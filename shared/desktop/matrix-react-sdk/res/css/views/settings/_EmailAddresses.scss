@@ -1,0 +1,21 @@
+.mx_ExistingEmailAddress {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.mx_ExistingEmailAddress_delete {
+    margin-right: 5px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.mx_ExistingEmailAddress_email,
+.mx_ExistingEmailAddress_promptText {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.mx_ExistingEmailAddress_confirmBtn {
+    margin-left: 5px;
+}

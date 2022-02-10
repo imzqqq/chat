@@ -1,0 +1,7 @@
+.mx_MjolnirUserSettingsTab .mx_Field {
+    @mixin mx_Settings_fullWidthField;
+}
+
+.mx_MjolnirUserSettingsTab_listItem {
+    margin-bottom: 2px;
+}

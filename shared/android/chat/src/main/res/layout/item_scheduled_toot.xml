@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <androidx.emoji.widget.EmojiTextView
+        android:id="@+id/text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.91"
+        android:padding="8dp"/>
+
+    <ImageButton
+        android:id="@+id/edit"
+        app:tint="?android:attr/textColorTertiary"
+        android:background="?android:colorBackground"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="12dp"
+        android:contentDescription="@string/action_edit"
+        android:padding="4dp"
+        app:srcCompat="@drawable/ic_create_24dp" />
+
+    <ImageButton
+        android:id="@+id/delete"
+        app:tint="?android:attr/textColorTertiary"
+        android:background="?android:colorBackground"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="12dp"
+        android:contentDescription="@string/action_delete"
+        android:padding="4dp"
+        app:srcCompat="@drawable/ic_clear_24dp" />
+
+</LinearLayout>

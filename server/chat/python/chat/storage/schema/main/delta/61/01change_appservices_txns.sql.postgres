@@ -1,0 +1,8 @@
+-- we use bigint elsewhere in the database for appservice txn ids (notably,
+-- application_services_state.last_txn), and generally we use bigints everywhere else
+-- we have monotonic counters, so let's bring this one in line.
+--
+-- assuming there aren't thousands of rows for decommisioned/non-functional ASes, this
+-- table should be pretty small, so safe to do a synchronous ALTER TABLE.
+
+ALTER TABLE application_services_txns ALTER COLUMN txn_id SET DATA TYPE BIGINT;

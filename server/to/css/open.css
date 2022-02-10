@@ -1,0 +1,36 @@
+.OpenLinkView .caption {
+    color: var(--grey);
+    font-size: 12px;
+}
+
+.ServerConsentView .actions label {
+    display: flex;
+    align-items: center;
+}
+
+.ServerConsentView .actions {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.ServerConsentView input[type=submit] {
+    flex: 1;
+    margin-left: 32px;
+}
+
+.ServerOptions div {
+    margin: 8px 0;
+}
+
+.ServerOptions label {
+    display: flex;
+    align-items: center;
+}
+
+.ServerOptions label > .line {
+    flex: 1;
+    border: none;
+    border-bottom: 1px solid var(--grey);
+    padding: 4px 0;
+}

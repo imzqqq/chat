@@ -1,0 +1,23 @@
+{
+    "file": {
+        "v": "v2",
+        "key": {
+            "alg": "A256CTR",
+            "ext": true,
+            "k": "3InU2yNf0xL2ivudzls_nqnbCN9VWvHVQBCNWRPrMzk",
+            "key_ops": [
+                "encrypt",
+                "decrypt"
+            ],
+            "kty": "oct"
+        },
+        "iv": "R/ZLJIXcmGAAAAAAAAAAAA",
+        "hashes": {
+            "sha256": "FfzQwGbFuBhvFQqASyeN95D9QKLCaoD+9l4eUqK4epk"
+        },
+        "url": "mxc://matrix.org/mIXAOwOuCyGHveXRMcCAeqcq",
+        "mimetype": "image/png"
+    },
+    "_domain": "matrix.org",
+    "_mediaId": "mIXAOwOuCyGHveXRMcCAeqcq"
+}

@@ -1,0 +1,12 @@
+This directory contains the config files and deployment scripts for the official
+chat.imzqqq distribution of Chat Web.
+
+You probably do not want to build with this config unless you're building the
+official chat.imzqqq distribution, but these files may be useful if you want to
+inspect the configuration used there.
+
+Chat Desktop uses a separate config (see
+../../element-desktop/element.io).
+
+Deployment scripts (such as app/deploy.py) are meant to be run on the web server
+hosting the Chat installation.

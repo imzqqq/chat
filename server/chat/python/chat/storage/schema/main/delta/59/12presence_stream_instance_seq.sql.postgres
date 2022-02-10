@@ -1,0 +1,5 @@
+CREATE SEQUENCE IF NOT EXISTS presence_stream_sequence;
+
+SELECT setval('presence_stream_sequence', (
+    SELECT COALESCE(MAX(stream_id), 1) FROM presence_stream
+));

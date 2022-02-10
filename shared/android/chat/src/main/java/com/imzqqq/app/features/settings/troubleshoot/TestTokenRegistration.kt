@@ -1,0 +1,67 @@
+package com.imzqqq.app.features.settings.troubleshoot
+
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
+import com.imzqqq.app.R
+import com.imzqqq.app.core.di.ActiveSessionHolder
+import com.imzqqq.app.core.pushers.PushersManager
+import com.imzqqq.app.core.resources.StringProvider
+import com.imzqqq.app.core.pushers.UPHelper
+import org.matrix.android.sdk.api.session.pushers.PusherState
+import javax.inject.Inject
+
+/**
+ * Force registration of the token to HomeServer
+ */
+class TestTokenRegistration @Inject constructor(private val context: FragmentActivity,
+                                                private val stringProvider: StringProvider,
+                                                private val pushersManager: PushersManager,
+                                                private val activeSessionHolder: ActiveSessionHolder) :
+    TroubleshootTest(R.string.settings_troubleshoot_test_pusher_registration_title) {
+
+    override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
+        // Check if we have a registered pusher for this token
+        val pushToken = UPHelper.getUpEndpoint(context) ?: run {
+            status = TestStatus.FAILED
+            return
+        }
+        val pushGateway = UPHelper.getPushGateway(context) ?: run {
+            status = TestStatus.FAILED
+            return
+        }
+        val session = activeSessionHolder.getSafeActiveSession() ?: run {
+            status = TestStatus.FAILED
+            return
+        }
+        val pushers = session.getPushers().filter {
+            it.pushKey == pushToken && it.state == PusherState.REGISTERED
+        }
+        if (pushers.isEmpty()) {
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_pusher_registration_failed,
+                    stringProvider.getString(R.string.sas_error_unknown))
+            quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_token_registration_quick_fix) {
+                override fun doFix() {
+                    val workId = pushersManager.enqueueRegisterPusher(context, pushToken, pushGateway)
+                    WorkManager.getInstance(context).getWorkInfoByIdLiveData(workId).observe(context, Observer { workInfo ->
+                        if (workInfo != null) {
+                            if (workInfo.state == WorkInfo.State.SUCCEEDED) {
+                                manager?.retry(activityResultLauncher)
+                            } else if (workInfo.state == WorkInfo.State.FAILED) {
+                                manager?.retry(activityResultLauncher)
+                            }
+                        }
+                    })
+                }
+            }
+
+            status = TestStatus.FAILED
+        } else {
+            description = stringProvider.getString(R.string.settings_troubleshoot_test_pusher_registration_success)
+            status = TestStatus.SUCCESS
+        }
+    }
+}

@@ -1,0 +1,44 @@
+Source: chat-server-py3
+Section: contrib/python
+Priority: extra
+Maintainer: Chat Packaging team <packages@matrix.org>
+# keep this list in sync with the build dependencies in docker/Dockerfile-dhvirtualenv.
+Build-Depends:
+ debhelper (>= 10),
+ dh-virtualenv (>= 1.1),
+ libsystemd-dev,
+ libpq-dev,
+ lsb-release,
+ python3-dev,
+ python3,
+ python3-setuptools,
+ python3-pip,
+ python3-venv,
+ tar,
+Standards-Version: 3.9.8
+Homepage: https://github.com/matrix-org/chat
+
+Package: chat-server-py3
+Architecture: amd64
+Provides: chat-server
+Conflicts:
+ chat-server (<< 0.34.0.1-0matrix2),
+ chat-server (>= 0.34.0.1-1),
+Pre-Depends: dpkg (>= 1.16.1)
+Depends:
+ adduser,
+ debconf,
+ ${misc:Depends},
+ ${shlibs:Depends},
+ ${chat:pydepends},
+# some of our scripts use perl, but none of them are important,
+# so we put perl:Depends in Suggests rather than Depends.
+Recommends:
+ ${shlibs1:Recommends},
+Suggests:
+ sqlite3,
+ ${perl:Depends},
+Description: Open federated Instant Messaging and VoIP server
+ Matrix is an ambitious new ecosystem for open federated Instant
+ Messaging and VoIP. Chat is a reference Matrix server
+ implementation.

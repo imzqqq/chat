@@ -1,0 +1,10 @@
+.mx_SenderProfile_displayName {
+    font-weight: 600;
+}
+
+.mx_SenderProfile_mxid {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-left: 5px;
+    opacity: 0.5; // Match mx_TextualEvent
+}

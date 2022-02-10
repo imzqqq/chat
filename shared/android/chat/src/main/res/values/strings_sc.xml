@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="normal_priority_header">Normal priority</string>
+
+    <string name="settings_home_overview">Overview</string>
+
+    <string name="settings_single_overview">Combined chat overview</string>
+    <string name="settings_single_overview_summary">View both direct messages and rooms on one page</string>
+
+    <string name="settings_room_unread_kind_dm">Direct chat preview content</string>
+    <string name="settings_room_unread_kind_group">Group chat preview content</string>
+    <string name="settings_room_unread_kind_default">Show all events</string>
+    <string name="settings_room_unread_kind_content">Hide member changes</string>
+    <string name="settings_room_unread_kind_original_content">Hide member changes and reactions</string>
+
+    <string name="settings_simplified_mode">Easy mode</string>
+    <string name="settings_simplified_mode_summary">Hide advanced functionality, including public room directories and chat encryption settings</string>
+    <string name="prompt_simplified_mode_title">Select user interface</string>
+    <string name="prompt_simplified_mode_text">You can change this later in the settings.</string>
+    <string name="prompt_simplified_mode_on">Easy</string>
+    <string name="prompt_simplified_mode_on_text">I only plan to chat with people I know, and consider extra options confusing.</string>
+    <string name="prompt_simplified_mode_off">Complete</string>
+    <string name="prompt_simplified_mode_off_text">I\'m looking for full functionality, including discovery of public rooms and fine-grained room and encryption settings.</string>
+
+    <string name="settings_light_theme">Light theme</string>
+    <string name="settings_dark_theme">Dark theme</string>
+    <string name="settings_system_dark_theme_pre_ten">Follow system dark theme</string>
+    <string name="settings_system_dark_theme_pre_ten_summary">Provide separate theme settings for light and dark themes. Your current Android version might not support switching light and dark themes!</string>
+    <string name="sc_light_theme">SC Light</string>
+    <string name="sc_theme">SC Black</string>
+    <string name="sc_dark_theme">SC Dark</string>
+    <string name="sc_colored_theme">SC Black, colored bubbles</string>
+    <string name="sc_dark_colored_theme">SC Dark, colored bubbles</string>
+    <string name="element_light_theme">Element Light</string>
+    <string name="element_dark_theme">Element Dark</string>
+    <string name="element_black_theme">Element Black</string>
+
+    <string name="bubble_style">Message bubbles</string>
+    <string name="bubble_style_none">None</string>
+    <string name="bubble_style_start">Same side</string>
+    <string name="bubble_style_both">Both sides</string>
+    <string name="bubble_time_location">Timestamp location</string>
+    <string name="bubble_time_location_top">Top</string>
+    <string name="bubble_time_location_bottom">Bottom</string>
+
+    <string name="settings_unread_counter">Unread counter</string>
+    <string name="settings_unimportant_counter_badge_v2">Count muted messages</string>
+    <string name="settings_unimportant_counter_badge_summary_v2">Show counts for muted messages in the chat overview</string>
+    <string name="settings_aggregate_unread_counts">Count chats instead of messages</string>
+    <string name="settings_aggregate_unread_counts_summary">Whether to count unread chats instead of individual messages in spaces and room categories</string>
+
+    <string name="labs_mark_rooms_unread">Mark chats as unread</string>
+    <string name="labs_mark_rooms_unread_summary">Allow marking chats as unread. Other Matrix clients might not support this yet.</string>
+    <string name="url_previews_in_encrypted_rooms">URL previews in encrypted chats</string>
+    <string name="url_previews_in_encrypted_rooms_summary">This will leak URLs from your messages to your homeserver!</string>
+
+    <string name="login_mobile_device_sc">Chat Android</string>
+    <string name="bottom_action_all">Overview</string>
+    <string name="all_list_rooms_empty_title">Chat</string>
+    <string name="all_list_rooms_empty_body">Chats will be displayed here</string>
+
+    <!-- Login screen -->
+    <string name="login_connect_using_matrix_id_text_sc">e.g. @user:domain.com</string>
+    <string name="login_server_other_title_sc">Custom server</string>
+    <string name="login_server_other_text_sc">Enter server address to log in or register</string>
+
+    <string name="show_room_info_sc">Room details</string>
+    <string name="show_participants_sc">Participants</string>
+    <string name="room_list_quick_actions_mark_room_unread">Mark as unread</string>
+    <string name="room_list_quick_actions_mark_room_read">Mark as read</string>
+    <string name="room_list_quick_actions_open_at_bottom">Open at recent messages</string>
+
+    <string name="footer_read_receipt_content_description">Message status</string>
+
+    <!-- Username colors -->
+    <string name="settings_user_colors_in_dm">User colors in direct chats</string>
+    <string name="settings_user_colors_in_default">User colors in group chats</string>
+    <string name="settings_user_colors_in_public_rooms">User colors in public rooms</string>
+    <string name="user_colors_uniform">Uniform</string>
+    <string name="user_colors_from_pl">Based on power level</string>
+    <string name="user_colors_from_id">Based on Matrix ID</string>
+
+    <string name="settings_advanced_theme_settings">Advanced theme settings</string>
+    <string name="settings_user_colors">User colors</string>
+    <string name="settings_theme_colors">Theme colors</string>
+    <string name="setting_sc_accent_color_light">Accent color for light themes</string>
+    <string name="setting_sc_accent_color_dark">Accent color for dark themes</string>
+    <string name="settings_sc_accent_disclaimer">Note that these color settings only apply to SC themes, and not Element themes.</string>
+
+    <string name="settings_open_chats_at_first_unread">Open at first unread</string>
+    <string name="settings_open_chats_at_first_unread_summary">Open chats at the first unread message instead of at the bottom.</string>
+
+    <string name="settings_show_voice_message_recorder_ui">Voice messages</string>
+    <string name="settings_show_voice_message_recorder_ui_summary">Show a button to record voice messages</string>
+
+    <!-- Accent colors -->
+    <string name="sc_accent_greenlight">Light green</string>
+    <string name="sc_accent_greendark">Dark green</string>
+    <string name="sc_accent_amber">Amber</string>
+    <string name="sc_accent_bluelight">Light blue</string>
+    <string name="sc_accent_cyan">Cyan</string>
+    <string name="sc_accent_gold">Gold</string>
+    <string name="sc_accent_lime">Lime</string>
+    <string name="sc_accent_orange">Orange</string>
+    <string name="sc_accent_pink">Pink</string>
+    <string name="sc_accent_purple">Purple</string>
+    <string name="sc_accent_red">Red</string>
+    <string name="sc_accent_teal">Teal</string>
+    <string name="sc_accent_turquoise">Turquoise</string>
+    <string name="sc_accent_yellow">Yellow</string>
+    <string name="sc_accent_carnation">Carnation</string>
+    <string name="sc_accent_denim">Denim</string>
+    <string name="sc_accent_indigo">Indigo</string>
+    <string name="sc_accent_lava">Lava</string>
+    <string name="sc_accent_blue">Blue</string>
+    <!-- do not change this comment for accent generation -->
+
+    <string name="send_bug_report_sc_extra">To increase the visibility of your issue and to allow us to contact you, you may want to reference this report (by providing your matrix ID and the approximate time when it was sent) in an issue at https://github.com/Chat/Chat-android/issues (check first if one already exists for your issue, and only create a new one if there is not).</string>
+
+    <!-- Unifiedpush Endpoint -->
+    <string name="settings_troubleshoot_test_endpoint_title">Endpoint/FCM</string>
+    <string name="settings_troubleshoot_test_endpoint_success">Endpoint successfully retrieved:\n%1$s</string>
+    <string name="settings_troubleshoot_test_endpoint_failed">Failed to retrieve Endpoint.</string>
+
+    <!-- UnifiedPush Distributor Picker Dialog -->
+    <string name="unifiedpush_getdistributors_dialog_title">Choose a distributor</string>
+    <string name="unifiedpush_getdistributors_dialog_fcm_fallback">FCM Fallback</string>
+
+    <!-- Pusher registration -->
+    <string name="settings_troubleshoot_test_pusher_registration_title">Pusher Registration</string>
+    <string name="settings_troubleshoot_test_pusher_registration_success">Pusher successfully registered to HomeServer.</string>
+    <string name="settings_troubleshoot_test_pusher_registration_failed">Failed to register pusher to HomeServer:\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed_sc">Failed to retrieve FCM token</string>
+
+    <string name="settings_apply_sc_default_settings">Do not click this setting</string>
+    <string name="settings_apply_sc_default_settings_dialog_title">Mess up settings</string>
+    <string name="settings_apply_sc_default_settings_dialog_summary">If you continue, this will mess with your app settings!</string>
+
+    <string name="settings_unifiedpush">UnifiedPush</string>
+    <string name="settings_unifiedpush_force_custom_gateway">Force custom push gateway</string>
+    <string name="settings_unifiedpush_force_custom_gateway_summary">Only enable this if your push endpoint does not require an external gateway.</string>
+    <string name="settings_unifiedpush_reregister">Re-register push distributor</string>
+    <string name="settings_force_allow_background_sync">Allow background sync in addition to push</string>
+    <string name="settings_force_allow_background_sync_summary">Only meaningful while debugging your push setup!</string>
+    <string name="toast_unifiedpush_no_push_distributor">No push distributor found!</string>
+    <string name="toast_unifiedpush_one_push_distributor">Registered push distributor %1$s</string>
+
+    <string name="settings_jump_to_bottom_on_send">Jump to bottom on send</string>
+    <string name="settings_jump_to_bottom_on_send_summary">Automatically scroll down when sending a message</string>
+    <string name="settings_include_space_members_as_rooms">Show people in spaces</string>
+    <string name="settings_include_space_members_as_rooms_summary">If disabled, you can still add Direct Messages to Personal Spaces. If enabled, you\'ll automatically see everyone who is a member of the Space.</string>
+
+</resources>

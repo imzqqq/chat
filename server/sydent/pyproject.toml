@@ -1,0 +1,61 @@
+[tool.towncrier]
+    package = "sydent"
+    filename = "CHANGELOG.md"
+    directory = "changelog.d"
+    issue_format = "[\\#{issue}](https://github.com/matrix-org/sydent/issues/{issue})"
+
+    [[tool.towncrier.type]]
+        directory = "feature"
+        name = "Features"
+        showcontent = true
+
+    [[tool.towncrier.type]]
+        directory = "bugfix"
+        name = "Bugfixes"
+        showcontent = true
+
+    [[tool.towncrier.type]]
+        directory = "docker"
+        name = "Updates to the Docker image"
+        showcontent = true
+
+    [[tool.towncrier.type]]
+        directory = "doc"
+        name = "Improved Documentation"
+        showcontent = true
+
+    [[tool.towncrier.type]]
+        directory = "removal"
+        name = "Deprecations and Removals"
+        showcontent = true
+
+    [[tool.towncrier.type]]
+        directory = "misc"
+        name = "Internal Changes"
+        showcontent = true
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+target-version = ['py36']
+
+[tool.mypy]
+plugins = "mypy_zope:plugin"
+show_error_codes = true
+namespace_packages = true
+
+[[tool.mypy.overrides]]
+module = [
+    "idna",
+    "nacl.*",
+    "netaddr",
+    "OpenSSL",
+    "prometheus_client",
+    "phonenumbers",
+    "signedjson.*",
+    "sortedcontainers",
+    "unpaddedbase64"
+]
+ignore_missing_imports = true
+

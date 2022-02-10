@@ -1,0 +1,3519 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"PO-Revision-Date: 2021-01-27 00:45+0000\n"
+"Last-Translator: tunda <tunda@mail36.net>\n"
+"Language-Team: German <https://weblate.framasoft.org/projects/joinpeertube/"
+"main/de/>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4.2\n"
+"Generated-By: easygettext\n"
+
+#: src/App.vue:18
+msgid ""
+"A free software to take back control of your videos! With more than 100 000 "
+"hosted videos, viewed more than 6 millions times and 20 000 users, Tube "
+"is the decentralized free software alternative to videos platforms developed "
+"by Framasoft"
+msgstr ""
+"Eine freie Software um die Kontrolle über deine Videos zurückzugewinnen! Mit "
+"mehr als 100 000 bereitgestellten Videos, die mehr als 6 Millionen mal "
+"angesehen wurden und 20 000 Nutzern ist das von Framasoft entwickelte "
+"Tube DIE dezentrale freie Softwarealternative zu Videoplattformen"
+
+#: src/components/ContentSelection.vue:4 src/components/ContentSelection.vue:48
+msgid "Discover the channel"
+msgstr "Entdecke den Kanal"
+
+#: src/components/ContentSelection.vue:4 src/components/ContentSelection.vue:55
+msgid "Go on the instance"
+msgstr "Zur Instanz wechseln"
+
+#: src/components/ContentSelection.vue:4 src/components/ContentSelection.vue:41
+msgid "Watch the video"
+msgstr "Sieh das Video an"
+
+#: src/components/Footer.vue:5
+msgid "Legal notices"
+msgstr "Rechtliche Hinweise"
+
+#: src/components/Footer.vue:7
+msgid "Contact"
+msgstr "Kontakt"
+
+#: src/components/Footer.vue:9 src/components/roadmap/ShareAndFollow.vue:5
+msgid "Newsletter"
+msgstr "Rundbrief"
+
+#: src/components/Footer.vue:11
+msgid "Forum"
+msgstr "Forum"
+
+#: src/components/Footer.vue:15
+msgid "Press kit"
+msgstr "Pressemappe"
+
+#: src/components/Footer.vue:17
+msgid "JoinTube Git"
+msgstr "JoinTube Git"
+
+#: src/components/Footer.vue:19
+msgid "Tube Git"
+msgstr "Tube-Git"
+
+#: src/components/Footer.vue:24
+msgid ""
+"Website developed by <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://framasoft.org\">Framasoft</a> and designed by <a target=\"_blank\" "
+"rel=\"noopener noreferrer\" href=\"https://www.maiwann.net/\">Maiwann</a>"
+msgstr ""
+"Die Webseite wurde von <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://framasoft.org\">Framasoft</a> entwickelt und von <a target=\"_blank"
+"\" rel=\"noopener noreferrer\" href=\"https://www.maiwann.net/\">Maiwann</a> "
+"gestaltet"
+
+#: src/components/Footer.vue:28
+msgid ""
+"Illustrations from <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://framatube.org/videos/watch/9c9de5e8-0a1e-484a-b099-e80766180a6d"
+"\">What is Tube video</a>, created by <a target=\"_blank\" rel="
+"\"noopener noreferrer\" href=\"https://libreart.info/\">LILA</a> - <a target="
+"\"_blank\" rel=\"noopener noreferrer\" href=\"https://film.zemarmot.net/"
+"\">ZeMarmot Team</a>"
+msgstr ""
+"Darstellungen von <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://framatube.org/videos/watch/9c9de5e8-0a1e-484a-b099-e80766180a6d"
+"\">What is Tube video</a>, erstellt von <a target=\"_blank\" rel="
+"\"noopener noreferrer\" href=\"https://libreart.info/\">LILA</a> - <a target="
+"\"_blank\" rel=\"noopener noreferrer\" href=\"https://film.zemarmot.net/"
+"\">ZeMarmot Team</a>"
+
+#: src/components/Footer.vue:33
+msgid ""
+"Tube mascot created by <a target=\"_blank\" rel=\"noopener noreferrer\" "
+"href=\"https://www.davidrevoy.com/\">David Revoy</a>"
+msgstr ""
+"Das Tube Maskottchen wurde von <a target=\"_blank\" rel=\"noopener "
+"noreferrer\" href=\"https://www.davidrevoy.com/\">David Revoy</a> erstellt"
+
+#: src/components/Footer.vue:37
+msgid ""
+"<em>Tube news!</em> content licensed under <a href=\"https://"
+"creativecommons.org/licenses/by-sa/4.0/\" rel=\"noopener noreferrer\" target="
+"\"_blank\">CC-BY-SA</a>"
+msgstr ""
+
+#: src/components/Header.vue:5
+msgid "Roadmap"
+msgstr "Fahrplan"
+
+#: src/components/Header.vue:9
+msgid "developed by"
+msgstr "entwickelt von"
+
+#: src/components/Header.vue:21
+msgid "Home"
+msgstr "Start"
+
+#: src/components/Header.vue:29 src/components/InstancesList.vue:30
+#: src/views/Instances.vue:5
+msgid "Create an account"
+msgstr "Ein Benutzerkonto erstellen"
+
+#: src/components/Header.vue:33 src/components/NewsArticles.vue:65
+msgid "News"
+msgstr "Nachrichten"
+
+#: src/components/Header.vue:37 src/views/Help.vue:5 src/views/Help.vue:10
+msgid "Help"
+msgstr "Hilfe"
+
+#: src/components/Header.vue:41 src/views/Roadmap-2020.vue:62
+#: src/views/Roadmap-2020.vue:170
+msgid "Contribute"
+msgstr "Beitragen"
+
+#: src/components/Header.vue:45
+msgid "Git"
+msgstr "Git"
+
+#: src/components/I18n.vue:5 src/components/I18n.vue:8
+msgid "Languages"
+msgstr "Sprachen"
+
+#: src/components/I18n.vue:19
+msgid "Change interface language"
+msgstr "Sprache der Oberfläche ändern"
+
+#: src/components/I18n.vue:22
+msgid "Translate"
+msgstr "Übersetzen"
+
+#: src/components/InstanceCard.vue:5 src/components/InstanceCard.vue:49
+#, fuzzy
+msgid "%{ instance.totalInstanceFollowers } follower instance"
+msgid_plural "%{ instance.totalInstanceFollowers } followers"
+msgstr[0] "%{ instance.totalInstanceFollowers } Folger der Instanz"
+msgstr[1] "%{ instance.totalInstanceFollowers } Folger der Instanzen"
+
+#: src/components/InstanceCard.vue:5 src/components/InstanceCard.vue:60
+msgid "Follows %{ instance.totalInstanceFollowing } instance"
+msgid_plural "Follows %{ instance.totalInstanceFollowing } instances"
+msgstr[0] "Folgt %{ instance.totalInstanceFollowing } Instanz"
+msgstr[1] "Folgt %{ instance.totalInstanceFollowing } Instanzen"
+
+#: src/components/InstanceCard.vue:21
+msgid "per user"
+msgstr "pro Nutzer"
+
+#: src/components/InstanceCard.vue:24
+msgid "No video quota per user"
+msgstr "Keine Video-Quota pro Nutzer"
+
+#: src/components/InstanceCard.vue:47
+msgid "Unlimited space"
+msgstr "Unbegrenzter Speicherplatz"
+
+#: src/components/InstanceCard.vue:51
+msgid "B"
+msgstr "B"
+
+#: src/components/InstanceCard.vue:52
+msgid "KB"
+msgstr "KB"
+
+#: src/components/InstanceCard.vue:53
+msgid "MB"
+msgstr "MB"
+
+#: src/components/InstanceCard.vue:54
+msgid "GB"
+msgstr "GB"
+
+#: src/components/InstanceCard.vue:76
+msgid "Sensitive content"
+msgstr "Sensibler Inhalt"
+
+#: src/components/InstanceCard.vue:77
+msgid "Hidden"
+msgstr "Versteckt"
+
+#: src/components/InstanceCard.vue:78
+msgid "Blurred"
+msgstr "Verwischt"
+
+#: src/components/InstanceCard.vue:79
+msgid "Displayed"
+msgstr "Angezeigt"
+
+#: src/components/InstanceCard.vue:84
+msgid "See the instance"
+msgstr "Wirf einen Blick auf die Instanz"
+
+#: src/components/InstancesList.vue:6
+msgid "Filter according to your preferences"
+msgstr "Filtere nach deinen Vorlieben"
+
+#: src/components/InstancesList.vue:8
+msgid ""
+"Updating one of the fields will automatically update results below the form"
+msgstr ""
+
+#: src/components/InstancesList.vue:12
+msgid "Your profile"
+msgstr "Dein Profil"
+
+#: src/components/InstancesList.vue:16
+msgid "Viewer"
+msgstr "Betrachter"
+
+#: src/components/InstancesList.vue:20
+msgid "Video maker"
+msgstr "Videoproduzent"
+
+#: src/components/InstancesList.vue:22
+msgid "Music"
+msgstr "Musik"
+
+#: src/components/InstancesList.vue:23
+msgid "Films"
+msgstr "Filme"
+
+#: src/components/InstancesList.vue:24
+msgid "Vehicles"
+msgstr "Fahrzeuge"
+
+#: src/components/InstancesList.vue:25
+msgid "Art"
+msgstr "Kunst"
+
+#: src/components/InstancesList.vue:26
+msgid "Sports"
+msgstr "Sport"
+
+#: src/components/InstancesList.vue:26
+msgid "You want to"
+msgstr "Du möchtest"
+
+#: src/components/InstancesList.vue:27
+msgid "Travels"
+msgstr "Reise"
+
+#: src/components/InstancesList.vue:28
+msgid "Gaming"
+msgstr "Computerspiele"
+
+#: src/components/InstancesList.vue:29
+msgid "People"
+msgstr "Menschen"
+
+#: src/components/InstancesList.vue:30
+msgid "Comedy"
+msgstr "Komik"
+
+#: src/components/InstancesList.vue:31
+msgid "Entertainment"
+msgstr "Unterhaltung"
+
+#: src/components/InstancesList.vue:32
+msgid "News & Politics"
+msgstr "Nachrichten & Politik"
+
+#: src/components/InstancesList.vue:33
+msgid "How To"
+msgstr "Anleitungen"
+
+#: src/components/InstancesList.vue:34
+msgid "Discover instances"
+msgstr "Instanzen entdecken"
+
+#: src/components/InstancesList.vue:34
+msgid "Education"
+msgstr "Bildung"
+
+#: src/components/InstancesList.vue:35
+msgid "Activism"
+msgstr "Aktivismus"
+
+#: src/components/InstancesList.vue:36
+msgid "Science & Technology"
+msgstr "Wissenschaft & Technik"
+
+#: src/components/InstancesList.vue:37
+msgid "Animals"
+msgstr "Tiere"
+
+#: src/components/InstancesList.vue:38
+msgid "Kids"
+msgstr "Kinder"
+
+#: src/components/InstancesList.vue:39
+msgid "Food"
+msgstr "Essen"
+
+#: src/components/InstancesList.vue:40
+#, fuzzy
+msgid "And do live streams"
+msgstr "Echtzeitübertragung"
+
+#: src/components/InstancesList.vue:42
+msgid "English"
+msgstr "Englisch"
+
+#: src/components/InstancesList.vue:43
+msgid "Français"
+msgstr "Français"
+
+#: src/components/InstancesList.vue:44
+msgid "Yes"
+msgstr ""
+
+#: src/components/InstancesList.vue:44
+msgid "日本語"
+msgstr "日本語"
+
+#: src/components/InstancesList.vue:45
+msgid "Euskara"
+msgstr "Baskisch"
+
+#: src/components/InstancesList.vue:46
+msgid "Català"
+msgstr "Català"
+
+#: src/components/InstancesList.vue:47
+msgid "Čeština"
+msgstr "Čeština"
+
+#: src/components/InstancesList.vue:48
+msgid "Esperanto"
+msgstr "Esperanto"
+
+#: src/components/InstancesList.vue:48
+msgid "No"
+msgstr ""
+
+#: src/components/InstancesList.vue:49
+msgid "ελληνικά"
+msgstr "ελληνικά"
+
+#: src/components/InstancesList.vue:50
+msgid "Deutsch"
+msgstr "Deutsch"
+
+#: src/components/InstancesList.vue:51
+msgid "Italiano"
+msgstr "Italiano"
+
+#: src/components/InstancesList.vue:52
+msgid "Nederlands"
+msgstr "Niederlande"
+
+#: src/components/InstancesList.vue:53
+msgid "Español"
+msgstr "Spanisch"
+
+#: src/components/InstancesList.vue:54
+msgid "Occitan"
+msgstr "Occitan"
+
+#: src/components/InstancesList.vue:54
+msgid "Topics"
+msgstr ""
+
+#: src/components/InstancesList.vue:55
+msgid "Gàidhlig"
+msgstr "Gàidhlig"
+
+#: src/components/InstancesList.vue:56
+msgid "简体中文（中国）"
+msgstr "简体中文（中国）"
+
+#: src/components/InstancesList.vue:57
+msgid "Português (Portugal)"
+msgstr "Português (Portugal)"
+
+#: src/components/InstancesList.vue:58
+msgid "svenska"
+msgstr "svenska"
+
+#: src/components/InstancesList.vue:59
+msgid "Polski"
+msgstr "Polski"
+
+#: src/components/InstancesList.vue:60
+msgid "Sensitive videos"
+msgstr "Heikle Videos"
+
+#: src/components/InstancesList.vue:60
+msgid "suomi"
+msgstr "suomi"
+
+#: src/components/InstancesList.vue:61
+msgid "русский"
+msgstr "русский"
+
+#: src/components/InstancesList.vue:64
+msgid "Hide"
+msgstr "Verstecken"
+
+#: src/components/InstancesList.vue:68
+msgid "Blur"
+msgstr "Verwischen"
+
+#: src/components/InstancesList.vue:72
+msgid "Display"
+msgstr "Anzeige"
+
+#: src/components/InstancesList.vue:76
+msgid "No opinion"
+msgstr "Keine Meinung"
+
+#: src/components/InstancesList.vue:82
+msgid "Instance languages"
+msgstr "Instanzsprachen"
+
+#: src/components/InstancesList.vue:88
+msgid "Allowed video space"
+msgstr "Zugelassener Videospeicherplatz"
+
+#: src/components/InstancesList.vue:92
+msgid "At least 1GB"
+msgstr "Mindestens 1 GB"
+
+#: src/components/InstancesList.vue:96
+msgid "At least 5GB"
+msgstr "Mindestens 5 GB"
+
+#: src/components/InstancesList.vue:100
+msgid "At least 20GB"
+msgstr "Mindestens 20 GB"
+
+#: src/components/InstancesList.vue:104
+msgid "At least 50GB"
+msgstr "Mindestens 50 GB"
+
+#: src/components/InstancesList.vue:115
+msgid "Instances list"
+msgstr "Instanzenliste"
+
+#: src/components/InstancesList.vue:117
+#, fuzzy
+msgid "No instances found"
+msgstr "Instanzen entdecken"
+
+#: src/components/InstancesList.vue:118
+msgid "{{ instances.length }} instances found"
+msgstr ""
+
+#: src/components/InstancesList.vue:121
+msgid ""
+"Built from <a href=\"https://instances.joinpeertube.org\">instances."
+"joinpeertube.org</a>"
+msgstr ""
+"Erstellt von <a href=\"https://instances.joinpeertube.org\">instances."
+"joinpeertube.org</a>"
+
+#: src/components/InstancesList.vue:124
+#, fuzzy
+msgid "Report an instance"
+msgstr "Zur Instanz wechseln"
+
+#: src/components/NewsArticles.vue:39 src/views/News.vue:50
+#, fuzzy
+msgid "Subscribe to the newsletter"
+msgstr "Entdecke den Kanal"
+
+#: src/components/NewsArticles.vue:43 src/views/News.vue:58
+#, fuzzy
+msgid "Subscribe to RSS feed"
+msgstr "Entdecke den Kanal"
+
+#: src/components/NewsArticles.vue:47 src/views/News.vue:62
+msgid "Subscribe to our Mastodon account"
+msgstr ""
+
+#: src/components/NewsArticles.vue:51 src/views/News.vue:66
+msgid "Subscribe to our Twitter account"
+msgstr ""
+
+#: src/components/NewsArticles.vue:55 src/views/News.vue:70
+msgid "Open the Toot"
+msgstr ""
+
+#: src/components/NewsArticles.vue:59 src/views/News.vue:74
+msgid "Open the Tweet"
+msgstr ""
+
+#: src/components/PluginSelection.vue:15
+msgid "Plugin homepage"
+msgstr ""
+
+#: src/components/roadmap/DonateForm.vue:33
+msgid "I want my donation to remain anonymous"
+msgstr "Ich möchte, dass meine Spende anonym bleibt"
+
+#: src/components/roadmap/DonateForm.vue:36
+msgid "Amount"
+msgstr "Menge"
+
+#: src/components/roadmap/DonateForm.vue:37
+msgid "Amount (e.g.: 42)"
+msgstr "Menge (z.B.: 42)"
+
+#: src/components/roadmap/DonateForm.vue:38
+msgid "I would like to receive a tax receipt"
+msgstr "Ich möchte eine Steuerbescheinigung erhalten"
+
+#: src/components/roadmap/DonateForm.vue:39
+msgid "E-mail"
+msgstr "E-mail"
+
+#: src/components/roadmap/DonateForm.vue:40
+msgid "e.g. contact@fsf.org"
+msgstr "z.B. contact@example.org"
+
+#: src/components/roadmap/DonateForm.vue:41
+msgid "e.g. r.stallman@outlock.com"
+msgstr "z.B. contact@example.com"
+
+#: src/components/roadmap/DonateForm.vue:43
+msgid "Nickname"
+msgstr ""
+
+#: src/components/roadmap/DonateForm.vue:44
+msgid "e.g. Lady AAL"
+msgstr "z.B. Lady AAL"
+
+#: src/components/roadmap/DonateForm.vue:46
+msgid "I represent"
+msgstr "Ich vertrete"
+
+#: src/components/roadmap/DonateForm.vue:46
+msgid "Please complete this information so we can prepare your receipt"
+msgstr ""
+
+#: src/components/roadmap/DonateForm.vue:48
+msgid "Company, association, community..."
+msgstr "Unternehmen, Verein, Gemeinde..."
+
+#: src/components/roadmap/DonateForm.vue:50
+msgid "Last name"
+msgstr "Nachname"
+
+#: src/components/roadmap/DonateForm.vue:51
+msgid "e.g. Lovelace"
+msgstr "z.B. Müller"
+
+#: src/components/roadmap/DonateForm.vue:53
+msgid "First name"
+msgstr "Vorname"
+
+#: src/components/roadmap/DonateForm.vue:54
+msgid "an individual"
+msgstr "eine einzelne"
+
+#: src/components/roadmap/DonateForm.vue:54
+msgid "e.g. Ada"
+msgstr "z.B. Thomas"
+
+#: src/components/roadmap/DonateForm.vue:56
+msgid "Legal entity"
+msgstr "Rechtliche Hinweise"
+
+#: src/components/roadmap/DonateForm.vue:57
+msgid "e.g. Free Software Foundation"
+msgstr "z.B. Free Software Foundation Europe"
+
+#: src/components/roadmap/DonateForm.vue:58
+msgid "a company"
+msgstr "ein Unternehmen"
+
+#: src/components/roadmap/DonateForm.vue:59
+msgid "Address"
+msgstr "Adresse"
+
+#: src/components/roadmap/DonateForm.vue:60
+msgid "e.g. 12, Freedom Street"
+msgstr "z.B. Straße der Freiheit 12"
+
+#: src/components/roadmap/DonateForm.vue:62
+msgid "Address line 2"
+msgstr "Adresszeile 2"
+
+#: src/components/roadmap/DonateForm.vue:63
+msgid "e.g. Building VI"
+msgstr "z.B. Gebäude VI"
+
+#: src/components/roadmap/DonateForm.vue:65
+msgid "Postal/Zip code"
+msgstr "Postleitzahl"
+
+#: src/components/roadmap/DonateForm.vue:66
+msgid "e.g. 42100"
+msgstr "z.B. 10115"
+
+#: src/components/roadmap/DonateForm.vue:68
+msgid "City"
+msgstr "Stadt"
+
+#: src/components/roadmap/DonateForm.vue:69
+msgid "e.g. Saint-Etienne"
+msgstr "z.B. Berlin"
+
+#: src/components/roadmap/DonateForm.vue:132
+#: src/components/roadmap/DonateForm.vue:144
+msgid "This field must be filled in."
+msgstr ""
+
+#: src/components/roadmap/DonateForm.vue:135
+msgid "You must enter a valid email address."
+msgstr "Es muss eine gültige E-Mail-Adresse eingegeben werden."
+
+#: src/components/roadmap/DonateForm.vue:143
+msgid ""
+"In France, thanks to the %{ percent } tax deduction, your donation of "
+"%{ amount } will cost you %{ defisc }."
+msgstr ""
+"Dank der Steuererleichterung von %{ percent } in Frankreich, kostet Dich "
+"deine Spende von %{ amount } %{ defisc }."
+
+#: src/components/roadmap/DonateForm.vue:155
+msgid "Credit card"
+msgstr "Kreditkarte"
+
+#: src/components/roadmap/DonateForm.vue:168
+msgid "Give"
+msgstr "Spenden"
+
+#: src/components/roadmap/DonateForm.vue:176
+msgid "now"
+msgstr "Jetzt"
+
+#: src/components/roadmap/MoreInfos.vue:6
+msgid "Why progressive fundraising over 6 months?"
+msgstr "Wieso eine kontinuierliche Spendensammlung über 6 Monate?"
+
+#: src/components/roadmap/MoreInfos.vue:14
+msgid ""
+"At a time when no one knows what the future holds, we deem it inappropriate "
+"to start a crowdfunding campaign and threaten not to do our best on Tube "
+"if we don't get the necessary funds."
+msgstr ""
+"Zu einer Zeit wo niemand weiß, was die Zukunft bereithält, hielten wir es "
+"nicht für angemessen eine Crowdfunding-Kampagne zu starten und damit zu "
+"drohen, wir würden nicht unser Bestes für Tube geben, wenn wir nicht die "
+"erforderlichen Mittel erhielten."
+
+#: src/components/roadmap/MoreInfos.vue:19
+msgid ""
+"We believe in the public utility of Tube, so much so that we commit to "
+"working on it for six months to make this v3 happen, even if we must do it "
+"with our own funds (which <a href=\"https://framablog.org/2019/11/12/"
+"tube-has-worked-twice-as-hard-to-free-your-videos-from-youtube/\">we had "
+"already done for v2</a>)."
+msgstr ""
+
+#: src/components/roadmap/MoreInfos.vue:25
+msgid ""
+"We still hope that by sharing this roadmap as widely as possible, some of "
+"you will support us in our approach with a donation that will allow us to "
+"fund this project."
+msgstr ""
+
+#: src/components/roadmap/MoreInfos.vue:35 src/views/Roadmap-2020.vue:71
+msgid "Global search"
+msgstr "Globale Suche"
+
+#: src/components/roadmap/MoreInfos.vue:35
+msgid "Learn more on"
+msgstr "Lerne mehr über"
+
+#: src/components/roadmap/MoreInfos.vue:36 src/views/FAQ.vue:537
+#, fuzzy
+msgid "Moderation tools"
+msgstr "Bildung"
+
+#: src/components/roadmap/MoreInfos.vue:37 src/views/Roadmap-2020.vue:95
+msgid "Plugins & Playlists"
+msgstr "Plugins & Wiedergabelisten"
+
+#: src/components/roadmap/MoreInfos.vue:38 src/views/FAQ.vue:395
+#: src/views/Roadmap-2020.vue:107
+msgid "Live streaming"
+msgstr "Echtzeitübertragung"
+
+#: src/components/roadmap/MoreInfos.vue:41
+#, fuzzy
+msgid ""
+"<p>Today, when searching for videos on a Tube instance, it is hard to\n"
+"            <strong>find content that is not in the federation bubble</"
+"strong> of that instance.</p>\n"
+"\n"
+"            <p>We will create a <strong>server that indexes all videos</"
+"strong>\n"
+"            and channels from all Tube instances that are listed on\n"
+"            <a href=\"https://instances.joinpeertube.org/\">the public "
+"directory</a>.\n"
+"            The code for this indexing engine will be open source,\n"
+"            so that anyone can host their own by setting their own "
+"eligibility rules.</p>\n"
+"\n"
+"            <p>Each Tube instance administrator will be able to choose "
+"to <strong>\n"
+"            use one of these indexing engines for their instance's search "
+"bar</strong>.</p>\n"
+"\n"
+"            <p>In addition, <strong>announcements</strong>\n"
+"            will allow instance administrators to display information to "
+"visitors.</p>"
+msgstr ""
+"<p>Gegenwärtig ist es bei der Suche auf einer Tube-Instanz schwierig, "
+"<strong>Inahlte zu finden, sich nicht in der Föderationsblase</strong> "
+"dieser Instanz befinden.</p>\n"
+"<p>Wir werden einen Server erstellen, der <strong>alle Videos und Kanäle "
+"aller Tube-Instanzen</strong> indiziert, die im <a href=\"https://"
+"instances.joinpeertube.org/\">öffentlichen Verzeichnis</a> gelistet sind. "
+"Der Quelltext dieser Indizierungseinheit wird quelloffen sein, so jeder "
+"seine eigene mit eigenen Kriterien erstellen kann.</p>\n"
+"<p>Jeder Tube-Instanzverwalter wird die Möglichkeit haben <strong> eine "
+"dieser Einheiten für die Suchleiste seiner Instanz</strong> auszuwählen.</"
+"p>\n"
+"<p>Zusätzlich werden es <strong>Bekanntmachungen</strong> den "
+"Instanzverwaltern ermöglichen ihren Besuchern Informationen einzublenden</p>"
+
+#: src/components/roadmap/MoreInfos.vue:58
+#, fuzzy
+msgid ""
+"<p>While each new version of Tube has brought <a\n"
+"            href=\"https://joinpeertube.org/faq#tube-developers-did-not-"
+"add-moderation-tools\">new moderation features</a>,\n"
+"            there is still much to be done to <strong>facilitate moderation</"
+"strong> of content and accounts within the fediverse.\n"
+"            That's why we want to <strong>dedicate a month to the "
+"development of new moderation tools</strong>.</p>\n"
+"\n"
+"            <p>The list of features we have to develop or improve is long: "
+"reports logs and monitoring, moderation history,\n"
+"            comments moderation, moderation reports related to an account, "
+"feedback on steps taken (or not) following a report,\n"
+"            <strong>fight against spam</strong>, sharing blocklists of "
+"instances, accounts or content...</p>\n"
+"\n"
+"            <p>This list is being built\n"
+"            <a href=\"https://github.com/Chocobozzz/Tube/labels/Component"
+"%3A%20Moderation%20%3Agodmode%3A\"><strong>in collaboration with the "
+"community</strong></a>,\n"
+"            and it is with these needs in mind that we will try to "
+"prioritize the moderation tools developed during this month.</p>"
+msgstr ""
+"<p>Obwohl jede neue Tube-Version <a href=\"https://joinpeertube.org/"
+"faq#tube-developers-did-not-add-moderation-tools\">neue "
+"Moderierungsfunktionen</a> einführte, ist noch viel zu tun um die "
+"<strong>Moderation von Inhalten und Benutzerkonten</strong> innerhalb des "
+"Fediversums zu erleichtern. Deshalb möchten wir einen <strong>Monat der "
+"Entwicklung von neuen Moderationswerkzeugen widmen</strong>.</p>\n"
+"<p>Die Liste der von uns zu entwickelnden oder zu verbessernden Funktionen "
+"ist lang: Berichtsprotokolle und Überwachung, Moderationsverlauf, "
+"Kommentarmoderation, Moderationsberichte bezogen auf ein Benutzerkonto, "
+"Rückmeldung über auf einen Bericht folgende (nicht) eingeleitete Schritte, "
+"<strong>der Kampf gegen Spam</strong>, teilen von Blockierlisten zu "
+"Instanzen, Benutzerkonten oder Inhalten...</p>\n"
+"<p>Diese Liste wird <a href=\"https://github.com/Chocobozzz/Tube/labels/"
+"Component%3A%20Moderation%20%3Agodmode%3A\"><strong>in Zusammenarbeit mit "
+"der Gemeinschaft</strong> erstellt</a> und mit diesen Bedürfnissen im "
+"Hinterkopf versuchen wir die Entwicklung der Moderationswerkzeuge in diesem "
+"Monat zu priorisieren.</p>"
+
+#: src/components/roadmap/MoreInfos.vue:73
+#, fuzzy
+msgid ""
+"<p>While it is easy to embed a Tube video on a website or social media, "
+"the same cannot be said for playlists.\n"
+"            We want to rework the <strong>embed and display of playlists</"
+"strong> on third party websites.</p>\n"
+"\n"
+"            <p>We also want to <strong>allow two clips of the same video to "
+"be displayed in a playlist</strong>. Combined with the ability to\n"
+"            extract a specific piece of video in a playlist, "
+"<strong>playlists will thus become very useful remixing tools</strong>,\n"
+"            for example for educational purposes.</p>\n"
+"\n"
+"            <p>Plugins allow anyone to contribute to new Tube features "
+"by coding them into Tube, and offer them to instance\n"
+"            administrators. We want to <strong>improve the plugin system</"
+"strong> to offer more interaction possibilities.</p>\n"
+"\n"
+"            <p>In order to put ourselves in their contributors' shoes, we "
+"are going to create a few plugins of our own,\n"
+"            for example one to <strong>display information over a video to "
+"annotate it</strong> at a specific point in the viewing process.</p>\n"
+"\n"
+"            <p>Finally, we want to work on <strong>selecting a set of "
+"plugins to showcase</strong> them on joinpeertube.org.</p>"
+msgstr ""
+"<p>Obwohl es einfach ist, ein Tube-Video in ein Web-Portal oder Soziale "
+"Medien einzubetten, kann das selbe nicht über Abspiellisten gesagt werden. "
+"Wir möchten das <strong>Einbetten und Anzeigen von Abspiellisten</strong> "
+"auf Web-Portalen von Dritten überarbeiten.</p>\n"
+"<p>Des Weiteren möchten wir ermöglichen <strong>zwei Ausschnitte desselben "
+"Videos in einer Abspielliste anzuzeigen</strong>. Verbunden mit der "
+"Möglichkeit ein bestimmtes Stück aus einem Video einer Abspielliste zu "
+"extrahieren, <strong> werden Abspiellisten zu einem nützlichen Remix-"
+"Werkzeug</strong>, beispielsweise für Bildungszwecke.</p>\n"
+"<p>Erweiterungen ermöglichen es jedem durch eigene Programmierung neue "
+"Tube-Funktionen beizusteuern und sie Instanzverwaltern anzubieten. Wir "
+"möchten das <strong>Erweiterungen-System verbessern</strong> um mehr "
+"Möglichkeiten der Interaktion zu bieten.</p>\n"
+"<p>Um ein Gefühl für den Blickwinkel eines Erweiterungen-Entwicklers zu "
+"bekommen, werden wir ein paar Erweiterungen selbst schreiben. Zum Beispiel "
+"eine, um <strong>Informationen über einem Video einzublenden und es so an "
+"einem bestimmten Punkt während des Ansehens</strong> mit Anmerkungen zu "
+"ergänzen.</p>\n"
+"<p>Zuletzt möchten wir <strong>einen Satz von Erweiterungen auswählen</"
+"strong> um sie auf joinpeertube.org vorzustellen.</p>"
+
+#: src/components/roadmap/MoreInfos.vue:90
+#, fuzzy
+msgid ""
+"<p>The biggest challenge of live streaming on Tube is to <strong>get the "
+"live stream to be peer-to-peer</strong>.\n"
+"            After extensive testing, we believe this is possible.</p>\n"
+"\n"
+"            <p>By using the HLS technology that has been built into the "
+"Tube video player since version 1.3, we believe\n"
+"            we can <strong>create a live stream with one minute of lag "
+"between streamers and viewers</strong>.</p>\n"
+"\n"
+"            <p>We want to lay the technological foundation for this live "
+"stream feature, so <strong>this first version of\n"
+"            Tube Live will be minimalist</strong>. There will be no "
+"stream captation tools, no built-in chat, no react emojis...</p>\n"
+"\n"
+"            <p>However, we want to make sure that <strong>once the live "
+"stream is over, the video will be processed and\n"
+"            added to the creator's channel</strong>, with every requirement "
+"for proper federation checked.</p>"
+msgstr ""
+"<p>Die größte Herausforderung bei der Direktübertragung über Tube ist "
+"es, <strong>die Direktübertragung zwischen allen Teilnehmern auszutauschen</"
+"strong>.\n"
+"Nach umfangreicher Erprobung glauben wir, dass dies möglich ist.</p>\n"
+"<p>Durch die Verwendung der HLS-Technik, die im Tube-Video-Spieler seit "
+"Version 1.3 eingebaut ist, glauben wir\n"
+"<strong>eine Direktübertragung zwischen Produzenten und Zuschauern mit einer "
+"Minute Verzögerung bereitstellen zu können</strong>.</p>\n"
+"<p>Wir möchten zuerst die technischen Grundlagen für diese "
+"Direktübertragungsfunktion legen, daher <strong>wird diese erste Version von "
+"Tube Live sehr minimalistisch sein</strong>. Es wird keine "
+"Übertragungsaufzeichnungswerkzeuge, keine eingebauten Unterhaltungen, keine "
+"Emojis... geben</p>\n"
+"<p>Trotzdem möchten wir sicherstellen, dass <strong>sobald die "
+"Direktübertragung beendet ist, das Video verarbeitet und dem Kanal des "
+"Produzenten hinzugefügt wird</strong>, unter Berücksichtigung aller für die "
+"Föderierung nötigen Anforderungen.</p>"
+
+#: src/components/roadmap/ShareAndFollow.vue:3
+msgid "Stay up-to-date with Tube"
+msgstr "Bleib auf dem Laufendem mit Tube"
+
+#: src/components/roadmap/ShareAndFollow.vue:5
+msgid "Share on Mastodon"
+msgstr "Teile auf Mastodon"
+
+#: src/components/roadmap/ShareAndFollow.vue:6
+msgid "Share on Diaspora"
+msgstr "Teile auf Diaspora"
+
+#: src/components/roadmap/ShareAndFollow.vue:7
+msgid "Share on Twitter"
+msgstr "Teile auf Twitter"
+
+#: src/components/roadmap/ShareAndFollow.vue:8
+msgid "Share on Facebook"
+msgstr "Teile auf Facebook"
+
+#: src/components/roadmap/ShareAndFollow.vue:14
+msgid ""
+"Join me and support Tube, a free software to take back control of your "
+"videos!"
+msgstr ""
+"Mach' mit und unterstütze Tube, eine freie Software um die Kontrolle "
+"über deine Videos zurückzugewinnen!"
+
+#: src/components/roadmap/ShareAndFollow.vue:15
+msgid "Let’s support Tube"
+msgstr "Lasst uns Tube unterstützen"
+
+#: src/components/roadmap/Team.vue:6
+msgid "Who are we?"
+msgstr "Wer sind wir?"
+
+#: src/components/roadmap/Team.vue:17
+msgid ""
+"<strong>Framasoft</strong> (that's us!) is a French non-for-profit "
+"organization created in 2004, dedicated <strong>to popular education</"
+"strong> on digital matters. Our small association (under 40 members, under "
+"10 employees) is known to have made the <a href=\"https://degooglisons-"
+"internet.org\">\"De-google-ify the Internet\" project</a>, offering 34 "
+"ethical and alternative online tools."
+msgstr ""
+"<strong>Framasoft</strong> (das sind wir!) ist eine französische "
+"gemeinnützige Organisation, die 2004 mit dem Ziel gegründet wurde "
+"<strong>die Bildung in digitalen Angelegenheiten zu fördern</strong>. Unser "
+"kleiner Verein (weniger als 40 Mitglieder, weniger als 10 Angestellte) wurde "
+"durch das <a href=\"https://degooglisons-internet.org\">Projekt \"Das "
+"Internet ent-google-n\"</a> bekannt, welches 34 alternative und ethische "
+"Online-Werkzeugen anbietet."
+
+#: src/components/roadmap/Team.vue:24
+#, fuzzy
+msgid ""
+"Our association creates digital tools (services, courses and resources, "
+"software) to equip the people who participate in a \"contribution society\". "
+"Amongst these, we lead the development of federated software Tube and "
+"Mobilizon (an upcoming alternative to Facebook events, pages and groups)."
+msgstr ""
+"Unser Verein erstellt digitale Werkzeuge (Dienste, Kurse und Materialien, "
+"Software) um die Leute auszustatten, die zum Gemeingut beitragen. Zusätzlich "
+"leiten wir die Entwicklungen von verteilter Software wie z.B. Tube und "
+"Mobilizon (einer aufsteigenden Alternative zu Facebook Terminen, Seiten und "
+"Gruppen)."
+
+#: src/components/roadmap/Team.vue:30
+msgid ""
+"Recognised as being of general interest, over 95% of our association's "
+"budget comes from donations made by people who support and trust us."
+msgstr ""
+"Da wir als wichtig für die Allgemeinheit wahrgenommen werden, kommen über "
+"95% unseres Vereinsbudgets von Spendern, die uns unterstützen und uns "
+"vertrauen."
+
+#: src/components/roadmap/Team.vue:36
+msgid "Learn more about Framasoft"
+msgstr "Erfahre mehr über Framasoft"
+
+#: src/components/roadmap/Team.vue:42
+msgid "Guest designer"
+msgstr "Gast-Designer"
+
+#: src/components/roadmap/Team.vue:43
+msgid ""
+"Throughout this development period we will be improving the user experience "
+"and interface of Tube to provide more clarity and power at every level "
+"of use."
+msgstr ""
+
+#: src/components/roadmap/Team.vue:53
+msgid ""
+"« Independent designer, UX researcher who seeks to acquire a thorough and "
+"deep understanding of uses and design user-friendly, ethical and inclusive "
+"tools. »"
+msgstr ""
+"« Unabhängige Gestalter, UX-Forscher, die ein gründliches und tiefgehendes "
+"Verständnis der Verwendung erlangen und benutzerfreundliche, ethische und "
+"integrative Werkzeuge zu entwerfen möchten. »"
+
+#: src/main.js:88
+msgid "value"
+msgstr "Wert"
+
+#: src/views/All-Contents-Selection.vue:5
+#, fuzzy
+msgid "Our content selection"
+msgstr "Unsere Auswahl"
+
+#: src/views/All-Contents-Selection.vue:10
+#, fuzzy
+msgid "Our contents selection"
+msgstr "Unsere Auswahl"
+
+#: src/views/All-Plugins-Selection.vue:5
+#, fuzzy
+msgid "Our plugin selection"
+msgstr "Unsere Auswahl"
+
+#: src/views/All-Plugins-Selection.vue:10
+#, fuzzy
+msgid "Our plugins selection"
+msgstr "Unsere Auswahl"
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:725
+msgid "Does Tube ensure federation compatibility with previous versions?"
+msgstr ""
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:770
+#, fuzzy
+msgid "Does Tube offer moderation tools?"
+msgstr "Bildung"
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:676
+#, fuzzy
+msgid "Does Tube support horizontal scaling?"
+msgstr "Bildung"
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:566
+msgid "How do I install Tube?"
+msgstr "Wie installiere ich Tube?"
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:335
+#, fuzzy
+msgid "How do I report Tube content?"
+msgstr "Wie installiere ich Tube?"
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:347
+#, fuzzy
+msgid "How does Tube count views?"
+msgstr "Wie installiere ich Tube?"
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:204
+msgid "I don't like the name \"Tube\""
+msgstr ""
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:924
+msgid ""
+"I have found a security vulnerability in Tube. Where and how should I "
+"report it?"
+msgstr ""
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:420
+#, fuzzy
+msgid "If it's free, can we upload illegal stuff on Tube?"
+msgstr "Wenn es frei ist, können wir dann illegales Zeug hochladen?"
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:178
+msgid "Is \"Tube\" a registered trademark?"
+msgstr ""
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:134
+msgid "Is Tube a neutral software?"
+msgstr ""
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:164
+msgid "Is Tube's purpose to replace YouTube?"
+msgstr "Ist der Zweck PeerTubes YouTube zu ersetzten?"
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:738
+#, fuzzy
+msgid "Tube does not contain all the tools I need to manage my instance"
+msgstr ""
+"Es scheint mir, dass die Tube Version x.y.z mir nicht die passenden "
+"Möglichkeiten bietet, um meine Instanzen zu verwalten."
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:583
+msgid "Should I have a big server to run Tube?"
+msgstr ""
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:316
+#, fuzzy
+msgid "There are many bad/porn videos on Tube!"
+msgstr "Es gibt viele Pornos auf Tube!"
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:468
+msgid "What are the Tube features for administrators?"
+msgstr ""
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:366
+msgid "What are the Tube features for content creators?"
+msgstr ""
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:836
+#, fuzzy
+msgid "What are the Tube features for developers?"
+msgstr "Wie ist PeerTubes Monetarisierungspolitik?"
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:222
+msgid "What are the Tube features for viewers?"
+msgstr ""
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:38
+msgid "What are the main advantages of Tube?"
+msgstr "Was sind die Hauptvorteile PeerTubes?"
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:440
+#, fuzzy
+msgid "What is Tube's policy about content monetization?"
+msgstr "Wie ist PeerTubes Monetarisierungspolitik?"
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:16 src/views/Home.vue:55
+msgid "What is Tube?"
+msgstr "Was ist Tube?"
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:703
+#, fuzzy
+msgid "What is the Tube release policy?"
+msgstr "Wie ist PeerTubes Monetarisierungspolitik?"
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:80
+#, fuzzy
+msgid "Who is working on Tube?"
+msgstr "Was ist Tube?"
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:293
+msgid "Why do you let bad people use or upload bad videos on Tube?"
+msgstr ""
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:885
+#, fuzzy
+msgid ""
+"Why does Tube use ActivityPub and WebRTC? Why not IPFS / DTube / Steemit?"
+msgstr ""
+"Warum verwendet Tube das ActivityPub-Federation-Protokoll? Warum nicht "
+"IPFS / d.tube / Steemit?"
+
+#: src/views/FAQ.vue:1 src/views/FAQ.vue:914
+msgid "Why hosting the code on GitHub and Framagit?"
+msgstr ""
+
+#: src/views/FAQ.vue:5 src/views/FAQ.vue:10
+msgid "FAQ"
+msgstr "FAQ"
+
+#: src/views/FAQ.vue:7
+msgid "A few questions to discover Tube"
+msgstr "Einige Fragen um Tube besser kennenzulernen"
+
+#: src/views/FAQ.vue:13
+msgid "Tube Presentation"
+msgstr "Tube-Präsentation"
+
+#: src/views/FAQ.vue:21
+msgid ""
+"Tube is software that you install on a web server. It allows you to "
+"create a video hosting website, so create your \"homemade YouTube\"."
+msgstr ""
+"Tube ist eine Software, die Du auf einem Webserver installieren kannst. "
+"Sie ermöglicht es Dir eine Webseite mit einem Video Portal zu erstellen, "
+"also erstelle \"Dein eigenes YouTube\"."
+
+#: src/views/FAQ.vue:26
+msgid ""
+"The difference to YouTube is that it's not intended to create a huge "
+"platform centralizing videos from the whole world on a single server farm "
+"(which is horribly expensive)."
+msgstr ""
+
+#: src/views/FAQ.vue:31
+msgid ""
+"On the contrary, Tube's concept is to create a network of multiple small "
+"interconnected video hosting providers."
+msgstr ""
+"Im Gegenteil, PeerTubes Konzept ist es, ein Netzwerk aus vielen kleinen "
+"verbundenen Videobereitstellern zu schaffen."
+
+#: src/views/FAQ.vue:43
+msgid ""
+"Tube is unique because (as far as we know) it's the only video hosting "
+"web application which combines three advantages:"
+msgstr ""
+"Tube ist einzigartig (soweit wir wissen), denn es ist die einzige Web-"
+"Software um Videos anzubieten, die drei Vorteile hat:"
+
+#: src/views/FAQ.vue:49
+#, fuzzy
+msgid "An open code under a free/libre license"
+msgstr "Ein quelloffener Programmcode unter einer freien/libre Lizenz"
+
+#: src/views/FAQ.vue:52
+msgid ""
+"Tube is freely provided, no need to pay to install it on your server;"
+msgstr ""
+"Tube wird gratis bereitgestellt, es gibt keine Verpflichtung, dafür zu "
+"bezahlen damit du es auf deinem Server installieren darfst;"
+
+#: src/views/FAQ.vue:53
+msgid ""
+"We can look under the hood of Tube (its source code): it's auditable, "
+"transparent;"
+msgstr ""
+"Wir können Tube unter die Haube (seinen Quelltext) sehen: Er ist "
+"überprüfbar und transparent;"
+
+#: src/views/FAQ.vue:54
+#, fuzzy
+msgid "It can be enhanced by everyone's contributions."
+msgstr ""
+"Es ist eine gemeinschaftliche Entwicklung, die durch die Mitarbeit eines "
+"jeden einzelnen erweitert wird."
+
+#: src/views/FAQ.vue:59
+#, fuzzy
+msgid "A federation of interconnected hosting providers"
+msgstr "Ein Zusammenschluss von mit einander verbundenen Anbietern"
+
+#: src/views/FAQ.vue:62
+msgid "It decentralizes video storage and decision-making power;"
+msgstr ""
+
+#: src/views/FAQ.vue:63
+msgid "We can display videos and accounts of other Tube websites;"
+msgstr ""
+
+#: src/views/FAQ.vue:64
+#, fuzzy
+msgid ""
+"It's based on <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://activitypub.rocks\">ActivityPub</a> to connect with tools <a "
+"target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.cpy.re/"
+"videos/watch/da2b08d4-a242-4170-b32a-4ec8cbdca701\">like Mastodon</a> for "
+"example."
+msgstr ""
+"Die Webseite wurde von <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://framasoft.org\">Framasoft</a> entwickelt und von <a target=\"_blank"
+"\" rel=\"noopener noreferrer\" href=\"https://www.maiwann.net/\">Maiwann</a> "
+"gestaltet"
+
+#: src/views/FAQ.vue:68
+#, fuzzy
+msgid "Peer-to-peer broadcasting"
+msgstr "Über das Peer-2-Peer-Verteilen und -Ansehen"
+
+#: src/views/FAQ.vue:71
+msgid "It reduces server bandwidth overload if a video becomes viral;"
+msgstr ""
+
+#: src/views/FAQ.vue:72
+msgid "We become an actor of the video broadcasting;"
+msgstr ""
+
+#: src/views/FAQ.vue:73
+#, fuzzy
+msgid ""
+"It's based on <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://en.wikipedia.org/wiki/WebRTC\">WebRTC</a>, a free and open-source "
+"project for web browsers."
+msgstr ""
+"Peer-to-peer Übertragungen ermöglichen, durch das<a target=\"_blank\" rel="
+"\"noopener noreferrer\" href=\"https://en.wikipedia.org/wiki/WebRTC"
+"\">WebRTC</a> Protokoll, dass Internetnutzer, die gleichzeitig das gleiche "
+"Video gucken, Teile des Videos sich gegenseitig zuschicken, was den Server "
+"entlastet."
+
+#: src/views/FAQ.vue:85
+msgid ""
+"Tube is developed by <a target=\"_blank\" rel=\"noopener noreferrer\" "
+"href=\"https://framasoft.org\">Framasoft</a>, a French non-profit popular "
+"educational organization on digital issues."
+msgstr ""
+"Tube wird von <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://framasoft.org\">Framasoft</a> entwickelt, einem französischem, "
+"gemeinnützigem Verein für Bildung für Alle im digitalen Bereich."
+
+#: src/views/FAQ.vue:89
+msgid ""
+"It employs a developer, <a target=\"_blank\" rel=\"noopener noreferrer\" "
+"href=\"https://github.com/Chocobozzz\">Chocobozzz</a>, who works since 2018 "
+"on Tube projects:"
+msgstr ""
+"Es beschäftigt einen Entwickler, <a target=\"_blank\" rel=\"noopener "
+"noreferrer\" href=\"https://github.com/Chocobozzz\">Chocobozzz</a>, der seit "
+"2018 am Tube Projekt arbeitet:"
+
+#: src/views/FAQ.vue:94
+msgid "Development of new features and software maintenance;"
+msgstr "Entwicklung neuer Funktionen und Software-Verwaltung;"
+
+#: src/views/FAQ.vue:95
+msgid "Thoughts on the architecture, the design and the future of Tube;"
+msgstr ""
+
+#: src/views/FAQ.vue:96
+msgid ""
+"New stable releases preparation and communication (blog posts, changelog, "
+"etc.);"
+msgstr ""
+"Neue stabile Versionen vorbereiten und bekannt geben (Blogbeiträge, "
+"Änderungshistorie usw.);"
+
+#: src/views/FAQ.vue:97
+msgid ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://joinpeertube."
+"org\">Official Tube website</a> development and maintenance;"
+msgstr ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org\">PeerTubes offizielles Dokumentationsportal</a> "
+"(Verwaltung und Verwendung);"
+
+#: src/views/FAQ.vue:100
+#, fuzzy
+msgid ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://packages."
+"joinpeertube.org/api/v1/ping\">Tube plugins index</a> development and "
+"maintenance;"
+msgstr ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org\">PeerTubes offizielles Dokumentationsportal</a> "
+"(Verwaltung und Verwendung);"
+
+#: src/views/FAQ.vue:103
+msgid ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://instances."
+"joinpeertube.org\">Tube instances index</a> development and maintenance;"
+msgstr ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org\">PeerTubes offizielles Dokumentationsportal</a> Verwaltung "
+"und Verwendung;"
+
+#: src/views/FAQ.vue:106
+#, fuzzy
+msgid ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://search."
+"joinpeertube.org/\">Tube videos/channels search index</a> development "
+"and maintenance;"
+msgstr ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org\">PeerTubes offizielles Dokumentationsportal</a> "
+"(Verwaltung und Verwendung);"
+
+#: src/views/FAQ.vue:109
+#, fuzzy
+msgid ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org\">Tube documentation website</a> development and "
+"maintenance;"
+msgstr ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org\">PeerTubes offizielles Dokumentationsportal</a> "
+"(Verwaltung und Verwendung);"
+
+#: src/views/FAQ.vue:112
+msgid ""
+"Tube support and discussions on bugtrackers, forum, IRC or by email;"
+msgstr ""
+"Unterstützung und Diskussionen rund um Tube gibt es auf Bugtrackern, im "
+"Forum, im IRC oder per Mail;"
+
+#: src/views/FAQ.vue:113
+msgid ""
+"Pull requests/merge requests reviews, merges, and support of features added "
+"by external contributions (bug fixes, documentation, refactor, etc.);"
+msgstr ""
+"Pull Requests/Merge Requests Überprüfungen, Softwareänderungen einpflegen "
+"und Unterstützen von Funktionalitäten, die durch von außen kommende Beiträge "
+"hinzugefügt wurden (gemeldete Fehler, Dokumentation, Veränderungen usw.);"
+
+#: src/views/FAQ.vue:114
+msgid ""
+"Maintenance of several Tube instances (tube.cpy.re, peertube2.cpy."
+"re, etc.)."
+msgstr ""
+"Die Wartung von einigen Tube Instanzen (tube.cpy.re, peertube2.cpy."
+"re, etc.)."
+
+#: src/views/FAQ.vue:117
+msgid ""
+"Moreover, Chocobozzz works on internal Framasoft's projects (<a target="
+"\"_blank\" rel=\"noopener noreferrer\" href=\"https://framapad.org"
+"\">Framapad</a>, <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://framatalk.org\">Framatalk</a>, etc.). In other words, the "
+"management of Tube projects is operated by only one employee, who has "
+"other responsabilities in addition to his workload."
+msgstr ""
+"Hinzu kommt, dass Chocobozzz an internen Projekten von Framasoft arbeitet "
+"(<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://framapad.org"
+"\">Framapad</a>, <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://framatalk.org\">Framatalk</a>, usw). Anders gesagt: Die ganze "
+"Verwaltung des Tube Projektes wird von nur einem Angestelltem gestemmt, "
+"der zusätzlich zu seinem Arbeitspensum auch noch weitere Verantwortungen "
+"schultert."
+
+#: src/views/FAQ.vue:122
+msgid ""
+"Other Framasoft's volunteers and salaried members also contribute to the "
+"Tube project on various aspects (strategy, communication, development, "
+"community animation). Nevertheless, Tube is not developed by a startup "
+"with a team of 50 people, and a workflow full of hyper-formatted processes."
+msgstr ""
+"Andere Freiwillige und bezahlte Arbeitnehmer von Framasoft unterstützen das "
+"Tube Projekt auf verschiedene Art und Weisen (Strategie, Kommunikation, "
+"Entwicklung, Förderung der Gemeinschaft). Trotz alledem wird Tube nicht "
+"von einem Startup mit einem Team von 50 Leuten entwickelt und es hat keinen "
+"Geschäftsplan, der nur so vor hippen Abläufen und Zielen strotzt."
+
+#: src/views/FAQ.vue:127
+msgid ""
+"Framasoft will therefore takes the time to improve the software "
+"progressively, at its own pace and with its atypical methods which, so far, "
+"have proven to be rather effective."
+msgstr ""
+"Framasoft wird sich daher die Zeit nehmen, die Software schrittweise zu "
+"verbessern, in seinem eigenen Tempo und mit seinen atypischen Methoden, die "
+"sich bisher als recht effektiv erwiesen haben."
+
+#: src/views/FAQ.vue:139
+msgid "No it is not."
+msgstr "Nein, ist es nicht."
+
+#: src/views/FAQ.vue:143
+msgid ""
+"Tube is a software created, developed and maintained by <a target="
+"\"_blank\" rel=\"noopener noreferrer\" href=\"https://framasoft.org"
+"\">Framasoft</a>, a French non-profit popular educational organization on "
+"digital issues. Framasoft has a French culture, respects French laws and is "
+"a political actor (« who participates in the life of the city-state ») of "
+"civil society."
+msgstr ""
+"Tube ist eine Software, die von <a target=\"_blank\" rel=\"noopener "
+"noreferrer\" href=\"https://framasoft.org\">Framasoft</a> erschaffen wurde "
+"und weiter entwickelt und gewartet wird. Framasoft ist ein französischer, "
+"gemeinnütziger Verein, der sich für Bildung für Alle im digitalen Bereich "
+"einsetzt. Framasoft lebt die französische Kultur, respektiert das "
+"französische Recht und nimmt am politischen Leben der Zivilgesellschaft im "
+"Stadtstaat teil."
+
+#: src/views/FAQ.vue:148
+#, fuzzy
+msgid ""
+"Tube is part of several actions assembled by Framasoft in the <a target="
+"\"_blank\" rel=\"noopener noreferrer\" href=\"https://contributopia.org"
+"\">Contributopia roadmap</a>. These actions aim to propose alternative "
+"digital tools to those coming from surveillance capitalism, so that people "
+"who do not recognize themselves in such a system can create spaces of "
+"freedom."
+msgstr ""
+"Tube ist nur ein Teil der vielen Aktivitäten, die von Framasoft im <a "
+"target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://contributopia."
+"org\">Contributopia Fahrplan</a> organisiert werden. Diese Aktivitäten "
+"zielen darauf ab alternative digitale Lösungen zu den Diensten aufzuzeigen, "
+"die von dem überwachenden Kapitalismus präsentiert werden, so dass Leute, "
+"die sich bei jenen Diensten nicht wiederfinden wollen, Bereiche mit "
+"Freiheiten erschaffen können."
+
+#: src/views/FAQ.vue:153
+msgid ""
+"Consequently, Tube development and/or management of websites associated "
+"with the Tube project (<a target=\"_blank\" rel=\"noopener noreferrer\" "
+"href=\"https://joinpeertube.org\">joinpeertube.org</a>, <a target=\"_blank\" "
+"rel=\"noopener noreferrer\" href=\"https://instances.joinpeertube.org"
+"\">instances.joinpeertube.org</a>, <a target=\"_blank\" rel=\"noopener "
+"noreferrer\" href=\"https://search.joinpeertube.org/\">search.joinpeertube."
+"org</a>, etc.) may not please everyone (in particular because of different "
+"ideas, ideologies of cultures)."
+msgstr ""
+"Folglich kann es sein, dass die Tube-Entwicklung und/oder Verwaltung von "
+"Websites, die mit dem Tube-Projekt in Verbindung stehen(<a target="
+"\"_blank\" rel=\"noopener noreferrer\" href=\"https://joinpeertube.org"
+"\">joinpeertube.org</a>, <a target=\"_blank\" rel=\"noopener noreferrer\" "
+"href=\"https://instances.joinpeertube.org\">instances.joinpeertube.org</a>, "
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://search."
+"joinpeertube.org/\">search.joinpeertube.org</a>, etc.)nicht jedem gefallen "
+"wird (insbesondere aufgrund unterschiedlicher Ideen, Ideologien der "
+"Kulturen)."
+
+#: src/views/FAQ.vue:157
+msgid ""
+"We respect that, and remind that all software of the Tube project is "
+"free software and can be installed with their own domain name."
+msgstr ""
+
+#: src/views/FAQ.vue:169
+msgid "We can answer with certainty: no!"
+msgstr "Wir können mit Sicherheit sagen: Nein!"
+
+#: src/views/FAQ.vue:171
+#, fuzzy
+msgid ""
+"The ambition remains to be <strong>a free and decentralized alternative</"
+"strong>: the goal of an alternative is not to replace, but to propose "
+"something else, with different values, in parallel to what already exists."
+msgstr ""
+"Nichtsdestotrotz, das Ziel bleibt <strong>eine freie und dezentrale "
+"Alternative</strong>: Das Ziel einer Alternative ist nicht zu ersetzen, "
+"sondern etwas anderes vorzuschlagen, mit anderen Werten, parallel zu dem was "
+"es schon gibt."
+
+#: src/views/FAQ.vue:183
+msgid ""
+"Yes, Framasoft holds the \"Tube\" trademark in several countries for "
+"preventive purposes."
+msgstr ""
+
+#: src/views/FAQ.vue:185
+msgid ""
+"Framasoft affirms here its intention to not use intellectual property for "
+"predatory purposes or to constrain legitimate uses of the software. However, "
+"Framasoft reserves the right to use trademark law, especially in case of "
+"damage to the image of the Tube project, edited by Framasoft."
+msgstr ""
+
+#: src/views/FAQ.vue:192
+msgid ""
+"We recommend you to create your own digital identity, without using "
+"\"Tube\" for your project (software name, website domain...) to not "
+"confuse people about who is behind the website/project."
+msgstr ""
+
+#: src/views/FAQ.vue:197
+#, fuzzy
+msgid ""
+"For more information, please refer to our <a target=\"_blank\" rel="
+"\"noopener noreferrer\" href=\"https://framasoft.org/en/trademarks"
+"\">Trademark Code of Conduct</a>."
+msgstr ""
+"Wenn du Fragen hast, zögere nicht, unser Forum zu benutzen: <a target="
+"\"_blank\" rel=\"noopener noreferrer\" href=\"https://framacolibri.org/c/"
+"tube\">https://framacolibri.org/c/tube</a>"
+
+#: src/views/FAQ.vue:209
+msgid ""
+"Tube is just the name of the software. You can install it on your "
+"server, and choose the name you want. For example, Framasoft's Tube "
+"instance is named <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://framatube.org/\">Framatube</a>."
+msgstr ""
+
+#: src/views/FAQ.vue:219
+#, fuzzy
+msgid "For those who want to watch videos"
+msgstr "Für diejenigen, die Videos schauen wollen, kann Tube..."
+
+#: src/views/FAQ.vue:229
+msgid "Become a part of the broadcasting of the videos you are watching"
+msgstr ""
+
+#: src/views/FAQ.vue:232
+msgid "Help the Tube website to share videos and lives using P2P"
+msgstr ""
+
+#: src/views/FAQ.vue:233
+msgid ""
+"Easily disable P2P in your account if logged-in or in your anonymous settings"
+msgstr ""
+
+#: src/views/FAQ.vue:238
+#, fuzzy
+msgid "Customize the interface"
+msgstr "Eine bessere Oberfläche"
+
+#: src/views/FAQ.vue:241
+#, fuzzy
+msgid ""
+"Update your name, avatar or description in <a target=\"_blank\" rel="
+"\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-setup-"
+"account?id=update-your-profile\">your profile</a>"
+msgstr ""
+"die neue Version von <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://joinpeertube.org\">JoinTube</a>, das durch diese Arbeit "
+"bereichert wird;"
+
+#: src/views/FAQ.vue:242
+msgid "Set your appropriate NSFW policy (display, blur or hide NSFW videos)"
+msgstr ""
+
+#: src/views/FAQ.vue:243
+msgid "Choose a Tube theme to change the look and feel of the interface"
+msgstr ""
+
+#: src/views/FAQ.vue:244
+#, fuzzy
+msgid "Automatically filter videos depending on their language"
+msgstr "Filtern von Videos anhand der Sprache,"
+
+#: src/views/FAQ.vue:245
+msgid "Choose your autoplay policy"
+msgstr ""
+
+#: src/views/FAQ.vue:250
+msgid "Manage your library"
+msgstr ""
+
+#: src/views/FAQ.vue:253
+msgid ""
+"Use the built-in <em>Watch Later</em> playlist and add easily videos in it"
+msgstr ""
+
+#: src/views/FAQ.vue:254
+#, fuzzy
+msgid ""
+"Organize videos in public or private <a target=\"_blank\" rel=\"noopener "
+"noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-library?id=video-"
+"history\">playlists</a>"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:255
+msgid "Automatically resume videos from the last time you watched them"
+msgstr ""
+
+#: src/views/FAQ.vue:256
+msgid "Check your watch history in a dedicated page"
+msgstr ""
+
+#: src/views/FAQ.vue:261
+#, fuzzy
+msgid "Subscribe to channels"
+msgstr "Entdecke den Kanal"
+
+#: src/views/FAQ.vue:264
+msgid ""
+"Subscribe to local or remote channels to be notified when they publish videos"
+msgstr ""
+
+#: src/views/FAQ.vue:265
+msgid "Display videos of your subscriptions in a dedicated page"
+msgstr ""
+
+#: src/views/FAQ.vue:270
+msgid "Share and interact with videos and playlists"
+msgstr ""
+
+#: src/views/FAQ.vue:273
+#, fuzzy
+msgid ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/use-watch-video\">Share</a> the video or the playlist URL/"
+"embed with attributes (automatically start/stop at, loop enabled, muted...)"
+msgstr ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org\">PeerTubes offizielles Dokumentationsportal</a> "
+"(Verwaltung und Verwendung);"
+
+#: src/views/FAQ.vue:274
+msgid "Download a video using a dedicated modal"
+msgstr ""
+
+#: src/views/FAQ.vue:275
+msgid ""
+"Comment, reply and rate videos using Tube or an ActivityPub compatible "
+"software (Mastodon, Pleroma...)"
+msgstr ""
+
+#: src/views/FAQ.vue:280
+#, fuzzy
+msgid "Search videos or channels"
+msgstr "Suche nach Tube Videos und Kanälen"
+
+#: src/views/FAQ.vue:283
+#, fuzzy
+msgid ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/use-search\">Search</a> local or remote videos and channels"
+msgstr ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org\">PeerTubes offizielles Dokumentationsportal</a> "
+"(Verwaltung und Verwendung);"
+
+#: src/views/FAQ.vue:284
+msgid "Use many advanced filters (tags, category, licence...)"
+msgstr ""
+
+#: src/views/FAQ.vue:285
+msgid "Use the video URL or channel handle/URL to fetch remote content"
+msgstr ""
+
+#: src/views/FAQ.vue:298
+msgid ""
+"Tube is not a service, Tube is free software. This means that anyone "
+"can download and install Tube to host videos on a specific domain name "
+"(this is called \"hosting a Tube instance/website\"). Framasoft has no "
+"control over who downloads Tube, and who installs or uses it. Nor does "
+"Microsoft or Adobe have any control over who uses Word or Photoshop and for "
+"what purposes."
+msgstr ""
+
+#: src/views/FAQ.vue:305
+msgid ""
+"Framasoft only hosts and promotes one Tube instance: <a href=\"https://"
+"framatube.org\" target=\"_blank\">https://framatube.org</a>"
+msgstr ""
+
+#: src/views/FAQ.vue:309
+msgid ""
+"Also, Framasoft hosts and promotes only one Tube search index: <a href="
+"\"https://sepiasearch.org\" target=\"_blank\">https://sepiasearch.org</a>"
+msgstr ""
+
+#: src/views/FAQ.vue:321
+msgid ""
+"This is not true. In September 2021, the 900 instances listed on our <a "
+"target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://instances."
+"joinpeertube.org/instances\">public index</a> host ~1% videos tagged as NSFW "
+"(i. e. the content is sensitive, which could be something else than "
+"pornography)."
+msgstr ""
+
+#: src/views/FAQ.vue:327
+msgid ""
+"Administrators have full control of the content they want to display, and "
+"how they want to display it. In the default configuration, Tube hides "
+"NSFW videos."
+msgstr ""
+
+#: src/views/FAQ.vue:340
+msgid ""
+"See the dedicated section in the Tube documentation: <a href=\"https://"
+"tube.docs.dingshunyu.top/use-report\" target=\"_blank\">https://docs."
+"joinpeertube.org/use-report</a>"
+msgstr ""
+
+#: src/views/FAQ.vue:352
+msgid ""
+"Your web browser sends a view to the server after 30 seconds of playback. If "
+"a video is less than 30 seconds in length, a view is sent after 75% of the "
+"video duration. After giving a view, that IP address cannot add another view "
+"in the next hour. Views are buffered, so don't panic if the view counter "
+"stays the same after you watched a video."
+msgstr ""
+
+#: src/views/FAQ.vue:363
+#, fuzzy
+msgid "For those who want to upload videos"
+msgstr ""
+"Für diejenigen, die ihre Videos hochladen wollen, ermöglicht Tube..."
+
+#: src/views/FAQ.vue:373
+#, fuzzy
+msgid "Find the Tube website that suits you best"
+msgstr "1. Finde die Instanz, die am besten zu dir passt"
+
+#: src/views/FAQ.vue:376
+#, fuzzy
+msgid ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/instances\">Join a "
+"Tube community</a> depending on its topic, terms of services or code of "
+"conduct"
+msgstr ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org\">PeerTubes offizielles Dokumentationsportal</a> Verwaltung "
+"und Verwendung;"
+
+#: src/views/FAQ.vue:377
+msgid "Talk to administrators and moderators that are real people, not robots"
+msgstr ""
+
+#: src/views/FAQ.vue:382
+msgid "Upload and import videos"
+msgstr ""
+
+#: src/views/FAQ.vue:385
+msgid ""
+"Upload or import videos from the web (Youtube, Dailymotion...) or from a "
+"torrent file"
+msgstr ""
+
+#: src/views/FAQ.vue:386
+msgid ""
+"Set metadata: category, licence, language, tags, description, thumbnail..."
+msgstr ""
+
+#: src/views/FAQ.vue:387
+#, fuzzy
+msgid ""
+"Choose <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/use-create-upload-video?id=video-confidentiality-options-"
+"what-do-they-mean\">video privacy</a>: public, unlisted, internal or private"
+msgstr ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org\">PeerTubes offizielles Dokumentationsportal</a> "
+"(Verwaltung und Verwendung);"
+
+#: src/views/FAQ.vue:388
+#, fuzzy
+msgid ""
+"Add <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/use-create-upload-video?id=captions\">subtitles</a>"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:389
+msgid "Easily disable comments or download"
+msgstr ""
+
+#: src/views/FAQ.vue:390
+msgid ""
+"Upload an audio file and an image and let Tube take care of creating the "
+"video!"
+msgstr ""
+
+#: src/views/FAQ.vue:398
+msgid ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/use-create-upload-video?id=publish-a-live-in-tube-gt-"
+"v3\">Publish live videos</a> in Tube using your favorite RTMP compatible "
+"software (OBS, Restream, ffmpeg...)"
+msgstr ""
+
+#: src/views/FAQ.vue:399
+msgid ""
+"Create permanent lives to stream multiple times inside the same live (URL "
+"doesn't change for the viewers)"
+msgstr ""
+
+#: src/views/FAQ.vue:400
+msgid "Let Tube create a replay of your live"
+msgstr ""
+
+#: src/views/FAQ.vue:405
+msgid "Manage your channels"
+msgstr ""
+
+#: src/views/FAQ.vue:408
+#, fuzzy
+msgid ""
+"Create <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/use-library?id=video-channels\">multiple channels</a> "
+"inside your account to group your videos by topic"
+msgstr ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org\">PeerTubes offizielles Dokumentationsportal</a> "
+"(Verwaltung und Verwendung);"
+
+#: src/views/FAQ.vue:409
+msgid "Brand your channel using a dedicated name, a banner and an avatar"
+msgstr ""
+
+#: src/views/FAQ.vue:410
+msgid ""
+"Set a <em>Support</em> button for your channel to explain how to support "
+"your work"
+msgstr ""
+
+#: src/views/FAQ.vue:411
+msgid ""
+"People can subscribe to your channel from a Tube website or from an "
+"ActivityPub compatible software (Mastodon, Pleroma...)"
+msgstr ""
+
+#: src/views/FAQ.vue:412
+#, fuzzy
+msgid ""
+"Create public <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://tube.docs.dingshunyu.top/use-library?id=playlist\">playlists</a> "
+"assigned to your channel to organize your content or remote videos"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:425
+msgid ""
+"Being free doesn't mean being above the law! Each Tube hosting provider "
+"can decide on its own general conditions of use, abiding by their local laws."
+msgstr ""
+"Frei zu sein bedeutet nicht über dem Gesetz zu stehen! Jeder, für Tube "
+"Videos bereitstellende Anbieter, kann über seine eigenen Nutzungsbedingungen "
+"entscheiden, konform zu seinen örtlich geltenden Gesetzen."
+
+#: src/views/FAQ.vue:430
+#, fuzzy
+msgid ""
+"For example, in France, discriminatory content <a target=\"_blank\" rel="
+"\"noopener noreferrer\" href=\"https://fr.wikipedia.org/wiki/"
+"Lois_contre_le_racisme_et_les_discours_de_haine\">is prohibited</a> and may "
+"be reported to authorities. Tube allows users to report problematic "
+"videos, and administrator must then apply its moderation in accordance with "
+"its terms and conditions and the law."
+msgstr ""
+"Zum Beispiel ist in Frankreich diskriminierender Inhalt<a target=\"_blank\" "
+"rel=\"noopener noreferrer\" href=\"https://fr.wikipedia.org/wiki/"
+"Lois_contre_le_racisme_et_les_discours_de_haine\">verboten</a> und kann den "
+"Behörden gemeldet werden. Tube ermöglicht es Benutzern, problematische "
+"Videos zu melden, und jeder Administrator muss dann seine Moderation gemäß "
+"seinen Bedingungen und dem Gesetz anwenden."
+
+#: src/views/FAQ.vue:445
+#, fuzzy
+msgid ""
+"There are none at the moment: Tube is a tool that we wanted neutral in "
+"terms of monetization."
+msgstr ""
+"Es gibt, im Moment, keine. Tube ist ein Werkzeug das hinsichtlich "
+"Monetarisierung neutral geplant wurde."
+
+#: src/views/FAQ.vue:447
+#, fuzzy
+msgid ""
+"For now, the solution proposed the <strong>support</strong> button under the "
+"video. This button displays a frame in which people who upload videos can "
+"display text, images, and links freely (link to Patreon, Tipeee, Paypal, "
+"Liberapay...)."
+msgstr ""
+"Vorerst wird denjenigen, die Videos hochladen, als Lösung vorgeschlagen, die "
+"Schaltfläche \"Support\" unter dem Video zu verwenden. Diese Schaltfläche "
+"zeigt einen Rahmen an, in dem Personen, die Videos hochladen, Text, Bilder "
+"und Links frei anzeigen können. Es ist zum Beispiel möglich, dort einen Link "
+"zu Patreon, Tipeee, Paypal, Liberapay (oder einer anderen Lösung) zu "
+"platzieren. Andere Beispiele: Gib eine Postanschrift an, wenn du physische "
+"Dankschreiben erhalten möchtest, gib ein Logo deines Unternehmens an, einen "
+"Link zur Unterstützung einer gemeinnützigen Organisation..."
+
+#: src/views/FAQ.vue:453
+msgid ""
+"We did not go any further, as we refuse to tie our code to a particular "
+"content funding method, that might not fit all communities and deter others. "
+"It's the reason why we encourage developers to use the <a target=\"_blank\" "
+"rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/contribute-"
+"plugins\">Tube plugin API</a> to create their own monetization system."
+msgstr ""
+
+#: src/views/FAQ.vue:465
+#, fuzzy
+msgid "For Tube administrators"
+msgstr "Für Tube-Administratoren"
+
+#: src/views/FAQ.vue:475 src/views/FAQ.vue:843
+msgid "Free and open-source software"
+msgstr ""
+
+#: src/views/FAQ.vue:478
+msgid "Install Tube on your server and create your \"homemade YouTube\""
+msgstr ""
+
+#: src/views/FAQ.vue:479
+#, fuzzy
+msgid ""
+"Official <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://"
+"tube.docs.dingshunyu.top/install-docker\">Docker support</a>"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:480
+#, fuzzy
+msgid ""
+"Documented <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://"
+"tube.docs.dingshunyu.top/api-rest-reference.html\">REST API</a> and <a target="
+"\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/"
+"maintain-tools\">CLI tools</a>"
+msgstr ""
+"Die Webseite wurde von <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://framasoft.org\">Framasoft</a> entwickelt und von <a target=\"_blank"
+"\" rel=\"noopener noreferrer\" href=\"https://www.maiwann.net/\">Maiwann</a> "
+"gestaltet"
+
+#: src/views/FAQ.vue:485
+msgid "Federation with ActivityPub"
+msgstr ""
+
+#: src/views/FAQ.vue:488
+msgid "Enable or disable federation for your instance"
+msgstr ""
+
+#: src/views/FAQ.vue:489
+msgid "Display videos/accounts of other instances on yours"
+msgstr ""
+
+#: src/views/FAQ.vue:490
+#, fuzzy
+msgid ""
+"<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/admin-following-instances?id=automatically-follow-other-"
+"instances\">Automatically follow</a> instances from a public index"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:495
+msgid "P2P with WebRTC"
+msgstr ""
+
+#: src/views/FAQ.vue:498
+msgid "Reduce your server bandwidth using P2P on VOD and live videos"
+msgstr ""
+
+#: src/views/FAQ.vue:499
+msgid "Enable or disable easily P2P for your instance"
+msgstr ""
+
+#: src/views/FAQ.vue:500
+#, fuzzy
+msgid ""
+"Help (or get help) other instances using <a target=\"_blank\" rel=\"noopener "
+"noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-following-instances?"
+"id=instances-redundancy\">Tube redundancy</a>"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:505
+msgid "Video transcoding"
+msgstr ""
+
+#: src/views/FAQ.vue:508
+#, fuzzy
+msgid ""
+"Optimize videos and generate <a target=\"_blank\" rel=\"noopener noreferrer"
+"\" href=\"https://tube.docs.dingshunyu.top/admin-configuration?id=vod-"
+"transcoding\">multiple resolutions</a> using ffmpeg"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:509
+msgid ""
+"Enable additional video extension (.mkv, .mov, .avi...) or audio uploads"
+msgstr ""
+
+#: src/views/FAQ.vue:510
+msgid "Generate HLS playlists or raw MP4 files"
+msgstr ""
+
+#: src/views/FAQ.vue:511
+msgid "Customize ffmpeg transcoding profile using Tube plugins"
+msgstr ""
+
+#: src/views/FAQ.vue:516
+#, fuzzy
+msgid "Live streaming transcoding"
+msgstr "Echtzeitübertragung"
+
+#: src/views/FAQ.vue:519
+#, fuzzy
+msgid ""
+"Enable <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/admin-configuration?id=live-streaming\">live streaming</a> "
+"for your instance"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:520
+msgid "Add ability for your users to publish a replay of live videos"
+msgstr ""
+
+#: src/views/FAQ.vue:521
+msgid "Set simultaneous live streaming limits (per user/instance)"
+msgstr ""
+
+#: src/views/FAQ.vue:522
+msgid "Enable live streaming transcoding in multiple resolutions"
+msgstr ""
+
+#: src/views/FAQ.vue:523
+msgid "Customize ffmpeg live transcoding profile using Tube plugins"
+msgstr ""
+
+#: src/views/FAQ.vue:528
+#, fuzzy
+msgid "Video imports"
+msgstr "YouTube-Videoimport"
+
+#: src/views/FAQ.vue:531
+msgid "Enable video import using youtube-dl (Youtube, Dailymotion...)"
+msgstr ""
+
+#: src/views/FAQ.vue:532
+#, fuzzy
+msgid "Enable video import using webtorrent (torrent file or magnet URI)"
+msgstr ""
+"Möglichkeit ein Video über eine Torrent-Datei oder eine Magnet-URI zu "
+"importieren"
+
+#: src/views/FAQ.vue:540
+msgid "Enable signups and set a max users and upload limits"
+msgstr ""
+
+#: src/views/FAQ.vue:541
+#, fuzzy
+msgid ""
+"Assign <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/admin-moderation\">moderator/admin</a> roles"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:542
+msgid ""
+"Manage abuse reports on videos, accounts or comments using a dedicated "
+"dashboard"
+msgstr ""
+
+#: src/views/FAQ.vue:543
+msgid ""
+"Automatically block videos from untrusted users awaiting a review by "
+"moderators"
+msgstr ""
+
+#: src/views/FAQ.vue:544
+msgid "Block specific videos and specify a reason"
+msgstr ""
+
+#: src/views/FAQ.vue:545
+msgid "Ban local users, mute accounts or instances"
+msgstr ""
+
+#: src/views/FAQ.vue:550
+msgid "Highly configurable"
+msgstr ""
+
+#: src/views/FAQ.vue:553
+msgid "Easily set instance metadata: name, description, main categories..."
+msgstr ""
+
+#: src/views/FAQ.vue:554
+#, fuzzy
+msgid ""
+"Search and install Tube <a target=\"_blank\" rel=\"noopener noreferrer\" "
+"href=\"https://tube.docs.dingshunyu.top/admin-customize-instance\">plugins or "
+"themes</a>"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:555
+msgid "Use external auth (LDAP, OpenID Connect...) using auth plugins"
+msgstr ""
+
+#: src/views/FAQ.vue:556
+msgid "Set the default NSFW policy (hide, blur or display these videos)"
+msgstr ""
+
+#: src/views/FAQ.vue:557
+msgid "Choose your trending algorithm"
+msgstr ""
+
+#: src/views/FAQ.vue:558
+msgid "Broadcast a message to users using a banner"
+msgstr ""
+
+#: src/views/FAQ.vue:571
+#, fuzzy
+msgid ""
+"The <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/install-any-os\">installation guide is here</a> (only in "
+"English)."
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:576
+#, fuzzy
+msgid ""
+"If you need help, check the <a target=\"_blank\" rel=\"noopener noreferrer\" "
+"href=\"https://joinpeertube.org/help\">help page</a>."
+msgstr ""
+"die neue Version von <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://joinpeertube.org\">JoinTube</a>, das durch diese Arbeit "
+"bereichert wird;"
+
+#: src/views/FAQ.vue:588
+msgid ""
+"Tube should run happily on a virtual machine with 2 threads/vCPUs, at "
+"least 1 Gb of RAM and enough storage for videos. In terms of bandwidth, a "
+"lot will depend on which Tube instances you federate with and what your "
+"relation with them is (more about that below)."
+msgstr ""
+
+#: src/views/FAQ.vue:594
+msgid ""
+"As a real life example, the Tube demonstration server https://tube."
+"cpy.re runs on 2 vCores and 2GB of RAM. Average consumption is:"
+msgstr ""
+
+#: src/views/FAQ.vue:600
+msgid "CPU: nginx ~ 2%, tube ~ 10%, postgres ~ 1%, redis ~ 1%"
+msgstr ""
+
+#: src/views/FAQ.vue:601
+msgid "RAM: nginx ~ 1MB, tube ~ 150MB, postgres ~ 30MB, redis ~ 20MB"
+msgstr ""
+
+#: src/views/FAQ.vue:602
+msgid ""
+"Network: ~200GB sent per month (https://framatube.org: ~1.5TB sent per month)"
+msgstr ""
+
+#: src/views/FAQ.vue:605
+msgid "CPU"
+msgstr ""
+
+#: src/views/FAQ.vue:607
+msgid ""
+"Except for video transcoding, a Tube instance is not CPU bound. Neither "
+"Nginx, Tube itself, PostgreSQL nor Redis require a lot of computing "
+"power. If it were only for those, one could easily get by with just one "
+"thread/vCPU."
+msgstr ""
+
+#: src/views/FAQ.vue:612
+msgid ""
+"You will hugely benefit from at least a second thread though, because of "
+"transcoding. Transcoding is very cpu intensive. It serves two purposes on a "
+"Tube instance: it ensures all videos can be played optimally in the web "
+"interface, and it generates different resolutions for the same video. "
+"Tube support for offloading transcoding to other machines is <a target="
+"\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/Chocobozzz/"
+"Tube/issues/947\">being discussed</a>, but not yet implemented."
+msgstr ""
+
+#: src/views/FAQ.vue:620
+msgid "RAM"
+msgstr ""
+
+#: src/views/FAQ.vue:622
+msgid ""
+"1/2 GB of RAM should be plenty for a basic Tube instance, which usually "
+"takes at most 150 MB in RAM. The only reason you might want more would be if "
+"you colocate your Redis or PostgreSQL services on a non-SSD system."
+msgstr ""
+
+#: src/views/FAQ.vue:627
+msgid "Storage"
+msgstr ""
+
+#: src/views/FAQ.vue:628
+msgid ""
+"There are two important angles to storage: disk space usage and sustained "
+"read speed. To make a rough estimate of your disk space usage requirements, "
+"you want to know the answer to three questions:"
+msgstr ""
+
+#: src/views/FAQ.vue:634
+msgid "What is the total size of the videos you wish to stream?"
+msgstr ""
+
+#: src/views/FAQ.vue:635
+msgid ""
+"Do you want to enable transcoding? If so, do you want to provide multiple "
+"resolutions per video? Try this out with a few videos and you will get an "
+"idea of how much extra space is required per video and estimate a "
+"multiplication factor for future space allocation."
+msgstr ""
+
+#: src/views/FAQ.vue:640
+msgid ""
+"Which sharing mechanisms do you want to enable? Just WebTorrent, or also HLS "
+"with p2p? If you want both, this will double your storage needs."
+msgstr ""
+
+#: src/views/FAQ.vue:646
+msgid ""
+"In terms of read speed, you want to make sure that you can saturate your "
+"network uplink serving Tube videos. This should not be a problem with "
+"SSD disks, whereas traditional HDD should be accounted for: typical "
+"sustained read rates for a well tuned system with a 7200rpm hard disk should "
+"hover around 120 MB/s or 960 Mbit/s. The latter should be enough for a "
+"typical 1 Gbit/s network uplink."
+msgstr ""
+
+#: src/views/FAQ.vue:653
+msgid "Network"
+msgstr ""
+
+#: src/views/FAQ.vue:654
+msgid ""
+"A rough estimate of a traditional server's video streaming network capacity "
+"is usually quite straightforward. You simply divide your server's available "
+"bandwidth by the average bandwidth per stream, and you have an upper bound."
+msgstr ""
+
+#: src/views/FAQ.vue:659
+msgid ""
+"Take a server for example with a 1 Gbit/s uplink for example pushing out "
+"1080p60 streams at 5 Mbit/s per stream. That means the absolute theoretical "
+"upper capacity bound is 200 simultaneous viewers if your server's disk i/o "
+"can keep up. Expect a bit less in practice."
+msgstr ""
+
+#: src/views/FAQ.vue:665
+msgid ""
+"But what if you need to serve more users? That's where Tube's federation "
+"feature shines. If other Tube instances following yours, chances are "
+"they have decided to mirror part of your instance! The feature is called "
+"\"server redundancy\" and caches your most popular videos to help serve "
+"additional viewers. While viewers themselves contribute a little additional "
+"bandwidth while watching the video in their browsers (mostly during surges), "
+"mirroring servers have a much greater uplink and will help your instance "
+"with sustained higher concurrent streaming."
+msgstr ""
+
+#: src/views/FAQ.vue:681
+msgid ""
+"No it doesn't. You can't deploy multiple Tube nodes behind a load "
+"balancer."
+msgstr ""
+
+#: src/views/FAQ.vue:685
+msgid ""
+"As far as we know, there are 3 limitations to handle a large amount of users "
+"in Tube:"
+msgstr ""
+
+#: src/views/FAQ.vue:690
+#, fuzzy
+msgid ""
+"Bandwidth: can be mitigated using <a target=\"_blank\" rel=\"noopener "
+"noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-following-instances?"
+"id=instances-redundancy\">Tube redundancy system</a> and cache servers "
+"that serve video static files in front of your Tube instance"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:691
+#, fuzzy
+msgid ""
+"Storage: can be mitigated using <a target=\"_blank\" rel=\"noopener "
+"noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-remote-storage\">S3/"
+"Object storage</a>"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:692
+#, fuzzy
+msgid ""
+"Video transcoding: we may implement <a target=\"_blank\" rel=\"noopener "
+"noreferrer\" href=\"https://github.com/Chocobozzz/Tube/"
+"issues/947\">transcoding by remote workers</a> in the future"
+msgstr ""
+"Das <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github."
+"com/Chocobozzz/Tube\">Git Repository von Tube ist hier</a>."
+
+#: src/views/FAQ.vue:695
+#, fuzzy
+msgid ""
+"If you notice performance problems or a bottleneck at your scale, don't "
+"hesitate to <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://"
+"github.com/Chocobozzz/Tube/issues/new/choose\">create an issue</a> to "
+"discuss it."
+msgstr ""
+"Weil von Grund auf free/libre Software unsere fundamentalen Freiheiten "
+"respektiert diese durch <a target=\"_blank\" rel=\"noopener noreferrer\" "
+"href=\"https://github.com/Chocobozzz/Tube/blob/develop/LICENSE\">eine "
+"Lizenz</a> schützt. Also einen rechtlich durchsetzbaren Vertrag."
+
+#: src/views/FAQ.vue:708
+msgid ""
+"Framasoft tries to make around 4 major releases per year. Releasing a new "
+"Tube version takes a lot of our time, so we cannot change this release "
+"cycle."
+msgstr ""
+
+#: src/views/FAQ.vue:713
+msgid ""
+"There is no LTS version: only the latest stable version of Tube is "
+"supported by Framasoft."
+msgstr ""
+
+#: src/views/FAQ.vue:717
+#, fuzzy
+msgid ""
+"If you want to test the Tube develop branch, we provide <a target="
+"\"_blank\" rel=\"noopener noreferrer\" href=\"https://builds.joinpeertube."
+"org/nightly/\">nightly builds</a>."
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:730
+msgid ""
+"We <strong>try</strong> to keep compatibility with the latest minor version "
+"(2.3.1 with 2.2 for example). Unfortunately we don't have enough resources "
+"to keep compatibility with other versions."
+msgstr ""
+
+#: src/views/FAQ.vue:743
+#, fuzzy
+msgid ""
+"\"It's outrageous and unconscionable: you're releasing a Tube version "
+"that doesn't contain the necessary tools to effectively manage videos "
+"claimed by rights holders, or to effectively manage the issue of online "
+"harassment in comments, or to effectively manage monetization through "
+"advertising, or to (insert here your request to Tube). It will never "
+"work! What do you intend to do about it?\""
+msgstr ""
+"\"Es ist empörend und unbedacht: Sie veröffentlichen Version x.y.z von "
+"Tube, obwohl es nicht über die nötigen Werkzeuge zur effizienten "
+"Verwaltung von Videos verfügt, die von Urheberrechtsinhabern beanstandet "
+"werden oder um effizient das Problem der Online-Belästigung in Kommentaren "
+"zu bekämpfen oder effizient die Monetarisierung mittels Werbung zu "
+"verwalten, oder (fügen Sie hier Ihre Forderung an Tube ein). Es wird nie "
+"funktionieren! Was gedenken Sie deswegen zu unternehmen?\""
+
+#: src/views/FAQ.vue:750
+#, fuzzy
+msgid ""
+"You're right. Tube is not the perfect tool, far from it. And we never "
+"promised this software would include all the features corresponding to every "
+"use cases."
+msgstr ""
+"Sie haben Recht. Tube ist nicht das perfekte Werkzeug und noch weit "
+"davon entfernt. Und wir haben nie versprochen, dass diese Version 1.0 ein "
+"Werkzeug sein würde, das alle Funktionen für alle Fälle enthält."
+
+#: src/views/FAQ.vue:755
+#, fuzzy
+msgid ""
+"Remember that Tube has only <a href=\"#who-is-working-on-tube\">one "
+"full time developer</a> and a small handful of very involved volunteers. It "
+"is not a product developed by a start-up with a full time team and "
+"significant financial support."
+msgstr ""
+"Bitte denke daran, dass Tube nur einen (beinahe) Vollzeit-Entwickler hat "
+"und eine Handvoll von sehr engagierten Freiwilligen. Das ist kein Produkt, "
+"das von einem Start-Up entwickelt wird, das ein ganzes Team (Entwicklung, "
+"Design, Benutzerinterface, Marketing, Support usw) und eine bedeutende "
+"finanzielle Unterstützung hat. Es ist eine gemeinsam entwickelte Freie "
+"Software, die über Monate und hoffentlich Jahre, weiterentwickelt wird."
+
+#: src/views/FAQ.vue:761
+#, fuzzy
+msgid ""
+"So if you feel that Tube does not currently meet your needs, it's "
+"simple: don't use it right now. We remind you that we don't make money "
+"developing Tube, and if we obviously hope for its success, Framasoft "
+"does not depend on it to continue its activities."
+msgstr ""
+"Es ist ganz einfach, wenn Dir Tube als Benutzer nicht gefällt: Benutze "
+"es noch nicht! (Wir möchten Dich daran erinnern, dass wir keine Geld für die "
+"Entwicklung von Tube bekommen und dass wir einfach hoffen, dass Tube "
+"ein Erfolg wird. Das Weiterbestehen unseres Vereins hängt nicht von Tube "
+"ab)."
+
+#: src/views/FAQ.vue:775
+#, fuzzy
+msgid ""
+"<a href=\"#what-are-the-tube-features-for-administrators\">Yes it does!</"
+"a> Since the first stable release of Tube in October 2018, <strong>every "
+"release</strong> added or improved moderation features:"
+msgstr ""
+"Seit der Veröffentlichtung der ersten stabilen Version von Tube im "
+"Oktober 2018, sind <strong>bei jeder Veröffentlichung</strong> weitere "
+"Funktionen für die Moderation hinzugekommen oder es wurden welche verbessert:"
+
+#: src/views/FAQ.vue:782
+msgid ""
+"<strong>Tube 1.1</strong> added bulk actions in the admin users table "
+"and instance/account muting;"
+msgstr ""
+"<strong>Tube 1.1</strong> hat Sammelaktionen in der Admin-Benutzer-"
+"Tabelle und Instanz-/Account-Stummschaltung hinzugefügt;"
+
+#: src/views/FAQ.vue:783
+msgid ""
+"<strong>Tube 1.2</strong> added the ability to unfederate a video on "
+"blacklist; the notification system now shows reports, and new users;"
+msgstr ""
+"<strong>Tube 1.2</strong> hat die Fähigkeit bekommen ein Video aus der "
+"Schwarzen Liste vom Verbund auszuschließen; das Benachrichtigungssystem "
+"zeigt nun Berichte und neue Benutzer an;"
+
+#: src/views/FAQ.vue:786
+msgid ""
+"<strong>Tube 1.3</strong> added the possibility for admins to "
+"automatically quarantine new videos for new/untrusted users until a "
+"moderator reviews it. The instance's followers management was also reworked: "
+"UI is improved, follows can be denied;"
+msgstr ""
+"<strong>Tube 1.3</strong> hat die Möglichkeit für Admins hinzugefügt, "
+"dass neue Videos für neue/nicht vertrauenswürdige Benutzer automatisch unter "
+"Quarantäne stellen, bis ein Moderator sie überprüft hat. Auch die Follower-"
+"Verwaltung der Instanz wurde überarbeitet: Die Benutzeroberfläche wurde "
+"verbessert, Followers können verweigert werden;"
+
+#: src/views/FAQ.vue:790
+msgid ""
+"<strong>Tube 1.4</strong> added a plugin system, and made sure plugins "
+"can for instance automatically blacklist videos or reject comments based on "
+"any rule (similar to Pleroma MRF);"
+msgstr ""
+"<strong>Tube 1.4</strong> hat ein Plugin-System hinzugefügt und "
+"ermöglicht, dass Plugins in der Instanz Videos automatisch auf eine schwarze "
+"Liste setzen oder Kommentare aufgrund einer beliebigen Regel ablehnen können "
+"(ähnlich wie Pleroma MRF);"
+
+#: src/views/FAQ.vue:793
+msgid ""
+"<strong>Tube 2.0</strong> setup now asks the admin to answer questions "
+"regarding their moderation policy and dedication to it. Make a feature to "
+"automatically follow a public index of Tube instances part of core "
+"Tube, instead of leaving admins to script it themselves. This allows "
+"instance administrators to automatically follow instances of a \"follow list"
+"\" of their choice; a list which is self-hostable, so that communities can "
+"grow at their own pace;"
+msgstr ""
+"Die <strong>Tube 2.0</strong>-Installation fordert den Verwalter nun "
+"auf, Fragen zu seinen Moderationsrichtlinien und -engagement zu beantworten. "
+"Es wird nun eine Funktion bereitgestellt um automatisch einem öffentlichen "
+"Index an Tube-Instanzen als Teil des Kern-Tube zu folgen, anstatt "
+"dies manuell einrichten zu müssen. Dies ermöglicht es Instanzverwaltern "
+"automatisch Instanzen einer \"Folgen-Liste\" ihrer Wahl zu folgen; eine "
+"Liste die selbst bereitgestellt werden kann, um es Gemeinschaften zu "
+"ermöglichen, in ihrem eigenen Tempo zu wachsen;"
+
+#: src/views/FAQ.vue:798
+msgid ""
+"<strong>Tube 2.1</strong> added an <em>internal</em> privacy mode to "
+"videos (such videos won't be shared outside of the instance), and added "
+"quick access to moderation tools below the comments and hooks to create "
+"registration plugins (geoblocking or captchas for example); some third-party "
+"plugins already demonstrate this ability. This release also put emphasis on "
+"describing moderation features within the interface: warnings for features "
+"that might increase moderation work like autofollow, and descriptions to the "
+"action dropdowns."
+msgstr ""
+"<strong>Tube 2.1</strong> wurde um einen <em>internen</em> Privatmodus "
+"für Videos (diese Videos werden nicht außerhalb der Instanz geteilt), "
+"Schnellzugriff auf Moderationswerkzeuge unterhalb der Kommentare und "
+"Schnittstellen für as Einbinden von Registrationserweiterungen (Geoblocking "
+"oder Captchas zum Beispiel) ergänzt; einige Drittanbieter-Erweiterungen "
+"nutzen bereits diese Funktion. Diese Version betont das Beschreiben der "
+"Moderationsfunktionen innerhalb der Benutzeroberfläche: Warnungen vor "
+"Funktionen die möglicherweise den Moderationsaufwand erhöhen (wie "
+"\"Autofolgen\") und Beschreibungen der Aktionsauswahlmöglichkeiten."
+
+#: src/views/FAQ.vue:804
+msgid ""
+"<strong>Tube 2.2</strong> greatly improved video abuses management "
+"(search, abuses display, actions on the video or account etc), added "
+"moderation hooks and helpers in the plugins API and Framasoft developed an "
+"experimental <em>Auto mute</em> plugin based on public lists."
+msgstr ""
+"In <strong>Tube 2.2</strong> wurde die Videomissbrauchsverwaltung "
+"erheblich verbessert (suchen, Missbräuche anzeigen, Aktionen für das Video "
+"oder das Benutzerkonto, usw.), des Weiteren die Moderationsschnittstellen "
+"und die Helfer in der Erweiterungen-API. Außerdem entwickelte Framasoft eine "
+"experimentelle <em>Auto-Stumm</em>-Erweiterung basierend auf öffentlichen "
+"Listen."
+
+#: src/views/FAQ.vue:808
+msgid ""
+"<strong>Tube 2.3</strong> improved the report modal and added predefined "
+"reasons selection. This version made it possible to delete all the comments "
+"of an account and Framasoft developed an experimental <em>Auto block videos</"
+"em> plugin based on public lists."
+msgstr ""
+"In <strong>Tube 2.2</strong> wurde die Videomissbrauchsverwaltung "
+"erheblich verbessert (suchen, Missbräuche anzeigen, Aktionen für das Video "
+"oder das Benutzerkonto usw.), des Weiteren die Moderationsschnittstellen und "
+"Helfer in der Erweiterungen-API. Außerdem entwickelte Framasoft eine "
+"experimentelle <em>Auto-Stumm</em>-Erweiterung basierend auf öffentlichen "
+"Listen."
+
+#: src/views/FAQ.vue:812
+msgid ""
+"<strong>Tube 2.4</strong> added ability to report accounts and comments, "
+"a messaging system between the local reporter of an abuse and moderators, "
+"and an abuse management view for users."
+msgstr ""
+
+#: src/views/FAQ.vue:815
+msgid ""
+"<strong>Tube 3.0</strong> added a dedicated view to manage comments of "
+"the instance (list, filter, remove in bulk etc)."
+msgstr ""
+
+#: src/views/FAQ.vue:821
+#, fuzzy
+msgid ""
+"Tube developers are committed to develop and improve moderation tools to "
+"make instances always easier to manage. We welcome you to take part in "
+"discussions to <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://github.com/Chocobozzz/Tube/issues\">help ongoing efforts</a> "
+"in that direction or <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://github.com/Chocobozzz/Tube/issues/new\">suggest new ones</a>!"
+msgstr ""
+"Die Tube Entwickler kümmern sich darum, die Werkzeuge fürs Moderieren "
+"auf den Instanzen zu entwickeln und immer besser zu machen. Wir laden Euch "
+"ein an der Diskussion teilzunehmen, um bei den <a href=\"https://github.com/"
+"Chocobozzz/Tube/issues\">laufenden Anstrengungen zu helfen</a> oder <a "
+"href=\"https://github.com/Chocobozzz/Tube/issues/new\">neue Wege "
+"vorzuschlagen</a>!"
+
+#: src/views/FAQ.vue:833
+#, fuzzy
+msgid "Technical"
+msgstr "Technische Fragen"
+
+#: src/views/FAQ.vue:846
+#, fuzzy
+msgid ""
+"View, share and update <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://github.com/Chocobozzz/Tube\">Tube code</a>"
+msgstr ""
+"Das <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github."
+"com/Chocobozzz/Tube\">Git Repository von Tube ist hier</a>."
+
+#: src/views/FAQ.vue:847
+msgid "Join a community of admins, video makers and viewers"
+msgstr ""
+
+#: src/views/FAQ.vue:852
+#, fuzzy
+msgid "Tube REST API"
+msgstr "Tube-Git"
+
+#: src/views/FAQ.vue:855
+#, fuzzy
+msgid ""
+"Test Tube REST API with the <a target=\"_blank\" rel=\"noopener "
+"noreferrer\" href=\"https://tube.docs.dingshunyu.top/api-rest-getting-started"
+"\">getting started guide</a>"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:856
+#, fuzzy
+msgid ""
+"Check the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://"
+"tube.docs.dingshunyu.top/api-rest-reference.html\">REST API documentation</a>"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:857 src/views/FAQ.vue:867
+#, fuzzy
+msgid ""
+"Get help on <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://"
+"framacolibri.org/c/tube\">Tube forum</a>"
+msgstr ""
+"die neue Version von <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://joinpeertube.org\">JoinTube</a>, das durch diese Arbeit "
+"bereichert wird;"
+
+#: src/views/FAQ.vue:862
+msgid "Player embed API"
+msgstr ""
+
+#: src/views/FAQ.vue:865
+msgid "Use the Tube player embed on your website"
+msgstr ""
+
+#: src/views/FAQ.vue:866
+#, fuzzy
+msgid ""
+"Control the Tube player embed using the <a target=\"_blank\" rel="
+"\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/api-embed-player"
+"\">embed API</a>"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:872
+#, fuzzy
+msgid "Plugins & Themes"
+msgstr "Plugins & Wiedergabelisten"
+
+#: src/views/FAQ.vue:875
+#, fuzzy
+msgid ""
+"Develop plugins and themes using the <a target=\"_blank\" rel=\"noopener "
+"noreferrer\" href=\"https://tube.docs.dingshunyu.top/contribute-plugins"
+"\">getting started guide</a>"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:876
+#, fuzzy
+msgid ""
+"Check the complete <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://tube.docs.dingshunyu.top/api-plugins\">plugin/theme documentation</a>"
+msgstr ""
+"Die <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://docs."
+"joinpeertube.org/#/install-any-os\">Installations-Anleitung ist hier</a>(nur "
+"auf Englisch)."
+
+#: src/views/FAQ.vue:877
+#, fuzzy
+msgid ""
+"Get help on <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://"
+"framacolibri.org/c/tube\">Tube forum</a> or ask new plugin/theme API "
+"in <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github."
+"com/Chocobozzz/Tube\">Tube issues</a>"
+msgstr ""
+"Die Webseite wurde von <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://framasoft.org\">Framasoft</a> entwickelt und von <a target=\"_blank"
+"\" rel=\"noopener noreferrer\" href=\"https://www.maiwann.net/\">Maiwann</a> "
+"gestaltet"
+
+#: src/views/FAQ.vue:890
+#, fuzzy
+msgid ""
+"Tube uses ActivityPub because this federation protocol is recommended by "
+"the W3C and is also used by other projects like the social network <a target="
+"\"_blank\" rel=\"noopener noreferrer\" href=\"https://joinmastodon.org/"
+"\">Mastodon</a>."
+msgstr ""
+"Tube benutzt ActivityPub, denn dieses Verbund-Protokoll wird von dem W3C "
+"empfohlen und es wird schon vom verteilten, sozialen Netzwerk Mastodon "
+"genutzt."
+
+#: src/views/FAQ.vue:895
+msgid ""
+"IPFS is a great technology, but it still seems too young for streaming large "
+"files. The Tube P2P system based on well established protocols like HTTP "
+"and WebRTC, and the <a target=\"_blank\" rel=\"noopener noreferrer\" href="
+"\"https://tube.docs.dingshunyu.top/admin-following-instances?id=instances-"
+"redundancy\">redundancy system</a> are more easy for us to use and to "
+"maintain."
+msgstr ""
+
+#: src/views/FAQ.vue:902
+#, fuzzy
+msgid ""
+"DTube does not seem open source, because publishing only compiled code "
+"hinders freedom of modification."
+msgstr ""
+"Nach einer Diskussion in unserem Forum sind wir der Ansicht, dass d.tube "
+"weder frei noch quelloffen ist, da das Veröffentlichen nur von kompiliertem "
+"Code die Freiheit der Anpassung einschränkt."
+
+#: src/views/FAQ.vue:906
+#, fuzzy
+msgid ""
+"Tube does not impose any remuneration model. This is the choice we have "
+"made, and others (like DTube) have made other choices. So it's up to you to "
+"see what suits you."
+msgstr ""
+"Tube ist frei, dezentral, verteilt und stellt keine Bedingungen für ein "
+"Vergütungssystem. Unsere Entscheidungen kann man natürlich diskutieren und "
+"andere (wie d.tube) haben andere Entscheidungen getroffen, die andere "
+"Vorteile haben. So kannst Du Dir selber aussuchen, was Du lieber möchtest."
+
+#: src/views/FAQ.vue:919
+msgid "Historical reason."
+msgstr ""
+
+#: src/views/FAQ.vue:929
+#, fuzzy
+msgid ""
+"We have a policy for contributions related to security. Please refer to <a "
+"target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/"
+"Chocobozzz/Tube/security\">our security policy and advisories</a>."
+msgstr ""
+"Weil von Grund auf free/libre Software unsere fundamentalen Freiheiten "
+"respektiert diese durch <a target=\"_blank\" rel=\"noopener noreferrer\" "
+"href=\"https://github.com/Chocobozzz/Tube/blob/develop/LICENSE\">eine "
+"Lizenz</a> schützt. Also einen rechtlich durchsetzbaren Vertrag."
+
+#: src/views/Hall-Of-Fame.vue:4 src/views/Hall-Of-Fame.vue:5
+msgid "Hall of Fame"
+msgstr "Ruhmeshalle"
+
+#: src/views/Hall-Of-Fame.vue:11
+msgid "Sponsors"
+msgstr "Unterstützer"
+
+#: src/views/Hall-Of-Fame.vue:23
+msgid "Financial Contributors"
+msgstr "Finanzielle Unterstützer"
+
+#: src/views/Hall-Of-Fame.vue:426
+msgid "Contributors"
+msgstr "Beitragende"
+
+#: src/views/Help.vue:7
+msgid "Questions on Tube? Need help? You've come to the right place!"
+msgstr "Fragen zu Tube? Brauchst du Hilfe? Dann bist du hier richtig!"
+
+#: src/views/Help.vue:18
+msgid "Better understand and use Tube"
+msgstr "Tube besser verstehen und nutzen"
+
+#: src/views/Help.vue:20
+msgid "You have a question?"
+msgstr "Du hast eine Frage?"
+
+#: src/views/Help.vue:23
+msgid "Discover our FAQ"
+msgstr "Entdecke unsere FAQ"
+
+#: src/views/Help.vue:28
+msgid "Need a detailed guide?"
+msgstr "Brauchst du eine detaillierte Anleitung?"
+
+#: src/views/Help.vue:31
+msgid "Read the documentation"
+msgstr "Lies die Dokumentation"
+
+#: src/views/Help.vue:40
+msgid "Ask questions to the community"
+msgstr "Stelle Fragen an die Gemeinschaft"
+
+#: src/views/Help.vue:44
+msgid "Go to the forum"
+msgstr "Zum Forum wechseln"
+
+#: src/views/Help.vue:61
+msgid "For Tube admins"
+msgstr "Für Tube-Administratoren"
+
+#: src/views/Help.vue:65
+msgid "Install Tube"
+msgstr "Tube installieren"
+
+#: src/views/Help.vue:72
+msgid "Upgrade Tube"
+msgstr ""
+
+#: src/views/Help.vue:79
+msgid "Administer Tube"
+msgstr "Tube verwalten"
+
+#: src/views/Help.vue:88
+msgid "Contribute to Tube"
+msgstr "Zu Tube beitragen"
+
+#: src/views/Help.vue:92
+msgid "How to contribute?"
+msgstr "Wie kann man beitragen?"
+
+#: src/views/Home.vue:1
+msgid "Learn more about free/libre software"
+msgstr "Erfahre mehr über Freie/Libre Software"
+
+#: src/views/Home.vue:1
+msgid "Learn more about the federation"
+msgstr "Erfahre mehr über den Verein"
+
+#: src/views/Home.vue:3
+#, fuzzy
+msgid "Skip to content"
+msgstr "Sensibler Inhalt"
+
+#: src/views/Home.vue:7
+#, fuzzy
+msgid "Tube, a free software to take back control of your videos"
+msgstr ""
+"Eine freie Software um die Kontrolle über deine Videos zurückzugewinnen"
+
+#: src/views/Home.vue:13
+msgid "Free software to take back control of your videos"
+msgstr ""
+"Eine freie Software um die Kontrolle über deine Videos zurückzugewinnen"
+
+#: src/views/Home.vue:25
+#, fuzzy
+msgid "Search for Tube videos, channels and playlists"
+msgstr "Suche nach Tube Videos und Kanälen"
+
+#: src/views/Home.vue:32
+msgid "V4 is here!"
+msgstr ""
+
+#: src/views/Home.vue:36
+msgid ""
+"Tube V4 with channel customization, playlists search, custom instance "
+"homepage and more video filters is out!"
+msgstr ""
+
+#: src/views/Home.vue:36
+msgid ""
+"Tube, developed by Framasoft, is the free and decentralized alternative "
+"to video platforms, providing you over %{ videos } videos published by "
+"%{ users } users and viewed over %{ views } million times"
+msgstr ""
+"Tube, das von Framasoft entwickelt wird, ist eine freie und dezentrale "
+"Alternative zu Videoplatformen und bietet Dir mehr als %{ videos } Videos, "
+"die von %{ users } Nutzern veröffentlicht wurden und bereits über %{ views } "
+"Millionen mal geguckt worden sind"
+
+#: src/views/Home.vue:40
+#, fuzzy
+msgid ""
+"<a href=\"https://framablog.org/2021/11/30/tube-v4-more-power-to-help-"
+"you-present-your-videos/\" target=\"_blank\" class=\"bottom-link\"> Read the "
+"blog post </a>"
+msgstr ""
+"<a href=\"https://framablog.org/2021/01/07/tube-v3-its-a-live-a-liiiiive/"
+"\" target=\"_blank\"> Lese den Blogbeitrag für mehr Informationen </a>"
+
+#: src/views/Home.vue:61 src/views/Instances.vue:13
+msgid "See the instances list"
+msgstr "Schau in der Liste der Instanzen"
+
+#: src/views/Home.vue:68
+msgid "Discover our content selection"
+msgstr "Endecke unsere Auswahl"
+
+#: src/views/Home.vue:76 src/views/Home.vue:318
+msgid "Browse contents"
+msgstr "Inhalte durchstöbern"
+
+#: src/views/Home.vue:86
+msgid "What is"
+msgstr "Was ist"
+
+#: src/views/Home.vue:88 src/views/Home.vue:340
+msgid "?"
+msgstr "?"
+
+#: src/views/Home.vue:102
+msgid ""
+"Tube aspires to be a <strong>decentralized and free/libre alternative</"
+"strong> to video broadcasting services."
+msgstr ""
+"Tube strebt an, eine <strong>dezentralisierte und free/libre "
+"Alternative</strong> zu anderen Videodiensten zu sein."
+
+#: src/views/Home.vue:107
+msgid ""
+"Our aim is not to replace them, but rather to simultaneously offer something "
+"else, with different values."
+msgstr ""
+"Unser Ziel ist es nicht, sie zu ersetzen, sondern gleichzeitig etwas anderes "
+"anzubieten, mit anderen Werten."
+
+#: src/views/Home.vue:117
+msgid "A federation of interconnected hosting services"
+msgstr "Ein Zusammenschluss von mit einander verbundenen Anbietern"
+
+#: src/views/Home.vue:125
+msgid ""
+"Tube is not meant to become a huge platform that would centralize videos "
+"from all around the world."
+msgstr ""
+"Tube ist nicht gedacht, eine riesige Plattform zu werden, die Videos von "
+"überall auf der Welt zentral bereitstellt."
+
+#: src/views/Home.vue:130
+msgid ""
+"Rather, it is <strong>a network of inter-connected small videos hosters</"
+"strong>."
+msgstr ""
+"Es ist eher <strong>ein Netzwerk von miteinander verbundenen kleinen "
+"Videobereitstellern</strong>."
+
+#: src/views/Home.vue:136
+msgid ""
+"Anyone with a modicum of technical skills can host a Tube server, aka an "
+"instance. Each instance hosts its users and their videos. In this way, "
+"<strong>every instance is created, moderated and maintained independently by "
+"various administrators.</strong>"
+msgstr ""
+"Jeder mit einem Hauch an technischem Geschick kann einen Tube-Server, "
+"Instanz genannt, betreiben. Jeder Instanz beherbergt seine Nutzer und ihre "
+"Videos. Auf diese Art wird <strong>jede Instanz unabhängig von anderen "
+"Administratoren erstellt, moderiert und gewartet.</strong>"
+
+#: src/views/Home.vue:144
+msgid "Discover Tube instances"
+msgstr "Entdecke Tube-Instanzen"
+
+#: src/views/Home.vue:151
+msgid ""
+"You can still watch from your account videos hosted by other instances "
+"though if the administrator of your instance had previously connected it "
+"with other instances."
+msgstr ""
+"Sie können von Ihrem Konto aus immer noch Videos ansehen, die von anderen "
+"Instanzen gehostet werden, wenn der Administrator Ihrer Instanz diese zuvor "
+"mit anderen Instanzen verbunden hat."
+
+#: src/views/Home.vue:159
+msgid "This is just how a <strong>federation</strong> works!"
+msgstr ""
+
+#: src/views/Home.vue:166
+#, fuzzy
+msgid ""
+"And there's more! Tube uses <a target=\"_blank\" rel=\"noopener "
+"noreferrer\" href=\"https://activitypub.rocks\">ActivityPub</a>, a "
+"federating protocol that <strong>allows you to interact with other software</"
+"strong>, provided they also use this protocol. For example, Tube and "
+"Mastodon -a Twitter alternative- are connected: <strong>you can follow a "
+"Tube user from Mastodon</strong> (the latest videos from the Tube "
+"account you follow will appear in your feed), <strong>and even comment on a "
+"Tube-hosted video directly from your Mastodon's account.</strong>"
+msgstr ""
+"Und es gibt noch mehr! Tube verwendet Activity Pub, ein "
+"föderalisierendes Protokoll das <strong>es dir ermöglicht mit anderer "
+"Software zu interagieren</strong>, verausgesetzt das diese ebenfalls dieses "
+"Protokoll unterstützt. Beispielsweise sind Tube und Mastodon - eine "
+"Twitter-Alternative - verbunden: <strong>Du kannst einem Tube-Nutzer "
+"mittels Mastodon folgen</strong> (die neuesten Videos des Tube-Kontos, "
+"dem du folgst, werden dann in deinem Benachrichtigungsverlauf erscheinen), "
+"<strong>und sogar ein auf Tube bereitgestelltes Video direkt von deinem "
+"Mastodon-Konto aus kommentieren.</strong>"
+
+#: src/views/Home.vue:186
+msgid "Open-source, free/libre license code"
+msgstr "Ein quelloffener Programmcode unter einer freien/libre Lizenz"
+
+#: src/views/Home.vue:193
+msgid ""
+"Mainstream online video broadcasting services make money off of your data by "
+"analyzing your interactions so that they can then bombard your with targeted "
+"advertising."
+msgstr ""
+"Die üblichen Videoportale verdienen Geld mit Deinen Daten, indem sie Dein "
+"Verhalten analysieren und Dich mit gezielter Werbung überfluten."
+
+#: src/views/Home.vue:201
+msgid ""
+"Peertube is not subject to any corporate monopoly, does not rely on ads and "
+"<strong>does not track you.</strong>"
+msgstr ""
+"Peertube ist keinem Unternehmensmonopol unterstellt, finanziert sich nicht "
+"durch Werbung und <strong>spioniert dir nicht hinterher.</strong>"
+
+#: src/views/Home.vue:206
+msgid ""
+"Most importantly, <strong>you are a person to Tube, not a product in "
+"need of profiling so as to be stuck in video loops.</strong> For example, "
+"Tube doesn't use any biased recommendation algorithms to keep you online "
+"for hours on end."
+msgstr ""
+"Am Wichtigstens ist aber: <strong>Du bist ein Mensch für Tube, nicht ein "
+"Objekt, das analysiert werden muss um es im Videokonsum zu fesseln.</strong> "
+"Beispielsweise benutzt Tube keine fiesen Algorithmen um Dich stundenlang "
+"online zu halten."
+
+#: src/views/Home.vue:212
+msgid ""
+"All of this is made possible by Peertube's free/libre license (GNU-AGPL). "
+"Its code is a digital \"common\", that belongs to everybody, instead of a "
+"secret formula that belongs to Google (in the case of Youtube) or to Vivendi/"
+"Bolloré (Dailymotion). This free/libre license <strong>guarantees our "
+"fundamental freedoms as users and allows many contributors to offer "
+"evolutions and new features.</strong>"
+msgstr ""
+"All dies wird durch PeerTubes free/libre Lizenz (GNU-AGPL) ermöglicht. Sein "
+"Quelltext ist digitales \"Gemeingut\", der jedem gehört, anstatt eine "
+"geheime Formel zu sein, die Google (im Falle YouTubes) oder Vivendi/Bolloré "
+"(Dailymotion) gehört. Diese free/libre Lizenz <strong>garantiert unsere "
+"fundamentalen Freiheiten als Nutzer und ermöglicht es vielen Beitragenden "
+"neue Entwicklungen und neue Funktionen anzubieten.</strong>"
+
+#: src/views/Home.vue:232
+msgid "Are you a video maker?"
+msgstr "Bist du Videoproduzent?"
+
+#: src/views/Home.vue:242
+#, fuzzy
+msgid ""
+"With Tube, choose <strong>your hosting company and the rules you believe "
+"in.</strong>"
+msgstr ""
+"Mit Tube, suchst du dir <strong>deinen Bereitstellungsanbieter und die "
+"Regeln, mit denen du einverstanden bist aus.</strong>"
+
+#: src/views/Home.vue:247
+msgid ""
+"YouTube has clearly gone astray: its hoster, Google-Alphabet, can enforce "
+"its ContentID system (the infamous \"Robocopyright\") or its videos "
+"recommendation system, all of which appear to be as obscure as unfair."
+msgstr ""
+"YouTube ist eindeutig vom Weg abgekommen: Sein Hoster, Google-Alphabet, kann "
+"sein ContentID-System (das berüchtigte \"Robocopyright\") oder sein "
+"Videoempfehlungssystem durchsetzen, die alle ebenso obskur wie unfair "
+"erscheinen."
+
+#: src/views/Home.vue:255
+msgid ""
+"Direct contact with a human-scale hoster allows for two things: you no "
+"longer are the client of a huge tech company, and <strong>you can nurture a "
+"special relationship with your hoster, who distributes your data.</strong>"
+msgstr ""
+"Der direkte Kontakt mit einem menschlichen Hoster ermöglicht Dir zwei Dinge: "
+"Du bist nicht mehr Kunde eines riesigen Technologieunternehmens, und "
+"<strong>Du kannst eine besondere Beziehung zu deinem Hoster pflegen, der "
+"deine Daten verbreitet.</strong>"
+
+#: src/views/Home.vue:261
+msgid ""
+"With Tube, you get to choose your hosting provider according to their "
+"terms of use, such as their disk space limit per user, their moderation "
+"policy, who they chose to federate with... You are not speaking with a huge "
+"tech company, so you can talk it out in case of any issue, need, desire..."
+msgstr ""
+
+#: src/views/Home.vue:269
+msgid "Browse/discover Tube instances"
+msgstr "Tube-Instanzen durchstöbern/entdecken"
+
+#: src/views/Home.vue:275
+msgid "About peer-to-peer broadcasting and watching"
+msgstr "Über das Peer-2-Peer-Verteilen und -Ansehen"
+
+#: src/views/Home.vue:285
+msgid ""
+"The Tube software can, whenever necessary, use a peer-to-peer protocol "
+"(P2P) to broadcast viral videos, <strong>lowering the load of their hosts.</"
+"strong>"
+msgstr ""
+"Die Tube Software kann, wenn nötig, das Peer-to-peer Protokoll (P2P) "
+"nutzen, um virale Videos zu übertragen, was <strong>die Last der Server "
+"verringert</strong>."
+
+#: src/views/Home.vue:291
+msgid ""
+"In this way, when you watch a video, your computer contributes to its "
+"broadcast. If a lot of people are watching the same video at the same time, "
+"their browser automatically send smalls pieces of the video to the other "
+"viewers. <strong>The server resources are not over-exploited</strong>: the "
+"stream is split, the network optimized."
+msgstr ""
+"Immer wenn Du ein Video anschaust, hilft Dein Computer beim Verteilen des "
+"Videos. Wenn viele Leute gleichzeitig das gleiche Video anschauen, dann "
+"sendet ihr Browser kleine Teile des Videos zu anderen Zuschauern. "
+"<strong>Der Server wird nicht überlastet</strong>: die Last der Datenströme "
+"wird aufgeteilt und das Netzwerk optimiert."
+
+#: src/views/Home.vue:298
+msgid ""
+"It might not look like it, but thanks to peer-to-peer broadcasting, popular "
+"video makers and their videos are no longer forced to be hosted by big "
+"companies, whose infrastructure can stand thousands of views at the same "
+"time... or to pay for a robust but extremely expensive independent video "
+"host."
+msgstr ""
+"Vielleicht sieht es nicht so aus, aber wegen des Peer-to-peer Übertragungen "
+"sind Video Produzenten und ihre Videos nicht mehr gezwungen sich auf große "
+"Firmen zu verlassen, deren Infrastruktur mehrere Tausend Zuschauer "
+"gleichzeitig schafft ... oder für zuverlässige und unabhängige aber sehr "
+"teure Videoportale zu bezahlen."
+
+#: src/views/Home.vue:308
+msgid "Your move!"
+msgstr "Du bist am Zug!"
+
+#: src/views/Home.vue:323
+msgid "Sign up"
+msgstr "Registrieren"
+
+#: src/views/Home.vue:325
+msgid ""
+"Enjoy every feature: history, subscriptions, playlists, notifications..."
+msgstr ""
+"Genieße jede Funktion: Verlauf, Abonnements, Abspiellisten, "
+"Benachrichtigungen..."
+
+#: src/views/Home.vue:338
+msgid "Who is behind"
+msgstr "Wer steckt hinter"
+
+#: src/views/Home.vue:350
+msgid ""
+"Peertube is a <strong>free/libre software funded by a French non-profit "
+"organization</strong>: Framasoft"
+msgstr ""
+"Tube, eine <strong>freie/libre Software, wird von einem französischem, "
+"gemeinnützigem Verein finanziert</strong>: Framasoft"
+
+#: src/views/Home.vue:354
+msgid ""
+"Our organization started in 2004, and now devotes itself <strong>to popular "
+"education about digital technology issues.</strong> We are a small structure "
+"of less than 40 members and under 10 employees, well-known for the De-google-"
+"ify Internet project, when we offered 34 ethical and alternative online "
+"tools. As a public interest organization, <strong>over 90% of our funding "
+"comes from donations</strong> (tax deductible for French taxpayers)."
+msgstr ""
+"Unsere Organisation wurde 2004 gegründet und widmet sich nun der "
+"<strong>Bildung für alle im Bereich der digitalen Technologien.</strong>. "
+"Wir sind eine kleine Gruppe von weniger als 40 Mitgliedern und weniger als "
+"10 Beschäftigten, die für das \"Google-freie Internet Projekt\" bekannt "
+"sind, das 34 ethische und alternative Online-Tools anbietet. Als ein "
+"gemeinnütziger Verein, <strong>finanzieren wir uns zu über 90% von Spenden</"
+"strong> (die in Frankreich von der Steuer abgesetzt werden können)."
+
+#: src/views/Home.vue:361
+msgid ""
+"Thanks to our <a href=\"/hall-of-fame\" target=\"_blank\">crowdfunding (from "
+"March to July 2018)</a>, <strong>Framasoft were able to employ Tube's "
+"main developer.</strong> After a beta release in March 2018, release 1 came "
+"out in November 2018. Since then, several intermediary releases have brought "
+"many features along. Several collectives have already created Tube "
+"hosts, laying the foundation for the federation."
+msgstr ""
+
+#: src/views/Home.vue:370
+msgid ""
+"The more people use, support, and contribute to Tube, the quicker it "
+"will become a concrete alternative to platforms like YouTube."
+msgstr ""
+"Je mehr Leute Tube benutzen, unterstützen und dazu beitragen, desto "
+"schneller wird es zu einer wirklichen Alternative zu Video Plattformen wie "
+"YouTube."
+
+#: src/views/Home.vue:379
+msgid "Donate to Framasoft"
+msgstr "An Framasoft spenden"
+
+#: src/views/Instances.vue:7
+msgid ""
+"If you would like to interact with videos (like, comment, download...), "
+"subscribe to channels, create playlists or play videos, then all you have to "
+"do is <strong>create an account on the Tube instance of your choice.</"
+"strong>"
+msgstr ""
+"Wenn du mit Videos interagieren möchten (z.B. kommentieren, "
+"herunterladen...), Kanäle abonnieren, Playlisten erstellen oder Videos "
+"abspielen möchten, dann musst du nur <strong>ein Konto auf der Tube-"
+"Instanz deinerWahl erstellen.</strong>"
+
+#: src/views/Instances.vue:10
+msgid "Tube instances"
+msgstr "Tube-Instanzen"
+
+#: src/views/Instances.vue:23
+msgid "1. Find the instance that suits you best"
+msgstr "1. Finde die Instanz, die am besten zu dir passt"
+
+#: src/views/Instances.vue:25
+#, fuzzy
+msgid ""
+"By <strong>filtering according to your profile</strong> (video maker or "
+"viewer), <strong>topics</strong> that you are looking for or "
+"<strong>languages</strong> you speak, <strong>find an instance whose rules "
+"match your needs!</strong>"
+msgstr ""
+"Durch <strong>Filtern gemäß deinem Profil</strong> (Filmemacher oder "
+"Zuschauer), nach <strong>Themen</strong> die dich interessieren oder "
+"<strong>Sprachen</strong> die du sprichst, <strong>kannst du eine Instanz "
+"finden, die deinen Bedürfnissen entspricht!</strong>"
+
+#: src/views/Instances.vue:34
+msgid "2. Create your account and enjoy Tube"
+msgstr "2. Erstelle dein Benutzerkonto und habe Spaß mit Tube"
+
+#: src/views/Instances.vue:36
+msgid ""
+"A username, an email, a password and you can already <strong>enjoy all the "
+"features of Tube!</strong>"
+msgstr ""
+"Ein Benutzername, eine E-Mailadresse, ein Kennwort und schon kannst du "
+"<strong>all die Funktionen von Tube nutzen!</strong>"
+
+#: src/views/News-Archive.vue:4 src/views/News-Archive.vue:33
+#, fuzzy
+msgid "Tube news archive"
+msgstr "Tube-Nachrichten!"
+
+#: src/views/News.vue:4
+msgid "Tube news!"
+msgstr "Tube-Nachrichten!"
+
+#: src/views/News.vue:7
+msgid "Discover the latest Tube improvements"
+msgstr "Entdecke die neusten Tube-Verbesserungen"
+
+#: src/views/News.vue:43
+msgid "See older news"
+msgstr ""
+
+#: src/views/News.vue:80
+#, fuzzy
+msgid "Tube news"
+msgstr "Tube-Nachrichten!"
+
+#: src/views/NotFound.vue:5 src/views/NotFound.vue:6
+msgid "Page not found"
+msgstr "Seite nicht gefunden"
+
+#: src/views/NotFound.vue:10
+msgid "Go back to the homepage"
+msgstr "Zurück zur Startseite"
+
+#: src/views/Roadmap-2020-Placeholder.vue:5
+msgid ""
+"Thanks to our crowdfunfing contributors, Tube V3 with live streaming "
+"support, global search, playlists embed and more moderation tools is out!"
+msgstr ""
+
+#: src/views/Roadmap-2020-Placeholder.vue:6
+#, fuzzy
+msgid "2020 roadmap"
+msgstr "Fahrplan"
+
+#: src/views/Roadmap-2020-Placeholder.vue:9
+msgid ""
+"<a href=\"https://framablog.org/2021/01/07/tube-v3-its-a-live-a-liiiiive/"
+"\" target=\"_blank\"> Read the blog post for more information </a>"
+msgstr ""
+"<a href=\"https://framablog.org/2021/01/07/tube-v3-its-a-live-a-liiiiive/"
+"\" target=\"_blank\"> Lese den Blogbeitrag für mehr Informationen </a>"
+
+#: src/views/Roadmap-2020.vue:7
+msgid "Let's pave the way to Tube live streaming in v3!"
+msgstr "Lasst uns den Weg ebnen für Tube live Streams in der Version 3!"
+
+#: src/views/Roadmap-2020.vue:22
+msgid "Support the development of Tube!"
+msgstr "Unterstütze die Entwicklung von Tube!"
+
+#: src/views/Roadmap-2020.vue:25
+msgid ""
+"Donate, share: we will need all the help we can get to complete this roadmap."
+msgstr ""
+"Spenden, Teilen: Wir werden alle Hilfe benötigen, die wir bekommen können, "
+"um diesen Entwicklungsplan abschließen zu können."
+
+#: src/views/Roadmap-2020.vue:52
+msgid "raised in %{ days } day"
+msgid_plural "raised in %{ days } days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/views/Roadmap-2020.vue:57
+msgid "contributors"
+msgstr "Beitragende"
+
+#: src/views/Roadmap-2020.vue:70
+msgid "Step 1"
+msgstr "Schritt 1"
+
+#: src/views/Roadmap-2020.vue:72
+msgid "(June)"
+msgstr "(Juni)"
+
+#: src/views/Roadmap-2020.vue:75
+msgid "Search through the fediverse"
+msgstr "Durchsuche das Fediverse"
+
+#: src/views/Roadmap-2020.vue:76
+msgid "Ability to create search indexes"
+msgstr "Fähigkeit Suchindizes zu erzeugen"
+
+#: src/views/Roadmap-2020.vue:77
+#, fuzzy
+msgid "Instance broadcast messages"
+msgstr "Instanzsprachen"
+
+#: src/views/Roadmap-2020.vue:78 src/views/Roadmap-2020.vue:90
+#: src/views/Roadmap-2020.vue:102 src/views/Roadmap-2020.vue:114
+msgid "WIP to improve UX/UI"
+msgstr ""
+"Ist in Arbeit, um das Benutzererlebnis und die Benutzeroberfläche zu "
+"verbessern"
+
+#: src/views/Roadmap-2020.vue:80
+msgid "A roadmap in 4 steps"
+msgstr "Ein Entwicklungsplan in 4 Schritten"
+
+#: src/views/Roadmap-2020.vue:82
+msgid "Step 2"
+msgstr "Schritt 2"
+
+#: src/views/Roadmap-2020.vue:83
+msgid "Moderation"
+msgstr "Moderation"
+
+#: src/views/Roadmap-2020.vue:84
+msgid "(July)"
+msgstr "(Juli)"
+
+#: src/views/Roadmap-2020.vue:85
+msgid ""
+"From June to November 2020, Framasoft will develop new features and "
+"improvements for Tube. We have broken down this roadmap into 4 main "
+"steps, each with its own schedule and cost, leading to the addition of peer-"
+"to-peer powered live streaming to Tube v3."
+msgstr ""
+"Von Juni bis November 2020 wird Framasoft neue Funktionen und Verbesserungen "
+"für Tube entwickeln. Wir haben diesen Fahrplan in 4 Hauptschritte mit "
+"jeweils eigenem Zeit- und Kostenplan unterteilt, die dazu führen werden, "
+"dass Tube v3 um Peer-to-Peer-Live-Streaming erweitert wird."
+
+#: src/views/Roadmap-2020.vue:87
+msgid "Feedback on reports"
+msgstr "Rückmeldungen zu Berichten"
+
+#: src/views/Roadmap-2020.vue:88
+msgid "Making moderation easier"
+msgstr "Erleichtert die Moderation"
+
+#: src/views/Roadmap-2020.vue:89
+msgid "Sharing blocklists (spam)"
+msgstr "Teile die Blocklist (Spam)"
+
+#: src/views/Roadmap-2020.vue:90
+msgid ""
+"These developments are funded by donations made to our small nonprofit "
+"organization: Framasoft. We will be raising funds progressively over the "
+"next six months of development, so that you can help us in our efforts."
+msgstr ""
+
+#: src/views/Roadmap-2020.vue:94
+msgid "Step 3"
+msgstr "Schritt 3"
+
+#: src/views/Roadmap-2020.vue:96
+msgid "(Aug. - Sept.)"
+msgstr "(Aug. - Sept.)"
+
+#: src/views/Roadmap-2020.vue:99
+msgid "Online playlists sharing"
+msgstr "Online Wiedergabelisten teilen"
+
+#: src/views/Roadmap-2020.vue:100
+msgid "Plugins (annotations, etc)"
+msgstr "Erweiterungen (Anmerkungen usw.)"
+
+#: src/views/Roadmap-2020.vue:101
+msgid "Promoting plugins"
+msgstr "Plugins voranbringen"
+
+#: src/views/Roadmap-2020.vue:106
+msgid "Step 4"
+msgstr "Schritt 4"
+
+#: src/views/Roadmap-2020.vue:108
+msgid "(Oct. - Nov.)"
+msgstr "(Okt. - Nov.)"
+
+#: src/views/Roadmap-2020.vue:111
+#, fuzzy
+msgid "Peer-to-peer (30s - 1min lag)"
+msgstr "Über das Peer-2-Peer-Verteilen und -Ansehen"
+
+#: src/views/Roadmap-2020.vue:112
+msgid "No chat, no gifs, no ❤️ 👍"
+msgstr "Keine Chats, keine GIFs, keine ❤️ 👍"
+
+#: src/views/Roadmap-2020.vue:113
+msgid "Post-live publishing"
+msgstr "Nach der Echtzeitübertragung veröffentlichen"
+
+#: src/views/Roadmap-2020.vue:125
+msgid "Learn more about those steps"
+msgstr "Lerne mehr über diese Schritte"
+
+#: src/views/Roadmap-2020.vue:140
+msgid ""
+"\"Another\" world cannot be built using surveillance capitalism's tools."
+msgstr ""
+"Eine \"neue\" Welt kann nicht mit den Mitteln des Überwachungskapitalismus "
+"aufgebaut werden."
+
+#: src/views/Roadmap-2020.vue:144
+msgid ""
+"Making it easier to access content, sharing power and responsibilities, "
+"opening up to contributions, generalizing live broadcasting thanks to peer-"
+"to-peer... Tube’s v3 aims to consolidate it as an alternative to Google-"
+"Youtube and Facebook-Live that is more and more convivial."
+msgstr ""
+"Indem wir es einfacher machen auf Inhalte zuzugreifen, Macht und "
+"Verantwortung zu teilen, Diskussionsbeiträge ermöglichen, "
+"Echtzeitübertragungen vergemeinschaften mit Hilfe von Peer-to-peer... "
+"Tube Version 3 zielt darauf ab seine Position als Alternative zu Googles "
+"YouTube und Facebook-Live auszubauen und immer attraktiver zu werden."
+
+#: src/views/Roadmap-2020.vue:151
+msgid ""
+"<a href=\"https://framablog.org/2020/05/26/our-plans-for-tube-v3-"
+"progressive-fundraising-live-streaming-coming-next-fall\">Read Framasoft's "
+"statement on the Framablog</a>"
+msgstr ""
+"<a href=\"https://framablog.org/2020/05/26/our-plans-for-tube-v3-"
+"progressive-fundraising-live-streaming-coming-next-fall\">Lesen Sie "
+"Framasoft's Stellungsnahme im Framablog</a>"
+
+#: src/views/Roadmap-2020.vue:175
+msgid ""
+"The money donated via this form will be exclusively dedicated to the "
+"Tube project."
+msgstr ""
+"Das Geld, das durch dieses Formular gespendet wird, wird ausschließlich für "
+"das Tube Projekt benutzt."
+
+#: src/views/Roadmap-2020.vue:183
+msgid "Share and follow"
+msgstr ""
+
+#: src/views/Thank-You.vue:5
+msgid "Thank you very much for your donation to the Tube project!"
+msgstr "Herzlichen Dank für Deine Spende an das Tube Projekt!"
+
+#: src/views/Thank-You.vue:10
+msgid "Thank you"
+msgstr "Danke"
+
+#: src/views/Thank-You.vue:11
+msgid ""
+"Thanks to you, Framasoft’s teams will be able to continue and expand the "
+"work already started on this software."
+msgstr ""
+"Nur deinetwegen können die Teams von Framasoft ihre Arbeit an der Software "
+"weitermachen und ausweiten."
+
+#: src/views/Thank-You.vue:17
+msgid ""
+"The success of this fundraising depends only on you: <strong>we need you</"
+"strong> to raise awareness about this roadmap, so we can share our "
+"enthousiasm about Peertube's v3."
+msgstr ""
+
+#: src/views/Thank-You.vue:21
+msgid ""
+"Feel free <strong>to share your gesture</strong> on your favourite social "
+"networks and to talk about Tube around you!"
+msgstr ""
+"Fühle dich ermutigt, <strong>deine Haltung</strong> in deinen bevorzugten "
+"sozialen Netzwerken zu teilen und über Tube zu sprechen!"

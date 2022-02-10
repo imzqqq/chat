@@ -1,0 +1,20 @@
+P2Play is an Android Application for Peertube.
+
+What is Peertube? https://github.com/Chocobozzz/Tube/
+
+Features
+* Show recent, popular and local list of videos.
+* Reproduce videos
+* Login and register in your instance
+* Show uploaded videos
+* Subscribe to accounts
+* Show your subscription videos
+* Show your history
+* Rate videos
+* Show and make commentaries
+* Splash screen
+* Search videos
+* Infinite scroll
+* Share videos
+* Report videos
+* Peertube profiles

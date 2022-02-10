@@ -1,0 +1,159 @@
+package com.imzqqq.app.features.spaces.invite
+
+import android.content.Context
+import android.os.Bundle
+import android.os.Parcelable
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.isVisible
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
+import com.imzqqq.app.R
+import com.imzqqq.app.core.platform.ButtonStateView
+import com.imzqqq.app.core.platform.VectorBaseBottomSheetDialogFragment
+import com.imzqqq.app.core.utils.toast
+import com.imzqqq.app.databinding.BottomSheetInvitedToSpaceBinding
+import com.imzqqq.app.features.displayname.getBestName
+import com.imzqqq.app.features.home.AvatarRenderer
+import com.imzqqq.app.features.matrixto.SpaceCardRenderer
+import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.util.toMatrixItem
+import javax.inject.Inject
+
+@AndroidEntryPoint
+class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetInvitedToSpaceBinding>() {
+
+    interface InteractionListener {
+        fun spaceInviteBottomSheetOnAccept(spaceId: String)
+        fun spaceInviteBottomSheetOnDecline(spaceId: String)
+    }
+
+    var interactionListener: InteractionListener? = null
+
+    @Parcelize
+    data class Args(
+            val spaceId: String
+    ) : Parcelable
+
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var spaceCardRenderer: SpaceCardRenderer
+
+    private val viewModel: SpaceInviteBottomSheetViewModel by fragmentViewModel(SpaceInviteBottomSheetViewModel::class)
+
+    override val showExpanded = true
+
+    private val inviteArgs: Args by args()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        views.spaceCard.matrixToCardMainButton.commonClicked = {
+            // quick local echo
+            views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Loading)
+            views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = false
+            viewModel.handle(SpaceInviteBottomSheetAction.DoJoin)
+        }
+        views.spaceCard.matrixToCardSecondaryButton.commonClicked = {
+            views.spaceCard.matrixToCardMainButton.button.isEnabled = false
+            views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Loading)
+            viewModel.handle(SpaceInviteBottomSheetAction.DoReject)
+        }
+
+        viewModel.observeViewEvents {
+            when (it) {
+                is SpaceInviteBottomSheetEvents.ShowError -> requireActivity().toast(it.message)
+            }
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is InteractionListener) {
+            interactionListener = context
+        }
+    }
+
+    override fun onDetach() {
+        interactionListener = null
+        super.onDetach()
+    }
+
+    override fun invalidate() = withState(viewModel) { state ->
+        super.invalidate()
+        val summary = state.summary.invoke()
+        val inviter = state.inviterUser.invoke()?.toMatrixItem()
+        if (inviter != null) {
+            views.inviterAvatarImage.isVisible = true
+            views.inviterText.isVisible = true
+            views.inviterMxid.isVisible = true
+            avatarRenderer.render(inviter, views.inviterAvatarImage)
+            views.inviterText.text = getString(R.string.user_invites_you, inviter.getBestName())
+            views.inviterMxid.text = inviter.id
+        } else {
+            views.inviterAvatarImage.isVisible = false
+            views.inviterText.isVisible = false
+            views.inviterMxid.isVisible = false
+        }
+
+        spaceCardRenderer.render(summary, state.peopleYouKnow.invoke().orEmpty(), null, views.spaceCard)
+
+        views.spaceCard.matrixToCardMainButton.button.text = getString(R.string.accept)
+        views.spaceCard.matrixToCardSecondaryButton.button.text = getString(R.string.decline)
+
+        when (state.joinActionState) {
+            Uninitialized -> {
+                views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Button)
+            }
+            is Loading    -> {
+                views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Loading)
+                views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = false
+            }
+            is Success    -> {
+                interactionListener?.spaceInviteBottomSheetOnAccept(inviteArgs.spaceId)
+                dismiss()
+            }
+            is Fail       -> {
+                views.spaceCard.matrixToCardMainButton.render(ButtonStateView.State.Error)
+                views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = true
+            }
+        }
+
+        when (state.rejectActionState) {
+            Uninitialized -> {
+                views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Button)
+            }
+            is Loading    -> {
+                views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Loading)
+                views.spaceCard.matrixToCardMainButton.button.isEnabled = false
+            }
+            is Success    -> {
+                interactionListener?.spaceInviteBottomSheetOnDecline(inviteArgs.spaceId)
+                dismiss()
+            }
+            is Fail       -> {
+                views.spaceCard.matrixToCardSecondaryButton.render(ButtonStateView.State.Error)
+                views.spaceCard.matrixToCardSecondaryButton.button.isEnabled = true
+            }
+        }
+    }
+
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetInvitedToSpaceBinding {
+        return BottomSheetInvitedToSpaceBinding.inflate(inflater, container, false)
+    }
+
+    companion object {
+
+        fun newInstance(spaceId: String): SpaceInviteBottomSheet {
+            return SpaceInviteBottomSheet().apply {
+                setArguments(Args(spaceId))
+            }
+        }
+    }
+}

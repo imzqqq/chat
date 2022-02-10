@@ -1,0 +1,23 @@
+// This file defines project settings for Debug.
+// Targets (App, extensions) xcconfig files automatically include it for Debug build.
+
+#include "Project.xcconfig"
+#include "Project-Warnings.xcconfig"
+
+ONLY_ACTIVE_ARCH = YES
+COPY_PHASE_STRIP = NO
+ENABLE_TESTABILITY = YES
+MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE
+
+SWIFT_OPTIMIZATION_LEVEL = -Onone
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
+
+GCC_OPTIMIZATION_LEVEL = 0
+GCC_DYNAMIC_NO_PIC = NO
+GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1 $(inherited)
+GCC_SYMBOLS_PRIVATE_EXTERN = NO
+
+
+// Code signing: Use the development team for all targets
+CODE_SIGN_IDENTITY = iPhone Developer
+CODE_SIGN_STYLE = Automatic

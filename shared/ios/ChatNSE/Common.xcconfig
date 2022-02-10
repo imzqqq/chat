@@ -1,0 +1,17 @@
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include "Config/AppIdentifiers.xcconfig"
+#include "Config/AppVersion.xcconfig"
+
+PRODUCT_NAME = ChatNSE
+PRODUCT_BUNDLE_IDENTIFIER = $(BASE_BUNDLE_IDENTIFIER).nse
+
+INFOPLIST_FILE = ChatNSE/Info.plist
+
+CODE_SIGN_ENTITLEMENTS = ChatNSE/ChatNSE.entitlements
+
+SKIP_INSTALL = YES
+SWIFT_OBJC_BRIDGING_HEADER = $(SRCROOT)/$(PRODUCT_NAME)/SupportingFiles/ChatNSE-Bridging-Header.h
+
+SWIFT_OBJC_INTERFACE_HEADER_NAME = GeneratedInterface-Swift.h

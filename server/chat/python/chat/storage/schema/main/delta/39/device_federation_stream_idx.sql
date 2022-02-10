@@ -1,0 +1,1 @@
+CREATE INDEX device_federation_outbox_id ON device_federation_outbox(stream_id);

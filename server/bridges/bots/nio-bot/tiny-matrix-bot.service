@@ -1,0 +1,19 @@
+[Unit]
+Description=tiny-matrix-bot
+
+[Service]
+User=bot
+Group=users
+NoNewPrivileges=true
+ProtectSystem=strict
+PrivateDevices=true
+PrivateTmp=true
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=/home/bot/tiny-matrix-bot/tiny-matrix-bot.env
+ExecStart=/home/bot/tiny-matrix-bot/tiny-matrix-bot.py
+ExecStop=/usr/bin/kill -9 $MAINPID
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

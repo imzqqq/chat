@@ -1,0 +1,17 @@
+.mx_RoleButton {
+    margin-left: 4px;
+    margin-right: 4px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.mx_RoleButton object {
+    pointer-events: none;
+}
+
+.mx_RoleButton_tooltip {
+    display: inline-block;
+    position: relative;
+    top: -25px;
+    left: 6px;
+}

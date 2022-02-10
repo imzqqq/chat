@@ -1,0 +1,65 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+form {
+  margin-top: 40px;
+}
+
+.radio-label {
+  font-size: 15px;
+  font-weight: $font-bold;
+}
+
+.tube-radio-container {
+  @include margin-right(30px);
+
+  display: inline-block;
+}
+
+.tube-select-container {
+  @include tube-select-container(auto);
+
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+input[type=text] {
+  @include tube-input-text(100%);
+  display: block;
+}
+
+input[type=submit] {
+  @include tube-button-link;
+  @include orange-button;
+}
+
+.submit-button {
+  text-align: end;
+}
+
+.reset-button {
+  @include tube-button;
+  @include margin-right(1rem);
+
+  font-weight: $font-semibold;
+  display: inline-block;
+  padding: 0 10px;
+  white-space: nowrap;
+  background: transparent;
+}
+
+.reset-button-small {
+  font-size: 80%;
+  height: unset;
+  line-height: unset;
+  margin: unset;
+  margin-bottom: 0.5rem;
+}
+
+.label-container {
+  display: flex;
+  white-space: nowrap;
+}

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Start Global strings -->
+    <string name="comming">Proximamente</string>
+    <string name="charging">Cargando...</string>
+    <!-- End Global strings -->
+
+    <!-- Start About strings -->
+    <string name="aboutLabel">Sobre P2Play</string>
+    <string name="aboutText">P2Play es una aplicacion no-oficial de Tube. Tu puedes ver y cntribuir con el codigo en GitLab:</string>
+    <string name="aboutStatus">Puedes seguir nuestro blog:</string>
+    <string name="aboutLicense">Copyleft GNU GPLv3 License</string>
+    <string name="aboutInstance">Sobre la instancia</string>
+    <string name="aboutInWeb">Para ver los terminos y mas visita la web:</string>
+    <!-- End About strings -->
+    <!-- Start Host strings -->
+    <string name="hostInfoText">Selecciona la instancia que prefieras</string>
+    <string name="okButton">Aceptar</string>
+    <string name="errorMsg">Error, intenta de nuevo</string>
+    <string name="finallyMsg">Instancia guardada</string>
+    <!-- End Host strings -->
+    <!-- Start Login strings -->
+    <string name="loginInfo">Acceder o crear una cuenta nueva</string>
+    <string name="userTxt">Usuario:</string>
+    <string name="passwordTxt">Contraseña:</string>
+    <string name="loginBtn">Ingresar</string>
+    <string name="registerActionBtn">Crear una cuenta</string>
+    <!-- Toast msg -->
+    <string name="loginSuccess_msg">Te has identificado</string>
+    <string name="loginError_msg">Ha ocurrido un error</string>
+    <string name="loginFailed_msg">Credenciales invalidas</string>
+    <string name="registerSuccess_msg">Te has registrado</string>
+    <string name="registerError_msg">Ha ocurrido un error</string>
+    <string name="registerFailed_msg">Datos invalidos</string>
+    <!-- Register msg -->
+    <string name="emailTxt">Correo:</string>
+    <string name="registerBtn">Registrar ahora</string>
+    <!-- End Login strings -->
+    <!-- Start Main strings -->
+    <string name="title_recent">Recientes</string>
+    <string name="title_popular">Populares</string>
+    <string name="title_local">Locales</string>
+    <string name="title_subscriptions">Suscripciones</string>
+    <string name="title_myVideos">Mis videos</string>
+    <string name="view_text">vistas</string>
+    <string name="timeSec_text">segundos</string>
+    <string name="timeMin_text">minutos</string>
+    <string name="timeHrs_text">horas</string>
+    <string name="nav_header_title">Inicia session</string>
+    <!-- Toast msg -->
+    <string name="logout_msg">Te has desconectado</string>
+    <!-- End Main strings -->
+    <!-- Start Menu strings -->
+    <string name="nav_popular">Populares</string>
+    <string name="nav_recent">Recientes</string>
+    <string name="nav_local">Local</string>
+    <string name="nav_about">Sobre</string>
+    <string name="nav_subscriptions">Suscripciones</string>
+    <string name="nav_history">Historial</string>
+    <string name="nav_menu_myLibrary">Mi libreria</string>
+    <string name="nav_menu_videos">Videos</string>
+    <string name="nav_menu_more">Mas</string>
+    <!-- End Menu strings -->
+    <!-- Start MiniMenu strings -->
+    <string name="action_settings">Configuracion</string>
+    <string name="action_login">Acceder</string>
+    <string name="action_logout">Cerrar sesion</string>
+    <!-- End MiniMenu strings -->
+    <!-- Start Reproductor strings -->
+    <string name="descriptionTxt">Descripcion:</string>
+    <string name="commentariesTxt">Comentarios:</string>
+    <string name="commentHolder">Has un comentario</string>
+    <!-- Actions -->
+    <string name="likeBtn">Like</string>
+    <string name="dislikeBtn">Dislike</string>
+    <string name="shareBtn">Compartir</string>
+    <string name="reportBtn">Reportar</string>
+    <string name="subscribeBtn">Subscribir</string>
+    <string name="unSubscribeBtn">Desubscribir</string>
+    <string name="commentaryText">Comentar</string>
+    <!-- Messages -->
+    <string name="subscribeMsg">Te has subscribido a este canal</string>
+    <string name="rateMsg">Has valorado este video</string>
+    <string name="unSubscribeMsg">Te has desubscribido de este canal</string>
+    <string name="makedCommentaryMsg">Has comentado este video</string>
+    <string name="errorCommentaryMsg">A ocurrido un error, intenta de nuevo</string>
+    <string name="emptyCommentaryMsg">Porfavor has un comentario primero</string>
+    <!-- End Reproductor strings -->
+    <!-- Start Settings strings -->
+    <string name="title_activity_settings">Configuracion</string>
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+    <string name="pref_nfsw_title">Contenido NFSW</string>
+    <string name="pref_nfsw_description">Si es activado podria mostrar contenido para adultos o sencible.</string>
+    <string name="pref_hostname_title">Instancia Peertube</string>
+    <string name="pref_message_exit">Reinicia para aplicar los cambios</string>
+    <string name="pref_videos_count_title">Videos por pagina</string>
+    <string name="showMore">Mostrar mas</string>
+    <string name="nav_trending">Tendencias</string>
+    <string name="title_trending">Tendencias</string>
+    <string name="followersIndicator">Seguidores:</string>
+    <string name="hostIndicator">Host:</string>
+    <string name="reportDialog">Razon para reportar:</string>
+    <string name="reportDialogMsg">Has reportado el video</string>
+    <string name="nav_likes">Mas gustados</string>
+    <!-- End Settings strings -->
+
+</resources>

@@ -1,0 +1,56 @@
+"""
+This migration handles the process of changing the type of `room_depth.min_depth` to
+a BIGINT.
+"""
+from chat.storage.engines import BaseDatabaseEngine, PostgresEngine
+from chat.storage.types import Cursor
+
+
+def run_create(cur: Cursor, database_engine: BaseDatabaseEngine, *args, **kwargs):
+    if not isinstance(database_engine, PostgresEngine):
+        # this only applies to postgres - sqlite does not distinguish between big and
+        # little ints.
+        return
+
+    # First add a new column to contain the bigger min_depth
+    cur.execute("ALTER TABLE room_depth ADD COLUMN min_depth2 BIGINT")
+
+    # Create a trigger which will keep it populated.
+    cur.execute(
+        """
+        CREATE OR REPLACE FUNCTION populate_min_depth2() RETURNS trigger AS $BODY$
+            BEGIN
+                new.min_depth2 := new.min_depth;
+                RETURN NEW;
+            END;
+        $BODY$ LANGUAGE plpgsql
+        """
+    )
+
+    cur.execute(
+        """
+        CREATE TRIGGER populate_min_depth2_trigger BEFORE INSERT OR UPDATE ON room_depth
+        FOR EACH ROW
+        EXECUTE PROCEDURE populate_min_depth2()
+        """
+    )
+
+    # Start a bg process to populate it for old rooms
+    cur.execute(
+        """
+       INSERT INTO background_updates (ordering, update_name, progress_json) VALUES
+            (6103, 'populate_room_depth_min_depth2', '{}')
+       """
+    )
+
+    # and another to switch them over once it completes.
+    cur.execute(
+        """
+        INSERT INTO background_updates (ordering, update_name, progress_json, depends_on) VALUES
+            (6103, 'replace_room_depth_min_depth', '{}', 'populate_room_depth2')
+        """
+    )
+
+
+def run_upgrade(cur: Cursor, database_engine: BaseDatabaseEngine, *args, **kwargs):
+    pass

@@ -1,0 +1,25 @@
+.mx_ChatCreateOrReuseDialog .mx_ChatCreateOrReuseDialog_tiles {
+    margin-top: 24px;
+}
+
+.mx_ChatCreateOrReuseDialog .mx_Dialog_content {
+    margin-bottom: 24px;
+
+    /*
+       To stop spinner that mx_ChatCreateOrReuseDialog_profile replaces from causing a
+       height change
+    */
+    min-height: 100px;
+}
+
+.mx_ChatCreateOrReuseDialog .mx_RoomTile_badge {
+    display: none;
+}
+
+.mx_ChatCreateOrReuseDialog_profile {
+    display: flex;
+}
+
+.mx_ChatCreateOrReuseDialog_profile_name {
+    padding: 14px;
+}

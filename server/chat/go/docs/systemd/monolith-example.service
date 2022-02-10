@@ -1,0 +1,18 @@
+[Unit]
+Description=Dendrite (Matrix Homeserver)
+After=syslog.target
+After=network.target
+After=postgresql.service
+
+[Service]
+Environment=GODEBUG=madvdontneed=1
+RestartSec=2s
+Type=simple
+User=dendrite
+Group=dendrite
+WorkingDirectory=/opt/dendrite/
+ExecStart=/opt/dendrite/bin/dendrite-monolith-server
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

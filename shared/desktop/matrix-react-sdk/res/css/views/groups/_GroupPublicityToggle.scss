@@ -1,0 +1,17 @@
+.mx_GroupPublicity_toggle {
+    display: flex;
+    align-items: center;
+    margin: 8px;
+}
+
+.mx_GroupPublicity_toggle .mx_GroupTile {
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.mx_GroupPublicity_toggle .mx_ToggleSwitch {
+    float: right;
+}

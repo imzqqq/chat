@@ -1,0 +1,9 @@
+.python-version
+.venv*
+
+scripts-enabled/*
+!scripts-enabled/.placeholder
+
+### MARK
+# tiny-matrix-bot.env
+###

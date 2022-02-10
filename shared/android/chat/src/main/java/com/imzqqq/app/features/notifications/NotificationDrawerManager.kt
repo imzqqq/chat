@@ -1,0 +1,240 @@
+package com.imzqqq.app.features.notifications
+
+import android.content.Context
+import android.os.Handler
+import android.os.HandlerThread
+import androidx.annotation.WorkerThread
+import com.imzqqq.app.ActiveSessionDataSource
+import com.imzqqq.app.BuildConfig
+import com.imzqqq.app.R
+import com.imzqqq.app.core.utils.FirstThrottler
+import com.imzqqq.app.features.displayname.getBestName
+import com.imzqqq.app.features.settings.VectorPreferences
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.util.toMatrixItem
+import timber.log.Timber
+import java.io.File
+import java.io.FileOutputStream
+import javax.inject.Inject
+import javax.inject.Singleton
+
+/**
+ * The NotificationDrawerManager receives notification events as they arrived (from event stream or fcm) and
+ * organise them in order to display them in the notification drawer.
+ * Events can be grouped into the same notification, old (already read) events can be removed to do some cleaning.
+ */
+@Singleton
+class NotificationDrawerManager @Inject constructor(private val context: Context,
+                                                    private val notificationDisplayer: NotificationDisplayer,
+                                                    private val vectorPreferences: VectorPreferences,
+                                                    private val activeSessionDataSource: ActiveSessionDataSource,
+                                                    private val notifiableEventProcessor: NotifiableEventProcessor,
+                                                    private val notificationRenderer: NotificationRenderer) {
+
+    private val handlerThread: HandlerThread = HandlerThread("NotificationDrawerManager", Thread.MIN_PRIORITY)
+    private var backgroundHandler: Handler
+
+    init {
+        handlerThread.start()
+        backgroundHandler = Handler(handlerThread.looper)
+    }
+
+    /**
+     * The notifiable events to render
+     * this is our source of truth for notifications, any changes to this list will be rendered as notifications
+     * when events are removed the previously rendered notifications will be cancelled
+     * when adding or updating, the notifications will be notified
+     *
+     * Events are unique by their properties, we should be careful not to insert multiple events with the same event-id
+     */
+    private val queuedEvents = loadEventInfo()
+
+    /**
+     * The last known rendered notifiable events
+     * we keep track of them in order to know which events have been removed from the eventList
+     * allowing us to cancel any notifications previous displayed by now removed events
+     */
+    private var renderedEvents = emptyList<ProcessedEvent<NotifiableEvent>>()
+    private val avatarSize = context.resources.getDimensionPixelSize(R.dimen.profile_avatar_size)
+    private var currentRoomId: String? = null
+
+    // TODO Multi-session: this will have to be improved
+    private val currentSession: Session?
+        get() = activeSessionDataSource.currentValue?.orNull()
+
+    private var useCompleteNotificationFormat = vectorPreferences.useCompleteNotificationFormat()
+
+    /**
+     * An in memory FIFO cache of the seen events.
+     * Acts as a notification debouncer to stop already dismissed push notifications from
+     * displaying again when the /sync response is delayed.
+     */
+    private val seenEventIds = CircularCache.create<String>(cacheSize = 25)
+
+    /**
+    Should be called as soon as a new event is ready to be displayed.
+    The notification corresponding to this event will not be displayed until
+    #refreshNotificationDrawer() is called.
+    Events might be grouped and there might not be one notification per event!
+     */
+    fun NotificationEventQueue.onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
+        if (!vectorPreferences.areNotificationEnabledForDevice()) {
+            Timber.i("Notification are disabled for this device")
+            return
+        }
+        // If we support multi session, event list should be per userId
+        // Currently only manage single session
+        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+            Timber.d("onNotifiableEventReceived(): $notifiableEvent")
+        } else {
+            Timber.d("onNotifiableEventReceived(): is push: ${notifiableEvent.canBeReplaced}")
+        }
+
+        add(notifiableEvent, seenEventIds)
+    }
+
+    /**
+     * Clear all known events and refresh the notification drawer
+     */
+    fun clearAllEvents() {
+        updateEvents { it.clear() }
+    }
+
+    /**
+     * Should be called when the application is currently opened and showing timeline for the given roomId.
+     * Used to ignore events related to that room (no need to display notification) and clean any existing notification on this room.
+     */
+    fun setCurrentRoom(roomId: String?) {
+        updateEvents {
+            val hasChanged = roomId != currentRoomId
+            currentRoomId = roomId
+            if (hasChanged && roomId != null) {
+                it.clearMessagesForRoom(roomId)
+            }
+        }
+    }
+
+    fun notificationStyleChanged() {
+        updateEvents {
+            val newSettings = vectorPreferences.useCompleteNotificationFormat()
+            if (newSettings != useCompleteNotificationFormat) {
+                // Settings has changed, remove all current notifications
+                notificationDisplayer.cancelAllNotifications()
+                useCompleteNotificationFormat = newSettings
+            }
+        }
+    }
+
+    fun updateEvents(action: NotificationDrawerManager.(NotificationEventQueue) -> Unit) {
+        synchronized(queuedEvents) {
+            action(this, queuedEvents)
+        }
+        refreshNotificationDrawer()
+    }
+
+    private var firstThrottler = FirstThrottler(200)
+
+    private fun refreshNotificationDrawer() {
+        // Implement last throttler
+        val canHandle = firstThrottler.canHandle()
+        Timber.v("refreshNotificationDrawer(), delay: ${canHandle.waitMillis()} ms")
+        backgroundHandler.removeCallbacksAndMessages(null)
+
+        backgroundHandler.postDelayed(
+                {
+                    try {
+                        refreshNotificationDrawerBg()
+                    } catch (throwable: Throwable) {
+                        // It can happen if for instance session has been destroyed. It's a bit ugly to try catch like this, but it's safer
+                        Timber.w(throwable, "refreshNotificationDrawerBg failure")
+                    }
+                },
+                canHandle.waitMillis())
+    }
+
+    @WorkerThread
+    private fun refreshNotificationDrawerBg() {
+        Timber.v("refreshNotificationDrawerBg()")
+        val eventsToRender = synchronized(queuedEvents) {
+            notifiableEventProcessor.process(queuedEvents.rawEvents(), currentRoomId, renderedEvents).also {
+                queuedEvents.clearAndAdd(it.onlyKeptEvents())
+            }
+        }
+
+        if (renderedEvents == eventsToRender) {
+            Timber.d("Skipping notification update due to event list not changing")
+        } else {
+            renderedEvents = eventsToRender
+            val session = currentSession ?: return
+            val user = session.getUser(session.myUserId)
+            // myUserDisplayName cannot be empty else NotificationCompat.MessagingStyle() will crash
+            val myUserDisplayName = user?.toMatrixItem()?.getBestName() ?: session.myUserId
+            val myUserAvatarUrl = session.contentUrlResolver().resolveThumbnail(
+                    contentUrl = user?.avatarUrl,
+                    width = avatarSize,
+                    height = avatarSize,
+                    method = ContentUrlResolver.ThumbnailMethod.SCALE
+            )
+            notificationRenderer.render(session.myUserId, myUserDisplayName, myUserAvatarUrl, useCompleteNotificationFormat, eventsToRender)
+        }
+    }
+
+    fun shouldIgnoreMessageEventInRoom(roomId: String?): Boolean {
+        return currentRoomId != null && roomId == currentRoomId
+    }
+
+    fun persistInfo() {
+        synchronized(queuedEvents) {
+            if (queuedEvents.isEmpty()) {
+                deleteCachedRoomNotifications()
+                return
+            }
+            try {
+                val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
+                if (!file.exists()) file.createNewFile()
+                FileOutputStream(file).use {
+                    currentSession?.securelyStoreObject(queuedEvents.rawEvents(), KEY_ALIAS_SECRET_STORAGE, it)
+                }
+            } catch (e: Throwable) {
+                Timber.e(e, "## Failed to save cached notification info")
+            }
+        }
+    }
+
+    private fun loadEventInfo(): NotificationEventQueue {
+        try {
+            val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
+            if (file.exists()) {
+                file.inputStream().use {
+                    val events: ArrayList<NotifiableEvent>? = currentSession?.loadSecureSecret(it, KEY_ALIAS_SECRET_STORAGE)
+                    if (events != null) {
+                        return NotificationEventQueue(events.toMutableList())
+                    }
+                }
+            }
+        } catch (e: Throwable) {
+            Timber.e(e, "## Failed to load cached notification info")
+        }
+        return NotificationEventQueue()
+    }
+
+    private fun deleteCachedRoomNotifications() {
+        val file = File(context.applicationContext.cacheDir, ROOMS_NOTIFICATIONS_FILE_NAME)
+        if (file.exists()) {
+            file.delete()
+        }
+    }
+
+    companion object {
+        const val SUMMARY_NOTIFICATION_ID = 0
+        const val ROOM_MESSAGES_NOTIFICATION_ID = 1
+        const val ROOM_EVENT_NOTIFICATION_ID = 2
+        const val ROOM_INVITATION_NOTIFICATION_ID = 3
+
+        // TODO Mutliaccount
+        private const val ROOMS_NOTIFICATIONS_FILE_NAME = "im.vector.notifications.cache"
+
+        private const val KEY_ALIAS_SECRET_STORAGE = "notificationMgr"
+    }
+}

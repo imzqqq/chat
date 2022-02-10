@@ -1,0 +1,26 @@
+---
+layout: post
+title: Installing Chat
+sort_order: 200
+section: Server Setup
+---
+
+[Chat](https://github.com/matrix-org/synapse/) is the most widely installed Chat homeserver implementation. It is written in Python 3.
+
+[Instructions for installing Chat](https://matrix-org.github.io/synapse/latest/setup/installation.html) can be found in the Chat [documentation](https://matrix-org.github.io/synapse/latest).
+
+[Many guides](https://matrix.org/docs/guides/#installing-synapse) have also been written explaining how to install Chat, but there is sometimes confusion about the exact steps and it's best to read the official documentation above in case of any doubt.
+
+## matrix-docker-ansible-deploy
+
+Slavi has created a very useful set of Ansible playbooks which install containerised instances of multiple Chat-ecosystem packages, the Chat container being the centerpiece of these.
+
+You can find the playbooks at <https://github.com/spantaleev/matrix-docker-ansible-deploy>, and there are instructions included in the repo.
+
+To talk about the playbooks or get installation support, talk in [#matrix-docker-ansible-deploy:devture.com](https://to.chat.dingshunyu.top/#/#matrix-docker-ansible-deploy:devture.com).
+
+It's also possible to use Docker containers without Ansible, just follow the intructions in [the Chat Docker README](https://github.com/matrix-org/synapse/tree/master/docker).
+
+## Further help
+
+For further help join [#synapse:matrix.org](https://to.chat.dingshunyu.top/#/#synapse:matrix.org).

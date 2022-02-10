@@ -1,0 +1,22 @@
+.mx_LinkPreviewGroup {
+    .mx_LinkPreviewGroup_hide {
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+
+        img {
+            flex: 0 0 40px;
+            visibility: hidden;
+        }
+    }
+
+    &:hover .mx_LinkPreviewGroup_hide img,
+    .mx_LinkPreviewGroup_hide.focus-visible:focus img {
+        visibility: visible;
+    }
+
+    > .mx_AccessibleButton {
+        color: $accent-color;
+        text-align: center;
+    }
+}

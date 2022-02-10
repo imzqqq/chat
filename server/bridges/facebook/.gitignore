@@ -1,0 +1,15 @@
+.venv
+*.pyc
+*.egg-info
+/build
+/dist
+
+*.yaml
+!mautrix_facebook/example-config.yaml
+
+*.log
+*.log.*
+
+*.db
+*.pickle
+*.bak

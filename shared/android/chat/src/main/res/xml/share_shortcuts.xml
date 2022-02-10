@@ -1,0 +1,8 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <share-target android:targetClass="com.imzqqq.app.MainActivity">
+        <data android:mimeType="text/plain" />
+        <category android:name="com.imzqqq.app.Share" />
+    </share-target>
+
+</shortcuts>

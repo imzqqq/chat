@@ -1,0 +1,164 @@
+name: "🌐 Build the matrix.org website"
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  # Apply styling to the spec documents.
+  # This step also sets up the OpenAPI UI.
+  build-spec:
+    name: "📖 Spec"
+    runs-on: ubuntu-latest
+    container: "python:3.6"
+    steps:
+      - name: "📥 Source checkout"
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+      - name: "📖 Update docs"
+        run: |
+          python3 -m venv env
+          env/bin/pip install requests
+          . env/bin/activate; scripts/update_docs.sh
+      - name: "📦 Tarball creation"
+        run: tar -czf styled-docs.tar.gz content/docs
+      - name: "📤 Artifact upload"
+        uses: actions/upload-artifact@v2
+        with:
+          name: styled-docs-artifact
+          path: styled-docs.tar.gz
+
+  # Run jekyll. We run this in a custom docker image.
+  build-jekyll:
+    name: "🌐 Jekyll"
+    runs-on: ubuntu-latest
+    container:
+      # the dockerfile for this is in matrix-org/docker/build
+      image: "matrixdotorg/matrixdotorg-build:0.2"
+    steps:
+      - name: "📥 Source checkout"
+        uses: actions/checkout@v2
+      - name: "🚧 Jekyll build"
+        run: |
+          . /env/bin/activate
+          ./jekyll/generate.sh
+          cp -rf ./pre-generated/* jekyll/_site/
+      - name: "📦 Tarball creation"
+        run: tar -czf jekyll-site.tar.gz jekyll/_site
+      - name: "📤 Artifact upload"
+        uses: actions/upload-artifact@v2
+        with:
+          name: spec-artifact
+          path: jekyll-site.tar.gz
+
+  # Run gatsby.
+  build-gatsby:
+    name: "🌐 Gatsby"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "📥 Source checkout"
+        uses: actions/checkout@v2
+      - name: "⚙️ Setup node"
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: "📝 Gatsby dependencies cache"
+        uses: actions/cache@v2
+        with:
+          path: |
+            gatsby/node_modules
+          key: ${{ runner.os }}-gatsby-deps-${{ hashFiles('gatsby/package-lock.json') }}
+      - name: "⚙️ Install Gatsby"
+        run: npm install
+        working-directory: gatsby
+      - name: "📝 Gatsby build cache"
+        uses: actions/cache@v2
+        with:
+          path: |
+            gatsby/public
+            gatsby/.cache
+          key: ${{ runner.os}}-gatsby-build-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-gatsby-build-
+      - name: "🚧 Gatsby build"
+        run: npm run build
+        working-directory: gatsby
+        env:
+          GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES: true
+          CI: true
+      - name: "📦 Tarball creation"
+        run: tar -czf gatsby-site.tar.gz public
+        working-directory: gatsby
+      - name: "📤 Artifact upload"
+        uses: actions/upload-artifact@v2
+        with:
+          name: gatsby-artifact
+          path: gatsby/gatsby-site.tar.gz
+
+  build-guides:
+    name: "📖 Implementation guides"
+    runs-on: ubuntu-latest
+    container:
+      image: "buildpack-deps"
+    steps:
+      - name: "📥 Source checkout"
+        uses: actions/checkout@v2
+      - name: "🚧 Build implementation guides"
+        run: |
+          wget https://github.com/rust-lang/mdBook/releases/download/v0.4.1/mdbook-v0.4.1-x86_64-unknown-linux-gnu.tar.gz
+          tar -xf mdbook-v0.4.1-x86_64-unknown-linux-gnu.tar.gz
+          ./mdbook build server -d ${GITHUB_WORKSPACE}/implementation-guides/implementation-guides/server
+          ./mdbook build client -d ${GITHUB_WORKSPACE}/implementation-guides/implementation-guides/client
+          ./mdbook build application-services -d ${GITHUB_WORKSPACE}/implementation-guides/implementation-guides/application-services
+          cp index.html ./implementation-guides/
+        working-directory: implementation-guides
+      - name: "📦 Tarball creation"
+        run: tar -czf implementation-guides.tar.gz implementation-guides
+        working-directory: implementation-guides
+      - name: "📤 Artifact upload"
+        uses: actions/upload-artifact@v2
+        with:
+          name: guides-artifact
+          path: implementation-guides/implementation-guides.tar.gz
+
+  # Merge the three sets of outputs together, together
+  # with the existing static stuff in `content`.
+  package:
+    name: "📦 Package"
+    runs-on: ubuntu-latest
+    needs: [build-spec, build-jekyll, build-gatsby, build-guides]
+    steps:
+      - name: "📥 Source checkout"
+        uses: actions/checkout@v2
+      - name: "📥 Spec artifact download"
+        uses: actions/download-artifact@v2
+        with:
+          name: styled-docs-artifact
+      - name: "📥 Jekyll artifact download"
+        uses: actions/download-artifact@v2
+        with:
+          name: spec-artifact
+      - name: "📥 Gatsby artifact download"
+        uses: actions/download-artifact@v2
+        with:
+          name: gatsby-artifact
+      - name: "📥 Implementation guides artifact download"
+        uses: actions/download-artifact@v2
+        with:
+          name: guides-artifact
+      - name: "📦 Merge archives"
+        run: |
+          tar -xzvf styled-docs.tar.gz
+          tar -xzvf jekyll-site.tar.gz
+          cp -r jekyll/_site/{css,guides,howtos,projects} content/docs
+          tar -C content --strip-components=1 -xzf gatsby-site.tar.gz
+          tar -C content -xzf implementation-guides.tar.gz
+          tar -czf content.tar.gz content
+      - name: "📤 Artifact upload"
+        uses: actions/upload-artifact@v2
+        with:
+          name: merged-content-artifact
+          path: content.tar.gz

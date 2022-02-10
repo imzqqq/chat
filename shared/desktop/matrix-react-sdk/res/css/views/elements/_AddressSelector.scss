@@ -1,0 +1,29 @@
+.mx_AddressSelector {
+    position: absolute;
+    background-color: $background;
+    width: 485px;
+    max-height: 116px;
+    overflow-y: auto;
+    border-radius: $border-radius-3px;
+    border: solid 1px $accent-color;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.mx_AddressSelector.mx_AddressSelector_empty {
+    display: none;
+}
+
+.mx_AddressSelector_addressListElement .mx_AddressTile {
+    background-color: $background;
+    border: solid 1px $background;
+}
+
+.mx_AddressSelector_addressListElement.mx_AddressSelector_selected {
+    background-color: $selected-color;
+}
+
+.mx_AddressSelector_addressListElement.mx_AddressSelector_selected .mx_AddressTile {
+    background-color: $selected-color;
+    border: solid 1px $selected-color;
+}

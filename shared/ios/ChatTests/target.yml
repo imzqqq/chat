@@ -1,0 +1,66 @@
+name: ChatTests
+
+schemes:
+  ChatTests:
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    build:
+      targets:
+        ChatTests:
+        - running
+        - testing
+        - profiling
+        - analyzing
+        - archiving
+    profile:
+      config: Release
+    run:
+      config: Debug
+      disableMainThreadChecker: true
+    test:
+      config: Debug
+      disableMainThreadChecker: true
+      targets:
+      - ChatTests
+
+targets:
+  ChatTests:
+    type: bundle.unit-test
+    platform: iOS
+
+    dependencies:
+    - target: Chat
+
+    configFiles:
+      Debug: Debug.xcconfig
+      Release: Release.xcconfig
+
+    settings:
+      base:
+        BUNDLE_LOADER: $(TEST_HOST)
+        FRAMEWORK_SEARCH_PATHS: $(SDKROOT)/Developer/Library/Frameworks $(inherited)
+        INFOPLIST_FILE: ChatTests/Info.plist
+        LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks @loader_path/Frameworks
+        PRODUCT_BUNDLE_IDENTIFIER: org.matrix.$(PRODUCT_NAME:rfc1034identifier)
+        PRODUCT_NAME: ChatTests
+        SWIFT_OBJC_BRIDGING_HEADER: ChatTests/ChatTests-Bridging-Header.h
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/Chat.app/Chat
+      configs:
+        Debug:
+        Release:
+          PROVISIONING_PROFILE: $(RIOT_PROVISIONING_PROFILE)
+          PROVISIONING_PROFILE_SPECIFIER: $(RIOT_PROVISIONING_PROFILE_SPECIFIER)
+
+    sources:
+    - path: .
+    - path: ../Config/Configurable.swift
+    - path: ../Config/BuildSettings.swift
+    - path: ../Config/AppConfiguration.swift
+    - path: ../Config/CommonConfiguration.swift
+    - path: ../Chat/Categories/Bundle.swift
+    - path: ../Chat/Managers/Settings/ChatSettings.swift
+    - path: ../Chat/Managers/EncryptionKeyManager/EncryptionKeyManager.swift
+    - path: ../Chat/Managers/KeyValueStorage/
+    - path: ../Chat/PropertyWrappers/UserDefaultsBackedPropertyWrapper.swift

@@ -1,0 +1,78 @@
+package com.imzqqq.app.features.spaces.people
+
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MavericksViewModelFactory
+import com.airbnb.mvrx.Success
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import com.imzqqq.app.core.di.MavericksAssistedViewModelFactory
+import com.imzqqq.app.core.di.hiltMavericksViewModelFactory
+import com.imzqqq.app.core.extensions.exhaustive
+import com.imzqqq.app.core.platform.VectorViewModel
+import com.imzqqq.app.features.raw.wellknown.getElementWellknown
+import com.imzqqq.app.features.raw.wellknown.isE2EByDefault
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+
+class SpacePeopleViewModel @AssistedInject constructor(
+        @Assisted val initialState: SpacePeopleViewState,
+        private val rawService: RawService,
+        private val session: Session
+) : VectorViewModel<SpacePeopleViewState, SpacePeopleViewAction, SpacePeopleViewEvents>(initialState) {
+
+    @AssistedFactory
+    interface Factory : MavericksAssistedViewModelFactory<SpacePeopleViewModel, SpacePeopleViewState> {
+        override fun create(initialState: SpacePeopleViewState): SpacePeopleViewModel
+    }
+
+    companion object : MavericksViewModelFactory<SpacePeopleViewModel, SpacePeopleViewState> by hiltMavericksViewModelFactory()
+
+    override fun handle(action: SpacePeopleViewAction) {
+        when (action) {
+            is SpacePeopleViewAction.ChatWith   -> handleChatWith(action)
+            SpacePeopleViewAction.InviteToSpace -> handleInviteToSpace()
+        }.exhaustive
+    }
+
+    private fun handleInviteToSpace() {
+        _viewEvents.post(SpacePeopleViewEvents.InviteToSpace(initialState.spaceId))
+    }
+
+    private fun handleChatWith(action: SpacePeopleViewAction.ChatWith) {
+        val otherUserId = action.member.userId
+        if (otherUserId == session.myUserId) return
+        val existingRoomId = session.getExistingDirectRoomWithUser(otherUserId)
+        if (existingRoomId != null) {
+            // just open it
+            _viewEvents.post(SpacePeopleViewEvents.OpenRoom(existingRoomId))
+            return
+        }
+        setState { copy(createAndInviteState = Loading()) }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val adminE2EByDefault = rawService.getElementWellknown(session.sessionParams)
+                    ?.isE2EByDefault()
+                    ?: true
+
+            val roomParams = CreateRoomParams()
+                    .apply {
+                        invitedUserIds.add(otherUserId)
+                        setDirectMessage()
+                        enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
+                    }
+
+            try {
+                val roomId = session.createRoom(roomParams)
+                _viewEvents.post(SpacePeopleViewEvents.OpenRoom(roomId))
+                setState { copy(createAndInviteState = Success(roomId)) }
+            } catch (failure: Throwable) {
+                setState { copy(createAndInviteState = Fail(failure)) }
+            }
+        }
+    }
+}

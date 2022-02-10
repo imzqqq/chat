@@ -1,0 +1,69 @@
+{
+	"sqltools.connections": [
+		{
+			"previewLimit": 50,
+			"server": "47.115.52.51",
+			"port": 5432,
+			"driver": "PostgreSQL",
+			"name": "47.115.52.51",
+			"database": "synapse",
+			"username": "admin",
+			"password": "Pwd@123456"
+		},
+		{
+			"previewLimit": 50,
+			"server": "localhost",
+			"port": 5432,
+			"driver": "PostgreSQL",
+			"name": "localhost",
+			"database": "chat",
+			"username": "imzqqq",
+			"password": "Pwd@123456"
+		},
+		{
+			"previewLimit": 50,
+			"server": "localhost",
+			"port": 5432,
+			"driver": "PostgreSQL",
+			"name": "localhost",
+			"database": "chat",
+			"username": "imzqqq",
+			"password": "newpwd"
+		},
+		{
+			"previewLimit": 50,
+			"server": "localhost",
+			"port": 5432,
+			"driver": "PostgreSQL",
+			"name": "localhost",
+			"database": "chat",
+			"username": "imzqqq",
+			"password": "newpwd"
+		},
+		{
+			"previewLimit": 50,
+			"server": "localhost",
+			"port": 5432,
+			"driver": "PostgreSQL",
+			"name": "localhost",
+			"database": "chat",
+			"username": "imzqqq",
+			"password": "newpwd"
+		},
+		{
+			"previewLimit": 50,
+			"server": "localhost",
+			"port": 5432,
+			"driver": "PostgreSQL",
+			"name": "47.115.52.51",
+			"database": "chat",
+			"username": "admin",
+			"password": "Pwd@123456"
+		}
+	],
+	"git.ignoreLimitWarning": true,
+	"cSpell.words": [
+		"Innovationslabor"
+	],
+	"json.schemaDownload.enable": false
+}

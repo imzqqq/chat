@@ -1,0 +1,16 @@
+[submodule "boost"]
+	path = deps/boost
+	url = https://github.com.cnpmjs.org/boostorg/boost.git
+[submodule "rocksdb"]
+	path = deps/rocksdb
+	url = https://github.com.cnpmjs.org/facebook/rocksdb.git
+[submodule "gecko-dev"]
+	path = deps/gecko-dev
+	url = https://github.com.cnpmjs.org/mozilla/gecko-dev.git
+	branch = esr45
+[submodule "deps/pbc"]
+	path = deps/pbc
+	url = https://github.com.cnpmjs.org/blynn/pbc.git
+[submodule "doc"]
+	path = doc
+	url = https://github.com.cnpmjs.org/matrix-construct/construct.wiki.git

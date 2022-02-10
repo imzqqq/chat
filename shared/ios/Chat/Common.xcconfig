@@ -1,0 +1,18 @@
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include "Config/AppIdentifiers.xcconfig"
+#include "Config/AppVersion.xcconfig"
+
+PRODUCT_NAME = Chat
+PRODUCT_BUNDLE_IDENTIFIER = $(BASE_BUNDLE_IDENTIFIER)
+
+INFOPLIST_FILE = Chat/SupportingFiles/Info.plist
+ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon
+
+CODE_SIGN_ENTITLEMENTS = Chat/SupportingFiles/Chat.entitlements
+
+SWIFT_OBJC_BRIDGING_HEADER = $(SRCROOT)/$(PRODUCT_NAME)/SupportingFiles/Chat-Bridging-Header.h
+LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks
+
+SWIFT_OBJC_INTERFACE_HEADER_NAME = GeneratedInterface-Swift.h

@@ -1,0 +1,56 @@
+.mx_NewRoomIntro {
+    margin: 40px 0 48px 64px;
+
+    .mx_MiniAvatarUploader_hasAvatar:not(.mx_MiniAvatarUploader_busy):not(:hover) {
+        .mx_MiniAvatarUploader_indicator {
+            display: none;
+        }
+    }
+
+    .mx_AccessibleButton_kind_link {
+        padding: 0;
+        font-size: inherit;
+    }
+
+    .mx_NewRoomIntro_buttons {
+        margin-top: 28px;
+
+        .mx_AccessibleButton {
+            line-height: $font-24px;
+            display: inline-block;
+
+            & + .mx_AccessibleButton {
+                margin-left: 12px;
+            }
+
+            &:not(.mx_AccessibleButton_kind_primary_outline)::before {
+                content: '';
+                display: inline-block;
+                background-color: $button-fg-color;
+                mask-position: center;
+                mask-repeat: no-repeat;
+                mask-size: 20px;
+                width: 20px;
+                height: 20px;
+                margin-right: 5px;
+                vertical-align: text-bottom;
+            }
+        }
+
+        .mx_NewRoomIntro_inviteButton::before {
+            mask-image: url('$(res)/img/element-icons/room/invite.svg');
+        }
+    }
+
+    > h2 {
+        margin-top: 24px;
+        font-size: $font-24px;
+        font-weight: 600;
+    }
+
+    > p {
+        margin: 0;
+        font-size: $font-15px;
+        color: $secondary-content;
+    }
+}

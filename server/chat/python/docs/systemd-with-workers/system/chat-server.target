@@ -1,0 +1,6 @@
+[Unit]
+Description=Chat server parent target
+After=network.target
+
+[Install]
+WantedBy=multi-user.target

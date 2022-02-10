@@ -1,0 +1,233 @@
+package com.imzqqq.app.features.userdirectory
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ScrollView
+import androidx.core.view.forEach
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.args
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
+import com.google.android.material.chip.Chip
+import com.imzqqq.app.R
+import com.imzqqq.app.core.extensions.cleanup
+import com.imzqqq.app.core.extensions.configureWith
+import com.imzqqq.app.core.extensions.hideKeyboard
+import com.imzqqq.app.core.extensions.setupAsSearch
+import com.imzqqq.app.core.platform.VectorBaseFragment
+import com.imzqqq.app.core.utils.DimensionConverter
+import com.imzqqq.app.core.utils.showIdentityServerConsentDialog
+import com.imzqqq.app.core.utils.startSharePlainTextIntent
+import com.imzqqq.app.databinding.FragmentUserListBinding
+import com.imzqqq.app.features.homeserver.HomeServerCapabilitiesViewModel
+import com.imzqqq.app.features.navigation.SettingsActivityPayload
+import com.imzqqq.app.features.settings.VectorSettingsActivity
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import org.matrix.android.sdk.api.session.identity.ThreePid
+import org.matrix.android.sdk.api.session.user.model.User
+import reactivecircus.flowbinding.android.widget.textChanges
+import javax.inject.Inject
+
+class UserListFragment @Inject constructor(
+        private val userListController: UserListController,
+        private val dimensionConverter: DimensionConverter,
+) : VectorBaseFragment<FragmentUserListBinding>(),
+        UserListController.Callback {
+
+    private val args: UserListFragmentArgs by args()
+    private val viewModel: UserListViewModel by activityViewModel()
+    private val homeServerCapabilitiesViewModel: HomeServerCapabilitiesViewModel by fragmentViewModel()
+    private lateinit var sharedActionViewModel: UserListSharedActionViewModel
+
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentUserListBinding {
+        return FragmentUserListBinding.inflate(inflater, container, false)
+    }
+
+    override fun getMenuRes() = args.menuResId
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedActionViewModel = activityViewModelProvider.get(UserListSharedActionViewModel::class.java)
+        if (args.showToolbar) {
+            views.userListTitle.text = args.title
+            vectorBaseActivity.setSupportActionBar(views.userListToolbar)
+            setupCloseView()
+            views.userListToolbar.isVisible = true
+        } else {
+            views.userListToolbar.isVisible = false
+        }
+        setupRecyclerView()
+        setupSearchView()
+
+        homeServerCapabilitiesViewModel.onEach {
+            views.userListE2EbyDefaultDisabled.isVisible = !it.isE2EByDefault
+        }
+
+        viewModel.onEach(UserListViewState::pendingSelections) {
+            renderSelectedUsers(it)
+        }
+
+        viewModel.observeViewEvents {
+            when (it) {
+                is UserListViewEvents.OpenShareMatrixToLink -> {
+                    val text = getString(R.string.invite_friends_text, it.link)
+                    startSharePlainTextIntent(
+                            fragment = this,
+                            activityResultLauncher = null,
+                            chooserTitle = getString(R.string.invite_friends),
+                            text = text,
+                            extraTitle = getString(R.string.invite_friends_rich_title)
+                    )
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        views.userListRecyclerView.cleanup()
+        super.onDestroyView()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        withState(viewModel) {
+            val showMenuItem = it.pendingSelections.isNotEmpty()
+            menu.forEach { menuItem ->
+                menuItem.isVisible = showMenuItem
+            }
+        }
+        super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = withState(viewModel) {
+        sharedActionViewModel.post(UserListSharedAction.OnMenuItemSelected(item.itemId, it.pendingSelections))
+        return@withState true
+    }
+
+    private fun setupRecyclerView() {
+        userListController.callback = this
+        // Don't activate animation as we might have way to much item animation when filtering
+        views.userListRecyclerView.configureWith(userListController, disableItemAnimation = true)
+    }
+
+    private fun setupSearchView() {
+        views.userListSearch
+                .textChanges()
+                .onStart { emit(views.userListSearch.text) }
+                .onEach { text ->
+                    val searchValue = text.trim()
+                    val action = if (searchValue.isBlank()) {
+                        UserListAction.ClearSearchUsers
+                    } else {
+                        UserListAction.SearchUsers(searchValue.toString())
+                    }
+                    viewModel.handle(action)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        views.userListSearch.setupAsSearch()
+        views.userListSearch.requestFocus()
+    }
+
+    private fun setupCloseView() {
+        views.userListClose.debouncedClicks {
+            requireActivity().finish()
+        }
+    }
+
+    override fun invalidate() = withState(viewModel) {
+        userListController.setData(it)
+    }
+
+    private fun renderSelectedUsers(selections: Set<PendingSelection>) {
+        invalidateOptionsMenu()
+
+        val currentNumberOfChips = views.chipGroup.childCount
+        val newNumberOfChips = selections.size
+
+        views.chipGroup.removeAllViews()
+        selections.forEach { addChipToGroup(it) }
+
+        // Scroll to the bottom when adding chips. When removing chips, do not scroll
+        if (newNumberOfChips >= currentNumberOfChips) {
+            viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+                views.chipGroupScrollView.fullScroll(ScrollView.FOCUS_DOWN)
+            }
+        }
+    }
+
+    private fun addChipToGroup(pendingSelection: PendingSelection) {
+        val chip = Chip(requireContext())
+        chip.setChipBackgroundColorResource(android.R.color.transparent)
+        chip.chipStrokeWidth = dimensionConverter.dpToPx(1).toFloat()
+        chip.text = pendingSelection.getBestName()
+        chip.isClickable = true
+        chip.isCheckable = false
+        chip.isCloseIconVisible = true
+        views.chipGroup.addView(chip)
+        chip.setOnCloseIconClickListener {
+            viewModel.handle(UserListAction.RemovePendingSelection(pendingSelection))
+        }
+    }
+
+    fun getCurrentState() = withState(viewModel) { it }
+
+    override fun onInviteFriendClick() {
+        viewModel.handle(UserListAction.ComputeMatrixToLinkForSharing)
+    }
+
+    override fun onContactBookClick() {
+        sharedActionViewModel.post(UserListSharedAction.OpenPhoneBook)
+    }
+
+    override fun onItemClick(user: User) {
+        view?.hideKeyboard()
+        viewModel.handle(UserListAction.AddPendingSelection(PendingSelection.UserPendingSelection(user)))
+    }
+
+    override fun onMatrixIdClick(matrixId: String) {
+        view?.hideKeyboard()
+        viewModel.handle(UserListAction.AddPendingSelection(PendingSelection.UserPendingSelection(User(matrixId))))
+    }
+
+    override fun onThreePidClick(threePid: ThreePid) {
+        view?.hideKeyboard()
+        viewModel.handle(UserListAction.AddPendingSelection(PendingSelection.ThreePidPendingSelection(threePid)))
+    }
+
+    override fun onSetupDiscovery() {
+        navigator.openSettings(
+                requireContext(),
+                VectorSettingsActivity.EXTRA_DIRECT_ACCESS_DISCOVERY_SETTINGS
+        )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.handle(UserListAction.Resumed)
+    }
+
+    override fun giveIdentityServerConsent() {
+        withState(viewModel) { state ->
+            requireContext().showIdentityServerConsentDialog(
+                    state.configuredIdentityServer,
+                    policyLinkCallback = {
+                        navigator.openSettings(requireContext(), SettingsActivityPayload.DiscoverySettings(expandIdentityPolicies = true))
+                    },
+                    consentCallBack = { viewModel.handle(UserListAction.UpdateUserConsent(true)) }
+            )
+        }
+    }
+
+    override fun onUseQRCode() {
+        view?.hideKeyboard()
+        sharedActionViewModel.post(UserListSharedAction.AddByQrCode)
+    }
+}

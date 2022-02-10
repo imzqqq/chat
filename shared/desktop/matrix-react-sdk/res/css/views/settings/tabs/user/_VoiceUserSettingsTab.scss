@@ -1,0 +1,7 @@
+.mx_VoiceUserSettingsTab .mx_Field {
+    @mixin mx_Settings_fullWidthField;
+}
+
+.mx_VoiceUserSettingsTab_missingMediaPermissions {
+    margin-bottom: 15px;
+}

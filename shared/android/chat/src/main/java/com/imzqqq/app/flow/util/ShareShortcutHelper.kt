@@ -1,0 +1,84 @@
+@file:JvmName("ShareShortcutHelper")
+
+package com.imzqqq.app.flow.util
+
+import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.text.TextUtils
+import androidx.core.app.Person
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
+import com.bumptech.glide.Glide
+import com.imzqqq.app.flow.FlowActivity
+import com.imzqqq.app.R
+import com.imzqqq.app.flow.components.notifications.NotificationHelper
+import com.imzqqq.app.flow.db.AccountEntity
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
+
+fun updateShortcut(context: Context, account: AccountEntity) {
+
+    Single.fromCallable {
+
+        val innerSize = context.resources.getDimensionPixelSize(R.dimen.adaptive_bitmap_inner_size)
+        val outerSize = context.resources.getDimensionPixelSize(R.dimen.adaptive_bitmap_outer_size)
+
+        val bmp = if (TextUtils.isEmpty(account.profilePictureUrl)) {
+            Glide.with(context)
+                .asBitmap()
+                .load(R.drawable.avatar_default)
+                .submit(innerSize, innerSize)
+                .get()
+        } else {
+            Glide.with(context)
+                .asBitmap()
+                .load(account.profilePictureUrl)
+                .error(R.drawable.avatar_default)
+                .submit(innerSize, innerSize)
+                .get()
+        }
+
+        // inset the loaded bitmap inside a 108dp transparent canvas so it looks good as adaptive icon
+        val outBmp = Bitmap.createBitmap(outerSize, outerSize, Bitmap.Config.ARGB_8888)
+
+        val canvas = Canvas(outBmp)
+        canvas.drawBitmap(bmp, (outerSize - innerSize).toFloat() / 2f, (outerSize - innerSize).toFloat() / 2f, null)
+
+        val icon = IconCompat.createWithAdaptiveBitmap(outBmp)
+
+        val person = Person.Builder()
+            .setIcon(icon)
+            .setName(account.displayName)
+            .setKey(account.identifier)
+            .build()
+
+        // This intent will be sent when the user clicks on one of the launcher shortcuts. Intent from share sheet will be different
+        val intent = Intent(context, FlowActivity::class.java).apply {
+            action = Intent.ACTION_SEND
+            type = "text/plain"
+            putExtra(NotificationHelper.ACCOUNT_ID, account.id)
+        }
+
+        val shortcutInfo = ShortcutInfoCompat.Builder(context, account.id.toString())
+            .setIntent(intent)
+            .setCategories(setOf("com.imzqqq.app.Share"))
+            .setShortLabel(account.displayName)
+            .setPerson(person)
+            .setLongLived(true)
+            .setIcon(icon)
+            .build()
+
+        ShortcutManagerCompat.addDynamicShortcuts(context, listOf(shortcutInfo))
+    }
+        .subscribeOn(Schedulers.io())
+        .onErrorReturnItem(false)
+        .subscribe()
+}
+
+fun removeShortcut(context: Context, account: AccountEntity) {
+
+    ShortcutManagerCompat.removeDynamicShortcuts(context, listOf(account.id.toString()))
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>bridge-docs</title>
+  <meta name="description" content="Documentation for Chat bridges, Chat bot and possibly other things in the future"/>
+
+  <meta property="og:title" content="bridge-docs"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://github.com/imzqqq"/>
+  <meta property="og:image" content="/bridges/favicon.png"/>
+  <meta property="og:description" content="Documentation for Chat bridges, Chat bot and possibly other things in the future"/>
+
+  <link rel="icon" href="/bridges/favicon.svg" type="image/svg+xml"/>
+  <link rel="shortcut icon" href="/bridges/favicon.png" type="image/png"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="/bridges/fonts/fonts.css">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      font-family: "Open Sans", sans-serif;
+      color: #313131;
+    }
+
+    body {
+      padding: 20px;
+    }
+
+    .project {
+      display: grid;
+      border: 3px solid #f5f5f5;
+      border-radius: 6px;
+      padding: 30px;
+      text-align: left;
+      width: 80%;
+      max-width: 800px;
+      margin: 1rem auto;
+      text-decoration: none;
+
+      grid-template:
+        "icon title" 60px
+        "icon description" 1fr
+        / 120px 1fr;
+      grid-column-gap: 20px;
+      align-items: center;
+    }
+
+    .project:hover {
+      background-color: #f5f5f5;
+    }
+
+    .project .emojicon {
+      grid-area: icon;
+      font-size: 120px;
+      line-height: 1;
+    }
+
+    .project img {
+      grid-area: icon;
+      width: 100%;
+    }
+
+    .project h2 {
+      grid-area: title;
+      font-size: 2em;
+      margin: 0;
+    }
+
+    .project p {
+      grid-area: description;
+      color: #313131;
+      padding: 0;
+      margin: 0;
+      font-size: 1.1em;
+    }
+
+    @media screen and (max-width: 600px) {
+      .project {
+        padding: 20px;
+
+        grid-template:
+          "icon title" 60px
+          "description description" 1fr
+          / 45px 1fr;
+        grid-column-gap: 10px;
+      }
+
+      .project .emojicon {
+        font-size: 45px;
+      }
+    }
+
+    @media screen and (max-width: 450px) {
+      .project {
+        padding: 10px;
+      }
+
+      body {
+        padding: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>bridge-docs</h1>
+  <a href="bridges/" class="project">
+    <span class="emojicon">🌉</span>
+    <h2>Bridges</h2>
+    <p>Documentation for administering the Chat bridges</p>
+  </a>
+  <a href="maubot/" class="project">
+    <img src="./maubot.png" alt="🐈‍⬛"/>
+    <h2>maubot</h2>
+    <p>Documentation for administering and developing plugins for Chat bot</p>
+  </a>
+  <a href="gomuks/" class="project">
+    <img src="./gomuks.png" alt="🐁"/>
+    <h2>gomuks</h2>
+    <p>Documentation for using gomuks</p>
+  </a>
+</body>
+</html>

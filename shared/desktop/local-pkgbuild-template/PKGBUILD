@@ -1,0 +1,21 @@
+pkgname=---appName----git
+_pkgver=---version---
+pkgver=${_pkgver//-/.}
+pkgrel=1
+pkgdesc="Chat is a client with a more traditional instant messaging experience."
+arch=('x86_64')
+url="https://apps.chat.dingshunyu.top"
+license=('Apache')
+depends=('sqlcipher')
+provides=('---appName---')
+conflicts=('---appName---')
+source=("---debName---"
+        "---appName---.sh")
+sha256sums=('SKIP'
+            'SKIP')
+
+package() {
+  msg2 "Extracting the data.tar.xz..."
+  bsdtar -xf data.tar.xz -C "$pkgdir/"
+  install -Dm755 "${srcdir}"/---appName---.sh "${pkgdir}"/usr/bin/---appName---
+}

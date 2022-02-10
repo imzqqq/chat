@@ -1,0 +1,13 @@
+"$schema": "http://json-schema.org/draft-04/schema#"
+type: object
+required:
+  - domain
+  - homeserverUrl
+  - registration
+properties:
+  domain:
+    type: string
+  homeserverUrl:
+    type: string
+  registration:
+    type: string

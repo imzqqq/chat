@@ -1,0 +1,17 @@
+build/
+dist/
+*.egg-info
+
+.env
+pip-selfcheck.json
+*.pyc
+__pycache__
+
+*.db
+/*.yaml
+!example-config.yaml
+!config.yaml
+
+logs/
+plugins/
+trash/

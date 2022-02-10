@@ -1,0 +1,55 @@
+name: ChatSwiftUI
+
+schemes:
+  ChatSwiftUI:
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    build:
+      targets:
+        ChatSwiftUI:
+        - running
+        - testing
+        - profiling
+        - analyzing
+        - archiving
+    profile:
+      config: Release
+    run:
+      config: Debug
+      disableMainThreadChecker: true
+    test:
+      config: Debug
+      disableMainThreadChecker: true
+      targets:
+      - ChatSwiftUnitTests
+
+targets:
+  ChatSwiftUI:
+    type: application
+    platform: iOS
+    dependencies:
+    - target: DesignKit
+    sources:
+    - path: .
+      excludes:
+      # Don't include service implementations and coordinator/bridges in target.
+      - "**/MatrixSDK/**"
+      - "**/Coordinator/**"
+      - "**/Test/**"
+    - path: ../Chat/Generated/Strings.swift
+    - path: ../Chat/Generated/Images.swift
+    - path: ../Chat/Managers/Theme/ThemeIdentifier.swift
+    - path: ../Chat/Managers/Locale/LocaleProviderType.swift
+    - path: ../Chat/Categories/String.swift
+    - path: ../Chat/Categories/Character.swift
+    - path: ../Chat/Assets/en.lproj/Vector.strings
+      buildPhase: resources
+    - path: ../Chat/Assets/Images.xcassets
+      buildPhase: resources
+    - path: ../Chat/Assets/SharedImages.xcassets
+      buildPhase: resources
+    configFiles:
+      Debug: Debug.xcconfig
+      Release: Release.xcconfig

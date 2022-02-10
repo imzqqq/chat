@@ -1,0 +1,191 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'realm-android'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "io.realm:realm-gradle-plugin:10.8.1"
+    }
+}
+
+android {
+    testOptions.unitTests.includeAndroidResources = true
+
+    compileSdk versions.compileSdk
+
+    defaultConfig {
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
+
+        // Multidex is useful for tests
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // The following argument makes the Android Test Orchestrator run its
+        // "pm clear" command after each test invocation. This command ensures
+        // that the app's state is completely cleared between tests.
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+
+        buildConfigField "String", "SDK_VERSION", "\"1.3.8\""
+
+        buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
+        resValue "string", "git_sdk_revision", "\"${gitRevision()}\""
+        resValue "string", "git_sdk_revision_unix_date", "\"${gitRevisionUnixDate()}\""
+        resValue "string", "git_sdk_revision_date", "\"${gitRevisionDate()}\""
+
+        defaultConfig {
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+    }
+
+    testOptions {
+        // Comment to run on Android 12
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+    }
+
+    buildTypes {
+        debug {
+            // Set to true to log privacy or sensible data, such as token
+            buildConfigField "boolean", "LOG_PRIVATE_DATA", project.property("vector.debugPrivateData")
+            // Set to BODY instead of NONE to enable logging
+            buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "OKHTTP_LOGGING_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level." + project.property("vector.httpLogLevel")
+        }
+
+        release {
+            buildConfigField "boolean", "LOG_PRIVATE_DATA", "false"
+            buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "OKHTTP_LOGGING_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level.BASIC"
+        }
+    }
+
+    adbOptions {
+        installOptions "-g"
+    }
+
+    compileOptions {
+        sourceCompatibility versions.sourceCompat
+        targetCompatibility versions.targetCompat
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    sourceSets {
+        androidTest {
+            java.srcDirs += "src/sharedTest/java"
+        }
+        test {
+            java.srcDirs += "src/sharedTest/java"
+        }
+    }
+    buildToolsVersion '31.0.0'
+}
+
+static def gitRevision() {
+    def cmd = "git rev-parse --short=8 HEAD"
+    return cmd.execute().text.trim()
+}
+
+static def gitRevisionUnixDate() {
+    def cmd = "git show -s --format=%ct HEAD^{commit}"
+    return cmd.execute().text.trim()
+}
+
+static def gitRevisionDate() {
+    def cmd = "git show -s --format=%ci HEAD^{commit}"
+    return cmd.execute().text.trim()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
+
+    implementation "androidx.appcompat:appcompat:1.3.1"
+    implementation "androidx.core:core-ktx:1.7.0"
+
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-common:2.4.0"
+    implementation "androidx.lifecycle:lifecycle-process:2.4.0"
+
+    // Network
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.2"))
+    implementation 'com.squareup.okhttp3:okhttp'
+    implementation 'com.squareup.okhttp3:logging-interceptor'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection'
+
+    implementation "com.squareup.moshi:moshi-adapters:1.12.0"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.12.0"
+
+    implementation "io.noties.markwon:core:4.6.2"
+
+    // Image
+    implementation "androidx.exifinterface:exifinterface:1.3.3"
+
+    // Database
+    implementation 'com.github.Zhuinden:realm-monarchy:0.7.1'
+
+    kapt 'dk.ilios:realmfieldnameshelper:2.0.0'
+
+    // Work
+    implementation "androidx.work:work-runtime-ktx:2.7.0"
+
+    // FP
+    implementation "io.arrow-kt:arrow-core:0.8.2"
+    implementation "io.arrow-kt:arrow-instances-core:0.8.2"
+
+    // olm
+    //implementation 'org.matrix.android:olm:3.2.7'
+    implementation project(":library:olm:android:olm-sdk")
+
+    // DI
+    implementation "com.google.dagger:dagger:2.40.5"
+    kapt "com.google.dagger:dagger-compiler:2.40.5"
+
+    // Logging
+    implementation "com.jakewharton.timber:timber:5.0.1"
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.6.0'
+
+    // Video compression
+    implementation 'com.otaliastudios:transcoder:0.10.4'
+
+    // Exif data handling
+    implementation "org.apache.sanselan:sanselan:0.97-incubator"
+
+    // Phone number https://github.com/google/libphonenumber
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.37'
+
+    testImplementation "junit:junit:4.13.2"
+    testImplementation 'org.robolectric:robolectric:4.7'
+    //testImplementation 'org.robolectric:shadows-support-v4:3.0'
+    // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281
+    testImplementation "io.mockk:mockk:1.12.1"
+    testImplementation "org.amshove.kluent:kluent-android:1.68"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
+    // Plant Timber tree for test
+    testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
+    // Transitively required for mocking realm as monarchy doesn't expose Rx
+    testImplementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
+
+    kaptAndroidTest "com.google.dagger:dagger-compiler:2.40.5"
+    androidTestImplementation "androidx.test:core:1.4.0"
+    androidTestImplementation "androidx.test:runner:1.4.0"
+    androidTestImplementation "androidx.test:rules:1.4.0"
+    androidTestImplementation "androidx.test.ext:junit:1.1.3"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
+    androidTestImplementation "org.amshove.kluent:kluent-android:1.68"
+    androidTestImplementation "io.mockk:mockk-android:1.12.1"
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
+    // Plant Timber tree for test
+    androidTestImplementation "net.lachlanmckee:timber-junit-rule:1.0.1"
+
+    androidTestUtil "androidx.test:orchestrator:1.4.0"
+}

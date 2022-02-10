@@ -1,0 +1,512 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"PO-Revision-Date: 2021-11-16 15:51+0000\n"
+"Last-Translator: Berto Te <ateira@3fpj.com>\n"
+"Language-Team: Spanish <https://weblate.framasoft.org/projects/tube-"
+"search-index/client/es/>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.8.1\n"
+"Generated-By: easygettext\n"
+
+#: src/components/Footer.vue:28
+msgid "&gt;&gt; Check all guides on joinpeertube.org &lt;&lt;"
+msgstr "&gt;&gt; Comprueba todas las guías en joinpeertube.org &lt;&lt;"
+
+#: src/components/ChannelResult.vue
+msgid "%{ n } follower"
+msgid_plural "%{ n } followers"
+msgstr[0] "%{ n } seguidor"
+msgstr[1] "%{ n } seguidores"
+
+#: src/views/Search.vue:199
+msgid "%{resultsCount} result found"
+msgid_plural "%{resultsCount} results found"
+msgstr[0] "%{resultsCount} resultado encontrado"
+msgstr[1] "%{resultsCount} resultados encontrados"
+
+#: src/components/PlaylistResult.vue
+msgid "%{videosLength} videos"
+msgstr "%{videosLength} vídeos"
+
+#: src/components/SearchWarning.vue:4
+msgid ""
+"<strong>%{indexName}</strong> displays videos and channels that match your "
+"search but is not the publisher, nor the owner. If you notice any problems "
+"with a video, report it to the administrators on the Tube website where "
+"the video is published."
+msgstr ""
+"<strong>%{indexName}</strong> te muestra vídeos y canales que coinciden con "
+"tu búsqueda pero no es ni el publicador ni el dueño. Si encuentras algún "
+"problema con un vídeo, repórtalo a los administradores de la página de "
+"Tube donde el vídeo está publicado."
+
+#: src/components/Footer.vue:6
+msgid "A free software to take back control of your videos"
+msgstr "Un software libre para volver a tomar control sobre tus vídeos"
+
+#: src/components/Header.vue:13 src/components/Header.vue:2
+msgid ""
+"A search engine of <a href=\"https://joinpeertube.org\" target=\"_blank"
+"\">Tube</a> videos, channels and playlists"
+msgstr ""
+"Un buscador de vídeos y canales de <a href=\"https://joinpeertube.org\" "
+"target=\"_blank\">Tube</a>"
+
+#: src/views/Search.vue
+msgid "Activism"
+msgstr "Activismo"
+
+#: src/views/Search.vue
+msgid "Add tag"
+msgstr "Añadir etiqueta"
+
+#: src/views/Search.vue:170
+msgid "All of these tags"
+msgstr "Todas esas etiquetas"
+
+#: src/views/Search.vue
+msgid "Animals"
+msgstr "Animales"
+
+#: src/views/Search.vue
+msgid "Any"
+msgstr "Cualquiera"
+
+#: src/views/Search.vue
+msgid "Apply filters"
+msgstr "Aplicar filtros"
+
+#: src/views/Search.vue
+msgid "Art"
+msgstr "Arte"
+
+#: src/views/Search.vue
+msgid "Attribution"
+msgstr "Reconocimiento"
+
+#: src/views/Search.vue
+msgid "Attribution - No Derivatives"
+msgstr "Reconocimiento - Sin Obra Derivada"
+
+#: src/views/Search.vue
+msgid "Attribution - Non Commercial"
+msgstr "Reconocimiento - No Comercial"
+
+#: src/views/Search.vue
+msgid "Attribution - Non Commercial - No Derivatives"
+msgstr "Reconocimiento - No Comercial - Sin Obra Derivada"
+
+#: src/views/Search.vue
+msgid "Attribution - Non Commercial - Share Alike"
+msgstr "Reconocimiento - No Comercial - Compartir Igual"
+
+#: src/views/Search.vue
+msgid "Attribution - Share Alike"
+msgstr "Reconocimiento - Compartir Igual"
+
+#: src/views/Search.vue:43
+msgid "Best match"
+msgstr "Mejor coincidencia"
+
+#: src/views/Search.vue
+msgid "Català"
+msgstr "Catalán - Català"
+
+#: src/views/Search.vue:122
+msgid "Category"
+msgstr "Categoría"
+
+#: src/views/Search.vue
+msgid "Čeština"
+msgstr "Checo - Čeština"
+
+#: src/components/InterfaceLanguageDropdown.vue
+msgid "Change interface language"
+msgstr "Cambiar idioma de la interfaz"
+
+#: src/views/Search.vue
+msgid "Comedy"
+msgstr "Comedia"
+
+#: src/components/Footer.vue:19
+msgid "Create an account to take back control of your videos"
+msgstr "Crea una cuenta para volver a tomar control sobre tus vídeos"
+
+#: src/components/Footer.vue:23
+msgid "Create playlists"
+msgstr "Crear listas de reproducción"
+
+#: src/components/PlaylistResult.vue:20 src/components/VideoResult.vue:21
+msgid "Created by"
+msgstr "Creado por"
+
+#: src/views/Search.vue
+msgid "Deutsch"
+msgstr "Alemán - Deutsch"
+
+#: src/components/Header.vue:15 src/components/Header.vue:4
+msgid ""
+"Developed by <a href=\"https://framasoft.org\" target=\"_blank\">Framasoft</"
+"a>"
+msgstr ""
+"Desarrollado por <a href=\"https://framasoft.org\" target=\"_blank"
+"\">Framasoft</a>"
+
+#: src/components/ChannelResult.vue
+msgid "Discover this channel on %{host}"
+msgstr "Descubre este canal en %{host}"
+
+#: src/views/Search.vue:129
+msgid "Display all categories"
+msgstr "Mostrar todas las categorías"
+
+#: src/views/Search.vue:157
+msgid "Display all languages"
+msgstr "Mostrar todos los idiomas"
+
+#: src/views/Search.vue:143
+msgid "Display all licenses"
+msgstr "Mostrar todas las licencias"
+
+#: src/views/Search.vue:74
+msgid "Display only"
+msgstr "Solo mostrar"
+
+#: src/views/Search.vue:54
+msgid "Display sensitive content"
+msgstr "Mostrar contenido sensible"
+
+#: src/views/Search.vue:109
+msgid "Duration"
+msgstr "Duración"
+
+#: src/views/Search.vue
+msgid "Education"
+msgstr "Educación"
+
+#: src/views/Search.vue
+msgid "English"
+msgstr "Inglés - English"
+
+#: src/views/Search.vue
+msgid "Entertainment"
+msgstr "Entretenimiento"
+
+#: src/views/Search.vue
+msgid "Español"
+msgstr "Español"
+
+#: src/views/Search.vue
+msgid "Esperanto"
+msgstr "Esperanto - Esperanto"
+
+#: src/views/Search.vue
+msgid "Euskara"
+msgstr "Vasco - Euskara"
+
+#: src/views/Search.vue:18
+msgid "Explore!"
+msgstr "¡Explorar!"
+
+#: src/views/Search.vue
+msgid "Films"
+msgstr "Películas"
+
+#: src/views/Search.vue:32
+msgid "Filters"
+msgstr "Filtros"
+
+#: src/views/Search.vue
+msgid "Food"
+msgstr "Comida"
+
+#: src/views/Search.vue
+msgid "Français"
+msgstr "Francés - Français"
+
+#: src/views/Search.vue
+msgid "Gàidhlig"
+msgstr "Gaélico - Gàidhlig"
+
+#: src/views/Search.vue
+msgid "Gaming"
+msgstr "Videojuegos"
+
+#: src/components/ActorMiniature.vue
+msgid "Go on this account page"
+msgstr "Ve a la página de esta cuenta"
+
+#: src/components/ActorMiniature.vue
+msgid "Go on this channel page"
+msgstr "Ve a la página de este canal"
+
+#: src/views/Search.vue:17
+msgid "Go!"
+msgstr "¡Ve!"
+
+#: src/views/Search.vue
+msgid "How To"
+msgstr "Cómo hacer"
+
+#: src/components/PlaylistResult.vue:25 src/components/VideoResult.vue:26
+msgid "In"
+msgstr "En"
+
+#: src/components/Footer.vue:13
+msgid "Install Tube"
+msgstr "Instalar Tube"
+
+#: src/views/Search.vue
+msgid "Italiano"
+msgstr "Italiano - Italiano"
+
+#: src/views/Search.vue
+msgid "Keyword, channel, video, playlist, etc."
+msgstr "Palabra clave, canal, vídeo lista de reproducción, etc..."
+
+#: src/views/Search.vue
+msgid "Kids"
+msgstr "Infantil"
+
+#: src/components/VideoResult.vue:39 src/views/Search.vue:150
+msgid "Language"
+msgstr "Idioma"
+
+#: src/views/Search.vue
+msgid "Last 30 days"
+msgstr "Últimos 30 días"
+
+#: src/views/Search.vue
+msgid "Last 365 days"
+msgstr "Últimos 365 días"
+
+#: src/views/Search.vue
+msgid "Last 7 days"
+msgstr "Últimos 7 días"
+
+#: src/views/Search.vue:45
+msgid "Least recent"
+msgstr "Más antiguo"
+
+#: src/components/Footer.vue:34
+msgid "Legal notices"
+msgstr "Avisos legales"
+
+#: src/views/Search.vue:136
+msgid "Licence"
+msgstr "Licencia"
+
+#: src/components/VideoResult.vue:7
+msgid "LIVE"
+msgstr "EN VIVO"
+
+#: src/views/Search.vue:83
+msgid "Live videos"
+msgstr "Videos en vivo"
+
+#: src/views/Search.vue
+msgid "Long (> 10 min)"
+msgstr "Largo (> 10 min)"
+
+#: src/views/Search.vue
+msgid "Medium (4-10 min)"
+msgstr "Medio (4-10 min)"
+
+#: src/views/Search.vue:44
+msgid "Most recent"
+msgstr "Más reciente"
+
+#: src/views/Search.vue
+msgid "Music"
+msgstr "Música"
+
+#: src/views/Search.vue
+msgid "Nederlands"
+msgstr "Neerlandés - Nederlands"
+
+#: src/views/Search.vue
+msgid "News & Politics"
+msgstr "Noticias y política"
+
+#: src/components/Pagination.vue:19
+msgid "Next page"
+msgstr "Página siguiente"
+
+#: src/views/Search.vue:68
+msgid "No"
+msgstr "No"
+
+#: src/views/Search.vue:196
+msgid "No results found"
+msgstr "Ningún resultado encontrado"
+
+#: src/views/Search.vue
+msgid "Occitan"
+msgstr "Occitano - Occitan"
+
+#: src/components/VideoResult.vue:32
+msgid "On"
+msgstr "En"
+
+#: src/views/Search.vue:179
+msgid "One of these tags"
+msgstr "Una de estas etiquetas"
+
+#: src/components/Footer.vue:21
+msgid "Open an account on a Tube website"
+msgstr "Registrarse en una instancia de Tube"
+
+#: src/components/Footer.vue:11
+msgid "Open your own videos website with Tube!"
+msgstr "¡Abre tu propia página de vídeos con Tube!"
+
+#: src/views/Search.vue:164
+msgid "Tube instance"
+msgstr "Instancia de Tube"
+
+#: src/views/Search.vue
+msgid "People"
+msgstr "Gente"
+
+#: src/views/Search.vue
+msgid "Polski"
+msgstr "Polaco - Polski"
+
+#: src/views/Search.vue
+msgid "Português (Portugal)"
+msgstr "Portugués (Portugal) - Português (Portugal)"
+
+#: src/components/Pagination.vue:3
+msgid "Previous page"
+msgstr "Página anterior"
+
+#: src/views/Search.vue
+msgid "Public Domain Dedication"
+msgstr "Dedicación de Dominio Público"
+
+#: src/views/Search.vue:94
+msgid "Published date"
+msgstr "Fecha de publicación"
+
+#: src/views/Search.vue:56 src/views/Search.vue:76 src/views/Search.vue:96
+#: src/views/Search.vue:110 src/views/Search.vue:123 src/views/Search.vue:137
+#: src/views/Search.vue:151 src/views/Search.vue:171 src/views/Search.vue:180
+msgid "Reset"
+msgstr "Reiniciar"
+
+#: src/views/Search.vue
+msgid "Science & Technology"
+msgstr "Ciencia y Tecnología"
+
+#: src/views/Search.vue:22
+msgid ""
+"Search for your favorite videos, channels and playlists on <a href="
+"\"%{indexedInstancesUrl}\" target=\"_blank\">%{instancesCount} Tube "
+"websites</a> indexed by %{indexName}!"
+msgstr ""
+"Busca tus vídeos, canales y listas de reproducción favoritas en <a href="
+"\"%{indexedInstancesUrl}\" target=\"_blank\">%{instancesCount} instancias de "
+"Tube</a> indexadas por %{indexName}!"
+
+#: src/views/Search.vue
+msgid "Short (< 4 min)"
+msgstr "Corto (< 4 min)"
+
+#: src/views/Search.vue:40
+msgid "Sort by:"
+msgstr "Ordenar por:"
+
+#: src/components/Footer.vue:32
+msgid "Source code"
+msgstr "Código fuente"
+
+#: src/views/Search.vue
+msgid "Sports"
+msgstr "Deportes"
+
+#: src/views/Search.vue
+msgid "suomi"
+msgstr "Finés - suomi"
+
+#: src/views/Search.vue
+msgid "svenska"
+msgstr "Sueco - svenska"
+
+#: src/components/VideoResult.vue:45
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: src/views/Search.vue
+msgid "Today"
+msgstr "Hoy"
+
+#: src/views/Search.vue
+msgid "Travels"
+msgstr "Viajes"
+
+#: src/components/PlaylistResult.vue:31
+msgid "Updated on"
+msgstr "Actualizado en"
+
+#: src/views/Search.vue
+msgid "Vehicles"
+msgstr "Vehículos"
+
+#: src/views/Search.vue:88
+msgid "VOD videos"
+msgstr "videos VOD"
+
+#: src/components/PlaylistResult.vue
+msgid "Watch the playlist on %{host}"
+msgstr "Mira el lista de reproducción en %{host}"
+
+#: src/components/VideoResult.vue
+msgid "Watch the video on %{host}"
+msgstr "Mira el vídeo en %{host}"
+
+#: src/components/Footer.vue:15
+msgid "Why should I have my own Tube website?"
+msgstr "¿Por qué debería tener mi propia instancia de Tube?"
+
+#: src/views/Search.vue:63
+msgid "Yes"
+msgstr "Sí"
+
+#: src/views/Search.vue
+msgid "ελληνικά"
+msgstr "Griego - ελληνικά"
+
+#: src/views/Search.vue
+msgid "русский"
+msgstr "Ruso - русский"
+
+#: src/views/Search.vue
+msgid "日本語"
+msgstr "Japonés - 日本語"
+
+#: src/views/Search.vue
+msgid "简体中文（中国）"
+msgstr "Chino simplificado (China) - 简体中文（中国）"
+
+#~ msgid "Display homepage"
+#~ msgstr "Mostrar la página principal"
+
+#~ msgid "on %{instancesCount} indexed Tube website"
+#~ msgid_plural "on %{instancesCount} indexed Tube websites"
+#~ msgstr[0] "en %{instancesCount} página de Tube indexada"
+#~ msgstr[1] "en %{instancesCount} páginas de Tube indexadas"
+
+#~ msgid "with %{activeFilters} active filter"
+#~ msgid_plural "with %{activeFilters} active filters"
+#~ msgstr[0] "con %{activeFilters} filtro activo"
+#~ msgstr[1] "con %{activeFilters} filtros activados"
+
+#~ msgid "%{ channel.followersCount } follower"
+#~ msgid_plural "%{channel.followersCount} followers"
+#~ msgstr[0] "%{ channel.followersCount } seguidor"
+#~ msgstr[1] "%{channel.followersCount} seguidores"

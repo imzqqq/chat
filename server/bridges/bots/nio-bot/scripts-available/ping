@@ -1,0 +1,8 @@
+#!/bin/sh -e
+
+if [ -n "$CONFIG" ]
+then
+    echo '^!?ping(!|\?)?$'
+else
+    echo 'P O N G'
+fi

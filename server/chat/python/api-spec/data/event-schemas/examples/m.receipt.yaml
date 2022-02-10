@@ -1,0 +1,13 @@
+{
+  "$ref": "core/room_edu.json",
+  "type": "m.receipt",
+  "content": {
+    "$1435641916114394fHBLK:chat.dingshunyu.top": {
+      "m.read": {
+        "@rikj:jki.re": {
+          "ts": 1436451550453
+        }
+      }
+    }
+  }
+}

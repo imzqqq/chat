@@ -1,0 +1,16 @@
+.coverage
+.mypy_cache/
+.ropeproject/
+.pytest_cache/
+packages/
+__pycache__
+*.pyc
+.hypothesis/
+.tox/
+doc/build
+matrix_nio.egg-info/
+dist
+doc/html
+*.swp
+build
+.idea/

@@ -1,0 +1,59 @@
+name: ChatSwiftUITests
+
+schemes:
+  ChatSwiftUITests:
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    build:
+      targets:
+        ChatSwiftUITests:
+        - running
+        - testing
+        - profiling
+        - analyzing
+        - archiving
+    profile:
+      config: Release
+    run:
+      config: Debug
+      disableMainThreadChecker: true
+    test:
+      config: Debug
+      disableMainThreadChecker: true
+      targets:
+      - ChatSwiftUITests
+
+targets:
+  ChatSwiftUITests:
+    type: bundle.ui-testing
+    platform: iOS
+
+    dependencies:
+    - target: ChatSwiftUI
+
+    settings:
+      base:
+        TEST_TARGET_NAME: ChatSwiftUI
+        PRODUCT_BUNDLE_IDENTIFIER: org.matrix.ChatSwiftUITests$(rfc1034identifier)
+    sources:
+      # Source included/excluded here here are similar to ChatSwiftUI as we
+      # need access to ScreenStates
+    - path: ../ChatSwiftUI/Modules
+      excludes:
+      - "**/MatrixSDK/**"
+      - "**/Coordinator/**"
+      - "**/Test/Unit/**"
+    - path: ../Chat/Generated/Strings.swift
+    - path: ../Chat/Generated/Images.swift
+    - path: ../Chat/Managers/Theme/ThemeIdentifier.swift
+    - path: ../Chat/Managers/Locale/LocaleProviderType.swift
+    - path: ../Chat/Categories/String.swift
+    - path: ../Chat/Categories/Character.swift
+    - path: ../Chat/Assets/en.lproj/Vector.strings
+      buildPhase: resources
+    - path: ../Chat/Assets/Images.xcassets
+      buildPhase: resources
+    - path: ../Chat/Assets/SharedImages.xcassets
+      buildPhase: resources

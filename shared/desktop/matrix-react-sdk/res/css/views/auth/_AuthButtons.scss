@@ -1,0 +1,32 @@
+.mx_AuthButtons {
+    min-height: 24px;
+    height: unset !important;
+    padding-top: 13px !important;
+    padding-bottom: 14px !important;
+    order: 4;
+}
+
+.mx_AuthButtons_loginButton_wrapper {
+    text-align: center;
+    width: 100%;
+}
+
+.mx_AuthButtons_loginButton,
+.mx_AuthButtons_registerButton {
+    margin-top: 3px;
+    height: 40px;
+    border: 0px;
+    border-radius: 40px;
+    margin-left: 4px;
+    margin-right: 4px;
+    min-width: 80px;
+
+    background-color: $accent-color;
+    color: $background;
+
+    cursor: pointer;
+
+    font-size: $font-15px;
+    padding: 0 11px;
+    word-break: break-word;
+}

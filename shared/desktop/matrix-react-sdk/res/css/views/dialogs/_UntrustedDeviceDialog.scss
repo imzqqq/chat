@@ -1,0 +1,10 @@
+.mx_UntrustedDeviceDialog {
+    .mx_Dialog_title {
+        display: flex;
+        align-items: center;
+
+        .mx_E2EIcon {
+            margin-left: 0;
+        }
+    }
+}

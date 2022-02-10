@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--<com.imzqqq.app.core.preference.VectorPreferenceCategory-->
+    <!--android:key="SETTINGS_LABS_PREFERENCE_KEY"-->
+    <!--android:title="@string/room_settings_labs_pref_title">-->
+
+    <com.imzqqq.app.core.preference.VectorPreference
+        android:focusable="false"
+        android:key="labs_warning"
+        android:summary="@string/room_settings_labs_warning_message" />
+
+    <!--<com.imzqqq.app.core.preference.VectorSwitchPreference-->
+    <!--android:key="SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_PREFERENCE_KEY"-->
+    <!--android:title="@string/room_settings_labs_end_to_end" />-->
+
+    <!--<com.imzqqq.app.core.preference.VectorPreference-->
+    <!--android:focusable="false"-->
+    <!--android:key="SETTINGS_ROOM_SETTINGS_LABS_END_TO_END_IS_ACTIVE_PREFERENCE_KEY"-->
+    <!--android:title="@string/room_settings_labs_end_to_end_is_active" />-->
+
+    <!--<com.imzqqq.app.core.preference.VectorSwitchPreference-->
+    <!--android:key="SETTINGS_DATA_SAVE_MODE_PREFERENCE_KEY"-->
+    <!--android:summary="@string/settings_data_save_mode_summary"-->
+    <!--android:title="@string/settings_data_save_mode" />-->
+
+    <!--<com.imzqqq.app.core.preference.VectorSwitchPreference-->
+    <!--android:defaultValue="true"-->
+    <!--android:key="SETTINGS_USE_JITSI_CONF_PREFERENCE_KEY"-->
+    <!--android:title="@string/settings_labs_create_conference_with_jitsi" />-->
+
+    <!--<com.imzqqq.app.core.preference.VectorSwitchPreference-->
+    <!--android:key="SETTINGS_ENABLE_SEND_VOICE_FEATURE_PREFERENCE_KEY"-->
+    <!--android:summary="@string/settings_labs_enable_send_voice_summary"-->
+    <!--android:title="@string/settings_labs_enable_send_voice" />-->
+
+    <com.imzqqq.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:key="SETTINGS_OPEN_CHATS_AT_FIRST_UNREAD"
+        android:title="@string/settings_open_chats_at_first_unread"
+        android:summary="@string/settings_open_chats_at_first_unread_summary" />
+
+    <com.imzqqq.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:key="SYSTEM_DARK_THEME_PRE_TEN"
+        android:title="@string/settings_system_dark_theme_pre_ten"
+        android:summary="@string/settings_system_dark_theme_pre_ten_summary" />
+
+    <com.imzqqq.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:key="SETTINGS_ALLOW_URL_PREVIEW_IN_ENCRYPTED_ROOM_KEY"
+        android:title="@string/url_previews_in_encrypted_rooms"
+        android:summary="@string/url_previews_in_encrypted_rooms_summary" />
+
+    <com.imzqqq.app.core.preference.VectorSwitchPreference
+        android:defaultValue="true"
+        android:key="SETTINGS_LABS_ALLOW_MARK_UNREAD"
+        android:title="@string/labs_mark_rooms_unread"
+        android:summary="@string/labs_mark_rooms_unread_summary" />
+
+    <com.imzqqq.app.core.preference.VectorSwitchPreference
+        android:defaultValue="true"
+        android:key="SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
+        android:title="@string/labs_swipe_to_reply_in_timeline" />
+
+    <com.imzqqq.app.core.preference.VectorSwitchPreference
+        android:defaultValue="true"
+        android:key="SETTINGS_VOICE_MESSAGE"
+        android:title="@string/settings_show_voice_message_recorder_ui"
+        android:summary="@string/settings_show_voice_message_recorder_ui_summary" />
+
+    <com.imzqqq.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:key="SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB"
+        android:title="@string/labs_show_unread_notifications_as_tab" />
+
+
+    <com.imzqqq.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:key="SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE"
+        android:title="@string/labs_use_restricted_join_rule"
+        android:summary="@string/labs_use_restricted_join_rule_desc"/>
+    <!--</com.imzqqq.app.core.preference.VectorPreferenceCategory>-->
+
+
+</androidx.preference.PreferenceScreen>

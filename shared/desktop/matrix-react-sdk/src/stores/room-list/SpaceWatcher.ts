@@ -1,0 +1,60 @@
+import { RoomListStoreClass } from "./RoomListStore";
+import { SpaceFilterCondition } from "./filters/SpaceFilterCondition";
+import SpaceStore from "../spaces/SpaceStore";
+import { MetaSpace, SpaceKey, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
+
+/**
+ * Watches for changes in spaces to manage the filter on the provided RoomListStore
+ */
+export class SpaceWatcher {
+    private readonly filter = new SpaceFilterCondition();
+    // we track these separately to the SpaceStore as we need to observe transitions
+    private activeSpace: SpaceKey = SpaceStore.instance.activeSpace;
+    private allRoomsInHome: boolean = SpaceStore.instance.allRoomsInHome;
+
+    constructor(private store: RoomListStoreClass) {
+        if (SpaceWatcher.needsFilter(this.activeSpace, this.allRoomsInHome)) {
+            this.updateFilter();
+            store.addFilter(this.filter);
+        }
+        SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdated);
+        SpaceStore.instance.on(UPDATE_HOME_BEHAVIOUR, this.onHomeBehaviourUpdated);
+    }
+
+    private static needsFilter(spaceKey: SpaceKey, allRoomsInHome: boolean): boolean {
+        return !(spaceKey === MetaSpace.Home && allRoomsInHome);
+    }
+
+    private onSelectedSpaceUpdated = (activeSpace: SpaceKey, allRoomsInHome = this.allRoomsInHome) => {
+        if (activeSpace === this.activeSpace && allRoomsInHome === this.allRoomsInHome) return; // nop
+
+        const neededFilter = SpaceWatcher.needsFilter(this.activeSpace, this.allRoomsInHome);
+        const needsFilter = SpaceWatcher.needsFilter(activeSpace, allRoomsInHome);
+
+        this.activeSpace = activeSpace;
+        this.allRoomsInHome = allRoomsInHome;
+
+        if (needsFilter) {
+            this.updateFilter();
+        }
+
+        if (!neededFilter && needsFilter) {
+            this.store.addFilter(this.filter);
+        } else if (neededFilter && !needsFilter) {
+            this.store.removeFilter(this.filter);
+        }
+    };
+
+    private onHomeBehaviourUpdated = (allRoomsInHome: boolean) => {
+        this.onSelectedSpaceUpdated(this.activeSpace, allRoomsInHome);
+    };
+
+    private updateFilter = () => {
+        if (this.activeSpace[0] === "!") {
+            SpaceStore.instance.traverseSpace(this.activeSpace, roomId => {
+                this.store.matrixClient?.getRoom(roomId)?.loadMembersIfNeeded();
+            });
+        }
+        this.filter.updateSpace(this.activeSpace);
+    };
+}

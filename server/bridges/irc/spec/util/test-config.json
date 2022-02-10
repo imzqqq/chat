@@ -1,0 +1,116 @@
+{
+    "_registration": {
+        "id": "euiogheruifhe",
+        "hs_token": "foobar",
+        "as_token": "it's a secret",
+        "url": "https://mywuvelyappservicerunninganircbridgeyay.gome",
+        "sender_localpart": "monkeybot",
+        "namespaces": {
+            "users": [
+                {
+                    "exclusive": true,
+                    "regex": "@irc.example_.*:some.home.server"
+                }
+            ]
+        }
+    },
+    "_port": 2,
+    "_server": "irc.example",
+    "_chan": "#coffee",
+    "_roomid": "!foo:bar",
+    "_botnick": "ro_bot_nick",
+    "_botUserId": "@monkeybot:some.home.server",
+
+
+    "homeserver": {
+        "url": "https://some.home.server.goeshere",
+        "domain": "some.home.server"
+    },
+    "ircService": {
+        "databaseUri": "nedb://spec-db",
+        "debugApi": {
+            "enabled": false
+        },
+        "ident": {
+            "enabled": false,
+            "port": 113,
+            "address": "::1"
+        },
+        "logging": {
+            "level": "debug",
+            "toConsole": true
+        },
+        "ircHandler": {
+            "powerLevelGracePeriodMs": 500
+        },
+        "servers": {
+            "irc.example": {
+                "port": 6667,
+                "ssl": false,
+                "sslselfsign": false,
+                "sendConnectionMessages": false,
+
+                "botConfig": {
+                    "enabled": true,
+                    "nick": "ro_bot_nick",
+                    "username": "matrixbot",
+                    "joinChannelsIfNoUsers": true
+                },
+                "privateMessages": {
+                    "enabled": true,
+                    "exclude": []
+                },
+                "modePowerMap": {
+                    "o": 50,
+                    "v": 25
+                },
+                "dynamicChannels": {
+                    "enabled": true,
+                    "createAlias": true,
+                    "published": true,
+                    "joinRule": "public",
+                    "federate": true,
+                    "aliasTemplate": "#irc_$SERVER_$CHANNEL",
+                    "whitelist": [],
+                    "exclude": [ "#excluded_channel" ]
+                },
+                "matrixClients": {
+                    "userTemplate": "@$SERVER_$NICK",
+                    "displayName": "$NICK (IRC)"
+                },
+                "ircClients": {
+                    "nickTemplate": "M-$DISPLAY",
+                    "maxClients": 30,
+                    "idleTimeout": 172800,
+                    "reconnectIntervalMs": 0,
+                    "allowNickChanges": false
+                },
+                "membershipLists": {
+                    "enabled": false,
+                    "global": {
+                        "ircToMatrix": {
+                            "initial": false,
+                            "incremental": false
+                        },
+                        "matrixToIrc": {
+                            "initial": false,
+                            "incremental": false
+                        }
+                    },
+                    "channels": [],
+                    "rooms": []
+                },
+                "mappings": {
+                    "#coffee": {
+                        "roomIds": ["!foo:bar"]
+                    }
+                }
+            }
+        },
+        "provisioning": {
+            "enabled": true,
+            "requestTimeoutSeconds": 1
+        },
+        "passwordEncryptionKeyPath": "./spec/support/passkey.pem"
+    }
+}

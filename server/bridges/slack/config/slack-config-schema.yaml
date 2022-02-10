@@ -1,0 +1,192 @@
+type: object
+required: ["homeserver", "username_prefix"]
+properties:
+  dbdir:
+    type: string
+  homeserver:
+    type: object
+    required: ["server_name", "url"]
+    properties:
+      server_name:
+        type: string
+      url:
+        type: string
+      media_url:
+        type: string
+      max_upload_size:
+        type: number
+      appservice_port:
+        type: number
+      appservice_host:
+        type: string
+  tls:
+    type: object
+    required: ["key_file", "crt_file"]
+    properties:
+      key_file:
+        type: string
+      crt_file:
+        type: string
+  user_activity:
+    type: object
+    properties:
+      min_user_active_days:
+        type: number
+      inactive_after_days:
+        type: number
+  rtm:
+    type: object
+    required: ["enable"]
+    properties:
+      enable:
+        type: boolean
+      log_level:
+        type: "string"
+        enum: ["error", "warn", "info", "debug", "silent"]
+  db:
+    type: object
+    required: ["engine", "connectionString"]
+    properties:
+      engine:
+        type: "string"
+        enum: ["postgres", "nedb"]
+      connectionString:
+        type: string
+  slack_hook_port:
+    type: integer
+  inbound_uri_prefix:
+    type: string
+  oauth2:
+    type: object
+    required: ["client_id", "client_secret"]
+    properties:
+      client_id:
+        type: string
+      client_secret:
+        type: string
+      redirect_prefix:
+        type: string
+  username_prefix:
+    type: string
+  matrix_admin_room:
+    type: string
+  enable_metrics:
+    type: boolean
+  logging:
+    type: object
+    properties:
+      console:
+        type: "string"
+        enum: ["error", "warn", "info", "debug", "off"]
+      fileDatePattern:
+        type: string
+      timestampFormat:
+        type: string
+      files:
+          type: "object"
+          items:
+              additionalProperties:
+               - type: "string"
+                 enum: ["error","warn","info","debug"]
+  team_sync:
+    type: "object"
+    additionalProperties:
+      type: "object"
+      properties:
+        channels:
+          type: "object"
+          properties:
+            enabled:
+              type: boolean
+            allow_private:
+              type: boolean
+            allow_public:
+              type: boolean
+            whitelist:
+              type: "array"
+              items:
+                  type: "string"
+            blacklist:
+              type: "array"
+              items:
+                type: "string"
+            alias_prefix:
+                type: "string"
+        users:
+          type: "object"
+          properties:
+            enabled:
+              type: boolean
+  provisioning:
+    type: object
+    required: ["enabled"]
+    properties:
+      enabled:
+        type: boolean
+      require_public_room:
+        type: boolean
+      allow_private_channels:
+        type: boolean
+      limits:
+        type: object
+        properties:
+          room_count:
+            type: number
+          team_count:
+            type: number
+      channel_adl:
+        type: object
+        properties:
+          allow:
+            type: "array"
+            items:
+                type: "string"
+          deny:
+            type: "array"
+            items:
+                type: "string"
+  puppeting:
+    type: object
+    required: ["enabled"]
+    properties:
+      enabled:
+        type: boolean
+      onboard_users:
+        type: boolean
+      direct_messages:
+        type: object
+        additionalProperties: false
+        properties:
+          allow:
+            slack:
+              type: "array"
+              items:
+                  type: "string"
+            matrix:
+              type: "array"
+              items:
+                  type: "string"
+          deny:
+            slack:
+              type: "array"
+              items:
+                  type: "string"
+            matrix:
+              type: "array"
+              items:
+                  type: "string"
+  bot_profile:
+    type: object
+    properties:
+      displayname:
+        type: string
+      avatar_url:
+        type: string
+  encryption:
+    type: object
+    properties:
+      enabled:
+        type: boolean
+      pantalaimon_url:
+        type: string
+    required: ["enabled"]

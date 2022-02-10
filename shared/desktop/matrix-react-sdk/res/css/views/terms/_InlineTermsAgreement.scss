@@ -1,0 +1,29 @@
+.mx_InlineTermsAgreement_cbContainer {
+    margin-bottom: 10px;
+    font-size: $font-14px;
+
+    a {
+        color: $accent-color;
+        text-decoration: none;
+    }
+
+    .mx_InlineTermsAgreement_checkbox {
+        margin-top: 10px;
+
+        input {
+            vertical-align: text-bottom;
+        }
+    }
+}
+
+.mx_InlineTermsAgreement_link {
+    display: inline-block;
+    mask-image: url('$(res)/img/external-link.svg');
+    background-color: $accent-color;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    width: 12px;
+    height: 12px;
+    margin-left: 3px;
+    vertical-align: middle;
+}

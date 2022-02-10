@@ -1,0 +1,20 @@
+---
+layout: project
+title: Navi
+categories:
+ - bot
+description: A minimal Chat notification bot
+author: Maximilian Fricke
+maturity: Not actively maintained
+language: Python
+license: Apache-2.0
+repo: https://github.com/madmax28/navi
+---
+
+Navi is a tiny bot for Chat that sends notifications to users. It is builtupon the [Chat Python SDK](https://github.com/matrix-org/matrix-python-sdk).
+
+The motivation behind Navi is to send notifications from anywhere to everywhere. This includes the push services GCM and APNs that [Riot](https://riot.im/) bridges to, without having to rely on services such as Pushbullet or Pushover.
+
+The first time you use it, Navi creates a new room and invites your user to it. The room will be reused afterwards. If you leave the room, so will Navi, and invite you to a new room.
+
+Follow the progress and grab the code from [GitHub](https://github.com/madmax28/navi)!

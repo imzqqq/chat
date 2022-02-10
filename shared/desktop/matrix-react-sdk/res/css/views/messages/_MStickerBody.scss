@@ -1,0 +1,19 @@
+.mx_MStickerBody_wrapper {
+    padding: 20px 0px;
+}
+
+.mx_MStickerBody_tooltip {
+    position: absolute;
+    top: 50%;
+}
+
+.mx_MStickerBody_hidden {
+    max-width: 220px;
+    text-decoration: none;
+    text-align: center;
+
+    // To center the text in the middle of the frame
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

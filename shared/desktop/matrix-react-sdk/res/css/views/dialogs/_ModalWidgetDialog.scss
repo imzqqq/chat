@@ -1,0 +1,26 @@
+.mx_ModalWidgetDialog {
+    .mx_ModalWidgetDialog_warning {
+        margin-bottom: 24px;
+
+        > img {
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+    }
+
+    .mx_ModalWidgetDialog_buttons {
+        float: right;
+        margin-top: 24px;
+
+        .mx_AccessibleButton + .mx_AccessibleButton {
+            margin-left: 8px;
+        }
+    }
+
+    iframe {
+        width: 100%;
+        height: 450px;
+        border: 0;
+        border-radius: $border-radius-8px;
+    }
+}

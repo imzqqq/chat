@@ -1,0 +1,48 @@
+package com.imzqqq.app.core.di
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import javax.inject.Inject
+import javax.inject.Provider
+import javax.inject.Singleton
+
+/**
+ * ViewModelFactory which uses Dagger to create the instances.
+ */
+class VectorViewModelFactory @Inject constructor(
+        private val creators: @JvmSuppressWildcards Map<Class<out ViewModel>,
+        Provider<ViewModel>>
+) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        var creator: Provider<out ViewModel>? = creators[modelClass]
+        if (creator == null) {
+            for ((key, value) in creators) {
+                if (modelClass.isAssignableFrom(key)) {
+                    creator = value
+                    break
+                }
+            }
+        }
+        if (creator == null) {
+            throw IllegalArgumentException("Unknown model class: $modelClass")
+        }
+        try {
+            @Suppress("UNCHECKED_CAST")
+            return creator.get() as T
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
+    }
+}
+
+/// MARK - imzqqq, @deprecated
+/*
+class FlowViewModelFactory @Inject constructor(
+        private val viewModels: @JvmSuppressWildcards MutableMap<Class<out ViewModel>,
+        Provider<ViewModel>>
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T = viewModels[modelClass]?.get() as T
+}*/
+///

@@ -1,0 +1,19 @@
+[Unit]
+Description=Tube search index daemon
+After=network.target
+
+[Service]
+Type=simple
+Environment=NODE_ENV=production
+Environment=NODE_CONFIG_DIR=/var/www/tube-search-index/config
+User=tube
+Group=tube
+ExecStart=/usr/bin/npm start
+WorkingDirectory=/var/www/tube-search-index
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=tube-search-index
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

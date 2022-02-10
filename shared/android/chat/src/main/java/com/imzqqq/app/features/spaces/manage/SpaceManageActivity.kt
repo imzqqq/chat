@@ -1,0 +1,181 @@
+package com.imzqqq.app.features.spaces.manage
+
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.os.Parcelable
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.Mavericks
+import com.airbnb.mvrx.viewModel
+import com.airbnb.mvrx.withState
+import com.google.android.material.appbar.MaterialToolbar
+import dagger.hilt.android.AndroidEntryPoint
+import com.imzqqq.app.R
+import com.imzqqq.app.core.extensions.addFragmentToBackstack
+import com.imzqqq.app.core.extensions.commitTransaction
+import com.imzqqq.app.core.extensions.hideKeyboard
+import com.imzqqq.app.core.platform.ToolbarConfigurable
+import com.imzqqq.app.core.platform.VectorBaseActivity
+import com.imzqqq.app.databinding.ActivitySimpleLoadingBinding
+import com.imzqqq.app.features.roomdirectory.RoomDirectorySharedAction
+import com.imzqqq.app.features.roomdirectory.RoomDirectorySharedActionViewModel
+import com.imzqqq.app.features.roomdirectory.createroom.CreateRoomArgs
+import com.imzqqq.app.features.roomdirectory.createroom.CreateRoomFragment
+import com.imzqqq.app.features.roomprofile.RoomProfileArgs
+import com.imzqqq.app.features.roomprofile.alias.RoomAliasFragment
+import com.imzqqq.app.features.roomprofile.permissions.RoomPermissionsFragment
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+data class SpaceManageArgs(
+        val spaceId: String,
+        val manageType: ManageType
+) : Parcelable
+
+@AndroidEntryPoint
+class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
+        ToolbarConfigurable {
+
+    private lateinit var sharedDirectoryActionViewModel: RoomDirectorySharedActionViewModel
+
+    override fun getBinding(): ActivitySimpleLoadingBinding = ActivitySimpleLoadingBinding.inflate(layoutInflater)
+
+    override fun getTitleRes(): Int = R.string.space_add_existing_rooms
+
+    val sharedViewModel: SpaceManageSharedViewModel by viewModel()
+
+    override fun showWaitingView(text: String?) {
+        hideKeyboard()
+        views.waitingView.waitingStatusText.isGone = views.waitingView.waitingStatusText.text.isNullOrBlank()
+        super.showWaitingView(text)
+    }
+
+    override fun hideWaitingView() {
+        views.waitingView.waitingStatusText.text = null
+        views.waitingView.waitingStatusText.isGone = true
+        views.waitingView.waitingHorizontalProgress.progress = 0
+        views.waitingView.waitingHorizontalProgress.isVisible = false
+        super.hideWaitingView()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        sharedDirectoryActionViewModel = viewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
+        sharedDirectoryActionViewModel
+                .stream()
+                .onEach { sharedAction ->
+                    when (sharedAction) {
+                        is RoomDirectorySharedAction.Back,
+                        is RoomDirectorySharedAction.Close -> finish()
+                    }
+                }
+                .launchIn(lifecycleScope)
+
+        val args = intent?.getParcelableExtra<SpaceManageArgs>(Mavericks.KEY_ARG)
+        if (isFirstCreation()) {
+            withState(sharedViewModel) {
+                when (it.manageType) {
+                    ManageType.AddRooms,
+                    ManageType.AddRoomsOnlySpaces -> {
+                        val simpleName = SpaceAddRoomFragment::class.java.simpleName
+                        if (supportFragmentManager.findFragmentByTag(simpleName) == null) {
+                            supportFragmentManager.commitTransaction {
+                                replace(R.id.simpleFragmentContainer,
+                                        SpaceAddRoomFragment::class.java,
+                                        Bundle().apply { this.putParcelable(Mavericks.KEY_ARG, args) },
+                                        simpleName
+                                )
+                            }
+                        }
+                    }
+                    ManageType.Settings    -> {
+                        val simpleName = SpaceSettingsFragment::class.java.simpleName
+                        if (supportFragmentManager.findFragmentByTag(simpleName) == null && args?.spaceId != null) {
+                            supportFragmentManager.commitTransaction {
+                                replace(R.id.simpleFragmentContainer,
+                                        SpaceSettingsFragment::class.java,
+                                        Bundle().apply { this.putParcelable(Mavericks.KEY_ARG, RoomProfileArgs(args.spaceId)) },
+                                        simpleName
+                                )
+                            }
+                        }
+                    }
+                    ManageType.ManageRooms -> {
+                        // no direct access for now
+                    }
+                }
+            }
+        }
+
+        sharedViewModel.observeViewEvents {
+            when (it) {
+                SpaceManagedSharedViewEvents.Finish                       -> {
+                    finish()
+                }
+                SpaceManagedSharedViewEvents.HideLoading                  -> {
+                    hideWaitingView()
+                }
+                SpaceManagedSharedViewEvents.ShowLoading                  -> {
+                    showWaitingView()
+                }
+                SpaceManagedSharedViewEvents.NavigateToCreateRoom         -> {
+                    addFragmentToBackstack(
+                            R.id.simpleFragmentContainer,
+                            CreateRoomFragment::class.java,
+                            CreateRoomArgs("", parentSpaceId = args?.spaceId)
+                    )
+                }
+                SpaceManagedSharedViewEvents.NavigateToCreateSpace -> {
+                    addFragmentToBackstack(
+                            R.id.simpleFragmentContainer,
+                            CreateRoomFragment::class.java,
+                            CreateRoomArgs("", parentSpaceId = args?.spaceId, isSpace = true)
+                    )
+                }
+                SpaceManagedSharedViewEvents.NavigateToManageRooms -> {
+                    args?.spaceId?.let { spaceId ->
+                        addFragmentToBackstack(
+                                R.id.simpleFragmentContainer,
+                                SpaceManageRoomsFragment::class.java,
+                                SpaceManageArgs(spaceId, ManageType.ManageRooms)
+                        )
+                    }
+                }
+                SpaceManagedSharedViewEvents.NavigateToAliasSettings      -> {
+                    args?.spaceId?.let { spaceId ->
+                        addFragmentToBackstack(
+                                R.id.simpleFragmentContainer,
+                                RoomAliasFragment::class.java,
+                                RoomProfileArgs(spaceId)
+                        )
+                    }
+                }
+                SpaceManagedSharedViewEvents.NavigateToPermissionSettings -> {
+                    args?.spaceId?.let { spaceId ->
+                        addFragmentToBackstack(
+                                R.id.simpleFragmentContainer, RoomPermissionsFragment::class.java,
+                                RoomProfileArgs(spaceId)
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    companion object {
+        fun newIntent(context: Context, spaceId: String, manageType: ManageType): Intent {
+            return Intent(context, SpaceManageActivity::class.java).apply {
+                putExtra(Mavericks.KEY_ARG, SpaceManageArgs(spaceId, manageType))
+            }
+        }
+    }
+
+    override fun configure(toolbar: MaterialToolbar) {
+        configureToolbar(toolbar)
+    }
+}

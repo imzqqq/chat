@@ -1,0 +1,21 @@
+$PassphraseStrengthHigh: $accent-color;
+$PassphraseStrengthMedium: $username-variant5-color;
+$PassphraseStrengthLow: $notice-primary-color;
+
+progress.mx_PassphraseField_progress {
+    appearance: none;
+    width: 100%;
+    border: 0;
+    height: 4px;
+    position: absolute;
+    top: -12px;
+
+    @mixin ProgressBarBorderRadius "2px";
+    @mixin ProgressBarColour $PassphraseStrengthLow;
+    &[value="2"], &[value="3"] {
+        @mixin ProgressBarColour $PassphraseStrengthMedium;
+    }
+    &[value="4"] {
+        @mixin ProgressBarColour $PassphraseStrengthHigh;
+    }
+}

@@ -1,0 +1,1 @@
+ALTER TABLE private_user_data_max_stream_id RENAME TO account_data_max_stream_id;

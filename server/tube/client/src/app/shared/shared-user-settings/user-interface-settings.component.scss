@@ -1,0 +1,21 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+label {
+  font-weight: $font-regular;
+  font-size: 100%;
+}
+
+input[type=submit] {
+  @include tube-button;
+  @include orange-button;
+
+  display: block;
+  margin-top: 15px;
+}
+
+.tube-select-container {
+  @include tube-select-container(340px);
+
+  margin-bottom: 30px;
+}

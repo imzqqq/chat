@@ -1,0 +1,63 @@
+name: ChatNSE
+
+schemes:
+  ChatNSE:
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    build:
+      targets:
+        ChatNSE:
+        - running
+        - testing
+        - profiling
+        - analyzing
+        - archiving
+    profile:
+      config: Release
+    run:
+      askForAppToLaunch: true
+      config: Debug
+      debugEnabled: false
+      disableMainThreadChecker: true
+      launchAutomaticallySubstyle: 2
+    test:
+      config: Debug
+      disableMainThreadChecker: true
+
+targets:
+  ChatNSE:
+    platform: iOS
+    type: app-extension
+
+    configFiles:
+      Debug: Debug.xcconfig
+      Release: Release.xcconfig
+
+    sources: 
+    - path: .
+    - path: ../Chat/Managers/Settings/ChatSettings.swift
+    - path: ../Config/BuildSettings.swift
+    - path: ../Chat/Utils/DataProtectionHelper.swift
+    - path: ../Config/CommonConfiguration.swift
+    - path: ../Chat/Managers/PushNotification/PushNotificationStore.swift
+    - path: ../Chat/Modules/SetPinCode/PinCodePreferences.swift
+    - path: ../Chat/Managers/KeyValueStorage/Extensions/Keychain.swift
+    - path: ../Chat/Modules/SetPinCode/SetupBiometrics/BiometricsAuthenticationPresenter.swift
+    - path: ../Chat/Categories/UNUserNotificationCenter.swift
+    - path: ../Chat/Managers/KeyValueStorage/KeyValueStore.swift
+    - path: ../Chat/Managers/Locale/LocaleProvider.swift
+    - path: ../Chat/Managers/Locale/LocaleProviderType.swift
+    - path: ../Chat/Managers/EncryptionKeyManager/EncryptionKeyManager.swift
+    - path: ../Chat/Categories/Bundle.swift
+    - path: ../Chat/Generated/Strings.swift
+    - path: ../Chat/Generated/Images.swift
+    - path: ../Chat/Managers/KeyValueStorage/KeychainStore.swift
+    - path: ../Chat/Managers/LocalAuthentication/LocalAuthenticationService.swift
+    - path: ../Config/Configurable.swift
+    - path: ../Chat/Utils/Constants.swift
+    - path: ../Chat/Categories/String.swift
+    - path: ../Chat/Categories/Character.swift
+    - path: ../Chat/Managers/Widgets/WidgetConstants.m
+    - path: ../Chat/PropertyWrappers/UserDefaultsBackedPropertyWrapper.swift

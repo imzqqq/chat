@@ -1,0 +1,39 @@
+package com.imzqqq.app.core.ui.views
+
+import androidx.core.view.isVisible
+import com.imzqqq.app.features.call.webrtc.WebRtcCall
+
+class CurrentCallsViewPresenter {
+
+    private var currentCallsView: CurrentCallsView? = null
+    private var currentCall: WebRtcCall? = null
+    private var calls: List<WebRtcCall> = emptyList()
+
+    private val tickListener = object : WebRtcCall.Listener {
+        override fun onTick(formattedDuration: String) {
+            currentCallsView?.render(calls, formattedDuration)
+        }
+    }
+
+    fun updateCall(currentCall: WebRtcCall?, calls: List<WebRtcCall>) {
+        this.currentCall?.removeListener(tickListener)
+        this.currentCall = currentCall
+        this.currentCall?.addListener(tickListener)
+        this.calls = calls
+        val hasActiveCall = calls.isNotEmpty()
+        currentCallsView?.isVisible = hasActiveCall
+        currentCallsView?.render(calls, currentCall?.formattedDuration() ?: "")
+    }
+
+    fun bind(activeCallView: CurrentCallsView, interactionListener: CurrentCallsView.Callback) {
+        this.currentCallsView = activeCallView
+        this.currentCallsView?.callback = interactionListener
+        this.currentCall?.addListener(tickListener)
+    }
+
+    fun unBind() {
+        this.currentCallsView?.callback = null
+        this.currentCall?.removeListener(tickListener)
+        currentCallsView = null
+    }
+}

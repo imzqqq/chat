@@ -1,0 +1,19 @@
+.mx_CrossSigningPanel_statusList {
+    border-spacing: 0;
+
+    td {
+        padding: 0;
+
+        &:first-of-type {
+            padding-inline-end: 1em;
+        }
+    }
+}
+
+.mx_CrossSigningPanel_buttonRow {
+    margin: 1em 0;
+
+    :nth-child(n + 1) {
+        margin-inline-end: 10px;
+    }
+}

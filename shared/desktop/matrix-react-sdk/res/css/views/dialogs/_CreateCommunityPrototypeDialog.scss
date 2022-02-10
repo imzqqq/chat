@@ -1,0 +1,86 @@
+.mx_CreateCommunityPrototypeDialog {
+    .mx_Dialog_content {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 12px;
+
+        .mx_CreateCommunityPrototypeDialog_colName {
+            flex-basis: 66.66%;
+            padding-right: 100px;
+
+            .mx_Field input {
+                font-size: $font-16px;
+                line-height: $font-20px;
+            }
+
+            .mx_CreateCommunityPrototypeDialog_subtext {
+                display: block;
+                color: $muted-fg-color;
+                margin-bottom: 16px;
+
+                &:last-child {
+                    margin-top: 16px;
+                }
+
+                &.mx_CreateCommunityPrototypeDialog_subtext_error {
+                    color: $warning-color;
+                }
+            }
+
+            .mx_CreateCommunityPrototypeDialog_communityId {
+                position: relative;
+
+                .mx_InfoTooltip {
+                    float: right;
+                }
+            }
+
+            .mx_AccessibleButton {
+                display: block;
+                height: 32px;
+                font-size: $font-16px;
+                line-height: 32px;
+            }
+        }
+
+        .mx_CreateCommunityPrototypeDialog_colAvatar {
+            flex-basis: 33.33%;
+
+            .mx_CreateCommunityPrototypeDialog_avatarContainer {
+                margin-top: 12px;
+                margin-bottom: 20px;
+
+                .mx_CreateCommunityPrototypeDialog_avatar,
+                .mx_CreateCommunityPrototypeDialog_placeholderAvatar {
+                    width: 96px;
+                    height: 96px;
+                    border-radius: 96px;
+                }
+
+                .mx_CreateCommunityPrototypeDialog_placeholderAvatar {
+                    background-color: #368bd6; // hardcoded for both themes
+
+                    &::before {
+                        display: inline-block;
+                        background-color: #fff; // hardcoded because the background is
+                        mask-repeat: no-repeat;
+                        mask-size: 96px;
+                        width: 96px;
+                        height: 96px;
+                        mask-position: center;
+                        content: '';
+                        vertical-align: middle;
+                        mask-image: url('$(res)/img/element-icons/add-photo.svg');
+                    }
+                }
+            }
+
+            .mx_CreateCommunityPrototypeDialog_tip {
+                & > b, & > span {
+                    display: block;
+                    color: $muted-fg-color;
+                }
+            }
+        }
+    }
+}

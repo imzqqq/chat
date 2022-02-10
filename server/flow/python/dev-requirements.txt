@@ -1,0 +1,10 @@
+### MARK - imzqqq, using local deps
+git+https://github.com/imzqqq/little-boxes.git
+### END
+pytest
+requests
+html2text
+pyyaml
+flake8
+mypy
+black

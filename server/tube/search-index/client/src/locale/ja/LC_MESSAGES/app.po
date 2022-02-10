@@ -1,0 +1,517 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"PO-Revision-Date: 2021-12-05 20:31+0000\n"
+"Last-Translator: DignifiedSilence <5Dd12Ck@protonmail.com>\n"
+"Language-Team: Japanese <https://weblate.framasoft.org/projects/tube-"
+"search-index/client/ja/>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.9.1\n"
+"Generated-By: easygettext\n"
+
+#: src/components/Footer.vue:28
+msgid "&gt;&gt; Check all guides on joinpeertube.org &lt;&lt;"
+msgstr "&gt;&gt;joinpeertube.orgでPeerTubeのガイドをチェックする&lt;&lt;"
+
+#: src/components/ChannelResult.vue
+msgid "%{ n } follower"
+msgid_plural "%{ n } followers"
+msgstr[0] "%{ n } フォロワー"
+
+#: src/views/Search.vue:199
+msgid "%{resultsCount} result found"
+msgid_plural "%{resultsCount} results found"
+msgstr[0] "次の検索ワードにマッチしたコンテンツが、%{resultsCount}件ありました"
+
+#: src/components/PlaylistResult.vue
+msgid "%{videosLength} videos"
+msgstr "%{videosLength}動画"
+
+#: src/components/SearchWarning.vue:4
+msgid ""
+"<strong>%{indexName}</strong> displays videos and channels that match your "
+"search but is not the publisher, nor the owner. If you notice any problems "
+"with a video, report it to the administrators on the Tube website where "
+"the video is published."
+msgstr ""
+"<strong>%{indexName}</strong>は検索にマッチした動画やチャンネルを表示します。"
+"Sepia Searchは動画やチャンネルの投稿者でもなければ、それらの所有者でもありま"
+"せん。動画に何か問題があると気づきましたら、動画が投稿されたPeerTubeインスタ"
+"ンスの運営者に報告してください。"
+
+#: src/components/Footer.vue:6
+msgid "A free software to take back control of your videos"
+msgstr "あなたの動画へのコントロールをフリーソフトウェアで取り戻す"
+
+#: src/components/Header.vue:13 src/components/Header.vue:2
+msgid ""
+"A search engine of <a href=\"https://joinpeertube.org\" target=\"_blank"
+"\">Tube</a> videos, channels and playlists"
+msgstr ""
+"<a href=\"https://joinpeertube.org\" target=\"_blank\">Tube</a>の動画、"
+"チャンネル、プレイリストの検索エンジン"
+
+#: src/views/Search.vue
+msgid "Activism"
+msgstr "アクティビズム"
+
+#: src/views/Search.vue
+msgid "Add tag"
+msgstr "タグを加える"
+
+#: src/views/Search.vue:170
+msgid "All of these tags"
+msgstr "以下の全てのタグにあてはまる動画"
+
+#: src/views/Search.vue
+msgid "Animals"
+msgstr "動物"
+
+#: src/views/Search.vue
+msgid "Any"
+msgstr "全て"
+
+#: src/views/Search.vue
+msgid "Apply filters"
+msgstr "フィルターを適用する"
+
+#: src/views/Search.vue
+msgid "Art"
+msgstr "芸術"
+
+#: src/views/Search.vue
+msgid "Attribution"
+msgstr ""
+"CC BY (作品を複製、頒布、展示、実演を行うにあたり、著作権者の表示を要求す"
+"る。)"
+
+#: src/views/Search.vue
+msgid "Attribution - No Derivatives"
+msgstr ""
+"CC BY-ND (作品を複製、頒布、展示、実演を行うにあたり、著作権者の表示を要求"
+"し、非営利目的での利用に限定し、いかなる改変も禁止する)"
+
+#: src/views/Search.vue
+msgid "Attribution - Non Commercial"
+msgstr ""
+"CC BY-NC (作品を複製、頒布、展示、実演を行うにあたり、著作権者の表示を要求"
+"し、非営利目的での利用に限定する)"
+
+#: src/views/Search.vue
+msgid "Attribution - Non Commercial - No Derivatives"
+msgstr ""
+"CC BY-NC-ND (作品を複製、頒布、展示、実演を行うにあたり、著作権者の表示を要求"
+"し、非営利目的での利用に限定し、いかなる改変も禁止する)"
+
+#: src/views/Search.vue
+msgid "Attribution - Non Commercial - Share Alike"
+msgstr ""
+"CC BY-NC-SA (作品を複製、頒布、展示、実演を行うにあたり、著作権者の表示を要求"
+"し、非営利目的での利用に限定し、作品を改変・変形・加工してできた作品について"
+"も、元になった作品と同じライセンスを継承させた上で頒布を認める)"
+
+#: src/views/Search.vue
+msgid "Attribution - Share Alike"
+msgstr ""
+"CC BY-SA (作品を複製、頒布、展示、実演を行うにあたり、著作権者の表示を要求"
+"し、作品を改変・変形・加工してできた作品についても、元になった作品と同じライ"
+"センスを継承させた上で頒布を認める)"
+
+#: src/views/Search.vue:43
+msgid "Best match"
+msgstr "最も合った動画"
+
+#: src/views/Search.vue
+msgid "Català"
+msgstr "カタルーニャ語"
+
+#: src/views/Search.vue:122
+msgid "Category"
+msgstr "カテゴリー"
+
+#: src/views/Search.vue
+msgid "Čeština"
+msgstr "セルビア・クロアチア語"
+
+#: src/components/InterfaceLanguageDropdown.vue
+msgid "Change interface language"
+msgstr "言語を変える"
+
+#: src/views/Search.vue
+msgid "Comedy"
+msgstr "コメディー"
+
+#: src/components/Footer.vue:19
+msgid "Create an account to take back control of your videos"
+msgstr "あなたの動画へのコントロールを取り戻すために、アカウントを作成しよう"
+
+#: src/components/Footer.vue:23
+msgid "Create playlists"
+msgstr "プレイリストを作成する"
+
+#: src/components/PlaylistResult.vue:20 src/components/VideoResult.vue:21
+msgid "Created by"
+msgstr "制作者アカウント"
+
+#: src/views/Search.vue
+msgid "Deutsch"
+msgstr "ドイツ語"
+
+#: src/components/Header.vue:15 src/components/Header.vue:4
+msgid ""
+"Developed by <a href=\"https://framasoft.org\" target=\"_blank\">Framasoft</"
+"a>"
+msgstr ""
+"Developed by <a href=\"https://framasoft.org\" target=\"_blank\">Framasoft</"
+"a>"
+
+#: src/components/ChannelResult.vue
+msgid "Discover this channel on %{host}"
+msgstr "%{host}にあるチャンネルを見に行く"
+
+#: src/views/Search.vue:129
+msgid "Display all categories"
+msgstr "全てのカテゴリー"
+
+#: src/views/Search.vue:157
+msgid "Display all languages"
+msgstr "全ての言語"
+
+#: src/views/Search.vue:143
+msgid "Display all licenses"
+msgstr "全てのライセンス"
+
+#: src/views/Search.vue:74
+msgid "Display only"
+msgstr "以下の動画のみ表示"
+
+#: src/views/Search.vue:54
+msgid "Display sensitive content"
+msgstr "センシティブなコンテンツの表示"
+
+#: src/views/Search.vue:109
+msgid "Duration"
+msgstr "再生時間"
+
+#: src/views/Search.vue
+msgid "Education"
+msgstr "教育"
+
+#: src/views/Search.vue
+msgid "English"
+msgstr "英語"
+
+#: src/views/Search.vue
+msgid "Entertainment"
+msgstr "エンターテイメント"
+
+#: src/views/Search.vue
+msgid "Español"
+msgstr "スペイン語"
+
+#: src/views/Search.vue
+msgid "Esperanto"
+msgstr "エスペラント語"
+
+#: src/views/Search.vue
+msgid "Euskara"
+msgstr "バスク語"
+
+#: src/views/Search.vue:18
+msgid "Explore!"
+msgstr "検索！"
+
+#: src/views/Search.vue
+msgid "Films"
+msgstr "映画"
+
+#: src/views/Search.vue:32
+msgid "Filters"
+msgstr "フィルター"
+
+#: src/views/Search.vue
+msgid "Food"
+msgstr "食べ物"
+
+#: src/views/Search.vue
+msgid "Français"
+msgstr "フランス語"
+
+#: src/views/Search.vue
+msgid "Gàidhlig"
+msgstr "スコットランド・ゲール語"
+
+#: src/views/Search.vue
+msgid "Gaming"
+msgstr "ゲーム"
+
+#: src/components/ActorMiniature.vue
+msgid "Go on this account page"
+msgstr "このアカウントページに行く"
+
+#: src/components/ActorMiniature.vue
+msgid "Go on this channel page"
+msgstr "このチャンネルページに行く"
+
+#: src/views/Search.vue:17
+msgid "Go!"
+msgstr "検索！"
+
+#: src/views/Search.vue
+msgid "How To"
+msgstr "ハウツー"
+
+#: src/components/PlaylistResult.vue:25 src/components/VideoResult.vue:26
+msgid "In"
+msgstr "制作者のチャンネル"
+
+#: src/components/Footer.vue:13
+msgid "Install Tube"
+msgstr "PeerTubeをインストールする"
+
+#: src/views/Search.vue
+msgid "Italiano"
+msgstr "イタリア語"
+
+#: src/views/Search.vue
+msgid "Keyword, channel, video, playlist, etc."
+msgstr "キーワード、チャンネル名、動画名、プレイリスト名など。"
+
+#: src/views/Search.vue
+msgid "Kids"
+msgstr "子ども向け"
+
+#: src/components/VideoResult.vue:39 src/views/Search.vue:150
+msgid "Language"
+msgstr "言語"
+
+#: src/views/Search.vue
+msgid "Last 30 days"
+msgstr "過去30日間"
+
+#: src/views/Search.vue
+msgid "Last 365 days"
+msgstr "過去1年間"
+
+#: src/views/Search.vue
+msgid "Last 7 days"
+msgstr "過去7日間"
+
+#: src/views/Search.vue:45
+msgid "Least recent"
+msgstr "過去の動画から順に"
+
+#: src/components/Footer.vue:34
+msgid "Legal notices"
+msgstr "法的通知"
+
+#: src/views/Search.vue:136
+msgid "Licence"
+msgstr "ライセンス"
+
+#: src/components/VideoResult.vue:7
+msgid "LIVE"
+msgstr "生放送"
+
+#: src/views/Search.vue:83
+msgid "Live videos"
+msgstr "ライブ動画"
+
+#: src/views/Search.vue
+msgid "Long (> 10 min)"
+msgstr "長い（10分以上）"
+
+#: src/views/Search.vue
+msgid "Medium (4-10 min)"
+msgstr "中間 (4～10 分)"
+
+#: src/views/Search.vue:44
+msgid "Most recent"
+msgstr "最新の動画"
+
+#: src/views/Search.vue
+msgid "Music"
+msgstr "音楽"
+
+#: src/views/Search.vue
+msgid "Nederlands"
+msgstr "オランダ語"
+
+#: src/views/Search.vue
+msgid "News & Politics"
+msgstr "ニュースや政治"
+
+#: src/components/Pagination.vue:19
+msgid "Next page"
+msgstr "次のページ"
+
+#: src/views/Search.vue:68
+msgid "No"
+msgstr "いいえ"
+
+#: src/views/Search.vue:196
+msgid "No results found"
+msgstr "次の検索ワードに該当する動画はありませんでした"
+
+#: src/views/Search.vue
+msgid "Occitan"
+msgstr "オック語"
+
+#: src/components/VideoResult.vue:32
+msgid "On"
+msgstr "投稿日"
+
+#: src/views/Search.vue:179
+msgid "One of these tags"
+msgstr "以下のタグのうち、一つでもあてはまる動画"
+
+#: src/components/Footer.vue:21
+msgid "Open an account on a Tube website"
+msgstr "PeerTubeインスタンスでアカウントを作成する"
+
+#: src/components/Footer.vue:11
+msgid "Open your own videos website with Tube!"
+msgstr "PeerTubeであなただけの動画インスタンスを建てよう！"
+
+#: src/views/Search.vue:164
+msgid "Tube instance"
+msgstr "PeerTubeインスタンスのドメイン名"
+
+#: src/views/Search.vue
+msgid "People"
+msgstr "人物"
+
+#: src/views/Search.vue
+msgid "Polski"
+msgstr "ポーランド語"
+
+#: src/views/Search.vue
+msgid "Português (Portugal)"
+msgstr "ポルトガル語"
+
+#: src/components/Pagination.vue:3
+msgid "Previous page"
+msgstr "前のページ"
+
+#: src/views/Search.vue
+msgid "Public Domain Dedication"
+msgstr "パブリックドメイン公開"
+
+#: src/views/Search.vue:94
+msgid "Published date"
+msgstr "投稿日"
+
+#: src/views/Search.vue:56 src/views/Search.vue:76 src/views/Search.vue:96
+#: src/views/Search.vue:110 src/views/Search.vue:123 src/views/Search.vue:137
+#: src/views/Search.vue:151 src/views/Search.vue:171 src/views/Search.vue:180
+msgid "Reset"
+msgstr "リセット"
+
+#: src/views/Search.vue
+msgid "Science & Technology"
+msgstr "科学やテクノロジー"
+
+#: src/views/Search.vue:22
+msgid ""
+"Search for your favorite videos, channels and playlists on <a href="
+"\"%{indexedInstancesUrl}\" target=\"_blank\">%{instancesCount} Tube "
+"websites</a> indexed by %{indexName}!"
+msgstr ""
+"好きな動画やチャンネルやプレイリストを%{indexName}に登録された、<a href="
+"\"%{indexedInstancesUrl}\" target=\"_blank\">%{instancesCount}のPeerTubeイン"
+"スタンス</a>の中から検索しましょう!"
+
+#: src/views/Search.vue
+msgid "Short (< 4 min)"
+msgstr "短い（4分以下）"
+
+#: src/views/Search.vue:40
+msgid "Sort by:"
+msgstr "並び替え："
+
+#: src/components/Footer.vue:32
+msgid "Source code"
+msgstr "ソースコード"
+
+#: src/views/Search.vue
+msgid "Sports"
+msgstr "スポーツ"
+
+#: src/views/Search.vue
+msgid "suomi"
+msgstr "フィンランド語"
+
+#: src/views/Search.vue
+msgid "svenska"
+msgstr "スウェーデン語"
+
+#: src/components/VideoResult.vue:45
+msgid "Tags"
+msgstr "タグ"
+
+#: src/views/Search.vue
+msgid "Today"
+msgstr "今日"
+
+#: src/views/Search.vue
+msgid "Travels"
+msgstr "旅行"
+
+#: src/components/PlaylistResult.vue:31
+msgid "Updated on"
+msgstr "チャンネル更新日"
+
+#: src/views/Search.vue
+msgid "Vehicles"
+msgstr "乗り物"
+
+#: src/views/Search.vue:88
+msgid "VOD videos"
+msgstr "ビデオ・オン・デマンド動画"
+
+#: src/components/PlaylistResult.vue
+msgid "Watch the playlist on %{host}"
+msgstr "%{host}でプレイリストを見る"
+
+#: src/components/VideoResult.vue
+msgid "Watch the video on %{host}"
+msgstr "%{host}で動画を見る"
+
+#: src/components/Footer.vue:15
+msgid "Why should I have my own Tube website?"
+msgstr "なぜ、自分だけのPeerTubeインスタンスを持つべきなのでしょうか？"
+
+#: src/views/Search.vue:63
+msgid "Yes"
+msgstr "はい"
+
+#: src/views/Search.vue
+msgid "ελληνικά"
+msgstr "ギリシア語"
+
+#: src/views/Search.vue
+msgid "русский"
+msgstr "ロシア語"
+
+#: src/views/Search.vue
+msgid "日本語"
+msgstr "日本語"
+
+#: src/views/Search.vue
+msgid "简体中文（中国）"
+msgstr "简体中文（中国）"
+
+#~ msgid "Display homepage"
+#~ msgstr "インスタンスを表示する"
+
+#~ msgid "on %{instancesCount} indexed Tube website"
+#~ msgid_plural "on %{instancesCount} indexed Tube websites"
+#~ msgstr[0] "%{instancesCount}の登録されたPeerTubeインスタンス中"
+
+#~ msgid "with %{activeFilters} active filter"
+#~ msgid_plural "with %{activeFilters} active filters"
+#~ msgstr[0] "%{activeFilters}つのフィルターが適用されてます"

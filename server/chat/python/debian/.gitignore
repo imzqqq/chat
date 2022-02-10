@@ -1,0 +1,7 @@
+/chat-server-py3.*.debhelper
+/chat-server-py3.debhelper.log
+/chat-server-py3.substvars
+/chat-server-*/
+/files
+/debhelper-build-stamp
+/.debhelper

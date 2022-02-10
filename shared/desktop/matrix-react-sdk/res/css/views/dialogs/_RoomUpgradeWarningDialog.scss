@@ -1,0 +1,20 @@
+.mx_RoomUpgradeWarningDialog {
+    max-width: 38vw;
+    width: 38vw;
+}
+
+.mx_RoomUpgradeWarningDialog .mx_SettingsFlag {
+    font-weight: 700;
+
+    .mx_ToggleSwitch {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 8px;
+        float: right;
+    }
+
+    .mx_SettingsFlag_label {
+        display: inline-block;
+        vertical-align: middle;
+    }
+}

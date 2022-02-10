@@ -1,0 +1,8 @@
+{
+  "bracketSpacing": true,
+  "tabWidth": 2,
+  "semicolon": [
+    false,
+    "always"
+  ]
+}

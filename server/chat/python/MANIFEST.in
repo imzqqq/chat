@@ -1,0 +1,54 @@
+include synctl
+include VERSION
+include *.rst
+include *.md
+include cl/README.md
+include cl/demo.tls.dh
+include cl/*.py
+include cl/*.sh
+
+recursive-include chat/storage *.sql
+recursive-include chat/storage *.sql.postgres
+recursive-include chat/storage *.sql.sqlite
+recursive-include chat/storage *.py
+recursive-include chat/storage *.txt
+recursive-include chat/storage *.md
+
+recursive-include docs *
+recursive-include scripts *
+recursive-include scripts-dev *
+recursive-include chat *.pyi
+recursive-include tests *.py
+recursive-include tests *.pem
+recursive-include tests *.p8
+recursive-include tests *.crt
+recursive-include tests *.key
+
+recursive-include chat/res *
+recursive-include chat/static *.css
+recursive-include chat/static *.gif
+recursive-include chat/static *.html
+recursive-include chat/static *.js
+
+exclude .codecov.yml
+exclude .coveragerc
+exclude .dockerignore
+exclude .editorconfig
+exclude Dockerfile
+exclude mypy.ini
+exclude sytest-blacklist
+exclude test_postgresql.sh
+
+include book.toml
+include pyproject.toml
+recursive-include changelog.d *
+
+prune .circleci
+prune .github
+prune .ci
+prune contrib
+prune debian
+prune cl/etc
+prune docker
+prune snap
+prune stubs

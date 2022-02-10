@@ -1,0 +1,180 @@
+import EventEmitter from "events";
+import { SDPStreamMetadataPurpose } from "./callEventTypes";
+import { MatrixClient } from "../client";
+import { RoomMember } from "../models/room-member";
+
+const POLLING_INTERVAL = 250; // ms
+const SPEAKING_THRESHOLD = -60; // dB
+
+export enum CallFeedEvent {
+    NewStream = "new_stream",
+    MuteStateChanged = "mute_state_changed",
+    VolumeChanged = "volume_changed",
+    Speaking = "speaking",
+}
+
+export class CallFeed extends EventEmitter {
+    private measuringVolumeActivity = false;
+    private audioContext: AudioContext;
+    private analyser: AnalyserNode;
+    private frequencyBinCount: Float32Array;
+    private speakingThreshold = SPEAKING_THRESHOLD;
+    private speaking = false;
+    private volumeLooperTimeout: number;
+
+    constructor(
+        public stream: MediaStream,
+        public userId: string,
+        public purpose: SDPStreamMetadataPurpose,
+        private client: MatrixClient,
+        private roomId: string,
+        private audioMuted: boolean,
+        private videoMuted: boolean,
+    ) {
+        super();
+
+        if (this.hasAudioTrack) {
+            this.initVolumeMeasuring();
+        }
+    }
+
+    private get hasAudioTrack(): boolean {
+        return this.stream.getAudioTracks().length > 0;
+    }
+
+    private initVolumeMeasuring(): void {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!this.hasAudioTrack || !AudioContext) return;
+
+        this.audioContext = new AudioContext();
+
+        this.analyser = this.audioContext.createAnalyser();
+        this.analyser.fftSize = 512;
+        this.analyser.smoothingTimeConstant = 0.1;
+
+        const mediaStreamAudioSourceNode = this.audioContext.createMediaStreamSource(this.stream);
+        mediaStreamAudioSourceNode.connect(this.analyser);
+
+        this.frequencyBinCount = new Float32Array(this.analyser.frequencyBinCount);
+    }
+
+    /**
+     * Returns callRoom member
+     * @returns member of the callRoom
+     */
+    public getMember(): RoomMember {
+        const callRoom = this.client.getRoom(this.roomId);
+        return callRoom.getMember(this.userId);
+    }
+
+    /**
+     * Returns true if CallFeed is local, otherwise returns false
+     * @returns {boolean} is local?
+     */
+    public isLocal(): boolean {
+        return this.userId === this.client.getUserId();
+    }
+
+    /**
+     * Returns true if audio is muted or if there are no audio
+     * tracks, otherwise returns false
+     * @returns {boolean} is audio muted?
+     */
+    public isAudioMuted(): boolean {
+        return this.stream.getAudioTracks().length === 0 || this.audioMuted;
+    }
+
+    /**
+     * Returns true video is muted or if there are no video
+     * tracks, otherwise returns false
+     * @returns {boolean} is video muted?
+     */
+    public isVideoMuted(): boolean {
+        // We assume only one video track
+        return this.stream.getVideoTracks().length === 0 || this.videoMuted;
+    }
+
+    /**
+     * Replaces the current MediaStream with a new one.
+     * This method should be only used by MatrixCall.
+     * @param newStream new stream with which to replace the current one
+     */
+    public setNewStream(newStream: MediaStream): void {
+        this.stream = newStream;
+        this.emit(CallFeedEvent.NewStream, this.stream);
+
+        if (this.hasAudioTrack) {
+            this.initVolumeMeasuring();
+        } else {
+            this.measureVolumeActivity(false);
+        }
+    }
+
+    /**
+     * Set feed's internal audio mute state
+     * @param muted is the feed's audio muted?
+     */
+    public setAudioMuted(muted: boolean): void {
+        this.audioMuted = muted;
+        this.emit(CallFeedEvent.MuteStateChanged, this.audioMuted, this.videoMuted);
+    }
+
+    /**
+     * Set feed's internal video mute state
+     * @param muted is the feed's video muted?
+     */
+    public setVideoMuted(muted: boolean): void {
+        this.videoMuted = muted;
+        this.emit(CallFeedEvent.MuteStateChanged, this.audioMuted, this.videoMuted);
+    }
+
+    /**
+     * Starts emitting volume_changed events where the emitter value is in decibels
+     * @param enabled emit volume changes
+     */
+    public measureVolumeActivity(enabled: boolean): void {
+        if (enabled) {
+            if (!this.audioContext || !this.analyser || !this.frequencyBinCount || !this.hasAudioTrack) return;
+
+            this.measuringVolumeActivity = true;
+            this.volumeLooper();
+        } else {
+            this.measuringVolumeActivity = false;
+            this.emit(CallFeedEvent.VolumeChanged, -Infinity);
+        }
+    }
+
+    public setSpeakingThreshold(threshold: number) {
+        this.speakingThreshold = threshold;
+    }
+
+    private volumeLooper(): void {
+        if (!this.analyser) return;
+
+        this.volumeLooperTimeout = setTimeout(() => {
+            if (!this.measuringVolumeActivity) return;
+
+            this.analyser.getFloatFrequencyData(this.frequencyBinCount);
+
+            let maxVolume = -Infinity;
+            for (let i = 0; i < this.frequencyBinCount.length; i++) {
+                if (this.frequencyBinCount[i] > maxVolume) {
+                    maxVolume = this.frequencyBinCount[i];
+                }
+            }
+
+            this.emit(CallFeedEvent.VolumeChanged, maxVolume);
+            const newSpeaking = maxVolume > this.speakingThreshold;
+            if (this.speaking !== newSpeaking) {
+                this.speaking = newSpeaking;
+                this.emit(CallFeedEvent.Speaking, this.speaking);
+            }
+
+            this.volumeLooper();
+        }, POLLING_INTERVAL);
+    }
+
+    public dispose(): void {
+        clearTimeout(this.volumeLooperTimeout);
+    }
+}

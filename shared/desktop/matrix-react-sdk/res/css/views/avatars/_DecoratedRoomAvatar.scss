@@ -1,0 +1,71 @@
+.mx_DecoratedRoomAvatar, .mx_ExtraTile {
+    position: relative;
+    contain: content;
+
+    &.mx_DecoratedRoomAvatar_cutout .mx_BaseAvatar {
+        mask-image: url('$(res)/img/element-icons/roomlist/decorated-avatar-mask.svg');
+        mask-position: center;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+    }
+
+    .mx_DecoratedRoomAvatar_icon {
+        position: absolute;
+        bottom: -6.25%;
+        right: -6.25%;
+        margin: 12.5%;
+        width: 25%;
+        height: 25%;
+        border-radius: 50%;
+    }
+
+    .mx_DecoratedRoomAvatar_icon::before {
+        content: '';
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        border-radius: 50%;
+    }
+
+    .mx_DecoratedRoomAvatar_icon_globe::before {
+        mask-position: center;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        background: $secondary-content;
+        mask-image: url('$(res)/img/globe.svg');
+    }
+
+    .mx_DecoratedRoomAvatar_icon_offline::before {
+        background-color: $presence-offline;
+    }
+
+    .mx_DecoratedRoomAvatar_icon_online::before {
+        background-color: $presence-online;
+    }
+
+    .mx_DecoratedRoomAvatar_icon_away::before {
+        background-color: $presence-away;
+    }
+
+    .mx_NotificationBadge, .mx_RoomTile_badgeContainer {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 1.8rem;
+        width: 1.8rem;
+    }
+}
+
+.mx_RoomList_Roomy .mx_DecoratedRoomAvatar, .mx_ExtraTile {
+    &.mx_DecoratedRoomAvatar_cutout .mx_BaseAvatar {
+        mask-image: url('$(res)/img/element-icons/roomlist/decorated-avatar-mask-big.svg');
+    }
+
+    .mx_DecoratedRoomAvatar_icon {
+        bottom: -4.1666666%;
+        right: -4.1666666%;
+        margin: 8.3333333%;
+        width: 16.6666666%;
+        height: 16.6666666%;
+    }
+}

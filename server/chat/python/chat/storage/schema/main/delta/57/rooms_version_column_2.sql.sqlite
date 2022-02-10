@@ -1,0 +1,7 @@
+-- see rooms_version_column_2.sql.postgres for details of what's going on here.
+
+UPDATE rooms SET room_version=(
+    SELECT COALESCE(json_extract(ej.json, '$.content.room_version'), '1')
+    FROM current_state_events cse INNER JOIN event_json ej USING (event_id)
+    WHERE cse.room_id=rooms.room_id AND cse.type='m.room.create' AND cse.state_key=''
+) WHERE rooms.room_version IS NULL;

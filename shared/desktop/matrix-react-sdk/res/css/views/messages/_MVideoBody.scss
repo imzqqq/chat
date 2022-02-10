@@ -1,0 +1,15 @@
+span.mx_MVideoBody {
+    video.mx_MVideoBody {
+        max-width: 100%;
+        height: auto;
+        border-radius: $border-radius-4px;
+    }
+}
+
+.mx_EventTile_reply {
+    span.mx_MVideoBody {
+        video.mx_MVideoBody {
+            max-height: 150px !important;
+        }
+    }
+}

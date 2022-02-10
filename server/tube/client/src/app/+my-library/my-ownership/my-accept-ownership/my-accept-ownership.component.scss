@@ -1,0 +1,6 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.tube-select-container {
+  @include tube-select-container(350px);
+}

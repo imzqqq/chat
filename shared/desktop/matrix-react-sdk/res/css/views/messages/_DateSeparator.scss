@@ -1,0 +1,21 @@
+.mx_DateSeparator {
+    clear: both;
+    margin: 4px 0;
+    display: flex;
+    align-items: center;
+    font-size: $font-14px;
+    color: $roomtopic-color;
+}
+
+.mx_DateSeparator > hr {
+    flex: 1 1 0;
+    height: 0;
+    border: none;
+    border-bottom: 1px solid $roomtopic-color;
+    opacity: 0.15;
+}
+
+.mx_DateSeparator > div {
+    margin: 0 25px;
+    flex: 0 0 auto;
+}

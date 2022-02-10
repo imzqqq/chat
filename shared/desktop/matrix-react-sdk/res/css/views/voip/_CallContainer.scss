@@ -1,0 +1,16 @@
+.mx_CallContainer {
+    position: absolute;
+    right: 20px;
+    bottom: 72px;
+    z-index: 100;
+
+    // Disable pointer events for Meet widgets to function. Direct
+    // calls have their own cursor and behaviour, but we need to make
+    // sure the cursor hits the iframe for Meet which will be at a
+    // different level.
+    pointer-events: none;
+
+    .mx_AppTile_persistedWrapper div {
+        min-width: 350px;
+    }
+}

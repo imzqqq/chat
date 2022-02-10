@@ -1,0 +1,25 @@
+[package]
+name = "seshat-node"
+version = "2.3.0"
+authors = ["imqzzZ"]
+exclude = ["artifacts.json", "index.node"]
+edition = "2021"
+
+[lib]
+name = "seshat_node"
+crate-type = ["cdylib"]
+
+# We are pinning the exact version of neon since it has a track record of
+# introducing breaking changes in patch releases.
+
+[dependencies]
+fs_extra = "1.2.0"
+serde_json = "1.0.58"
+neon-serde2 = "0.8"
+uuid = "0.8.1"
+seshat = { version = "2.3.0", path = "../../" }
+
+[dependencies.neon]
+version = "=0.8.2"
+default-features = false
+features = ["napi-4"]

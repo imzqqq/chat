@@ -1,0 +1,3 @@
+domain: chatie.io
+homeserverUrl: https://matrix.chatie.cn
+registration: wechaty-registration.yaml

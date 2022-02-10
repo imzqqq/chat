@@ -1,0 +1,12 @@
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include "Config/AppIdentifiers.xcconfig"
+#include "Config/AppVersion.xcconfig"
+
+PRODUCT_NAME = DesignKit
+PRODUCT_BUNDLE_IDENTIFIER = $(BASE_BUNDLE_IDENTIFIER).designkit
+
+INFOPLIST_FILE = DesignKit/Info.plist
+
+SKIP_INSTALL = YES

@@ -1,0 +1,59 @@
+.mx_LinkPreviewWidget {
+    margin-top: 8px;
+    margin-right: 15px;
+    margin-bottom: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    display: flex;
+    border-left: 2px solid $preview-widget-bar-color;
+    color: $preview-widget-fg-color;
+    font-size: $font-14px;
+    line-height: $font-18px;
+}
+
+.mx_LinkPreviewWidget_image {
+    flex: 0 0 100px;
+    margin-top: auto;
+    margin-left: 15px;
+    margin-bottom: auto;
+    text-align: center;
+    cursor: pointer;
+}
+
+.mx_LinkPreviewWidget_caption {
+    margin-left: 15px;
+    flex: 1 1 auto;
+    overflow: hidden; // cause it to wrap rather than clip
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.mx_LinkPreviewWidget_title {
+    font-weight: bold;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    .mx_LinkPreviewWidget_siteName {
+        font-weight: normal;
+    }
+}
+
+.mx_LinkPreviewWidget_description {
+    margin-top: $font-3px;
+    white-space: normal;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.mx_MatrixChat_useCompactLayout {
+    .mx_LinkPreviewWidget {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+}

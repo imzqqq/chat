@@ -1,0 +1,41 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    apnotic (1.6.1)
+      connection_pool (~> 2)
+      net-http2 (>= 0.18.3, < 2)
+    connection_pool (2.2.5)
+    dotenv (2.7.6)
+    http-2 (0.11.0)
+    mustermann (1.1.1)
+      ruby2_keywords (~> 0.0.1)
+    net-http2 (0.18.4)
+      http-2 (~> 0.11)
+    nio4r (2.5.7)
+    puma (5.3.1)
+      nio4r (~> 2.0)
+    rack (2.2.3)
+    rack-protection (2.1.0)
+      rack
+    ruby2_keywords (0.0.4)
+    sinatra (2.1.0)
+      mustermann (~> 1.0)
+      rack (~> 2.2)
+      rack-protection (= 2.1.0)
+      tilt (~> 2.0)
+    tilt (2.0.10)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  apnotic (~> 1.6.1)
+  dotenv (~> 2.7.6)
+  puma (~> 5.3.1)
+  sinatra (~> 2.1.0)
+
+RUBY VERSION
+   ruby 3.0.1p64
+
+BUNDLED WITH
+   2.2.15

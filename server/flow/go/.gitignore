@@ -1,0 +1,20 @@
+# exclude the compiled binary
+/gotosocial
+
+# exclude built documentation, since readthedocs will build it for us anyway
+/docs/_build
+
+# exclude coverage report
+cp.out
+
+# exclude node_modules if installed
+/web/source/node_modules
+
+# exclude compiled mkdocs site
+site/
+
+# exclude compiled binaries
+dist/
+
+# exclude the copy of swagger.yaml moved into assets during packaging
+web/assets/swagger.yaml

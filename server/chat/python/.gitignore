@@ -1,0 +1,55 @@
+# filename patterns
+*~
+.*.swp
+.#*
+*.deb
+*.egg
+*.egg-info
+*.lock
+*.py[cod]
+*.snap
+*.tac
+_trial_temp/
+_trial_temp*/
+/out
+.DS_Store
+__pycache__/
+
+# stuff that is likely to exist when you run a server locally
+/*.db
+/*.log
+*.log
+/*.log.*
+!/*.log.config
+/*.pid
+/.python-version
+# /*.signing.key
+/*env/
+/.env/
+/.venv*/
+/logs
+/media_store/
+/uploads
+
+# IDEs
+/.idea/
+/.ropeproject/
+/.vscode/
+
+# build products
+!/.coveragerc
+/.coverage*
+/.mypy_cache/
+/.tox
+/build/
+/coverage.*
+/dist/
+/docs/build/
+/htmlcov
+/pip-wheel-metadata/
+
+# docs
+book/
+
+# config
+# homeserver.yaml

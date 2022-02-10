@@ -1,0 +1,72 @@
+---
+layout: projectimage
+title: Ruby Chat SDK
+categories: 
+ - sdk
+description: An SDK for building Chat communication applications in Ruby
+author: Ananace
+maturity: Beta
+language: Ruby
+license: MIT
+repo: https://github.com/ananace/ruby-matrix-sdk
+room: "#ruby-matrix-sdk:kittenface.studio"
+featured: true
+thumbnail: /docs/projects/images/ruby.png
+screenshot: /docs/projects/images/ruby.png
+---
+
+A Ruby gem for easing the development of software that communicates with servers implementing the Chat protocol.
+
+There is a Chat room for the discussion about usage and development at [#ruby-matrix-sdk:kittenface.studio](https://to.chat.dingshunyu.top/#/#ruby-matrix-sdk:kittenface.studio).
+
+Live YARD documentation can be found at; http://aleol57.gitlab-pages.liu.se/ruby-matrix-sdk
+
+### Example usage
+
+```ruby
+# Raw API usage
+require 'matrix_sdk'
+
+api = MatrixSdk::Api.new 'https://matrix.org'
+
+api.login user: 'example', password: 'notarealpass'
+api.whoami?
+# => {:user_id=>"@example:matrix.org"}
+
+# It's possible to call arbitrary APIs as well
+api.request :get, :federation_v1, '/version'
+# => {:server=>{:version=>"0.28.1", :name=>"Chat"}}
+```
+
+```ruby
+# Client wrapper
+require 'matrix_sdk'
+
+client = MatrixSdk::Client.new 'https://example.com'
+client.login 'username', 'notarealpass' #, no_sync: true
+
+client.rooms.count
+# => 5
+hq = client.find_room '#matrix:matrix.org'
+# => #<MatrixSdk::Room:00005592a1161528 @id="!cURbafjkfsMDVwdRDQ:matrix.org" @name="Chat HQ" @topic="The Official Chat HQ - please come chat here! | To support Chat development: https://patreon.com/matrixdotorg | Try http://riot.im/app for a glossy web client | Looking for homeserver hosting? Check out https://upcloud.com/matrix!" @canonical_alias="#matrix:matrix.org" @aliases=["#matrix:jda.mn"] @join_rule=:public @guest_access=:can_join @event_history_limit=10>
+hq.guest_access?
+# => true
+hq.send_text "This is an example message - don't actually do this ;)"
+# => {:event_id=>"$123457890abcdef:matrix.org"}
+```
+
+```ruby
+# Client wrapper
+require 'matrix_sdk'
+
+client = MatrixSdk::Client.new 'https://example.com'
+client.api.access_token = 'thisisnotarealtoken'
+
+# Doesn't automatically trigger a sync when setting the token directly
+client.rooms.count
+# => 0
+
+client.sync
+client.rooms.count
+# => 5
+```

@@ -1,0 +1,20 @@
+-- when we first added the room_version column, it was populated via a background
+-- update. We now need it to be populated before chat starts, so we populate
+-- any remaining rows with a NULL room version now. For servers which have completed
+-- the background update, this will be pretty quick.
+
+-- the following query will set room_version to NULL if no create event is found for
+-- the room in current_state_events, and will set it to '1' if a create event with no
+-- room_version is found.
+
+UPDATE rooms SET room_version=(
+    SELECT COALESCE(json::json->'content'->>'room_version','1')
+    FROM current_state_events cse INNER JOIN event_json ej USING (event_id)
+    WHERE cse.room_id=rooms.room_id AND cse.type='m.room.create' AND cse.state_key=''
+) WHERE rooms.room_version IS NULL;
+
+-- we still allow the background update to complete: it has the useful side-effect of
+-- populating `rooms` with any missing rooms (based on the current_state_events table).
+
+-- see also rooms_version_column_2.sql.sqlite which has a copy of the above query, using
+-- sqlite syntax for the json extraction.

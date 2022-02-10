@@ -1,0 +1,21 @@
+{
+  "name": "matrix-seshat",
+  "version": "2.3.0",
+  "description": "A message logger with full text search support",
+  "main": "lib/index.js",
+  "author": "imqzzZ",
+  "dependencies": {
+    "neon-cli": "^0.8.2"
+  },
+  "scripts": {
+    "install": "neon build --release",
+    "test": "jest",
+    "lint": "eslint lib/index.js"
+  },
+  "devDependencies": {
+    "eslint": "^6.2.2",
+    "eslint-config-google": "^0.13.0",
+    "jest": "^24.9.0",
+    "jsdoc": "^3.6.3"
+  }
+}

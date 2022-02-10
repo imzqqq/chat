@@ -1,0 +1,44 @@
+.mx_CallViewSidebar {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    z-index: 100; // To be above the primary feed
+
+    overflow: auto;
+
+    height: calc(100% - 32px); // Subtract the top and bottom padding
+    width: 20%;
+
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+    align-items: flex-end;
+    gap: 12px;
+
+    > .mx_VideoFeed {
+        width: 100%;
+        border-radius: 4px;
+
+        &.mx_VideoFeed_voice {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mx_VideoFeed_video {
+            border-radius: 4px;
+        }
+
+        .mx_VideoFeed_mic {
+            left: 6px;
+            bottom: 6px;
+        }
+    }
+
+    &.mx_CallViewSidebar_pipMode {
+        top: 16px;
+        bottom: unset;
+        justify-content: flex-end;
+        gap: 4px;
+    }
+}

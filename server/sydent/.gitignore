@@ -1,0 +1,14 @@
+# Development files
+*.pyc
+.idea/
+.vscode/
+*.iml
+_trial_temp
+*.egg
+*.egg-info
+.python-version
+
+# Runtime files
+/sydent.conf
+/sydent.db
+/matrix_is_test/sydent.stderr

@@ -1,0 +1,23 @@
+{
+    "version": "1.0.0",
+    "location": "https://localhost:3001",
+    "branding": {
+        "name": "Flow",
+        "logo": "logo.svg",
+        "background": "background.png"
+    },
+    "developer": false,
+    "federation": {
+        "universalLogin": true,
+        "allowPublicPosts": true,
+        "enablePublicTimeline": true
+    },
+    "registration": {
+        "defaultInstance": "flow.dingshunyu.top"
+    },
+    "admin": {
+        "name": "Flow Admin",
+        "account": "imqzzZ"
+    },
+    "repository": "https://github.com/imzqqq"
+}

@@ -1,0 +1,30 @@
+.mx_AliasSettings_editable {
+    border: 0px;
+    border-bottom: 1px solid $strong-input-border-color;
+    padding: 0px;
+    min-width: 240px;
+}
+
+.mx_AliasSettings_editable:focus {
+    border-bottom: 1px solid $accent-color;
+    outline: none;
+    box-shadow: none;
+}
+
+.mx_AliasSettings {
+    summary {
+        cursor: pointer;
+        color: $accent-color;
+        font-weight: 600;
+        list-style: none;
+
+        // list-style doesn't do it for webkit
+        &::-webkit-details-marker {
+            display: none;
+        }
+    }
+
+    .mx_AliasSettings_localAliasHeader {
+        margin-top: 35px;
+    }
+}

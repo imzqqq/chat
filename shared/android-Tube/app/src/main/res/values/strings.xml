@@ -1,0 +1,123 @@
+<resources>
+    <!-- Start Global string -->
+    <string name="app_name" translatable="false">P2Play</string>
+    <string name="hostText" translatable="false">peertube.example.com</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
+    <string name="comming">Coming soon!</string>
+    <string name="charging">Loading…</string>
+    <!-- End Global string -->
+
+
+    <!-- Start About strings -->
+    <string name="aboutGitUrl" translatable="false">https://gitlab.com/agosto182/p2play/</string>
+    <string name="aboutGnuUrl" translatable="false">https://personaljournal.ca/p2play/</string>
+    <string name="aboutLabel">About P2Play</string>
+    <string name="aboutText">P2Play is an unofficial Android application for Tube. You can watch and contribute with the code on GitLab:</string>
+    <string name="aboutStatus">You can follow our blog:</string>
+    <string name="aboutLicense">Copyleft GNU GPLv3 License</string>
+    <string name="aboutInstance">About instance</string>
+    <string name="aboutInWeb">You can see terms and more on the web:</string>
+    <!-- End About strings -->
+    <!-- Start Host strings -->
+    <string name="hostInfoText">Select your instance</string>
+    <string name="okButton">Accept</string>
+    <string name="errorMsg">Error, try again</string>
+    <string name="finallyMsg">Host saved</string>
+    <!-- End Host strings -->
+    <!-- Start Login strings -->
+    <string name="loginInfo">Login or register new account</string>
+    <string name="userTxt">Username:</string>
+    <string name="userText" translatable="false"> </string>
+    <string name="passwordTxt">Password:</string>
+    <string name="passwordText" translatable="false"> </string>
+    <string name="loginBtn">Login now</string>
+    <string name="registerActionBtn">Create new account</string>
+    <!-- Toast msg -->
+    <string name="loginSuccess_msg">You are logged</string>
+    <string name="loginError_msg">An error has occurred</string>
+    <string name="loginFailed_msg">Invalid credentials</string>
+    <string name="registerSuccess_msg">You are registered</string>
+    <string name="registerError_msg">An error has occurred</string>
+    <string name="registerFailed_msg">Invalid data</string>
+    <!-- Register msg -->
+    <string name="registerBtn">Register now</string>
+    <string name="emailTxt">Email:</string>
+    <string name="emailText" translatable="false">user@mail.com</string>
+    <!-- End Login strings -->
+    <!-- Start Main strings -->
+    <string name="title_subscriptions">Subscriptions</string>
+    <string name="title_recent">Recent</string>
+    <string name="title_popular">Popular</string>
+    <string name="title_trending">Trending</string>
+    <string name="title_local">Local videos</string>
+    <string name="title_myVideos">My videos</string>
+    <string name="view_text">views</string>
+    <string name="timeSec_text">seconds</string>
+    <string name="timeMin_text">minutes</string>
+    <string name="timeHrs_text">hours</string>
+    <string name="nav_header_title">Log In</string>
+    <string name="nav_header_subtitle" translatable="false">P2Play</string>
+    <!-- Toast msg -->
+    <string name="logout_msg">You disconnected</string>
+    <!-- End Main strings -->
+    <!-- Start Menu strings -->
+    <string name="nav_subscriptions">Subscriptions</string>
+    <string name="nav_popular">Popular</string>
+    <string name="nav_trending">Trending</string>
+    <string name="nav_recent">Recent</string>
+    <string name="nav_local">Local</string>
+    <string name="nav_about">About</string>
+    <string name="nav_history">History</string>
+    <string name="nav_menu_myLibrary">My Library</string>
+    <string name="nav_menu_videos">Videos</string>
+    <string name="nav_menu_more">More</string>
+    <string name="nav_likes">Most liked</string>
+    <!-- End Menu strings -->
+    <!-- Start MiniMenu strings -->
+    <string name="action_settings">Settings</string>
+    <string name="action_login">Log In</string>
+    <string name="action_logout">Logout</string>
+    <!-- End MiniMenu strings -->
+    <!-- Start Reproductor strings -->
+    <string name="descriptionTxt">Description:</string>
+    <string name="commentariesTxt">Commentaries:</string>
+    <string name="commentHolder">Make a commentary</string>
+    <!-- Actions -->
+    <string name="subscribeBtn">Subscribe</string>
+    <string name="likeBtn">Like</string>
+    <string name="dislikeBtn">Dislike</string>
+    <string name="shareBtn">Share</string>
+    <string name="reportBtn">Report</string>
+    <string name="unSubscribeBtn">Unsubscribe</string>
+    <string name="commentaryText">Comment</string>
+    <string name="showMore">Show more</string>
+    <!-- Messages -->
+    <string name="subscribeMsg">You subscribed to this channel</string>
+    <string name="rateMsg">You rated the video</string>
+    <string name="unSubscribeMsg">You unsubscribed from this channel</string>
+    <string name="makedCommentaryMsg">You commented this video</string>
+    <string name="errorCommentaryMsg">An error has occurred, try again</string>
+    <string name="emptyCommentaryMsg">Please make a comment first</string>
+    <!-- End Reproductor strings -->
+    <!-- Start Settings strings -->
+    <string name="title_activity_settings">Settings</string>
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+    <string name="pref_nfsw_title">NFSW content</string>
+    <string name="pref_nfsw_description">When active, it may show adult and sensitive contents.</string>
+    <string name="pref_hostname_title">Peertube instance</string>
+    <string name="pref_hostname_error" translatable="false">-</string>
+    <string name="pref_message_exit">Restart app to apply changes</string>
+    <string name="pref_videos_count_title">Videos per page</string>
+    <!-- End Settings strings -->
+    <!-- Start Channel strings -->
+    <string name="followersIndicator">Followers:</string>
+    <string name="hostIndicator">Host:</string>
+    <!-- End Channel strings -->
+    <!-- Start Prompt string -->
+    <string name="reportDialog">Reason to report this video:</string>
+    <string name="reportDialogMsg">You reported the video</string>
+    <!-- End Prompt strings -->
+</resources>

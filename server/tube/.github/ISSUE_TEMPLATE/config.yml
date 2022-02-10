@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Matrix
+    url: https://matrix.to/#/#tube:matrix.org
+    about: Chat with us via Matrix for quick Q/A here
+  - name: 💬 IRC
+    url: https://web.libera.chat/#tube
+    about: Chat with us via IRC for quick Q/A here
+  - name: 🤷💻🤦 Forum
+    url: https://framacolibri.org/c/tube
+    about: You can ask and answer other questions here

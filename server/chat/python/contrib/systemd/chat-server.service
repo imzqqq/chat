@@ -1,0 +1,39 @@
+# Example systemd configuration file for chat. Copy into
+#    /etc/systemd/system/, update the paths if necessary, then:
+#
+#    systemctl enable chat-server
+#    systemctl start chat-server
+#
+# This assumes that Chat has been installed by a user named
+# chat.
+#
+# This assumes that Chat has been installed in a virtualenv in
+# the user's home directory: `/home/chat/chat/env`.
+#
+# **NOTE:** This is an example service file that may change in the future. If you
+# wish to use this please copy rather than symlink it.
+
+[Unit]
+Description=Chat Matrix homeserver
+# If you are using postgresql to persist data, uncomment this line to make sure
+# chat starts after the postgresql service.
+# After=postgresql.service
+
+[Service]
+Type=notify
+NotifyAccess=main
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-abort
+
+User=chat
+Group=nogroup
+
+WorkingDirectory=/home/chat/chat
+ExecStart=/home/chat/chat/env/bin/python -m chat.app.homeserver --config-path=/home/chat/chat/homeserver.yaml
+SyslogIdentifier=chat-server
+
+# adjust the cache factor if necessary
+# Environment=SYNAPSE_CACHE_FACTOR=2.0
+
+[Install]
+WantedBy=multi-user.target

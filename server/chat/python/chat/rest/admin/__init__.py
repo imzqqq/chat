@@ -1,0 +1,248 @@
+import logging
+import platform
+from typing import TYPE_CHECKING, Optional, Tuple
+
+import chat
+from chat.api.errors import Codes, NotFoundError, SynapseError
+from chat.http.server import HttpServer, JsonResource
+from chat.http.servlet import RestServlet, parse_json_object_from_request
+from chat.http.site import SynapseRequest
+from chat.rest.admin._base import admin_patterns, assert_requester_is_admin
+from chat.rest.admin.devices import (
+    DeleteDevicesRestServlet,
+    DeviceRestServlet,
+    DevicesRestServlet,
+)
+from chat.rest.admin.event_reports import (
+    EventReportDetailRestServlet,
+    EventReportsRestServlet,
+)
+from chat.rest.admin.groups import DeleteGroupAdminRestServlet
+from chat.rest.admin.media import ListMediaInRoom, register_servlets_for_media_repo
+from chat.rest.admin.rooms import (
+    DeleteRoomRestServlet,
+    ForwardExtremitiesRestServlet,
+    JoinRoomAliasServlet,
+    ListRoomRestServlet,
+    MakeRoomAdminRestServlet,
+    RoomEventContextServlet,
+    RoomMembersRestServlet,
+    RoomRestServlet,
+    RoomStateRestServlet,
+)
+from chat.rest.admin.server_notice_servlet import SendServerNoticeServlet
+from chat.rest.admin.statistics import UserMediaStatisticsRestServlet
+from chat.rest.admin.username_available import UsernameAvailableRestServlet
+from chat.rest.admin.users import (
+    AccountValidityRenewServlet,
+    DeactivateAccountRestServlet,
+    PushersRestServlet,
+    RateLimitRestServlet,
+    ResetPasswordRestServlet,
+    SearchUsersRestServlet,
+    ShadowBanRestServlet,
+    UserAdminServlet,
+    UserMembershipRestServlet,
+    UserRegisterServlet,
+    UserRestServletV2,
+    UsersRestServletV2,
+    UserTokenRestServlet,
+    WhoisRestServlet,
+)
+from chat.types import JsonDict, RoomStreamToken
+from chat.util.versionstring import get_version_string
+
+if TYPE_CHECKING:
+    from chat.server import HomeServer
+
+logger = logging.getLogger(__name__)
+
+
+class VersionServlet(RestServlet):
+    PATTERNS = admin_patterns("/server_version$")
+
+    def __init__(self, hs: "HomeServer"):
+        self.res = {
+            "server_version": get_version_string(chat),
+            "python_version": platform.python_version(),
+        }
+
+    def on_GET(self, request: SynapseRequest) -> Tuple[int, JsonDict]:
+        return 200, self.res
+
+
+class PurgeHistoryRestServlet(RestServlet):
+    PATTERNS = admin_patterns(
+        "/purge_history/(?P<room_id>[^/]*)(/(?P<event_id>[^/]+))?"
+    )
+
+    def __init__(self, hs: "HomeServer"):
+        self.pagination_handler = hs.get_pagination_handler()
+        self.store = hs.get_datastore()
+        self.auth = hs.get_auth()
+
+    async def on_POST(
+        self, request: SynapseRequest, room_id: str, event_id: Optional[str]
+    ) -> Tuple[int, JsonDict]:
+        await assert_requester_is_admin(self.auth, request)
+
+        body = parse_json_object_from_request(request, allow_empty_body=True)
+
+        delete_local_events = bool(body.get("delete_local_events", False))
+
+        # establish the topological ordering we should keep events from. The
+        # user can provide an event_id in the URL or the request body, or can
+        # provide a timestamp in the request body.
+        if event_id is None:
+            event_id = body.get("purge_up_to_event_id")
+
+        if event_id is not None:
+            event = await self.store.get_event(event_id)
+
+            if event.room_id != room_id:
+                raise SynapseError(400, "Event is for wrong room.")
+
+            # RoomStreamToken expects [int] not Optional[int]
+            assert event.internal_metadata.stream_ordering is not None
+            room_token = RoomStreamToken(
+                event.depth, event.internal_metadata.stream_ordering
+            )
+            token = await room_token.to_string(self.store)
+
+            logger.info("[purge] purging up to token %s (event_id %s)", token, event_id)
+        elif "purge_up_to_ts" in body:
+            ts = body["purge_up_to_ts"]
+            if not isinstance(ts, int):
+                raise SynapseError(
+                    400, "purge_up_to_ts must be an int", errcode=Codes.BAD_JSON
+                )
+
+            stream_ordering = await self.store.find_first_stream_ordering_after_ts(ts)
+
+            r = await self.store.get_room_event_before_stream_ordering(
+                room_id, stream_ordering
+            )
+            if not r:
+                logger.warning(
+                    "[purge] purging events not possible: No event found "
+                    "(received_ts %i => stream_ordering %i)",
+                    ts,
+                    stream_ordering,
+                )
+                raise SynapseError(
+                    404, "there is no event to be purged", errcode=Codes.NOT_FOUND
+                )
+            (stream, topo, _event_id) = r
+            token = "t%d-%d" % (topo, stream)
+            logger.info(
+                "[purge] purging up to token %s (received_ts %i => "
+                "stream_ordering %i)",
+                token,
+                ts,
+                stream_ordering,
+            )
+        else:
+            raise SynapseError(
+                400,
+                "must specify purge_up_to_event_id or purge_up_to_ts",
+                errcode=Codes.BAD_JSON,
+            )
+
+        purge_id = self.pagination_handler.start_purge_history(
+            room_id, token, delete_local_events=delete_local_events
+        )
+
+        return 200, {"purge_id": purge_id}
+
+
+class PurgeHistoryStatusRestServlet(RestServlet):
+    PATTERNS = admin_patterns("/purge_history_status/(?P<purge_id>[^/]+)")
+
+    def __init__(self, hs: "HomeServer"):
+        self.pagination_handler = hs.get_pagination_handler()
+        self.auth = hs.get_auth()
+
+    async def on_GET(
+        self, request: SynapseRequest, purge_id: str
+    ) -> Tuple[int, JsonDict]:
+        await assert_requester_is_admin(self.auth, request)
+
+        purge_status = self.pagination_handler.get_purge_status(purge_id)
+        if purge_status is None:
+            raise NotFoundError("purge id '%s' not found" % purge_id)
+
+        return 200, purge_status.asdict()
+
+
+########################################################################################
+#
+# please don't add more servlets here: this file is already long and unwieldy. Put
+# them in separate files within the 'admin' package.
+#
+########################################################################################
+
+
+class AdminRestResource(JsonResource):
+    """The REST resource which gets mounted at /_chat/admin"""
+
+    def __init__(self, hs: "HomeServer"):
+        JsonResource.__init__(self, hs, canonical_json=False)
+        register_servlets(hs, self)
+
+
+def register_servlets(hs: "HomeServer", http_server: HttpServer) -> None:
+    """
+    Register all the admin servlets.
+    """
+    register_servlets_for_client_rest_resource(hs, http_server)
+    ListRoomRestServlet(hs).register(http_server)
+    RoomStateRestServlet(hs).register(http_server)
+    RoomRestServlet(hs).register(http_server)
+    RoomMembersRestServlet(hs).register(http_server)
+    DeleteRoomRestServlet(hs).register(http_server)
+    JoinRoomAliasServlet(hs).register(http_server)
+    SendServerNoticeServlet(hs).register(http_server)
+    VersionServlet(hs).register(http_server)
+    UserAdminServlet(hs).register(http_server)
+    UserMembershipRestServlet(hs).register(http_server)
+    UserTokenRestServlet(hs).register(http_server)
+    UserRestServletV2(hs).register(http_server)
+    UsersRestServletV2(hs).register(http_server)
+    DeviceRestServlet(hs).register(http_server)
+    DevicesRestServlet(hs).register(http_server)
+    DeleteDevicesRestServlet(hs).register(http_server)
+    UserMediaStatisticsRestServlet(hs).register(http_server)
+    EventReportDetailRestServlet(hs).register(http_server)
+    EventReportsRestServlet(hs).register(http_server)
+    PushersRestServlet(hs).register(http_server)
+    MakeRoomAdminRestServlet(hs).register(http_server)
+    ShadowBanRestServlet(hs).register(http_server)
+    ForwardExtremitiesRestServlet(hs).register(http_server)
+    RoomEventContextServlet(hs).register(http_server)
+    RateLimitRestServlet(hs).register(http_server)
+    UsernameAvailableRestServlet(hs).register(http_server)
+
+
+def register_servlets_for_client_rest_resource(
+    hs: "HomeServer", http_server: HttpServer
+) -> None:
+    """Register only the servlets which need to be exposed on /chat/client/xxx"""
+    WhoisRestServlet(hs).register(http_server)
+    PurgeHistoryStatusRestServlet(hs).register(http_server)
+    DeactivateAccountRestServlet(hs).register(http_server)
+    PurgeHistoryRestServlet(hs).register(http_server)
+    ResetPasswordRestServlet(hs).register(http_server)
+    SearchUsersRestServlet(hs).register(http_server)
+    UserRegisterServlet(hs).register(http_server)
+    DeleteGroupAdminRestServlet(hs).register(http_server)
+    AccountValidityRenewServlet(hs).register(http_server)
+
+    # Load the media repo ones if we're using them. Otherwise load the servlets which
+    # don't need a media repo (typically readonly admin APIs).
+    if hs.config.can_load_media_repo:
+        register_servlets_for_media_repo(hs, http_server)
+    else:
+        ListMediaInRoom(hs).register(http_server)
+
+    # don't add more things here: new servlets should only be exposed on
+    # /_chat/admin so should not go here. Instead register them in AdminRestResource.

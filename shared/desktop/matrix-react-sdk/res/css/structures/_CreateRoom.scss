@@ -1,0 +1,21 @@
+.mx_CreateRoom {
+    width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    color: $primary-content;
+}
+
+.mx_CreateRoom input,
+.mx_CreateRoom textarea {
+    border-radius: $border-radius-3px;
+    border: 1px solid $strong-input-border-color;
+    font-weight: 300;
+    font-size: $font-13px;
+    padding: 9px;
+    margin-top: 6px;
+}
+
+.mx_CreateRoom_description {
+    width: 330px;
+}
+

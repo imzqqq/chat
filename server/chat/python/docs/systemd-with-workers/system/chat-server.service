@@ -1,0 +1,22 @@
+[Unit]
+Description=Chat Server
+
+# This service should be restarted when the Chat server target is restarted.
+PartOf=chat-server.target
+ReloadPropagatedFrom=chat-server.target
+
+[Service]
+Type=notify
+NotifyAccess=main
+User=root
+WorkingDirectory=/home/imzqqq/workspace/chat/server/chat/python
+EnvironmentFile=/home/imzqqq/workspace/chat/server/chat/python/docs/systemd-with-workers/workers/federation_reader.yaml
+ExecStartPre=/home/imzqqq/workspace/chat/server/chat/python/.env/bin/python3 -m chat.app.homeserver --config-path=/home/imzqqq/workspace/chat/server/chat/python/homeserver.yaml --generate-keys
+ExecStart=/home/imzqqq/workspace/chat/server/chat/python/.env/bin/python3 -m chat.app.homeserver --config-path=/home/imzqqq/workspace/chat/server/chat/python/homeserver.yaml
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=3
+SyslogIdentifier=chat-server
+
+[Install]
+WantedBy=chat-server.target

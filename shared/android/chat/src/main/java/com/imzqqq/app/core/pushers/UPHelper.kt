@@ -1,0 +1,226 @@
+package com.imzqqq.app.core.pushers
+
+import android.content.Context
+import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.edit
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.imzqqq.app.BuildConfig
+import com.imzqqq.app.R
+import com.imzqqq.app.core.di.DefaultSharedPreferences
+import com.imzqqq.app.features.settings.VectorPreferences
+import com.imzqqq.app.push.fcm.FcmHelper
+import org.unifiedpush.android.connector.Registration
+import timber.log.Timber
+import java.net.URI
+import java.net.URL
+
+/**
+ * This class store the UnifiedPush Endpoint in SharedPrefs and ensure this token is retrieved.
+ * It has an alter ego in the fdroid variant.
+ */
+object UPHelper {
+    private const val PREFS_UP_ENDPOINT = "UP_ENDPOINT"
+    private const val PREFS_PUSH_GATEWAY = "PUSH_GATEWAY"
+
+    /**
+     * Retrieves the UnifiedPush Endpoint.
+     *
+     * @return the UnifiedPush Endpoint or null if not received
+     */
+    fun getUpEndpoint(context: Context): String? {
+        return DefaultSharedPreferences.getInstance(context).getString(PREFS_UP_ENDPOINT, null)
+    }
+
+    /**
+     * Store UnifiedPush Endpoint to the SharedPrefs
+     * TODO Store in realm
+     *
+     * @param context android context
+     * @param endpoint the endpoint to store
+     */
+    fun storeUpEndpoint(context: Context,
+                        endpoint: String?) {
+        DefaultSharedPreferences.getInstance(context).edit {
+            putString(PREFS_UP_ENDPOINT, endpoint)
+        }
+    }
+
+    /**
+     * Retrieves the Push Gateway.
+     *
+     * @return the Push Gateway or null if not defined
+     */
+    fun getPushGateway(context: Context): String? {
+        return DefaultSharedPreferences.getInstance(context).getString(PREFS_PUSH_GATEWAY, null)
+    }
+
+    /**
+     * Store Push Gateway to the SharedPrefs
+     * TODO Store in realm
+     *
+     * @param context android context
+     * @param gateway the push gateway to store
+     */
+    fun storePushGateway(context: Context,
+                         gateway: String?) {
+        DefaultSharedPreferences.getInstance(context).edit {
+            putString(PREFS_PUSH_GATEWAY, gateway)
+        }
+    }
+
+    fun registerUnifiedPush(context: Context, forceShowSelection: Boolean = false, onDoneRunnable: Runnable? = null) {
+        val up = Registration()
+        if (!BuildConfig.ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB) {
+            up.saveDistributor(context, context.packageName)
+            up.registerApp(context)
+            return
+        }
+        if (forceShowSelection) {
+            // Un-register first
+            up.unregisterApp(context)
+            up.saveDistributor(context, "")
+            storeUpEndpoint(context, null)
+            storePushGateway(context, null)
+        } else if (up.getDistributor(context).isNotEmpty()) {
+            up.registerApp(context)
+            return
+        }
+        val distributors = up.getDistributors(context).toMutableList()
+        /**
+         * Check if it is the gplay flavour AND GServices are not available
+         */
+        if (!FcmHelper.isPlayServicesAvailable(context)) {
+            distributors.remove(context.packageName)
+        }
+        when (distributors.size) {
+            0 -> {
+                /**
+                 * Fallback with sync service
+                 */
+                if (forceShowSelection) {
+                    Toast.makeText(context.applicationContext, R.string.toast_unifiedpush_no_push_distributor, Toast.LENGTH_LONG).show()
+                }
+                onDoneRunnable?.run()
+            }
+            1 -> {
+                if (forceShowSelection) {
+                    Toast.makeText(
+                            context.applicationContext,
+                            context.getString(R.string.toast_unifiedpush_one_push_distributor, distributors.first()),
+                            Toast.LENGTH_LONG
+                    ).show()
+                }
+                up.saveDistributor(context, distributors.first())
+                up.registerApp(context)
+                onDoneRunnable?.run()
+            }
+            else -> {
+                val builder: AlertDialog.Builder = MaterialAlertDialogBuilder(context)
+                builder.setTitle(context.getString(R.string.unifiedpush_getdistributors_dialog_title))
+
+                val distributorsArray = distributors.toTypedArray()
+                val distributorsNameArray = distributorsArray.map {
+                    if (it == context.packageName) {
+                        context.getString(R.string.unifiedpush_getdistributors_dialog_fcm_fallback)
+                    } else {
+                        try {
+                            val ai = context.packageManager.getApplicationInfo(it, 0)
+                            context.packageManager.getApplicationLabel(ai)
+                        } catch (e: PackageManager.NameNotFoundException) {
+                            it
+                        } as String
+                    }
+                }.toTypedArray()
+                builder.setItems(distributorsNameArray) { _, which ->
+                    val distributor = distributorsArray[which]
+                    up.saveDistributor(context, distributor)
+                    Timber.i("Saving distributor: $distributor")
+                    up.registerApp(context)
+                    onDoneRunnable?.run()
+                }
+                builder.setOnDismissListener {
+                    onDoneRunnable?.run()
+                }
+                builder.setOnCancelListener {
+                    onDoneRunnable?.run()
+                }
+                val dialog: AlertDialog = builder.create()
+                dialog.show()
+            }
+        }
+    }
+
+    fun unregister(context: Context) {
+        val up = Registration()
+        up.unregisterApp(context)
+    }
+
+    fun customOrDefaultGateway(context: Context, endpoint: String?): String {
+        // if we use the embedded distributor,
+        // register app_id type upfcm on sygnal
+        // the pushkey if FCM key
+        val up = Registration()
+        if (up.getDistributor(context) == context.packageName) {
+            return context.getString(R.string.pusher_http_url)
+        }
+        // else, unifiedpush, and pushkey is an endpoint
+        val default = context.getString(R.string.default_push_gateway_http_url)
+        endpoint?.let {
+            val uri = URI(it)
+            val custom = "${it.split(uri.rawPath)[0]}/chat/push/v1/notify"
+            Timber.i("Testing $custom")
+            /**
+             * TODO:
+             * if GET custom returns """{"unifiedpush":{"gateway":"matrix"}}"""
+             * return custom
+             */
+            val vectorPreferences = VectorPreferences(context)
+            if (vectorPreferences.forceUseCustomUpGateway()) {
+                return custom
+            }
+        }
+        return default
+    }
+
+    fun hasEndpoint(context: Context): Boolean {
+        getUpEndpoint(context)?.let {
+            return true
+        }
+        return false
+    }
+
+    fun allowBackgroundSync(context: Context): Boolean {
+        if (!hasEndpoint(context)) {
+            return true
+        }
+        val vectorPreferences = VectorPreferences(context)
+        return vectorPreferences.forceAllowBackgroundSync()
+    }
+
+    fun distributorExists(context: Context): Boolean {
+        val up = Registration()
+        return up.getDistributor(context).isNotEmpty()
+    }
+
+    fun isEmbeddedDistributor(context: Context) : Boolean {
+        val up = Registration()
+        return up.getDistributor(context) == context.packageName
+    }
+
+    fun getPrivacyFriendlyUpEndpoint(context: Context): String? {
+        val endpoint = getUpEndpoint(context)
+        if (endpoint.isNullOrEmpty()) return endpoint
+        if (isEmbeddedDistributor(context)) {
+            return endpoint
+        }
+        return try {
+            val parsed = URL(endpoint)
+            "${parsed.protocol}://${parsed.host}"
+        } catch (e: Exception) {
+            Timber.e("Error parsing unifiedpush endpoint: $e")
+            null
+        }
+    }
+}

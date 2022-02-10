@@ -1,0 +1,51 @@
+import Foundation
+import SwiftUI
+
+/**
+ Struct for holding colors for use in SwiftUI.
+ */
+@available(iOS 14.0, *)
+public struct ColorSwiftUI: Colors {
+
+    public let accent: Color
+    
+    public let alert: Color
+    
+    public let primaryContent: Color
+    
+    public let secondaryContent: Color
+    
+    public let tertiaryContent: Color
+    
+    public let quarterlyContent: Color
+    
+    public let quinaryContent: Color
+    
+    public let separator: Color
+    
+    public var system: Color
+    
+    public let tile: Color
+    
+    public let navigation: Color
+    
+    public let background: Color
+    
+    public let namesAndAvatars: [Color]
+    
+    init(values: ColorValues) {
+        accent = Color(values.accent)
+        alert = Color(values.alert)
+        primaryContent = Color(values.primaryContent)
+        secondaryContent = Color(values.secondaryContent)
+        tertiaryContent = Color(values.tertiaryContent)
+        quarterlyContent = Color(values.quarterlyContent)
+        quinaryContent = Color(values.quinaryContent)
+        separator = Color(values.separator)
+        system = Color(values.system)
+        tile = Color(values.tile)
+        navigation = Color(values.navigation)
+        background = Color(values.background)
+        namesAndAvatars = values.namesAndAvatars.map({ Color($0) })
+    }
+}

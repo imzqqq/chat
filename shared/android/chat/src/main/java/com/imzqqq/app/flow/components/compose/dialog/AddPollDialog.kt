@@ -1,0 +1,86 @@
+@file:JvmName("AddPollDialog")
+
+package com.imzqqq.app.flow.components.compose.dialog
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.WindowManager
+import androidx.appcompat.app.AlertDialog
+import com.imzqqq.app.R
+import com.imzqqq.app.databinding.DialogAddPollBinding
+import com.imzqqq.app.flow.entity.NewPoll
+
+fun showAddPollDialog(
+        context: Context,
+        poll: NewPoll?,
+        maxOptionCount: Int,
+        maxOptionLength: Int,
+        onUpdatePoll: (NewPoll) -> Unit
+) {
+
+    val binding = DialogAddPollBinding.inflate(LayoutInflater.from(context))
+
+    val dialog = AlertDialog.Builder(context)
+        .setIcon(R.drawable.ic_poll_24dp)
+        .setTitle(R.string.create_poll_title)
+        .setView(binding.root)
+        .setNegativeButton(android.R.string.cancel, null)
+        .setPositiveButton(android.R.string.ok, null)
+        .create()
+
+    val adapter = AddPollOptionsAdapter(
+        options = poll?.options?.toMutableList() ?: mutableListOf("", ""),
+        maxOptionLength = maxOptionLength,
+        onOptionRemoved = { valid ->
+            binding.addChoiceButton.isEnabled = true
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = valid
+        },
+        onOptionChanged = { valid ->
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = valid
+        }
+    )
+
+    binding.pollChoices.adapter = adapter
+
+    binding.addChoiceButton.setOnClickListener {
+        if (adapter.itemCount < maxOptionCount) {
+            adapter.addChoice()
+        }
+        if (adapter.itemCount >= maxOptionCount) {
+            it.isEnabled = false
+        }
+    }
+
+    val pollDurationId = context.resources.getIntArray(R.array.poll_duration_values).indexOfLast {
+        it <= poll?.expiresIn ?: 0
+    }
+
+    binding.pollDurationSpinner.setSelection(pollDurationId)
+
+    binding.multipleChoicesCheckBox.isChecked = poll?.multiple ?: false
+
+    dialog.setOnShowListener {
+        val button = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        button.setOnClickListener {
+            val selectedPollDurationId = binding.pollDurationSpinner.selectedItemPosition
+
+            val pollDuration = context.resources
+                .getIntArray(R.array.poll_duration_values)[selectedPollDurationId]
+
+            onUpdatePoll(
+                NewPoll(
+                    options = adapter.pollOptions,
+                    expiresIn = pollDuration,
+                    multiple = binding.multipleChoicesCheckBox.isChecked
+                )
+            )
+
+            dialog.dismiss()
+        }
+    }
+
+    dialog.show()
+
+    // make the dialog focusable so the keyboard does not stay behind it
+    dialog.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+}

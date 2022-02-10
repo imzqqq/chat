@@ -1,0 +1,64 @@
+.mx_Dialog_dialPadWrapper .mx_Dialog {
+    padding: 0px;
+}
+
+.mx_DialPadModal {
+    width: 292px;
+    height: 370px;
+    padding: 16px 0px 0px 0px;
+}
+
+.mx_DialPadModal_header {
+    margin-top: 32px;
+    margin-left: 40px;
+    margin-right: 40px;
+
+    /* a separator between the input line and the dial buttons */
+    border-bottom: 1px solid $quaternary-content;
+    transition: border-bottom 0.25s;
+}
+
+.mx_DialPadModal_header:focus-within {
+    border-bottom: 1px solid $accent-color;
+}
+
+.mx_DialPadModal_title {
+    color: $muted-fg-color;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.mx_DialPadModal_cancel {
+    float: right;
+    mask: url('$(res)/img/feather-customised/cancel.svg');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: cover;
+    width: 14px;
+    height: 14px;
+    background-color: $dialog-close-fg-color;
+    cursor: pointer;
+    margin-right: 16px;
+}
+
+.mx_DialPadModal_field {
+    border: none;
+    margin: 0px;
+    height: 30px;
+}
+
+.mx_DialPadModal_field .mx_Field_postfix {
+    /* Remove border separator between postfix and field content */
+    border-left: none;
+}
+
+.mx_DialPadModal_field input {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.mx_DialPadModal_dialPad {
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-top: 16px;
+}

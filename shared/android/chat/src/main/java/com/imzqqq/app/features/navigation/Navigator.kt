@@ -1,0 +1,129 @@
+package com.imzqqq.app.features.navigation
+
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.core.util.Pair
+import com.imzqqq.app.features.crypto.recover.SetupMode
+import com.imzqqq.app.features.displayname.getBestName
+import com.imzqqq.app.features.login.LoginConfig
+import com.imzqqq.app.features.media.AttachmentData
+import com.imzqqq.app.features.pin.PinMode
+import com.imzqqq.app.features.roomdirectory.RoomDirectoryData
+import com.imzqqq.app.features.roomdirectory.roompreview.RoomPreviewData
+import com.imzqqq.app.features.settings.VectorSettingsActivity
+import com.imzqqq.app.features.share.SharedData
+import org.matrix.android.sdk.api.session.permalinks.PermalinkData
+import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
+import org.matrix.android.sdk.api.session.terms.TermsService
+import org.matrix.android.sdk.api.session.widgets.model.Widget
+import org.matrix.android.sdk.api.util.MatrixItem
+
+interface Navigator {
+
+    fun openLogin(context: Context, loginConfig: LoginConfig? = null, flags: Int = 0)
+
+    fun openRoom(context: Context, roomId: String, eventId: String? = null, buildTask: Boolean = false, openAtFirstUnread: Boolean? = null)
+
+    sealed class PostSwitchSpaceAction {
+        object None : PostSwitchSpaceAction()
+        data class OpenDefaultRoom(val roomId: String, val showShareSheet: Boolean) : PostSwitchSpaceAction()
+        object OpenAddExistingRooms : PostSwitchSpaceAction()
+    }
+
+    fun switchToSpace(context: Context, spaceId: String, postSwitchSpaceAction: PostSwitchSpaceAction)
+
+    fun openSpacePreview(context: Context, spaceId: String)
+
+    fun performDeviceVerification(context: Context, otherUserId: String, sasTransactionId: String)
+
+    fun requestSessionVerification(context: Context, otherSessionId: String)
+
+    fun requestSelfSessionVerification(context: Context)
+
+    fun waitSessionVerification(context: Context)
+
+    fun upgradeSessionSecurity(context: Context, initCrossSigningOnly: Boolean)
+
+    fun openRoomForSharingAndFinish(activity: Activity, roomId: String, sharedData: SharedData)
+
+    fun openRoomPreview(context: Context, publicRoom: PublicRoom, roomDirectoryData: RoomDirectoryData)
+
+    fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData, fromEmailInviteLink: PermalinkData.RoomEmailInviteLink? = null)
+
+    fun openMatrixToBottomSheet(context: Context, link: String)
+
+    fun openCreateRoom(context: Context, initialName: String = "")
+
+    fun openCreateDirectRoom(context: Context)
+
+    fun openInviteUsersToRoom(context: Context, roomId: String)
+
+    fun openRoomDirectory(context: Context, initialFilter: String = "")
+
+    fun openRoomsFiltering(context: Context)
+
+    fun openSettings(context: Context, directAccess: Int = VectorSettingsActivity.EXTRA_DIRECT_ACCESS_ROOT)
+
+    fun openSettings(context: Context, payload: SettingsActivityPayload)
+
+    fun openDebug(context: Context)
+
+    fun openKeysBackupSetup(context: Context, showManualExport: Boolean)
+
+    fun open4SSetup(context: Context, setupMode: SetupMode)
+
+    fun openKeysBackupManager(context: Context)
+
+    fun openGroupDetail(groupId: String, context: Context, buildTask: Boolean = false)
+
+    fun openRoomMemberProfile(userId: String, roomId: String?, context: Context, buildTask: Boolean = false)
+
+    fun openRoomProfile(context: Context, roomId: String, directAccess: Int? = null)
+
+    fun openBigImageViewer(activity: Activity, sharedElement: View?, matrixItem: MatrixItem) {
+        openBigImageViewer(activity, sharedElement, matrixItem.avatarUrl, matrixItem.getBestName())
+    }
+
+    fun openBigImageViewer(activity: Activity, sharedElement: View?, mxcUrl: String?, title: String?)
+
+    fun openPinCode(context: Context,
+                    activityResultLauncher: ActivityResultLauncher<Intent>,
+                    pinMode: PinMode)
+
+    fun openTerms(context: Context,
+                  activityResultLauncher: ActivityResultLauncher<Intent>,
+                  serviceType: TermsService.ServiceType,
+                  baseUrl: String,
+                  token: String?)
+
+    fun openStickerPicker(context: Context,
+                          activityResultLauncher: ActivityResultLauncher<Intent>,
+                          roomId: String,
+                          widget: Widget)
+
+    fun openIntegrationManager(context: Context,
+                               activityResultLauncher: ActivityResultLauncher<Intent>,
+                               roomId: String,
+                               integId: String?,
+                               screen: String?)
+
+    fun openRoomWidget(context: Context, roomId: String, widget: Widget, options: Map<String, Any>? = null)
+
+    fun openMediaViewer(activity: Activity,
+                        roomId: String,
+                        mediaData: AttachmentData,
+                        view: View,
+                        inMemory: List<AttachmentData> = emptyList(),
+                        options: ((MutableList<Pair<View, String>>) -> Unit)?)
+
+    fun openSearch(context: Context, roomId: String)
+
+    fun openDevTools(context: Context, roomId: String)
+
+    fun openCallTransfer(context: Context, callId: String)
+
+    fun openCreatePoll(context: Context, roomId: String)
+}

@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "target": "ES2017",
+    "module": "commonjs",
+    "allowJs": false,
+    "checkJs": false,
+    "declaration": true,
+    "sourceMap": false,
+    "outDir": "./lib",
+    "composite": false,
+    "strict": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "index.js"
+  ],
+  "typedocOptions": {
+    "out": ".typedoc",
+    "entryPoints": ["src/index.ts"],
+    "excludePrivate": true,
+    "exclude": ["**/index.ts"]
+  }
+}

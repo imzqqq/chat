@@ -1,0 +1,79 @@
+/*
+   GoToSocial
+   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU Affero General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+package util
+
+import (
+	"fmt"
+	"strings"
+
+	"github.com/superseriousbusiness/gotosocial/internal/regexes"
+)
+
+// DeriveMentionsFromText takes a plaintext (ie., not html-formatted) text,
+// and applies a regex to it to return a deduplicated list of accounts
+// mentioned in that text.
+//
+// It will look for fully-qualified account names in the form "@user@example.org".
+// or the form "@username" for local users.
+func DeriveMentionsFromText(text string) []string {
+	mentionedAccounts := []string{}
+	for _, m := range regexes.MentionFinder.FindAllStringSubmatch(text, -1) {
+		mentionedAccounts = append(mentionedAccounts, m[1])
+	}
+	return UniqueStrings(mentionedAccounts)
+}
+
+// DeriveHashtagsFromText takes a plaintext (ie., not html-formatted) text,
+// and applies a regex to it to return a deduplicated list of hashtags
+// used in that text, without the leading #. The case of the returned
+// tags will be lowered, for consistency.
+func DeriveHashtagsFromText(text string) []string {
+	tags := []string{}
+	for _, m := range regexes.HashtagFinder.FindAllStringSubmatch(text, -1) {
+		tags = append(tags, strings.TrimPrefix(m[1], "#"))
+	}
+	return UniqueStrings(tags)
+}
+
+// DeriveEmojisFromText takes a plaintext (ie., not html-formatted) text,
+// and applies a regex to it to return a deduplicated list of emojis
+// used in that text, without the surrounding `::`
+func DeriveEmojisFromText(text string) []string {
+	emojis := []string{}
+	for _, m := range regexes.EmojiFinder.FindAllStringSubmatch(text, -1) {
+		emojis = append(emojis, m[1])
+	}
+	return UniqueStrings(emojis)
+}
+
+// ExtractMentionParts extracts the username test_user and the domain example.org
+// from a mention string like @test_user@example.org.
+//
+// If nothing is matched, it will return an error.
+func ExtractMentionParts(mention string) (username, domain string, err error) {
+	matches := regexes.MentionName.FindStringSubmatch(mention)
+	switch len(matches) {
+	case 2:
+		return matches[1], "", nil
+	case 3:
+		return matches[1], matches[2], nil
+	default:
+		return "", "", fmt.Errorf("couldn't match mention %s", mention)
+	}
+}

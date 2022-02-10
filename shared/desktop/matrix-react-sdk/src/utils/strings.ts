@@ -1,0 +1,69 @@
+/**
+ * Copy plaintext to user's clipboard
+ * It will overwrite user's selection range
+ * In certain browsers it may only work if triggered by a user action or may ask user for permissions
+ * Tries to use new async clipboard API if available
+ * @param text the plaintext to put in the user's clipboard
+ */
+export async function copyPlaintext(text: string): Promise<boolean> {
+    try {
+        if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(text);
+            return true;
+        } else {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+
+            // Avoid scrolling to bottom
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+
+            document.body.appendChild(textArea);
+            const selection = document.getSelection();
+            const range = document.createRange();
+            // range.selectNodeContents(textArea);
+            range.selectNode(textArea);
+            selection.removeAllRanges();
+            selection.addRange(range);
+
+            const successful = document.execCommand("copy");
+            selection.removeAllRanges();
+            document.body.removeChild(textArea);
+            return successful;
+        }
+    } catch (e) {
+        console.error("copyPlaintext failed", e);
+    }
+    return false;
+}
+
+export function selectText(target: Chat) {
+    const range = document.createRange();
+    range.selectNodeContents(target);
+
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+}
+
+/**
+ * Copy rich text to user's clipboard
+ * It will overwrite user's selection range
+ * In certain browsers it may only work if triggered by a user action or may ask user for permissions
+ * @param ref pointer to the node to copy
+ */
+export function copyNode(ref: Chat): boolean {
+    selectText(ref);
+    return document.execCommand('copy');
+}
+
+const collator = new Intl.Collator();
+/**
+ * Performant language-sensitive string comparison
+ * @param a the first string to compare
+ * @param b the second string to compare
+ */
+export function compare(a: string, b: string): number {
+    return collator.compare(a, b);
+}

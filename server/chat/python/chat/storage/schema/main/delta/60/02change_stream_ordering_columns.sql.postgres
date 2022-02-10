@@ -1,0 +1,15 @@
+-- This migration is closely related to '01recreate_stream_ordering.sql.postgres'.
+--
+-- It updates the other tables which use an INTEGER to refer to a stream ordering.
+-- These tables are all small enough that a re-create is tractable.
+ALTER TABLE pushers ALTER COLUMN last_stream_ordering SET DATA TYPE BIGINT;
+ALTER TABLE federation_stream_position ALTER COLUMN stream_id SET DATA TYPE BIGINT;
+
+-- these aren't actually event stream orderings, but they are numbers where 2 billion
+-- is a bit limiting, application_services_state is tiny, and I don't want to ever have
+-- to do this again.
+ALTER TABLE application_services_state ALTER COLUMN last_txn SET DATA TYPE BIGINT;
+ALTER TABLE application_services_state ALTER COLUMN read_receipt_stream_id SET DATA TYPE BIGINT;
+ALTER TABLE application_services_state ALTER COLUMN presence_stream_id SET DATA TYPE BIGINT;
+
+

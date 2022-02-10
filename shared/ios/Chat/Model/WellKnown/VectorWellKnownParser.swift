@@ -1,0 +1,18 @@
+import Foundation
+
+final class VectorWellKnownParser {
+    
+    func parse(jsonDictionary: [AnyHashable: Any]) -> VectorWellKnown? {
+        let serializationService = SerializationService()
+        let vectorWellKnown: VectorWellKnown?
+                        
+        do {
+            vectorWellKnown = try serializationService.deserialize(jsonDictionary)
+        } catch {
+            vectorWellKnown = nil
+            MXLog.debug("[VectorWellKnownParser] Fail to parse application Well Known keys with error: \(error)")
+        }
+        
+        return vectorWellKnown
+    }
+}

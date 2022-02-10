@@ -1,0 +1,527 @@
+[2021-11-29 21:48:56,473] [INFO@mau.init] Initializing maubot 0.2.1
+[2021-11-29 21:48:56,475] [DEBUG@maubot.loader.zip] Preloading plugins...
+[2021-11-29 21:48:56,559] [INFO@mau.init] Initialization complete in 0.14 seconds
+[2021-11-29 21:48:56,560] [DEBUG@mau.init] Running startup actions...
+[2021-11-29 21:48:56,561] [INFO@maubot.server] Listening on http://0.0.0.0:29316
+[2021-11-29 21:48:56,562] [INFO@mau.init] Startup actions complete in 0.0 seconds, now running forever
+[2021-11-29 21:49:02,530] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot 404 172 in 0.0008s"
+[2021-11-29 21:49:02,706] [INFO@aiohttp.access] 127.0.0.1 "GET /favicon.ico 404 172 in 0.0026s"
+[2021-11-29 21:49:08,917] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot 302 189 in 0.0007s"
+[2021-11-29 21:49:08,961] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/ 200 2452 in 0.0007s"
+[2021-11-29 21:49:09,050] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css 200 236 in 0.0265s"
+[2021-11-29 21:49:09,060] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/2.1c1f161d.chunk.js 200 252 in 0.0341s"
+[2021-11-29 21:49:09,174] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/main.186853d0.chunk.js 200 250 in 0.0037s"
+[2021-11-29 21:49:09,358] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/paths.json 200 173 in 0.0007s"
+[2021-11-29 21:49:09,372] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/favicon.png 200 13689 in 0.0005s"
+[2021-11-29 21:49:09,407] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/features 200 172 in 0.0007s"
+[2021-11-29 21:49:09,804] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0005s"
+[2021-11-29 21:50:06,858] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/login 401 235 in 0.0009s"
+[2021-11-29 21:50:08,820] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/login 401 235 in 0.0007s"
+[2021-11-29 21:51:17,250] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/ 200 2452 in 0.0007s"
+[2021-11-29 21:51:17,320] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css 304 177 in 0.0023s"
+[2021-11-29 21:51:17,364] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/2.1c1f161d.chunk.js 304 178 in 0.0013s"
+[2021-11-29 21:51:17,409] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/main.186853d0.chunk.js 304 177 in 0.0013s"
+[2021-11-29 21:51:17,484] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/paths.json 200 173 in 0.0006s"
+[2021-11-29 21:51:17,529] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/favicon.png 200 13689 in 0.0005s"
+[2021-11-29 21:51:17,578] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/features 200 172 in 0.0007s"
+[2021-11-29 21:51:17,956] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0005s"
+[2021-11-29 21:52:19,976] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/login 401 235 in 0.0008s"
+[2021-11-29 21:52:25,063] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/login 401 235 in 0.0008s"
+[2021-11-29 21:52:25,716] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/login 401 235 in 0.0008s"
+[2021-11-29 21:52:25,963] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/login 401 235 in 0.0008s"
+[2021-11-29 21:52:28,003] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/login 401 235 in 0.0007s"
+[2021-11-29 21:52:32,663] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/login 401 235 in 0.0007s"
+[2021-11-29 21:52:41,356] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/ 200 2452 in 0.0006s"
+[2021-11-29 21:52:41,486] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/paths.json 200 173 in 0.0006s"
+[2021-11-29 21:52:41,531] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/favicon.png 200 13689 in 0.0006s"
+[2021-11-29 21:52:41,691] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/features 200 172 in 0.0007s"
+[2021-11-29 21:52:41,963] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0006s"
+[2021-11-29 21:55:41,952] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/login 401 235 in 0.0008s"
+[2021-11-29 21:58:19,980] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/ 200 2452 in 0.0008s"
+[2021-11-29 21:58:20,069] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/2.1c1f161d.chunk.js 200 252 in 0.0231s"
+[2021-11-29 21:58:20,070] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css 200 236 in 0.0235s"
+[2021-11-29 21:58:20,070] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/main.186853d0.chunk.js 200 250 in 0.0166s"
+[2021-11-29 21:58:20,665] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/paths.json 200 173 in 0.0006s"
+[2021-11-29 21:58:20,696] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/favicon.png 200 13689 in 0.0005s"
+[2021-11-29 21:58:20,707] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/features 200 172 in 0.0006s"
+[2021-11-29 21:58:20,775] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0005s"
+[2021-11-29 21:58:23,357] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/ 200 2452 in 0.0006s"
+[2021-11-29 21:58:23,440] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/paths.json 200 173 in 0.0005s"
+[2021-11-29 21:58:23,482] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/features 200 172 in 0.0007s"
+[2021-11-29 21:58:23,490] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/favicon.png 200 13689 in 0.0004s"
+[2021-11-29 21:58:23,492] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0004s"
+[2021-11-29 22:02:04,954] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot 302 189 in 0.0006s"
+[2021-11-29 22:02:04,993] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/ 200 2452 in 0.0006s"
+[2021-11-29 22:02:05,066] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css 304 177 in 0.0047s"
+[2021-11-29 22:02:05,067] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/2.1c1f161d.chunk.js 304 178 in 0.0045s"
+[2021-11-29 22:02:05,068] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/main.186853d0.chunk.js 304 177 in 0.0042s"
+[2021-11-29 22:02:05,168] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/paths.json 200 173 in 0.0006s"
+[2021-11-29 22:02:05,211] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/features 200 172 in 0.0008s"
+[2021-11-29 22:02:05,263] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0005s"
+[2021-11-29 22:02:26,952] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot 302 189 in 0.0006s"
+[2021-11-29 22:02:26,998] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/ 200 2452 in 0.0009s"
+[2021-11-29 22:02:27,150] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/paths.json 200 173 in 0.0006s"
+[2021-11-29 22:02:27,199] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/features 200 172 in 0.0007s"
+[2021-11-29 22:02:27,283] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0005s"
+[2021-11-29 22:03:05,780] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/login 401 235 in 0.0007s"
+[2021-11-29 22:03:08,550] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0005s"
+[2021-11-29 22:03:08,613] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/main.186853d0.chunk.js.map 200 254 in 0.0029s"
+[2021-11-29 22:03:08,628] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css.map 200 253 in 0.0041s"
+[2021-11-29 22:03:09,770] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/login 401 235 in 0.0007s"
+[2021-11-29 22:03:41,702] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/logs 400 230 in 0.0008s"
+[2021-11-29 22:03:44,268] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/ 200 2452 in 0.0006s"
+[2021-11-29 22:03:44,362] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/2.1c1f161d.chunk.js 200 252 in 0.0055s"
+[2021-11-29 22:03:44,365] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/main.186853d0.chunk.js 200 250 in 0.0083s"
+[2021-11-29 22:03:44,365] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css 200 236 in 0.0088s"
+[2021-11-29 22:03:44,621] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css.map 200 253 in 0.0038s"
+[2021-11-29 22:03:45,306] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/paths.json 200 173 in 0.0006s"
+[2021-11-29 22:03:45,317] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/main.186853d0.chunk.js.map 200 254 in 0.0024s"
+[2021-11-29 22:03:45,320] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/2.1c1f161d.chunk.js.map 200 256 in 0.0058s"
+[2021-11-29 22:03:45,362] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0008s"
+[2021-11-29 22:03:45,365] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/features 200 172 in 0.0006s"
+[2021-11-29 22:06:44,239] [DEBUG@mau.init] Interrupt received, stopping...
+[2021-11-29 22:06:44,240] [DEBUG@maubot.server.websocket] Closing log listener websockets
+[2021-11-29 22:06:44,241] [DEBUG@mau.init] Stopping server
+[2021-11-29 22:06:44,242] [INFO@mau.init] Everything stopped, shutting down
+[2021-11-29 22:06:52,620] [INFO@mau.init] Initializing maubot 0.2.1
+[2021-11-29 22:06:52,624] [DEBUG@maubot.loader.zip] Preloading plugins...
+[2021-11-29 22:06:52,729] [INFO@mau.init] Initialization complete in 0.27 seconds
+[2021-11-29 22:06:52,729] [DEBUG@mau.init] Running startup actions...
+[2021-11-29 22:06:52,730] [INFO@maubot.server] Listening on http://0.0.0.0:29316
+[2021-11-29 22:06:52,730] [INFO@mau.init] Startup actions complete in 0.0 seconds, now running forever
+[2021-11-29 22:06:56,361] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/ 200 2452 in 0.0007s"
+[2021-11-29 22:06:56,466] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css 200 236 in 0.0322s"
+[2021-11-29 22:06:56,467] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/main.186853d0.chunk.js 200 250 in 0.0334s"
+[2021-11-29 22:06:56,565] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css.map 200 253 in 0.002s"
+[2021-11-29 22:06:56,883] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/paths.json 200 173 in 0.0006s"
+[2021-11-29 22:06:56,890] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/main.186853d0.chunk.js.map 200 254 in 0.0061s"
+[2021-11-29 22:06:56,890] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/2.1c1f161d.chunk.js.map 200 256 in 0.0064s"
+[2021-11-29 22:06:56,930] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/favicon.png 200 13689 in 0.0006s"
+[2021-11-29 22:06:56,933] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/features 200 172 in 0.0006s"
+[2021-11-29 22:06:57,011] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0005s"
+[2021-11-29 22:07:02,442] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/login 401 235 in 0.0007s"
+[2021-11-29 22:08:48,535] [DEBUG@mau.init] Interrupt received, stopping...
+[2021-11-29 22:08:48,537] [DEBUG@maubot.server.websocket] Closing log listener websockets
+[2021-11-29 22:08:48,538] [DEBUG@mau.init] Stopping server
+[2021-11-29 22:08:48,539] [INFO@mau.init] Everything stopped, shutting down
+[2021-11-29 22:08:50,610] [INFO@mau.init] Initializing maubot 0.2.1
+[2021-11-29 22:08:50,614] [DEBUG@maubot.loader.zip] Preloading plugins...
+[2021-11-29 22:08:50,702] [INFO@mau.init] Initialization complete in 0.19 seconds
+[2021-11-29 22:08:50,703] [DEBUG@mau.init] Running startup actions...
+[2021-11-29 22:08:50,703] [INFO@maubot.server] Listening on http://0.0.0.0:29316
+[2021-11-29 22:08:50,704] [INFO@mau.init] Startup actions complete in 0.0 seconds, now running forever
+[2021-11-29 22:13:29,046] [DEBUG@mau.init] Interrupt received, stopping...
+[2021-11-29 22:13:29,047] [DEBUG@maubot.server.websocket] Closing log listener websockets
+[2021-11-29 22:13:29,049] [DEBUG@mau.init] Stopping server
+[2021-11-29 22:13:29,053] [INFO@mau.init] Everything stopped, shutting down
+[2021-11-29 22:13:30,919] [INFO@mau.init] Initializing maubot 0.2.1
+[2021-11-29 22:13:30,921] [DEBUG@maubot.loader.zip] Preloading plugins...
+[2021-11-29 22:13:31,056] [INFO@mau.init] Initialization complete in 0.56 seconds
+[2021-11-29 22:13:31,056] [DEBUG@mau.init] Running startup actions...
+[2021-11-29 22:13:31,057] [INFO@maubot.server] Listening on http://0.0.0.0:29316
+[2021-11-29 22:13:31,058] [INFO@mau.init] Startup actions complete in 0.0 seconds, now running forever
+[2021-11-29 22:14:47,856] [DEBUG@mau.init] Interrupt received, stopping...
+[2021-11-29 22:14:47,857] [DEBUG@maubot.server.websocket] Closing log listener websockets
+[2021-11-29 22:14:47,857] [DEBUG@mau.init] Stopping server
+[2021-11-29 22:14:47,858] [INFO@mau.init] Everything stopped, shutting down
+[2021-11-29 22:14:54,144] [INFO@mau.init] Initializing maubot 0.2.1
+[2021-11-29 22:14:54,145] [DEBUG@maubot.loader.zip] Preloading plugins...
+[2021-11-29 22:14:54,190] [INFO@mau.init] Initialization complete in 0.14 seconds
+[2021-11-29 22:14:54,190] [DEBUG@mau.init] Running startup actions...
+[2021-11-29 22:14:54,191] [INFO@maubot.server] Listening on http://0.0.0.0:29316
+[2021-11-29 22:14:54,192] [INFO@mau.init] Startup actions complete in 0.0 seconds, now running forever
+[2021-11-29 22:15:01,047] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/ 200 2452 in 0.0009s"
+[2021-11-29 22:15:01,142] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/2.1c1f161d.chunk.js 200 252 in 0.0253s"
+[2021-11-29 22:15:01,243] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css.map 200 253 in 0.005s"
+[2021-11-29 22:15:01,579] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/paths.json 200 173 in 0.0006s"
+[2021-11-29 22:15:01,583] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/main.186853d0.chunk.js.map 200 254 in 0.0031s"
+[2021-11-29 22:15:01,587] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/2.1c1f161d.chunk.js.map 200 256 in 0.0073s"
+[2021-11-29 22:15:01,644] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/features 200 172 in 0.0007s"
+[2021-11-29 22:15:01,649] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/favicon.png 200 13689 in 0.0061s"
+[2021-11-29 22:15:01,710] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0005s"
+[2021-11-29 22:15:08,499] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/login 200 279 in 0.5224s"
+[2021-11-29 22:15:08,550] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/ping 200 384 in 0.0007s"
+[2021-11-29 22:15:08,626] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/instances 200 158 in 0.0008s"
+[2021-11-29 22:15:08,628] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/clients 200 158 in 0.0006s"
+[2021-11-29 22:15:08,629] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/plugins 200 158 in 0.0005s"
+[2021-11-29 22:15:08,629] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/client/auth/servers 200 210 in 0.0011s"
+[2021-11-29 22:15:08,630] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/debug/open 200 175 in 0.0016s"
+[2021-11-29 22:15:08,630] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/favicon.png 200 13689 in 0.002s"
+[2021-11-29 22:15:08,759] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 opened
+[2021-11-29 22:15:08,800] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 authenticated
+[2021-11-29 22:15:17,812] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/media/firacode-regular.fb1bb49c.woff2 200 254 in 0.0018s"
+[2021-11-29 22:16:08,900] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 opened
+[2021-11-29 22:16:08,939] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 authenticated
+[2021-11-29 22:16:22,699] [ERROR@maubot.server] Error in handler
+Traceback (most recent call last):
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/middleware.py", line 48, in error
+    return await handler(request)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 129, in update_client
+    return await _create_or_update_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 108, in _create_or_update_client
+    return await _create_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 52, in _create_client
+    whoami = await new_client.whoami()
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/client/api/authentication.py", line 154, in whoami
+    resp = await self.api.request(Method.GET, Path.account.whoami)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 306, in request
+    return await self._send(method, full_url, content, query_params, headers or {})
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 215, in _send
+    async with request as response:
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 1138, in __aenter__
+    self._resp = await self._coro
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 507, in _request
+    req = self._request_class(
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 305, in __init__
+    self.update_host(url)
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 366, in update_host
+    raise InvalidURL(url)
+aiohttp.client_exceptions.InvalidURL: https:///chat.dingshunyu.top/chat/client/r0/account/whoami
+[2021-11-29 22:16:22,714] [INFO@aiohttp.access] 127.0.0.1 "PUT /chat/maubot/v1/client/@notices:chat.dingshunyu.top 500 246 in 0.0232s"
+[2021-11-29 22:17:22,835] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 opened
+[2021-11-29 22:17:22,870] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 authenticated
+[2021-11-29 22:18:23,010] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 opened
+[2021-11-29 22:18:23,050] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 authenticated
+[2021-11-29 22:18:47,225] [DEBUG@maubot.loader.zip] Preloaded plugin xyz.maubot.echo from /home/imzqqq/workspace/chat/server/chat/python/bots/maubot/plugins/xyz.maubot.echo-v1.4.0.mbp
+[2021-11-29 22:18:47,226] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/plugins/upload 201 330 in 0.0132s"
+[2021-11-29 22:18:47,284] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/media/firacode-bold.4be56996.woff2 200 254 in 0.002s"
+[2021-11-29 22:19:47,363] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 opened
+[2021-11-29 22:19:47,396] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 authenticated
+[2021-11-29 22:20:35,589] [ERROR@maubot.server] Error in handler
+Traceback (most recent call last):
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/middleware.py", line 48, in error
+    return await handler(request)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 129, in update_client
+    return await _create_or_update_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 108, in _create_or_update_client
+    return await _create_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 52, in _create_client
+    whoami = await new_client.whoami()
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/client/api/authentication.py", line 154, in whoami
+    resp = await self.api.request(Method.GET, Path.account.whoami)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 306, in request
+    return await self._send(method, full_url, content, query_params, headers or {})
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 215, in _send
+    async with request as response:
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 1138, in __aenter__
+    self._resp = await self._coro
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 507, in _request
+    req = self._request_class(
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 305, in __init__
+    self.update_host(url)
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 366, in update_host
+    raise InvalidURL(url)
+aiohttp.client_exceptions.InvalidURL: https:///chat.dingshunyu.top/chat/client/r0/account/whoami
+[2021-11-29 22:20:35,590] [INFO@aiohttp.access] 127.0.0.1 "PUT /chat/maubot/v1/client/@bot:chat.dingshunyu.top 500 246 in 0.0039s"
+[2021-11-29 22:20:46,994] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css 304 177 in 0.0011s"
+[2021-11-29 22:20:47,029] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/main.186853d0.chunk.js.map 200 254 in 0.0025s"
+[2021-11-29 22:20:47,033] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/2.1c1f161d.chunk.js.map 200 256 in 0.0082s"
+[2021-11-29 22:20:47,067] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0005s"
+[2021-11-29 22:20:47,153] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css.map 200 253 in 0.0016s"
+[2021-11-29 22:20:49,078] [ERROR@maubot.server] Error in handler
+Traceback (most recent call last):
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/middleware.py", line 48, in error
+    return await handler(request)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 129, in update_client
+    return await _create_or_update_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 108, in _create_or_update_client
+    return await _create_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 52, in _create_client
+    whoami = await new_client.whoami()
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/client/api/authentication.py", line 154, in whoami
+    resp = await self.api.request(Method.GET, Path.account.whoami)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 306, in request
+    return await self._send(method, full_url, content, query_params, headers or {})
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 215, in _send
+    async with request as response:
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 1138, in __aenter__
+    self._resp = await self._coro
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 507, in _request
+    req = self._request_class(
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 305, in __init__
+    self.update_host(url)
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 366, in update_host
+    raise InvalidURL(url)
+aiohttp.client_exceptions.InvalidURL: https:///chat.dingshunyu.top/chat/client/r0/account/whoami
+[2021-11-29 22:20:49,079] [INFO@aiohttp.access] 127.0.0.1 "PUT /chat/maubot/v1/client/@bot:chat.dingshunyu.top 500 246 in 0.0041s"
+[2021-11-29 22:21:05,737] [ERROR@maubot.server] Error in handler
+Traceback (most recent call last):
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/middleware.py", line 48, in error
+    return await handler(request)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 129, in update_client
+    return await _create_or_update_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 108, in _create_or_update_client
+    return await _create_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 52, in _create_client
+    whoami = await new_client.whoami()
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/client/api/authentication.py", line 154, in whoami
+    resp = await self.api.request(Method.GET, Path.account.whoami)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 306, in request
+    return await self._send(method, full_url, content, query_params, headers or {})
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 215, in _send
+    async with request as response:
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 1138, in __aenter__
+    self._resp = await self._coro
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 507, in _request
+    req = self._request_class(
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 305, in __init__
+    self.update_host(url)
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 366, in update_host
+    raise InvalidURL(url)
+aiohttp.client_exceptions.InvalidURL: https:///chat.dingshunyu.top/chat/client/r0/account/whoami
+[2021-11-29 22:21:05,738] [INFO@aiohttp.access] 127.0.0.1 "PUT /chat/maubot/v1/client/@bot:chat.dingshunyu.top 500 246 in 0.008s"
+[2021-11-29 22:21:07,999] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/ 200 2452 in 0.0006s"
+[2021-11-29 22:21:08,056] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 closed
+[2021-11-29 22:21:08,057] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/logs 101 0 in 80.6945s"
+[2021-11-29 22:21:08,094] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/main.186853d0.chunk.js 200 250 in 0.0055s"
+[2021-11-29 22:21:08,187] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css.map 200 253 in 0.0017s"
+[2021-11-29 22:21:08,630] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/paths.json 200 173 in 0.0006s"
+[2021-11-29 22:21:08,645] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/2.1c1f161d.chunk.js.map 200 256 in 0.0074s"
+[2021-11-29 22:21:08,645] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/main.186853d0.chunk.js.map 200 254 in 0.0078s"
+[2021-11-29 22:21:08,684] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/ping 200 384 in 0.0008s"
+[2021-11-29 22:21:08,688] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/favicon.png 200 13689 in 0.0005s"
+[2021-11-29 22:21:08,758] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0006s"
+[2021-11-29 22:21:11,826] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/instances 200 158 in 0.0011s"
+[2021-11-29 22:21:11,828] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/clients 200 158 in 0.0027s"
+[2021-11-29 22:21:11,830] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/plugins 200 327 in 0.0043s"
+[2021-11-29 22:21:11,831] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/client/auth/servers 200 210 in 0.0006s"
+[2021-11-29 22:21:11,833] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/debug/open 200 175 in 0.0019s"
+[2021-11-29 22:21:11,834] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/favicon.png 200 13689 in 0.0032s"
+[2021-11-29 22:21:12,668] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 opened
+[2021-11-29 22:21:12,703] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 authenticated
+[2021-11-29 22:21:28,731] [ERROR@maubot.server] Error in handler
+Traceback (most recent call last):
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/middleware.py", line 48, in error
+    return await handler(request)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 129, in update_client
+    return await _create_or_update_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 108, in _create_or_update_client
+    return await _create_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 52, in _create_client
+    whoami = await new_client.whoami()
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/client/api/authentication.py", line 154, in whoami
+    resp = await self.api.request(Method.GET, Path.account.whoami)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 306, in request
+    return await self._send(method, full_url, content, query_params, headers or {})
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 215, in _send
+    async with request as response:
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 1138, in __aenter__
+    self._resp = await self._coro
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 507, in _request
+    req = self._request_class(
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 305, in __init__
+    self.update_host(url)
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 366, in update_host
+    raise InvalidURL(url)
+aiohttp.client_exceptions.InvalidURL: https:///chat.dingshunyu.top/chat/client/r0/account/whoami
+[2021-11-29 22:21:28,732] [INFO@aiohttp.access] 127.0.0.1 "PUT /chat/maubot/v1/client/@bot:chat.dingshunyu.top 500 246 in 0.0039s"
+[2021-11-29 22:22:28,871] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 opened
+[2021-11-29 22:22:28,914] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 authenticated
+[2021-11-29 22:23:28,986] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 opened
+[2021-11-29 22:23:29,019] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 authenticated
+[2021-11-29 22:24:27,811] [ERROR@maubot.server] Error in handler
+Traceback (most recent call last):
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/middleware.py", line 48, in error
+    return await handler(request)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 129, in update_client
+    return await _create_or_update_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 108, in _create_or_update_client
+    return await _create_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 52, in _create_client
+    whoami = await new_client.whoami()
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/client/api/authentication.py", line 154, in whoami
+    resp = await self.api.request(Method.GET, Path.account.whoami)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 306, in request
+    return await self._send(method, full_url, content, query_params, headers or {})
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 215, in _send
+    async with request as response:
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 1138, in __aenter__
+    self._resp = await self._coro
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 507, in _request
+    req = self._request_class(
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 305, in __init__
+    self.update_host(url)
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 366, in update_host
+    raise InvalidURL(url)
+aiohttp.client_exceptions.InvalidURL: https:///chat.dingshunyu.top/chat/client/r0/account/whoami
+[2021-11-29 22:24:27,817] [INFO@aiohttp.access] 127.0.0.1 "PUT /chat/maubot/v1/client/@bot:chat.dingshunyu.top 500 246 in 0.008s"
+[2021-11-29 22:25:27,936] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 opened
+[2021-11-29 22:25:27,972] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 authenticated
+[2021-11-29 22:26:25,243] [DEBUG@mau.init] Interrupt received, stopping...
+[2021-11-29 22:26:25,243] [DEBUG@maubot.server.websocket] Closing log listener websockets
+[2021-11-29 22:26:25,244] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 closed
+[2021-11-29 22:26:25,244] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/logs 101 0 in 57.3085s"
+[2021-11-29 22:26:25,246] [DEBUG@mau.init] Stopping server
+[2021-11-29 22:26:25,247] [INFO@mau.init] Everything stopped, shutting down
+[2021-11-29 22:26:26,649] [INFO@mau.init] Initializing maubot 0.2.1
+[2021-11-29 22:26:26,650] [DEBUG@maubot.loader.zip] Preloading plugins...
+[2021-11-29 22:26:26,656] [DEBUG@maubot.loader.zip] Preloaded plugin xyz.maubot.echo from /home/imzqqq/workspace/chat/server/chat/python/bots/maubot/plugins/xyz.maubot.echo-v1.4.0.mbp
+[2021-11-29 22:26:26,704] [INFO@mau.init] Initialization complete in 0.11 seconds
+[2021-11-29 22:26:26,705] [DEBUG@mau.init] Running startup actions...
+[2021-11-29 22:26:26,705] [INFO@maubot.server] Listening on http://0.0.0.0:29316
+[2021-11-29 22:26:26,706] [INFO@mau.init] Startup actions complete in 0.0 seconds, now running forever
+[2021-11-29 22:26:36,410] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/ 200 2452 in 0.0009s"
+[2021-11-29 22:26:37,672] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/ 200 2452 in 0.0006s"
+[2021-11-29 22:26:37,831] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css.map 200 253 in 0.0018s"
+[2021-11-29 22:26:38,338] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/2.1c1f161d.chunk.js.map 200 256 in 0.0025s"
+[2021-11-29 22:26:38,387] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/paths.json 200 173 in 0.0006s"
+[2021-11-29 22:26:38,406] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/main.186853d0.chunk.js.map 200 254 in 0.0018s"
+[2021-11-29 22:26:38,418] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/favicon.png 200 13689 in 0.0005s"
+[2021-11-29 22:26:38,482] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0006s"
+[2021-11-29 22:26:41,202] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/ping 200 384 in 0.001s"
+[2021-11-29 22:26:42,229] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/instances 200 158 in 0.0009s"
+[2021-11-29 22:26:42,231] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/clients 200 158 in 0.0033s"
+[2021-11-29 22:26:42,232] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/plugins 200 327 in 0.0042s"
+[2021-11-29 22:26:42,237] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/client/auth/servers 200 210 in 0.0092s"
+[2021-11-29 22:26:42,242] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/debug/open 200 175 in 0.014s"
+[2021-11-29 22:26:42,244] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/favicon.png 200 13689 in 0.0157s"
+[2021-11-29 22:26:42,382] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 opened
+[2021-11-29 22:26:42,425] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 authenticated
+[2021-11-29 22:26:46,103] [INFO@aiohttp.access] 127.0.0.1 "PUT /chat/maubot/v1/client/ 404 228 in 0.0009s"
+[2021-11-29 22:27:22,194] [DEBUG@mau.init] Interrupt received, stopping...
+[2021-11-29 22:27:22,195] [DEBUG@maubot.server.websocket] Closing log listener websockets
+[2021-11-29 22:27:22,196] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 closed
+[2021-11-29 22:27:22,197] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/logs 101 0 in 39.8159s"
+[2021-11-29 22:27:22,198] [DEBUG@mau.init] Stopping server
+[2021-11-29 22:27:22,199] [INFO@mau.init] Everything stopped, shutting down
+[2021-11-29 22:27:23,823] [INFO@mau.init] Initializing maubot 0.2.1
+[2021-11-29 22:27:23,824] [DEBUG@maubot.loader.zip] Preloading plugins...
+[2021-11-29 22:27:23,831] [DEBUG@maubot.loader.zip] Preloaded plugin xyz.maubot.echo from /home/imzqqq/workspace/chat/server/chat/python/bots/maubot/plugins/xyz.maubot.echo-v1.4.0.mbp
+[2021-11-29 22:27:23,888] [INFO@mau.init] Initialization complete in 0.13 seconds
+[2021-11-29 22:27:23,888] [DEBUG@mau.init] Running startup actions...
+[2021-11-29 22:27:23,889] [INFO@maubot.server] Listening on http://0.0.0.0:29316
+[2021-11-29 22:27:23,890] [INFO@mau.init] Startup actions complete in 0.0 seconds, now running forever
+[2021-11-29 22:27:34,851] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/ 200 2452 in 0.0009s"
+[2021-11-29 22:27:34,937] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css 200 236 in 0.0126s"
+[2021-11-29 22:27:34,941] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/main.186853d0.chunk.js 200 250 in 0.0073s"
+[2021-11-29 22:27:35,029] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css.map 200 253 in 0.0018s"
+[2021-11-29 22:27:35,804] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/2.1c1f161d.chunk.js.map 200 256 in 0.0023s"
+[2021-11-29 22:27:35,859] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/paths.json 200 173 in 0.0006s"
+[2021-11-29 22:27:35,870] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/js/main.186853d0.chunk.js.map 200 254 in 0.0018s"
+[2021-11-29 22:27:35,954] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0006s"
+[2021-11-29 22:27:35,956] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/favicon.png 200 13689 in 0.0006s"
+[2021-11-29 22:27:38,465] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/ping 200 384 in 0.0008s"
+[2021-11-29 22:27:39,421] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/instances 200 158 in 0.0008s"
+[2021-11-29 22:27:39,422] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/clients 200 158 in 0.0016s"
+[2021-11-29 22:27:39,423] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/plugins 200 327 in 0.0005s"
+[2021-11-29 22:27:39,424] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/client/auth/servers 200 210 in 0.0011s"
+[2021-11-29 22:27:39,425] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/debug/open 200 175 in 0.0005s"
+[2021-11-29 22:27:39,425] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/favicon.png 200 13689 in 0.0009s"
+[2021-11-29 22:27:39,550] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 opened
+[2021-11-29 22:27:39,589] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 authenticated
+[2021-11-29 22:28:06,674] [DEBUG@mau.init] Interrupt received, stopping...
+[2021-11-29 22:28:06,675] [DEBUG@maubot.server.websocket] Closing log listener websockets
+[2021-11-29 22:28:06,675] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 closed
+[2021-11-29 22:28:06,676] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/logs 101 0 in 27.1259s"
+[2021-11-29 22:28:06,676] [DEBUG@mau.init] Stopping server
+[2021-11-29 22:28:06,676] [INFO@mau.init] Everything stopped, shutting down
+[2021-11-29 22:28:08,051] [INFO@mau.init] Initializing maubot 0.2.1
+[2021-11-29 22:28:08,052] [DEBUG@maubot.loader.zip] Preloading plugins...
+[2021-11-29 22:28:08,058] [DEBUG@maubot.loader.zip] Preloaded plugin xyz.maubot.echo from /home/imzqqq/workspace/chat/server/chat/python/bots/maubot/plugins/xyz.maubot.echo-v1.4.0.mbp
+[2021-11-29 22:28:08,098] [INFO@mau.init] Initialization complete in 0.1 seconds
+[2021-11-29 22:28:08,100] [DEBUG@mau.init] Running startup actions...
+[2021-11-29 22:28:08,101] [INFO@maubot.server] Listening on http://0.0.0.0:29316
+[2021-11-29 22:28:08,101] [INFO@mau.init] Startup actions complete in 0.0 seconds, now running forever
+[2021-11-29 22:28:20,542] [ERROR@maubot.server] Error in handler
+Traceback (most recent call last):
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/middleware.py", line 48, in error
+    return await handler(request)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 129, in update_client
+    return await _create_or_update_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 108, in _create_or_update_client
+    return await _create_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 52, in _create_client
+    whoami = await new_client.whoami()
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/client/api/authentication.py", line 154, in whoami
+    resp = await self.api.request(Method.GET, Path.account.whoami)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 306, in request
+    return await self._send(method, full_url, content, query_params, headers or {})
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 215, in _send
+    async with request as response:
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 1138, in __aenter__
+    self._resp = await self._coro
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 507, in _request
+    req = self._request_class(
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 305, in __init__
+    self.update_host(url)
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 366, in update_host
+    raise InvalidURL(url)
+aiohttp.client_exceptions.InvalidURL: https:///chat.dingshunyu.top/chat/client/r0/account/whoami
+[2021-11-29 22:28:20,543] [INFO@aiohttp.access] 127.0.0.1 "PUT /chat/maubot/v1/client/@dfsg 500 246 in 0.0057s"
+[2021-11-29 22:28:22,094] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 opened
+[2021-11-29 22:28:22,138] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 authenticated
+[2021-11-29 22:28:45,027] [ERROR@maubot.server] Error in handler
+Traceback (most recent call last):
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/middleware.py", line 48, in error
+    return await handler(request)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 129, in update_client
+    return await _create_or_update_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 108, in _create_or_update_client
+    return await _create_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 52, in _create_client
+    whoami = await new_client.whoami()
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/client/api/authentication.py", line 154, in whoami
+    resp = await self.api.request(Method.GET, Path.account.whoami)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 306, in request
+    return await self._send(method, full_url, content, query_params, headers or {})
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 215, in _send
+    async with request as response:
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 1138, in __aenter__
+    self._resp = await self._coro
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 507, in _request
+    req = self._request_class(
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 305, in __init__
+    self.update_host(url)
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 366, in update_host
+    raise InvalidURL(url)
+aiohttp.client_exceptions.InvalidURL: https:///chat.dingshunyu.top/chat/client/r0/account/whoami
+[2021-11-29 22:28:45,034] [INFO@aiohttp.access] 127.0.0.1 "PUT /chat/maubot/v1/client/@dfsg 500 246 in 0.0113s"
+[2021-11-29 22:28:47,959] [ERROR@maubot.server] Error in handler
+Traceback (most recent call last):
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/middleware.py", line 48, in error
+    return await handler(request)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 129, in update_client
+    return await _create_or_update_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 108, in _create_or_update_client
+    return await _create_client(user_id, data)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/maubot/maubot/management/api/client.py", line 52, in _create_client
+    whoami = await new_client.whoami()
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/client/api/authentication.py", line 154, in whoami
+    resp = await self.api.request(Method.GET, Path.account.whoami)
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 306, in request
+    return await self._send(method, full_url, content, query_params, headers or {})
+  File "/home/imzqqq/workspace/chat/server/chat/python/bots/libs/mautrix-python/mautrix/api.py", line 215, in _send
+    async with request as response:
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 1138, in __aenter__
+    self._resp = await self._coro
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client.py", line 507, in _request
+    req = self._request_class(
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 305, in __init__
+    self.update_host(url)
+  File "/usr/local/lib/python3.9/dist-packages/aiohttp/client_reqrep.py", line 366, in update_host
+    raise InvalidURL(url)
+aiohttp.client_exceptions.InvalidURL: https:///chat.dingshunyu.top/chat/client/r0/account/whoami
+[2021-11-29 22:28:47,961] [INFO@aiohttp.access] 127.0.0.1 "PUT /chat/maubot/v1/client/@dfsg 500 246 in 0.0061s"
+[2021-11-29 22:29:20,182] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 closed
+[2021-11-29 22:29:20,183] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/logs 101 0 in 58.0898s"
+[2021-11-29 22:30:28,638] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot 302 189 in 0.0009s"
+[2021-11-29 22:30:28,674] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/ 200 2452 in 0.0009s"
+[2021-11-29 22:30:28,846] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/paths.json 200 173 in 0.0006s"
+[2021-11-29 22:30:28,884] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0006s"
+[2021-11-29 22:30:28,889] [INFO@aiohttp.access] 127.0.0.1 "POST /chat/maubot/v1/auth/ping 200 384 in 0.0007s"
+[2021-11-29 22:30:28,942] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/instances 200 158 in 0.0008s"
+[2021-11-29 22:30:28,943] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/clients 200 158 in 0.0015s"
+[2021-11-29 22:30:28,945] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/plugins 200 327 in 0.0006s"
+[2021-11-29 22:30:28,945] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/client/auth/servers 200 210 in 0.0011s"
+[2021-11-29 22:30:28,946] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/debug/open 200 175 in 0.0017s"
+[2021-11-29 22:30:28,947] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/favicon.png 200 13689 in 0.0028s"
+[2021-11-29 22:30:29,347] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 opened
+[2021-11-29 22:30:29,384] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 authenticated
+[2021-11-29 22:30:47,095] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/ 200 2452 in 0.0006s"
+[2021-11-29 22:30:47,142] [DEBUG@maubot.server.websocket] Connection from 127.0.0.1 closed
+[2021-11-29 22:30:47,143] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/logs 101 0 in 17.7965s"
+[2021-11-29 22:30:47,178] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/static/css/main.ccd61cd6.chunk.css 200 236 in 0.0198s"
+[2021-11-29 22:30:48,267] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/paths.json 200 173 in 0.0006s"
+[2021-11-29 22:30:48,290] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/favicon.png 200 13689 in 0.0005s"
+[2021-11-29 22:30:48,311] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/v1/features 200 172 in 0.0007s"
+[2021-11-29 22:30:48,362] [INFO@aiohttp.access] 127.0.0.1 "GET /chat/maubot/manifest.json 200 13689 in 0.0005s"

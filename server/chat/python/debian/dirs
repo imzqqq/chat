@@ -1,0 +1,3 @@
+etc/chat-server
+var/lib/chat-server
+var/log/chat-server

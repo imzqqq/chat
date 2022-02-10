@@ -1,0 +1,34 @@
+image: framasoft/vuefs:latest
+stages:
+  - deploy
+
+pages:
+  stage: deploy
+  script:
+    - yarn install --pure-lockfile
+    - npm run build
+    - rm -r public/ && mv dist/ public/
+  artifacts:
+    paths:
+      - public
+  cache:
+    paths:
+      - node_modules/
+
+production:
+  stage: deploy
+  script:
+    - yarn install --pure-lockfile
+    - npm run build
+    - rm -r public/ && mv dist/ public/
+    - cp -r api/ public/
+    - eval `ssh-agent -s`
+    - ssh-add <(echo "${DEPLOYEMENT_KEY}" | base64 --decode -i);
+    - cd public && echo "put -r ." | sftp -o "VerifyHostKeyDNS yes" ${DEPLOYEMENT_USER}@${DEPLOYEMENT_HOST}:../../web;
+  only:
+    refs:
+      - master
+    variables:
+      - $DEPLOYEMENT_KEY
+      - $DEPLOYEMENT_USER
+      - $DEPLOYEMENT_HOST

@@ -1,0 +1,7 @@
+pytest
+pytest-cov
+httpretty
+black
+codecov
+flake8
+mypy

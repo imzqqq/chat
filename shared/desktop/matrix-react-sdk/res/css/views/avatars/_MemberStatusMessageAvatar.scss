@@ -1,0 +1,13 @@
+.mx_MessageComposer_avatar .mx_BaseAvatar {
+    padding: 2px;
+    border: 1px solid transparent;
+    border-radius: 100%;
+}
+
+.mx_MessageComposer_avatar .mx_BaseAvatar_initial {
+    left: 2px;
+}
+
+.mx_MemberStatusMessageAvatar_hasStatus .mx_BaseAvatar {
+    border-color: $accent-color;
+}

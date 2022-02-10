@@ -1,0 +1,116 @@
+import { MatrixClient } from "../client";
+import { IEncryptedFile, UNSTABLE_MSC3089_BRANCH } from "../@types/event";
+import { MatrixEvent } from "./event";
+
+/**
+ * Represents a [MSC3089](https://github.com/matrix-org/matrix-doc/pull/3089) branch - a reference
+ * to a file (leaf) in the tree. Note that this is UNSTABLE and subject to breaking changes
+ * without notice.
+ */
+export class MSC3089Branch {
+    public constructor(private client: MatrixClient, public readonly indexEvent: MatrixEvent) {
+        // Nothing to do
+    }
+
+    /**
+     * The file ID.
+     */
+    public get id(): string {
+        return this.indexEvent.getStateKey();
+    }
+
+    /**
+     * Whether this branch is active/valid.
+     */
+    public get isActive(): boolean {
+        return this.indexEvent.getContent()["active"] === true;
+    }
+
+    private get roomId(): string {
+        return this.indexEvent.getRoomId();
+    }
+
+    /**
+     * Deletes the file from the tree.
+     * @returns {Promise<void>} Resolves when complete.
+     */
+    public async delete(): Promise<void> {
+        await this.client.sendStateEvent(this.roomId, UNSTABLE_MSC3089_BRANCH.name, {}, this.id);
+        await this.client.redactEvent(this.roomId, this.id);
+
+        // TODO: Delete edit history as well
+    }
+
+    /**
+     * Gets the name for this file.
+     * @returns {string} The name, or "Unnamed File" if unknown.
+     */
+    public getName(): string {
+        return this.indexEvent.getContent()['name'] || "Unnamed File";
+    }
+
+    /**
+     * Sets the name for this file.
+     * @param {string} name The new name for this file.
+     * @returns {Promise<void>} Resolves when complete.
+     */
+    public async setName(name: string): Promise<void> {
+        await this.client.sendStateEvent(this.roomId, UNSTABLE_MSC3089_BRANCH.name, {
+            ...this.indexEvent.getContent(),
+            name: name,
+        }, this.id);
+    }
+
+    /**
+     * Gets whether or not a file is locked.
+     * @returns {boolean} True if locked, false otherwise.
+     */
+    public isLocked(): boolean {
+        return this.indexEvent.getContent()['locked'] || false;
+    }
+
+    /**
+     * Sets a file as locked or unlocked.
+     * @param {boolean} locked True to lock the file, false otherwise.
+     * @returns {Promise<void>} Resolves when complete.
+     */
+    public async setLocked(locked: boolean): Promise<void> {
+        await this.client.sendStateEvent(this.roomId, UNSTABLE_MSC3089_BRANCH.name, {
+            ...this.indexEvent.getContent(),
+            locked: locked,
+        }, this.id);
+    }
+
+    /**
+     * Gets information about the file needed to download it.
+     * @returns {Promise<{info: IEncryptedFile, httpUrl: string}>} Information about the file.
+     */
+    public async getFileInfo(): Promise<{ info: IEncryptedFile, httpUrl: string }> {
+        const event = await this.getFileEvent();
+
+        const file = event.getContent()['file'];
+        const httpUrl = this.client.mxcUrlToHttp(file['url']);
+
+        return { info: file, httpUrl: httpUrl };
+    }
+
+    /**
+     * Gets the event the file points to.
+     * @returns {Promise<MatrixEvent>} Resolves to the file's event.
+     */
+    public async getFileEvent(): Promise<MatrixEvent> {
+        const room = this.client.getRoom(this.roomId);
+        if (!room) throw new Error("Unknown room");
+
+        const timeline = await this.client.getEventTimeline(room.getUnfilteredTimelineSet(), this.id);
+        if (!timeline) throw new Error("Failed to get timeline for room event");
+
+        const event = timeline.getEvents().find(e => e.getId() === this.id);
+        if (!event) throw new Error("Failed to find event");
+
+        // Sometimes the event context doesn't decrypt for us, so do that.
+        await this.client.decryptEventIfNeeded(event, { emit: false, isRetry: false });
+
+        return event;
+    }
+}

@@ -1,0 +1,19 @@
+.mx_ExistingSpellCheckLanguage {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.mx_ExistingSpellCheckLanguage_language {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.mx_GeneralUserSettingsTab_spellCheckLanguageInput {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.mx_SpellCheckLanguages {
+    @mixin mx_Settings_fullWidthField;
+}

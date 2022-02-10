@@ -1,0 +1,24 @@
+image: framasoft/ruby-node-rsync:latest
+
+build_and_deploy:
+  cache:
+    paths:
+      - node_modules/
+  script:
+    - ./install.sh
+    - mkdir .public
+    - cp -r * .public
+    - mv .public public
+    - rm -r public/node_modules
+    - eval `ssh-agent -s`
+    - ssh-add <(echo "$DEPLOYEMENT_KEY" | base64 --decode)
+    - rsync -a --rsh='ssh -o "VerifyHostKeyDNS yes"' --delete public/ ${DEPLOYEMENT_USER}@${DEPLOYEMENT_HOST}:../../web/
+  environment:
+    name: production
+  only:
+    refs:
+      - master
+    variables:
+      - $DEPLOYEMENT_KEY
+      - $DEPLOYEMENT_USER
+      - $DEPLOYEMENT_HOST

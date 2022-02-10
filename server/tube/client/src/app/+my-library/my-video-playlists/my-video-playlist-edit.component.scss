@@ -1,0 +1,30 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+label {
+  font-weight: $font-regular;
+  font-size: 100%;
+}
+
+.video-playlist-title {
+  @include settings-big-title;
+}
+
+input[type=text] {
+  @include tube-input-text(340px);
+
+  display: block;
+}
+
+.tube-select-container {
+  @include tube-select-container(340px);
+}
+
+input[type=submit] {
+  @include tube-button;
+  @include orange-button;
+}
+
+.breadcrumb {
+  @include breadcrumb;
+}

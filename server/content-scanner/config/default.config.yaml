@@ -1,0 +1,66 @@
+# The port to listen to for HTTP requests
+server:
+    port: 9000
+    host: "::1"
+
+scan:
+    # The script that will be given a file as its first parameter
+    script: './example.sh'
+    # The temporary directory to use
+    tempDirectory: '/tmp'
+    # The base URL of the homeserver to download media from
+    baseUrl: 'https://matrix.org'
+    # If set to true, effectively set baseUrl to
+    #   "https://$domain"
+    #   where $domain is the domain part of the requested media.
+    #
+    # This should only be used when it is preferable not to download
+    # media through the normal route: via a single (and federated)
+    # homeserver.
+    #
+    # directDownload: false
+
+# Optional. A command to execute when unlinking files from the file
+# system instead of using node's fs.unlink. When executed, the first
+# argument to the command will be the path of the file being
+# removed.
+#
+# altRemovalCmd: 'rm'
+
+# Optional. If need to use a proxy to access baseUrl
+# proxy: "http://10.228.1.1:80"
+
+# Optional. Settings to send HTTP header in download requests from
+# content scanner to homeserver
+#requestHeader:
+    # Optional. If need to send a 'user-agent' header
+    # If set to 'origin', uses the user agent used by the client
+    # when sending the request to the content scanner
+    # userAgent: 'matrix-content-scanner'
+    #
+    # Optional. If need to send a 'x-forwarded-for' header
+    # If set to 'origin', uses the IP address of the client that
+    # sent the request to the content scanner
+    # xForward: 'x-forwarded-for'
+
+middleware:
+    # Configuration for using encrypted_body in POST requests.
+    encryptedBody:
+        # The following configuration allows for the encrypted_body
+        # decryption key to be persisted to the file system. This means
+        # the public/private key pair will not change when the AV server
+        # is restarted.
+        #
+        # The pickle key secret used to unpickle the decryption key
+        pickleKey: 'some_random_secret'
+        # The file that the decryption key will be written to if the file
+        # does not exist. If it does exist, the file will be read from and
+        # the unpickled key will be used to decrypt encrypted_body
+        # requests.
+        picklePath: 'av_pickled_decryption.key'
+
+# Optional. A list of accepted mime type.
+#acceptedMimeType:
+#    - 'image/jpeg'
+#    - 'image/jpg'
+#    - 'image/png'

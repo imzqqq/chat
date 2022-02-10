@@ -1,0 +1,3 @@
+# Introduction
+
+Welcome to the documentation repository for Chat server...

@@ -1,0 +1,6 @@
+.mx_MJitsiWidgetEvent {
+    &::before {
+        background-color: $composer-e2e-icon-color; // XXX: Variable abuse
+        mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+    }
+}

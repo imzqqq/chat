@@ -1,0 +1,23 @@
+*.pyc
+# sygnal.yaml
+var/
+sygnal.pid
+sygnal.db
+_trial_temp*
+.coverage*
+
+/venv/
+/.venv/
+/oldvenv/
+/.oldvenv/
+/.idea
+/.eggs
+/*.egg-info
+/build
+/dist
+/.tox
+/.python-version
+/htmlcov
+
+.vscode/
+.idea/

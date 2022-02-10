@@ -1,0 +1,9 @@
+.mx_LabsUserSettingsTab {
+    .mx_SettingsTab_section {
+        margin-top: 32px;
+
+        .mx_SettingsFlag {
+            margin-right: 0; // remove right margin to align with beta cards
+        }
+    }
+}

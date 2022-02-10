@@ -1,0 +1,36 @@
+---
+title: Homepage
+layout: product
+product:
+    title: The fediverse at your fingertips.
+    detail: "The next generation of the fluffiest client for the fediverse* is even better than ever. New layout options like the masonry layout make it easier to view more posts at once. Explore your fediverse community with the Activity page and view server announcements on the Announcements page."
+    image: "./assets/images/homepage-hero.png"
+    action:
+        name: Try it Online
+        link: "https://hyperspaceapp.herokuapp.com"
+---
+<div class="section">
+    <h1>Latest posts</h1>
+    <p><a href="/blog/">Read all posts &rightarrow;</a></p>
+    <div class="post-list-grid">
+        {% for post in site.posts limit:3 %}
+            {% assign author = site.data.team[post.author] %}
+        <a href="{{ post.url }}">
+            <div class="plist-card">
+                <div class="plist-background">
+                    <img class="plist-image" src="{{ author.mastodon.image }}"/>
+                </div>
+                <div class="plist-content">
+                    <h3>{{ post.title }}</h3>
+                    <p>Written {{ post.date | date: '%B %d, %Y' }}</p>
+                    <p>{{ post.excerpt | strip_html | truncate: 140 }}</p>
+                </div>
+            </div>
+        </a>
+
+        {% endfor %}
+    </div>
+</div>
+<div class="section">
+    <small>*Flow currently doesn't offer support for users of the Gab platform. <a href="/2019/10/26/statement.html">Learn more &rightarrow;</a></small>
+</div>

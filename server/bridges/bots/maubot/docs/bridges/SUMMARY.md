@@ -1,0 +1,53 @@
+# Summary
+
+- [Introduction](./index.md)
+
+# Bridges in general
+- [Troubleshooting & FAQ](./general/troubleshooting.md)
+- [End-to-bridge encryption](./general/end-to-bridge-encryption.md)
+- [Double puppeting](./general/double-puppeting.md)
+
+# Python-based bridges
+- [Bridge setup](./python/setup/index.md)
+  - [with Docker](./python/setup/docker.md)
+  - [with systemd](./python/setup/systemd.md)
+- [Optional dependencies](./python/optional-dependencies.md)
+- [Manhole](./python/manhole.md)
+---
+- [mautrix-telegram](./python/telegram/index.md)
+  - [Authentication](./python/telegram/authentication.md)
+  - [Creating and managing chats](./python/telegram/creating-and-managing-chats.md)
+  - [Management commands](./python/telegram/management-commands.md)
+  - [Relay bot](./python/telegram/relay-bot.md)
+  - [Provisioning API](./python/telegram/provisioning-api.md)
+  - [Migrating from Telematrix](./python/telegram/migrating-from-telematrix.md)
+  - [DBMS migration](./python/telegram/dbms-migration.md)
+- [mautrix-facebook](./python/facebook/index.md)
+  - [Authentication](./python/facebook/authentication.md)
+  - [Upgrading to v0.2.0](./python/facebook/upgrading-to-v0.2.0.md)
+- [mautrix-googlechat](./python/googlechat/index.md)
+  - [Authentication](./python/googlechat/authentication.md)
+- [mautrix-twitter](./python/twitter/index.md)
+  - [Authentication](./python/twitter/authentication.md)
+- [mautrix-signal](./python/signal/index.md)
+  - [Authentication](./python/signal/authentication.md)
+  - [Bridge setup with Docker](./python/signal/setup-docker.md)
+  - [Relay mode](./python/signal/relay-mode.md)
+- [mautrix-instagram](./python/instagram/index.md)
+  - [Authentication](./python/instagram/authentication.md)
+
+# Go-based bridges
+- [mautrix-whatsapp](./go/whatsapp/index.md)
+  - [Bridge setup](./go/whatsapp/setup/index.md)
+    - [with Docker](./go/whatsapp/setup/docker.md)
+    - [with systemd](./go/whatsapp/setup/systemd.md)
+  - [Android VM setup](./go/whatsapp/android-vm-setup.md)
+  - [Authentication](./go/whatsapp/authentication.md)
+  - [Relaybot](./go/whatsapp/relaybot.md)
+  - [DBMS migration](./go/whatsapp/database-migration.md)
+- [mautrix-imessage](./go/imessage/index.md)
+  - [Bridge setup (macOS)](./go/imessage/mac/setup.md)
+  - [Bridge setup (macOS without SIP)]()
+  - [Bridge setup (iOS)](./go/imessage/ios/setup.md)
+    - [SMS forwarding](./go/imessage/ios/sms-forwarding.md)
+  - [Bridge setup (Android SMS)](./go/imessage/android/setup.md)

@@ -1,0 +1,70 @@
+name: ChatShareExtension
+
+schemes:
+  ChatShareExtension:
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    build:
+      targets:
+        ChatShareExtension:
+        - running
+        - testing
+        - profiling
+        - analyzing
+        - archiving
+    profile:
+      config: Release
+    run:
+      askForAppToLaunch: true
+      config: Debug
+      debugEnabled: false
+      disableMainThreadChecker: true
+      launchAutomaticallySubstyle: 2
+    test:
+      config: Debug
+      disableMainThreadChecker: true
+
+targets:
+  ChatShareExtension:
+    platform: iOS
+    type: app-extension
+
+    configFiles:
+      Debug: Debug.xcconfig
+      Release: Release.xcconfig
+
+    sources:
+    - path: .
+    - path: ../Chat/Modules/Common/SegmentedViewController/SegmentedViewController.m
+    - path: ../Chat/Categories/Bundle.swift
+    - path: ../Chat/Managers/Theme/
+    - path: ../Chat/Utils/AvatarGenerator.m
+    - path: ../Config/BuildSettings.swift
+    - path: ../Chat/Categories/Character.swift
+    - path: ../Chat/Categories/MXKImageView.swift
+    - path: ../Chat/Categories/MXRoom+Chat.m
+    - path: ../Config/Configurable.swift
+    - path: ../Config/CommonConfiguration.swift
+    - path: ../Chat/Utils/UserNameColorGenerator.swift
+    - path: ../Chat/Categories/MXRoomSummary+Chat.m
+    - path: ../Chat/Managers/EncryptionKeyManager/EncryptionKeyManager.swift
+    - path: ../Chat/Managers/KeyValueStorage
+    - path: ../Chat/Managers/Settings/ChatSettings.swift
+    - path: ../Chat/Managers/AppInfo/
+    - path: ../Chat/Categories/UIColor.swift
+    - path: ../Chat/Categories/UISearchBar.swift
+    - path: ../Chat/Categories/String.swift
+    - path: ../Chat/Categories/UIView.swift
+    - path: ../Chat/Modules/Common/Recents/Model/RecentCellData.m
+    - path: ../Chat/PropertyWrappers/UserDefaultsBackedPropertyWrapper.swift
+    - path: ../Chat/Generated/Strings.swift
+    - path: ../Chat/Managers/Locale/LocaleProviderType.swift
+    - path: ../Chat/Managers/Locale/LocaleProvider.swift
+    - path: ../Chat/Modules/Common/SegmentedViewController/SegmentedViewController.xib
+      buildPhase: resources
+    - path: ../Chat/Assets/en.lproj/Vector.strings
+      buildPhase: resources
+    - path: ../Chat/Assets/SharedImages.xcassets
+      buildPhase: resources

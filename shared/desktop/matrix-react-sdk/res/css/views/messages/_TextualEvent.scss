@@ -1,0 +1,9 @@
+.mx_TextualEvent {
+    opacity: 0.5;
+    overflow-y: hidden;
+
+    a {
+        color: $accent-color;
+        cursor: pointer;
+    }
+}

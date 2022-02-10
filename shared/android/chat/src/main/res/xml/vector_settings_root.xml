@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.imzqqq.app.core.preference.VectorPreference
+        android:icon="@drawable/ic_settings_root_general"
+        android:title="@string/settings_general_title"
+        app:fragment="com.imzqqq.app.features.settings.VectorSettingsGeneralFragment" />
+
+    <com.imzqqq.app.core.preference.VectorPreference
+        android:icon="@drawable/ic_settings_root_flair"
+        android:title="@string/settings_flair"
+        app:fragment="com.imzqqq.app.features.settings.VectorSettingsFlairFragment"
+        app:isPreferenceVisible="@bool/false_not_implemented" />
+
+    <com.imzqqq.app.core.preference.VectorPreference
+        android:icon="@drawable/ic_settings_root_notification"
+        android:title="@string/settings_notifications"
+        app:fragment="com.imzqqq.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment" />
+
+    <com.imzqqq.app.core.preference.VectorPreference
+        android:icon="@drawable/ic_settings_root_preferences"
+        android:title="@string/settings_preferences"
+        app:fragment="com.imzqqq.app.features.settings.VectorSettingsPreferencesFragment" />
+
+    <com.imzqqq.app.core.preference.VectorPreference
+        android:icon="@drawable/ic_settings_root_call"
+        android:title="@string/preference_voice_and_video"
+        app:fragment="com.imzqqq.app.features.settings.VectorSettingsVoiceVideoFragment" />
+
+    <com.imzqqq.app.core.preference.VectorPreference
+        android:icon="@drawable/ic_settings_root_ignored_users"
+        android:title="@string/settings_ignored_users"
+        app:fragment="com.imzqqq.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment" />
+
+    <com.imzqqq.app.core.preference.VectorPreference
+        android:icon="@drawable/ic_settings_root_security_privacy"
+        android:title="@string/settings_security_and_privacy"
+        app:fragment="com.imzqqq.app.features.settings.VectorSettingsSecurityPrivacyFragment" />
+
+    <com.imzqqq.app.core.preference.VectorPreference
+        android:icon="@drawable/ic_settings_root_labs"
+        android:title="@string/room_settings_labs_pref_title"
+        app:fragment="com.imzqqq.app.features.settings.VectorSettingsLabsFragment" />
+
+    <com.imzqqq.app.core.preference.VectorPreference
+        android:icon="@drawable/ic_settings_root_advanced"
+        android:title="@string/settings_advanced_settings"
+        app:fragment="com.imzqqq.app.features.settings.VectorSettingsAdvancedSettingsFragment" />
+
+    <com.imzqqq.app.core.preference.VectorPreference
+        android:icon="@drawable/ic_settings_root_help_about"
+        android:title="@string/preference_root_help_about"
+        app:fragment="com.imzqqq.app.features.settings.VectorSettingsHelpAboutFragment" />
+
+</androidx.preference.PreferenceScreen>

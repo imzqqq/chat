@@ -1,0 +1,96 @@
+package com.imzqqq.app.features.spaces.share
+
+import android.os.Bundle
+import android.os.Parcelable
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentManager
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
+import com.imzqqq.app.R
+import com.imzqqq.app.core.extensions.setTextOrHide
+import com.imzqqq.app.core.platform.VectorBaseBottomSheetDialogFragment
+import com.imzqqq.app.core.utils.startSharePlainTextIntent
+import com.imzqqq.app.databinding.BottomSheetSpaceInviteBinding
+import com.imzqqq.app.features.invite.InviteUsersToRoomActivity
+import kotlinx.parcelize.Parcelize
+
+@AndroidEntryPoint
+class ShareSpaceBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpaceInviteBinding>() {
+
+    @Parcelize
+    data class Args(
+            val spaceId: String,
+            val postCreation: Boolean = false
+    ) : Parcelable
+
+    override val showExpanded = true
+
+    private val viewModel: ShareSpaceViewModel by fragmentViewModel(ShareSpaceViewModel::class)
+
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetSpaceInviteBinding {
+        return BottomSheetSpaceInviteBinding.inflate(inflater, container, false)
+    }
+
+    override fun invalidate() = withState(viewModel) { state ->
+        super.invalidate()
+        val summary = state.spaceSummary.invoke()
+
+        val spaceName = summary?.name
+
+        if (state.postCreation) {
+            views.headerText.text = getString(R.string.invite_people_to_your_space)
+            views.descriptionText.setTextOrHide(getString(R.string.invite_people_to_your_space_desc, spaceName))
+        } else {
+            views.headerText.text = getString(R.string.invite_to_space, spaceName)
+            views.descriptionText.setTextOrHide(null)
+        }
+
+        views.inviteByLinkButton.isVisible = state.canShareLink
+        views.inviteByMxidButton.isVisible = state.canInviteByMxId
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        views.inviteByMxidButton.debouncedClicks {
+            viewModel.handle(ShareSpaceAction.InviteByMxId)
+        }
+
+        views.inviteByLinkButton.debouncedClicks {
+            viewModel.handle(ShareSpaceAction.InviteByLink)
+        }
+
+        viewModel.observeViewEvents { event ->
+            when (event) {
+                is ShareSpaceViewEvents.NavigateToInviteUser -> {
+                    val intent = InviteUsersToRoomActivity.getIntent(requireContext(), event.spaceId)
+                    startActivity(intent)
+                }
+                is ShareSpaceViewEvents.ShowInviteByLink     -> {
+                    startSharePlainTextIntent(
+                            fragment = this,
+                            activityResultLauncher = null,
+                            chooserTitle = getString(R.string.share_by_text),
+                            text = getString(R.string.share_space_link_message, event.spaceName, event.permalink),
+                            extraTitle = getString(R.string.share_space_link_message, event.spaceName, event.permalink)
+                    )
+                }
+            }
+        }
+    }
+
+    companion object {
+
+        fun show(fragmentManager: FragmentManager, spaceId: String, postCreation: Boolean = false): ShareSpaceBottomSheet {
+            return ShareSpaceBottomSheet().apply {
+                setArguments(Args(spaceId = spaceId, postCreation = postCreation))
+            }.also {
+                it.show(fragmentManager, ShareSpaceBottomSheet::class.java.name)
+            }
+        }
+    }
+}

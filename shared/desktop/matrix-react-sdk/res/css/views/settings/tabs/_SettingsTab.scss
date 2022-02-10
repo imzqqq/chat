@@ -1,0 +1,145 @@
+.mx_SettingsTab {
+    color: $muted-fg-color;
+}
+
+.mx_SettingsTab_warningText {
+    color: $warning-color;
+}
+
+.mx_SettingsTab_heading {
+    font-size: $font-20px;
+    font-weight: 600;
+    color: $primary-content;
+    margin-bottom: 10px;
+}
+
+.mx_SettingsTab_heading:nth-child(n + 2) {
+    margin-top: 30px;
+}
+
+.mx_SettingsTab_subheading {
+    font-size: $font-16px;
+    display: block;
+    font-weight: 600;
+    color: $primary-content;
+    margin-bottom: 10px;
+    margin-top: 12px;
+}
+
+.mx_SettingsTab_subsectionText {
+    color: $settings-subsection-fg-color;
+    font-size: $font-14px;
+    display: block;
+    margin: 10px 80px 10px 0; // Align with the rest of the view
+}
+
+.mx_SettingsTab_section {
+    $right-gutter: 80px;
+
+    margin-bottom: 24px;
+
+    .mx_SettingsFlag {
+        margin-right: $right-gutter;
+        margin-bottom: 10px;
+    }
+
+    > p {
+        margin-right: $right-gutter;
+    }
+
+    &.mx_SettingsTab_subsectionText .mx_SettingsFlag {
+        margin-right: 0 !important;
+    }
+}
+
+.mx_SettingsTab_section .mx_SettingsFlag .mx_SettingsFlag_label {
+    vertical-align: middle;
+    display: inline-block;
+    font-size: $font-14px;
+    color: $primary-content;
+    max-width: calc(100% - $font-48px); // Force word wrap instead of colliding with the switch
+    box-sizing: border-box;
+    padding-right: 10px;
+}
+
+.mx_SettingsTab_section .mx_SettingsFlag .mx_SettingsFlag_microcopy {
+    margin-top: 4px;
+    font-size: $font-12px;
+    line-height: $font-15px;
+    color: $secondary-content;
+}
+
+.mx_SettingsTab_section .mx_SettingsFlag .mx_ToggleSwitch {
+    float: right;
+}
+
+.mx_SettingsTab_settingsTable {
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 10px 0;
+    margin: 12px -10px 0 -10px;
+
+    .mx_SettingsTab_subheading {
+        margin: 0;
+    }
+
+    tr > th {
+        font-weight: $font-semi-bold;
+    }
+
+    tr > th:first-child, tr > td:first-child {
+        text-align: left;
+    }
+
+    tr > th:nth-child(n + 2) {
+        color: $secondary-content;
+        font-size: $font-12px;
+        vertical-align: middle;
+        width: 66px;
+    }
+
+    tr > td:nth-child(n + 2) {
+        text-align: center;
+    }
+
+    tr > td {
+        padding-top: 8px;
+    }
+
+    // Override StyledRadioButton default styles
+    .mx_RadioButton {
+        justify-content: center;
+
+        .mx_RadioButton_content {
+            display: none;
+        }
+
+        .mx_RadioButton_spacer {
+            display: none;
+        }
+    }
+}
+
+.mx_SettingsTab_inlineRadioSelectors {
+    display: flex;
+    flex-direction: row;
+}
+
+.mx_SettingsTab_multilineRadioSelectors {
+    display: flex;
+    flex-direction: column;
+
+    .mx_RadioButton {
+        margin-bottom: 8px;
+    }
+}
+
+.mx_SettingsTab_linkBtn {
+    cursor: pointer;
+    color: $accent-color;
+    word-break: break-all;
+}
+
+.mx_SettingsTab a {
+    color: $accent-color-alt;
+}

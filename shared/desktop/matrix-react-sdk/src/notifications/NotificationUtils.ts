@@ -1,0 +1,79 @@
+import { PushRuleAction, PushRuleActionName, TweakHighlight, TweakSound } from "matrix-js-sdk/src/@types/PushRules";
+
+interface IEncodedActions {
+    notify: boolean;
+    sound?: string;
+    highlight?: boolean;
+}
+
+export class NotificationUtils {
+    // Encodes a dictionary of {
+    //   "notify": true/false,
+    //   "sound": string or undefined,
+    //   "highlight: true/false,
+    // }
+    // to a list of push actions.
+    static encodeActions(action: IEncodedActions): PushRuleAction[] {
+        const notify = action.notify;
+        const sound = action.sound;
+        const highlight = action.highlight;
+        if (notify) {
+            const actions: PushRuleAction[] = [PushRuleActionName.Notify];
+            if (sound) {
+                actions.push({ "set_tweak": "sound", "value": sound } as TweakSound);
+            }
+            if (highlight) {
+                actions.push({ "set_tweak": "highlight" } as TweakHighlight);
+            } else {
+                actions.push({ "set_tweak": "highlight", "value": false } as TweakHighlight);
+            }
+            return actions;
+        } else {
+            return [PushRuleActionName.DontNotify];
+        }
+    }
+
+    // Decode a list of actions to a dictionary of {
+    //   "notify": true/false,
+    //   "sound": string or undefined,
+    //   "highlight: true/false,
+    // }
+    // If the actions couldn't be decoded then returns null.
+    static decodeActions(actions: PushRuleAction[]): IEncodedActions {
+        let notify = false;
+        let sound = null;
+        let highlight = false;
+
+        for (let i = 0; i < actions.length; ++i) {
+            const action = actions[i];
+            if (action === PushRuleActionName.Notify) {
+                notify = true;
+            } else if (action === PushRuleActionName.DontNotify) {
+                notify = false;
+            } else if (typeof action === "object") {
+                if (action.set_tweak === "sound") {
+                    sound = action.value;
+                } else if (action.set_tweak === "highlight") {
+                    highlight = action.value;
+                } else {
+                    // We don't understand this kind of tweak, so give up.
+                    return null;
+                }
+            } else {
+                // We don't understand this kind of action, so give up.
+                return null;
+            }
+        }
+
+        if (highlight === undefined) {
+            // If a highlight tweak is missing a value then it defaults to true.
+            highlight = true;
+        }
+
+        const result: IEncodedActions = { notify, highlight };
+        if (sound !== null) {
+            result.sound = sound;
+        }
+        return result;
+    }
+}

@@ -1,0 +1,36 @@
+.mx_EventTile_content.mx_ViewSourceEvent {
+    display: flex;
+    opacity: 0.6;
+    font-size: $font-12px;
+
+    pre, code {
+        flex: 1;
+    }
+
+    pre {
+        line-height: 1.2;
+        margin: 3.5px 0;
+    }
+
+    .mx_ViewSourceEvent_toggle {
+        width: 12px;
+        mask-repeat: no-repeat;
+        mask-position: 0 center;
+        mask-size: auto 12px;
+        visibility: hidden;
+        background-color: $accent-color;
+        mask-image: url('$(res)/img/feather-customised/maximise.svg');
+    }
+
+    &.mx_ViewSourceEvent_expanded .mx_ViewSourceEvent_toggle {
+        mask-position: 0 bottom;
+        margin-bottom: 7px;
+        mask-image: url('$(res)/img/feather-customised/minimise.svg');
+    }
+}
+
+.mx_EventTile:hover {
+    .mx_ViewSourceEvent_toggle {
+        visibility: visible;
+    }
+}

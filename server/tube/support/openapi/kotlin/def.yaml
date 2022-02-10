@@ -1,0 +1,6 @@
+# https://openapi-generator.tech/docs/generators/kotlin
+
+artifactId: tube-api
+groupId: org.tube
+packageName: org.tube.client
+

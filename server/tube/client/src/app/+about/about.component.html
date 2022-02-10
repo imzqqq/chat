@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="sub-menu" [ngClass]="{ 'sub-menu-fixed': !isBroadcastMessageDisplayed }">
+
+    <div class="links">
+      <a myPluginSelector pluginSelectorId="about-menu-instance" i18n routerLink="instance" routerLinkActive="active" class="title-page title-page-about">Instance</a>
+
+      <a myPluginSelector pluginSelectorId="about-menu-tube" i18n routerLink="tube" routerLinkActive="active" class="title-page title-page-about">Tube</a>
+
+      <a myPluginSelector pluginSelectorId="about-menu-network" i18n routerLink="follows" routerLinkActive="active" class="title-page title-page-about">Network</a>
+    </div>
+  </div>
+
+  <div class="margin-content" [ngClass]="{ 'offset-content': !isBroadcastMessageDisplayed }">
+    <router-outlet></router-outlet>
+  </div>
+</div>

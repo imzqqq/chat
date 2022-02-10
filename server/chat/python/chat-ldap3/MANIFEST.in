@@ -1,0 +1,8 @@
+include *.in
+include *.py
+include *.md
+include tox.ini
+include requirements.txt
+include .coveragerc
+include .codecov.yml
+recursive-include tests *.py

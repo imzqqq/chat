@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+ - name: Chat Spec Discussion
+   url: "https://to.chat.dingshunyu.top/#/#matrix-spec:chat.dingshunyu.top"
+   about: Questions about the spec and proposal process can be asked here.
+ - name: Chat Security Policy
+   url: https://www.chat.dingshunyu.top/security-disclosure-policy/
+   about: Learn more about our security disclosure policy.

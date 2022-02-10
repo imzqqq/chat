@@ -1,0 +1,41 @@
+---
+layout: projectimage
+title: matrix-appservice-slack
+categories: 
+ - bridge
+author: leonerd, Half-Shot, illicitonion, Cadair and others
+language: TypeScript
+maturity: Stable
+repo: https://github.com/matrix-org/matrix-appservice-slack
+room: "#matrix_appservice_slack:cadair.com"
+license: Apache-2.0
+description: This project bridges Slack to Chat
+bridges: Slack
+featured: true
+thumbnail: /docs/projects/bridges/images/slack-logo.svg
+screenshot: /docs/projects/images/slack_bridge_screenshot.png
+sort_order: 200
+---
+
+This project bridges [Slack](https://slack.com) to Chat.
+
+The bridge allows you to connect Chat rooms and Slack channels together. It supports bridging via webhooks or via a
+dedicated slack integration (using the Events API). The bridge supports nearly all matrix message types and client features
+with active development on new features as they arrive. Check the list below for feature support.
+
+The bridge is regularly hacked on and is accepting new PRs for bugfixes and features, come and get involved!
+
+✓ Direct (1:1) Chats  
+✓ Group (‘Channel’) Chats  
+✗ History  
+✓ Typing notifications and read receipts  
+✓ Text Messages  
+✓ Reactions  
+✓ Redactions/Deleting Events  
+✓ Threading/Replies  
+✓ Formatted Text Content  
+✓ Media Content  
+
+When using [Element](https://element.io) with the default integrations manager (`scalar.vector.im`), you can enable the Slack integration per-room. Click the "Room info" button in the top right corner of the page and then click "Add widgets, bridges & bots".
+
+Get it from [GitHub](https://github.com/matrix-org/matrix-appservice-slack)!

@@ -1,0 +1,29 @@
+import Foundation
+
+/// SideMenuPresentable absract a side menu presenter
+protocol SideMenuPresentable {
+    
+    /// Show side menu
+    func show(from presentable: Presentable, animated: Bool, completion: (() -> Void)?)
+    
+    /// Hide side menu
+    func dismiss(animated: Bool, completion: (() -> Void)?)
+    
+    /// Add screen edge gesture to reveal menu
+    @discardableResult func addScreenEdgePanGesturesToPresent(to view: UIView) -> UIScreenEdgePanGestureRecognizer
+    
+    /// Add pan gesture to reveal menu, like pan to reveal from a navigation bar
+    @discardableResult func addPanGestureToPresent(to view: UIView) -> UIPanGestureRecognizer
+}
+
+// MARK: Default implementation
+extension SideMenuPresentable {
+    
+    func show(from presentable: Presentable, animated: Bool) {
+        return self.show(from: presentable, animated: animated, completion: nil)
+    }
+    
+    func dismiss(animated: Bool) {
+        return self.dismiss(animated: animated, completion: nil)
+    }
+}

@@ -1,0 +1,11 @@
+.mx_ScrollPanel {
+    .mx_RoomView_MessageList {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        content-visibility: auto;
+        contain-intrinsic-size: 50px;
+    }
+}

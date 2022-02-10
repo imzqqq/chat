@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tube REST API documentation</title>
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Tube REST API documentation">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+</head>
+<body>
+
+  <div id="redoc-container"></div>
+
+  <script src="vendor/redoc.standalone.js"></script>
+
+  <script>
+    Redoc.init('./openapi.yaml', {
+      nativeScrollbars: true,
+      requiredPropsFirst: true,
+      sortPropsAlphabetically: true,
+      theme: {
+        colors: {
+          primary: { main: '#f48a44' },
+        },
+      },
+    }, document.getElementById('redoc-container'))
+  </script>
+
+</body>

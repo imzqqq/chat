@@ -1,0 +1,26 @@
+---
+layout: project
+title: Chat Email Bridge
+categories: 
+ - bridge
+description: Two ways Email<->Chat bridge
+author: Kamax.io and Open-Xchange
+maturity: Not actively maintained
+language: Java
+license: AGPL-3.0-or-later
+repo: https://github.com/kamax-io/matrix-appservice-email
+featured: true
+bridges: Email
+thumbnail: /docs/projects/images/email-icon.svg
+---
+
+An application service gateway for bridging between Email and Chat, written using Spring Boot (Java) using [matrix-java-sdk](https://github.com/kamax-io/matrix-java-sdk).
+You can get the [code on github](https://github.com/kamax-io/matrix-appservice-email).
+
+Features:
+
+- Chat to Email forwarding
+- Email to Chat forwarding
+- Email <-> Chat <-> Email forwarding, if several bridge users are present within a room
+- Fully configuration notification templates, per event
+- Subscription portal where E-mail users can manage their notifications

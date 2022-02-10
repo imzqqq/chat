@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tube documentation</title>
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Tube documentation">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="/assets/docsify-vue.css">
+  <link rel="stylesheet" href="/vendor/prism.css">
+  <link rel="stylesheet" href="/assets/custom.css">/
+
+  <script src="/vendor/feather.min.js"></script>
+  <link rel="icon" type="image/png" href="/assets/favicon.png" />
+
+  <style>
+    .raw-html {
+      padding: 0;
+    }
+
+    .raw-html .markdown-section {
+      max-width: initial;
+      padding: 0;
+    }
+
+    .edit-page {
+      text-align: right;
+      margin-bottom: 30px;
+    }
+
+    .app-nav li {
+      cursor: pointer;
+    }
+
+    .sidebar li {
+      margin: 2px 0;
+    }
+
+    .feather {
+      margin-bottom: -7px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script src="/vendor/docsify.min.js"></script>
+
+  <script src="/vendor/prism-bash.min.js"></script>
+  <script src="/vendor/prism-json.min.js"></script>
+  <script src="/vendor/prism-typescript.min.js"></script>
+  <script src="/vendor/prism-yaml.min.js"></script>
+  <script src="/vendor/prism-css.min.js"></script>
+
+  <script>
+    function isRawPage (html) {
+      return html.startsWith('<!-- raw html -->')
+    }
+
+    function getContentBlock () {
+      return document.querySelector('.content')
+    }
+
+    window.$docsify = {
+      name: 'Tube',
+      basePath: '/',
+      logo: '/assets/brand.png',
+      // repo: 'https://github.com/Chocobozzz/Tube',
+      loadSidebar: true,
+      loadNavbar: true,
+      subMaxLevel: 2,
+      executeScript: true,
+      homepage: 'home.md',
+      notFoundPage: '404.md',
+      fallbackLanguages: [ 'fr' ],
+      matomo: {
+        host: 'https://stats.framasoft.org/',
+        id: 70
+      },
+      alias: {
+        '/.*/_navbar.md': '/_navbar.md',
+        '/.*?/assets/(.*)': '/assets/$2',
+        '.*?/dependencies': '../support/doc/dependencies.md',
+        '.*?/CREDITS': '../CREDITS.md',
+        '.*?/translation': '../support/doc/translation.md',
+        '.*?/development/tests': '../support/doc/development/tests.md',
+        '.*?/install-any-os': '../support/doc/production.md',
+        '.*?/install-docker': '../support/doc/docker.md',
+        '.*?/maintain-tools': '../support/doc/tools.md',
+        '.*?/contribute-getting-started': '../.github/CONTRIBUTING.md',
+        '.*?/contribute-code-of-conduct': '../CODE_OF_CONDUCT.md',
+        '.*?/contribute-plugins': '../support/doc/plugins/guide.md',
+        '.*?/contribute-translations': '../support/doc/translation.md',
+        '.*?/api-rest-getting-started': '../support/doc/api/quickstart.md',
+        '.*?/api-embed-player': '../support/doc/api/embeds.md',
+        '/(#.*?)?': '../README.md',
+
+        '/admin-deal-with-spammers': 'admin-moderation.md',
+        '/use-video-channels': 'use-library.md',
+        '/use-video-playlists': 'use-library.md',
+        '/use-video-history': 'use-library.md',
+        '/use-share-video': 'use-watch-video.md',
+        '/use-download-video': 'use-watch-video.md',
+        '/maintain-security': 'maintain-configuration.md',
+        '/maintain-cache': 'maintain-configuration.md',
+      },
+
+      // Generate using:
+      // for i in $(cat index.html | grep githubusercontent | grep -o "http[^']\+" | egrep '\.md$');
+      //   do curl -s $i | grep -o '[\"(]http[^)"]\+' | sed 's/^[("]//' | grep -v 'my-image' | sed "s/^/        '/" | sed "s/$/',/" | sort | uniq;
+      // done
+      crossOriginLinks: [
+        'https://certbot.eff.org/all-instructions',
+        'https://gist.github.com/mustafaturan/7053900#file-latest-ffmpeg-centos6-sh',
+        'https://github.com/Chocobozzz/Tube/blob/master/engines.yaml',
+        'https://github.com/yarnpkg/yarn/releases/latest',
+        'https://linoxide.com/linux-how-to/install-ffmpeg-centos-7/',
+        'https://linuxize.com/post/how-to-install-ffmpeg-on-centos-8/',
+        'https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions',
+        'https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora',
+        'https://rpmfusion.org',
+        'https://stackoverflow.com/questions/34662574/node-js-getting-error-nodemon-internal-watch-failed-watch-enospc#34664097',
+        'https://www.freebsd.org',
+        'https://www.postgresql.org/download/linux/redhat/',
+        'https://yarnpkg.com/en/docs/install',
+        'https://yarnpkg.com/en/docs/install#linux-tab',
+        'https://github.com/Chocobozzz/Tube/issues',
+        'https://github.com/videojs/video.js/tree/master/lang',
+        'https://weblate.org',
+        'https://dehydrated.io/',
+        'https://tube.docs.dingshunyu.top/maintain-tools?id=update-hostjs',
+        'https://github.com/Chocobozzz/Tube/releases/download/${VERSION}/tube-${VERSION}.zip',
+        'https://joinpeertube.org/en_US/faq#should-i-have-a-big-server-to-run-tube',
+        'https://letsencrypt.org/',
+        'https://docs.docker.com/compose/install/',
+        'https://tube.docs.dingshunyu.top/install-any-os?id=administrator',
+        'https://tube.docs.dingshunyu.top/install-any-os?id=what-now',
+        'https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail',
+        'https://github.com/Chocobozzz/Tube/blob/develop/.github/CONTRIBUTING.md#develop',
+        'https://github.com/Chocobozzz/Tube/blob/develop/support/docker/production/config/custom-environment-variables.yaml',
+        'https://github.com/Chocobozzz/Tube/blob/develop/support/docker/production/config/production.yaml',
+        'https://github.com/Chocobozzz/Tube/blob/develop/support/docker/production/docker-compose.yml',
+        'https://github.com/Chocobozzz/Tube/blob/develop/support/docker/production/.env',
+        'https://www.docker.com/community-edition',
+        'http://www.opendkim.org/',
+        'https://help.ubuntu.com/community/CronHowto',
+        'https://rg3.github.io/youtube-dl/supportedsites.html',
+        'http://editor.swagger.io/',
+        'http://mailslurper.com/',
+        'https://about.gitlab.com/',
+        'https://tube.docs.dingshunyu.top/#/contribute-architecture?id=client-code',
+        'https://tube.docs.dingshunyu.top/#/contribute-architecture?id=server-code',
+        'https://framagit.org',
+        'https://framasoft.org/',
+        'https://github.com/Chocobozzz/Tube/tree/develop/server/controllers',
+        'https://github.com/Chocobozzz/Tube/tree/develop/server/middlewares/validators',
+        'https://github.com/Chocobozzz/Tube/tree/develop/shared/models',
+        'https://github.com/Chocobozzz/Tube/tree/develop/support/doc/api',
+        'https://github.com/Redocly/redoc/blob/master/cli/README.md',
+        'https://gitpod.io/button/open-in-gitpod.svg',
+        'https://gitpod.io/#https://github.com/Chocobozzz/Tube',
+        'https://joinpeertube.org',
+        'https://www.gnu.org/software/parallel/',
+        'https://babeljs.io/',
+        'https://tube.docs.dingshunyu.top/api-plugins',
+        'https://expressjs.com/en/4x/api.html#router',
+        'https://framagit.org/framasoft/tube/official-plugins/-/tree/master/tube-plugin-auth-ldap',
+        'https://framagit.org/framasoft/tube/official-plugins/-/tree/master/tube-plugin-auth-openid-connect',
+        'https://framagit.org/framasoft/tube/official-plugins/-/tree/master/tube-plugin-auth-saml2',
+        'https://github.com/Chocobozzz/Tube/blob/develop/.github/CONTRIBUTING.md#prerequisites',
+        'https://github.com/Chocobozzz/Tube/blob/develop/shared/models/i18n/i18n.ts',
+        'https://github.com/Chocobozzz/Tube/issues/new/choose',
+        'https://packages.joinpeertube.org/api/v1/plugins',
+        'https://www.npmjs.com/',
+        'https://github.com/Chocobozzz/Tube/issues',
+        'https://github.com/videojs/video.js/tree/master/lang',
+        'https://weblate.org',
+        'https://framagit.org/framasoft/tube/clients',
+        'https://framagit.org/framasoft/tube/clients/go',
+        'https://framagit.org/framasoft/tube/clients/kotlin',
+        'https://framagit.org/framasoft/tube/clients/python',
+        'https://github.com/Chocobozzz/Tube/blob/develop/support/doc/api/openapi.yaml',
+        'https://openapi-generator.tech/docs/generators/#client-generators',
+        'https://unpkg.com/@tube/embed-api/build/player.min.js',
+        'https://discord.gg/wj8DDUT',
+        'https://tube.docs.dingshunyu.top/admin-following-instances',
+        'https://tube.docs.dingshunyu.top/api-activitypub',
+        'https://tube.docs.dingshunyu.top/api-rest-reference.html',
+        'https://tube.docs.dingshunyu.top/contribute-architecture',
+        'https://tube.docs.dingshunyu.top/contribute-architecture?id=redundancy-between-instances',
+        'https://tube.docs.dingshunyu.top/install-unofficial',
+        'https://tube.docs.dingshunyu.top/maintain-tools',
+        'https://tube.docs.dingshunyu.top/use-setup-account',
+        'https://framacolibri.org/c/tube',
+        'https://framasoft.org',
+        'https://framasoft.org/',
+        'https://framasoft.org/en/#soutenir',
+        'https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3',
+        'https://github.com/Chocobozzz/Tube/actions?query=workflow%3A%22Test+Suite%22+branch%3Adevelop',
+        'https://github.com/Chocobozzz/Tube/blob/develop/FAQ.md',
+        'https://github.com/Chocobozzz/Tube/blob/develop/.github/CONTRIBUTING.md',
+        'https://github.com/Chocobozzz/Tube/blob/develop/README.md#package-create-your-own-instance',
+        'https://github.com/Chocobozzz/Tube/blob/develop/README.md#contact',
+        'https://github.com/Chocobozzz/Tube/blob/develop/support/doc/api/openapi.yaml',
+        'https://github.com/Chocobozzz/Tube/blob/develop/support/doc/docker.md',
+        'https://github.com/Chocobozzz/Tube/blob/develop/support/doc/production.md',
+        'https://github.com/Chocobozzz/Tube/workflows/Test%20Suite/badge.svg',
+        'https://github.com/tootsuite/mastodon',
+        'https://img.shields.io/badge/code%20style-standard-brightgreen.svg',
+        'https://install-app.yunohost.org/?app=tube',
+        'https://joinpeertube.org/',
+        'https://joinpeertube.org/faq',
+        'https://joinpeertube.org/faq#should-i-have-a-big-server-to-run-tube',
+        'https://joinpeertube.org/faq#what-are-the-tube-features-for-administrators',
+        'https://joinpeertube.org/faq#what-are-the-tube-features-for-content-creators',
+        'https://joinpeertube.org/faq#what-are-the-tube-features-for-viewers',
+        'https://joinpeertube.org/img/brand.png',
+        'https://joinpeertube.org/instances',
+        'https://matrix.to/#/#tube:matrix.org',
+        'https://peertube2.cpy.re',
+        'https://peertube3.cpy.re',
+        'https://tube.cpy.re',
+        'https://tube.cpy.re/videos/watch/da2b08d4-a242-4170-b32a-4ec8cbdca701',
+        'https://standardjs.com/',
+        'https://weblate.framasoft.org/projects/tube/angular/',
+        'https://weblate.framasoft.org/widgets/tube/-/angular/svg-badge.svg',
+        'https://web.libera.chat/#tube'
+      ],
+      auto2top: true,
+      plugins: [
+        function (hook, vm) {
+          hook.afterEach(function (html, next) {
+            if (isRawPage(html)) return next(html)
+
+            const githubPageStart = 'https://raw.githubusercontent.com/Chocobozzz/Tube/'
+
+            const url = vm.route.file.startsWith(githubPageStart)
+              ? vm.route.file.replace(githubPageStart, 'https://github.com/Chocobozzz/Tube/edit/')
+              : 'https://framagit.org/framasoft/tube/documentation/edit/master/' + vm.route.file
+
+            const editHtml = '<div class="edit-page"><a target="_blank" href="' + url + '">Edit this page</a></div>'
+
+            return next(
+              editHtml +
+              html
+            )
+          })
+        },
+
+        function (hook) {
+          hook.beforeEach(function(html) {
+            if (isRawPage(html)) {
+              getContentBlock().classList.add('raw-html')
+            } else {
+              getContentBlock().classList.remove('raw-html')
+            }
+          });
+        },
+
+        function (hook) {
+          hook.doneEach(function() {
+            feather.replace()
+          })
+        },
+
+        function (hook) {
+          hook.doneEach(function() {
+            const current = window.location.hash
+
+            if (current.startsWith('#/')) {
+              window.location.href = current.replace(/^#\//, '/')
+            }
+          })
+        }
+      ],
+      routerMode: 'history'
+    }
+  </script>
+
+  <script src="/vendor/matomo.min.js"></script>
+  <script src="/vendor/external-script.min.js"></script>
+  <script src="/vendor/emoji.min.js"></script>
+</body>
+</html>

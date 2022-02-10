@@ -1,0 +1,17 @@
+[Unit]
+Description=Chat Matrix homeserver
+
+[Service]
+Type=notify
+User=chat-server
+WorkingDirectory=/var/lib/chat-server
+EnvironmentFile=/etc/default/chat-server
+ExecStartPre=/opt/venvs/chat-server/bin/python -m chat.app.homeserver --config-path=/etc/chat-server/homeserver.yaml --config-path=/etc/chat-server/conf.d/ --generate-keys
+ExecStart=/opt/venvs/chat-server/bin/python -m chat.app.homeserver --config-path=/etc/chat-server/homeserver.yaml --config-path=/etc/chat-server/conf.d/
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=3
+SyslogIdentifier=chat-server
+
+[Install]
+WantedBy=multi-user.target

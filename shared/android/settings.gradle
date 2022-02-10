@@ -1,0 +1,18 @@
+include ':chat'
+include ':matrix-sdk-android'
+include ':matrix-sdk-android-rx'
+include ':matrix-sdk-android-flow'
+include ':attachment-viewer'
+include ':multipicker'
+include ':diff-match-patch'
+include ':library:ui-styles'
+/// MARK - imzqqq
+// TODO: tmp action, remove this when we upgrading to epoxyPaging3
+include ':library:epoxy-paging'
+include ':library:epoxy-adapter'
+include ':library:epoxy-processor'
+include ':library:epoxy-annotations'
+
+// olm
+include ':library:olm:android:olm-sdk'
+/// END

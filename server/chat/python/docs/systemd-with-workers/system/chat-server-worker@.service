@@ -1,0 +1,26 @@
+[Unit]
+Description=Chat server %i
+AssertPathExists=/etc/chat-server/workers/%i.yaml
+
+# This service should be restarted when the Chat server target is restarted.
+PartOf=chat-server.target
+ReloadPropagatedFrom=chat-server.target
+
+# if this is started at the same time as the main, let the main process start
+# first, to initialise the database schema.
+After=chat-server.service
+
+[Service]
+Type=notify
+NotifyAccess=main
+User=root
+WorkingDirectory=/home/imzqqq/workspace/chat/server/chat/python
+EnvironmentFile=/home/imzqqq/workspace/chat/server/chat/python/docs/systemd-with-workers/workers/federation_reader.yaml
+ExecStart=/home/imzqqq/workspace/chat/server/chat/python/.env/bin/python3 -m chat.app.generic_worker --config-path=/home/imzqqq/workspace/chat/server/chat/python/homeserver.yaml --config-path=/home/imzqqq/workspace/chat/server/chat/python/docs/systemd-with-workers/workers/%i.yaml
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=3
+SyslogIdentifier=chat-server-%i
+
+[Install]
+WantedBy=chat-server.target

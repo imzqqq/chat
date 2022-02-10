@@ -1,0 +1,43 @@
+.mx_ExistingPhoneNumber {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.mx_ExistingPhoneNumber_delete {
+    margin-right: 5px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.mx_ExistingPhoneNumber_address,
+.mx_ExistingPhoneNumber_promptText {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.mx_ExistingPhoneNumber_confirmBtn {
+    margin-left: 5px;
+}
+
+.mx_ExistingPhoneNumber_verification {
+    display: inline-flex;
+    align-items: center;
+
+    .mx_Field {
+        margin: 0 0 0 1em;
+    }
+}
+
+.mx_PhoneNumbers_input {
+    display: flex;
+    align-items: center;
+}
+
+.mx_PhoneNumbers_input > .mx_Field {
+    flex-grow: 1;
+}
+
+.mx_PhoneNumbers_country {
+    width: 80px;
+}

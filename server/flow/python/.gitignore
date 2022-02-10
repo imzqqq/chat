@@ -1,0 +1,10 @@
+*.sw[op]
+key_*.pem
+data/*
+config/*
+!config/me.sample.yml
+static/media/*
+
+.mypy_cache/
+__pycache__/
+.venv

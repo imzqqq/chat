@@ -1,0 +1,73 @@
+.mx_Checkbox {
+    $size: $font-16px;
+    $border-size: $font-1-5px;
+    $border-radius: $border-radius-4px;
+
+    display: flex;
+    align-items: flex-start;
+
+    input[type=checkbox] {
+        appearance: none;
+        margin: 0;
+        padding: 0;
+
+        & + label {
+            display: flex;
+            align-items: center;
+
+            flex-grow: 1;
+        }
+
+        & + label > .mx_Checkbox_background {
+            display: inline-flex;
+            position: relative;
+
+            flex-shrink: 0;
+
+            height: $size;
+            width: $size;
+            size: 0.5rem;
+
+            border: $border-size solid rgba($muted-fg-color, 0.5);
+            box-sizing: border-box;
+            border-radius: $border-radius;
+
+            img {
+                display: none;
+
+                height: 100%;
+                width: 100%;
+                filter: invert(100%);
+            }
+        }
+
+        &:checked + label > .mx_Checkbox_background {
+            background: $accent-color;
+            border-color: $accent-color;
+
+            img {
+                display: block;
+            }
+        }
+
+        & + label > *:not(.mx_Checkbox_background) {
+            margin-left: 10px;
+        }
+
+        &:disabled + label {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        &:checked:disabled + label > .mx_Checkbox_background {
+            background-color: $accent-color;
+            border-color: $accent-color;
+        }
+
+        &.focus-visible {
+            & + label .mx_Checkbox_background {
+                @mixin unreal-focus;
+            }
+        }
+    }
+}

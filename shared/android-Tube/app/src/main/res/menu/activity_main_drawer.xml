@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item
+        android:id="@+id/ml"
+        android:icon="@android:color/darker_gray"
+        android:title="@string/nav_menu_myLibrary"
+        android:visible="false">
+        <menu>
+            <item
+                android:id="@+id/nav_myVideos"
+                android:icon="@drawable/ic_video_library_black_24dp"
+                android:title="@string/title_myVideos" />
+            <item
+                android:id="@+id/nav_subscriptions"
+                android:icon="@drawable/ic_live_tv_black_24dp"
+                android:title="@string/nav_subscriptions" />
+            <item
+                android:id="@+id/nav_history"
+                android:icon="@drawable/ic_history_black_24dp"
+                android:title="@string/nav_history" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/ai"
+        android:icon="@android:color/darker_gray"
+        android:title="@string/nav_menu_videos">
+        <menu>
+            <item
+                android:id="@+id/nav_popular"
+                android:icon="@android:drawable/btn_star"
+                android:title="@string/nav_popular" />
+            <item
+                android:id="@+id/nav_trending"
+                android:icon="@drawable/ic_trending_up_black_24dp"
+                android:title="@string/nav_trending" />
+            <item
+                android:id="@+id/nav_likes"
+                android:icon="@drawable/ic_thumb_up_black_24dp"
+                android:title="@string/nav_likes" />
+            <item
+                android:id="@+id/nav_recent"
+                android:icon="@drawable/ic_add_circle_black_24dp"
+                android:title="@string/nav_recent" />
+            <item
+                android:id="@+id/nav_local"
+                android:icon="@drawable/ic_home_black_24dp"
+                android:title="@string/nav_local" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/aiao"
+        android:icon="@android:color/white"
+        android:title="@string/nav_menu_more">
+        <menu>
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@android:drawable/ic_dialog_info"
+                android:title="@string/nav_about" />
+        </menu>
+    </item>
+
+</menu>

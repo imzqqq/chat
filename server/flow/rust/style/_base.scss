@@ -1,0 +1,199 @@
+// it's 2018. please tell me that nobody is using box-sizing != border-box.
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  font: inherit;
+  color: inherit;
+  background-color: inherit;
+  border: 0 currentcolor solid;
+}
+
+html {
+  font-size: 18px;
+}
+
+body {
+  // aesthetics
+  color: $text_color;
+  background-color: $background_color;
+  font-family: $base_font;
+  line-height: $line_height;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "liga", "dlig", "hlig", "swsh", "onum", "pnum", "opbd";
+}
+
+// show focus outlines on everything!! tab accessibility~
+:focus {
+  outline: $focused_color auto 1px;
+}
+
+a {
+  color: $link_color;
+  &:hover {
+    color: $hover_color;
+    text-decoration: underline;
+  }
+  &:active {
+    color: $active_color;
+  }
+  &:visited {
+    color: $visited_color;
+  }
+  &[disabled] {
+    opacity: .5;
+    cursor: default;
+    // prevent clicks on disabled links
+    pointer-events: none;
+  }
+}
+
+code,
+pre {
+  font-family: $mono_font;
+  color: inherit;
+  font-feature-settings: "tnum";
+}
+
+small {
+  font-size: .8em;
+}
+
+// restyle inputs so they look consistent across browsers
+input,
+textarea {
+  color: $text_color;
+  background: $invert_color;
+  border: $border_width solid $border_color;
+  border-radius: $border_radius;
+  padding: .25em .5em;
+  margin: .5em 0;
+  font-family: inherit; // fix for built-in browser styles
+  width: 100%;
+
+  &:focus {
+    outline-offset: 0;
+  }
+}
+
+// restyle buttons so they look consistent across browsers
+button,
+a.button,
+a.button:visited {
+  @extend %button-styling;
+  display: inline-block;
+  padding: 1px 1rem;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button-row {
+  padding: .5rem 0;
+  button {
+    min-width: 5rem;
+  }
+  button[type=submit] {
+    float: right;
+  }
+}
+
+.button--cancel {
+  float: left;
+  background: $border_color_alt;
+  &:hover {
+    background: $warning_color;
+  }
+}
+
+form.inline {
+  display: inline;
+}
+
+// turn buttons with the .link class into links
+// (so we can use inline forms as Links Whomst POST)
+button.link {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  color: $link_color;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 1em;
+  font-variant: normal;
+  box-shadow: none;
+  &:active {
+    color: $active_color;
+  }
+  &:hover {
+    color: $hover_color;
+  }
+}
+
+.flash {
+  border: 2px dashed $border_color;
+  padding: 1rem;
+  position: absolute;
+  top: 0;
+  left: 30%;
+  right: 30%;
+  text-align: center;
+  @extend %big-shadow;
+  &.error {
+    border-color: $error_color;
+    background-color: $error_color_alt;
+  }
+  &.success {
+    border-color: $active_color;
+    background-color: $active_color_alt;
+  }
+  &-hider {
+    &,
+    &:checked~.flash,
+    &:checked~.flash-hider-label {
+      display: none;
+    }
+    &-label {
+      color: $error_color;
+      position: absolute;
+      top: 0;
+      right: 30%;
+      z-index: 5;
+      margin: .5em;
+      background: transparent;
+    }
+  }
+  &-container {
+    animation: 5s forwards disappear;
+  }
+}
+
+@keyframes disappear {
+	from { opacity: 1; }
+	95% { opacity: .8; }
+	to { opacity: 0; display: none; }
+}
+
+.title {
+  text-transform: capitalize;
+  font-variant: small-caps;
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.status {
+  max-width: $column_width;
+  border-top: $standard_border;
+  padding: 1rem 0;
+}
+
+.timeline-avatar {
+  width: 3rem;
+  height: 3rem;
+  margin-right: 1rem;
+  border-radius: $border_radius;
+  float: left;
+  background: $visited_color;
+}

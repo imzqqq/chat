@@ -1,0 +1,113 @@
+/*
+   GoToSocial
+   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU Affero General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+package federation
+
+import (
+	"context"
+	"net/url"
+
+	"github.com/superseriousbusiness/activity/pub"
+	"github.com/superseriousbusiness/gotosocial/internal/ap"
+	"github.com/superseriousbusiness/gotosocial/internal/config"
+	"github.com/superseriousbusiness/gotosocial/internal/db"
+	"github.com/superseriousbusiness/gotosocial/internal/federation/dereferencing"
+	"github.com/superseriousbusiness/gotosocial/internal/federation/federatingdb"
+	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
+	"github.com/superseriousbusiness/gotosocial/internal/media"
+	"github.com/superseriousbusiness/gotosocial/internal/transport"
+	"github.com/superseriousbusiness/gotosocial/internal/typeutils"
+)
+
+// Federator wraps various interfaces and functions to manage activitypub federation from gotosocial
+type Federator interface {
+	// FederatingActor returns the underlying pub.FederatingActor, which can be used to send activities, and serve actors at inboxes/outboxes.
+	FederatingActor() pub.FederatingActor
+	// FederatingDB returns the underlying FederatingDB interface.
+	FederatingDB() federatingdb.DB
+
+	// AuthenticateFederatedRequest can be used to check the authenticity of incoming http-signed requests for federating resources.
+	// The given username will be used to create a transport for making outgoing requests. See the implementation for more detailed comments.
+	//
+	// If the request is valid and passes authentication, the URL of the key owner ID will be returned, as well as true, and nil.
+	//
+	// If the request does not pass authentication, or there's a domain block, nil, false, nil will be returned.
+	//
+	// If something goes wrong during authentication, nil, false, and an error will be returned.
+	AuthenticateFederatedRequest(ctx context.Context, username string) (*url.URL, bool, error)
+
+	// FingerRemoteAccount performs a webfinger lookup for a remote account, using the .well-known path. It will return the ActivityPub URI for that
+	// account, or an error if it doesn't exist or can't be retrieved.
+	FingerRemoteAccount(ctx context.Context, requestingUsername string, targetUsername string, targetDomain string) (*url.URL, error)
+
+	DereferenceRemoteThread(ctx context.Context, username string, statusURI *url.URL) error
+	DereferenceAnnounce(ctx context.Context, announce *gtsmodel.Status, requestingUsername string) error
+
+	GetRemoteAccount(ctx context.Context, username string, remoteAccountID *url.URL, refresh bool) (*gtsmodel.Account, bool, error)
+	EnrichRemoteAccount(ctx context.Context, username string, account *gtsmodel.Account) (*gtsmodel.Account, error)
+
+	GetRemoteStatus(ctx context.Context, username string, remoteStatusID *url.URL, refresh, includeParent bool) (*gtsmodel.Status, ap.Statusable, bool, error)
+	EnrichRemoteStatus(ctx context.Context, username string, status *gtsmodel.Status, includeParent bool) (*gtsmodel.Status, error)
+
+	GetRemoteInstance(ctx context.Context, username string, remoteInstanceURI *url.URL) (*gtsmodel.Instance, error)
+
+	// Handshaking returns true if the given username is currently in the process of dereferencing the remoteAccountID.
+	Handshaking(ctx context.Context, username string, remoteAccountID *url.URL) bool
+	pub.CommonBehavior
+	pub.FederatingProtocol
+}
+
+type federator struct {
+	config              *config.Config
+	db                  db.DB
+	federatingDB        federatingdb.DB
+	clock               pub.Clock
+	typeConverter       typeutils.TypeConverter
+	transportController transport.Controller
+	dereferencer        dereferencing.Dereferencer
+	mediaHandler        media.Handler
+	actor               pub.FederatingActor
+}
+
+// NewFederator returns a new federator
+func NewFederator(db db.DB, federatingDB federatingdb.DB, transportController transport.Controller, config *config.Config, typeConverter typeutils.TypeConverter, mediaHandler media.Handler) Federator {
+	dereferencer := dereferencing.NewDereferencer(config, db, typeConverter, transportController, mediaHandler)
+
+	clock := &Clock{}
+	f := &federator{
+		config:              config,
+		db:                  db,
+		federatingDB:        federatingDB,
+		clock:               &Clock{},
+		typeConverter:       typeConverter,
+		transportController: transportController,
+		dereferencer:        dereferencer,
+		mediaHandler:        mediaHandler,
+	}
+	actor := newFederatingActor(f, f, federatingDB, clock)
+	f.actor = actor
+	return f
+}
+
+func (f *federator) FederatingActor() pub.FederatingActor {
+	return f.actor
+}
+
+func (f *federator) FederatingDB() federatingdb.DB {
+	return f.federatingDB
+}

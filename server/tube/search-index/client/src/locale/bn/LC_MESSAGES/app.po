@@ -1,0 +1,510 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"PO-Revision-Date: 2021-12-03 18:22+0000\n"
+"Last-Translator: Vodoyo Kamal <vodoyo2327@psk3n.com>\n"
+"Language-Team: Bengali <https://weblate.framasoft.org/projects/tube-"
+"search-index/client/bn/>\n"
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.9.1\n"
+"Generated-By: easygettext\n"
+
+#: src/components/Footer.vue:28
+msgid "&gt;&gt; Check all guides on joinpeertube.org &lt;&lt;"
+msgstr "&gt;&gt; joinpeertube.org এ সব নির্দেশিকা দেখো &lt;&lt;"
+
+#: src/components/ChannelResult.vue
+msgid "%{ n } follower"
+msgid_plural "%{ n } followers"
+msgstr[0] "%{ n } জন অনুসরণকারী"
+msgstr[1] "%{ n } জন অনুসরণকারী"
+
+#: src/views/Search.vue:199
+msgid "%{resultsCount} result found"
+msgid_plural "%{resultsCount} results found"
+msgstr[0] "%{resultsCount}টি ফলাফল পাওয়া গেছে"
+msgstr[1] "%{resultsCount}টি ফলাফল পাওয়া গেছে"
+
+#: src/components/PlaylistResult.vue
+msgid "%{videosLength} videos"
+msgstr "%{videosLength} ভিডিও"
+
+#: src/components/SearchWarning.vue:4
+msgid ""
+"<strong>%{indexName}</strong> displays videos and channels that match your "
+"search but is not the publisher, nor the owner. If you notice any problems "
+"with a video, report it to the administrators on the Tube website where "
+"the video is published."
+msgstr ""
+"তোমার ভিডিও ও চ্যানেলের অনুসন্ধানের সাথে <strong>%{indexName}</strong> এর মিল "
+"আছে, কিন্তু সে এটার প্রকাশক বা মালিক না। কোনো সমস্যা দেখলে, যে পিয়ারটিউব "
+"ওয়েবসাইটটিতে ভিডিওটি দেখেছো তার উপস্থাপক ব্যবস্থাপকের কাছে প্রতিবেদন পাঠাও।"
+
+#: src/components/Footer.vue:6
+msgid "A free software to take back control of your videos"
+msgstr "নিজের ভিডিওর নিয়ন্ত্রণ নাও মুক্ত সফ্‌টওয়্যার দিয়ে"
+
+#: src/components/Header.vue:13 src/components/Header.vue:2
+msgid ""
+"A search engine of <a href=\"https://joinpeertube.org\" target=\"_blank"
+"\">Tube</a> videos, channels and playlists"
+msgstr ""
+"<a href=\"https://joinpeertube.org\" target=\"_blank\">পিয়ারটিউব</a> ভিডিও ও "
+"চ্যানেলের একটি অনুসন্ধান ইঞ্জিন"
+
+#: src/views/Search.vue
+msgid "Activism"
+msgstr "সক্রিয়তাবাদ"
+
+#: src/views/Search.vue
+msgid "Add tag"
+msgstr "চিরকুট(ট্যাগ) যোগ"
+
+#: src/views/Search.vue:170
+msgid "All of these tags"
+msgstr "সবগুলো চিরকুট(ট্যাগ)"
+
+#: src/views/Search.vue
+msgid "Animals"
+msgstr "পশু-পাখি"
+
+#: src/views/Search.vue
+msgid "Any"
+msgstr "যেকোনো"
+
+#: src/views/Search.vue
+msgid "Apply filters"
+msgstr "ছাঁকনি প্রয়োগ"
+
+#: src/views/Search.vue
+msgid "Art"
+msgstr "শিল্প"
+
+#: src/views/Search.vue
+msgid "Attribution"
+msgstr "কৃতিত্ব"
+
+#: src/views/Search.vue
+msgid "Attribution - No Derivatives"
+msgstr "স্বীকৃতি - অপরিবর্তনীয়"
+
+#: src/views/Search.vue
+msgid "Attribution - Non Commercial"
+msgstr "স্বীকৃতি - অবাণিজ্যিক"
+
+#: src/views/Search.vue
+msgid "Attribution - Non Commercial - No Derivatives"
+msgstr "স্বীকৃতি - অবাণিজ্যিক - অপরিবর্তনীয়"
+
+#: src/views/Search.vue
+msgid "Attribution - Non Commercial - Share Alike"
+msgstr "স্বীকৃতি - অবাণিজ্যিক - একইভাবে বণ্টনযোগ্য"
+
+#: src/views/Search.vue
+msgid "Attribution - Share Alike"
+msgstr "স্বীকৃতি - একইভাবে বণ্টন"
+
+#: src/views/Search.vue:43
+msgid "Best match"
+msgstr "সর্বোত্তম মিল"
+
+#: src/views/Search.vue
+msgid "Català"
+msgstr "কাটালান"
+
+#: src/views/Search.vue:122
+msgid "Category"
+msgstr "বিভাগ"
+
+#: src/views/Search.vue
+msgid "Čeština"
+msgstr "সেসটিনা"
+
+#: src/components/InterfaceLanguageDropdown.vue
+msgid "Change interface language"
+msgstr "ভাষা পরিবর্তন"
+
+#: src/views/Search.vue
+msgid "Comedy"
+msgstr "হাস্যরস"
+
+#: src/components/Footer.vue:19
+msgid "Create an account to take back control of your videos"
+msgstr "নিজের ভিডিওর নিয়ন্ত্রণ নিতে অ্যাকাউন্ট বানাও"
+
+#: src/components/Footer.vue:23
+msgid "Create playlists"
+msgstr "চালুতালিকা তৈরি"
+
+#: src/components/PlaylistResult.vue:20 src/components/VideoResult.vue:21
+msgid "Created by"
+msgstr "বানিয়েছে"
+
+#: src/views/Search.vue
+msgid "Deutsch"
+msgstr "জার্মান"
+
+#: src/components/Header.vue:15 src/components/Header.vue:4
+msgid ""
+"Developed by <a href=\"https://framasoft.org\" target=\"_blank\">Framasoft</"
+"a>"
+msgstr ""
+"<a href=\"https://framasoft.org\" target=\"_blank\">ফ্রামাসফট</a> বানিয়েছে"
+
+#: src/components/ChannelResult.vue
+msgid "Discover this channel on %{host}"
+msgstr "%{host}-এ এই চ্যানেল দেখো"
+
+#: src/views/Search.vue:129
+msgid "Display all categories"
+msgstr "সব বিভাগ দেখাও"
+
+#: src/views/Search.vue:157
+msgid "Display all languages"
+msgstr "সব ভাষাই দেখাও"
+
+#: src/views/Search.vue:143
+msgid "Display all licenses"
+msgstr "সব অনুমতিপত্র দেখাও"
+
+#: src/views/Search.vue:74
+msgid "Display only"
+msgstr "শুধু দেখাও"
+
+#: src/views/Search.vue:54
+msgid "Display sensitive content"
+msgstr "সংবেদনশীল ফলাফল দেখাও"
+
+#: src/views/Search.vue:109
+msgid "Duration"
+msgstr "সময়কাল"
+
+#: src/views/Search.vue
+msgid "Education"
+msgstr "শিক্ষামূলক"
+
+#: src/views/Search.vue
+msgid "English"
+msgstr "ইংরেজি"
+
+#: src/views/Search.vue
+msgid "Entertainment"
+msgstr "বিনোদন"
+
+#: src/views/Search.vue
+msgid "Español"
+msgstr "স্পেনীয়"
+
+#: src/views/Search.vue
+msgid "Esperanto"
+msgstr "এস্পেরান্তো"
+
+#: src/views/Search.vue
+msgid "Euskara"
+msgstr "ইউস্কারা"
+
+#: src/views/Search.vue:18
+msgid "Explore!"
+msgstr "আবিষ্কার করো!"
+
+#: src/views/Search.vue
+msgid "Films"
+msgstr "চলচিত্র"
+
+#: src/views/Search.vue:32
+msgid "Filters"
+msgstr "ছাঁকনি"
+
+#: src/views/Search.vue
+msgid "Food"
+msgstr "খাদ্য"
+
+#: src/views/Search.vue
+msgid "Français"
+msgstr "ফরাসি"
+
+#: src/views/Search.vue
+msgid "Gàidhlig"
+msgstr "গাইধলিগ"
+
+#: src/views/Search.vue
+msgid "Gaming"
+msgstr "গেমিং"
+
+#: src/components/ActorMiniature.vue
+msgid "Go on this account page"
+msgstr "এই অ্যাকাউন্টের পাতায় যাও"
+
+#: src/components/ActorMiniature.vue
+msgid "Go on this channel page"
+msgstr "এই চ্যানেলের পাতায় যাও"
+
+#: src/views/Search.vue:17
+msgid "Go!"
+msgstr "যাও!"
+
+#: src/views/Search.vue
+msgid "How To"
+msgstr "কিভাবে"
+
+#: src/components/PlaylistResult.vue:25 src/components/VideoResult.vue:26
+msgid "In"
+msgstr "ভিতরে"
+
+#: src/components/Footer.vue:13
+msgid "Install Tube"
+msgstr "পিয়ারটিউব ইন্সটল করো"
+
+#: src/views/Search.vue
+msgid "Italiano"
+msgstr "ইতালীয়"
+
+#: src/views/Search.vue
+msgid "Keyword, channel, video, playlist, etc."
+msgstr "মূলশব্দ, চ্যানেল, ভিডিও, চালুতালিকা, ইত্যাদি।"
+
+#: src/views/Search.vue
+msgid "Kids"
+msgstr "শিশুতোষ"
+
+#: src/components/VideoResult.vue:39 src/views/Search.vue:150
+msgid "Language"
+msgstr "ভাষা"
+
+#: src/views/Search.vue
+msgid "Last 30 days"
+msgstr "শেষ ৩০ দিন"
+
+#: src/views/Search.vue
+msgid "Last 365 days"
+msgstr "শেষ ৩৬৫ দিন"
+
+#: src/views/Search.vue
+msgid "Last 7 days"
+msgstr "শেষ ৭ দিন"
+
+#: src/views/Search.vue:45
+msgid "Least recent"
+msgstr "সবচেয়ে আগের"
+
+#: src/components/Footer.vue:34
+msgid "Legal notices"
+msgstr "আইন বিজ্ঞপ্তি"
+
+#: src/views/Search.vue:136
+msgid "Licence"
+msgstr "অনুমতিপত্র"
+
+#: src/components/VideoResult.vue:7
+msgid "LIVE"
+msgstr "সরাসরি"
+
+#: src/views/Search.vue:83
+msgid "Live videos"
+msgstr "সরাসরি ভিডিও"
+
+#: src/views/Search.vue
+msgid "Long (> 10 min)"
+msgstr "লম্বা (> ১০ মি.)"
+
+#: src/views/Search.vue
+msgid "Medium (4-10 min)"
+msgstr "মাঝামাঝি (৪-১০ মি.)"
+
+#: src/views/Search.vue:44
+msgid "Most recent"
+msgstr "সবচেয়ে নতুন"
+
+#: src/views/Search.vue
+msgid "Music"
+msgstr "সংগীত"
+
+#: src/views/Search.vue
+msgid "Nederlands"
+msgstr "নেদারল্যান্ড"
+
+#: src/views/Search.vue
+msgid "News & Politics"
+msgstr "খবর ও রাজনীতি"
+
+#: src/components/Pagination.vue:19
+msgid "Next page"
+msgstr "পরের পাতা"
+
+#: src/views/Search.vue:68
+msgid "No"
+msgstr "না"
+
+#: src/views/Search.vue:196
+msgid "No results found"
+msgstr "কোনো ফলাফল পাওয়া যায়নি"
+
+#: src/views/Search.vue
+msgid "Occitan"
+msgstr "অক্সিটান"
+
+#: src/components/VideoResult.vue:32
+msgid "On"
+msgstr "চালু"
+
+#: src/views/Search.vue:179
+msgid "One of these tags"
+msgstr "এই চিরকুটগুলোর একটি"
+
+#: src/components/Footer.vue:21
+msgid "Open an account on a Tube website"
+msgstr "পিয়ারটিউব ওয়েবসাইটে অ্যাকাউন্ট খুলো"
+
+#: src/components/Footer.vue:11
+msgid "Open your own videos website with Tube!"
+msgstr "পিয়ারটিউব দিয়ে নিজের ভিডিও ওয়েবসাইট খুলো!"
+
+#: src/views/Search.vue:164
+msgid "Tube instance"
+msgstr "পিয়ারটিউব সার্ভার"
+
+#: src/views/Search.vue
+msgid "People"
+msgstr "মানুষ"
+
+#: src/views/Search.vue
+msgid "Polski"
+msgstr "পোলিশ"
+
+#: src/views/Search.vue
+msgid "Português (Portugal)"
+msgstr "পর্তুগিজ (পর্তুগাল)"
+
+#: src/components/Pagination.vue:3
+msgid "Previous page"
+msgstr "আগের পাতা"
+
+#: src/views/Search.vue
+msgid "Public Domain Dedication"
+msgstr "জনসাধারণ ক্ষেত্রে উৎসর্গ"
+
+#: src/views/Search.vue:94
+msgid "Published date"
+msgstr "ছাপানোর তারিখ"
+
+#: src/views/Search.vue:56 src/views/Search.vue:76 src/views/Search.vue:96
+#: src/views/Search.vue:110 src/views/Search.vue:123 src/views/Search.vue:137
+#: src/views/Search.vue:151 src/views/Search.vue:171 src/views/Search.vue:180
+msgid "Reset"
+msgstr "পরিষ্কার"
+
+#: src/views/Search.vue
+msgid "Science & Technology"
+msgstr "বিজ্ঞান ও প্রযুক্তি"
+
+#: src/views/Search.vue:22
+msgid ""
+"Search for your favorite videos, channels and playlists on <a href="
+"\"%{indexedInstancesUrl}\" target=\"_blank\">%{instancesCount} Tube "
+"websites</a> indexed by %{indexName}!"
+msgstr ""
+"%{indexName} ইন্ডেক্সে <a href=\"%{indexedInstancesUrl}\" target=\"_blank\">"
+"%{instancesCount}টি পিয়ারটিউব ওয়েবসাইটে</a> তোমার পছন্দের ভিডিও এবং চ্যানেল "
+"খুঁজো!"
+
+#: src/views/Search.vue
+msgid "Short (< 4 min)"
+msgstr "ছোটো (< ৪ মি.)"
+
+#: src/views/Search.vue:40
+msgid "Sort by:"
+msgstr "সাজানোর পদ্ধতি:"
+
+#: src/components/Footer.vue:32
+msgid "Source code"
+msgstr "উৎস কোড"
+
+#: src/views/Search.vue
+msgid "Sports"
+msgstr "খেলাধুলা"
+
+#: src/views/Search.vue
+msgid "suomi"
+msgstr "সুয়োমি"
+
+#: src/views/Search.vue
+msgid "svenska"
+msgstr "স্ভেনস্কা"
+
+#: src/components/VideoResult.vue:45
+msgid "Tags"
+msgstr "চিরকুট(ট্যাগ)"
+
+#: src/views/Search.vue
+msgid "Today"
+msgstr "আজকে"
+
+#: src/views/Search.vue
+msgid "Travels"
+msgstr "ভ্রমণ"
+
+#: src/components/PlaylistResult.vue:31
+msgid "Updated on"
+msgstr "হালনাগাদের সময়"
+
+#: src/views/Search.vue
+msgid "Vehicles"
+msgstr "যানবাহন"
+
+#: src/views/Search.vue:88
+msgid "VOD videos"
+msgstr "চাহিদা অনুযায়ী ভিডিও"
+
+#: src/components/PlaylistResult.vue
+msgid "Watch the playlist on %{host}"
+msgstr "%{host} এ চালুতালিকা দেখো"
+
+#: src/components/VideoResult.vue
+msgid "Watch the video on %{host}"
+msgstr "%{host}-এ ভিডিও দেখো"
+
+#: src/components/Footer.vue:15
+msgid "Why should I have my own Tube website?"
+msgstr "আমি কেনো নিজের পিয়ারটিউব ওয়েবসাইট রাখবো?"
+
+#: src/views/Search.vue:63
+msgid "Yes"
+msgstr "হ্যাঁ"
+
+#: src/views/Search.vue
+msgid "ελληνικά"
+msgstr "গ্রিক"
+
+#: src/views/Search.vue
+msgid "русский"
+msgstr "রুশ"
+
+#: src/views/Search.vue
+msgid "日本語"
+msgstr "জাপানী"
+
+#: src/views/Search.vue
+msgid "简体中文（中国）"
+msgstr "সহজ চীনা ভাষা (চীন)"
+
+#~ msgid "Display homepage"
+#~ msgstr "মূলপাতা দেখাও"
+
+#~ msgid "on %{instancesCount} indexed Tube website"
+#~ msgid_plural "on %{instancesCount} indexed Tube websites"
+#~ msgstr[0] "%{instancesCount}টি বিদ্যমান পিয়ারটিউব ওয়েবসাইটের মধ্যে"
+#~ msgstr[1] "%{instancesCount}টি বিদ্যমান পিয়ারটিউব ওয়েবসাইটের মধ্যে"
+
+#~ msgid "with %{activeFilters} active filter"
+#~ msgid_plural "with %{activeFilters} active filters"
+#~ msgstr[0] "%{activeFilters}টি সক্রিয় ছাঁকনিসহ"
+#~ msgstr[1] "%{activeFilters}টি সক্রিয় ছাঁকনিসহ"
+
+#~ msgid "%{ channel.followersCount } follower"
+#~ msgid_plural "%{channel.followersCount} followers"
+#~ msgstr[0] "%{ channel.followersCount } অনুসরণকারী"
+#~ msgstr[1] "%{channel.followersCount} অনুসরণকারী"

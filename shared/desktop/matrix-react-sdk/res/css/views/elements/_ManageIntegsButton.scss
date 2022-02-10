@@ -1,0 +1,34 @@
+.mx_ManageIntegsButton_error {
+    position: relative;
+    float: right;
+    cursor: not-allowed;
+}
+
+.mx_ManageIntegsButton_error img {
+    position: absolute;
+    right: -5px;
+    top: -5px;
+}
+
+.mx_ManageIntegsButton_errorPopup {
+    position: absolute;
+    top: 110%;
+    left: -275%;
+    width: 550%;
+    padding: 30%;
+    font-size: 10pt;
+    line-height: 1.5em;
+    border-radius: $border-radius-5px;
+    background-color: $accent-color;
+    color: $accent-fg-color;
+    text-align: center;
+    z-index: 1000;
+}
+
+.mx_ManageIntegsButton_error .mx_ManageIntegsButton_errorPopup {
+    display: none;
+}
+
+.mx_ManageIntegsButton_error:hover .mx_ManageIntegsButton_errorPopup {
+    display: inline;
+}

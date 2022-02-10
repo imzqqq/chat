@@ -1,0 +1,34 @@
+version: '2'
+
+services:
+
+  synapse:
+    image: docker.io/matrixdotorg/synapse:v1.39.0
+    environment:
+      - SYNAPSE_CONFIG_PATH=/data/homeserver.yaml
+    volumes:
+      # You may either store all the files in a local folder
+      - ./data/synapse:/data
+      - ./data/wechaty:/wechaty
+      # .. or you may split this between different storage points
+      # - ./files:/data
+      # - /path/to/ssd:/data/uploads
+      # - /path/to/large_hdd:/data/media
+    ports:
+      # - 8880:8880/tcp
+      - 8080:8080/tcp
+
+  matrix-appservice-wechaty: # I tend to name it as birdge_0. ^_^
+      image: wechaty/matrix-appservice:latest
+      volumes:
+        - ./data/wechaty:/data
+      environment:
+        # The default setting is - WECHATY_PUPPET=wechaty-puppet-wechat
+        - WECHATY_LOG=silly
+
+        # If you want to use wechaty token uncomment and fix follows.
+        # - WECHATY_PUPPET=wechaty-puppet-padlocal
+        # - WECHATY_PUPPET_PADLOCAL_TOKEN=puppet_padlocal_xxx # your token
+      command: ["--config", "wechaty-config.yaml", "--file", "wechaty-registration.yaml"]
+      depends_on: 
+        - synapse

@@ -1,0 +1,28 @@
+{
+  "name": "matrix-context-scanner",
+  "version": "1.7.0",
+  "description": "A web service for scanning media hosted by a Matrix media repository",
+  "main": "src/index.js",
+  "author": "-",
+  "license": "Apache-2.0",
+  "scripts": {
+    "test": "mocha",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "express-validation": "^1.0.2",
+    "file-type": "^10.5.0",
+    "joi": "^13.3.0",
+    "js-yaml": "^3.12.0",
+    "rimraf": "^2.6.2",
+    "simple-get": "^4.0.0",
+    "tunnel": "0.0.6"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0",
+    "supertest": "^3.4.2"
+  }
+}

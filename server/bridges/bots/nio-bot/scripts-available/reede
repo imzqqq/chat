@@ -1,0 +1,89 @@
+#!/bin/sh -e
+
+if [ -n "$CONFIG" ]
+then
+    echo '^reede\?$'
+    exit 0
+fi
+
+__mis_nadalapaev()
+{
+    date -d "$d" '+%u'
+}
+
+__mis_paevkuu()
+{
+    date -d "$d" '+%d%m'
+}
+
+__on_nadalavahetus()
+{
+    __mis_nadalapaev "$1" | grep -Eq '6|7'
+}
+
+__on_paevkuu()
+{
+    __mis_paevkuu "$1" | grep -Eq "$2"
+}
+
+__on_lyhendatud()
+{
+    __on_paevkuu "$1" '2302|2206|2312|3112'
+}
+
+__on_riigipyha()
+{
+    y="$( date +%Y )"
+    g="$(( y % 19 ))"
+    c="$(( y / 100 ))"
+    h="$(( ( c - c / 4 - ( 8 * c + 13 ) / 25 + 19 * g + 15 ) % 30 ))"
+    i="$(( h - ( h / 28 ) * ( 1 - ( h / 28 ) * ( 29 / ( h + 1 ) ) * ( ( 21 - g ) / 11 ) ) ))"
+    j="$(( ( y + y / 4 + i + 2 - c + c / 4 ) % 7 ))"
+    p="$(( i - j ))"
+    m="$(( 3 + ( p + 26 ) / 30 ))"
+    d="$(( ( 1 + ( p + 27 + ( p + 6 ) / 40 ) % 31 ) - 2 ))"
+    s="$( printf "%02d%02d" "$d" "$m" )"
+
+    __on_paevkuu "$1" "0101|2402|$s|0105|2306|2406|2008|2412|2512|2612"
+}
+
+if __on_riigipyha 'today'
+then
+    if __on_riigipyha 'tomorrow' || __on_nadalavahetus 'tomorrow'
+    then
+        echo 'Pühad on, kasi tagasi jooma!'
+    else
+        case "$( __mis_nadalapaev 'tomorrow' )" in
+            1|2|3) echo 'Hakkame lõpetama!' ;;
+            4)     echo 'Äkki peaks tervisepäevad võtma?' ;;
+            5)     echo 'Võta tervisepäev ja kasi tagasi jooma!' ;;
+        esac
+    fi
+
+elif __on_riigipyha 'tomorrow'
+then
+    if __on_nadalavahetus 'today'
+    then
+        echo 'Pühad on, kasi tagasi jooma!'
+
+    elif __on_lyhendatud 'today'
+    then
+        echo 'Miks sa ei joo juba?'
+    else
+        echo 'JAH!!!'
+    fi
+
+elif __on_lyhendatud 'tomorrow' || __on_riigipyha '2 days'
+then
+    echo 'Võta tervisepäevad ja kasi jooma!'
+
+else
+    case "$( __mis_nadalapaev 'today' )" in
+        1|2) echo 'Ei.' ;;
+        3)   echo 'Kolmapäev on nädala selgroog.' ;;
+        4)   echo 'Varareede alles.' ;;
+        5)   echo 'JAH!!!' ;;
+        6)   echo 'Nädalavahetus on, kasi tagasi jooma!' ;;
+        7)   echo 'Hakkame lõpetama!' ;;
+    esac
+fi

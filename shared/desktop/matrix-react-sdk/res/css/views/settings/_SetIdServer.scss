@@ -1,0 +1,7 @@
+.mx_SetIdServer .mx_Field_input {
+    @mixin mx_Settings_fullWidthField;
+}
+
+.mx_SetIdServer_tooltip {
+    @mixin mx_Settings_tooltip;
+}

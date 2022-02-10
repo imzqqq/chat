@@ -1,0 +1,8 @@
+mdx_linkify
+bleach
+requests
+markdown
+pyld
+pycryptodome
+html2text
+regex

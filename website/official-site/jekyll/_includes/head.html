@@ -1,0 +1,46 @@
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script type='text/javascript' src='/blog/wp-includes/js/jquery/jquery.js?ver=1.11.3'></script>
+
+  <link rel="stylesheet" href="/site.css">
+  <link rel="stylesheet" href="/docs/css/main.css">
+
+  <link rel="stylesheet" href="/docs/css/site_overrides.css">
+  <link rel="stylesheet" href="/docs/css/basic.css">
+  <link rel="stylesheet" href="/docs/css/nature.css">
+  <link rel="stylesheet" href="/docs/css/ratings.css">
+
+  <link rel='stylesheet' id='divi-fonts-css'  href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,700,800&#038;subset=latin,latin-ext' type='text/css' media='all'>
+  <!--link rel='stylesheet' id='divi-style-css'  href='/blog/wp-content/themes/Divi-child/style.css?ver=2.2' type='text/css' media='all'-->
+  <link rel="stylesheet" href="/docs/css/newstyle.css">
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+
+<script type="text/javascript">
+  var _paq = _paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//piwik.riot.im/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '3']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+
+  function toggleRatings() {
+    if (jQuery("#rating-container").css("bottom") === "18px") {
+      jQuery("#rating-container").animate({bottom:"-32px"});
+    } else {
+      jQuery("#rating-container").animate({bottom:"18px"});
+    }
+  }
+
+  function ratePage(rating) {
+    _paq.push(['trackEvent', 'Rating', 'Rating', window.location.pathname, rating]);
+    jQuery("#rating-container").empty();
+    jQuery("#rating-container").append(jQuery("<div>").text("Thank you. Your rating (" + rating + ") has been recorded."));
+  }
+</script>

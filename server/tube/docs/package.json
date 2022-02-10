@@ -1,0 +1,16 @@
+{
+  "name": "jointube-docs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "docsify": "docsify"
+  },
+  "dependencies": {
+    "docsify": "^4.12.1",
+    "docsify-cli": "^4.4.3",
+    "feather-icons": "^4.28.0",
+    "prismjs": "1.23.0",
+    "redoc": "^2.0.0-rc.48"
+  }
+}

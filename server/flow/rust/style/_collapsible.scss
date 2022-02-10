@@ -1,0 +1,16 @@
+input[type="checkbox"].collapse--toggle {
+  display: none;
+}
+
+.collapse--lbl-toggle {
+  @extend %button-styling;
+  padding: 0 .5em;
+}
+
+.collapse--content {
+  display: none;
+}
+
+.collapse--toggle:checked + .collapse--lbl-toggle + .collapse--content {
+  display: block;
+}

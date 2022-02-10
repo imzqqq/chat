@@ -1,0 +1,9 @@
+{
+  "root": true,
+  "private": true,
+  "workspaces": [
+    "megalodon",
+    "example/typescript",
+    "example/browser"
+  ]
+}

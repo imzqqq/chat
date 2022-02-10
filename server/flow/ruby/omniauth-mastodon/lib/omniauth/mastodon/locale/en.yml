@@ -1,0 +1,6 @@
+en:
+  omniauth:
+    mastodon:
+      title: 'Flow Login'
+      text: 'Your full Flow identifier (username@domain)'
+      button: 'Login'

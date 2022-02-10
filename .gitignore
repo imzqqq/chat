@@ -1,0 +1,13 @@
+/.vs
+/_trial_temp
+*.DS_Store
+*/build
+/.history
+./gradle.properties
+/.gradle
+
+shared/desktop/.bashrc
+shared/desktop/yarn-error.log
+shared/desktop/element-desktop/yarn-error.log
+shared/desktop/flow/yarn-error.log
+shared/android/.idea/gradle.properties

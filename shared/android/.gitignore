@@ -1,0 +1,24 @@
+*.iml
+.gradle
+
+### MARK - imzqqq, added ndk path
+/local.properties
+
+# idea files: exclude everything except dictionnaries
+.idea/caches
+.idea/libraries
+.idea/inspectionProfiles
+.idea/*.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+
+/tmp
+/fastlane/private
+/fastlane/report.xml
+
+ktlint
+
+.tmp_unpatched_strings
+.tmp_new_patched_strings

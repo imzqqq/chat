@@ -1,0 +1,58 @@
+import logging
+from typing import TYPE_CHECKING
+
+from twisted.web.server import Request
+
+from chat.http.server import DirectServeJsonResource, set_cors_headers
+from chat.http.servlet import parse_boolean
+
+from ._base import parse_media_id, respond_404
+
+if TYPE_CHECKING:
+    from chat.rest.media.v1.media_repository import MediaRepository
+    from chat.server import HomeServer
+
+logger = logging.getLogger(__name__)
+
+
+class DownloadResource(DirectServeJsonResource):
+    isLeaf = True
+
+    def __init__(self, hs: "HomeServer", media_repo: "MediaRepository"):
+        super().__init__()
+        self.media_repo = media_repo
+        self.server_name = hs.hostname
+
+    async def _async_render_GET(self, request: Request) -> None:
+        set_cors_headers(request)
+        request.setHeader(
+            b"Content-Security-Policy",
+            b"sandbox;"
+            b" default-src 'none';"
+            b" script-src 'none';"
+            b" plugin-types application/pdf;"
+            b" style-src 'unsafe-inline';"
+            b" media-src 'self';"
+            b" object-src 'self';",
+        )
+        # Limited non-standard form of CSP for IE11
+        request.setHeader(b"X-Content-Security-Policy", b"sandbox;")
+        request.setHeader(
+            b"Referrer-Policy",
+            b"no-referrer",
+        )
+        server_name, media_id, name = parse_media_id(request)
+        if server_name == self.server_name:
+            await self.media_repo.get_local_media(request, media_id, name)
+        else:
+            allow_remote = parse_boolean(request, "allow_remote", default=True)
+            if not allow_remote:
+                logger.info(
+                    "Rejecting request for remote media %s/%s due to allow_remote",
+                    server_name,
+                    media_id,
+                )
+                respond_404(request)
+                return
+
+            await self.media_repo.get_remote_media(request, server_name, media_id, name)

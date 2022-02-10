@@ -1,0 +1,12 @@
+build*
+*.gcov
+doc/html
+doc/reference.xml
+__pycache__
+*.pyc
+.DS_Store
+.vs*
+*.info
+tools/lcov-*
+tools/codecov
+coverage-report

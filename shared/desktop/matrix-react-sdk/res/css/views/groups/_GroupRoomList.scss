@@ -1,0 +1,11 @@
+.mx_GroupRoomTile {
+    position: relative;
+    color: $primary-content;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.mx_GroupRoomList_wrapper {
+    padding: 10px;
+}
