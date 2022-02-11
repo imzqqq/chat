@@ -37,7 +37,7 @@ PODS:
     - DTFoundation/Core
   - DTFoundation/UIKit (1.7.18):
     - DTFoundation/Core
-  - ffmpeg-kit-ios-audio (4.5)
+  - ffmpeg-kit-ios-audio (4.5.1)
   - FLEX (4.5.0)
   - FlowCommoniOS (1.12.2)
   - GBDeviceInfo (6.6.0):
@@ -45,7 +45,7 @@ PODS:
   - GBDeviceInfo/Core (6.6.0)
   - GZIP (1.3.0)
   - HPGrowingTextView (1.1)
-  - Introspect (0.1.3)
+  - Introspect (0.1.4)
   - JitsiMeetSDK (3.10.2)
   - KeychainAccess (4.2.2)
   - KituraContracts (1.2.1):
@@ -199,13 +199,13 @@ SPEC CHECKSUMS:
   DSWaveformImage: 3c718a0cf99291887ee70d1d0c18d80101d3d9ce
   DTCoreText: ec749e013f2e1f76de5e7c7634642e600a7467ce
   DTFoundation: a53f8cda2489208cbc71c648be177f902ee17536
-  ffmpeg-kit-ios-audio: 8c44d93054e1a9743a7014ec3dd26cd1ad8f2a59
+  ffmpeg-kit-ios-audio: 662ce2064e56733ca7d8216705efbc38d9e1c3fe
   FLEX: e51461dd6f0bfb00643c262acdfea5d5d12c596b
   FlowCommoniOS: ca92071ab526dc89905495a37844fd7e78d1a7f2
   GBDeviceInfo: ed0db16230d2fa280e1cbb39a5a7f60f6946aaec
   GZIP: 416858efbe66b41b206895ac6dfd5493200d95b3
   HPGrowingTextView: 88a716d97fb853bcb08a4a08e4727da17efc9b19
-  Introspect: 2be020f30f084ada52bb4387fff83fa52c5c400e
+  Introspect: b62c4dd2063072327c21d618ef2bedc3c87bc366
   JitsiMeetSDK: 2f118fa770f23e518f3560fc224fae3ac7062223
   KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
   KituraContracts: e845e60dc8627ad0a76fa55ef20a45451d8f830b
@@ -217,7 +217,7 @@ SPEC CHECKSUMS:
   MatomoTracker: 24a846c9d3aa76933183fe9d47fd62c9efa863fb
   MatrixKit: 0d8f15f9cacd9edf4250bb26270ccfc439b5c571
   MatrixSDK: c403fdcf2a93b5aa2d24675dceced38191e98c56
-  OLMKit: b1716d810922e13bd03f411e80375bf10357a4a8
+  OLMKit: 726c9d726966815728dd38c65abc51825935bc37
   ReadMoreTextView: 19147adf93abce6d7271e14031a00303fe28720d
   Realm: b6027801398f3743fc222f096faa85281b506e6c
   Reusable: 6bae6a5e8aa793c9c441db0213c863a64bce9136
@@ -231,6 +231,6 @@ SPEC CHECKSUMS:
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
   ZXingObjC: fdbb269f25dd2032da343e06f10224d62f537bdb
 
-PODFILE CHECKSUM: db79d3b86047474739dd07edfaa5b542081b34f9
+PODFILE CHECKSUM: d5e565c5abb63c52f6fa8490ca46a06cca76534e
 
 COCOAPODS: 1.11.0

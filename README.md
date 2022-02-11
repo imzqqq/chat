@@ -151,8 +151,9 @@ sudo docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
     - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[ruby](./server/flow/ruby/README.md)
       - <i class="fas fa-check" style="color:green; margin-right:5px;"></i>[docs](./server/flow/ruby/docs/README.md), <http://localhost:1313>
       - <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[omniauth-mastodon](./server/flow/ruby/omniauth-mastodon/README.md)
-      - <i class="fa fa-exclamation-triangle" style="color:red; margin-right:5px;"></i>[joinmastodon](./server/flow/ruby/joinmastodon/README.md), <http://localhost:3002>
-  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[flow_archived](./server/flow_archived/README.md) 
+	- rust
+	- python
+    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[join-flow](./server/flow/ruby/joinmastodon/README.md), <http://localhost:3002>
   - chat
     - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[go](./server/chat/go/README.md),
       - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[dugong](./server/chat/go/dugong/README.md),
@@ -172,22 +173,36 @@ sudo docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
 	  - <i class="fa fa-running" style="color:#ff922b; margin-right:5px;"></i>[chat-bot](./server/chat/python/chat-bot/README.md)
 		- <i class="fa fa-running" style="color:#ff922b; margin-right:5px;"></i>[matrix-nio](./server/chat/python/chat-bot/matrix-nio/README.md)
       - <i class="fas fa-check" style="color:green; margin-right:5px;"></i>[docs](./server/chat/python/docs/README.md),
+	- rust
+	- cc
   - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[server-admin](./server/server-admin/README.md), <http://localhost:3001>
-  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[meet](./server/meet/README.md), <https://localhost:8083>
-    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[handbook](./server/meet/handbook/README.md), <http://localhost:3000/handbook/>
-    - jicofo
-    - jitsi-videobridge
-    - ios
-    - android
-    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[lib-jitsi-meet](./server/meet/lib-jitsi-meet/README.md)
-    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[jitsi-meet-logger](./server/meet/jitsi-meet-logger/README.md)
-    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[js-utils](./server/meet/js-utils/README.md)
-    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[eslint-config-jitsi](./server/meet/eslint-config-jitsi/README.md)
+  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[tube](./server/tube/README.md), <https://localhost:8083>
+  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[to](./to/README.md), <http://localhost:5000>
+  - <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[pantalaimon](./pantalaimon/README.md)
+  - <i class="fas fa-check" style="color:green; margin-right:5px;"></i>[sydent](./sydent/README.rst), <http://localhost:8090>
+  - <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[sygnal](./sygnal/README.rst),
+  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[user-verification-service](./user-verification-service/README.md), <http://localhost:3003>
+  - <i class="fa fa-running" style="color:#ff922b; margin-right:5px;"></i>[mjolnir](./mjolnir/README.md),
+  - <i class="fa fa-check" style="color:#ff922b; margin-right:5px;"></i>[content-scanner](./content-scanner/README.md), <http://localhost:9000>
+  - bridges
+    - <i class="fa fa-running" style="color:green; margin-right:5px;"></i>[matrix-bot-sdk](./matrix-bot-sdk/README.md), 
+  - flow-apns
+  - tube
+  - bug-report
+
+
+- deploy
+
+
+- libs
+  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[olm](./olm/README.md), 
+
+
 - shared
   - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[ios](./shared/ios/README.md), 
-    - <i class="fa fa-check" style="color:red; margin-right:5px;"></i>[flow](./shared/ios/Riot/Flow/README.md), Unchecked
+    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[flow](./shared/ios/Riot/Flow/README.md),
   - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[android](./shared/android/README.md),
-    - <i class="fa fa-check" style="color:red; margin-right:5px;"></i>[flow](./shared/android/README.md/#Flow), Jetpack page version error
+    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[flow](./shared/android/README.md/#Flow),
   - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[desktop](./shared/desktop/README.md), <http://localhost:8084>
     - <i class="fas fa-check" style="color:green; margin-right:5px;"></i>[eslint-plugin-matrix-org](./shared/desktop/eslint-plugin-matrix-org/README.md),
     - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[matrix-mock-request](./shared/desktop/matrix-mock-request/README.md),
@@ -197,26 +212,25 @@ sudo docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
     - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[seshat](./shared/desktop/seshat/README.md),
     - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[matrix-react-sdk](./shared/desktop/seshat/README.md),
     - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[matrix-js-sdk](./shared/desktop/seshat/README.md),
-- <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[complement](./complement/README.md)
-- <i class="fa fa-check" style="color:#ff922b; margin-right:5px;"></i>[content-scanner](./content-scanner/README.md), <http://localhost:9000>
-- <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[federation-tester](./federation-tester/README.md), <http://localhost:8085/api/report?server_name=localhost:8082>
-- <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[matrix-is-tester](./matrix-is-tester/README.md), 
-- <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[user-verification-service](./user-verification-service/README.md), <http://localhost:3003>
-- <i class="fa fa-running" style="color:#ff922b; margin-right:5px;"></i>[mjolnir](./mjolnir/README.md),
-- <i class="fa fa-running" style="color:green; margin-right:5px;"></i>[matrix-bot-sdk](./matrix-bot-sdk/README.md), 
-- <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[olm](./olm/README.md), 
-- <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[official-site](./websites/official-site/README.md), <http://localhost:8000>
-- <i class="fa fa-running" style="color:green; margin-right:5px;"></i>[official-site2](./websites/official-site2/README.md)
-- <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[pantalaimon](./pantalaimon/README.md)
-- <i class="fas fa-check" style="color:green; margin-right:5px;"></i>[sydent](./sydent/README.rst), <http://localhost:8090>
-- <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[sygnal](./sygnal/README.rst),
-- <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[sytest](./sytest/README.rst),
-- <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[to](./to/README.md), <http://localhost:5000>
+
+
+- test
+  - <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[complement](./complement/README.md)
+  - <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[sytest](./sytest/README.rst),
+  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[federation-tester](./federation-tester/README.md), <http://localhost:8085/api/report?server_name=localhost:8082>
+  - <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[matrix-is-tester](./matrix-is-tester/README.md), 
+
+
+- website
+  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[official-site](./websites/official-site/README.md), <http://localhost:8000>
+  - <i class="fa fa-running" style="color:green; margin-right:5px;"></i>[apps](./websites/official-site2/README.md)
+  - live
+  - space
 
 ## API Tests
 
-- <https://chat.dingshunyu.top/chat/client/r0/login>
-- <https://chat.dingshunyu.top/chat/static/#/>
+- <https://chat.imzqqq.top/chat/client/r0/login>
+- <https://chat.imzqqq.top/chat/static/#/>
 - <http://localhost:8080/chat/static/#/>
 - <http://localhost:8080>
 - <http://localhost:8081>
@@ -289,10 +303,11 @@ The footer is currently used in two cases.
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.1/css/all.css">
 
-## Tips
+> ## Tips
 
-- `cp path-to-file/*.service /etc/systemd/system/`
-- `systemctl daemon-reload`
-- `systemctl enable --now service-name.service`
-- `journalctl -u service-name.service`
-- `git submodule update --init --recursive`
+> - `cp path-to-file/*.service /etc/systemd/system/`
+> - `systemctl daemon-reload`
+> - `systemctl enable --now service-name.service`
+> - `journalctl -u service-name.service`
+> - `git submodule update --init --recursive`
+> - `git config http.postBuffer 524288000`

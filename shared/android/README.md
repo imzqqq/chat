@@ -8,13 +8,12 @@ Features following most important ideas:
 - Optional message bubbles
 - Further usability improvements and additional settings to configure the app
 
-## TODOs
+## TODO
 
 - Friends list
+- Use kotlin version of sdk
 
-## Flow
-
-### Migrate Paging2 to Paging3
+## Migrate Paging2 to Paging3
 
 - PagedListAdapter -> PagingDataAdapter
 - PagingData -> PagedList

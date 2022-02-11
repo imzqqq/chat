@@ -33,3 +33,34 @@ include:
   - path: ChatSwiftUI/target.yml
   - path: ChatSwiftUI/targetUnitTests.yml
   - path: ChatSwiftUI/targetUITests.yml
+
+packages:
+  SDWebImage:
+    from: 5.12.3
+    url: https://github.com/SDWebImage/SDWebImage.git
+  ServiceLayer:
+    path: ./Chat/Flow/ServiceLayer
+  BlurHash:
+    path: ./Chat/Flow/BlurHash
+  ViewModels:
+    path: ./Chat/Flow/ViewModels
+  Secrets:
+    path: ./Chat/Flow/Secrets
+  MastodonAPI:
+    path: ./Chat/Flow/MastodonAPI
+  Mastodon:
+    path: ./Chat/Flow/Mastodon
+  Keychain:
+    path: ./Chat/Flow/Keychain
+  HTTP:
+    path: ./Chat/Flow/HTTP
+  DB:
+    path: ./Chat/Flow/DB
+  Base16:
+    path: ./Chat/Flow/Base16
+  CodableBloomFilter:
+    path: ./Chat/Flow/CodableBloomFilter
+  CombineExpectations:
+    path: ./Chat/Flow/CombineExpectations
+  GRDB:
+    path: ./Chat/Flow/GRDB

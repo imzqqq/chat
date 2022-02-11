@@ -87,9 +87,6 @@ abstract_target 'ChatPods' do
     pod 'ffmpeg-kit-ios-audio', '~> 4.5'
     pod 'FLEX', '~> 4.5.0', :configurations => ['Debug']
 
-    ### MARK - imzqqq
-    #pod 'SDWebImage'
-    ###
     target 'ChatTests' do
       inherit! :search_paths
     end

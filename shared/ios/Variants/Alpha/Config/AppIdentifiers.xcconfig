@@ -16,8 +16,8 @@
 
 
 // App identity
-BUNDLE_DISPLAY_NAME = Element Alpha
-BASE_BUNDLE_IDENTIFIER = im.vector.app.alpha
+BUNDLE_DISPLAY_NAME = Chat Alpha
+BASE_BUNDLE_IDENTIFIER = com.imzqqq.chat.alpha
 APPLICATION_GROUP_IDENTIFIER = group.im.vector.alpha
 APPLICATION_SCHEME = element
 

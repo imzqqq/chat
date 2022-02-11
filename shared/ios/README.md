@@ -10,20 +10,6 @@ pod install               # Create the xcworkspace with all project dependencies
 open Chat.xcworkspace     # Open Xcode
 ```
 
----
-
-## Flow
-
-A free, open-source iOS Flow client.
-
-### Building
-
-To build Flow:
-
-- Select the top-level "Flow" item in Xcode and change the team in each target's "Signing & Capabilities" settings to your own
-
-All dependencies are managed using [Swift Package Manager](https://swift.org/package-manager) and will automatically be installed by Xcode.
-
 ### Flow Push Notifications
 
 Push notifications will not work in development builds of Flow unless you host your own instance of [flow-apns] and change the `pushSubscriptionEndpointURL` constants in [IdentityService.swift] to its URL.
