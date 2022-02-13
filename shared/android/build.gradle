@@ -20,7 +20,7 @@ buildscript {
     dependencies {
         // Release notes of Android Gradle Plugin (AGP):
         // https://developer.android.com/studio/releases/gradle-plugin
-        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.android.tools.build:gradle:7.1.1'
         classpath libs.gradle.kotlinPlugin
         classpath libs.gradle.hiltPlugin
         classpath 'com.google.gms:google-services:4.3.10'
