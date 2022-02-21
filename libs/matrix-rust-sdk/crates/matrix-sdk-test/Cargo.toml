@@ -1,0 +1,27 @@
+[package]
+authors = ["Damir Jelić <poljar@termina.org.uk>"]
+description = "Helpers to write tests for the Matrix SDK"
+edition = "2021"
+homepage = "https://github.com/matrix-org/matrix-rust-sdk"
+keywords = ["matrix", "chat", "messaging", "ruma"]
+license = "Apache-2.0"
+name = "matrix-sdk-test"
+readme = "README.md"
+repository = "https://github.com/matrix-org/matrix-rust-sdk"
+rust-version = "1.56"
+version = "0.4.0"
+
+[features]
+appservice = []
+
+[dependencies]
+http = "0.2.4"
+lazy_static = "1.4.0"
+matrix-sdk-test-macros = { version = "0.1.0", path = "../matrix-sdk-test-macros" }
+serde = "1.0.126"
+serde_json = "1.0.64"
+
+[dependencies.ruma]
+git = "https://github.com/ruma/ruma/"
+rev = "b9f32bc6327542d382d4eb42ec43623495c50e66"
+features = ["client-api-c"]

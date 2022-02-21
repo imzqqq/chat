@@ -1,0 +1,69 @@
+[package]
+name = "mas-handlers"
+version = "0.1.0"
+authors = ["Quentin Gliech <quenting@element.io>"]
+edition = "2021"
+license = "Apache-2.0"
+
+[features]
+dev = ["mas-static-files/dev", "mas-templates/dev"]
+
+[dependencies]
+# Async runtime
+tokio = { version = "1.17.0", features = ["macros"] }
+
+# Logging and tracing
+tracing = "0.1.31"
+
+# Error management
+thiserror = "1.0.30"
+anyhow = "1.0.53"
+
+# Web server
+warp = "0.3.2"
+hyper = { version = "0.14.17", features = ["full"] }
+
+# Emails
+lettre = { version = "0.10.0-rc.4", default-features = false, features = ["builder"] }
+
+# Database access
+sqlx = { version = "0.5.10", features = ["runtime-tokio-rustls", "postgres"] }
+
+# Various structure (de)serialization
+serde = { version = "1.0.136", features = ["derive"] }
+serde_with = { version = "1.12.0", features = ["hex", "chrono"] }
+serde_json = "1.0.79"
+serde_urlencoded = "0.7.1"
+
+# Password hashing
+argon2 = { version = "0.3.4", features = ["password-hash"] }
+
+# Crypto, hashing and signing stuff
+rsa = { git = "https://github.com/RustCrypto/RSA.git" }
+pkcs8 = { version = "0.8.0", features = ["pem"] }
+elliptic-curve = { version = "0.11.12", features = ["pem"] }
+sha2 = "0.10.2"
+crc = "2.1.0"
+
+# Various data types and utilities
+data-encoding = "2.3.2"
+chrono = { version = "0.4.19", features = ["serde"] }
+url = { version = "2.2.2", features = ["serde"] }
+mime = "0.3.16"
+rand = "0.8.5"
+headers = "0.3.7"
+
+oauth2-types = { path = "../oauth2-types" }
+mas-config = { path = "../config" }
+mas-data-model = { path = "../data-model" }
+mas-email = { path = "../email" }
+mas-iana = { path = "../iana" }
+mas-jose = { path = "../jose" }
+mas-static-files = { path = "../static-files" }
+mas-storage = { path = "../storage" }
+mas-templates = { path = "../templates" }
+mas-warp-utils = { path = "../warp-utils" }
+tower = "0.4.12"
+
+[dev-dependencies]
+indoc = "1.0.4"

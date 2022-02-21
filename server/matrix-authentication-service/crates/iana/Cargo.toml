@@ -1,0 +1,11 @@
+[package]
+name = "mas-iana"
+version = "0.1.0"
+authors = ["Quentin Gliech <quenting@element.io>"]
+edition = "2021"
+license = "Apache-2.0"
+
+[dependencies]
+serde = "1.0.136"
+schemars = "0.8.8"
+parse-display = "0.5.4"

@@ -1,0 +1,56 @@
+[package]
+name = "mas-cli"
+version = "0.1.0"
+authors = ["Quentin Gliech <quenting@element.io>"]
+edition = "2021"
+license = "Apache-2.0"
+
+[dependencies]
+tokio = { version = "1.17.0", features = ["full"] }
+futures = "0.3.21"
+anyhow = { version = "1.0.53", features = ["backtrace"] }
+clap = { version = "3.1.0", features = ["derive"] }
+dotenv = "0.15.0"
+schemars = { version = "0.8.8", features = ["url", "chrono"] }
+tower = { version = "0.4.12", features = ["full"] }
+hyper = { version = "0.14.17", features = ["full"] }
+serde_yaml = "0.8.23"
+serde_json = "1.0.79"
+warp = "0.3.2"
+url = "2.2.2"
+argon2 = { version = "0.3.4", features = ["password-hash"] }
+reqwest = { version = "0.11.9", features = ["rustls-tls"], default-features = false, optional = true }
+watchman_client = "0.7.1"
+atty = "0.2.14"
+
+tracing = "0.1.31"
+tracing-appender = "0.2.0"
+tracing-subscriber = { version = "0.3.9", features = ["env-filter"] }
+tracing-opentelemetry = "0.17.1"
+opentelemetry = { version = "0.17.0", features = ["trace", "metrics", "rt-tokio"] }
+opentelemetry-semantic-conventions = "0.9.0"
+opentelemetry-jaeger = { version = "0.16.0", features = ["rt-tokio", "reqwest_collector_client"], optional = true }
+opentelemetry-otlp = { version = "0.10.0", features = ["trace", "metrics"], optional = true }
+opentelemetry-zipkin = { version = "0.15.0", features = ["reqwest-client", "reqwest-rustls"], default-features = false, optional = true }
+
+mas-config = { path = "../config" }
+mas-email = { path = "../email" }
+mas-handlers = { path = "../handlers" }
+mas-http = { path = "../http" }
+mas-storage = { path = "../storage" }
+mas-tasks = { path = "../tasks" }
+mas-templates = { path = "../templates" }
+mas-warp-utils = { path = "../warp-utils" }
+
+[dev-dependencies]
+indoc = "1.0.4"
+
+[features]
+default = ["otlp", "jaeger", "zipkin"]
+dev = ["mas-templates/dev", "mas-handlers/dev"]
+# Enable OpenTelemetry OTLP exporter. Requires "protoc"
+otlp = ["opentelemetry-otlp"]
+# Enable OpenTelemetry Jaeger exporter and propagator.
+jaeger = ["opentelemetry-jaeger", "reqwest"]
+# Enable OpenTelemetry Zipkin exporter and B3 propagator.
+zipkin = ["opentelemetry-zipkin", "reqwest"]

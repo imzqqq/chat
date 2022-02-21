@@ -1,0 +1,18 @@
+[package]
+name = "mas-iana-codegen"
+version = "0.1.0"
+authors = ["Quentin Gliech <quenting@element.io>"]
+edition = "2021"
+license = "Apache-2.0"
+
+[dependencies]
+anyhow = "1.0.53"
+async-trait = "0.1.52"
+convert_case = "0.5.0"
+csv = "1.1.6"
+futures-util = "0.3.21"
+reqwest = { version = "0.11.9", features = ["blocking", "rustls-tls"], default-features = false }
+serde = { version = "1.0.136", features = ["derive"] }
+tokio = { version = "1.17.0", features = ["full"] }
+tracing = "0.1.31"
+tracing-subscriber = "0.3.9"

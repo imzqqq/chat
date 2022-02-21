@@ -1,0 +1,369 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  fetch:
+    name: Fetch Cargo dependencies
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: "1.56.0" # MSRV
+          target: x86_64-unknown-linux-musl
+          profile: minimal
+          override: true
+
+      - name: Setup Cargo cache
+        uses: actions/cache@v2.1.7
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: ${{ runner.os }}-cargo-deps-msrv-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Fetch dependencies
+        id: fetch
+        uses: actions-rs/cargo@v1
+        continue-on-error: true
+        with:
+          command: fetch
+          args: --locked
+
+      - name: Fetch dependencies (retry)
+        id: fetch-2
+        uses: actions-rs/cargo@v1
+        if: steps.fetch.outcome == 'failure'
+        continue-on-error: true
+        with:
+          command: fetch
+          args: --locked
+
+      - name: Fetch dependencies (second retry)
+        uses: actions-rs/cargo@v1
+        if: steps.fetch.outcome == 'failure' && steps.fetch-2.outcome == 'failure'
+        with:
+          command: fetch
+          args: --locked
+
+
+  rustfmt:
+    name: Check style
+    needs: [fetch]
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Install toolchain
+        id: toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          target: x86_64-unknown-linux-musl
+          components: rustfmt
+          profile: minimal
+          override: true
+
+      - name: Setup Cargo cache
+        uses: actions/cache@v2.1.7
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: ${{ runner.os }}-cargo-deps-msrv-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Setup build cache
+        uses: actions/cache@v2.1.7
+        with:
+          path: |
+            target
+          key: cargo-fmt-${{ hashFiles('**/Cargo.lock') }}-${{ steps.toolchain.outputs.rustc_hash }}
+
+      - name: Check style
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+
+
+  clippy:
+    name: Run Clippy
+    needs: [fetch]
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Install toolchain
+        id: toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-musl
+          components: clippy
+          profile: minimal
+          override: true
+
+      - name: Setup Cargo cache
+        uses: actions/cache@v2.1.7
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: ${{ runner.os }}-cargo-deps-msrv-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Setup build cache
+        uses: actions/cache@v2.1.7
+        with:
+          path: |
+            target
+          key: cargo-clippy-${{ hashFiles('**/Cargo.lock') }}-${{ steps.toolchain.outputs.rustc_hash }}
+
+      - name: Run Clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --workspace -- -D warnings
+
+
+  test:
+    name: Run test suite with Rust ${{ matrix.toolchain }}
+    needs: [rustfmt, clippy, fetch]
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    continue-on-error: "${{ matrix.toolchain == 'beta' || matrix.toolchain == 'nightly' }}"
+
+    strategy:
+      fail-fast: false # Continue other jobs if one fails to help filling the cache
+      matrix:
+        toolchain:
+          - "1.56.0" # MSRV
+          - stable
+          - beta
+          - nightly
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Install toolchain
+        id: toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.toolchain }}
+          target: x86_64-unknown-linux-musl
+          profile: minimal
+          override: true
+
+      - name: Setup Cargo cache
+        uses: actions/cache@v2.1.7
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: ${{ runner.os }}-cargo-deps-msrv-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Setup build cache
+        uses: actions/cache@v2.1.7
+        with:
+          path: |
+            target
+          key: ${{ runner.os }}-cargo-build-${{ steps.toolchain.outputs.rustc_hash }}-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --offline --workspace
+
+
+  coverage:
+    name: Code coverage
+    needs: [rustfmt, clippy, fetch]
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Install toolchain
+        id: toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-musl
+          override: true
+          components: llvm-tools-preview
+
+      - name: Setup Cargo cache
+        uses: actions/cache@v2.1.7
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: ${{ runner.os }}-cargo-deps-msrv-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Setup build cache
+        uses: actions/cache@v2.1.7
+        with:
+          path: |
+            target
+          key: ${{ runner.os }}-cargo-coverage-${{ steps.toolchain.outputs.rustc_hash }}-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Download grcov
+        run: |
+          mkdir -p "${HOME}/.local/bin"
+          curl -sL https://github.com/mozilla/grcov/releases/download/v0.8.6/grcov-v0.8.6-x86_64-unknown-linux-gnu.tar.gz | tar -zxf - -C "${HOME}/.local/bin"
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+
+      - name: Run test suite with profiling enabled
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --all-features --no-fail-fast --workspace
+        env:
+          CARGO_INCREMENTAL: '0'
+          RUSTC_BOOTSTRAP: '1' # Use unstable flags on stable Rust
+          RUSTFLAGS: '-Zinstrument-coverage'
+          RUSTDOCFLAGS: "-Cpanic=abort -Zinstrument-coverage -Zunstable-options --persist-doctests ${{ github.workspace }}/target/debug/doctestbins"
+          LLVM_PROFILE_FILE: "cargo-test-%p-%m.profraw"
+
+      - name: Build grcov report
+        run: |
+          mkdir -p target/coverage
+          grcov . --binary-path ./target/debug/deps/ -s . -t lcov --branch --ignore-not-existing --ignore '../*' --ignore "/*" -o target/coverage/tests.lcov
+          grcov . --binary-path ./target/debug/doctestbins/ -s . -t lcov --branch --ignore-not-existing --ignore '../*' --ignore "/*" -o target/coverage/doctests.lcov
+
+      - name: Upload to codecov.io
+        uses: codecov/codecov-action@v2
+        with:
+          files: target/coverage/*.lcov
+
+
+  build-image:
+    name: Build and push Docker image
+    needs: [rustfmt, clippy]
+    runs-on: ubuntu-latest
+    env:
+      IMAGE: ghcr.io/matrix-org/matrix-authentication-service
+
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: "${{ env.IMAGE }}"
+          bake-target: docker-metadata-action
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
+
+      - name: Docker meta (debug variant)
+        id: meta-debug
+        uses: docker/metadata-action@v3
+        with:
+          images: "${{ env.IMAGE }}"
+          bake-target: docker-metadata-action-debug
+          tags: |
+            type=ref,event=branch,suffix=-debug
+            type=semver,pattern={{version}},suffix=-debug
+            type=semver,pattern={{major}}.{{minor}},suffix=-debug
+            type=semver,pattern={{major}},suffix=-debug
+            type=sha,suffix=-debug
+
+      - name: Merge buildx bake files
+        run: |
+            jq -s '.[0] * .[1]' ${{ steps.meta.outputs.bake-file }} ${{ steps.meta-debug.outputs.bake-file }} > docker-bake.override.json
+
+      - name: Setup Cosign
+        uses: sigstore/cosign-installer@v2.0.0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          config-inline: |
+            [registry."docker.io"]
+              mirrors = ["mirror.gcr.io"]
+
+      - name: Login to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # For pull-requests, only read from the cache, do not try to push to the
+      # cache or the image itself
+      - name: Build
+        uses: docker/bake-action@v1
+        if: github.event_name == 'pull_request'
+        with:
+          set: |
+            base.cache-from=type=registry,ref=${{ env.IMAGE }}:buildcache
+
+      - name: Build and push
+        uses: docker/bake-action@v1
+        if: github.event_name != 'pull_request'
+        with:
+          set: |
+            base.output=type=image,push=true
+            base.cache-from=type=registry,ref=${{ env.IMAGE }}:buildcache
+            base.cache-to=type=registry,ref=${{ env.IMAGE }}:buildcache,mode=max
+
+      - name: Sign the images with GitHub Actions provided token
+        # Only sign on tags and on commits on main branch
+        if: |
+          github.event_name != 'pull_request'
+          && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
+
+        run: cosign sign ${TAGS}
+        env:
+          TAGS: "${{ steps.meta.outputs.tags }} ${{ steps.meta-debug.outputs.tags }}"
+          COSIGN_EXPERIMENTAL: 1

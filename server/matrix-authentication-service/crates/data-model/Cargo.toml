@@ -1,0 +1,17 @@
+[package]
+name = "mas-data-model"
+version = "0.1.0"
+authors = ["Quentin Gliech <quenting@element.io>"]
+edition = "2021"
+license = "Apache-2.0"
+
+[dependencies]
+chrono = "0.4.19"
+thiserror = "1.0.30"
+serde = "1.0.136"
+url = { version = "2.2.2", features = ["serde"] }
+crc = "2.1.0"
+rand = "0.8.5"
+
+mas-iana = { path = "../iana" }
+oauth2-types = { path = "../oauth2-types" }
