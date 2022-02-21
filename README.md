@@ -311,3 +311,7 @@ The footer is currently used in two cases.
 > - `journalctl -u service-name.service`
 > - `git submodule update --init --recursive`
 > - `git config http.postBuffer 524288000`
+> - `git config --global  --list`
+> - `git config --global  user.name "user_name"`
+> - `git config --global user.email "email_address"`
+> - `ssh-keygen -t rsa -C "email_address"`
