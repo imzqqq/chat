@@ -1,0 +1,35 @@
+---
+clients: []
+http:
+  address: "[::]:8080"
+  web_root: ~
+  public_base: "http://[::]:8080/"
+database:
+  uri: "postgresql://"
+  max_connections: 10
+  min_connections: 0
+  connect_timeout: 30
+  idle_timeout: 600
+  max_lifetime: 1800
+telemetry:
+  tracing:
+    exporter: none
+    propagators: []
+  metrics:
+    exporter: none
+templates:
+  path: ~
+  builtin: true
+csrf:
+  ttl: 3600
+email:
+  from: Authentication Service <root@localhost>
+  reply_to: Authentication Service <root@localhost>
+  transport: blackhole
+secrets:
+  encryption: 14743ba04815c6079f89195a22efa7b95ded4cdf916258702c3ba8f5c088e7c5
+  keys:
+    - type: rsa
+      key: "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEAu4h5sFtAsEcdV+6IfHnYAS0Uvk5CRWvZW0rINY97kMtI7nvh\nca++TUvfmsWeO7DGaIJIOjaXazioKnzWDbAlxoLfnJJm6AapwcQadzUMW/6/TCZH\nSP4V4sq1+inJM2d9OaTVGS651h3+prahmMkdlbS65csE2OATrjgqGeQHlT0DvFyQ\nA1egpNGelvY3B7c7cfSUhusTRWGPG3lEuXHtmnyiq0qA8uQUDHgk2EZWYPMcQfpV\nhaz5rexuPuGV29KljS76kp/oPZmkA5vUbSuTNr3QB35erUhlB2vfwE3ZFpGy5r32\n6JjdSVYrMSI2lHz6S0YGRr2kDkiEyFjPd3Mx9QIDAQABAoIBAA8MbY9sUy2SF1W2\nC3fJoz686lw3FXRSqjd8McKyh9zfozOX90hTLPcw7nmSABeUIOfEBJ2/QblV65C1\nQcwJZY6fc+gxi1Z1KmwlG2aTeDFtqNYogDHoScNQNvgjIEUiudbFVmBV8o2vDH8+\nSotjIB+iSBkmiHYKzSl+0koPlVgxUQ/+4yHYtV5llPF87nJHd5O4VMh+JPeAAVFL\nUJZZeatWO7ZjuXcRcrizBjc4Xm6Ci/P5Ca40Avo2HEBr7NgZ1dEf98rKZCOb1+ax\n8wTY0NVZ1eURlV4FytmSKNOrH8kV52IuGdV6PNuZTW12nWUPP33+MJrKoMOaEgiN\nFikDnqECgYEA3GpsAD3wPFP10IoJZaHMC+NO+X1K5X/2C2iLaKIvlA/R8uDCLkm6\nxy4FTn8VQ5tsb74RfvgKh+fh0oFk9C6VwR9cU43LmDNCztY2oTo27jkNnE0lQwIh\n+GuACcDmigieEwHwZ1Y5BrJwvbS4Ih0a81TYkhCxFwMhmhE1LBc6YOkCgYEA2c8L\nt8w6A1fe51whijhPqkQ41VzrBh2T+aHcY9KemDMyQPf6F23gDKemJgXsTr/U7SKN\nlTcM8bCR6XQrIYFL/JNQ1L1cRmbtLPeQcL0QgQ7jTW9PsSFuVBsqkCcHuxxHOzj+\nPRUSkbemJPdsOox6Y2QqDcrle9lQNsUBuS3NQS0CgYEAjcX+FeHBJmyyziIbjT2W\n64aYA63tgNTfw9LI6NJ5W/kZB+o9vFw8QWV+kFD5snTEONO+mTaeP3CNNkN4Vf+o\n34F2d1/bNtix/iyXEvlI383ezUxpzUIP66PpxVxIbTzBwGQc57r0DzSzg7I8ReUG\nssE+VCVcYvrmoBy1YNjH+hECgYEAsJdkicVEN9ezeuNAsj8LoCGl7p9iUdgDVH7+\nH9TxDrdbhD9JfltwLvJyDBv7RrHTodvE7PjwPriI5L1yBr087XBHNeS9frsOisnB\nSxaO3gRDGFIqS5OuTvSjorJyWysHOaXww3dlUc2TIB+WmTWyOQlJ61rYinxbw7wg\ntJHE+5UCgYAReQD7juILyLeY3Qheahfegz0ghIJ4a98oqp/t1LI5OSGRYPUrP6c5\nbEyVkxkRggAYxv5UVZvhVXXgt2byTPsFaqkySWfgL0C8ROE1bVTAK0I5DyJhUQhL\n9knI61kLLKX0nuZAplJ1oal4RJDA9foVTlu1yodrsnM4+CGZDpYp8Q==\n-----END RSA PRIVATE KEY-----\n"
+    - type: ecdsa
+      key: "-----BEGIN EC PRIVATE KEY-----\nMGsCAQEEIJPf/fVKB+ID/klp8Dzx8uUTXwX8K0QC0oD/Pgxi0AtEoUQDQgAEaRTf\nlkAES8I8v44tIvmwHTXm4GRicfbzhTx6HCnknqvFxI/KhhIBCKJwfxWt3ugbssVY\ncdNykdJY5qOakqX4wg==\n-----END EC PRIVATE KEY-----\n"
