@@ -236,7 +236,7 @@ sudo docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
 - <http://localhost:8081>
 - <http://localhost:8082>
 
-## Git
+## Encoding
 
 > Use LF in Linux, use CRLF in Windows (Optional)
 
@@ -303,15 +303,20 @@ The footer is currently used in two cases.
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.1/css/all.css">
 
-> ## Tips
+## Common sense
 
-> - `cp path-to-file/*.service /etc/systemd/system/`
-> - `systemctl daemon-reload`
-> - `systemctl enable --now service-name.service`
-> - `journalctl -u service-name.service`
-> - `git submodule update --init --recursive`
-> - `git config http.postBuffer 524288000`
-> - `git config --global  --list`
-> - `git config --global  user.name "user_name"`
-> - `git config --global user.email "email_address"`
-> - `ssh-keygen -t rsa -C "email_address"`
+- `cp path-to-file/*.service /etc/systemd/system/`
+- `systemctl daemon-reload`
+- `systemctl enable --now service-name.service`
+- `journalctl -u service-name.service`
+- `git submodule update --init --recursive`
+- `git config http.postBuffer 524288000`
+- `git config --global --list`
+- `git config --global user.name "user_name"`
+- `git config --global user.email "email_address"`
+- `ssh-keygen -t rsa -C "email_address"`
+- `git config --global https.proxy http://127.0.0.1:1080`
+- `git config --global https.proxy https://127.0.0.1:1080`
+- `git config --global --unset http.proxy`
+- `git config --global --unset https.proxy`
+- `npm config delete proxy`
