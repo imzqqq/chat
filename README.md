@@ -143,6 +143,28 @@ sudo docker logs -f gitlab
 sudo docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
 ```
 
+## Locale
+
+Run the `locale` command to view the character encoding type of the ECS instance and switch the character encoding type from non-en_US.UTF-8 to en_US.UTF-8. Run the following command to switch the character encoding type.
+
+`LANG=en_US.UTF-8`
+
+If the problem is still not solved, run the following command to switch the character encoding type.
+
+`export LC_ALL=en_US.UTF-8`
+
+If the problem is still not solved, run the following command to switch the character encoding type.
+
+`localectl set-locale LANG=en_US.UTF-8`
+
+If the above solution does not solve the problem, run the following command to switch the character encoding type.
+
+`export LANGUAGE=en_US.UTF-8`
+
+If the problem is still not resolved, you should try running the following command to restart the ECS instance.
+
+`reboot`
+
 ## Architecture
 
 - server
