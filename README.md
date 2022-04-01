@@ -170,8 +170,14 @@ sudo docker run --detach  --hostname gitlab.dingshunyu.top --publish 16443:443 -
 
 # sudo docker run --detach  --hostname gitlab.dingshunyu.top --publish 16443:443 --publish 16680:80 --publish 16622:22  --name gitlab --restart always --volume $GITLAB_HOME/config:/etc/gitlab:Z  --volume $GITLAB_HOME/logs:/var/log/gitlab:Z  --volume $GITLAB_HOME/data:/var/opt/gitlab:Z  gitlab/gitlab-ee:latest
 
+sudo docker exec -it gitlab /bin/bash
+sudo docker exec -it gitlab editor /etc/gitlab/gitlab.rb
+
+docker stop/restart
 sudo docker logs -f gitlab
 sudo docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
+sudo gitlab-rake "gitlab:password:reset"
+sudo gitlab-rake "gitlab:password:reset[johndoe]"
 ```
 
 ## Locale
@@ -358,18 +364,176 @@ The footer is currently used in two cases.
 
 ## Common sense
 
-- `cp path-to-file/*.service /etc/systemd/system/`
-- `systemctl daemon-reload`
-- `systemctl enable --now service-name.service`
-- `journalctl -u service-name.service`
-- `git submodule update --init --recursive`
-- `git config http.postBuffer 524288000`
-- `git config --global --list`
-- `git config --global user.name "user_name"`
-- `git config --global user.email "email_address"`
-- `ssh-keygen -t rsa -C "email_address"`
-- `git config --global https.proxy http://127.0.0.1:1080`
-- `git config --global https.proxy https://127.0.0.1:1080`
-- `git config --global --unset http.proxy`
-- `git config --global --unset https.proxy`
-- `npm config delete proxy`
+```sh
+$ cp path-to-file/*.service /etc/systemd/system/
+$ systemctl daemon-reload
+$ systemctl enable --now service-name.service
+$ journalctl -u service-name.service
+$ git submodule update --init --recursive
+$ git config http.postBuffer 524288000
+$ git config --global --list
+$ git config --global user.name "user_name"
+$ git config --global user.email "email_address"
+$ ssh-keygen -t rsa -C "email_address"
+$ git config --global https.proxy http://127.0.0.1:1080
+$ git config --global https.proxy https://127.0.0.1:1080
+$ git config --global --unset http.proxy
+$ git config --global --unset https.proxy
+$ npm config delete proxy
+$ sudo nvidia-docker run -p 11050:11250 --name=zq_pytorch -v ~/workspace:/root/workspace -v /data:/root/data --shm-size 64g --device /dev/nvidiactl --device /dev/nvidia-uvm --device /dev/nvidia0 --device /dev/nvidia1 --device /dev/nvidia2 --device /dev/nvidia3 -it hetao-pytorch /bin/bash
+
+$ npm install uuid
+$ npm install --global windows-build-tools
+$ npm config set python c:\python27\python.exe
+
+$ sudo nginx -s reload
+
+$ sudo ufw enable
+$ sudo ufw allow smtp　#25/tcp (smtp)
+$ sudo ufw allow 22/tcp #22/tcp (ssh)
+$ sudo ufw allow 53
+$ sudo ufw allow from 192.168.1.100 
+$ sudo ufw allow proto udp 192.168.0.1 port 53 to 192.168.0.2 port 53
+$ sudo ufw deny smtp
+$ sudo ufw delete allow smtp 
+$ sudo ufw status
+
+$ sudo apt install maven
+$ sudo apt install openjdk-8-jdk
+
+$ du-h --max-depth=1
+
+$ git push origin --delete branch_name
+$ git branch -a 
+$ git branch -d branch_name
+
+$ pip install virtualenvwrapper
+$ mkvirtualenv project_env
+$ mkvirtualenv env --python=python2.7
+$ workon project_env
+$ rmvirtualenv project_env
+$ lssitepackages
+# lsvirtualenv
+
+$ sudo gem install -n /usr/local/bin cocoapods
+$ sudo adduser username
+$ sudo alter user admin superuser login
+$ sudo journalctl -u mastodon-sidekiq
+$ systemctl restart mastodon-sidekiq
+$ systemctl reload mastodon-web
+$ systemctl restart mastodon-streaming
+$ systemctl list-unit-files|grep enabled
+$ su - imzqqq
+$ bundle config deployment &apos;true&apos;
+$ bundle config without &apos;development test&apos;
+$ bundle install -j$(getconf _NPROCESSORS_ONLN)
+$ yarn install --pure-lockfile
+$ RAILS_ENV=production bundle exec rake mastodon:setup
+$ exit
+$ cp /home/mastodon/live/dist/nginx.conf /etc/nginx/sites-available/mastodon
+$ ln -s /etc/nginx/sites-available/mastodon /etc/nginx/sites-enabled/mastodon
+$ certbot --nginx -d example.com
+$ cp /home/mastodon/live/dist/mastodon-*.service /etc/systemd/system/
+$ systemctl daemon-reload
+$ systemctl enable --now mastodon-web mastodon-sidekiq mastodon-streaming
+
+$ git remote set-url origin <remote_url>
+$ git clone -b <remote_url>
+$ pip3 install psycopg2-binary
+$ sudo apt-get install -y nodejs
+$ sudo apt-get install gcc g++ make
+$ curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg|gpg--dearmor| sudo tee /usr/share/keyrings/yarnkey.gpg >/dev/null
+echo &quot;deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debianstablemain&quot; | sudo tee /etc/apt/sources.list.d/yarn.list
+$ sudo apt-get update sudo apt-get install yarn
+
+$ git fetch
+$ git checkout <branch_name>
+
+$ git remote -v
+$ git remote add upstream <upstream_server_url>
+$ git remote -v
+$ git fetch upstream
+$ git checkout main
+$ git merge upstream/main
+$ git push origin main
+
+$ git config --global core.autocrlf false
+$ git config --global core.safecrlf true
+
+$ go env -w GOPROXY=https://goproxy.cn,https://gocenter.io,https://goproxy.io,direct
+
+$ git push origin local_branch:remote_branch
+$ sudo chown -R user_name /path/to/folder
+
+$ python3 -m pip install -U autopep8
+$ npm install yarn tyarn -g
+
+$ alias python=&apos;/usr/bin/python3&apos;
+$ alias pip=&apos;/usr/bin/pip3&apos;
+$ . ~/.bashrc
+
+$ brew install postgresql
+$ brew install pgadmin4
+$ initdb /usr/local/var/postgres -E utf8
+$ pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
+$ pg_ctl -D /usr/local/var/postgres stop -s -m fast
+$ createuser username -P
+# Enter password for new role
+# Enter it again
+$ createdb dbname -O username -E UTF8 -e
+$ psql -U username -d dbname -h 127.0.0.1
+$ \l
+$ \c dbname
+$ \d
+
+$ sudo apt-get update
+$ sudo apt-get install postgresql postgresql-client
+$ sudo /etc/init.d/postgresql start
+$ su - postgres
+$ psql
+$ alter role postgres with password &apos;postgres&apos;
+
+$ CREATE USER user_name WITH PASSWORD &apos;******&apos;;
+$ CREATE DATABASE db_name OWNER user_name;
+$ GRANT ALL PRIVILEGES ON DATABASE db_name TO user_name;
+$ psql -d db_name
+
+$ npm config set registry https://registry.npmjs.org/
+$ npm config get registry
+$ yarn config set registry https://registry.yarnpkg.com
+$ yarn config get registry
+
+$ npm install -g nrm
+$ nrm ls
+$ nrm use taobao
+$ yarn global add yrm
+$ yrm ls
+$ yrm use taobao
+
+$ npm list -g --depth 0
+$ yarn global list
+
+# Will clean all pods
+$ pod cache clean --all
+# Will remove all installed &apos;FortifySec&apos; pods
+$ pod cache clean &apos;FortifySec&apos; --all
+
+$ gem install rails -V
+
+$ sudo apt-get update
+$ sudo apt-get upgrade
+$ sudo apt-get install postgresql postgresql-client
+$ sudo -i -u postgres
+$ psql
+$ CREATE DATABASE dbName;
+$ CREATE USER userName WITH PASSWORD 'password' ; 
+$ GRANT ALL PRIVILEGES ON DATABASE dbName to userName;
+$ \q
+$ psql -d dbname
+
+$ sudo docker run -itd --name imqzzZ -p 16666-16888:16666-16888/tcp ubuntu /bin/bash
+
+$ scp /local_path/test.txt root@47.115.52.51:/home/imzqqq/workspace
+$ scp root@47.115.52.51:/home/imzqqq/workspace/world.txt /local_path
+$ scp -r /local_folder root@47.115.52.51:/home/imzqqq/workspace/folder
+```
