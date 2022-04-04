@@ -1,0 +1,38 @@
+{
+  "name": "berty",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "@fullhuman/postcss-purgecss": "^2.1.2",
+    "amphtml-validator": "^1.0.30",
+    "autoprefixer": "^9.7.6",
+    "cheerio": "^1.0.0-rc.3",
+    "htmlnano": "^0.2.5",
+    "netlify-plugin-hugo-cache-resources": "^0.1.4",
+    "netlify-plugin-submit-sitemap": "^0.1.4",
+    "node-fetch": "^2.6.0",
+    "postcss-cli": "^7.1.0",
+    "postcss-import": "^12.0.1",
+    "postcss-purifycss": "^1.1.0",
+    "postcss-replace": "^1.1.2",
+    "yaml": "^1.10.0"
+  },
+  "browserslist": [
+    "> 1%"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pre:push": "node replace-remote-md-images"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "fast-xml-parser": "^3.21.1",
+    "glob": "^7.2.0",
+    "sharp": "^0.27.0"
+  }
+}

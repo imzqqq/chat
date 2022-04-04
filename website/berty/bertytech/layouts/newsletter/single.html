@@ -1,0 +1,50 @@
+{{ .Scratch.Set "body-class" "page-post fake wh" }}
+{{ partial "head" . }}
+
+<header class="header-rounded large bg-fakeblack gradient bg-newsletter">
+  <div class="container">
+    <div class="subnav">
+       <a href="/newsletter" class="btn btn-bty btn-transparent"><i class="far fa-arrow-left"></i>{{ T "back_to_list" . }}</a>
+    </div>
+  </div><!-- /.container -->
+  <div class="container text-center">
+    <br />
+    <h1 class="text-shadow">{{.Title}}</h1>
+  </div><!-- /.container -->
+</header>
+
+<div class="content">
+  <div class="container">
+     <div class="block block-post bg-white">
+      <div class="post-content">
+        {{.Content}}
+        <br />
+      </div><!-- /.post-content -->
+      {{ partial "post_footer" . }}
+    </div><!-- /.block -->
+
+    <div class="row mb-5">
+      <div class="col-md-12 mb-3">
+        <h3 class="font-weight-bold"><strong>{{ T "comments" "2" }}</strong></h3>
+      </div>
+      <div class="col-md-12">
+        <div class="block bg-white">
+          {{ partial "discourse_comments" . }}
+        </div>
+      </div>
+    </div>
+
+    <section class="section-actions d-none">
+      <a class="block block-action bg-fakeblack bg-gradient" href="/newsletter">
+      <h4><i class="far fa-arrow-left left"></i>{{ T "back_to_list" . }}</h4>
+      </a><!-- /.block -->
+    </section>
+
+  </div><!-- /.container -->
+</div><!-- /.content -->
+
+{{ partial "section_newsletter" . }}
+
+<!-- TODO : add previeous/next  -->
+
+{{ partial "footer" . }}

@@ -1,0 +1,70 @@
+{{ $table := .Site.GetPage "/compare-table-apps" }}
+{{ $_apps := sort ($table.Resources.Match "*") ".Params.weight" }}
+
+<!-- 
+  Make sure to ignore the translation files,
+  by checking if there is more than 1 dot in the filename.
+  Because on the English page "$_apps" also contains files from other languages.
+-->
+{{ $apps := slice }}
+{{ if ne (print .Site.Language) "en" }}
+  {{$apps = $_apps}}
+{{ else }}
+  {{ range $_apps }}
+    {{ $app := replace .File.Path "." "___" }}
+    {{ if lt (len (findRE "___" $app)) 2 }}
+      {{ $apps = $apps | append . }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="compare-table table-responsive-md">
+      <table class="compare-table-inner table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">{{ T "features" "1" }}</th>
+            {{ range $apps }}
+            <th scope="col">
+              {{ .Title }}
+            </th>
+            {{ end }}
+          </tr>
+        </thead>
+        <tbody>
+          {{ range $table.Params.compared_items }}
+          {{ $key := .key }}
+          <tr>
+            <th scope="row" class="compare-name">{{ T (print "compare_" $key) . }}</th>
+            {{ range $apps }}
+            {{ $value := (index .Params $key) | lower }}
+            <td class="compare-value value-{{ $value | lower }}">
+              {{ if eq $value "true" }}
+              <i class="far fa-check"></i>
+              {{ else if eq $value "false" }}
+              <i class="fal fa-times"></i>
+              {{ else if eq $value "?" }}
+              <i class="fal fa-question-circle"></i>
+              {{ else }}
+              {{ T $value . }}
+              {{ end }}
+            </td>
+            {{ end }}
+          </tr>
+          {{ end }}
+          <tr>
+            <th scope="row"></th>
+            {{ range $apps }}
+            <td>
+              <a class="btn btn-bty btn-grack d-flex align-items-center" href="{{ printf .Site.Params.editOnGithubLink .File.Path }}" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i><small>{{ T "edit" . }}</small>
+              </a>
+            </td>
+            {{ end }}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

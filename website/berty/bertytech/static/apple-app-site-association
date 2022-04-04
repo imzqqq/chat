@@ -1,0 +1,43 @@
+{
+    "webcredentials": {
+        "apps": [
+            "WMBQ84HN4T.tech.berty.ios.staff",
+            "WMBQ84HN4T.tech.berty.ios.debug",
+            "WMBQ84HN4T.tech.berty.ios",
+            "GR5463T564.tech.berty.ios.yolo"
+        ]
+    },
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "WMBQ84HN4T.tech.berty.ios.staff",
+                "paths": [
+                    "/id*",
+                    "/group*"
+                ]
+            },
+            {
+                "appID": "WMBQ84HN4T.tech.berty.ios.debug",
+                "paths": [
+                    "/id*",
+                    "/group*"
+                ]
+            },
+            {
+                "appID": "WMBQ84HN4T.tech.berty.ios",
+                "paths": [
+                    "/id*",
+                    "/group*"
+                ]
+            },
+            {
+                "appID": "GR5463T564.tech.berty.ios.yolo",
+                "paths": [
+                    "/id*",
+                    "/group*"
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,105 @@
+{{ $is_404 := eq .Kind "404" }}
+
+<footer class="overflow-hidden">
+	<div class="footer-rounded bg-blue text-white">
+		<div class="container">
+			<div class="row row-top">
+				<div class="col-md-5">
+					{{ partial "img" (dict "ctx" . "class" "img-fluid img-bt" "src" "/img/berty_technologies_logo.png" "alt" "Berty Technologies" "width" "352" "height" "145") }}
+					<br />
+					{{ $url := relLangURL "/about" }}
+					<p>The Berty app is developed by the NGO <a href="{{ cond $is_404 (absURL $url) $url }}">Berty Technologies</a>.</p>
+				</div><!-- /.col -->
+				<div class="col-md-7">
+					<div class="row">
+						<div class="col-4 col-links">
+							{{ $url := relLangURL "/features" }}
+							<h5><a href="{{ cond $is_404 (absURL $url) $url }}">Features</a></h5>
+							{{ $url := relLangURL "/challenges" }}
+							<h5><a href="{{ cond $is_404 (absURL $url) $url }}">Challenges</a></h5>
+							{{ $url := relLangURL "/faq" }}
+							<h5><a href="{{ cond $is_404 (absURL $url) $url }}">FAQ</a></h5>
+							{{ $url := relLangURL "/community" }}
+							<h5><a href="{{ cond $is_404 (absURL $url) $url }}">Community</a></h5>
+							{{ $url := relLangURL "/blog" }}
+							<h5><a href="{{ cond $is_404 (absURL $url) $url }}">Blog</a></h5>
+						</div><!-- /.col -->
+						<div class="col-4 col-links">
+							<h5>Developers</h5>
+							<ul class="list-unstyled text-small">
+								{{ $url := relLangURL "/docs" }}
+								<li><a href="{{ cond $is_404 (absURL $url) $url }}">Docs</a></li>
+								{{ $url := relLangURL "/docs#projects" }}
+								<li><a href="{{ cond $is_404 (absURL $url) $url }}">Our projects</a></li>
+								{{ $url := relLangURL "/contribute" }}
+								<li><a href="{{ cond $is_404 (absURL $url) $url }}">Contribute</a></li>
+								{{ $url := relLangURL "/contribute#projects-we-love" }}
+								<li><a href="{{ cond $is_404 (absURL $url) $url }}">Projects we love</a></li>
+							</ul>
+						</div><!-- /.col -->
+						<div class="col-4 col-links">
+							{{ $url := relLangURL "/about" }}
+							<h5><a href="{{ cond $is_404 (absURL $url) $url }}">About us</a></h5>
+							<ul class="list-unstyled text-small">
+								{{ $url := relLangURL "https://berty.crew.work/jobs" }}
+								<li><a href="{{ cond $is_404 (absURL $url) $url }}" target="_blabk">Jobs</a></li>
+								{{ $url := relLangURL "/newsletter" }}
+								<li><a href="{{ cond $is_404 (absURL $url) $url }}">Newsletter</a></li>
+								{{ $url := relLangURL "/contact" }}
+								<li><a href="{{ cond $is_404 (absURL $url) $url }}">Contact</a></li>
+								{{ $url := relLangURL "/press" }}
+								<li><a href="{{ cond $is_404 (absURL $url) $url }}">Press</a></li>
+								<li><a href="https://berty-tech.myshopify.com/">Boutique</a></li>
+								<li><a href="https://assets.berty.tech/">Assets</a></li>
+							</ul>
+						</div><!-- /.col -->		
+					</div><!-- /.row -->
+				</div><!-- /.col -->
+			</div><!-- /.row -->
+			<div class="row row-bottom">
+				<div class="col-lg-8 col-md-7 footer-legal">
+					<small>Berty™ is a registered trademark © 2018-2020 Berty Technologies - All right reserved - 
+						{{ $url := relLangURL "/terms" }}
+						<a href="{{ cond $is_404 (absURL $url) $url }}">Terms & Conditions</a> - 
+						{{ $url := relLangURL "/privacy-policy" }}
+						<a href="{{ cond $is_404 (absURL $url) $url }}">Privacy Policy</a>
+					</small>
+				</div><!-- /.col -->
+				<div class="col-lg-4 col-md-5">
+					{{ partial "nav_social" . }}
+				</div><!-- /.col -->
+			</div><!-- /.row -->
+		</div><!-- /.container -->
+	</div><!-- .footer-rounded -->
+</footer>
+
+{{ if not ($.Scratch.Get "isAmpPage") }}
+{{ $jQuery := resources.Get "/js/jquery-3.4.1.min.js" }}
+{{ $bootstrap := resources.Get "/js/bootstrap.min.js" }}
+{{ $slick := resources.Get "/js/slick.min.js" }}
+{{ $particles := resources.Get "/js/particles.min.js" }}
+{{ $lazySizes := resources.Get "/js/lazysizes.min.js" }}
+{{ $qrcode := resources.Get "/js/qrcode.min.js" }}
+{{ $main := resources.Get "/js/main.js" }}
+{{ $js := slice $jQuery $bootstrap $slick $particles $lazySizes $qrcode $main | resources.Concat "bundle.js" | minify | fingerprint }}
+<script type="text/javascript" src="{{ $js.RelPermalink }}"></script>
+{{ end }}
+
+<!-- fresh chat -->
+<script>
+  function initFreshChat() {
+    window.fcWidget.init({
+      token: "26cd6e22-0e7f-4bc3-9636-54beac8cb39b",
+      host: "https://wchat.eu.freshchat.com"
+    });
+  }
+  function initialize(i,t){var e;i.getElementById(t)?initFreshChat():((e=i.createElement("script")).id=t,e.async=!0,e.src="https://wchat.eu.freshchat.com/js/widget.js",e.onload=initFreshChat,i.head.appendChild(e))}function initiateCall(){initialize(document,"Freshdesk Messaging-js-sdk")}window.addEventListener?window.addEventListener("load",initiateCall,!1):window.attachEvent("load",initiateCall,!1);
+</script>
+<!-- end fresh chat -->
+
+<!-- 100% privacy friendly analytics -->
+<script async defer src="https://sa.berty.tech/latest.js"></script>
+<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
+
+</body>
+</html>

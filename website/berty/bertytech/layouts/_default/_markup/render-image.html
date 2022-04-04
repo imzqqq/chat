@@ -1,0 +1,35 @@
+{{ $is_remote := hasPrefix .Destination "http" }}
+{{ $resizable := slice "jpg" "jpeg" "png" }}
+
+<!-- Remove relative prefixed if defined -->
+{{ $destination := strings.TrimLeft "./" .Destination }}
+
+{{ $layout := "" }}
+{{ $width := "" }}
+{{ $height := "" }}
+{{ $url := "" }}
+
+{{ if $is_remote }}
+  {{ $layout = "fill" }}
+  {{ $width = "1000" }}
+  {{ $height = "500" }}
+  {{ $url = $destination }}
+{{ else }}
+  {{ $image := (.Page.Resources.GetMatch $destination) }}
+  {{ if ne $image nil }}
+    {{ $layout = "intrinsic" }}
+    {{ if in $resizable $image.MediaType.SubType }}
+    {{ $image = cond (gt $image.Width 970) ($image.Resize "970x q100 Lanczos") ($image.Resize (print $image.Width "x q100 Lanczos")) }}
+    {{ end }}
+    {{ $width = $image.Width }}
+    {{ $height = $image.Height }}
+    {{ $url = $image.RelPermalink }}
+  {{ end }}
+{{ end }}
+
+{{- if not (eq $url nil) -}}
+<figure class="md-image text-center {{ if $is_remote }}contain{{ end }}">
+  {{ partial "img" (dict "src" $url "width" $width "height" $height "layout" $layout "alt" .PlainText "title" (.Title | markdownify | plainify )) }}
+  <figcaption>{{ .Title | markdownify }}</figcaption>
+</figure>
+{{ end }}

@@ -2,7 +2,7 @@
 <!-- markdownlint-disable -->
 <div align="center">
   <h1>🐱‍👤Chat</h1>
-  <p><strong>Chat</strong> is a decentralized chat ecosystem.</p>
+  <p><strong>Chat</strong> is a decentralized interoperable data transmission ecosystem.</p>
 </div>
 
 ## Install prerequisites

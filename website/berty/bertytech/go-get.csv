@@ -1,0 +1,13 @@
+# package               repo
+berty                   https://github.com/berty/berty
+go-ipfs-log             https://github.com/berty/go-ipfs-log
+go-orbit-db             https://github.com/berty/go-orbit-db
+gomobile-ipfs           https://github.com/berty/gomobile-ipfs
+go-libp2p-ble-transport https://github.com/berty/go-libp2p-ble-transport
+zero-push               https://github.com/berty/zero-push
+yolo                    https://github.com/berty/yolo
+ipfs-webui-packed       https://github.com/berty/ipfs-webui-packed
+go-libp2p-tor-transport https://github.com/berty/go-libp2p-tor-transport
+go-ipfs-repo-encrypted  https://github.com/berty/go-ipfs-repo-encrypted
+# Might be temporary if the main repo is not dead :
+go-libtor               https://github.com/berty/go-libtor

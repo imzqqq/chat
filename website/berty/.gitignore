@@ -1,0 +1,19 @@
+*~
+*#
+.#*
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+node_modules/
+public/
+.DS_Store
+resources/
+*.tmp/
+*.swp
+
+# Local Netlify folder
+.netlify
