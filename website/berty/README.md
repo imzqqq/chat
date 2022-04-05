@@ -1,9 +1,3 @@
-<h1 align="center">
-  <br>
-  <img src="https://berty.tech/img/berty.svg" alt="The Berty Project" height="300px">
-  <br>
-</h1>
-
 <h3 align="center">Berty is a secure peer-to-peer messaging app that works with or without internet access, cellular data or trust in the network.</h3>
 
 <p align="center"><b>
@@ -43,19 +37,3 @@ For building the websites the following software is necessary:
 - [node and npm](https://nodejs.org/) - Javascript runtime and packet manager
 - [GNU make](https://www.gnu.org/software/make/) - build tool
 - [Hugo Extended](https://gohugo.io) - generator for static websites
-
-## Contribute
-
-_TODO: generic contribute intro_
-
-### Translating 🌐✍️
-
-_TODO: add special instrutions for translating_
-
-## Maintainers
-
-The [berty-staff](https://github.com/orgs/berty/teams/staff) team.
-
-## License
-
-© [Berty Technologies](https://berty.tech) | Code is licensed with the [MIT](./LICENSE) License. Except as noted, other content licensed [CC-BY 3.0](https://creativecommons.org/licenses/by/3.0/us/).

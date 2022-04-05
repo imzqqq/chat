@@ -6,6 +6,13 @@
   "directories": {
     "doc": "docs"
   },
+  "browserslist": [
+    "> 1%"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pre:push": "node replace-remote-md-images"
+  },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^2.1.2",
     "amphtml-validator": "^1.0.30",
@@ -21,15 +28,6 @@
     "postcss-replace": "^1.1.2",
     "yaml": "^1.10.0"
   },
-  "browserslist": [
-    "> 1%"
-  ],
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "pre:push": "node replace-remote-md-images"
-  },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "fast-xml-parser": "^3.21.1",
     "glob": "^7.2.0",

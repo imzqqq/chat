@@ -6,6 +6,12 @@
   "directories": {
     "doc": "docs"
   },
+  "browserslist": [
+    "> 1%"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^2.1.2",
     "autoprefixer": "^9.7.6",
@@ -17,12 +23,5 @@
     "postcss-purifycss": "^1.1.0",
     "postcss-replace": "^1.1.2",
     "webp-converter": "^2.2.2"
-  },
-  "browserslist": [
-    "> 1%"
-  ],
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": ""
+  }
 }
