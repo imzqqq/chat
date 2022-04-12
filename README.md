@@ -202,6 +202,43 @@ If the problem is still not resolved, you should try running the following comma
 
 `reboot`
 
+## tar
+
+TAR command details
+These five are separate commands, one of which is required for compression and decompression, and can be used with other commands but only one of them.
+
+-c: Create compressed file
+-x: Decompress
+-t: View content
+-r: Append files to the end of the compressed archive
+-u: Update the files in the original package
+
+The following parameters are optional when compressing or decompressing files as needed。
+
+-z: With gzip attribute
+-j: With bz2 attribute
+-Z: With compress attribute
+-v: Show all processes
+-O: Unpack files to standard output
+
+- Compression
+
+```sh
+tar –cvf jpg.tar *.jpg
+tar –czf jpg.tar.gz *.jpg
+tar –cjf jpg.tar.bz2 *.jpg
+tar –cZf jpg.tar.Z *.jpg
+```
+
+- Decompression
+
+```sh
+tar –xvf file.tar
+tar -xzvf file.tar.gz
+tar -xjvf file.tar.bz2
+```
+
+
 ## Architecture
 
 - server
