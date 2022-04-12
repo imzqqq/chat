@@ -207,19 +207,23 @@ If the problem is still not resolved, you should try running the following comma
 TAR command details
 These five are separate commands, one of which is required for compression and decompression, and can be used with other commands but only one of them.
 
+```txt
 -c: Create compressed file
 -x: Decompress
 -t: View content
 -r: Append files to the end of the compressed archive
 -u: Update the files in the original package
+```
 
 The following parameters are optional when compressing or decompressing files as needed。
 
+```txt
 -z: With gzip attribute
 -j: With bz2 attribute
 -Z: With compress attribute
 -v: Show all processes
 -O: Unpack files to standard output
+```
 
 - Compression
 
