@@ -242,6 +242,38 @@ tar -xzvf file.tar.gz
 tar -xjvf file.tar.bz2
 ```
 
+## Go
+
+Download Go
+
+- `wget https://go.dev/dl/go1.18.1.linux-amd64.tar.gz`
+
+Unzip the installation package
+
+`sudo tar -C /usr/local -xzf go1.18.1.linux-amd64.tar.gz`
+
+Establish a soft connection
+
+`sudo ln -sf /usr/local/go/bin/* /usr/bin/`
+
+
+Bash config
+
+```bash
+sudo vim ~/.bashrc
+export GOPATH="$HOME/go"
+export PATH="$PATH:/usr/local/go/bin:$GOPATH/bin"
+
+:wq
+source ~/.bashrc
+```
+
+Check whether the installation is working
+
+`go version`
+
+If the package is can not be downloaded, executes the following commands
+`go env -w GOPROXY=https://goproxy.cn,https://gocenter.io,https://goproxy.io,direct`
 
 ## Architecture
 
