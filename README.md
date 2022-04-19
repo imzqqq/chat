@@ -577,4 +577,6 @@ $ sudo docker run -itd --name imqzzZ -p 16666-16888:16666-16888/tcp ubuntu /bin/
 $ scp /local_path/test.txt root@47.115.52.51:/home/imzqqq/workspace
 $ scp root@47.115.52.51:/home/imzqqq/workspace/world.txt /local_path
 $ scp -r /local_folder root@47.115.52.51:/home/imzqqq/workspace/folder
+
+$ jupyter notebook --ip 0.0.0.0 --port 13666 --no-browser --allow-root
 ```
