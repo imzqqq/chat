@@ -84,8 +84,8 @@ The most convenient way to hack on _microblog.pub_ is to run the Python server o
 
 ```shell
 # One-time setup (in a new virtual env)
-$ python3 -m venv ./.venv
-$ source ./.venv/bin/activate
+$ python3 -m venv ./.env
+$ source ./.env/bin/activate
 $ pip install -r requirements.txt
 # Start MongoDB and poussetaches
 $ make poussetaches
