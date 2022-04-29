@@ -131,13 +131,13 @@
     <string name="label_header">ヘッダー</string>
     <string name="link_whats_an_instance">インスタンスとは？</string>
     <string name="login_connection">接続中…</string>
-    <string name="dialog_whats_an_instance">flow.dingshunyu.top, icosahedron.website, social.tchncs.deや<a href="https://instances.social">その他</a> のような、あらゆるインスタンスのアドレスやドメインを入力できます。 
+    <string name="dialog_whats_an_instance">flow.imzqqq.top, icosahedron.website, social.tchncs.deや<a href="https://instances.social">その他</a> のような、あらゆるインスタンスのアドレスやドメインを入力できます。 
 \n 
 \nまだアカウントをお持ちでない場合は、参加したいインスタンスの名前を入力することで そのインスタンスにアカウントを作成できます。 
 \n 
 \nインスタンスはあなたのアカウントが提供される単独の場所ですが、他のインスタンスのユーザーとあたかも同じ場所にいるように簡単にコミュニケーションをとったりフォローしたりできます。 
 \n 
-\nさらに詳しい情報は<a href="https://flow.join.dingshunyu.top">flow.join.dingshunyu.top</a>でご覧いただけます。 </string>
+\nさらに詳しい情報は<a href="https://flow.join.imzqqq.top">flow.join.imzqqq.top</a>でご覧いただけます。 </string>
     <string name="dialog_title_finishing_media_upload">メディアをアップロードしています</string>
     <string name="dialog_message_uploading_media">アップロード中…</string>
     <string name="dialog_download_image">ダウンロード</string>

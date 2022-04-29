@@ -48,7 +48,7 @@
 "auth_phone_placeholder" = "Telefonnummer";
 "auth_repeat_password_placeholder" = "Gjenta passord";
 "auth_repeat_new_password_placeholder" = "Bekreft ditt nye passord";
-"auth_home_server_placeholder" = "URL (f.eks. https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (f.eks. https://chat.imzqqq.top)";
 "auth_identity_server_placeholder" = "URL (f.eks. https://vector.im)";
 "auth_missing_password" = "Manglende passord";
 "auth_missing_email" = "Manglende E-postadresse";
@@ -173,11 +173,11 @@
 "settings_ui_theme_black" = "Svart";
 "settings_version" = "Versjon %@";
 "settings_copyright" = "Opphavsrettighet";
-"settings_copyright_url" = "https://apps.chat.dingshunyu.top/copyright";
+"settings_copyright_url" = "https://apps.chat.imzqqq.top/copyright";
 "settings_term_conditions" = "Betingelser og vilkår";
-"settings_term_conditions_url" = "https://apps.chat.dingshunyu.top/tac_apple";
+"settings_term_conditions_url" = "https://apps.chat.imzqqq.top/tac_apple";
 "settings_privacy_policy" = "Personvernbestemmelser";
-"settings_privacy_policy_url" = "https://apps.chat.dingshunyu.top/privacy";
+"settings_privacy_policy_url" = "https://apps.chat.imzqqq.top/privacy";
 "settings_old_password" = "Gammelt passord";
 "settings_new_password" = "Nytt passord";
 "settings_confirm_password" = "Bekreft passord";
@@ -399,7 +399,7 @@
 "user_verification_session_details_verify_action_current_user" = "Bekreft";
 // String for App Store
 "store_short_description" = "Sikker desentralisert chat/IP-telefoni";
-"store_full_description" = "Element er en ny type melding og samhandlings app som:\n\n1. Setter deg i førersetet for å kontrollere personlig informasjon\n2. Lar deg kommunisere med alle brukere i Matrix-nettverket, i tillegg til brukere i tilknyttede nettverk slik som Slack\n3. Beskytter deg fra annonser, datainnhenting, bakdører og lukkede nettverk. \n4. Beskytter deg gjennom at kommunikasjonen er ende-til-ende-kryptert, og at motparten er verifisert. \n\nElement er veldig annerledes enn andre melding og samhandlingsapper ved at det er en desentralisert løsning og laget som åpen kildekode.\n\nElement lar deg sette opp en egen tjener eller velge en offentlig tjener - slik at du kan beskytte tilgang og eierskap til dine data og samtaler. Det gir deg tilgang tiI et åpent nettverk slik at du ikke er begrenset til å kommunisere kun med Element brukere. Og det er veldig sikkert.\n\nElement gjør dette mulig ved at det opererer i Matrix - standarden for åpen og desentralisert kommunikasjon. \n\nElement setter deg selv i førersetet ved å la deg bestemme hvor dine samtaler skal befinne seg. Fra Element appen kan du velge forskjellige opsjoner/verter:\n\n1. Få en gratis konto på den offentlige chat.dingshunyu.top tjeneren. \n2. Sett opp en egen tjener for din konto på egne maskiner\n3. Registrer deg og opprett en egen tjener og konto på Element Matrix Services platformen.\n\nHvorfor velge Element?\n\nEI DINE EGNE DATA: Du bestemmer hvor dine data og meldinger oppbevares. Du eier og kontrollerer det, ikke et stort MEGACORP som samler dine data og tilbyr de til tredjeparter.\n\nÅPEN KOMMUNIKASJON OG SAMHANDLING: Du kan melde med hvem som helst i Matrix nettverket; uavhengig om de bruker Element eller en annen Matrix app, og uavhengig av om de bruker andre meldingssystemer slik som Slack, IRC eller XMPP.\n\nSUPER-SIKKER: Sann ende-til-ende-kryptering (kun de i som deltar i samtalen kan dekryptere meldinger), and kryss-signering for å sikre at alle enheter i samtalen er verifisert. \n\nKOMPLETT KOMMUNIKASJONSLØSNING: Meldinger, tale og videosamtaler, fildeling, skjermdeling og en hele rekke integrasjoner, bots og widgets. Bygg rom og samfunn, hold kontakt, og få ting gjort.\n\nOVERALT DU ER: Hold deg oppdatert uansett hvor du er, og med en fullt synkronisert meldingshistorikk, på tvers av alle enhetene dine og på web, hos https://element.io/app.";
+"store_full_description" = "Element er en ny type melding og samhandlings app som:\n\n1. Setter deg i førersetet for å kontrollere personlig informasjon\n2. Lar deg kommunisere med alle brukere i Matrix-nettverket, i tillegg til brukere i tilknyttede nettverk slik som Slack\n3. Beskytter deg fra annonser, datainnhenting, bakdører og lukkede nettverk. \n4. Beskytter deg gjennom at kommunikasjonen er ende-til-ende-kryptert, og at motparten er verifisert. \n\nElement er veldig annerledes enn andre melding og samhandlingsapper ved at det er en desentralisert løsning og laget som åpen kildekode.\n\nElement lar deg sette opp en egen tjener eller velge en offentlig tjener - slik at du kan beskytte tilgang og eierskap til dine data og samtaler. Det gir deg tilgang tiI et åpent nettverk slik at du ikke er begrenset til å kommunisere kun med Element brukere. Og det er veldig sikkert.\n\nElement gjør dette mulig ved at det opererer i Matrix - standarden for åpen og desentralisert kommunikasjon. \n\nElement setter deg selv i førersetet ved å la deg bestemme hvor dine samtaler skal befinne seg. Fra Element appen kan du velge forskjellige opsjoner/verter:\n\n1. Få en gratis konto på den offentlige chat.imzqqq.top tjeneren. \n2. Sett opp en egen tjener for din konto på egne maskiner\n3. Registrer deg og opprett en egen tjener og konto på Element Matrix Services platformen.\n\nHvorfor velge Element?\n\nEI DINE EGNE DATA: Du bestemmer hvor dine data og meldinger oppbevares. Du eier og kontrollerer det, ikke et stort MEGACORP som samler dine data og tilbyr de til tredjeparter.\n\nÅPEN KOMMUNIKASJON OG SAMHANDLING: Du kan melde med hvem som helst i Matrix nettverket; uavhengig om de bruker Element eller en annen Matrix app, og uavhengig av om de bruker andre meldingssystemer slik som Slack, IRC eller XMPP.\n\nSUPER-SIKKER: Sann ende-til-ende-kryptering (kun de i som deltar i samtalen kan dekryptere meldinger), and kryss-signering for å sikre at alle enheter i samtalen er verifisert. \n\nKOMPLETT KOMMUNIKASJONSLØSNING: Meldinger, tale og videosamtaler, fildeling, skjermdeling og en hele rekke integrasjoner, bots og widgets. Bygg rom og samfunn, hold kontakt, og få ting gjort.\n\nOVERALT DU ER: Hold deg oppdatert uansett hvor du er, og med en fullt synkronisert meldingshistorikk, på tvers av alle enhetene dine og på web, hos https://element.io/app.";
 "title_favourites" = "Favoritter";
 "on" = "På";
 "skip" = "Hopp over";
@@ -483,7 +483,7 @@
 // Group Details
 "group_details_title" = "Samfunnsdetaljer";
 "image_picker_action_library" = "Velg fra biblioteket";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 "do_not_ask_again" = "Ikke spør igjen";
 "room_does_not_exist" = "%@ eksisterer ikke";
 "call_no_stun_server_error_use_fallback_button" = "Prøv å bruk %@";
@@ -838,7 +838,7 @@
 // MARK: - Favourites
 
 "favourites_empty_view_title" = "Favorittrom og -personer";
-"create_room_placeholder_address" = "#testrom: chat.dingshunyu.top";
+"create_room_placeholder_address" = "#testrom: chat.imzqqq.top";
 "device_verification_emoji_santa" = "Julenisse";
 "device_verification_security_advice_emoji" = "Sammenlign de unike emojiene og sjekk at de vises i samme rekkefølge.";
 

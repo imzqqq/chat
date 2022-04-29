@@ -1,6 +1,6 @@
 # owncast.github.io
 
-Public facing web site. Documentation and info. Check out the website at [live.dingshunyu.top](https://live.dingshunyu.top).
+Public facing web site. Documentation and info. Check out the website at [live.imzqqq.top](https://live.imzqqq.top).
 
 ## Setup
 

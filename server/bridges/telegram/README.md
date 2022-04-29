@@ -25,7 +25,7 @@ Some quick links:
 contains a general overview of what is supported by the bridge.
 
 ## Discussion
-Matrix room: [`#telegram:maunium.net`](https://to.chat.dingshunyu.top/#/#telegram:maunium.net)
+Matrix room: [`#telegram:maunium.net`](https://to.chat.imzqqq.top/#/#telegram:maunium.net)
 
 Telegram chat: [`mautrix_telegram`](https://t.me/mautrix_telegram) (bridged to Matrix room)
 

@@ -60,7 +60,7 @@ Chat Android (1.0.5+) supports custom Meet domains, similar to Chat Web above.
 calls work directly between clients or via TURN servers configured on the respective
 homeservers.
 
-For rooms with more than 2 joined members, when creating a Meet conference via call/video buttons of the toolbar (not via integration manager), Chat Android will create a widget using the [wrapper](./jitsi-dev.md) hosted on `apps.chat.dingshunyu.top`.
+For rooms with more than 2 joined members, when creating a Meet conference via call/video buttons of the toolbar (not via integration manager), Chat Android will create a widget using the [wrapper](./jitsi-dev.md) hosted on `apps.chat.imzqqq.top`.
 The domain used is the one specified by the `/.well-known/matrix/client` endpoint, and if not present it uses the fallback defined in `config.xml` (jitsi.riot.im)
 
 For active Meet widgets in the room, a native Meet widget UI is created and points to the instance specified in the `domain` key of the widget content data.

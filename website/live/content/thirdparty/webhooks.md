@@ -128,7 +128,7 @@ Note: the field `user` in the chat was introduced with `v0.0.8`. Before `v0.0.8`
     "eventData": {
         "name": "Live",
         "streamTitle": "",
-        "summary": "Welcome to your new Live server! This description can be changed in the admin. Visit https://live.docs.dingshunyu.top/docs/configuration/ to learn more."
+        "summary": "Welcome to your new Live server! This description can be changed in the admin. Visit https://live.docs.imzqqq.top/docs/configuration/ to learn more."
     }
 }
 ```
@@ -141,7 +141,7 @@ Note: the field `user` in the chat was introduced with `v0.0.8`. Before `v0.0.8`
     "eventData": {
         "name": "Live",
         "streamTitle": "",
-        "summary": "Welcome to your new Live server! This description can be changed in the admin. Visit https://live.docs.dingshunyu.top/docs/configuration/ to learn more."
+        "summary": "Welcome to your new Live server! This description can be changed in the admin. Visit https://live.docs.imzqqq.top/docs/configuration/ to learn more."
     }
 }
 ```

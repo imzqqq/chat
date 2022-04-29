@@ -1,7 +1,7 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "Stwórz konto:";
-"login_server_url_placeholder" = "URL (np. https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (np. https://chat.imzqqq.top)";
 "login_identity_server_title" = "URL serwera tożsamości:";
 "login_password_placeholder" = "Hasło";
 "login_optional_field" = "opcjonalne";
@@ -170,7 +170,7 @@
 "notification_settings_suppress_from_bots" = "Ogranicz powiadomienia od botów";
 "notification_settings_custom_sound" = "Dźwięk niestandardowy";
 "login_home_server_info" = "Twój serwer domowy przechowuje wszystkie Twoje rozmowy i dane konta";
-"login_user_id_placeholder" = "Identyfikator Matrix (np. @bob:chat.dingshunyu.top lub bob)";
+"login_user_id_placeholder" = "Identyfikator Matrix (np. @bob:chat.imzqqq.top lub bob)";
 "search_searching" = "Wyszukiwanie...";
 
 // Search
@@ -237,7 +237,7 @@
 "login_error_do_not_support_login_flows" = "Obecnie nie obsługujemy żadnego lub wszystkich przepływów logowania zdefiniowanych przez ten Serwer Domowy";
 "login_error_no_login_flow" = "Nie udało się pobrać informacji uwierzytelniających z tego serwera domowego";
 "login_email_info" = "Podanie adresu e-mail pozwala innym użytkownikom na znalezienie Ciebie w sieci Matrix oraz pozwala na zresetowanie hasła.";
-"login_identity_server_info" = "Matrix zapewnia serwery tożsamości do śledzenia, które e-maile itp. Należą do których identyfikatorów Matrix. Obecnie istnieje tylko https://chat.dingshunyu.top.";
+"login_identity_server_info" = "Matrix zapewnia serwery tożsamości do śledzenia, które e-maile itp. Należą do których identyfikatorów Matrix. Obecnie istnieje tylko https://chat.imzqqq.top.";
 "ssl_expected_existing_expl" = "Certyfikat zmienił się z wcześniej zaufanego na taki, który nie jest zaufany. Serwer mógł odnowić swój certyfikat. Skontaktuj się z administratorem serwera, aby uzyskać oczekiwany odcisk palca.";
 "call_transfer_to_user" = "Transfer do %@";
 "call_consulting_with_user" = "Konsultacje z %@";
@@ -271,7 +271,7 @@
 "notification_settings_enable_notifications_warning" = "Wszystkie powiadomienia są obecnie wyłączone dla wszystkich urządzeń.";
 
 // contacts list screen 
-"invitation_message" = "Chciałbym z Tobą porozmawiać za pomocą sieci Matrix. Odwiedź witrynę http://chat.dingshunyu.top, aby uzyskać więcej informacji.";
+"invitation_message" = "Chciałbym z Tobą porozmawiać za pomocą sieci Matrix. Odwiedź witrynę http://chat.imzqqq.top, aby uzyskać więcej informacji.";
 
 // Login Screen 
 "login_error_already_logged_in" = "Jesteś już zalogowany(-a)";

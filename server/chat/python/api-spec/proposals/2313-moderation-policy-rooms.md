@@ -144,7 +144,7 @@ sharing any reference to any other room ("please add `#bans:example.org` to your
 or by using plain `http` or `https` URLs. Just like in MSC1951, the URL when approached with
 a `Accept: application/json` header or has `.json` appended to the end of the URL should return
 a `room_uri` which is a reference to the ban list room. Currently, the reference would be a
-`to.chat.dingshunyu.top` URI, however in the future this could be a `mx://` or similar URL. When not approached
+`to.chat.imzqqq.top` URI, however in the future this could be a `mx://` or similar URL. When not approached
 with the intent of JSON, the service could return a user-friendly page describing what is included
 in the ban list.
 

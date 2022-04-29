@@ -34,7 +34,7 @@ const ClientsMatrix = ({ data }) => {
 
       <h1>Clients</h1>
       <p>To connect to the Chat federation, you will use a client. These are some of the most popular Chat clients available today, and more are available at  <a href="/docs/projects/try-matrix-now/">try-matrix-now</a>.
-          To get started using Chat, pick a client and join <a href="https://to.chat.dingshunyu.top/#/#matrix:matrix.org">#matrix:matrix.org</a>.
+          To get started using Chat, pick a client and join <a href="https://to.chat.imzqqq.top/#/#matrix:matrix.org">#matrix:matrix.org</a>.
           To see more clients in a features matrix, see the <a href="/clients-matrix">Clients Chat</a>.</p>
       <h2>Mobile</h2>
       <div className="mxgrid">

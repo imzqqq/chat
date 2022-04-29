@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# generate a tarball of assets suitable for the chat.dingshunyu.top site
+# generate a tarball of assets suitable for the chat.imzqqq.top site
 
 set -e
 

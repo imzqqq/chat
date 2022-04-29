@@ -31,12 +31,12 @@ class PermalinkParserTest {
         val rawInvite = """
             https://app.element.io/#/room/%21MRBNLPtFnMAazZVPMO%3Amatrix.org?email=bob%2Bspace%40example.com&signurl=https%3A%2F%2Fvector.im%2F_matrix%2Fidentity%2Fapi%2Fv1%2Fsign-ed25519%3Ftoken%3DXmOwRZnSFabCRhTywFbJWKXWVNPysOpXIbroMGaUymqkJSvHeVKRsjHajwjCYdBsvGSvHauxbKfJmOxtXldtyLnyBMLKpBQCMzyYggrdapbVIceWZBtmslOQrXLABRoe%26private_key%3DT2gq0c3kJB_8OroXVxl1pBnzHsN7V6Xn4bEBSeW1ep4&room_name=Team2&room_avatar_url=&inviter_name=hiphop5&guest_access_token=&guest_user_id=
         """.trimIndent()
-                .replace("https://app.element.io/#/room/", "https://to.chat.dingshunyu.top/#/")
+                .replace("https://app.element.io/#/room/", "https://to.chat.imzqqq.top/#/")
 
         val parsedLink = PermalinkParser.parse(rawInvite)
         Assert.assertTrue("Should be parsed as email invite but was ${parsedLink::class.java}", parsedLink is PermalinkData.RoomEmailInviteLink)
         parsedLink as PermalinkData.RoomEmailInviteLink
-        Assert.assertEquals("!MRBNLPtFnMAazZVPMO:chat.dingshunyu.top", parsedLink.roomId)
+        Assert.assertEquals("!MRBNLPtFnMAazZVPMO:chat.imzqqq.top", parsedLink.roomId)
         Assert.assertEquals("XmOwRZnSFabCRhTywFbJWKXWVNPysOpXIbroMGaUymqkJSvHeVKRsjHajwjCYdBsvGSvHauxbKfJmOxtXldtyLnyBMLKpBQCMzyYggrdapbVIceWZBtmslOQrXLABRoe", parsedLink.token)
         Assert.assertEquals("vector.im", parsedLink.identityServer)
         Assert.assertEquals("Team2", parsedLink.roomName)
@@ -45,16 +45,16 @@ class PermalinkParserTest {
 
     @Test
     fun testParseLinkWIthEvent() {
-        val rawInvite = "https://to.chat.dingshunyu.top/#/!OGEhHVWSdvArJzumhm:matrix.org/\$xuvJUVDJnwEeVjPx029rAOZ50difpmU_5gZk_T0jGfc?via=matrix.org&via=libera.chat&via=matrix.example.io"
+        val rawInvite = "https://to.chat.imzqqq.top/#/!OGEhHVWSdvArJzumhm:matrix.org/\$xuvJUVDJnwEeVjPx029rAOZ50difpmU_5gZk_T0jGfc?via=matrix.org&via=libera.chat&via=matrix.example.io"
 
         val parsedLink = PermalinkParser.parse(rawInvite)
         Assert.assertTrue("Should be parsed as room link", parsedLink is PermalinkData.RoomLink)
         parsedLink as PermalinkData.RoomLink
-        Assert.assertEquals("!OGEhHVWSdvArJzumhm:chat.dingshunyu.top", parsedLink.roomIdOrAlias)
+        Assert.assertEquals("!OGEhHVWSdvArJzumhm:chat.imzqqq.top", parsedLink.roomIdOrAlias)
         Assert.assertEquals("\$xuvJUVDJnwEeVjPx029rAOZ50difpmU_5gZk_T0jGfc", parsedLink.eventId)
         Assert.assertEquals(3, parsedLink.viaParameters.size)
         Assert.assertTrue(parsedLink.viaParameters.contains("matrix.example.io"))
-        Assert.assertTrue(parsedLink.viaParameters.contains("chat.dingshunyu.top"))
+        Assert.assertTrue(parsedLink.viaParameters.contains("chat.imzqqq.top"))
         Assert.assertTrue(parsedLink.viaParameters.contains("matrix.example.io"))
     }
 }

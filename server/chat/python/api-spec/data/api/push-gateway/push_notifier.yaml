@@ -60,10 +60,10 @@ paths:
                 "event_id": "$3957tyerfgewrf384",
                 "room_id": "!slw48wfj34rtnrf:example.com",
                 "type": "m.room.message",
-                "sender": "@exampleuser:chat.dingshunyu.top",
+                "sender": "@exampleuser:chat.imzqqq.top",
                 "sender_display_name": "Major Tom",
                 "room_name": "Mission Control",
-                "room_alias": "#exampleroom:chat.dingshunyu.top",
+                "room_alias": "#exampleroom:chat.imzqqq.top",
                 "prio": "high",
                 "content": {
                   "msgtype": "m.text",

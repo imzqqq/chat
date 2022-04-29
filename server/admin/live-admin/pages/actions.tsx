@@ -73,7 +73,7 @@ function NewActionModal(props: Props) {
         Add the URL for the external action you want to present.{' '}
         <strong>Only HTTPS urls are supported.</strong>
         <p>
-          <a href="https://live.docs.dingshunyu.top/docs" target="_blank" rel="noopener noreferrer">
+          <a href="https://live.docs.imzqqq.top/docs" target="_blank" rel="noopener noreferrer">
             Read more about external actions.
           </a>
         </p>
@@ -278,7 +278,7 @@ export default function Actions() {
       <Paragraph>
         Read more about how to use actions, with examples, at{' '}
         <a
-          href="https://live.dingshunyu.top/thirdparty/?source=admin"
+          href="https://live.imzqqq.top/thirdparty/?source=admin"
           target="_blank"
           rel="noopener noreferrer"
         >

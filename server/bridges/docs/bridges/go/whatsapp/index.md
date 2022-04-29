@@ -3,12 +3,12 @@ Welcome to the mautrix-whatsapp docs!
 
 ## How The Components Fit Together
 ![Diagram of components: matrix, bridge, whatsapp, clients](./mautrix-whatsapp.png)
-(Image by [Азат](http://to.chat.dingshunyu.top/#/@azata:gazizova.net))
+(Image by [Азат](http://to.chat.imzqqq.top/#/@azata:gazizova.net))
 
 This bridge is the component labeled "mautrix-whatsapp bot".
 
 ## Discussion
-Matrix room: [#whatsapp:maunium.net](https://to.chat.dingshunyu.top/#/#whatsapp:maunium.net)
+Matrix room: [#whatsapp:maunium.net](https://to.chat.imzqqq.top/#/#whatsapp:maunium.net)
 
 In case you need to upload your logs somewhere, be aware that they contain your
 contacts' and your phone numbers. Strip them out with `| sed -r 's/[0-9]{10,}/📞/g'`

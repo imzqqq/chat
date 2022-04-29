@@ -339,9 +339,9 @@
         }];
 
         // Set a random direct user id. There is no control on that
-        [roomWithCharlie setIsDirect:YES withUserId:@"@aRandomUser:chat.dingshunyu.top" success:^{
+        [roomWithCharlie setIsDirect:YES withUserId:@"@aRandomUser:chat.imzqqq.top" success:^{
             successCount++;
-            XCTAssertEqualObjects(roomWithCharlie.directUserId, @"@aRandomUser:chat.dingshunyu.top");
+            XCTAssertEqualObjects(roomWithCharlie.directUserId, @"@aRandomUser:chat.imzqqq.top");
         } failure:^(NSError *error) {
             XCTFail(@"The operation should not fail - NSError: %@", error);
             [expectation fulfill];

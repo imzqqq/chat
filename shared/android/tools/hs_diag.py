@@ -54,7 +54,7 @@ items = [
     , ["Registration flow", baseUrl + "chat/client/r0/register", False]
     # Useless , ["Username availability", baseUrl + "chat/client/r0/register/available?username=benoit", True]
     # Useless , ["Public rooms", baseUrl + "chat/client/r0/publicRooms?limit=1", True]
-    # Useless , ["Profile", baseUrl + "chat/client/r0/profile/@benoit.marty:chat.dingshunyu.top", True]
+    # Useless , ["Profile", baseUrl + "chat/client/r0/profile/@benoit.marty:chat.imzqqq.top", True]
     # Need token , ["Capability", baseUrl + "chat/client/r0/capabilities", True]
     # Need token , ["Media config", baseUrl + "chat/media/r0/config", True]
     # Need token , ["Turn", baseUrl + "chat/client/r0/voip/turnServer", True]

@@ -37,7 +37,7 @@ paths:
           name: roomId
           description: The room ID.
           required: true
-          x-example: "!curbf:chat.dingshunyu.top"
+          x-example: "!curbf:chat.imzqqq.top"
       responses:
         200:
           description: The visibility of the room in the directory
@@ -81,7 +81,7 @@ paths:
           name: roomId
           description: The room ID.
           required: true
-          x-example: "!curbf:chat.dingshunyu.top"
+          x-example: "!curbf:chat.imzqqq.top"
         - in: body
           name: body
           required: true

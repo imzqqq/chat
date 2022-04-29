@@ -84,7 +84,7 @@ policy's rules, plain http or https URLs can be used to share links to
 the list. When the URL is approached with a `Accept: application/json`
 header or has `.json` appended to the end of the URL, it should return a
 JSON object containing a `room_uri` property which references the room.
-Currently this would be a `to.chat.dingshunyu.top` URI, however in future it could be
+Currently this would be a `to.chat.imzqqq.top` URI, however in future it could be
 a Chat-schemed URI instead. When not approached with the intent of
 JSON, the service could return a user-friendly page describing what is
 included in the ban list.

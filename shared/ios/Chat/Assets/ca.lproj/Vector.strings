@@ -433,7 +433,7 @@
 "directory_server_all_rooms" = "Totes les sales del servidor %@";
 "directory_server_all_native_rooms" = "Totes les sales natives de Matrix";
 "directory_server_type_homeserver" = "Introdueix un servidor per veure les seves sales públiques";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 // Events formatter
 "event_formatter_member_updates" = "%tu canvis de pertinença";
 "event_formatter_widget_added" = "Giny %@ afegit per %@";

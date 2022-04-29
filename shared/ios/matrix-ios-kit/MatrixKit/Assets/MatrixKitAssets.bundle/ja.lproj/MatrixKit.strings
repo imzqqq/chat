@@ -1,7 +1,7 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "アカウント作成:";
-"login_server_url_placeholder" = "URL (例 https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (例 https://chat.imzqqq.top)";
 "login_home_server_title" = "接続先サーバURL:";
 "login_home_server_info" = "あなたの接続先サーバは、あなたの全ての会話とアカウント情報を保存します";
 "login_identity_server_title" = "認証サーバURL:";
@@ -17,8 +17,8 @@
 "resend_message" = "メッセージを再送信する";
 "select_all" = "全て選択";
 "show_details" = "詳細を表示する";
-"login_identity_server_info" = "Matrixは、どの電子メールなどがどのMatrix IDに属しているかを追跡するアイデンティティサーバーを提供します。 現在 https://chat.dingshunyu.top のみが存在します。";
-"login_user_id_placeholder" = "Matrix ID（例 @bob:chat.dingshunyu.top または bob）";
+"login_identity_server_info" = "Matrixは、どの電子メールなどがどのMatrix IDに属しているかを追跡するアイデンティティサーバーを提供します。 現在 https://chat.imzqqq.top のみが存在します。";
+"login_user_id_placeholder" = "Matrix ID（例 @bob:chat.imzqqq.top または bob）";
 "login_optional_field" = "オプション";
 "login_display_name_placeholder" = "表示名 (例 Bob Obson)";
 "login_email_info" = "メールアドレスを指定すると、他のユーザーがあなたをMatrixで簡単に見つけることができ、今後パスワードをリセットすることができます。";

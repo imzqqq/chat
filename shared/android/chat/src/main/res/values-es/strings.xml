@@ -2182,7 +2182,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="soft_logout_clear_data_dialog_submit">Borrar datos</string>
     <string name="template_soft_logout_sso_not_same_user_error">La sesión actual es para el usuario %1$s y usted proporciona las credenciales para el usuario %2$s. Esto no está suportado por ${app_name}.
 \nPrimero borre los datos, luego inicie sesión nuevamente con otra cuenta.</string>
-    <string name="permalink_malformed">Su enlace to.chat.dingshunyu.top estaba mal formado</string>
+    <string name="permalink_malformed">Su enlace to.chat.imzqqq.top estaba mal formado</string>
     <string name="settings_developer_mode_summary">El modo desarrollador activa funciones ocultas y también puede hacer que la aplicación sea menos estable. ¡Solo para desarrolladores!</string>
     <string name="verification_conclusion_compromised">Uno de los siguientes puede verse comprometido:
 \n

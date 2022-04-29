@@ -61,7 +61,7 @@
 "auth_softlogout_clear_data_button" = "ล้างข้อมูลทั้งหมด";
 "auth_forgot_password" = "ลืมรหัสผ่าน?";
 "auth_identity_server_placeholder" = "URL (เช่น https://vector.im)";
-"auth_home_server_placeholder" = "URL (เช่น https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (เช่น https://chat.imzqqq.top)";
 "auth_repeat_new_password_placeholder" = "ยืนยันรหัสผ่านใหม่ของคุณ";
 "accept" = "ยอมรับ";
 "decline" = "ปฏิเสธ";

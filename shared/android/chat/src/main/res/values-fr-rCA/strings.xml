@@ -238,7 +238,7 @@
     <string name="settings_show_devices_list">Voir toutes mes sessions</string>
     <string name="notification_initial_sync">Synchronisation initiale…</string>
     <string name="bug_report_error_too_short">La description est trop courte</string>
-    <string name="permalink_malformed">Votre lien to.chat.dingshunyu.top était malformé</string>
+    <string name="permalink_malformed">Votre lien to.chat.imzqqq.top était malformé</string>
     <string name="template_soft_logout_sso_not_same_user_error">La session en cours est celle de l’utilisateur %1$s et vous fournissez des identifiants pour l’utilisateur %2$s. Ce n’est pas pris en charge par ${app_name}.
 \nEffacez d’abord les données, puis reconnectez-vous avec un autre compte.</string>
     <string name="soft_logout_clear_data_dialog_submit">Effacer les données</string>

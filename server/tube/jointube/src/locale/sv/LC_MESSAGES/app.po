@@ -1524,11 +1524,11 @@ msgstr "Anpassa gränssnittet"
 #: src/views/FAQ.vue:241
 msgid ""
 "Update your name, avatar or description in <a target=\"_blank\" rel="
-"\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-setup-"
+"\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-setup-"
 "account?id=update-your-profile\">your profile</a>"
 msgstr ""
 "Uppdatera ditt namn, profilbild eller beskrivning under <a target=\"_blank\" "
-"rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-setup-"
+"rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-setup-"
 "account?id=update-your-profile\">din profil</a>"
 
 #: src/views/FAQ.vue:242
@@ -1559,11 +1559,11 @@ msgstr ""
 #: src/views/FAQ.vue:254
 msgid ""
 "Organize videos in public or private <a target=\"_blank\" rel=\"noopener "
-"noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-library?id=video-"
+"noreferrer\" href=\"https://tube.docs.imzqqq.top/use-library?id=video-"
 "history\">playlists</a>"
 msgstr ""
 "Organisera videor i offentliga eller privata <a target=\"_blank\" rel="
-"\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-library?"
+"\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-library?"
 "id=video-history\">spellistor</a>"
 
 #: src/views/FAQ.vue:255
@@ -1680,7 +1680,7 @@ msgstr ""
 #, fuzzy
 msgid ""
 "See the dedicated section in the Tube documentation: <a href=\"https://"
-"tube.docs.dingshunyu.top/use-report\" target=\"_blank\">https://docs."
+"tube.docs.imzqqq.top/use-report\" target=\"_blank\">https://docs."
 "joinpeertube.org/use-report</a>"
 msgstr ""
 "Vi hoppas att du vill hjälpa till att sprida översiktsplanen: <a href=\" "
@@ -1750,7 +1750,7 @@ msgid ""
 "joinpeertube.org/use-create-upload-video?id=captions\">subtitles</a>"
 msgstr ""
 "Lägg till <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://"
-"tube.docs.dingshunyu.top/use-create-upload-video?id=captions\">undertexter</a>"
+"tube.docs.imzqqq.top/use-create-upload-video?id=captions\">undertexter</a>"
 
 #: src/views/FAQ.vue:389
 msgid "Easily disable comments or download"
@@ -1813,11 +1813,11 @@ msgstr ""
 #: src/views/FAQ.vue:412
 msgid ""
 "Create public <a target=\"_blank\" rel=\"noopener noreferrer\" href="
-"\"https://tube.docs.dingshunyu.top/use-library?id=playlist\">playlists</a> "
+"\"https://tube.docs.imzqqq.top/use-library?id=playlist\">playlists</a> "
 "assigned to your channel to organize your content or remote videos"
 msgstr ""
 "Skapa offentliga <a target=\"_blank\" rel=\"noopener noreferrer\" href="
-"\"https://tube.docs.dingshunyu.top/use-library?id=playlist\">spellistor</a> "
+"\"https://tube.docs.imzqqq.top/use-library?id=playlist\">spellistor</a> "
 "kopplade till din kanal för att organisera dina eller andras videor"
 
 #: src/views/FAQ.vue:425
@@ -1857,7 +1857,7 @@ msgid ""
 "We did not go any further, as we refuse to tie our code to a particular "
 "content funding method, that might not fit all communities and deter others. "
 "It's the reason why we encourage developers to use the <a target=\"_blank\" "
-"rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/contribute-"
+"rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/contribute-"
 "plugins\">Tube plugin API</a> to create their own monetization system."
 msgstr ""
 
@@ -1876,21 +1876,21 @@ msgstr ""
 #: src/views/FAQ.vue:479
 msgid ""
 "Official <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://"
-"tube.docs.dingshunyu.top/install-docker\">Docker support</a>"
+"tube.docs.imzqqq.top/install-docker\">Docker support</a>"
 msgstr ""
 "Officielt <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://"
-"tube.docs.dingshunyu.top/install-docker\">stöd för Docker</a>"
+"tube.docs.imzqqq.top/install-docker\">stöd för Docker</a>"
 
 #: src/views/FAQ.vue:480
 msgid ""
 "Documented <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://"
-"tube.docs.dingshunyu.top/api-rest-reference.html\">REST API</a> and <a target="
-"\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/"
+"tube.docs.imzqqq.top/api-rest-reference.html\">REST API</a> and <a target="
+"\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/"
 "maintain-tools\">CLI tools</a>"
 msgstr ""
 "Dokumenterat <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://"
-"tube.docs.dingshunyu.top/api-rest-reference.html\">REST-API</a> och <a target="
-"\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/"
+"tube.docs.imzqqq.top/api-rest-reference.html\">REST-API</a> och <a target="
+"\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/"
 "maintain-tools\">CLI-verktyg</a>"
 
 #: src/views/FAQ.vue:485
@@ -1930,11 +1930,11 @@ msgstr ""
 #: src/views/FAQ.vue:500
 msgid ""
 "Help (or get help) other instances using <a target=\"_blank\" rel=\"noopener "
-"noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-following-instances?"
+"noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-following-instances?"
 "id=instances-redundancy\">Tube redundancy</a>"
 msgstr ""
 "Hjälp eller få hjälp från andra instanser med <a target=\"_blank\" rel="
-"\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-following-"
+"\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-following-"
 "instances?id=instances-redundancy\">PeerTubes redundans</a>"
 
 #: src/views/FAQ.vue:505
@@ -1944,11 +1944,11 @@ msgstr ""
 #: src/views/FAQ.vue:508
 msgid ""
 "Optimize videos and generate <a target=\"_blank\" rel=\"noopener noreferrer"
-"\" href=\"https://tube.docs.dingshunyu.top/admin-configuration?id=vod-"
+"\" href=\"https://tube.docs.imzqqq.top/admin-configuration?id=vod-"
 "transcoding\">multiple resolutions</a> using ffmpeg"
 msgstr ""
 "Optimera videor och generera <a target=\"_blank\" rel=\"noopener noreferrer"
-"\" href=\"https://tube.docs.dingshunyu.top/admin-configuration?id=vod-"
+"\" href=\"https://tube.docs.imzqqq.top/admin-configuration?id=vod-"
 "transcoding\">flera upplösningar</a> med hjälp av ffmpeg"
 
 #: src/views/FAQ.vue:509
@@ -1975,7 +1975,7 @@ msgid ""
 "for your instance"
 msgstr ""
 "Aktivera <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://"
-"tube.docs.dingshunyu.top/admin-configuration?id=live-streaming"
+"tube.docs.imzqqq.top/admin-configuration?id=live-streaming"
 "\">direktsändningar</a> på din instans"
 
 #: src/views/FAQ.vue:520
@@ -2017,7 +2017,7 @@ msgid ""
 "joinpeertube.org/admin-moderation\">moderator/admin</a> roles"
 msgstr ""
 "Tilldela rättigheter till <a target=\"_blank\" rel=\"noopener noreferrer\" "
-"href=\"https://tube.docs.dingshunyu.top/admin-moderation\">moderatorer och "
+"href=\"https://tube.docs.imzqqq.top/admin-moderation\">moderatorer och "
 "administratörer</a>"
 
 #: src/views/FAQ.vue:542
@@ -2051,11 +2051,11 @@ msgstr ""
 #: src/views/FAQ.vue:554
 msgid ""
 "Search and install Tube <a target=\"_blank\" rel=\"noopener noreferrer\" "
-"href=\"https://tube.docs.dingshunyu.top/admin-customize-instance\">plugins or "
+"href=\"https://tube.docs.imzqqq.top/admin-customize-instance\">plugins or "
 "themes</a>"
 msgstr ""
 "Sök och installera <a target=\"_blank\" rel=\"noopener noreferrer\" href="
-"\"https://tube.docs.dingshunyu.top/admin-customize-instance\">tillägg eller "
+"\"https://tube.docs.imzqqq.top/admin-customize-instance\">tillägg eller "
 "teman</a> i Tube"
 
 #: src/views/FAQ.vue:555
@@ -2242,12 +2242,12 @@ msgstr ""
 #: src/views/FAQ.vue:690
 msgid ""
 "Bandwidth: can be mitigated using <a target=\"_blank\" rel=\"noopener "
-"noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-following-instances?"
+"noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-following-instances?"
 "id=instances-redundancy\">Tube redundancy system</a> and cache servers "
 "that serve video static files in front of your Tube instance"
 msgstr ""
 "Bandbredd: kan avhjälpas med <a target=\"_blank\" rel=\"noopener noreferrer"
-"\" href=\"https://tube.docs.dingshunyu.top/admin-following-instances?"
+"\" href=\"https://tube.docs.imzqqq.top/admin-following-instances?"
 "id=instances-redundancy\">PeerTubes system för redundans</a> och cache-"
 "servrar som håller statiska videofiler åt din Tube-instans"
 
@@ -2255,11 +2255,11 @@ msgstr ""
 #, fuzzy
 msgid ""
 "Storage: can be mitigated using <a target=\"_blank\" rel=\"noopener "
-"noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-remote-storage\">S3/"
+"noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-remote-storage\">S3/"
 "Object storage</a>"
 msgstr ""
 "Tilldela rättigheter till <a target=\"_blank\" rel=\"noopener noreferrer\" "
-"href=\"https://tube.docs.dingshunyu.top/admin-moderation\">moderatorer och "
+"href=\"https://tube.docs.imzqqq.top/admin-moderation\">moderatorer och "
 "administratörer</a>"
 
 #: src/views/FAQ.vue:692
@@ -2528,21 +2528,21 @@ msgstr "Git (Tube)"
 #, fuzzy
 msgid ""
 "Test Tube REST API with the <a target=\"_blank\" rel=\"noopener "
-"noreferrer\" href=\"https://tube.docs.dingshunyu.top/api-rest-getting-started"
+"noreferrer\" href=\"https://tube.docs.imzqqq.top/api-rest-getting-started"
 "\">getting started guide</a>"
 msgstr ""
 "Sök och installera <a target=\"_blank\" rel=\"noopener noreferrer\" href="
-"\"https://tube.docs.dingshunyu.top/admin-customize-instance\">tillägg eller "
+"\"https://tube.docs.imzqqq.top/admin-customize-instance\">tillägg eller "
 "teman</a> i Tube"
 
 #: src/views/FAQ.vue:856
 #, fuzzy
 msgid ""
 "Check the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://"
-"tube.docs.dingshunyu.top/api-rest-reference.html\">REST API documentation</a>"
+"tube.docs.imzqqq.top/api-rest-reference.html\">REST API documentation</a>"
 msgstr ""
 "Officielt <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://"
-"tube.docs.dingshunyu.top/install-docker\">stöd för Docker</a>"
+"tube.docs.imzqqq.top/install-docker\">stöd för Docker</a>"
 
 #: src/views/FAQ.vue:857 src/views/FAQ.vue:867
 #, fuzzy
@@ -2565,11 +2565,11 @@ msgstr ""
 #, fuzzy
 msgid ""
 "Control the Tube player embed using the <a target=\"_blank\" rel="
-"\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/api-embed-player"
+"\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/api-embed-player"
 "\">embed API</a>"
 msgstr ""
 "Tilldela rättigheter till <a target=\"_blank\" rel=\"noopener noreferrer\" "
-"href=\"https://tube.docs.dingshunyu.top/admin-moderation\">moderatorer och "
+"href=\"https://tube.docs.imzqqq.top/admin-moderation\">moderatorer och "
 "administratörer</a>"
 
 #: src/views/FAQ.vue:872
@@ -2581,21 +2581,21 @@ msgstr "Tillägg och spellistor"
 #, fuzzy
 msgid ""
 "Develop plugins and themes using the <a target=\"_blank\" rel=\"noopener "
-"noreferrer\" href=\"https://tube.docs.dingshunyu.top/contribute-plugins"
+"noreferrer\" href=\"https://tube.docs.imzqqq.top/contribute-plugins"
 "\">getting started guide</a>"
 msgstr ""
 "Tilldela rättigheter till <a target=\"_blank\" rel=\"noopener noreferrer\" "
-"href=\"https://tube.docs.dingshunyu.top/admin-moderation\">moderatorer och "
+"href=\"https://tube.docs.imzqqq.top/admin-moderation\">moderatorer och "
 "administratörer</a>"
 
 #: src/views/FAQ.vue:876
 #, fuzzy
 msgid ""
 "Check the complete <a target=\"_blank\" rel=\"noopener noreferrer\" href="
-"\"https://tube.docs.dingshunyu.top/api-plugins\">plugin/theme documentation</a>"
+"\"https://tube.docs.imzqqq.top/api-plugins\">plugin/theme documentation</a>"
 msgstr ""
 "Sök och installera <a target=\"_blank\" rel=\"noopener noreferrer\" href="
-"\"https://tube.docs.dingshunyu.top/admin-customize-instance\">tillägg eller "
+"\"https://tube.docs.imzqqq.top/admin-customize-instance\">tillägg eller "
 "teman</a> i Tube"
 
 #: src/views/FAQ.vue:877
@@ -2624,7 +2624,7 @@ msgid ""
 "IPFS is a great technology, but it still seems too young for streaming large "
 "files. The Tube P2P system based on well established protocols like HTTP "
 "and WebRTC, and the <a target=\"_blank\" rel=\"noopener noreferrer\" href="
-"\"https://tube.docs.dingshunyu.top/admin-following-instances?id=instances-"
+"\"https://tube.docs.imzqqq.top/admin-following-instances?id=instances-"
 "redundancy\">redundancy system</a> are more easy for us to use and to "
 "maintain."
 msgstr ""

@@ -1,12 +1,12 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "Регистрация:";
-"login_server_url_placeholder" = "URL (например https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (например https://chat.imzqqq.top)";
 "login_home_server_title" = "URL домашнего сервера:";
 "login_home_server_info" = "Ваш домашний сервер хранит все ваши разговоры и данные о аккаунте";
 "login_identity_server_title" = "Cервер идентификации URL:";
-"login_identity_server_info" = "Серверы идентификации Matrix обеспечивают определение соответствия между email и Matrix ID. В настоящее время существует только https://chat.dingshunyu.top.";
-"login_user_id_placeholder" = "Matrix ID (например, @bob:chat.dingshunyu.top или bob)";
+"login_identity_server_info" = "Серверы идентификации Matrix обеспечивают определение соответствия между email и Matrix ID. В настоящее время существует только https://chat.imzqqq.top.";
+"login_user_id_placeholder" = "Matrix ID (например, @bob:chat.imzqqq.top или bob)";
 "login_password_placeholder" = "Пароль";
 "login_optional_field" = "не обязательно";
 "login_display_name_placeholder" = "Отображаемое имя (например, Иван Петров)";
@@ -300,7 +300,7 @@
 // room details dialog screen
 "room_details_title" = "Информация о комнате";
 // contacts list screen 
-"invitation_message" = "Я бы хотел поговорить с вами в Matrix. Пожалуйста, посетите веб-сайт https://chat.dingshunyu.top для получения дополнительной информации.";
+"invitation_message" = "Я бы хотел поговорить с вами в Matrix. Пожалуйста, посетите веб-сайт https://chat.imzqqq.top для получения дополнительной информации.";
 // Settings screen 
 "settings_title_config" = "Конфигурация";
 "settings_title_notifications" = "Уведомления";

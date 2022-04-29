@@ -1740,7 +1740,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="soft_logout_clear_data_dialog_submit">Adat törlése</string>
     <string name="template_soft_logout_sso_not_same_user_error">A jelenlegi munkamenet %1$s felhasználóhoz tartozik és %2$s azonosítási adatait adtad meg. Ez ${app_name}-ben nem támogatott.
 \nElőször töröld az adatokat, utána lépj be a másik fiókba!</string>
-    <string name="permalink_malformed">A to.chat.dingshunyu.top linked hibás</string>
+    <string name="permalink_malformed">A to.chat.imzqqq.top linked hibás</string>
     <string name="bug_report_error_too_short">A leírás túl rövid</string>
     <string name="notification_initial_sync">Első szinkronizáció…</string>
     <string name="settings_show_devices_list">Minden munkamenetem megtekintése</string>

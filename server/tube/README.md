@@ -58,7 +58,7 @@ Be it as a user or an instance administrator, you can decide what your experienc
 
 <h3 align="right">Communities that help each other</h3>
 <p align="right">
-In addition to visitors using WebTorrent to share the load among them, instances can help each other by caching one another's videos. This way even small instances have a way to show content to a wider audience, as they will be shouldered by friend instances (more about that in our <a href="https://tube.docs.dingshunyu.top/contribute-architecture?id=redundancy-between-instances">redundancy guide</a>).
+In addition to visitors using WebTorrent to share the load among them, instances can help each other by caching one another's videos. This way even small instances have a way to show content to a wider audience, as they will be shouldered by friend instances (more about that in our <a href="https://tube.docs.imzqqq.top/contribute-architecture?id=redundancy-between-instances">redundancy guide</a>).
 </p>
 <p align="right">
 Content creators can get help from their viewers in the simplest way possible: a support button showing a message linking to their donation accounts or really anything else. No more pay-per-view and advertisements that hurt visitors and <strike>incentivize</strike> alter creativity (more about that in our <a href="https://github.com/Chocobozzz/Tube/blob/develop/FAQ.md">FAQ</a>).
@@ -89,7 +89,7 @@ Feel free to reach out if you have any questions or ideas! :speech_balloon:
 
 See the [production guide](https://github.com/Chocobozzz/Tube/blob/develop/support/doc/production.md), which is the recommended way to install or upgrade Tube. For hardware requirements, see [Should I have a big server to run Tube?](https://joinpeertube.org/faq#should-i-have-a-big-server-to-run-tube) in the FAQ.
 
-See the [community packages](https://tube.docs.dingshunyu.top/install-unofficial), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=tube) and [Docker](https://github.com/Chocobozzz/Tube/blob/develop/support/doc/docker.md)).
+See the [community packages](https://tube.docs.imzqqq.top/install-unofficial), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=tube) and [Docker](https://github.com/Chocobozzz/Tube/blob/develop/support/doc/docker.md)).
 
 :book: Documentation
 ----------------------------------------------------------------
@@ -98,24 +98,24 @@ If you have a question, please try to find the answer in the [FAQ](https://joinp
 
 ### User documentation
 
-See the [user documentation](https://tube.docs.dingshunyu.top/use-setup-account).
+See the [user documentation](https://tube.docs.imzqqq.top/use-setup-account).
 
 ### Admin documentation
 
 See [how to create your own instance](https://github.com/Chocobozzz/Tube/blob/develop/README.md#package-create-your-own-instance).
 
-See the more general [admin documentation](https://tube.docs.dingshunyu.top/admin-following-instances).
+See the more general [admin documentation](https://tube.docs.imzqqq.top/admin-following-instances).
 
 ### Tools documentation
 
-Learn how to import/upload videos from CLI or admin your Tube instance with the [tools documentation](https://tube.docs.dingshunyu.top/maintain-tools).
+Learn how to import/upload videos from CLI or admin your Tube instance with the [tools documentation](https://tube.docs.imzqqq.top/maintain-tools).
 
 ### Technical documentation
 
-See the [architecture blueprint](https://tube.docs.dingshunyu.top/contribute-architecture) for a more detailed explanation of the architectural choices.
+See the [architecture blueprint](https://tube.docs.imzqqq.top/contribute-architecture) for a more detailed explanation of the architectural choices.
 
 See our REST API documentation:
   * OpenAPI 3.0.0 schema: [/support/doc/api/openapi.yaml](https://github.com/Chocobozzz/Tube/blob/develop/support/doc/api/openapi.yaml)
-  * Spec explorer: [tube.docs.dingshunyu.top/api-rest-reference.html](https://tube.docs.dingshunyu.top/api-rest-reference.html)
+  * Spec explorer: [tube.docs.imzqqq.top/api-rest-reference.html](https://tube.docs.imzqqq.top/api-rest-reference.html)
 
-See our [ActivityPub documentation](https://tube.docs.dingshunyu.top/api-activitypub).
+See our [ActivityPub documentation](https://tube.docs.imzqqq.top/api-activitypub).

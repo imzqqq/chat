@@ -20,7 +20,7 @@ import com.squareup.moshi.JsonClass
 
 /**
  * All push rulesets for a user.
- * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#get-matrix-client-r0-pushrules
+ * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#get-matrix-client-r0-pushrules
  */
 @JsonClass(generateAdapter = true)
 internal data class GetPushRulesResponse(

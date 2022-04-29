@@ -21,7 +21,7 @@
 #import "MXEventScanStore.h"
 #import "MXEventScan.h"
 
-static NSString* const kDefaultAntivirusServerDomain = @"chat.dingshunyu.top";
+static NSString* const kDefaultAntivirusServerDomain = @"chat.imzqqq.top";
 
 @interface MXEventScanStoreUnitTests : XCTestCase
 
@@ -49,13 +49,13 @@ static NSString* const kDefaultAntivirusServerDomain = @"chat.dingshunyu.top";
 
 - (void)testCreateEventScan
 {
-    NSString *eventId = @"123456igzeoijncvoiuhekaj:chat.dingshunyu.top";
+    NSString *eventId = @"123456igzeoijncvoiuhekaj:chat.imzqqq.top";
     
     MXAntivirusScanStatus initialAntivirusScanStatus = MXAntivirusScanStatusInProgress;
     
     NSArray<NSString*>* mediaURLs = @[
-                                      @"mxc://chat.dingshunyu.top/7398H34PHL3904U",
-                                      @"mxc://chat.dingshunyu.top/7398H34PHL3904V"
+                                      @"mxc://chat.imzqqq.top/7398H34PHL3904U",
+                                      @"mxc://chat.imzqqq.top/7398H34PHL3904V"
                                       ];
     
     MXEventScan *eventScan = [self.eventScanStore createOrUpdateWithId:eventId initialAntivirusStatus:initialAntivirusScanStatus andMediaURLs:mediaURLs];
@@ -69,13 +69,13 @@ static NSString* const kDefaultAntivirusServerDomain = @"chat.dingshunyu.top";
 
 - (void)testCreateEventScanTwice
 {
-    NSString *eventId = @"123456igzeoijncvoiuhekaj:chat.dingshunyu.top";
+    NSString *eventId = @"123456igzeoijncvoiuhekaj:chat.imzqqq.top";
     
     MXAntivirusScanStatus initialAntivirusScanStatus = MXAntivirusScanStatusInProgress;
     
     NSArray<NSString*>* mediaURLs = @[
-                                      @"mxc://chat.dingshunyu.top/7398H34PHL3904U",
-                                      @"mxc://chat.dingshunyu.top/7398H34PHL3904V"
+                                      @"mxc://chat.imzqqq.top/7398H34PHL3904U",
+                                      @"mxc://chat.imzqqq.top/7398H34PHL3904V"
                                       ];
     
     MXEventScan *eventScan1 = [self.eventScanStore createOrUpdateWithId:eventId initialAntivirusStatus:initialAntivirusScanStatus andMediaURLs:mediaURLs];
@@ -89,11 +89,11 @@ static NSString* const kDefaultAntivirusServerDomain = @"chat.dingshunyu.top";
 
 - (void)testFindEventScan
 {
-    NSString *eventId = @"123456igzeoijncvoiuhekaj:chat.dingshunyu.top";
+    NSString *eventId = @"123456igzeoijncvoiuhekaj:chat.imzqqq.top";
     
     NSArray<NSString*>* mediaURLs = @[
-                                      @"mxc://chat.dingshunyu.top/7398H34PHL3904U",
-                                      @"mxc://chat.dingshunyu.top/7398H34PHL3904V"
+                                      @"mxc://chat.imzqqq.top/7398H34PHL3904U",
+                                      @"mxc://chat.imzqqq.top/7398H34PHL3904V"
                                       ];
     
     MXEventScan *insertedEventScan = [self.eventScanStore createOrUpdateWithId:eventId initialAntivirusStatus:MXAntivirusScanStatusUnknown andMediaURLs:mediaURLs];
@@ -106,17 +106,17 @@ static NSString* const kDefaultAntivirusServerDomain = @"chat.dingshunyu.top";
 
 - (void)testUpdateEventMediaScans
 {
-    NSString *eventId = @"123456igzeoijncvoiuhekaj:chat.dingshunyu.top";
+    NSString *eventId = @"123456igzeoijncvoiuhekaj:chat.imzqqq.top";
     
     NSArray<NSString*>* mediaURLsAtInsertion = @[
-                                                 @"mxc://chat.dingshunyu.top/7398H34PHL3904U",
-                                                 @"mxc://chat.dingshunyu.top/7398H34PHL3904V"
+                                                 @"mxc://chat.imzqqq.top/7398H34PHL3904U",
+                                                 @"mxc://chat.imzqqq.top/7398H34PHL3904V"
                                                  ];
     
     NSArray<NSString*>* mediaURLsAtUpdate = @[
-                                              @"mxc://chat.dingshunyu.top/7398H34PHL3904V",
-                                              @"mxc://chat.dingshunyu.top/7398H34PHL3904W",
-                                              @"mxc://chat.dingshunyu.top/7398H34PHL3904X"
+                                              @"mxc://chat.imzqqq.top/7398H34PHL3904V",
+                                              @"mxc://chat.imzqqq.top/7398H34PHL3904W",
+                                              @"mxc://chat.imzqqq.top/7398H34PHL3904X"
                                               ];
     
     MXEventScan *insertedEventScan = [self.eventScanStore createOrUpdateWithId:eventId initialAntivirusStatus:MXAntivirusScanStatusUnknown andMediaURLs:mediaURLsAtInsertion];

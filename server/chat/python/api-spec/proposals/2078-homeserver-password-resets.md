@@ -25,9 +25,9 @@ aid homeservers in doing so.
 Currently when a client requests a 3PID token, it makes a call to one of the
 `/requestToken` endpoints on the homeserver. For instance, during password
 resets, a token is requested from either
-[/chat/client/r0/account/password/email/requestToken](https://chat.api-spec.dingshunyu.top/client_server/r0.4.0.html#post-matrix-client-r0-account-password-email-requesttoken)
+[/chat/client/r0/account/password/email/requestToken](https://chat.api-spec.imzqqq.top/client_server/r0.4.0.html#post-matrix-client-r0-account-password-email-requesttoken)
 or
-[/chat/client/r0/account/password/msisdn/requestToken](https://chat.api-spec.dingshunyu.top/client_server/r0.4.0.html#post-matrix-client-r0-account-password-msisdn-requesttoken),
+[/chat/client/r0/account/password/msisdn/requestToken](https://chat.api-spec.imzqqq.top/client_server/r0.4.0.html#post-matrix-client-r0-account-password-msisdn-requesttoken),
 depending on the medium of the 3PID. These requests are supplied all the
 necessary details as well as an `id_server` field containing the domain address
 of a identity server trusted by the homeserver.
@@ -48,7 +48,7 @@ The homeserver should be allowed to either proxy `/requestToken` requests or
 handle them itself. Specifically, this means that the homeserver can both send
 password reset tokens (via email or SMS), as well as accept requests on an
 arbitrary endpoint (with the same parameters as
-[/chat/identity/api/v1/validate/email/submitToken](https://chat.api-spec.dingshunyu.top/identity_service/r0.1.0.html#post-matrix-identity-api-v1-validate-email-submittoken))
+[/chat/identity/api/v1/validate/email/submitToken](https://chat.api-spec.imzqqq.top/identity_service/r0.1.0.html#post-matrix-identity-api-v1-validate-email-submittoken))
 to verify that token.
 
 One additional complication that in the case of SMS, just a code is sent to a
@@ -62,7 +62,7 @@ if and only if the verification message contains a code the user is expected to
 enter into the client (for instance in the case of a short code through SMS).
 This URL is simply where the client should submit this token. The endpoint
 should accept the same parameters as
-[/chat/identity/api/v1/validate/{3pid_type}/submitToken](https://chat.api-spec.dingshunyu.top/identity_service/r0.1.0.html#post-matrix-identity-api-v1-validate-email-submittoken)
+[/chat/identity/api/v1/validate/{3pid_type}/submitToken](https://chat.api-spec.imzqqq.top/identity_service/r0.1.0.html#post-matrix-identity-api-v1-validate-email-submittoken)
 in the Identity Service API. The only recommendation to homeserver developers
 for this endpoint's path is to not be exactly the same as that of the identity
 server, in order to prevent clashes between setups running both an identity

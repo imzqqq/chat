@@ -1,7 +1,7 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "Izveidot kontu:";
-"login_server_url_placeholder" = "URL adrese (piemēram, https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL adrese (piemēram, https://chat.imzqqq.top)";
 "login_home_server_title" = "Mājas serveria URL:";
 "login_home_server_info" = "Tavs mājas serveris glabā visas sarunas un konta datus";
 "login_identity_server_title" = "Identifikācijas servera URL:";
@@ -115,5 +115,5 @@
 "login_error_no_login_flow" = "Mums neizdevās saņemt autentifikācijas informāciju no šī mājas servera.";
 "login_email_info" = "E-pasta adreses norādīšana ļauj citiem lietotājiem viegli atras tevi Matix, kā arī nodrošinās tev iespēju nākotnē atjaunot savu paroli.";
 "login_optional_field" = "neobligāts";
-"login_user_id_placeholder" = "Matrix ID (piem. @bob:chat.dingshunyu.top vai bobs)";
-"login_identity_server_info" = "Matrix nodrošina identifikācijas serverus, lai atšķirtu, kuri e-pasti, u.c., pieder kuram Matrix ID. Patlaban pastāv vienīgi https://chat.dingshunyu.top";
+"login_user_id_placeholder" = "Matrix ID (piem. @bob:chat.imzqqq.top vai bobs)";
+"login_identity_server_info" = "Matrix nodrošina identifikācijas serverus, lai atšķirtu, kuri e-pasti, u.c., pieder kuram Matrix ID. Patlaban pastāv vienīgi https://chat.imzqqq.top";

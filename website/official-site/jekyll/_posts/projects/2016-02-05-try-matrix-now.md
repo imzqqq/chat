@@ -438,7 +438,7 @@ Chat is a whole ecosystem of matrix-enabled clients, servers, gateways, applicat
 
  </ul>
 
-[#matrix:matrix.org]: https://to.chat.dingshunyu.top/#/#matrix:matrix.org
+[#matrix:matrix.org]: https://to.chat.imzqqq.top/#/#matrix:matrix.org
 [clients]: https://matrix.org/docs/projects/clients-matrix
 [bridges]: https://matrix.org/bridges
 [sdks]: https://matrix.org/docs/projects/sdks

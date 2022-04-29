@@ -138,13 +138,13 @@
     <string name="label_header">صورة رأس الصفحة</string>
     <string name="link_whats_an_instance">ماذا نعني بمثيل الخادم؟</string>
     <string name="login_connection">الإتصال جارٍ…</string>
-    <string name="dialog_whats_an_instance">بإمكانك إدخال عنوان أي مثيل خادوم ماستدون هنا. على سبيل المثال flow.dingshunyu.top أو icosahedron.website أو social.tchncs.de أوالإطلاع على <a href="https://instances.social">لاكتشاف المزيد !</a> 
+    <string name="dialog_whats_an_instance">بإمكانك إدخال عنوان أي مثيل خادوم ماستدون هنا. على سبيل المثال flow.imzqqq.top أو icosahedron.website أو social.tchncs.de أوالإطلاع على <a href="https://instances.social">لاكتشاف المزيد !</a> 
 \n 
 \n إن كنت لا تملك حسابا بإمكانك إدخال اسم مثيل خادوم تريد الانضمام إليه قصد إنشاء حسابك عليه.
 \n 
 \n نعني بمثيل الخادوم المكان الذي استُضِيف فيه حسابك و يمكنك التواصل مع أصدقائك و متابعيك و كأنكم على موقع واحد و ذلك حتى و إن كانت حساباتهم مُستضافة على مثيلات خوادم أخرى. 
 \n 
-\n للمزيد مِن التفاصيل إطّلع على <a href="https://flow.join.dingshunyu.top">flow.join.dingshunyu.top</a>. </string>
+\n للمزيد مِن التفاصيل إطّلع على <a href="https://flow.join.imzqqq.top">flow.join.imzqqq.top</a>. </string>
     <string name="dialog_title_finishing_media_upload">تتمة رفع الوسائط</string>
     <string name="dialog_message_uploading_media">الإرسال جارٍ…</string>
     <string name="dialog_download_image">تنزيل</string>

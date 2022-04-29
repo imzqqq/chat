@@ -89,7 +89,7 @@ This v2 adds __HTML support (on top of text mode) in emails__ sent by Tube, maki
 
 The admin of a Tube instance can choose to auto follow other instances. Before, the majority of admins used this feature to automatically follow all the instances in the public index (which causes moderation issues). It is now possible for anyone to share a list of instances (on github, gitlab, pastebin, etc.) so that the admins of a Tube instance can use that list's web address to make their instance automatically follow the instances of that shared list. This lets users create auto follow lists within small groups.
 
-And finally, we improved the embed API, allowing websites that embed a Tube video to have better control over the player:knowing the video's length, knowing when playback is over, exporting video subtitles, indicating a specific subtitle to activate. More info on https://tube.docs.dingshunyu.top/#/api-embed-player.
+And finally, we improved the embed API, allowing websites that embed a Tube video to have better control over the player:knowing the video's length, knowing when playback is over, exporting video subtitles, indicating a specific subtitle to activate. More info on https://tube.docs.imzqqq.top/#/api-embed-player.
 
 This new release includes many other improvements. You can see the complete list (in English) on https://github.com/Chocobozzz/Tube/blob/develop/CHANGELOG.md.
 

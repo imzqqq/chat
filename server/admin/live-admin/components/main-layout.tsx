@@ -231,7 +231,7 @@ export default function MainLayout(props) {
 
         <Footer className="footer-container">
           <a
-            href="https://live.dingshunyu.top/?source=admin"
+            href="https://live.imzqqq.top/?source=admin"
             target="_blank"
             rel="noopener noreferrer"
           >

@@ -26,7 +26,7 @@ import java.util.TreeSet
 
 /**
  * Build canonical Json
- * Doc: https://chat.docs.dingshunyu.top/spec/appendices.html#canonical-json
+ * Doc: https://chat.docs.imzqqq.top/spec/appendices.html#canonical-json
  */
 object JsonCanonicalizer {
 

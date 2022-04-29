@@ -2529,7 +2529,7 @@
     "%(brand)s iOS": "%(brand)s за iOS",
     "%(brand)s Desktop": "%(brand)s Desktop",
     "%(brand)s Web": "Уеб версия на %(brand)s",
-    "Enter the location of your Chat Chat Services homeserver. It may use your own domain name or be a subdomain of <a>element.io</a>.": "Въведете адреса на вашия Chat Chat Services сървър. Той или използва ваш собствен домейн или е поддомейн на <a>apps.chat.dingshunyu.top</a>.",
+    "Enter the location of your Chat Chat Services homeserver. It may use your own domain name or be a subdomain of <a>element.io</a>.": "Въведете адреса на вашия Chat Chat Services сървър. Той или използва ваш собствен домейн или е поддомейн на <a>apps.chat.imzqqq.top</a>.",
     "You can use the custom server options to sign into other Chat servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Chat account on a different homeserver.": "Може да използвате опцията за собствен сървър, за да влезете в друг Chat сървър, чрез указване на адреса му. Това позволява да използвате %(brand)s с Chat профил съществуващ на друг сървър.",
     "Forgot password?": "Забравена парола?",
     "Search (must be enabled)": "Търсене (трябва да е включено)",

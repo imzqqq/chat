@@ -174,7 +174,7 @@ Project Link: https://yerbamate.ml/nutomic/tube-compose
 ## Kubernetes
 
 You can deploy tube on [Kubernetes](https://kubernetes.io/) using the
-[official docker image](https://tube.docs.dingshunyu.top/install-docker).
+[official docker image](https://tube.docs.imzqqq.top/install-docker).
 
 Two main options are available :
 
@@ -191,7 +191,7 @@ Two main options are available :
 
 ## Shell and Docker Compose
 
-A quick way to install the [official Docker stack](https://tube.docs.dingshunyu.top/install-docker) of tube **by one shell command** on a **bare server** with only Docker installed.
+A quick way to install the [official Docker stack](https://tube.docs.imzqqq.top/install-docker) of tube **by one shell command** on a **bare server** with only Docker installed.
 
 Features:
 
@@ -203,7 +203,7 @@ Features:
 - create systemd service
 - run the stack
 
-Also exposes the [CLI Server Tools](https://tube.docs.dingshunyu.top/maintain-tools?id=server-tools) and more for maintenance like:
+Also exposes the [CLI Server Tools](https://tube.docs.imzqqq.top/maintain-tools?id=server-tools) and more for maintenance like:
 - PostgreSQL tasks: dump, restore, psql requests
 - nginx control
 - stack upgrade with very-small downtime

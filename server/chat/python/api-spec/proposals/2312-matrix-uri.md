@@ -29,10 +29,10 @@ Specific use cases include:
 Chat identifiers as defined by the current specification have a form distinct
 enough from other identifiers to mostly fulfil the representation use case.
 Since they are not URIs, they can not cover the two integration use cases.
-https://to.chat.dingshunyu.top somehow compensates for this; however:
+https://to.chat.imzqqq.top somehow compensates for this; however:
 * it requires a web browser to run JavaScript code that resolves identifiers
   (basically limiting first-class support to browser-based clients), and
-* it relies on to.chat.dingshunyu.top as an intermediary that provides that JavaScript code.
+* it relies on to.chat.imzqqq.top as an intermediary that provides that JavaScript code.
 
 To cover the use cases above, the following scheme is proposed for Chat URIs
 (`[]` enclose optional parts, `{}` enclose variables):
@@ -49,7 +49,7 @@ This MSC does not introduce new Chat entities, nor API endpoints -
 it merely defines a mapping between URIs with the scheme name `matrix:`
 and Chat identifiers, as well as operations on them. The MSC should be
 sufficient to produce an implementation that would convert Chat URIs to
-a series of [CS API](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1) calls,
+a series of [CS API](https://chat.api-spec.imzqqq.top/client_server/r0.6.1) calls,
 entirely on the client side. It is recognised, however, that most of
 the URI processing logic can and should (eventually) be on the server side
 in order to facilitate adoption of Chat URIs; further MSCs are needed
@@ -82,7 +82,7 @@ Examples:
 
 Further text uses the following terms:
 - Chat identifier - one of identifiers defined by the current
-[Chat Specification](https://chat.api-spec.dingshunyu.top/appendices.html#identifier-grammar),
+[Chat Specification](https://chat.api-spec.imzqqq.top/appendices.html#identifier-grammar),
 - Chat URI - a uniform resource identifier proposed hereby, following
   the RFC-compliant URI format.
 - MUST/SHOULD/MAY etc. follow the conventions of
@@ -107,7 +107,7 @@ The following requirements resulted from these drivers:
 1. By definition, Chat URI MUST unambiguously identify a resource
    in a Chat network, across servers and types of resources.
    This means, in particular, that two Chat identifiers distinct by
-   [Chat Specification](https://chat.api-spec.dingshunyu.top/appendices.html#identifier-grammar)
+   [Chat Specification](https://chat.api-spec.imzqqq.top/appendices.html#identifier-grammar)
    MUST NOT have Chat URIs that are equal in
    [RFC 3986](https://tools.ietf.org/html/rfc3986) sense
    (but two distinct Chat URIs MAY map to the same Chat identifier).
@@ -181,7 +181,7 @@ The proposed scheme name is `matrix`.
 Other considered options were `mx` and `web+matrix`;
 [comments to MSC455](https://github.com/matrix-org/matrix-doc/issues/455)
 mention two scheme names proposed and one more has been mentioned
-in `#matrix-core:chat.dingshunyu.top`.
+in `#matrix-core:chat.imzqqq.top`.
 
 The scheme name is a definitive indication of a Chat URI and MUST NOT
 be omitted. As can be seen below, Chat URI rely heavily on [relative
@@ -269,7 +269,7 @@ for type-in; if a URI for a given resource type is usually generated
 RECOMMENDED to use full (though short) words to avoid ambiguity and confusion.
 
 `id-without-sigil` is defined as the `string` part of Chat
-[Common identifier format](https://chat.api-spec.dingshunyu.top/appendices#common-identifier-format)
+[Common identifier format](https://chat.api-spec.imzqqq.top/appendices#common-identifier-format)
 with percent-encoded characters that are NEITHER unreserved, sub-delimiters, `:` nor `@`,
 [as per RFC 3986 rule for pchar](https://tools.ietf.org/html/rfc3986#appendix-A).
 This notably exempts `:` from percent-encoding but includes `/`.
@@ -331,7 +331,7 @@ means performing an action on a URI with no `action` in the query.
 
 The routing query (`via=`) indicates servers that are likely involved in
 the room (see also
-[the feature of to.chat.dingshunyu.top](https://chat.api-spec.dingshunyu.top/appendices#routing)).
+[the feature of to.chat.imzqqq.top](https://chat.api-spec.imzqqq.top/appendices#routing)).
 In the meantime, it is proposed that this routing query be used not only with
 room ids in a public federation but also when a URI refers to a resource in
 a non-public Chat network (see the question about closed federations in
@@ -419,13 +419,13 @@ comparisons are case-INsensitive.
 
    a. If `query` contains one or more items starting with `via=`: for each item, treat
       the rest of the item as a percent-encoded homeserver name to be used in
-      [routing](https://chat.api-spec.dingshunyu.top/appendices#routing).
+      [routing](https://chat.api-spec.imzqqq.top/appendices#routing).
 
    b. If `query` contains one or more items starting with `action=`: treat
       _the last_ such item as an instruction, as this proposal defines in [query](#query).
 
 Clients MUST implement proper percent-decoding of the identifiers; there's no
-liberty similar to that of to.chat.dingshunyu.top.
+liberty similar to that of to.chat.imzqqq.top.
 
 #### Operations on Chat URIs
 
@@ -479,7 +479,7 @@ may change this):
    - the event id after removing the sigil (`$`) and percent-encoding.
 
 Clients MUST implement proper percent-encoding of the identifiers; there's no
-liberty similar to that of to.chat.dingshunyu.top.
+liberty similar to that of to.chat.imzqqq.top.
 
 
 ## Discussion and non-normative statements
@@ -528,12 +528,12 @@ extensions. Here are a few ideas:
   the security concerns associated with such URIs.
 
 * One could conceive a URI mapping of avatars in the form of
-  `matrix:u/uid:chat.dingshunyu.top/avatar/room:chat.dingshunyu.top`
+  `matrix:u/uid:chat.imzqqq.top/avatar/room:chat.imzqqq.top`
   (a user’s avatar for a given room).
 
 * As described in "Alternatives", a synonymous system can be introduced that
   uses Chat identifiers with sigils by adding another path prefix (e.g.,
-  `matrix:id/%23matrix:chat.dingshunyu.top`). However, such MSC would have to address
+  `matrix:id/%23matrix:chat.imzqqq.top`). However, such MSC would have to address
   the concerns of possible confusion arising from having two similar but
   distinct notations.
 
@@ -613,7 +613,7 @@ advantages:
    with the abbreviated forms (and `r/` coincidentally standing for sub-Reddits
    links to which have basically the same place in the Reddit ecosystem as
    Chat room aliases have in the Chat ecosystem);
-2. to.chat.dingshunyu.top links to users and room aliases are heavily used throughout Chat,
+2. to.chat.imzqqq.top links to users and room aliases are heavily used throughout Chat,
    specifically in end-user-facing contexts (see also use cases in the
    introductory section of this MSC);
 3. the singular vs. plural (`room` or `rooms`?) confusion is avoided;
@@ -687,7 +687,7 @@ in the authority part - which is why the form above uses a leading `/` that
 puts the identifier in the path part instead of what parsers treat as
 the authority part. `#` has to be encoded wherever it appears, making a URI
 for Chat HQ, the first chat room many new users join, look like
-`matrix:/%23matrix:chat.dingshunyu.top`. Beyond first-time usage, this generally impacts
+`matrix:/%23matrix:chat.imzqqq.top`. Beyond first-time usage, this generally impacts
 [the "napkin" case](https://tools.ietf.org/html/rfc3986#section-1.2.1) from
 RFC 3986 that the Requirements section of this MSC mentions. Until we have
 applications generally recognising Chat identifiers in the same way e-mail
@@ -696,7 +696,7 @@ the fact that people will have to produce Chat URIs by hand in various
 instances, from pen-and-paper to other instant messengers.
 
 Putting the whole id to the URI fragment (`matrix:#id_with_sigil` or,
-following on the `to.chat.dingshunyu.top` tradition, `matrix:#/id_with_sigil` for
+following on the `to.chat.imzqqq.top` tradition, `matrix:#/id_with_sigil` for
 readability) allows using `#` without encoding on many URI parsers. It is
 still not fully RFC-compliant and rules out using URIs by homeservers
 (see also "Past discussion points" on using fragments to address events).
@@ -714,8 +714,8 @@ as an escape hatch to a bigger namespace if we hit shortage of sigils.
 
 The current proposal is also flexible enough to incorporate the minimal
 syntax of this option as an alternative to its own notation - e.g., a further
-MSC could enable `matrix:id/%23matrix:chat.dingshunyu.top` as a synonym for
-`matrix:room/matrix:chat.dingshunyu.top`.
+MSC could enable `matrix:id/%23matrix:chat.imzqqq.top` as a synonym for
+`matrix:room/matrix:chat.imzqqq.top`.
 
 
 ## Potential issues
@@ -758,7 +758,7 @@ A dedicated URI scheme is well overdue for Chat. Many other networks
 already have got one for themselves, benefiting both in terms of
 branding (compare `matrix:r/weruletheworld:example.org` vs.
 `#weruletheworld:example.org` from the standpoint of someone who
-hasn't been to Chat) and interoperability (`to.chat.dingshunyu.top` requires
+hasn't been to Chat) and interoperability (`to.chat.imzqqq.top` requires
 opening a browser while clicking a `tg:` link dumped to the terminal
 application will open the correct application for Telegram without
 user intervention or can even offer to install one, if needed).

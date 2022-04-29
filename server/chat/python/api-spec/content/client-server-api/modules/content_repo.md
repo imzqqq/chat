@@ -27,7 +27,7 @@ look like:
 
     mxc://<server-name>/<media-id>
 
-    <server-name> : The name of the homeserver where this content originated, e.g. chat.dingshunyu.top
+    <server-name> : The name of the homeserver where this content originated, e.g. chat.imzqqq.top
     <media-id> : An opaque ID which identifies the content.
 
 #### Client behaviour

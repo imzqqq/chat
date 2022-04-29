@@ -4,9 +4,9 @@ title: Live Demo Servers
 
 We provide two public Live servers for you to see how it works. One for streaming *to* and one for just watching.
 
-### Stream your content to [broadcast.live.dingshunyu.top](http://broadcast.live.dingshunyu.top)
+### Stream your content to [broadcast.live.imzqqq.top](http://broadcast.live.imzqqq.top)
 
-You can point **your own software and content** at [broadcast.live.dingshunyu.top](http://broadcast.live.dingshunyu.top) to test live streaming with Live. [Go there](http://broadcast.live.dingshunyu.top) and find the current key in the description and chat messages.
+You can point **your own software and content** at [broadcast.live.imzqqq.top](http://broadcast.live.imzqqq.top) to test live streaming with Live. [Go there](http://broadcast.live.imzqqq.top) and find the current key in the description and chat messages.
 
 Read more about how to configure your software by reading the [broadcasting software documentation](/docs/broadcasting/).
 
@@ -18,8 +18,8 @@ Some limitations and restrictions:
 
 ---
 
-### Watch a test live stream at [watch.live.dingshunyu.top](http://watch.live.dingshunyu.top)
+### Watch a test live stream at [watch.live.imzqqq.top](http://watch.live.imzqqq.top)
 
-If you just want to see what it's like to watch a currently active Live live stream you can visit [watch.live.dingshunyu.top](http://watch.live.dingshunyu.top) and check it out.
+If you just want to see what it's like to watch a currently active Live live stream you can visit [watch.live.imzqqq.top](http://watch.live.imzqqq.top) and check it out.
 
-{{< owncastembed "https://watch.live.dingshunyu.top/embed/video" >}}
+{{< owncastembed "https://watch.live.imzqqq.top/embed/video" >}}

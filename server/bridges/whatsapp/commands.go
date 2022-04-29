@@ -803,7 +803,7 @@ func formatContacts(bridge *Bridge, input map[types.JID]types.ContactInfo) (resu
 		if len(pushName) == 0 {
 			pushName = contact.FullName
 		}
-		result = append(result, fmt.Sprintf("* %s / [%s](https://to.chat.dingshunyu.top/#/%s) - `+%s`", contact.FullName, pushName, puppet.MXID, jid.User))
+		result = append(result, fmt.Sprintf("* %s / [%s](https://to.chat.imzqqq.top/#/%s) - `+%s`", contact.FullName, pushName, puppet.MXID, jid.User))
 	}
 	sort.Sort(sort.StringSlice(result))
 	return
@@ -962,7 +962,7 @@ func (handler *CommandHandler) CommandPM(ce *CommandEvent) {
 			portal.log.Warnfln("ensureUserInvited(%s) returned false, creating new portal", user.MXID)
 			portal.MXID = ""
 		} else {
-			ce.Reply("You already have a private chat portal with +%s at [%s](https://to.chat.dingshunyu.top/#/%s)", puppet.JID.User, puppet.Displayname, portal.MXID)
+			ce.Reply("You already have a private chat portal with +%s at [%s](https://to.chat.imzqqq.top/#/%s)", puppet.JID.User, puppet.Displayname, portal.MXID)
 			return
 		}
 	}

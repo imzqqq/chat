@@ -20,9 +20,9 @@ Visit the [Quickstart](/quickstart) to be walked through the installation option
 Paste the following into your shell and the installer will download the most recent version of Live for your platform.
 It will also download a copy of ffmpeg if you don't currently have one installed.
 
-{{< btn-copy text="curl -s https://live.dingshunyu.top/install.sh | bash" >}}
+{{< btn-copy text="curl -s https://live.imzqqq.top/install.sh | bash" >}}
 {{< highlight bash >}}
-curl -s https://live.dingshunyu.top/install.sh | bash
+curl -s https://live.imzqqq.top/install.sh | bash
 {{</ highlight >}}
 
 {{< asciicast "/install-owncast-ascii.cast">}}

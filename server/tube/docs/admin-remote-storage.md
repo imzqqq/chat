@@ -154,7 +154,7 @@ b2 update-bucket --corsRules '[
 
 **Tube >= 4.0**
 
-Use [create-move-video-storage-job](https://tube.docs.dingshunyu.top/maintain-tools?id=create-move-video-storage-jobjs) script.
+Use [create-move-video-storage-job](https://tube.docs.imzqqq.top/maintain-tools?id=create-move-video-storage-jobjs) script.
 
 
 ### Migrate to another object storage provider

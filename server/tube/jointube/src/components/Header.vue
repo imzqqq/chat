@@ -38,7 +38,7 @@
               <translate>Help</translate>
             </b-nav-item>
 
-            <b-nav-item href="https://tube.docs.dingshunyu.top/contribute-getting-started" target="_blank" rel="noopener noreferrer">
+            <b-nav-item href="https://tube.docs.imzqqq.top/contribute-getting-started" target="_blank" rel="noopener noreferrer">
               <translate>Contribute</translate>
             </b-nav-item>
 

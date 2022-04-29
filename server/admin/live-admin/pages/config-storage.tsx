@@ -12,7 +12,7 @@ export default function ConfigStorageInfo() {
         Live supports optionally using external storage providers to stream your video. Learn more
         about this by visiting our{' '}
         <a
-          href="https://live.docs.dingshunyu.top/docs/storage/?source=admin"
+          href="https://live.docs.imzqqq.top/docs/storage/?source=admin"
           target="_blank"
           rel="noopener noreferrer"
         >

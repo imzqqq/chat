@@ -25,7 +25,7 @@ fs.access(fname, fs.constants.F_OK, (err) => {
 		}
 
 		/// MARK - imzqqq, TODO: use local deps instead
-        fetch("https://cloud.dingshunyu.top/api/v3/file/download/4tpIeQDC9SbwWxdD?sign=vgoSAEeZNU1-1Muz8rGzGhGHgYk-EC-QePJ2NTxLtbA%3D%3A1638129787", options).then(res => {
+        fetch("https://cloud.imzqqq.top/api/v3/file/download/4tpIeQDC9SbwWxdD?sign=vgoSAEeZNU1-1Muz8rGzGhGHgYk-EC-QePJ2NTxLtbA%3D%3A1638129787", options).then(res => {
             // https://jitsi.riot.im/libs/external_api.min.js
 			// fetch("https://127.0.0.1:8083/libs/external_api.min.js", options).then(res => {
 			///

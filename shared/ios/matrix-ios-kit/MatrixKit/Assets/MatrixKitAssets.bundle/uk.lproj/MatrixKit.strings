@@ -24,7 +24,7 @@
 "close" = "Закрити";
 "back" = "Назад";
 "view" = "Вигляд";
-"login_server_url_placeholder" = "URL (наприклад, https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (наприклад, https://chat.imzqqq.top)";
 
 // Login Screen
 "login_create_account" = "Створіть обліковий запис:";
@@ -93,8 +93,8 @@
 "login_display_name_placeholder" = "Видиме ім'я (наприклад Bob Obson)";
 "login_optional_field" = "необов'язково";
 "login_password_placeholder" = "Пароль";
-"login_user_id_placeholder" = "Ідентифікатор Matrix (наприклад @bob:chat.dingshunyu.top або bob)";
-"login_identity_server_info" = "Matrix забезпечує сервери ідентифікації для відстеження, до яких ідентифікаторів Matrix, які електронні листи належать. Наразі доступно лише для https://chat.dingshunyu.top.";
+"login_user_id_placeholder" = "Ідентифікатор Matrix (наприклад @bob:chat.imzqqq.top або bob)";
+"login_identity_server_info" = "Matrix забезпечує сервери ідентифікації для відстеження, до яких ідентифікаторів Matrix, які електронні листи належать. Наразі доступно лише для https://chat.imzqqq.top.";
 "login_identity_server_title" = "URL-адреса сервера ідентифікації:";
 "login_home_server_info" = "Ваш домашній сервер зберігає всі ваші розмови та дані облікового запису";
 "login_home_server_title" = "URL-адреса домашнього сервера:";

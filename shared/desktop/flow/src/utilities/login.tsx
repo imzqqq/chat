@@ -23,7 +23,7 @@ export function createFlowApp(
         {
             scopes: scopes,
             redirect_uris: redirect_uri,
-			website: "https://flow.dingshunyu.top"
+			website: "https://flow.imzqqq.top"
         },
         baseurl
     ).then(appData => {

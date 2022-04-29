@@ -54,7 +54,7 @@ internal interface RoomAPI {
      * Lists the public rooms on the server, with optional filter.
      * This API returns paginated responses. The rooms are ordered by the number of joined members, with the largest rooms first.
      *
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0.html#post-matrix-client-r0-publicrooms
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/r0.4.0.html#post-matrix-client-r0-publicrooms
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "publicRooms")
     suspend fun publicRooms(@Query("server") server: String?,
@@ -63,7 +63,7 @@ internal interface RoomAPI {
 
     /**
      * Create a room.
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0.html#post-matrix-client-r0-createroom
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/r0.4.0.html#post-matrix-client-r0-createroom
      * Set all the timeouts to 1 minute, because if the server takes time to answer, we will not execute the
      * create direct chat request if any
      *
@@ -165,7 +165,7 @@ internal interface RoomAPI {
 
     /**
      * Invite a user to the given room.
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0.html#post-matrix-client-r0-rooms-roomid-invite
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/r0.4.0.html#post-matrix-client-r0-rooms-roomid-invite
      *
      * @param roomId the room id
      * @param body   a object that just contains a user id
@@ -176,7 +176,7 @@ internal interface RoomAPI {
 
     /**
      * Invite a user to a room, using a ThreePid
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/r0.6.1#id101
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/r0.6.1#id101
      * @param roomId Required. The room identifier (not alias) to which to invite the user.
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/invite")
@@ -211,7 +211,7 @@ internal interface RoomAPI {
 
     /**
      * Get state events of a room
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/r0.6.1#get-matrix-client-r0-rooms-roomid-state
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/r0.6.1#get-matrix-client-r0-rooms-roomid-state
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "rooms/{roomId}/state")
     suspend fun getRoomState(@Path("roomId") roomId: String): List<Event>
@@ -313,7 +313,7 @@ internal interface RoomAPI {
 
     /**
      * Get a list of aliases maintained by the local server for the given room.
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/r0.6.1#get-matrix-client-r0-rooms-roomid-aliases
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/r0.6.1#get-matrix-client-r0-rooms-roomid-aliases
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2432/rooms/{roomId}/aliases")
     suspend fun getAliases(@Path("roomId") roomId: String): GetAliasesResponse

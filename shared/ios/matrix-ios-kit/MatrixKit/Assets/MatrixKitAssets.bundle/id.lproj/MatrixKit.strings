@@ -100,12 +100,12 @@
 "login_display_name_placeholder" = "Nama tampilan (mis. Bob Obson)";
 "login_optional_field" = "opsional";
 "login_password_placeholder" = "Kata sandi";
-"login_user_id_placeholder" = "ID Matrix (mis. @bob:chat.dingshunyu.top atau bob)";
-"login_identity_server_info" = "Matrix menyediakan server identitas untuk melacak email mana, dll., milik ID Matrix mana. Hanya https://chat.dingshunyu.top yang saat ini ada.";
+"login_user_id_placeholder" = "ID Matrix (mis. @bob:chat.imzqqq.top atau bob)";
+"login_identity_server_info" = "Matrix menyediakan server identitas untuk melacak email mana, dll., milik ID Matrix mana. Hanya https://chat.imzqqq.top yang saat ini ada.";
 "login_identity_server_title" = "URL server identitas:";
 "login_home_server_info" = "Homeserver Anda menyimpan semua pesan Anda dan data akun";
 "login_home_server_title" = "URL Homeserver:";
-"login_server_url_placeholder" = "URL (mis. https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (mis. https://chat.imzqqq.top)";
 
 // Login Screen
 "login_create_account" = "Buat akun:";
@@ -258,7 +258,7 @@
 "account_email_validation_error" = "Tidak dapat memverifikasi alamat email. Silakan cek email Anda dan tekan tautannya yang ada. Setelah selesai, tekan lanjut";
 
 // contacts list screen 
-"invitation_message" = "Saya ingin berkomunikasi dengan Anda dengan Matrix. Silakan kunjungi ke websitenya di https://chat.dingshunyu.top untuk informasi selanjutnya.";
+"invitation_message" = "Saya ingin berkomunikasi dengan Anda dengan Matrix. Silakan kunjungi ke websitenya di https://chat.imzqqq.top untuk informasi selanjutnya.";
 "notice_room_history_visible_to_members_from_invited_point_by_you_for_dm" = "Anda membuat sejarah pesan di masa mendatang dapat dilihat oleh semuanya, sejak mereka diundang.";
 "notice_room_history_visible_to_members_from_invited_point_by_you" = "Anda membuat sejarah ruangan di masa mendatang dapat dilihat oleh semua anggota ruangan, sejak mereka diundang.";
 "notice_room_history_visible_to_members_by_you_for_dm" = "Anda membuat pesan di masa depan dapat dilihat oleh semua anggota ruangan.";

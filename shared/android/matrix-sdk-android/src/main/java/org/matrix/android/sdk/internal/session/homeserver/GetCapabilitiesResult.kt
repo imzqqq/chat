@@ -22,7 +22,7 @@ import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.util.JsonDict
 
 /**
- * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#get-matrix-client-r0-capabilities
+ * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#get-matrix-client-r0-capabilities
  */
 @JsonClass(generateAdapter = true)
 internal data class GetCapabilitiesResult(

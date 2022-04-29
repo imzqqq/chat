@@ -34,7 +34,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
- * Ref: https://chat.docs.dingshunyu.top/spec/client_server/unstable#server-side-key-backups
+ * Ref: https://chat.docs.imzqqq.top/spec/client_server/unstable#server-side-key-backups
  */
 internal interface RoomKeysApi {
 

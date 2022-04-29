@@ -12,7 +12,7 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 
 dotenv.config();
 let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
-if (!ogImageUrl) ogImageUrl = 'https://cloud.dingshunyu.top/api/v3/file/download/oehI1R6Ss077AU3e?sign=XUZu9bIz0RmWhovG9RAuJ76RPnMjdc2XzJwUBewEEmE%3D%3A1640590614';
+if (!ogImageUrl) ogImageUrl = 'https://cloud.imzqqq.top/api/v3/file/download/oehI1R6Ss077AU3e?sign=XUZu9bIz0RmWhovG9RAuJ76RPnMjdc2XzJwUBewEEmE%3D%3A1640590614';
 
 const cssThemes = {
     // CSS themes

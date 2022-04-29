@@ -17,7 +17,7 @@ side of the door. Some users will definitely not be familiar with `SSO` but will
 ## Proposal
 
 We extend the [login
-flow](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#login) to allow clients
+flow](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#login) to allow clients
 to choose an SSO Identity provider before control is handed over to the
 server. The following sequence diagram illustrates the proposed, updated, login flow:
 
@@ -27,7 +27,7 @@ server. The following sequence diagram illustrates the proposed, updated, login 
 
 ### Extensions to login flow discovery
 
-The response to [`GET /chat/client/r0/login`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#get-matrix-client-r0-login)
+The response to [`GET /chat/client/r0/login`](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#get-matrix-client-r0-login)
 is extended to **optionally** include an `identity_providers` property for
 flows whose type `m.login.sso`. This would look like this:
 

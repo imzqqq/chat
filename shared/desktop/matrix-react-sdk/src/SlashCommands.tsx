@@ -455,10 +455,10 @@ export const Commands = [
                 //   /join #example:example.org
                 //   /join !example:example.org
                 //   /join !example:example.org altserver.com elsewhere.ca
-                //   /join https://to.chat.dingshunyu.top/#/!example:example.org?via=altserver.com
+                //   /join https://to.chat.imzqqq.top/#/!example:example.org?via=altserver.com
                 // The command also supports event permalinks transparently:
-                //   /join https://to.chat.dingshunyu.top/#/!example:example.org/$something:example.org
-                //   /join https://to.chat.dingshunyu.top/#/!example:example.org/$something:example.org?via=altserver.com
+                //   /join https://to.chat.imzqqq.top/#/!example:example.org/$something:example.org
+                //   /join https://to.chat.imzqqq.top/#/!example:example.org/$something:example.org?via=altserver.com
                 const params = args.split(' ');
                 if (params.length < 1) return reject(this.getUsage());
 

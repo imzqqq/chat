@@ -63,7 +63,7 @@ internal interface AuthAPI {
 
     /**
      * Register to the homeserver, or get error 401 with a RegistrationFlowResponse object if registration is incomplete
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#account-registration-and-management
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#account-registration-and-management
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "register")
     suspend fun register(@Body registrationParams: RegistrationParams): Credentials
@@ -101,7 +101,7 @@ internal interface AuthAPI {
 
     /**
      * Get the supported login flow
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#get-matrix-client-r0-login
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#get-matrix-client-r0-login
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "login")
     suspend fun getLoginFlows(): LoginFlowResponse

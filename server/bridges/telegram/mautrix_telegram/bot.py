@@ -173,7 +173,7 @@ class Bot(AbstractUser):
         if portal.mxid:
             if portal.username:
                 return await reply(
-                    f"Portal is public: [{portal.alias}](https://to.chat.dingshunyu.top/#/{portal.alias})")
+                    f"Portal is public: [{portal.alias}](https://to.chat.imzqqq.top/#/{portal.alias})")
             else:
                 return await reply(
                     "Portal is not public. Use `/invite <mxid>` to get an invite.")

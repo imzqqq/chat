@@ -23,11 +23,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- * https://chat.dingshunyu.top/docs/spec/client_server/r0.4.0.html#server-discovery
+ * https://chat.imzqqq.top/docs/spec/client_server/r0.4.0.html#server-discovery
  *
  * {
  *     "m.homeserver": {
- *         "base_url": "https://chat.dingshunyu.top"
+ *         "base_url": "https://chat.imzqqq.top"
  *     },
  *     "m.identity_server": {
  *         "base_url": "https://vector.im"

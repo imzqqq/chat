@@ -77,7 +77,7 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/status_avatar"
         app:layout_constraintTop_toBottomOf="@id/status_display_name"
-        tools:text="\@ConnyDuck\@flow.dingshunyu.top" />
+        tools:text="\@ConnyDuck\@flow.imzqqq.top" />
 
     <androidx.emoji.widget.EmojiTextView
         android:id="@+id/status_content_warning_description"

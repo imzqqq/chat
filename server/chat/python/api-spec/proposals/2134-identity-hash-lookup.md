@@ -73,7 +73,7 @@ denny@example.com
 The client will hash each 3PID as a concatenation of the medium and address,
 separated by a space and a pepper, also separated by a space, appended to the
 end. Note that phone numbers should be formatted as defined by
-https://chat.api-spec.dingshunyu.top/appendices#pstn-phone-numbers, before being
+https://chat.api-spec.imzqqq.top/appendices#pstn-phone-numbers, before being
 hashed). Note that "pepper" in this proposal simply refers to a public,
 opaque string that is used to produce different hash results between identity
 servers. Its value is not secret.
@@ -176,7 +176,7 @@ include these fields. An example response to an incorrect pepper would be:
 Now comes time for the lookup. We'll first cover an example of the client
 choosing the `"sha256"` algorithm. Note that the resulting hash digest MUST
 be encoded in URL-safe unpadded base64 (similar to [room version 4's event
-IDs](https://chat.api-spec.dingshunyu.top/rooms/v4#event-ids)). Once hashing has been
+IDs](https://chat.api-spec.imzqqq.top/rooms/v4#event-ids)). Once hashing has been
 performed, the client sends each hash in an array.
 
 ```
@@ -279,7 +279,7 @@ it has that correspond to these 3PID addresses, and returns them:
 ```
 
 No parameter changes will be made to
-[/bind](https://chat.api-spec.dingshunyu.top/identity_service/r0.2.1#post-matrix-identity-api-v1-3pid-bind)
+[/bind](https://chat.api-spec.imzqqq.top/identity_service/r0.2.1#post-matrix-identity-api-v1-3pid-bind)
 as part of this proposal.
 
 ## Fallback considerations
@@ -422,12 +422,12 @@ identity server. While interesting and more decentralised, some attacks are
 still possible if the identity server is running an evil homeserver which it
 can direct the client to send its hashes to. Discussion on this matter has
 taken place in the MSC-specific room [starting at this
-message](https://to.chat.dingshunyu.top/#/!LlraCeVuFgMaxvRySN:amorgan.xyz/$4wzTSsspbLVa6Lx5cBq6toh6P3TY3YnoxALZuO8n9gk?via=amorgan.xyz&via=chat.dingshunyu.top&via=matrix.vgorcum.com).
+message](https://to.chat.imzqqq.top/#/!LlraCeVuFgMaxvRySN:amorgan.xyz/$4wzTSsspbLVa6Lx5cBq6toh6P3TY3YnoxALZuO8n9gk?via=amorgan.xyz&via=chat.imzqqq.top&via=matrix.vgorcum.com).
 
 Tangentially, identity servers would ideally just never receive plain-text
 addresses, just storing and receiving hash values instead. However, it is
 necessary for the identity server to have plain-text addresses during a
-[bind](https://chat.api-spec.dingshunyu.top/identity_service/r0.2.1#post-matrix-identity-api-v1-3pid-bind)
+[bind](https://chat.api-spec.imzqqq.top/identity_service/r0.2.1#post-matrix-identity-api-v1-3pid-bind)
 call, in order to send a verification email or sms message. It is not
 feasible to defer this job to a homeserver, as the identity server cannot
 trust that the homeserver has actually performed verification. Thus it may

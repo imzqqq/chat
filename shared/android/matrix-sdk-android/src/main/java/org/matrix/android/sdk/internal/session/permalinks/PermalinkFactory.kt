@@ -129,7 +129,7 @@ internal class PermalinkFactory @Inject constructor(
      * Get the permalink base URL according to the potential one in [MatrixConfiguration.clientPermalinkBaseUrl]
      * and the [forceMatrixTo] parameter.
      *
-     * @param forceMatrixTo whether we should force using to.chat.dingshunyu.top base URL.
+     * @param forceMatrixTo whether we should force using to.chat.imzqqq.top base URL.
      *
      * @return the permalink base URL.
      */

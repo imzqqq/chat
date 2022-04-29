@@ -539,11 +539,11 @@ export class Provisioner {
         }
 
         let roomDesc = null;
-        let matrixToLink = `https://to.chat.dingshunyu.top/#/${roomId}`;
+        let matrixToLink = `https://to.chat.imzqqq.top/#/${roomId}`;
 
         if (aliasState && aliasState.alias) {
             roomDesc = aliasState.alias;
-            matrixToLink = `https://to.chat.dingshunyu.top/#/${aliasState.alias}`;
+            matrixToLink = `https://to.chat.imzqqq.top/#/${aliasState.alias}`;
         }
 
         if (nameState && nameState.name) {

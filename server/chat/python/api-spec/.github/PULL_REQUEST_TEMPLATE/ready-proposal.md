@@ -15,5 +15,5 @@ assignees: ''
 
 * [ ] Pull request includes a [changelog file](https://github.com/matrix-org/matrix-doc/blob/master/CONTRIBUTING.rst#adding-to-the-changelog)
 * [ ] Pull request includes a [sign off](https://github.com/matrix-org/matrix-doc/blob/master/CONTRIBUTING.rst#sign-off)
-* [ ] Pull request includes ['Rendered' link](https://chat.api-spec.dingshunyu.top/proposals#process) above.
+* [ ] Pull request includes ['Rendered' link](https://chat.api-spec.imzqqq.top/proposals#process) above.
 * [ ] Pull request title and file name include this PR's number as the MSC number.

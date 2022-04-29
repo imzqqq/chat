@@ -1,6 +1,6 @@
 # MSC3069: Allow guests to use /account/whoami
 
-Currently the [/account/whoami](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#get-matrix-client-r0-account-whoami)
+Currently the [/account/whoami](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#get-matrix-client-r0-account-whoami)
 endpoint does not mention anything about guests, which is a bit of an oversight. The implementation
 of the endpoint got created such that guest access was declined.
 

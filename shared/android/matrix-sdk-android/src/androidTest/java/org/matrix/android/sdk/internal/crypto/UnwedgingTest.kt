@@ -52,7 +52,7 @@ import kotlin.coroutines.resume
 /**
  * Ref:
  * - https://github.com/matrix-org/matrix-doc/pull/1719
- * - https://chat.docs.dingshunyu.top/spec/client_server/latest#recovering-from-undecryptable-messages
+ * - https://chat.docs.imzqqq.top/spec/client_server/latest#recovering-from-undecryptable-messages
  * - https://github.com/matrix-org/matrix-js-sdk/pull/780
  * - https://github.com/matrix-org/matrix-ios-sdk/pull/778
  * - https://github.com/matrix-org/matrix-ios-sdk/pull/784

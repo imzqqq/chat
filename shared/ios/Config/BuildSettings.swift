@@ -85,10 +85,10 @@ final class BuildSettings: NSObject {
     
     // MARK: - Server configuration
     // Default servers proposed on the authentication screen
-    static let serverConfigDefaultHomeserverUrlString = "https://chat.dingshunyu.top"
+    static let serverConfigDefaultHomeserverUrlString = "https://chat.imzqqq.top"
     static let serverConfigDefaultIdentityServerUrlString = "https://vector.im"
     
-    static let serverConfigSygnalAPIUrlString = "https://chat.dingshunyu.top/_matrix/push/v1/notify"
+    static let serverConfigSygnalAPIUrlString = "https://chat.imzqqq.top/_matrix/push/v1/notify"
     
     
     // MARK: - Legal URLs
@@ -113,16 +113,16 @@ final class BuildSettings: NSObject {
         "vector.im": ["/app", "/staging", "/develop"],
         "www.vector.im": ["/app", "/staging", "/develop"],
         // Official Matrix ones
-        "to.chat.dingshunyu.top": ["/"],
-        "www.to.chat.dingshunyu.top": ["/"],
+        "to.chat.imzqqq.top": ["/"],
+        "www.to.chat.imzqqq.top": ["/"],
         // Client Permalinks (for use with `BuildSettings.clientPermalinkBaseUrl`)
 //        "example.com": ["/"],
 //        "www.example.com": ["/"],
     ]
     
-    // For use in clients that use a custom base url for permalinks rather than to.chat.dingshunyu.top.
+    // For use in clients that use a custom base url for permalinks rather than to.chat.imzqqq.top.
     // This baseURL is used to generate permalinks within the app (E.g. timeline message permalinks).
-    // Optional String that when set is used as permalink base, when nil to.chat.dingshunyu.top format is used.
+    // Optional String that when set is used as permalink base, when nil to.chat.imzqqq.top format is used.
     // Example value would be "https://www.example.com", note there is no trailing '/'.
     static let clientPermalinkBaseUrl: String? = nil
     
@@ -134,14 +134,14 @@ final class BuildSettings: NSObject {
         return false
         #endif
     }
-    static let stunServerFallbackUrlString: String? = "stun:turn.chat.dingshunyu.top"
+    static let stunServerFallbackUrlString: String? = "stun:turn.chat.imzqqq.top"
     
     // MARK: -  Public rooms Directory
     #warning("Unused build setting: should this be implemented in ShowDirectory?")
     static let publicRoomsAllowServerChange: Bool = true
     // List of homeservers for the public rooms directory
     static let publicRoomsDirectoryServers = [
-        "chat.dingshunyu.top",
+        "chat.imzqqq.top",
         "gitter.im"
     ]
     

@@ -100,7 +100,7 @@ sees from a user.
 
 Public keys for the cross-signing keys are uploaded to the servers using
 `/keys/device_signing/upload`.  This endpoint requires [UI
-Auth](https://chat.api-spec.dingshunyu.top/client_server/r0.4.0.html#user-interactive-authentication-api).
+Auth](https://chat.api-spec.imzqqq.top/client_server/r0.4.0.html#user-interactive-authentication-api).
 
 `POST /keys/device_signing/upload`
 

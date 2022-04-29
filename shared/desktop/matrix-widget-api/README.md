@@ -2,7 +2,7 @@
 
 JavaScript/TypeScript SDK for widgets & clients to communicate.
 
-For help and support, visit [#chat-widgets:chat.dingshunyu.top](https://to.chat.dingshunyu.top/#/#chat-widgets:chat.dingshunyu.top) on Chat.
+For help and support, visit [#chat-widgets:chat.imzqqq.top](https://to.chat.imzqqq.top/#/#chat-widgets:chat.imzqqq.top) on Chat.
 
 ## Not yet ready for usage
 

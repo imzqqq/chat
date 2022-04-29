@@ -27,7 +27,7 @@ import org.matrix.android.sdk.api.pushrules.SenderNotificationPermissionConditio
 import timber.log.Timber
 
 /**
- * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#get-matrix-client-r0-pushrules
+ * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#get-matrix-client-r0-pushrules
  */
 @JsonClass(generateAdapter = true)
 data class PushCondition(

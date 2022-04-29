@@ -108,7 +108,7 @@
                 <a target="_blank" rel="noopener noreferrer" href="https://search.joinpeertube.org/">Tube videos/channels search index</a> development and maintenance;
               </li>
               <li v-translate>
-                <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top">Tube documentation website</a> development and maintenance;
+                <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top">Tube documentation website</a> development and maintenance;
               </li>
               <li v-translate>Tube support and discussions on bugtrackers, forum, IRC or by email;</li>
               <li v-translate>Pull requests/merge requests reviews, merges, and support of features added by external contributions (bug fixes, documentation, refactor, etc.);</li>
@@ -239,7 +239,7 @@
                 <strong v-translate>Customize the interface</strong>
 
                 <ul>
-                  <li v-translate>Update your name, avatar or description in <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/use-setup-account?id=update-your-profile">your profile</a></li>
+                  <li v-translate>Update your name, avatar or description in <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/use-setup-account?id=update-your-profile">your profile</a></li>
                   <li v-translate>Set your appropriate NSFW policy (display, blur or hide NSFW videos)</li>
                   <li v-translate>Choose a Tube theme to change the look and feel of the interface</li>
                   <li v-translate>Automatically filter videos depending on their language</li>
@@ -252,7 +252,7 @@
 
                 <ul>
                   <li v-translate>Use the built-in <em>Watch Later</em> playlist and add easily videos in it</li>
-                  <li v-translate>Organize videos in public or private <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/use-library?id=video-history">playlists</a></li>
+                  <li v-translate>Organize videos in public or private <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/use-library?id=video-history">playlists</a></li>
                   <li v-translate>Automatically resume videos from the last time you watched them</li>
                   <li v-translate>Check your watch history in a dedicated page</li>
                 </ul>
@@ -271,7 +271,7 @@
                 <strong v-translate>Share and interact with videos and playlists</strong>
 
                 <ul>
-                  <li v-translate><a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/use-watch-video">Share</a> the video or the playlist URL/embed with attributes (automatically start/stop at, loop enabled, muted...)</li>
+                  <li v-translate><a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/use-watch-video">Share</a> the video or the playlist URL/embed with attributes (automatically start/stop at, loop enabled, muted...)</li>
                   <li v-translate>Download a video using a dedicated modal</li>
                   <li v-translate>Comment, reply and rate videos using Tube or an ActivityPub compatible software (Mastodon, Pleroma...)</li>
                 </ul>
@@ -281,7 +281,7 @@
                 <strong v-translate>Search videos or channels</strong>
 
                 <ul>
-                  <li v-translate><a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/use-search">Search</a> local or remote videos and channels</li>
+                  <li v-translate><a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/use-search">Search</a> local or remote videos and channels</li>
                   <li v-translate>Use many advanced filters (tags, category, licence...)</li>
                   <li v-translate>Use the video URL or channel handle/URL to fetch remote content</li>
                 </ul>
@@ -339,7 +339,7 @@
 
           <div>
             <p v-translate>
-              See the dedicated section in the Tube documentation: <a href="https://tube.docs.dingshunyu.top/use-report" target="_blank">https://tube.docs.dingshunyu.top/use-report</a>
+              See the dedicated section in the Tube documentation: <a href="https://tube.docs.imzqqq.top/use-report" target="_blank">https://tube.docs.imzqqq.top/use-report</a>
             </p>
           </div>
         </accordion-element>
@@ -385,8 +385,8 @@
                 <ul>
                   <li v-translate>Upload or import videos from the web (Youtube, Dailymotion...) or from a torrent file</li>
                   <li v-translate>Set metadata: category, licence, language, tags, description, thumbnail...</li>
-                  <li v-translate>Choose <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/use-create-upload-video?id=video-confidentiality-options-what-do-they-mean">video privacy</a>: public, unlisted, internal or private</li>
-                  <li v-translate>Add <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/use-create-upload-video?id=captions">subtitles</a></li>
+                  <li v-translate>Choose <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/use-create-upload-video?id=video-confidentiality-options-what-do-they-mean">video privacy</a>: public, unlisted, internal or private</li>
+                  <li v-translate>Add <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/use-create-upload-video?id=captions">subtitles</a></li>
                   <li v-translate>Easily disable comments or download</li>
                   <li v-translate>Upload an audio file and an image and let Tube take care of creating the video!</li>
                 </ul>
@@ -396,7 +396,7 @@
                 <strong v-translate>Live streaming</strong>
 
                 <ul>
-                  <li v-translate><a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/use-create-upload-video?id=publish-a-live-in-tube-gt-v3">Publish live videos</a> in Tube using your favorite RTMP compatible software (OBS, Restream, ffmpeg...)</li>
+                  <li v-translate><a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/use-create-upload-video?id=publish-a-live-in-tube-gt-v3">Publish live videos</a> in Tube using your favorite RTMP compatible software (OBS, Restream, ffmpeg...)</li>
                   <li v-translate>Create permanent lives to stream multiple times inside the same live (URL doesn't change for the viewers)</li>
                   <li v-translate>Let Tube create a replay of your live</li>
                 </ul>
@@ -406,11 +406,11 @@
                 <strong v-translate>Manage your channels</strong>
 
                 <ul>
-                  <li v-translate>Create <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/use-library?id=video-channels">multiple channels</a> inside your account to group your videos by topic</li>
+                  <li v-translate>Create <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/use-library?id=video-channels">multiple channels</a> inside your account to group your videos by topic</li>
                   <li v-translate>Brand your channel using a dedicated name, a banner and an avatar</li>
                   <li v-translate>Set a <em>Support</em> button for your channel to explain how to support your work</li>
                   <li v-translate>People can subscribe to your channel from a Tube website or from an ActivityPub compatible software (Mastodon, Pleroma...)</li>
-                  <li v-translate>Create public <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/use-library?id=playlist">playlists</a> assigned to your channel to organize your content or remote videos</li>
+                  <li v-translate>Create public <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/use-library?id=playlist">playlists</a> assigned to your channel to organize your content or remote videos</li>
                 </ul>
               </li>
             </ul>
@@ -455,7 +455,7 @@
               We did not go any further, as we refuse to tie our code to a particular content funding method,
               that might not fit all communities and deter others.
               It's the reason why we encourage developers to use the
-              <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/contribute-plugins">Tube plugin API</a>
+              <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/contribute-plugins">Tube plugin API</a>
               to create their own monetization system.
             </p>
           </div>
@@ -477,8 +477,8 @@
 
                 <ul>
                   <li v-translate>Install Tube on your server and create your "homemade YouTube"</li>
-                  <li v-translate>Official <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/install-docker">Docker support</a></li>
-                  <li v-translate>Documented <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/api-rest-reference.html">REST API</a> and <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/maintain-tools">CLI tools</a></li>
+                  <li v-translate>Official <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/install-docker">Docker support</a></li>
+                  <li v-translate>Documented <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/api-rest-reference.html">REST API</a> and <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/maintain-tools">CLI tools</a></li>
                 </ul>
               </li>
 
@@ -488,7 +488,7 @@
                 <ul>
                   <li v-translate>Enable or disable federation for your instance</li>
                   <li v-translate>Display videos/accounts of other instances on yours</li>
-                  <li v-translate><a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/admin-following-instances?id=automatically-follow-other-instances">Automatically follow</a> instances from a public index</li>
+                  <li v-translate><a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/admin-following-instances?id=automatically-follow-other-instances">Automatically follow</a> instances from a public index</li>
                 </ul>
               </li>
 
@@ -498,7 +498,7 @@
                 <ul>
                   <li v-translate>Reduce your server bandwidth using P2P on VOD and live videos</li>
                   <li v-translate>Enable or disable easily P2P for your instance</li>
-                  <li v-translate>Help (or get help) other instances using <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/admin-following-instances?id=instances-redundancy">Tube redundancy</a></li>
+                  <li v-translate>Help (or get help) other instances using <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/admin-following-instances?id=instances-redundancy">Tube redundancy</a></li>
                 </ul>
               </li>
 
@@ -506,7 +506,7 @@
                 <strong v-translate>Video transcoding</strong>
 
                 <ul>
-                  <li v-translate>Optimize videos and generate <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/admin-configuration?id=vod-transcoding">multiple resolutions</a> using ffmpeg</li>
+                  <li v-translate>Optimize videos and generate <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/admin-configuration?id=vod-transcoding">multiple resolutions</a> using ffmpeg</li>
                   <li v-translate>Enable additional video extension (.mkv, .mov, .avi...) or audio uploads</li>
                   <li v-translate>Generate HLS playlists or raw MP4 files</li>
                   <li v-translate>Customize ffmpeg transcoding profile using Tube plugins</li>
@@ -517,7 +517,7 @@
                 <strong v-translate>Live streaming transcoding</strong>
 
                 <ul>
-                  <li v-translate>Enable <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/admin-configuration?id=live-streaming">live streaming</a> for your instance</li>
+                  <li v-translate>Enable <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/admin-configuration?id=live-streaming">live streaming</a> for your instance</li>
                   <li v-translate>Add ability for your users to publish a replay of live videos</li>
                   <li v-translate>Set simultaneous live streaming limits (per user/instance)</li>
                   <li v-translate>Enable live streaming transcoding in multiple resolutions</li>
@@ -539,7 +539,7 @@
 
                 <ul>
                   <li v-translate>Enable signups and set a max users and upload limits</li>
-                  <li v-translate>Assign <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/admin-moderation">moderator/admin</a> roles</li>
+                  <li v-translate>Assign <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/admin-moderation">moderator/admin</a> roles</li>
                   <li v-translate>Manage abuse reports on videos, accounts or comments using a dedicated dashboard</li>
                   <li v-translate>Automatically block videos from untrusted users awaiting a review by moderators</li>
                   <li v-translate>Block specific videos and specify a reason</li>
@@ -552,7 +552,7 @@
 
                 <ul>
                   <li v-translate>Easily set instance metadata: name, description, main categories...</li>
-                  <li v-translate>Search and install Tube <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/admin-customize-instance">plugins or themes</a></li>
+                  <li v-translate>Search and install Tube <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/admin-customize-instance">plugins or themes</a></li>
                   <li v-translate>Use external auth (LDAP, OpenID Connect...) using auth plugins</li>
                   <li v-translate>Set the default NSFW policy (hide, blur or display these videos)</li>
                   <li v-translate>Choose your trending algorithm</li>
@@ -570,7 +570,7 @@
 
           <div>
             <p v-translate>
-              The <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/install-any-os">installation guide is here</a>
+              The <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/install-any-os">installation guide is here</a>
               (only in English).
             </p>
 
@@ -688,8 +688,8 @@
             </p>
 
             <ul>
-              <li v-translate>Bandwidth: can be mitigated using <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/admin-following-instances?id=instances-redundancy">Tube redundancy system</a> and cache servers that serve video static files in front of your Tube instance</li>
-              <li v-translate>Storage: can be mitigated using <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/admin-remote-storage">S3/Object storage</a></li>
+              <li v-translate>Bandwidth: can be mitigated using <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/admin-following-instances?id=instances-redundancy">Tube redundancy system</a> and cache servers that serve video static files in front of your Tube instance</li>
+              <li v-translate>Storage: can be mitigated using <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/admin-remote-storage">S3/Object storage</a></li>
               <li v-translate>Video transcoding: we may implement <a target="_blank" rel="noopener noreferrer" href="https://github.com/Chocobozzz/Tube/issues/947">transcoding by remote workers</a> in the future</li>
             </ul>
 
@@ -853,8 +853,8 @@
                 <strong v-translate>Tube REST API</strong>
 
                 <ul>
-                  <li v-translate>Test Tube REST API with the <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/api-rest-getting-started">getting started guide</a></li>
-                  <li v-translate>Check the <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/api-rest-reference.html">REST API documentation</a></li>
+                  <li v-translate>Test Tube REST API with the <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/api-rest-getting-started">getting started guide</a></li>
+                  <li v-translate>Check the <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/api-rest-reference.html">REST API documentation</a></li>
                   <li v-translate>Get help on <a target="_blank" rel="noopener noreferrer" href="https://framacolibri.org/c/tube">Tube forum</a></li>
                 </ul>
               </li>
@@ -864,7 +864,7 @@
 
                 <ul>
                   <li v-translate>Use the Tube player embed on your website</li>
-                  <li v-translate>Control the Tube player embed using the <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/api-embed-player">embed API</a></li>
+                  <li v-translate>Control the Tube player embed using the <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/api-embed-player">embed API</a></li>
                   <li v-translate>Get help on <a target="_blank" rel="noopener noreferrer" href="https://framacolibri.org/c/tube">Tube forum</a></li>
                 </ul>
               </li>
@@ -873,8 +873,8 @@
                 <strong v-translate>Plugins & Themes</strong>
 
                 <ul>
-                  <li v-translate>Develop plugins and themes using the <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/contribute-plugins">getting started guide</a></li>
-                  <li v-translate>Check the complete <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/api-plugins">plugin/theme documentation</a></li>
+                  <li v-translate>Develop plugins and themes using the <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/contribute-plugins">getting started guide</a></li>
+                  <li v-translate>Check the complete <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/api-plugins">plugin/theme documentation</a></li>
                   <li v-translate>Get help on <a target="_blank" rel="noopener noreferrer" href="https://framacolibri.org/c/tube">Tube forum</a> or ask new plugin/theme API in <a target="_blank" rel="noopener noreferrer" href="https://github.com/Chocobozzz/Tube">Tube issues</a></li>
                 </ul>
               </li>
@@ -896,7 +896,7 @@
             <p v-translate>
               IPFS is a great technology, but it still seems too young for streaming large files.
               The Tube P2P system based on well established protocols like HTTP and WebRTC, and the
-              <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.dingshunyu.top/admin-following-instances?id=instances-redundancy">redundancy system</a>
+              <a target="_blank" rel="noopener noreferrer" href="https://tube.docs.imzqqq.top/admin-following-instances?id=instances-redundancy">redundancy system</a>
               are more easy for us to use and to maintain.
             </p>
 

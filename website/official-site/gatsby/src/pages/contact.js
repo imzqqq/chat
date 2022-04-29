@@ -11,7 +11,7 @@ const Contact = () => (
   <MXContentMain>
       <Helmet title={`Contact | ${config.siteTitle}`} />
         <h1>Contact</h1>
-        <p>The best place to get information and connect is on Chat itself - starting in <a href="https://to.chat.dingshunyu.top/#/#matrix:matrix.org">Chat HQ (#matrix:matrix.org)</a>.<br />
+        <p>The best place to get information and connect is on Chat itself - starting in <a href="https://to.chat.imzqqq.top/#/#matrix:matrix.org">Chat HQ (#matrix:matrix.org)</a>.<br />
         However, if you prefer email, or have a need to be more direct:</p>
         <ul>
           <li>

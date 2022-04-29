@@ -14,7 +14,7 @@
             - unless whitelist_mode?
               = link_to t('directories.directory'), explore_path, class: 'nav-link optional' if Setting.profile_directory
               = link_to t('about.about_this'), about_more_path, class: 'nav-link optional'
-              = link_to t('about.apps'), 'https://flow.join.dingshunyu.top/apps', class: 'nav-link optional'
+              = link_to t('about.apps'), 'https://flow.join.imzqqq.top/apps', class: 'nav-link optional'
 
           .nav-center
 
@@ -38,10 +38,10 @@
           .column-1
             %h4= t 'footer.developers'
             %ul
-              %li= link_to t('about.documentation'), 'https://flow.docs.dingshunyu.top/'
-              %li= link_to t('about.api'), 'https://flow.docs.dingshunyu.top/client/intro/'
+              %li= link_to t('about.documentation'), 'https://flow.docs.imzqqq.top/'
+              %li= link_to t('about.api'), 'https://flow.docs.imzqqq.top/client/intro/'
           .column-2
-            %h4= link_to t('about.what_is_mastodon'), 'https://flow.join.dingshunyu.top/'
+            %h4= link_to t('about.what_is_mastodon'), 'https://flow.join.imzqqq.top/'
             = link_to svg_logo, root_url, class: 'brand'
           .column-3
             %h4= site_hostname
@@ -53,6 +53,6 @@
             %h4= t 'footer.more'
             %ul
               %li= link_to t('about.source_code'), Flow::Version.source_url
-              %li= link_to t('about.apps'), 'https://flow.join.dingshunyu.top/apps'
+              %li= link_to t('about.apps'), 'https://flow.join.imzqqq.top/apps'
 
 = render template: 'layouts/application'

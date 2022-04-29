@@ -88,7 +88,7 @@ class MatrixHandler(BaseMatrixHandler):
                                          text=("You already have a private chat with me "
                                                f"in room {portal.mxid}"),
                                          html=("You already have a private chat with me: "
-                                               f"<a href='https://to.chat.dingshunyu.top/#/{portal.mxid}'>"
+                                               f"<a href='https://to.chat.imzqqq.top/#/{portal.mxid}'>"
                                                "Link to room"
                                                "</a>"))
                 await intent.leave_room(room_id)

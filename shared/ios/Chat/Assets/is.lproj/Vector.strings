@@ -279,8 +279,8 @@
 "active_call_details" = "Virkt samtal (%@)";
 "auth_send_reset_email" = "Senda endurstillingarpóst";
 "auth_return_to_login" = "Fara aftur í innskráningargluggann";
-"auth_home_server_placeholder" = "URL-slóð (t.d. https://chat.dingshunyu.top)";
-"auth_identity_server_placeholder" = "URL-slóð (t.d. https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL-slóð (t.d. https://chat.imzqqq.top)";
+"auth_identity_server_placeholder" = "URL-slóð (t.d. https://chat.imzqqq.top)";
 "auth_invalid_email" = "Þetta lítur ekki út eins og gilt tölvupóstfang";
 "auth_invalid_phone" = "Þetta lítur ekki út eins og gilt símanúmer";
 "auth_email_in_use" = "Þetta tölvupóstfang er nú þegar í notkun";
@@ -465,7 +465,7 @@
 "group_participants_invite_prompt_msg" = "Ertu viss um að þú viljir bjóða %@ í þennan hóp?";
 "group_participants_invite_malformed_id_title" = "Villa við boð";
 "group_participants_invite_malformed_id" = "Rangt formað auðkenni. Ætti að vera Matrix-auðkenni á borð við'@sérheiti:lén'";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 // Events formatter
 "event_formatter_member_updates" = "%tu breytingar á aðild";
 "event_formatter_widget_added" = "%@ viðmótshluta bætt við af %@";

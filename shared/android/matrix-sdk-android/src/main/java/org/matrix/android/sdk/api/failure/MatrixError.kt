@@ -24,7 +24,7 @@ import org.matrix.android.sdk.internal.auth.data.InteractiveAuthenticationFlow
 /**
  * This data class holds the error defined by the matrix specifications.
  * You shouldn't have to instantiate it.
- * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#api-standards
+ * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#api-standards
  */
 @JsonClass(generateAdapter = true)
 data class MatrixError(

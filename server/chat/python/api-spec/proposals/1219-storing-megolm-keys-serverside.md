@@ -486,7 +486,7 @@ Returns the same as `PUT
 
 The `auth_data` property for the backup versions endpoints for
 `m.megolm_backup.v1.curve25519-aes-sha2` is a [signed
-json](https://chat.api-spec.dingshunyu.top/appendices#signing-json) object with the
+json](https://chat.api-spec.imzqqq.top/appendices#signing-json) object with the
 following keys:
 
 - `public_key` (string): the curve25519 public key used to encrypt the backups
@@ -511,7 +511,7 @@ The `session_data` field in the backups is constructed as follows:
      for devices who forwarded the session key
    - `session_key` (string): base64-encoded (unpadded) session key in
      [session-sharing
-     format](https://gitlab.chat.dingshunyu.top/matrix-org/olm/blob/master/docs/megolm.md#session-sharing-format)
+     format](https://gitlab.chat.imzqqq.top/matrix-org/olm/blob/master/docs/megolm.md#session-sharing-format)
 2. Generate an ephemeral curve25519 key, and perform an ECDH with the ephemeral
    key and the backup's public key to generate a shared secret.  The public
    half of the ephemeral key, encoded using base64, becomes the `ephemeral`

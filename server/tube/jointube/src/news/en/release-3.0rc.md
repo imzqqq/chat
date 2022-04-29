@@ -51,7 +51,7 @@ date: December 16, 2020
 <h4>Two ways to set up your live</h4>
 
 <p>
-  As you can see <a href="https://tube.docs.dingshunyu.top/use-create-upload-video?id=publish-a-live-in-tube-gt-v3">in
+  As you can see <a href="https://tube.docs.imzqqq.top/use-create-upload-video?id=publish-a-live-in-tube-gt-v3">in
     our <i>how to go live</i> documentation</a>, Tube streamers will need a broadcasting software (we recommend the
   Free-Libre software <a href="https://obsproject.com">OBS</a>), and use the live RTMP key.
 </p>

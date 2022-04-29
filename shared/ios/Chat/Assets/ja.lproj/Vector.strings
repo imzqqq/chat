@@ -50,7 +50,7 @@
 "auth_phone_placeholder" = "電話番号";
 "auth_repeat_password_placeholder" = "パスワード再確認";
 "auth_repeat_new_password_placeholder" = "新しいパスワードを再確認";
-"auth_home_server_placeholder" = "URL (例 https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (例 https://chat.imzqqq.top)";
 "auth_identity_server_placeholder" = "URL (例 https://vector.im)";
 "auth_invalid_login_param" = "ユーザ名かパスワードが正しくありません";
 "auth_invalid_user_name" = "ユーザ名は半角英数字、ドット、ハイフン、アンダスコアのみで記して下さい";
@@ -394,7 +394,7 @@
 "directory_server_all_rooms" = "%@ サーバ上の全ての部屋";
 "directory_server_all_native_rooms" = "全てのMatrix連携部屋";
 "directory_server_type_homeserver" = "公開部屋一覧を表示するための接続サーバを入力してください";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 // Events formatter
 "event_formatter_member_updates" = "%tu 権限が変更されました";
 "event_formatter_widget_added" = "%@ ウィジェットが %@ さんにより追加されました";
@@ -572,7 +572,7 @@
 // MARK: - Room Info
 
 "room_info_list_one_member" = "1 人のメンバー";
-"create_room_placeholder_address" = "#testroom:chat.dingshunyu.top";
+"create_room_placeholder_address" = "#testroom:chat.imzqqq.top";
 "create_room_section_header_address" = "部屋のアドレス";
 "create_room_show_in_directory" = "この部屋をディレクトリに掲載する";
 "create_room_section_footer_type" = "プライベートな部屋は、部屋に招待された人のみ参加できます。";

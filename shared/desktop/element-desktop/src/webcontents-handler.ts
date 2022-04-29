@@ -71,7 +71,7 @@ function onLinkContextMenu(ev: Event, params: ContextMenuParams, webContents: We
         // Avoid showing a context menu for app icons
         if (params.hasImageContents) return;
         // Rewrite URL so that it can be used outside of the app
-        url = "https://apps.chat.dingshunyu.top/" + url.substring(23);
+        url = "https://apps.chat.imzqqq.top/" + url.substring(23);
     }
 
     const popupMenu = new Menu();

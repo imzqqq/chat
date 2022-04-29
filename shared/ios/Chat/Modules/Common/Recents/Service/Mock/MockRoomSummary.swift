@@ -14,7 +14,7 @@ public class MockRoomSummary: NSObject, MXRoomSummaryProtocol {
     
     public var topic: String?
     
-    public var creatorUserId: String = "@room_creator:chat.dingshunyu.top"
+    public var creatorUserId: String = "@room_creator:chat.imzqqq.top"
     
     public var aliases: [String] = []
     
@@ -95,7 +95,7 @@ public class MockRoomSummary: NSObject, MXRoomSummaryProtocol {
         guard let random = MXTools.generateSecret() else {
             fatalError("Room id cannot be created")
         }
-        let result = MockRoomSummary(withRoomId: "!\(random):chat.dingshunyu.top")
+        let result = MockRoomSummary(withRoomId: "!\(random):chat.imzqqq.top")
         result.dataTypes = types
         if types.contains(.invited) {
             result.membership = .invite

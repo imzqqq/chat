@@ -99,15 +99,15 @@ Use case #1: Display a screen to chat in a room
 Suppose you have a MXSession instance stored in `mxSession` (you can learn how
 to get in the Matrix SDK tutorials `here
 <https://github.com/matrix-org/matrix-ios-sdk#use-case-2-get-the-rooms-the-user-has-interacted-with>`_
-) and you want to chat in `#matrix:chat.dingshunyu.top` which room id is
-`!cURbafjkfsMDVwdRDQ:chat.dingshunyu.top`.
+) and you want to chat in `#matrix:chat.imzqqq.top` which room id is
+`!cURbafjkfsMDVwdRDQ:chat.imzqqq.top`.
 
 You will have to instantiate a MXKRoomViewController and attach a
 MXKRoomDataSource object to it. This object that will manage the room data.
 This is done with the following code::
 
         // Create a data souce for managing data for the targeted room
-        MXKRoomDataSource *roomDataSource = [[MXKRoomDataSource alloc] initWithRoomId:@"!cURbafjkfsMDVwdRDQ:chat.dingshunyu.top" andMatrixSession:mxSession];
+        MXKRoomDataSource *roomDataSource = [[MXKRoomDataSource alloc] initWithRoomId:@"!cURbafjkfsMDVwdRDQ:chat.imzqqq.top" andMatrixSession:mxSession];
 
         // Create the room view controller that will display it
         MXKRoomViewController *roomViewController = [[MXKRoomViewController alloc] init];

@@ -25,7 +25,7 @@ internal interface PushersAPI {
     /**
      * Get the pushers for this user.
      *
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#get-matrix-client-r0-pushers
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#get-matrix-client-r0-pushers
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushers")
     suspend fun getPushers(): GetPushersResponse
@@ -34,7 +34,7 @@ internal interface PushersAPI {
      * This endpoint allows the creation, modification and deletion of pushers for this user ID.
      * The behaviour of this endpoint varies depending on the values in the JSON body.
      *
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#post-matrix-client-r0-pushers-set
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#post-matrix-client-r0-pushers-set
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "pushers/set")
     suspend fun setPusher(@Body jsonPusher: JsonPusher)

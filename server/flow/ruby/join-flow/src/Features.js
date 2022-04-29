@@ -51,7 +51,7 @@ const Features = () => (
           <i className='ion-md-business' />
           <h3><FormattedMessage id='features.for_organization' defaultMessage='Flow for the organization' /></h3>
           <p><FormattedMessage id='features.for_organization_text' defaultMessage='Host your own social media platform on your own infrastructure. Don&apos;t let your business or non-profit depend on a company that could change the rules of the game—write your own rules!' /></p>
-          <ArrowLink href='https://flow.docs.dingshunyu.top/user/run-your-own/' target='_blank' rel='noopener noreferrer' className='link-button'><FormattedMessage id='features.install_server' defaultMessage='Install a server' /></ArrowLink>
+          <ArrowLink href='https://flow.docs.imzqqq.top/user/run-your-own/' target='_blank' rel='noopener noreferrer' className='link-button'><FormattedMessage id='features.install_server' defaultMessage='Install a server' /></ArrowLink>
         </div>
       </div>
     </div>

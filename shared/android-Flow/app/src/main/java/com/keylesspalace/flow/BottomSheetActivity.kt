@@ -170,8 +170,8 @@ abstract class BottomSheetActivity : BaseActivity() {
     }
 }
 
-// https://flow.dingshunyu.top/@User
-// https://flow.dingshunyu.top/@User/43456787654678
+// https://flow.imzqqq.top/@User
+// https://flow.imzqqq.top/@User/43456787654678
 // https://pleroma.foo.bar/users/User
 // https://pleroma.foo.bar/users/9qTHT2ANWUdXzENqC0
 // https://pleroma.foo.bar/notice/9sBHWIlwwGZi5QGlHc

@@ -35,4 +35,4 @@ If the bridge ignores you and a DM is not accepted then the owner setting may be
 
 You can also learn the basics by watching [this demonstration video](https://www.youtube.com/watch?v=nQk1Bp4tk4I).
 
-If you encounter issues or feel lost you can join the project room at [#heisenbridge:vi.fi](https://to.chat.dingshunyu.top/#/#heisenbridge:vi.fi) for help.
+If you encounter issues or feel lost you can join the project room at [#heisenbridge:vi.fi](https://to.chat.imzqqq.top/#/#heisenbridge:vi.fi) for help.

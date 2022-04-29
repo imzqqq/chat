@@ -5,7 +5,7 @@ describes why a Space is useful:
 
 > Collecting rooms together into groups is useful for a number of purposes. Examples include:
 >
-> * Allowing users to discover different rooms related to a particular topic: for example "official chat.dingshunyu.top rooms".
+> * Allowing users to discover different rooms related to a particular topic: for example "official chat.imzqqq.top rooms".
 > * Allowing administrators to manage permissions across a number of rooms: for example "a new employee has joined my company and needs access to all of our rooms".
 > * Letting users classify their rooms: for example, separating "work" from "personal" rooms.
 >
@@ -13,11 +13,11 @@ describes why a Space is useful:
 
 This MSC attempts to solve how a member of a space discovers rooms in that space. This
 is useful for quickly exposing a user to many aspects of an entire community, using the
-examples above, joining the "official chat.dingshunyu.top rooms" space might suggest joining a few
+examples above, joining the "official chat.imzqqq.top rooms" space might suggest joining a few
 rooms:
 
 * A room to discuss development of the Chat Spec.
-* An announcements room for news related to chat.dingshunyu.top.
+* An announcements room for news related to chat.imzqqq.top.
 * An off-topic room for members of the space.
 
 ## Proposal
@@ -86,7 +86,7 @@ Query Parameters:
 * **`rooms`**: `[object]` For each room/space, starting with the root room, a
   summary of that room. The fields are the same as those returned by
   `/publicRooms` (see
-  [spec](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#post-matrix-client-r0-publicrooms)),
+  [spec](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#post-matrix-client-r0-publicrooms)),
   with the addition of:
   * **`room_type`**: the value of the `m.type` field from the room's
     `m.room.create` event, if any.
@@ -151,7 +151,7 @@ An HTTP response with a status code of 403 and an error code of `M_FORBIDDEN`
 should be returned if the user doesn't have permission to view/peek the root room.
 This should also be returned if that room does not exist, which matches the
 behavior of other room endpoints (e.g.
-[`/chat/client/r0/rooms/{roomID}/aliases`](https://chat.api-spec.dingshunyu.top/client_server/latest#get-matrix-client-r0-rooms-roomid-aliases))
+[`/chat/client/r0/rooms/{roomID}/aliases`](https://chat.api-spec.imzqqq.top/client_server/latest#get-matrix-client-r0-rooms-roomid-aliases))
 to not divulge that a room exists which the user doesn't have permission to view.
 
 An HTTP response with a status code of 400 and an error code of `M_INVALID_PARAM`
@@ -243,7 +243,7 @@ The response format is similar to the Client-Server API:
   response (which will simply be missing in the response).
 
 For both the `room` and `children` fields the summary of the room/space includes
-the fields returned by `/publicRooms` (see [spec](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#post-matrix-client-r0-publicrooms)),
+the fields returned by `/publicRooms` (see [spec](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#post-matrix-client-r0-publicrooms)),
 with the addition of:
 
 * **`room_type`**: the value of the `m.type` field from the room's `m.room.create`

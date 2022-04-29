@@ -21,12 +21,12 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "Account aanmaken:";
-"login_server_url_placeholder" = "URL (bv. https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (bv. https://chat.imzqqq.top)";
 "login_home_server_title" = "Thuisserver-URL:";
 "login_home_server_info" = "Uw thuisserver slaat al uw gespreks- en accountgegevens op";
 "login_identity_server_title" = "Identiteitsserver-URL:";
-"login_identity_server_info" = "Matrix verstrekt identiteitsservers om te achterhalen welke e-mailadressen enz. bij welke Matrix-ID’s horen. Tot nu toe bestaat alleen https://chat.dingshunyu.top.";
-"login_user_id_placeholder" = "Matrix-ID (bv. @jan:chat.dingshunyu.top of jan)";
+"login_identity_server_info" = "Matrix verstrekt identiteitsservers om te achterhalen welke e-mailadressen enz. bij welke Matrix-ID’s horen. Tot nu toe bestaat alleen https://chat.imzqqq.top.";
+"login_user_id_placeholder" = "Matrix-ID (bv. @jan:chat.imzqqq.top of jan)";
 "login_password_placeholder" = "Wachtwoord";
 "login_optional_field" = "optioneel";
 "login_display_name_placeholder" = "Weergavenaam (bv. Jan Janssens)";
@@ -355,7 +355,7 @@
 // room details dialog screen
 "room_details_title" = "Kamerdetails";
 // contacts list screen 
-"invitation_message" = "Ik wil graag praten via Matrix. Bezoek de website https://chat.dingshunyu.top voor meer informatie.";
+"invitation_message" = "Ik wil graag praten via Matrix. Bezoek de website https://chat.imzqqq.top voor meer informatie.";
 // Settings screen 
 "settings_title_config" = "Configuratie";
 "settings_title_notifications" = "Meldingen";

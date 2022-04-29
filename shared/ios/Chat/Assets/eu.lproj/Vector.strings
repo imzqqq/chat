@@ -384,7 +384,7 @@
 "directory_server_picker_title" = "Hautatu direktorio bat";
 "directory_server_all_rooms" = "%@ zerbitzariko gela guztiak";
 "directory_server_all_native_rooms" = "Matrix gela natibo guztiak";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 // Events formatter
 "event_formatter_member_updates" = "%tu kidetza aldaketa";
 "you" = "Zu";
@@ -411,7 +411,7 @@
 "bug_report_progress_zipping" = "Egunkariak biltzen";
 "bug_report_progress_uploading" = "Txostena igotzen";
 "room_details_advanced_e2e_encryption_prompt_message" = "Muturretik muturrerako zifratzea esperimentala da eta agian ez dabil behar bezala.\n\nEz zenuke datuak babesteko erabili behar oraindik.\n\nGailuek ezin izango dute gelara elakrtu aurreko historiala deszifratu.\n\nBehin gela batean zifratzea aktibatuta ez dago gero desaktibatzerik (oraingoz).\n\nZifratutako mezuak ezin izango dira ikusi oraindik zifratzea onartzen ez duten bezeroetan.";
-"auth_home_server_placeholder" = "URL (adib. https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (adib. https://chat.imzqqq.top)";
 "auth_identity_server_placeholder" = "URL (e.g. https://vector.im)";
 "room_ongoing_conference_call_with_close" = "Konferentzia deia abian. elkartu %@ edo %@ gisa. %@.";
 "room_ongoing_conference_call_close" = "Itxi";
@@ -654,7 +654,7 @@
 "key_backup_setup_intro_manual_export_action" = "Esportatu gakoak eskuz";
 // String for App Store
 "store_short_description" = "Deszentralizatutako txat/VoIP segurua";
-"store_full_description" = "Komunikatu, zure erara.\n\nTxat aplikazio bat, zure kontrolpean eta erabat malgua. Element-ek zuk nahi eran komunikatzea ahalbidetzen dizu. Komunikaziorako estandar ireki eta deszentralizatua den [matrix] protokolorako egina.\n\nEskuratu chat.dingshunyu.top kontu bat, ezarri zure zerbitzaria  https://ems.element.io erabiliz, edo erabili beste Matrix zerbitzari bat.\n\nZertgatik aukeratu Element?\n\nERABATEKO KOMUNIKAZIOA: Sortu zure taldeentzako gelak, zure lagunentzko, zure komunitatearentzat, zuk nahi eran! Txateatu, partekatu fitxategiak, gehitu trepetak eta egin ahots eta bideo-deiak, dena doan.\n\nINTEGRAZIO AHALTSUAK: Erabili Element jada ezagutu eta maite dituzun tresnekin. Element erabilita beste txat aplikazioak erabiltzen dituzten erabiltzaile eta taldeekin ere aritu zaitezke.\n\nPRIBATUA ETA SEGURUA: Mantendu zure elkarrizketak sekretupean. Gaur egungo muturretik muturrerako zifratzeak pribatua dena pribatu mantentzen laguntzen du.\n\nIREKIA, EZ ITXIA: Kode irekikoa, eta Matrix protokoloan eraikia. Izan zure datuen jabe zure zerbitzaria osatatauz, edo fidagarritzat duzun bat aukeratuz.\n\nZUREKIN NONAHI: Mantendu kontaktua zauden tokian zaudela gailuetan zehar erabat sinkronizatutako mezuen historialarekin, eta web bidez https://app.element.io helbidean.";
+"store_full_description" = "Komunikatu, zure erara.\n\nTxat aplikazio bat, zure kontrolpean eta erabat malgua. Element-ek zuk nahi eran komunikatzea ahalbidetzen dizu. Komunikaziorako estandar ireki eta deszentralizatua den [matrix] protokolorako egina.\n\nEskuratu chat.imzqqq.top kontu bat, ezarri zure zerbitzaria  https://ems.element.io erabiliz, edo erabili beste Matrix zerbitzari bat.\n\nZertgatik aukeratu Element?\n\nERABATEKO KOMUNIKAZIOA: Sortu zure taldeentzako gelak, zure lagunentzko, zure komunitatearentzat, zuk nahi eran! Txateatu, partekatu fitxategiak, gehitu trepetak eta egin ahots eta bideo-deiak, dena doan.\n\nINTEGRAZIO AHALTSUAK: Erabili Element jada ezagutu eta maite dituzun tresnekin. Element erabilita beste txat aplikazioak erabiltzen dituzten erabiltzaile eta taldeekin ere aritu zaitezke.\n\nPRIBATUA ETA SEGURUA: Mantendu zure elkarrizketak sekretupean. Gaur egungo muturretik muturrerako zifratzeak pribatua dena pribatu mantentzen laguntzen du.\n\nIREKIA, EZ ITXIA: Kode irekikoa, eta Matrix protokoloan eraikia. Izan zure datuen jabe zure zerbitzaria osatatauz, edo fidagarritzat duzun bat aukeratuz.\n\nZUREKIN NONAHI: Mantendu kontaktua zauden tokian zaudela gailuetan zehar erabat sinkronizatutako mezuen historialarekin, eta web bidez https://app.element.io helbidean.";
 "auth_login_single_sign_on" = "Hasi saioa Single sign-on bidez";
 "auth_autodiscover_invalid_response" = "Erantzun baliogabea hasiera-zerbitzarien bilaketari";
 "room_message_unable_open_link_error_message" = "Ezin izan da esteka ireki.";

@@ -1971,7 +1971,7 @@
     <string name="soft_logout_clear_data_dialog_submit">Limpar dados</string>
     <string name="template_soft_logout_sso_not_same_user_error">A sessão atual é para usuária(o) %1$s e você provê credenciais para usuária(o) %2$s. Isto não é suportado por ${app_name}.
 \nPor favor primeiro limpe dados, então faça signin de novo em uma outra conta.</string>
-    <string name="permalink_malformed">Seu link to.chat.dingshunyu.top foi malformado</string>
+    <string name="permalink_malformed">Seu link to.chat.imzqqq.top foi malformado</string>
     <string name="bug_report_error_too_short">A descrição é curta demais</string>
     <string name="notification_initial_sync">Sinc Inicial…</string>
     <string name="settings_show_devices_list">Ver todas minhas sessões</string>

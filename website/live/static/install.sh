@@ -215,7 +215,7 @@ main () {
   printf "\n"
   printf "${GREEN}Success!${NC} Run owncast by changing to the ${BOLD}owncast${NC} directory and run ${BOLD}./owncast${NC}.\n"
   printf "The default port is ${BOLD}8080${NC} and the default streaming key is ${BOLD}abc123${NC}.\n"
-  printf "Visit ${UNDERLINE}https://live.docs.dingshunyu.top/docs/configuration/${NC} to learn how to configure your new Live server."
+  printf "Visit ${UNDERLINE}https://live.docs.imzqqq.top/docs/configuration/${NC} to learn how to configure your new Live server."
   printf "\n\n"
 }
 

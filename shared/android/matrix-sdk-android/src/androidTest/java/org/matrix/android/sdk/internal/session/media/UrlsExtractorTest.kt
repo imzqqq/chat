@@ -36,7 +36,7 @@ internal class UrlsExtractorTest : InstrumentedTest {
 
     @Test
     fun wrongEventTypeTest() {
-        createEvent(body = "https://chat.dingshunyu.top")
+        createEvent(body = "https://chat.imzqqq.top")
                 .copy(type = EventType.STATE_ROOM_GUEST_ACCESS)
                 .toFakeTimelineEvent()
                 .let { urlsExtractor.extract(it) }
@@ -45,18 +45,18 @@ internal class UrlsExtractorTest : InstrumentedTest {
 
     @Test
     fun oneUrlTest() {
-        createEvent(body = "https://chat.dingshunyu.top")
+        createEvent(body = "https://chat.imzqqq.top")
                 .toFakeTimelineEvent()
                 .let { urlsExtractor.extract(it) }
                 .let { result ->
                     result.size shouldBeEqualTo 1
-                    result[0] shouldBeEqualTo "https://chat.dingshunyu.top"
+                    result[0] shouldBeEqualTo "https://chat.imzqqq.top"
                 }
     }
 
     @Test
     fun withoutProtocolTest() {
-        createEvent(body = "www.chat.dingshunyu.top")
+        createEvent(body = "www.chat.imzqqq.top")
                 .toFakeTimelineEvent()
                 .let { urlsExtractor.extract(it) }
                 .size shouldBeEqualTo 0
@@ -91,7 +91,7 @@ internal class UrlsExtractorTest : InstrumentedTest {
                 .let { urlsExtractor.extract(it) }
                 .let { result ->
                     result.size shouldBeEqualTo 1
-                    result[0] shouldBeEqualTo "https://chat.dingshunyu.top"
+                    result[0] shouldBeEqualTo "https://chat.imzqqq.top"
                 }
     }
 
@@ -102,7 +102,7 @@ internal class UrlsExtractorTest : InstrumentedTest {
                 .let { urlsExtractor.extract(it) }
                 .let { result ->
                     result.size shouldBeEqualTo 2
-                    result[0] shouldBeEqualTo "https://chat.dingshunyu.top"
+                    result[0] shouldBeEqualTo "https://chat.imzqqq.top"
                     result[1] shouldBeEqualTo "https://example.org"
                 }
     }

@@ -21,7 +21,7 @@ import org.matrix.android.sdk.api.pushrules.RuleIds
 import org.matrix.android.sdk.api.pushrules.RuleSetKey
 
 /**
- * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#get-matrix-client-r0-pushrules
+ * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#get-matrix-client-r0-pushrules
  */
 @JsonClass(generateAdapter = true)
 data class RuleSet(
@@ -37,7 +37,7 @@ data class RuleSet(
         val underride: List<PushRule>? = null
 ) {
     fun getAllRules(): List<PushRule> {
-        // Ref. for the order: https://chat.docs.dingshunyu.top/spec/client_server/latest#push-rules
+        // Ref. for the order: https://chat.docs.imzqqq.top/spec/client_server/latest#push-rules
         return override.orEmpty() + content.orEmpty() + room.orEmpty() + sender.orEmpty() + underride.orEmpty()
     }
 

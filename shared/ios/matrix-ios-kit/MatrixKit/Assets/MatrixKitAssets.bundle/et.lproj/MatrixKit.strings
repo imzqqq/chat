@@ -1,7 +1,7 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "Loo kasutajakonto:";
-"login_server_url_placeholder" = "URL (näiteks https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (näiteks https://chat.imzqqq.top)";
 "login_home_server_title" = "Koduserveri aadress:";
 "login_home_server_info" = "Sinu koduserver salvestab kõik vestlused ning kogu sinu kontoteabe";
 "login_identity_server_title" = "Isikutuvastusserveri aadress:";
@@ -94,7 +94,7 @@
 "notification_settings_disable_all" = "Lülita kõik teavitused välja";
 "notification_settings_enable_notifications" = "Võta teavitused kasutusele";
 "notification_settings_enable_notifications_warning" = "Kõik teavituste liigid on hetkel kõikidel seadmetel välja lülitatud.";
-"login_identity_server_info" = "Matrix'i spetsifikatsioon näeb ette isikutuvastusserverite kasutamist selleks, et tuvastada mis e-posti aadress kuulub mis Matrix'i kasutajale. Hetkel pakub sellist teenust vaid https://chat.dingshunyu.top .";
+"login_identity_server_info" = "Matrix'i spetsifikatsioon näeb ette isikutuvastusserverite kasutamist selleks, et tuvastada mis e-posti aadress kuulub mis Matrix'i kasutajale. Hetkel pakub sellist teenust vaid https://chat.imzqqq.top .";
 "login_user_id_placeholder" = "Matrixi kasutajatunnus (näiteks @kadri:toredomeen.ee või kadri)";
 "login_error_title" = "Sisselogimine ei õnnestunud";
 "login_error_no_login_flow" = "Autentimisteabe laadimine sellest koduserverist ei õnnestunud";
@@ -341,7 +341,7 @@
 // Login Screen 
 "login_error_already_logged_in" = "Sa oled juba sisse loginud";
 // contacts list screen 
-"invitation_message" = "Ma soovin sinuga vestelda Matrix'i võrgu vahendusel. Lisateavet leiad veebisaidist https://chat.dingshunyu.top/ .";
+"invitation_message" = "Ma soovin sinuga vestelda Matrix'i võrgu vahendusel. Lisateavet leiad veebisaidist https://chat.imzqqq.top/ .";
 // Settings screen 
 "settings_title_config" = "Seadistused";
 "notification_settings_always_notify" = "Teavita alati";

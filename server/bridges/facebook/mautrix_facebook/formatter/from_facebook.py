@@ -172,7 +172,7 @@ async def facebook_to_matrix(msg: Union[graphql.MessageText, mqtt.Message]) -> T
         mxid = mention_user_map[int(match.group(1))]
         if not mxid:
             return match.group(2)
-        return f"<a href=\"https://to.chat.dingshunyu.top/#/{mxid}\">{match.group(2)}</a>"
+        return f"<a href=\"https://to.chat.imzqqq.top/#/{mxid}\">{match.group(2)}</a>"
 
     html = MENTION_REGEX.sub(_mention_replacer, html)
     if html != escape(content.body).replace("\n", "<br/>"):

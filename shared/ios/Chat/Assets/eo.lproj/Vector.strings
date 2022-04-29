@@ -74,7 +74,7 @@
 "auth_phone_placeholder" = "Telefonnumero";
 "auth_repeat_password_placeholder" = "Ripeti pasvorton";
 "auth_repeat_new_password_placeholder" = "Konfirmi vian pasvorton";
-"auth_home_server_placeholder" = "URL (ekz. https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (ekz. https://chat.imzqqq.top)";
 "auth_identity_server_placeholder" = "URL (ekz. https://vector.im)";
 "auth_invalid_login_param" = "Malĝusta uzantnomo kaj/aŭ pasvorto";
 "auth_invalid_user_name" = "Uzantaj nomoj povas enhavi nur literojn, ciferojn, punktojn kaj strekojn";
@@ -503,7 +503,7 @@
 
 // Events formatter
 "event_formatter_member_updates" = "%tu ŝanĝoj de aneco";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 "directory_server_type_homeserver" = "Entajpu hejmservilon, kies publikaj ĉambroj listiĝu";
 "directory_server_all_rooms" = "Ĉiuj ĉambroj de la servilo %@";
 "directory_server_picker_title" = "Elektu katalogon";
@@ -586,7 +586,7 @@
 // MARK: - Room Info
 
 "room_info_list_one_member" = "1 ĉambrano";
-"create_room_placeholder_address" = "#provachambro:chat.dingshunyu.top";
+"create_room_placeholder_address" = "#provachambro:chat.imzqqq.top";
 "create_room_section_header_address" = "Adreso de ĉambro";
 "create_room_show_in_directory" = "Montri la ĉambron en la katalogo";
 "create_room_section_footer_type" = "Oni aliĝas al privata ĉambro nur per invito al tiu ĉambro.";
@@ -1471,7 +1471,7 @@
 "room_details_access_section_anyone_apart_from_guest_for_dm" = "Ĉiu, kiu konas la ligilon, krom gastoj";
 "room_details_access_section_anyone_apart_from_guest" = "Ĉiu, kiu konas la ligilon de la ĉambro, krom gastoj";
 "room_details_access_section_invited_only" = "Nur personoj, kiuj invitiĝis";
-"store_full_description" = "Element estas nova speco de mesaĝilo kaj kunlabora aplikaĵo, kiu:\n\n1. Stirigas vin por konservi vian privatecon\n2. Lasas vin komuniki kun ĉiu en la reto de Matrix, kaj eĉ ekstere, per kuniĝo kun aliaj aplikaĵoj, kiel ekzemple Slack\n3. Protektas vin de reklamoj, datumkolektado, kaŝenirejoj, kaj muritaj ĝardenoj\n4. Sekurigas vin per tutvoja ĉifrado, kun delegaj subskriboj por kontroli aliulojn\n\nElement tute malsamas de aliaj mesaĝiloj kaj kunlaboriloj, ĉar ĝi estas federa kaj malfermitkoda.\n\nElement lasas vin gastigi vin mem – aŭ elekti alian gastiganton – por ke vi havu privatecon, regon kaj kontrolon de viaj datumoj kaj interparoloj. Ĝi donas al vi aliron al malfermita reto, por ke via komunikado ne limiĝu al nur aliaj uzantoj de Element. Kaj ĝi estas tre sekura.\n\nElement povas fari ĉi ĉion, ĉar ĝi funkcias per Matrix – publika normo por malfermita, sencentra komunikado. \n\n\nElement lasas vi elekti, kiu gastigos viajn interparolojn. Per la aplikaĵo Element, vi povas elekti diversajn specojn de gastigado:\n\n1. Akiri senpagan konton ĉe la publika servilo chat.dingshunyu.top\n2. Memgastiĝi per via propra servilo ĉe via propra aparato\n3. Registriĝi ĉe propra servilo per simpla pagaliĝo al la gastiga platformo «Element Matrix Services»\n\nKial Element?\n\nPOSEDU VIAJN DATUMOJN: Vi decidu, kie vi tenu viajn datumojn kaj mesaĝojn. Vi posedas kaj regas ilin, ne iu granda komerca firmao, kiu kolektas viajn datumojn aŭ donas aliron al aliuloj.\n\nMALFERMAJ MESAĜADO KAJ KUNLABORADO: Vi povas babili kun ĉiu alia en la reto de Matrix, ĉu ĝi uzas Elementon aŭ alian aplikaĵon de Matrix, kaj eĉ se ĝi uzas tute alian mesaĝilon, kiel ekzemple Slack, IRC, aŭ XMPP.\n\nTRE SEKURA: Vera tutvoja ĉifrado (nur la interparolantoj povas malĉifri siajn mesaĝojn), kaj delegaj subskriboj por kontroli la aparatojn de partoprenantoj.\n\nSENMANKA KOMUNIKADO: Mesaĝoj, voĉvokoj kaj vidvokoj, havigado de dosieroj, ekrano, kaj multaj diversaj kunigoj, robotoj kaj fenestraĵoj. Kreu ĉambrojn, komunumojn, komuniku kaj kunlaboru.\n\nĈIE KUN VI: Tenu vin ĝisdata per historio de mesaĝoj plene spegulita trans ĉiuj viaj aparatoj, kaj sur la reto per https://app.element.io.";
+"store_full_description" = "Element estas nova speco de mesaĝilo kaj kunlabora aplikaĵo, kiu:\n\n1. Stirigas vin por konservi vian privatecon\n2. Lasas vin komuniki kun ĉiu en la reto de Matrix, kaj eĉ ekstere, per kuniĝo kun aliaj aplikaĵoj, kiel ekzemple Slack\n3. Protektas vin de reklamoj, datumkolektado, kaŝenirejoj, kaj muritaj ĝardenoj\n4. Sekurigas vin per tutvoja ĉifrado, kun delegaj subskriboj por kontroli aliulojn\n\nElement tute malsamas de aliaj mesaĝiloj kaj kunlaboriloj, ĉar ĝi estas federa kaj malfermitkoda.\n\nElement lasas vin gastigi vin mem – aŭ elekti alian gastiganton – por ke vi havu privatecon, regon kaj kontrolon de viaj datumoj kaj interparoloj. Ĝi donas al vi aliron al malfermita reto, por ke via komunikado ne limiĝu al nur aliaj uzantoj de Element. Kaj ĝi estas tre sekura.\n\nElement povas fari ĉi ĉion, ĉar ĝi funkcias per Matrix – publika normo por malfermita, sencentra komunikado. \n\n\nElement lasas vi elekti, kiu gastigos viajn interparolojn. Per la aplikaĵo Element, vi povas elekti diversajn specojn de gastigado:\n\n1. Akiri senpagan konton ĉe la publika servilo chat.imzqqq.top\n2. Memgastiĝi per via propra servilo ĉe via propra aparato\n3. Registriĝi ĉe propra servilo per simpla pagaliĝo al la gastiga platformo «Element Matrix Services»\n\nKial Element?\n\nPOSEDU VIAJN DATUMOJN: Vi decidu, kie vi tenu viajn datumojn kaj mesaĝojn. Vi posedas kaj regas ilin, ne iu granda komerca firmao, kiu kolektas viajn datumojn aŭ donas aliron al aliuloj.\n\nMALFERMAJ MESAĜADO KAJ KUNLABORADO: Vi povas babili kun ĉiu alia en la reto de Matrix, ĉu ĝi uzas Elementon aŭ alian aplikaĵon de Matrix, kaj eĉ se ĝi uzas tute alian mesaĝilon, kiel ekzemple Slack, IRC, aŭ XMPP.\n\nTRE SEKURA: Vera tutvoja ĉifrado (nur la interparolantoj povas malĉifri siajn mesaĝojn), kaj delegaj subskriboj por kontroli la aparatojn de partoprenantoj.\n\nSENMANKA KOMUNIKADO: Mesaĝoj, voĉvokoj kaj vidvokoj, havigado de dosieroj, ekrano, kaj multaj diversaj kunigoj, robotoj kaj fenestraĵoj. Kreu ĉambrojn, komunumojn, komuniku kaj kunlaboru.\n\nĈIE KUN VI: Tenu vin ĝisdata per historio de mesaĝoj plene spegulita trans ĉiuj viaj aparatoj, kaj sur la reto per https://app.element.io.";
 "directory_server_all_native_rooms" = "Ĉiuj ĉambroj, propraj al Matrix";
 "call_transfer_error_message" = "Malsukcesis transdono de voko";
 

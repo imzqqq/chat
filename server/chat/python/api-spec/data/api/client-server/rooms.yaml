@@ -42,19 +42,19 @@ paths:
           name: roomId
           description: The ID of the room the event is in.
           required: true
-          x-example: "!636q39766251:chat.dingshunyu.top"
+          x-example: "!636q39766251:chat.imzqqq.top"
         - in: path
           type: string
           name: eventId
           description: The event ID to get.
           required: true
-          x-example: "$asfDuShaf7Gafaw:chat.dingshunyu.top"
+          x-example: "$asfDuShaf7Gafaw:chat.imzqqq.top"
       responses:
         200:
           description: The full event.
           examples:
             application/json: {
-              "room_id": "!636q39766251:chat.dingshunyu.top",
+              "room_id": "!636q39766251:chat.imzqqq.top",
               "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml"
             }
           schema:

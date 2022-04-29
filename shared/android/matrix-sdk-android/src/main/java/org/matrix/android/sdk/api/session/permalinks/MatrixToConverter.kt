@@ -19,23 +19,23 @@ package org.matrix.android.sdk.api.session.permalinks
 import android.net.Uri
 
 /**
- * Mapping of an input URI to a to.chat.dingshunyu.top compliant URI.
+ * Mapping of an input URI to a to.chat.imzqqq.top compliant URI.
  */
 object MatrixToConverter {
 
     /**
-     * Try to convert a URL from an element web instance or from a client permalink to a to.chat.dingshunyu.top url.
+     * Try to convert a URL from an element web instance or from a client permalink to a to.chat.imzqqq.top url.
      * To be successfully converted, URL path should contain one of the [SUPPORTED_PATHS].
      * Examples:
-     * - https://riot.im/develop/#/room/#element-android:matrix.org  ->  https://to.chat.dingshunyu.top/#/#element-android:matrix.org
-     * - https://app.element.io/#/room/#element-android:matrix.org   ->  https://to.chat.dingshunyu.top/#/#element-android:matrix.org
-     * - https://www.example.org/#/room/#element-android:matrix.org  ->  https://to.chat.dingshunyu.top/#/#element-android:matrix.org
+     * - https://riot.im/develop/#/room/#element-android:matrix.org  ->  https://to.chat.imzqqq.top/#/#element-android:matrix.org
+     * - https://app.element.io/#/room/#element-android:matrix.org   ->  https://to.chat.imzqqq.top/#/#element-android:matrix.org
+     * - https://www.example.org/#/room/#element-android:matrix.org  ->  https://to.chat.imzqqq.top/#/#element-android:matrix.org
      */
     fun convert(uri: Uri): Uri? {
         val uriString = uri.toString()
 
         return when {
-            // URL is already a to.chat.dingshunyu.top
+            // URL is already a to.chat.imzqqq.top
             uriString.startsWith(PermalinkService.MATRIX_TO_URL_BASE) -> uri
             // Web or client url
             SUPPORTED_PATHS.any { it in uriString }                   -> {

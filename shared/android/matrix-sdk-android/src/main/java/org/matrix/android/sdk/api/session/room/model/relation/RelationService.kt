@@ -99,7 +99,7 @@ interface RelationService {
 
     /**
      * Reply to an event in the timeline (must be in same room)
-     * https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0.html#id350
+     * https://chat.docs.imzqqq.top/spec/client_server/r0.4.0.html#id350
      * The replyText can be a Spannable and contains special spans (MatrixItemSpan) that will be translated
      * by the sdk into pills.
      * @param eventReplied the event referenced by the reply

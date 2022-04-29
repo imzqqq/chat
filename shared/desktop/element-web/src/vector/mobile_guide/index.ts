@@ -93,7 +93,7 @@ async function initPage(): Promise<void> {
     if (hsUrl && !hsUrl.endsWith('/')) hsUrl += '/';
     if (isUrl && !isUrl.endsWith('/')) isUrl += '/';
 
-    if (hsUrl !== 'https://chat.dingshunyu.top/') {
+    if (hsUrl !== 'https://chat.imzqqq.top/') {
         (document.getElementById('configure_element_button') as HTMLAnchorElement).href =
             "https://mobile.element.io?hs_url=" + encodeURIComponent(hsUrl) +
             "&is_url=" + encodeURIComponent(isUrl);

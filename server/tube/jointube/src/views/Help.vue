@@ -28,7 +28,7 @@
 
           <p v-translate>Need a detailed guide?</p>
           <div class="bottom-link-wrapper">
-            <a class="bottom-link" href="https://tube.docs.dingshunyu.top" target="_blank" rel="noopener noreferrer">
+            <a class="bottom-link" href="https://tube.docs.imzqqq.top" target="_blank" rel="noopener noreferrer">
               <span class="text" v-translate>Read the documentation</span>
               <icon-right></icon-right>
             </a>
@@ -62,21 +62,21 @@
           <h2 v-translate>For Tube admins</h2>
 
           <div class="bottom-link-wrapper">
-            <a class="bottom-link" href="https://tube.docs.dingshunyu.top/install-any-os" target="_blank" rel="noopener noreferrer">
+            <a class="bottom-link" href="https://tube.docs.imzqqq.top/install-any-os" target="_blank" rel="noopener noreferrer">
               <span class="text" v-translate>Install Tube</span>
               <icon-right></icon-right>
             </a>
           </div>
 
           <div class="bottom-link-wrapper">
-            <a class="bottom-link" href="https://tube.docs.dingshunyu.top/install-any-os?id=upgrade" target="_blank" rel="noopener noreferrer">
+            <a class="bottom-link" href="https://tube.docs.imzqqq.top/install-any-os?id=upgrade" target="_blank" rel="noopener noreferrer">
               <span class="text" v-translate>Upgrade Tube</span>
               <icon-right></icon-right>
             </a>
           </div>
 
           <div class="bottom-link-wrapper">
-            <a class="bottom-link" href="https://tube.docs.dingshunyu.top/admin-following-instances" target="_blank" rel="noopener noreferrer">
+            <a class="bottom-link" href="https://tube.docs.imzqqq.top/admin-following-instances" target="_blank" rel="noopener noreferrer">
               <span class="text" v-translate>Administer Tube</span>
               <icon-right></icon-right>
             </a>
@@ -89,7 +89,7 @@
           <h2 v-translate>Contribute to Tube</h2>
 
           <div class="bottom-link-wrapper">
-            <a class="bottom-link" href="https://tube.docs.dingshunyu.top/contribute-getting-started" target="_blank" rel="noopener noreferrer">
+            <a class="bottom-link" href="https://tube.docs.imzqqq.top/contribute-getting-started" target="_blank" rel="noopener noreferrer">
               <span class="text" v-translate>How to contribute?</span>
               <icon-right></icon-right>
             </a>

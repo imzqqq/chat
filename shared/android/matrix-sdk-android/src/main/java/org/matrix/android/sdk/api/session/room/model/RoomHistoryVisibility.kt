@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#room-history-visibility
+ * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#room-history-visibility
  */
 @JsonClass(generateAdapter = false)
 enum class RoomHistoryVisibility {

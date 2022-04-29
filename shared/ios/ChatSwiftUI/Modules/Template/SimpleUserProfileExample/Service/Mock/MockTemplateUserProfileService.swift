@@ -9,9 +9,9 @@ class MockTemplateUserProfileService: TemplateUserProfileServiceProtocol {
     let displayName: String?
     let avatarUrl: String?
     init(
-        userId: String = "@alice:chat.dingshunyu.top",
+        userId: String = "@alice:chat.imzqqq.top",
         displayName:  String? = "Alice",
-        avatarUrl: String? = "mxc://chat.dingshunyu.top/VyNYAgahaiAzUoOeZETtQ",
+        avatarUrl: String? = "mxc://chat.imzqqq.top/VyNYAgahaiAzUoOeZETtQ",
         presence: TemplateUserProfilePresence = .offline
     ) {
         self.userId = userId

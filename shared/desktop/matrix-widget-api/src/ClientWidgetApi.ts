@@ -246,9 +246,9 @@ export class ClientWidgetApi extends EventEmitter {
             });
         }
 
-        if (!request.data?.uri || !request.data?.uri.toString().startsWith("https://to.chat.dingshunyu.top/#")) {
+        if (!request.data?.uri || !request.data?.uri.toString().startsWith("https://to.chat.imzqqq.top/#")) {
             return this.transport.reply<IWidgetApiErrorResponseData>(request, {
-                error: {message: "Invalid to.chat.dingshunyu.top URI"},
+                error: {message: "Invalid to.chat.imzqqq.top URI"},
             });
         }
 

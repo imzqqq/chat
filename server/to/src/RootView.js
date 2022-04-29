@@ -11,7 +11,7 @@ export class RootView extends TemplateView {
             t.mapView(vm => vm.createLinkViewModel, vm => vm ? new CreateLinkView(vm) : null),
             t.mapView(vm => vm.loadServerPolicyViewModel, vm => vm ? new LoadServerPolicyView(vm) : null),
             t.div({className: "footer"}, [
-                t.p(["This invite uses ", externalLink(t, "https://chat.dingshunyu.top", "Chat"), ", an open network for secure, decentralized communication."]),
+                t.p(["This invite uses ", externalLink(t, "https://chat.imzqqq.top", "Chat"), ", an open network for secure, decentralized communication."]),
                 t.ul({className: "links"}, [
                     t.li(externalLink(t, "https://github.com/imzqqq", "GitHub")),
                     t.li({className: {hidden: vm => !vm.hasPreferences}},

@@ -11,9 +11,9 @@ Pod::Spec.new do |s|
                    DESC
 
   s.author             = { "imqzzZ" => "support@imqzzZ.org" }
-  s.homepage     = "https://www.dingshunyu.top"
+  s.homepage     = "https://www.imzqqq.top"
   s.license      = { :type => "Apache License, Version 2.0", :file => "LICENSE" }
-  s.homepage     = "https://www.dingshunyu.top"
+  s.homepage     = "https://www.imzqqq.top"
   s.social_media_url   = "http://twitter.com/matrixdotorg"
   s.source       = { :git => "https://github.com/imzqqq/matrix-ios-sdk.git", :tag => "v#{s.version}" }
   

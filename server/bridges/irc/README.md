@@ -3,7 +3,7 @@ Matrix IRC Bridge
 
 ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/matrixdotorg/matrix-appservice-irc)
 [![Build Status](https://badge.buildkite.com/f33ff3f5e59aed3057cec0215a84e26747581e0fcb09b4b699.svg?branch=master)](https://buildkite.com/matrix-dot-org/matrix-appservice-irc)
-[![#irc:matrix.org](https://img.shields.io/matrix/irc:matrix.org.svg?server_fqdn=matrix.org&label=%23irc:matrix.org&logo=matrix)](https://to.chat.dingshunyu.top/#/#irc:matrix.org)
+[![#irc:matrix.org](https://img.shields.io/matrix/irc:matrix.org.svg?server_fqdn=matrix.org&label=%23irc:matrix.org&logo=matrix)](https://to.chat.imzqqq.top/#/#irc:matrix.org)
 
 This is an IRC bridge for [Matrix](https://matrix.org). If you're upgrading from an
 old release, be sure to read the [CHANGELOG](./CHANGELOG.md) as there may be breaking changes between releases.

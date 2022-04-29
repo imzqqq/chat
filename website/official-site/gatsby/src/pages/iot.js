@@ -30,7 +30,7 @@ const Iot = ({ data }) => {
                       <div className="mxgrid__item75">
                         <h2><a href={project.slug}>{project.title}</a></h2>
                         <p><a href={project.repo}>{project.repo}</a></p>
-                        <p><a href={"https://to.chat.dingshunyu.top/#/" + project.room}>{project.room}</a></p>
+                        <p><a href={"https://to.chat.imzqqq.top/#/" + project.room}>{project.room}</a></p>
                         <p>{project.description}</p>
                       </div>
                     </>
@@ -40,7 +40,7 @@ const Iot = ({ data }) => {
                       <div className="mxgrid__item75" style={{"textAlign": "right"}}>
                         <h2><a href={project.slug}>{project.title}</a></h2>
                         <p><a href={project.repo}>{project.repo}</a></p>
-                        <p><a href={"https://to.chat.dingshunyu.top/#/" + project.room}>{project.room}</a></p>
+                        <p><a href={"https://to.chat.imzqqq.top/#/" + project.room}>{project.room}</a></p>
                         <p>{project.description}</p>
                       </div>
                       <div className="mxgrid__item25"><img src={project.thumbnail} alt={project.title} /></div>

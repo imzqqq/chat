@@ -72,7 +72,7 @@ def symbolicate(crashLogData):
             print "Error: Can't extract build version"
             exit(-1)
         
-        XCArchiveTarGzURL = "http://chat.dingshunyu.top/jenkins/view/MatrixView/job/%s/%s/artifact/out/*.tar.gz/*zip*/out.zip" % (jenkinsJob, jenkinsBuild)
+        XCArchiveTarGzURL = "http://chat.imzqqq.top/jenkins/view/MatrixView/job/%s/%s/artifact/out/*.tar.gz/*zip*/out.zip" % (jenkinsJob, jenkinsBuild)
 
         print "Downloading symbols for %s (Build %s) at %s..." % (app, buildVersion, XCArchiveTarGzURL)
         responseCode = download_xcarchive_tar_gz(app, XCArchiveTarGzURL, dSYMSFile)

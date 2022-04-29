@@ -294,7 +294,7 @@
 "contacts_address_book_permission_denied" = "%@ wurde nicht erlaubt, auf lokale Kontakte zuzugreifen";
 "room_participants_remove_third_party_invite_msg" = "Entfernen der Einladung von Dritten ist noch nicht unterstützt";
 "room_participants_invite_another_user" = "Suchen/Einladen mittels Benutzer-ID, Name oder E-Mail-Adresse";
-"room_participants_invite_malformed_id" = "Ungültige ID. Sollte eine E-Mail-Adresse oder Matrix-ID wie \"@thomas:chat.dingshunyu.top' sein";
+"room_participants_invite_malformed_id" = "Ungültige ID. Sollte eine E-Mail-Adresse oder Matrix-ID wie \"@thomas:chat.imzqqq.top' sein";
 "room_participants_idle" = "Untätig";
 "room_participants_ago" = "her";
 "room_participants_action_section_admin_tools" = "Admin-Werkzeuge";
@@ -364,7 +364,7 @@
 "directory_server_all_rooms" = "Alle Räume auf %@ Server";
 "directory_server_all_native_rooms" = "Alle nativen Matrix-Räume";
 "directory_server_type_homeserver" = "Gib einen Heimserver ein, um davon öffentliche Räume zu listen";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 // Others
 "or" = "oder";
 "you" = "Du";
@@ -409,7 +409,7 @@
 "event_formatter_member_updates" = "%tu Änderungen der Mitgliedschaft";
 "contacts_user_directory_section" = "NUTZER VERZEICHNIS";
 "contacts_user_directory_offline_section" = "NUTZER VERZEICHNIS (offline)";
-"auth_home_server_placeholder" = "URL (z.B. https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (z.B. https://chat.imzqqq.top)";
 "auth_identity_server_placeholder" = "URL (z. B. https://vector.im)";
 "room_ongoing_conference_call_close" = "Schließen";
 "room_conference_call_no_power" = "Du brauchst die Berechtigung Konferenzgespräche in diesem Raum zu verwalten";
@@ -651,7 +651,7 @@
 "key_backup_setup_intro_manual_export_action" = "Manueller Schlüssel-Export";
 // String for App Store
 "store_short_description" = "Sicherer, dezentralisierter Chat/VoIP";
-"store_full_description" = "Element ist die neue Art von Messenger- und Kooperations-App, die:\n\n1. dir die Kontrolle gibt deine Privatsphäre zu schützen,\n2. dir die Kommunikation mit anderen Personen im Matrix-Netzwerk und darüber hinaus Integration in Apps wie Slack ermöglicht,\n3. dich vor Werbung, Datenerfassung, Hintertüren und geschlossene Plattformen schützt,\n4. dich durch End-to-End-Verschlüsselung absichert und mit Quersignaturen andere überprüft.\n\nElement unterscheidet sich grundlegend von anderen Messaging- und Kooperations-Diensten, da es dezentralisiert und open-source ist.\n\nMit Element kannst du dich selbst hosten oder einen Host auswählen, sodass du Datenschutz, Eigentum und Kontrolle über deine Daten und Konversationen hast. Du erhältst Zugriff auf ein offenes Netzwerk und bist nicht auf Element-Nutzer beschränkt. Und es ist sehr sicher.\n\nElement ist in der Lage, all dies zu tun, da es mit Matrix arbeitet - dem Standard für offene, dezentrale Kommunikation.\n\nMit Element hast du die Kontrolle, indem du auswählen kannst, wer deine Konversationen hostet. In der Element-App kannst du verschiedene Hosts auswählen:\n\n1. Hole dir ein kostenloses Konto auf dem öffentlichen Server von chat.dingshunyu.top\n2. Hoste dein Konto selbst, indem du einen Server auf deiner eigenen Hardware ausführst\n3. Melde dich für ein Konto auf einem benutzerdefinierten Server an, indem du einfach die Hosting-Plattform von Element Matrix Services abonnierst\n\nWarum Element?\n\nBESITZE DEINE DATEN: Du entscheidest, wo deine Daten und Nachrichten aufbewahrt werden sollen. Du besitzt und kontrollierst sie, nicht irgendein MEGAKONZERN, die deine Daten verwertet oder Dritten Zugriff gewährt.\n\nOPEN MESSAGING UND ZUSAMMENARBEIT: Du kannst mit allen anderen Mitgliedern des Matrix-Netzwerks chatten, unabhängig davon, ob sie Element oder eine andere Matrix-App verwenden, sogar selbst wenn sie ein anderes Messaging-System wie Slack, IRC oder XMPP verwenden.\n\nSUPERSICHER: Echte End-to-End-Verschlüsselung (nur diejenigen in der Konversation können Nachrichten entschlüsseln) und Quersignierung, um die Geräte der Konversationsteilnehmer zu überprüfen.\n\nVOLLSTÄNDIGE KOMMUNIKATION: Messaging, Sprach- und Videoanrufe, Dateifreigabe, Bildschirmfreigabe und eine ganze Reihe von Integrationen, Bots und Widgets. Baue Räume, Gemeinschaften, bleib in Kontakt und erledige Dinge.\n\nÜBERALL, WO DU BIST: Bleibe mit dem vollständig synchronisierten Nachrichtenverlauf auf all deinen Geräten und im Internet (unter https://element.io/app) unabhängig voneinander in Kontakt.";
+"store_full_description" = "Element ist die neue Art von Messenger- und Kooperations-App, die:\n\n1. dir die Kontrolle gibt deine Privatsphäre zu schützen,\n2. dir die Kommunikation mit anderen Personen im Matrix-Netzwerk und darüber hinaus Integration in Apps wie Slack ermöglicht,\n3. dich vor Werbung, Datenerfassung, Hintertüren und geschlossene Plattformen schützt,\n4. dich durch End-to-End-Verschlüsselung absichert und mit Quersignaturen andere überprüft.\n\nElement unterscheidet sich grundlegend von anderen Messaging- und Kooperations-Diensten, da es dezentralisiert und open-source ist.\n\nMit Element kannst du dich selbst hosten oder einen Host auswählen, sodass du Datenschutz, Eigentum und Kontrolle über deine Daten und Konversationen hast. Du erhältst Zugriff auf ein offenes Netzwerk und bist nicht auf Element-Nutzer beschränkt. Und es ist sehr sicher.\n\nElement ist in der Lage, all dies zu tun, da es mit Matrix arbeitet - dem Standard für offene, dezentrale Kommunikation.\n\nMit Element hast du die Kontrolle, indem du auswählen kannst, wer deine Konversationen hostet. In der Element-App kannst du verschiedene Hosts auswählen:\n\n1. Hole dir ein kostenloses Konto auf dem öffentlichen Server von chat.imzqqq.top\n2. Hoste dein Konto selbst, indem du einen Server auf deiner eigenen Hardware ausführst\n3. Melde dich für ein Konto auf einem benutzerdefinierten Server an, indem du einfach die Hosting-Plattform von Element Matrix Services abonnierst\n\nWarum Element?\n\nBESITZE DEINE DATEN: Du entscheidest, wo deine Daten und Nachrichten aufbewahrt werden sollen. Du besitzt und kontrollierst sie, nicht irgendein MEGAKONZERN, die deine Daten verwertet oder Dritten Zugriff gewährt.\n\nOPEN MESSAGING UND ZUSAMMENARBEIT: Du kannst mit allen anderen Mitgliedern des Matrix-Netzwerks chatten, unabhängig davon, ob sie Element oder eine andere Matrix-App verwenden, sogar selbst wenn sie ein anderes Messaging-System wie Slack, IRC oder XMPP verwenden.\n\nSUPERSICHER: Echte End-to-End-Verschlüsselung (nur diejenigen in der Konversation können Nachrichten entschlüsseln) und Quersignierung, um die Geräte der Konversationsteilnehmer zu überprüfen.\n\nVOLLSTÄNDIGE KOMMUNIKATION: Messaging, Sprach- und Videoanrufe, Dateifreigabe, Bildschirmfreigabe und eine ganze Reihe von Integrationen, Bots und Widgets. Baue Räume, Gemeinschaften, bleib in Kontakt und erledige Dinge.\n\nÜBERALL, WO DU BIST: Bleibe mit dem vollständig synchronisierten Nachrichtenverlauf auf all deinen Geräten und im Internet (unter https://element.io/app) unabhängig voneinander in Kontakt.";
 "auth_login_single_sign_on" = "Anmelden";
 "auth_autodiscover_invalid_response" = "Ungültige Antwort beim Entdecken des Heimservers";
 "room_message_unable_open_link_error_message" = "Konnte Link nicht öffnen.";
@@ -1199,7 +1199,7 @@
 "create_room_section_footer_type" = "Personen können einen privaten Raum nur mit Einladung betreten.";
 "create_room_show_in_directory" = "Zeige den Raum im Raumverzeichnis";
 "create_room_section_header_address" = "Raum-Adresse";
-"create_room_placeholder_address" = "#testraum:chat.dingshunyu.top";
+"create_room_placeholder_address" = "#testraum:chat.imzqqq.top";
 "room_info_list_room_encrypted" = "Nachrichten in diesem Raum sind Ende-zu-Ende verschlüsselt";
 "room_info_list_one_member" = "1 Mitglied";
 "room_info_list_several_members" = "%@ Mitglieder";

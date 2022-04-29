@@ -114,13 +114,13 @@ On HS handling events to unknown users:
   confirms the existence of that user (from its perspective), then the HS
   creates an account to represent the virtual user.
 * The namespace of virtual user accounts should conform to a structure like
-  ``@.irc.freenode.Arathorn:chat.dingshunyu.top``.  This lets Chat users communicate with
+  ``@.irc.freenode.Arathorn:chat.imzqqq.top``.  This lets Chat users communicate with
   foreign users who are not yet mapped into Chat via 3PID mappings or through
   an existing non-virtual Chat user by trying to talk to them via a gateway.
 * The AS can alternatively preprovision virtual users using the existing CS API
   rather than lazy-loading them in this manner.
 * The AS may want to link the matrix ID of the sender through to their 3PID in
-  the remote ecosystem.  E.g. a message sent from ``@matthew:chat.dingshunyu.top`` may wish
+  the remote ecosystem.  E.g. a message sent from ``@matthew:chat.imzqqq.top`` may wish
   to originate from Arathorn on irc.freenode.net in the case of an IRC bridge.
   It's left as an AS implementation detail as to how the user should authorise
   the AS to act on its behalf.

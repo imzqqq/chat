@@ -37,7 +37,7 @@ paths:
         This endpoint was deprecated in r0 of this specification. Clients
         should instead call the [`/sync`](/client-server-api/#get_matrixclientv3sync)
         endpoint with a `since` parameter. See
-        the [migration guide](https://chat.dingshunyu.top/docs/guides/migrating-from-client-server-api-v-1#deprecated-endpoints).
+        the [migration guide](https://chat.imzqqq.top/docs/guides/migrating-from-client-server-api-v-1#deprecated-endpoints).
       operationId: getEvents
       security:
         - accessToken: []
@@ -103,7 +103,7 @@ paths:
         This endpoint was deprecated in r0 of this specification. Clients
         should instead call the [`/sync`](/client-server-api/#get_matrixclientv3sync)
         endpoint with no `since` parameter. See
-        the [migration guide](https://chat.dingshunyu.top/docs/guides/migrating-from-client-server-api-v-1#deprecated-endpoints).
+        the [migration guide](https://chat.imzqqq.top/docs/guides/migrating-from-client-server-api-v-1#deprecated-endpoints).
       operationId: initialSync
       security:
         - accessToken: []
@@ -329,7 +329,7 @@ paths:
           name: eventId
           description: The event ID to get.
           required: true
-          x-example: "$asfDuShaf7Gafaw:chat.dingshunyu.top"
+          x-example: "$asfDuShaf7Gafaw:chat.imzqqq.top"
       responses:
         200:
           description: The full event.

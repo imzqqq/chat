@@ -127,7 +127,7 @@ const Sponsorship = ({ intl }) => (
           <div className='feature-angle' style={{ width: '50%' }}>
             <img src={mastodonGold} alt='' />
             <p><FormattedMessage id='sponsorship.sponsoring_higher_tiers' defaultMessage="If you want to see your company's logo with a do-follow link on this website, you can become a Gold or Platinum tier sponsor using our own platform!" /></p>
-            <a href='https://sponsor.dingshunyu.top/' className='cta button alt'><FormattedMessage id='sponsorship.become_a_sponsor' defaultMessage='Become a sponsor' /></a>
+            <a href='https://sponsor.imzqqq.top/' className='cta button alt'><FormattedMessage id='sponsorship.become_a_sponsor' defaultMessage='Become a sponsor' /></a>
           </div>
         </div>
       </div>
@@ -146,7 +146,7 @@ const Sponsorship = ({ intl }) => (
 
         <div className='sponsors-list--badges'>
           <ul>
-            {silverSponsors.map(sponsor => <li key={sponsor.name}><a href={sponsor.href || 'https://flow.join.dingshunyu.top/sponsors'} rel={sponsor.nofollow ? 'nofollow' : null}><img src={sponsor.src || noAvatar} alt='' /> <span><strong>{sponsor.name}</strong><span>{sponsor.href || '-'}</span></span></a></li>)}
+            {silverSponsors.map(sponsor => <li key={sponsor.name}><a href={sponsor.href || 'https://flow.join.imzqqq.top/sponsors'} rel={sponsor.nofollow ? 'nofollow' : null}><img src={sponsor.src || noAvatar} alt='' /> <span><strong>{sponsor.name}</strong><span>{sponsor.href || '-'}</span></span></a></li>)}
           </ul>
         </div>
       </div>

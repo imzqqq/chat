@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MXCredentials : NSObject <NSCopying>
 
 /**
- The homeserver url (ex: "https://chat.dingshunyu.top").
+ The homeserver url (ex: "https://chat.imzqqq.top").
  */
 @property (nonatomic, nullable) NSString *homeServer;
 
@@ -58,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, nullable) NSString *deviceId;
 
 /**
- The homeserver name (ex: "chat.dingshunyu.top").
+ The homeserver name (ex: "chat.imzqqq.top").
  */
 - (nullable NSString *)homeServerName;
 

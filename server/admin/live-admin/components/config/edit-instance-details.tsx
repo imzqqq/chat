@@ -103,12 +103,12 @@ export default function EditInstanceDetails() {
       <br />
       <p className="description">
         Increase your audience by appearing in the{' '}
-        <a href="https://directory.live.dingshunyu.top" target="_blank" rel="noreferrer">
+        <a href="https://directory.live.imzqqq.top" target="_blank" rel="noreferrer">
           <strong>Live Directory</strong>
         </a>
         . This is an external service run by the Live project.{' '}
         <a
-          href="https://live.docs.dingshunyu.top/docs/directory/?source=admin"
+          href="https://live.docs.imzqqq.top/docs/directory/?source=admin"
           target="_blank"
           rel="noopener noreferrer"
         >

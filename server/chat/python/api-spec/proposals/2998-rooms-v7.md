@@ -1,6 +1,6 @@
 # MSC2998: Room Version 7
 
-A new room version, `7`, is proposed using [room version 6](https://chat.api-spec.dingshunyu.top/rooms/v6.html) as a base
+A new room version, `7`, is proposed using [room version 6](https://chat.api-spec.imzqqq.top/rooms/v6.html) as a base
 and incorporating the following MSCs:
 
 * [MSC2403](https://github.com/matrix-org/matrix-doc/pull/2403) - Add "knock" feature.

@@ -163,7 +163,7 @@
 
         MXRestClient *bobRestClient2 = bobRestClient;
 
-        [bobRestClient setRoomAvatar:roomId avatar:@"http://chat.dingshunyu.top/matrix.png" success:^{
+        [bobRestClient setRoomAvatar:roomId avatar:@"http://chat.imzqqq.top/matrix.png" success:^{
 
             MXSession *mxSession = [[MXSession alloc] initWithMatrixRestClient:bobRestClient2];
             [matrixSDKTestsData retain:mxSession];
@@ -174,7 +174,7 @@
 
                 [room state:^(MXRoomState *roomState) {
                     XCTAssertNotNil(roomState.avatar);
-                    XCTAssertEqualObjects(roomState.avatar, @"http://chat.dingshunyu.top/matrix.png");
+                    XCTAssertEqualObjects(roomState.avatar, @"http://chat.imzqqq.top/matrix.png");
 
                     [expectation fulfill];
                 }];
@@ -215,14 +215,14 @@
                     XCTAssertEqual(event.eventType, MXEventTypeRoomAvatar);
 
                     XCTAssertNotNil(liveTimeline.state.avatar);
-                    XCTAssertEqualObjects(liveTimeline.state.avatar, @"http://chat.dingshunyu.top/matrix.png");
+                    XCTAssertEqualObjects(liveTimeline.state.avatar, @"http://chat.imzqqq.top/matrix.png");
 
                     [expectation fulfill];
 
                 }];
 
                 // Change the avatar
-                [bobRestClient2 setRoomAvatar:roomId avatar:@"http://chat.dingshunyu.top/matrix.png" success:^{
+                [bobRestClient2 setRoomAvatar:roomId avatar:@"http://chat.imzqqq.top/matrix.png" success:^{
 
                 } failure:^(NSError *error) {
                     XCTFail(@"The request should not fail - NSError: %@", error);
@@ -1180,7 +1180,7 @@
     }];
 }
 
-// Test for https://chat.dingshunyu.top/jira/browse/SYIOS-105
+// Test for https://chat.imzqqq.top/jira/browse/SYIOS-105
 - (void)testRoomStateWhenARoomHasBeenJoinedOnAnotherMatrixClient
 {
     [matrixSDKTestsData doMXRestClientTestWithAlice:self readyToTest:^(MXRestClient *aliceRestClient, XCTestExpectation *expectation) {
@@ -1237,7 +1237,7 @@
     }];
 }
 
-// Test for https://chat.dingshunyu.top/jira/browse/SYIOS-105 using notifications
+// Test for https://chat.imzqqq.top/jira/browse/SYIOS-105 using notifications
 - (void)testRoomStateWhenARoomHasBeenJoinedOnAnotherMatrixClientAndNotifications {
     [matrixSDKTestsData doMXRestClientTestWithAlice:self readyToTest:^(MXRestClient *aliceRestClient, XCTestExpectation *expectation) {
 

@@ -54,7 +54,7 @@ async def create(evt: CommandEvent) -> EventID:
                        title=title, about=about, encrypted=encrypted)
     invites, errors = await portal.get_telegram_users_in_matrix_room(evt.sender)
     if len(errors) > 0:
-        error_list = "\n".join(f"* [{mxid}](https://to.chat.dingshunyu.top/#/{mxid})" for mxid in errors)
+        error_list = "\n".join(f"* [{mxid}](https://to.chat.imzqqq.top/#/{mxid})" for mxid in errors)
         await evt.reply(f"Failed to add the following users to the chat:\n\n{error_list}\n\n"
                         "You can try `$cmdprefix+sp search -r <username>` to help the bridge find "
                         "those users.")

@@ -78,7 +78,7 @@ It returns SNS name, `mastodon`, `pleroma` or `misskey`.
 ```typescript
 import { detector } from 'megalodon'
 
-const sns = await detector('https://flow.dingshunyu.top')
+const sns = await detector('https://flow.imzqqq.top')
 ```
 
 These functions are necessary to treat multiple SNS.

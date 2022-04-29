@@ -49,8 +49,8 @@ class BottomSheetActivityTest {
 
     private lateinit var activity: FakeBottomSheetActivity
     private lateinit var apiMock: FlowApi
-    private val accountQuery = "http://flow.dingshunyu.top/@User"
-    private val statusQuery = "http://flow.dingshunyu.top/@User/345678"
+    private val accountQuery = "http://flow.imzqqq.top/@User"
+    private val statusQuery = "http://flow.imzqqq.top/@User/345678"
     private val nonFlowQuery = "http://medium.com/@correspondent/345678"
     private val emptyCallback = Single.just(SearchResult(emptyList(), emptyList(), emptyList()))
     private val testScheduler = TestScheduler()
@@ -61,7 +61,7 @@ class BottomSheetActivityTest {
         "admin",
         "Ad Min",
         SpannedString(""),
-        "http://flow.dingshunyu.top",
+        "http://flow.imzqqq.top",
         "",
         "",
         false,
@@ -124,10 +124,10 @@ class BottomSheetActivityTest {
             @JvmStatic
             fun data(): Iterable<Any> {
                 return listOf(
-                    arrayOf("https://flow.dingshunyu.top/@User", true),
-                    arrayOf("http://flow.dingshunyu.top/@abc123", true),
-                    arrayOf("https://flow.dingshunyu.top/@user/345667890345678", true),
-                    arrayOf("https://flow.dingshunyu.top/@user/3", true),
+                    arrayOf("https://flow.imzqqq.top/@User", true),
+                    arrayOf("http://flow.imzqqq.top/@abc123", true),
+                    arrayOf("https://flow.imzqqq.top/@user/345667890345678", true),
+                    arrayOf("https://flow.imzqqq.top/@user/3", true),
                     arrayOf("https://pleroma.foo.bar/users/meh3223", true),
                     arrayOf("https://pleroma.foo.bar/users/meh3223_bruh", true),
                     arrayOf("https://pleroma.foo.bar/users/2345", true),
@@ -145,12 +145,12 @@ class BottomSheetActivityTest {
                     arrayOf("https://friendica.foo.bar/profile/123", true),
                     arrayOf("https://friendica.foo.bar/display/abcdef-123-abcd-9876543", true),
                     arrayOf("https://google.com/", false),
-                    arrayOf("https://flow.dingshunyu.top/@User?foo=bar", false),
-                    arrayOf("https://flow.dingshunyu.top/@User#foo", false),
-                    arrayOf("http://flow.dingshunyu.top/@", false),
-                    arrayOf("http://flow.dingshunyu.top/@/345678", false),
-                    arrayOf("https://flow.dingshunyu.top/@user/345667890345678/", false),
-                    arrayOf("https://flow.dingshunyu.top/@user/3abce", false),
+                    arrayOf("https://flow.imzqqq.top/@User?foo=bar", false),
+                    arrayOf("https://flow.imzqqq.top/@User#foo", false),
+                    arrayOf("http://flow.imzqqq.top/@", false),
+                    arrayOf("http://flow.imzqqq.top/@/345678", false),
+                    arrayOf("https://flow.imzqqq.top/@user/345667890345678/", false),
+                    arrayOf("https://flow.imzqqq.top/@user/3abce", false),
                     arrayOf("https://pleroma.foo.bar/users/", false),
                     arrayOf("https://pleroma.foo.bar/users/meow/", false),
                     arrayOf("https://pleroma.foo.bar/users/@meow", false),
@@ -181,13 +181,13 @@ class BottomSheetActivityTest {
 
     @Test
     fun beginEndSearch_setIsSearching_isSearchingAfterBegin() {
-        activity.onBeginSearch("https://flow.dingshunyu.top/@User")
+        activity.onBeginSearch("https://flow.imzqqq.top/@User")
         Assert.assertTrue(activity.isSearching())
     }
 
     @Test
     fun beginEndSearch_setIsSearching_isNotSearchingAfterEnd() {
-        val validUrl = "https://flow.dingshunyu.top/@User"
+        val validUrl = "https://flow.imzqqq.top/@User"
         activity.onBeginSearch(validUrl)
         activity.onEndSearch(validUrl)
         Assert.assertFalse(activity.isSearching())
@@ -195,7 +195,7 @@ class BottomSheetActivityTest {
 
     @Test
     fun beginEndSearch_setIsSearching_doesNotCancelSearchWhenResponseFromPreviousSearchIsReceived() {
-        val validUrl = "https://flow.dingshunyu.top/@User"
+        val validUrl = "https://flow.imzqqq.top/@User"
         val invalidUrl = ""
 
         activity.onBeginSearch(validUrl)
@@ -205,7 +205,7 @@ class BottomSheetActivityTest {
 
     @Test
     fun cancelActiveSearch() {
-        val url = "https://flow.dingshunyu.top/@User"
+        val url = "https://flow.imzqqq.top/@User"
 
         activity.onBeginSearch(url)
         activity.cancelActiveSearch()
@@ -214,8 +214,8 @@ class BottomSheetActivityTest {
 
     @Test
     fun getCancelSearchRequested_detectsURL() {
-        val firstUrl = "https://flow.dingshunyu.top/@User"
-        val secondUrl = "https://flow.dingshunyu.top/@meh"
+        val firstUrl = "https://flow.imzqqq.top/@User"
+        val secondUrl = "https://flow.imzqqq.top/@meh"
 
         activity.onBeginSearch(firstUrl)
         activity.cancelActiveSearch()

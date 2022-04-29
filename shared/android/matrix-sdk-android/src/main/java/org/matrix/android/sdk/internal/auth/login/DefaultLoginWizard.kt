@@ -80,7 +80,7 @@ internal class DefaultLoginWizard(
     }
 
     /**
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#handling-the-authentication-endpoint
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#handling-the-authentication-endpoint
      */
     override suspend fun loginWithToken(loginToken: String): Session {
         val loginParams = TokenLoginParams(

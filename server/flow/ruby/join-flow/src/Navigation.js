@@ -8,9 +8,9 @@ import Dropdown from './Dropdown';
 import mastodonLogo from './assets/logo_full.svg';
 
 const options = [
-  { value: 'https://blog.dingshunyu.top/', label: <FormattedMessage id='nav.blog' defaultMessage='Blog' />},
-  { value: 'https://discourse.dingshunyu.top', label: <FormattedMessage id='nav.support' defaultMessage='Support' /> },
-  { value: 'https://flow.docs.dingshunyu.top', label: <FormattedMessage id='nav.docs' defaultMessage='Documentation' /> },
+  { value: 'https://blog.imzqqq.top/', label: <FormattedMessage id='nav.blog' defaultMessage='Blog' />},
+  { value: 'https://discourse.imzqqq.top', label: <FormattedMessage id='nav.support' defaultMessage='Support' /> },
+  { value: 'https://flow.docs.imzqqq.top', label: <FormattedMessage id='nav.docs' defaultMessage='Documentation' /> },
   { value: 'https://github.com/imzqqq', label: <FormattedMessage id='nav.merch' defaultMessage='Merch' /> },
 ];
 

@@ -42,7 +42,7 @@ export type UAccount = {
  */
 export type MultiAccount = {
     /**
-     * The host name of the account (ex.: flow.dingshunyu.top)
+     * The host name of the account (ex.: flow.imzqqq.top)
      */
     host: string;
 

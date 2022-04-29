@@ -5,13 +5,13 @@ Pod::Spec.new do |s|
   s.summary      = "The Chat reusable UI library for iOS based on ChatSDK."
 
   s.description  = <<-DESC
-					Chat Kit provides basic reusable interfaces to ease building of apps compatible with Chat (https://www.chat.dingshunyu.top).
+					Chat Kit provides basic reusable interfaces to ease building of apps compatible with Chat (https://www.chat.imzqqq.top).
                    DESC
 
   s.platform     = :ios, "12.1"
 
-  s.author             = { "chat.dingshunyu.top" => "support@chat.dingshunyu.top" }
-  s.homepage     = "https://www.dingshunyu.top"
+  s.author             = { "chat.imzqqq.top" => "support@chat.imzqqq.top" }
+  s.homepage     = "https://www.imzqqq.top"
   s.social_media_url   = "http://twitter.com/matrixdotorg" 
   s.license      = { :type => "Apache License, Version 2.0", :file => "LICENSE" }
   s.source       = { :git => "https://github.com/imzqqq/matrix-ios-kit.git", :tag => "v#{s.version}" }

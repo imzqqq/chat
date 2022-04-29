@@ -1254,12 +1254,12 @@ NSTimeInterval const kMXCallDirectRoomJoinTimeout = 30;
 #pragma mark - Conference call
 
 // Copied from vector-web:
-// FIXME: This currently forces Vector to try to hit the chat.dingshunyu.top AS for conferencing.
+// FIXME: This currently forces Vector to try to hit the chat.imzqqq.top AS for conferencing.
 // This is bad because it prevents people running their own ASes from being used.
 // This isn't permanent and will be customisable in the future: see the proposal
 // at docs/conferencing.md for more info.
 NSString *const kMXCallManagerConferenceUserPrefix  = @"@fs_";
-NSString *const kMXCallManagerConferenceUserDomain  = @"chat.dingshunyu.top";
+NSString *const kMXCallManagerConferenceUserDomain  = @"chat.imzqqq.top";
 
 - (void)handleConferenceUserUpdate:(MXRoomMember *)conferenceUserMember inRoom:(NSString *)roomId
 {

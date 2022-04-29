@@ -41,7 +41,7 @@ describe("MatrixAction", function() {
         }, FakeIntent).then(() => {
             expect(action.text).toEqual("TheJCDenton, it's a bomb!");
             expect(action.htmlText).toEqual(
-                "<a href=\"https://to.chat.dingshunyu.top/#/@jc.denton:unatco.gov\">"+
+                "<a href=\"https://to.chat.imzqqq.top/#/@jc.denton:unatco.gov\">"+
                 "TheJCDenton</a>, it's a bomb!"
             );
         });
@@ -58,7 +58,7 @@ describe("MatrixAction", function() {
         }, FakeIntent).then(() => {
             expect(action.text).toEqual("Did you get TheJCDenton's report?");
             expect(action.htmlText).toEqual(
-                "Did you get <a href=\"https://to.chat.dingshunyu.top/#/@jc.denton:unatco.gov\">"+
+                "Did you get <a href=\"https://to.chat.imzqqq.top/#/@jc.denton:unatco.gov\">"+
                 "TheJCDenton</a>'s report?"
             );
         });
@@ -75,7 +75,7 @@ describe("MatrixAction", function() {
         }, FakeIntent).then(() => {
             expect(action.text).toEqual("Hey, you missed: <TheJCDenton> it's a bomb!");
             expect(action.htmlText).toEqual(
-                "Hey, you missed: &lt;<a href=\"https://to.chat.dingshunyu.top/#/@jc.denton:unatco.gov\">"+
+                "Hey, you missed: &lt;<a href=\"https://to.chat.imzqqq.top/#/@jc.denton:unatco.gov\">"+
                 "TheJCDenton</a>&gt; it's a bomb!"
             );
         });
@@ -92,7 +92,7 @@ describe("MatrixAction", function() {
         }, FakeIntent).then(() => {
             expect(action.text).toEqual("TheJCDenton, it's a bomb!");
             expect(action.htmlText).toEqual(
-                "<a href=\"https://to.chat.dingshunyu.top/#/@jc.denton:unatco.gov\">"+
+                "<a href=\"https://to.chat.imzqqq.top/#/@jc.denton:unatco.gov\">"+
                 "TheJCDenton</a>, it's a bomb!"
             );
         });
@@ -105,7 +105,7 @@ describe("MatrixAction", function() {
         }, FakeIntent).then(() => {
             expect(action.text).toEqual("TheJCDenton, it's a bomb!");
             expect(action.htmlText).toEqual(
-                "<a href=\"https://to.chat.dingshunyu.top/#/@jc.denton:unatco.gov\">"+
+                "<a href=\"https://to.chat.imzqqq.top/#/@jc.denton:unatco.gov\">"+
                 "TheJCDenton</a>, it's a bomb!"
             );
         });
@@ -117,7 +117,7 @@ describe("MatrixAction", function() {
         }, FakeIntent).then(() => {
             expect(action.text).toEqual("TheJCDenton, it's a bomb!");
             expect(action.htmlText).toEqual(
-                "<a href=\"https://to.chat.dingshunyu.top/#/@jc.denton:unatco.gov\">"+
+                "<a href=\"https://to.chat.imzqqq.top/#/@jc.denton:unatco.gov\">"+
                 "TheJCDenton</a>, it's a bomb!"
             );
         });
@@ -135,8 +135,8 @@ describe("MatrixAction", function() {
         }, FakeIntent).then(() => {
             expect(action.text).toEqual("TheJCDenton is sent to assassinate ThePaulDenton");
             expect(action.htmlText).toEqual(
-                "<a href=\"https://to.chat.dingshunyu.top/#/@jc.denton:unatco.gov\">TheJCDenton</a> is sent" +
-                " to assassinate <a href=\"https://to.chat.dingshunyu.top/#/@paul.denton:unatco.gov\">" +
+                "<a href=\"https://to.chat.imzqqq.top/#/@jc.denton:unatco.gov\">TheJCDenton</a> is sent" +
+                " to assassinate <a href=\"https://to.chat.imzqqq.top/#/@paul.denton:unatco.gov\">" +
                 "ThePaulDenton</a>"
             );
         });
@@ -153,8 +153,8 @@ describe("MatrixAction", function() {
         }, FakeIntent).then(() => {
             expect(action.text).toEqual("TheJCDenton, meet TheJCDenton");
             expect(action.htmlText).toEqual(
-                "<a href=\"https://to.chat.dingshunyu.top/#/@jc.denton:unatco.gov\">TheJCDenton</a>," +
-                " meet <a href=\"https://to.chat.dingshunyu.top/#/@jc.denton:unatco.gov\">TheJCDenton</a>"
+                "<a href=\"https://to.chat.imzqqq.top/#/@jc.denton:unatco.gov\">TheJCDenton</a>," +
+                " meet <a href=\"https://to.chat.imzqqq.top/#/@jc.denton:unatco.gov\">TheJCDenton</a>"
             );
         });
     });
@@ -202,7 +202,7 @@ describe("MatrixAction", function() {
         }, FakeIntent).then(() => {
             expect(action.text).toEqual("anna.navarre: The machine would not make a mistake!");
             expect(action.htmlText).toEqual(
-                "<a href=\"https://to.chat.dingshunyu.top/#/@anna.navarre:unatco.gov\">"+
+                "<a href=\"https://to.chat.imzqqq.top/#/@anna.navarre:unatco.gov\">"+
                 "anna.navarre</a>: The machine would not make a mistake!"
             );
         });

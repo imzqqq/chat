@@ -65,14 +65,14 @@ async def _add_forward_header(source: 'AbstractUser', content: TextMessageEventC
         user = u.User.get_by_tgid(TelegramID(fwd_from.from_id.user_id))
         if user:
             fwd_from_text = user.displayname or user.mxid
-            fwd_from_html = (f"<a href='https://to.chat.dingshunyu.top/#/{user.mxid}'>"
+            fwd_from_html = (f"<a href='https://to.chat.imzqqq.top/#/{user.mxid}'>"
                              f"{escape(fwd_from_text)}</a>")
 
         if not fwd_from_text:
             puppet = pu.Puppet.get(TelegramID(fwd_from.from_id.user_id), create=False)
             if puppet and puppet.displayname:
                 fwd_from_text = puppet.displayname or puppet.mxid
-                fwd_from_html = (f"<a href='https://to.chat.dingshunyu.top/#/{puppet.mxid}'>"
+                fwd_from_html = (f"<a href='https://to.chat.imzqqq.top/#/{puppet.mxid}'>"
                                  f"{escape(fwd_from_text)}</a>")
 
         if not fwd_from_text:
@@ -90,7 +90,7 @@ async def _add_forward_header(source: 'AbstractUser', content: TextMessageEventC
         if portal and portal.title:
             fwd_from_text = portal.title
             if portal.alias:
-                fwd_from_html = (f"<a href='https://to.chat.dingshunyu.top/#/{portal.alias}'>"
+                fwd_from_html = (f"<a href='https://to.chat.imzqqq.top/#/{portal.alias}'>"
                                  f"{escape(fwd_from_text)}</a>")
             else:
                 fwd_from_html = f"channel <b>{escape(fwd_from_text)}</b>"
@@ -275,7 +275,7 @@ def _parse_mention(html: List[str], entity_text: str) -> bool:
         mxid = portal.alias or portal.mxid if portal else None
 
     if mxid:
-        html.append(f"<a href='https://to.chat.dingshunyu.top/#/{mxid}'>{entity_text}</a>")
+        html.append(f"<a href='https://to.chat.imzqqq.top/#/{mxid}'>{entity_text}</a>")
     else:
         return True
     return False
@@ -289,7 +289,7 @@ def _parse_name_mention(html: List[str], entity_text: str, user_id: TelegramID) 
         puppet = pu.Puppet.get(user_id, create=False)
         mxid = puppet.mxid if puppet else None
     if mxid:
-        html.append(f"<a href='https://to.chat.dingshunyu.top/#/{mxid}'>{entity_text}</a>")
+        html.append(f"<a href='https://to.chat.imzqqq.top/#/{mxid}'>{entity_text}</a>")
     else:
         return True
     return False
@@ -313,7 +313,7 @@ def _parse_url(html: List[str], entity_text: str, url: str) -> bool:
         if portal:
             message = DBMessage.get_one_by_tgid(TelegramID(msgid), portal.tgid)
             if message:
-                url = f"https://to.chat.dingshunyu.top/#/{portal.mxid}/{message.mxid}"
+                url = f"https://to.chat.imzqqq.top/#/{portal.mxid}/{message.mxid}"
 
     html.append(f"<a href='{url}'>{entity_text}</a>")
     return False

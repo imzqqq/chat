@@ -70,7 +70,7 @@ output = {
     "basePath": "/",
     "consumes": ["application/json"],
     "produces": ["application/json"],
-    "host": "chat.dingshunyu.top",
+    "host": "chat.imzqqq.top",
     # The servers value will be picked up by RapiDoc to provide a way
     # to switch API servers. Useful when one wants to test compliance
     # of their server with the API.
@@ -78,7 +78,7 @@ output = {
         "url": "https://{homeserver_address}/",
         "variables": {
             "homeserver_address": {
-                "default": "matrix-client.chat.dingshunyu.top",
+                "default": "matrix-client.chat.imzqqq.top",
                 "description": "The base URL for your homeserver",
             }
         }

@@ -156,7 +156,7 @@ def _plain_mention_to_html(match: Match) -> str:
     puppet = pu.Puppet.find_by_displayname(match.group(2))
     if puppet:
         return (f"{match.group(1)}"
-                f"<a href='https://to.chat.dingshunyu.top/#/{puppet.mxid}'>"
+                f"<a href='https://to.chat.imzqqq.top/#/{puppet.mxid}'>"
                 f"{puppet.displayname}"
                 "</a>")
     return "".join(match.groups())

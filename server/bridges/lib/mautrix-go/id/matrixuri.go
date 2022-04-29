@@ -23,16 +23,16 @@ var (
 	ErrEmptyFourthSegment  = errors.New("the fourth segment of the matrix URI must not be empty when the third segment is present")
 )
 
-// Errors that can happen when parsing to.chat.dingshunyu.top URLs
+// Errors that can happen when parsing to.chat.imzqqq.top URLs
 var (
-	ErrNotMatrixTo                        = errors.New("that URL is not a to.chat.dingshunyu.top URL")
-	ErrInvalidMatrixToPartCount           = errors.New("to.chat.dingshunyu.top URLs must have exactly 1 or 2 segments")
-	ErrEmptyMatrixToPrimaryIdentifier     = errors.New("the primary identifier in the to.chat.dingshunyu.top URL is empty")
-	ErrInvalidMatrixToPrimaryIdentifier   = errors.New("the primary identifier in the to.chat.dingshunyu.top URL has an invalid sigil")
-	ErrInvalidMatrixToSecondaryIdentifier = errors.New("the secondary identifier in the to.chat.dingshunyu.top URL has an invalid sigil")
+	ErrNotMatrixTo                        = errors.New("that URL is not a to.chat.imzqqq.top URL")
+	ErrInvalidMatrixToPartCount           = errors.New("to.chat.imzqqq.top URLs must have exactly 1 or 2 segments")
+	ErrEmptyMatrixToPrimaryIdentifier     = errors.New("the primary identifier in the to.chat.imzqqq.top URL is empty")
+	ErrInvalidMatrixToPrimaryIdentifier   = errors.New("the primary identifier in the to.chat.imzqqq.top URL has an invalid sigil")
+	ErrInvalidMatrixToSecondaryIdentifier = errors.New("the secondary identifier in the to.chat.imzqqq.top URL has an invalid sigil")
 )
 
-var ErrNotMatrixToOrMatrixURI = errors.New("that URL is not a to.chat.dingshunyu.top URL nor matrix: URI")
+var ErrNotMatrixToOrMatrixURI = errors.New("that URL is not a to.chat.imzqqq.top URL nor matrix: URI")
 
 // MatrixURI contains the result of parsing a matrix: URI using ParseMatrixURI
 type MatrixURI struct {
@@ -79,7 +79,7 @@ func (uri *MatrixURI) String() string {
 	}).String()
 }
 
-// MatrixToURL converts to parsed matrix: URI into a to.chat.dingshunyu.top URL
+// MatrixToURL converts to parsed matrix: URI into a to.chat.imzqqq.top URL
 func (uri *MatrixURI) MatrixToURL() string {
 	fragment := fmt.Sprintf("#/%s", url.QueryEscape(uri.PrimaryIdentifier()))
 	if uri.Sigil2 != 0 {
@@ -90,7 +90,7 @@ func (uri *MatrixURI) MatrixToURL() string {
 		fragment = fmt.Sprintf("%s?%s", fragment, query)
 	}
 	// It would be nice to use URL{...}.String() here, but figuring out the Fragment vs RawFragment stuff is a pain
-	return fmt.Sprintf("https://to.chat.dingshunyu.top/%s", fragment)
+	return fmt.Sprintf("https://to.chat.imzqqq.top/%s", fragment)
 }
 
 // PrimaryIdentifier returns the first Matrix identifier in the URI.
@@ -140,7 +140,7 @@ func (uri *MatrixURI) EventID() EventID {
 	return ""
 }
 
-// ParseMatrixURIOrMatrixToURL parses the given to.chat.dingshunyu.top URL or matrix: URI into a unified representation.
+// ParseMatrixURIOrMatrixToURL parses the given to.chat.imzqqq.top URL or matrix: URI into a unified representation.
 func ParseMatrixURIOrMatrixToURL(uri string) (*MatrixURI, error) {
 	parsed, err := url.Parse(uri)
 	if err != nil {
@@ -148,7 +148,7 @@ func ParseMatrixURIOrMatrixToURL(uri string) (*MatrixURI, error) {
 	}
 	if parsed.Scheme == "matrix" {
 		return ProcessMatrixURI(parsed)
-	} else if strings.HasSuffix(parsed.Hostname(), "to.chat.dingshunyu.top") {
+	} else if strings.HasSuffix(parsed.Hostname(), "to.chat.imzqqq.top") {
 		return ProcessMatrixToURL(parsed)
 	} else {
 		return nil, ErrNotMatrixToOrMatrixURI
@@ -233,7 +233,7 @@ func ProcessMatrixURI(uri *url.URL) (*MatrixURI, error) {
 	return &parsed, nil
 }
 
-// ParseMatrixToURL parses a to.chat.dingshunyu.top URL into the same container as ParseMatrixURI parses matrix: URIs.
+// ParseMatrixToURL parses a to.chat.imzqqq.top URL into the same container as ParseMatrixURI parses matrix: URIs.
 func ParseMatrixToURL(uri string) (*MatrixURI, error) {
 	parsed, err := url.Parse(uri)
 	if err != nil {
@@ -242,9 +242,9 @@ func ParseMatrixToURL(uri string) (*MatrixURI, error) {
 	return ProcessMatrixToURL(parsed)
 }
 
-// ProcessMatrixToURL is the equivalent of ProcessMatrixURI for to.chat.dingshunyu.top URLs.
+// ProcessMatrixToURL is the equivalent of ProcessMatrixURI for to.chat.imzqqq.top URLs.
 func ProcessMatrixToURL(uri *url.URL) (*MatrixURI, error) {
-	if !strings.HasSuffix(uri.Hostname(), "to.chat.dingshunyu.top") {
+	if !strings.HasSuffix(uri.Hostname(), "to.chat.imzqqq.top") {
 		return nil, ErrNotMatrixTo
 	}
 

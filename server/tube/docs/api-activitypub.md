@@ -221,7 +221,7 @@ A `Video` object could be complex depending on transcoding settings. Here is an 
   "liveSaveReplay": null,
   // If this is a live, tell if this is a permanent live or not
   "permanentLive": null,
-  // See the REST API documentation: https://tube.docs.dingshunyu.top/api-rest-reference.html#operation/getVideo
+  // See the REST API documentation: https://tube.docs.imzqqq.top/api-rest-reference.html#operation/getVideo
   "state": 1,
   "commentsEnabled": true,
   "downloadEnabled": true,

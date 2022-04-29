@@ -170,7 +170,7 @@ paths:
           type: string
           description: The Chat room alias to look up.
           required: true
-          x-example: "#matrix:chat.dingshunyu.top"
+          x-example: "#matrix:chat.imzqqq.top"
       responses:
         200:
           description: |-
@@ -201,7 +201,7 @@ paths:
           type: string
           description: The Chat User ID to look up.
           required: true
-          x-example: "@bob:chat.dingshunyu.top"
+          x-example: "@bob:chat.imzqqq.top"
       responses:
         200:
           description: |-

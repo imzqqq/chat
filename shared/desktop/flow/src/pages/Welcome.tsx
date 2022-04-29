@@ -226,15 +226,15 @@ class WelcomePage extends Component<IWelcomeProps, IWelcomeState> {
                         );
                     }
 
-                    // Reset to flow.dingshunyu.top if the location is a disallowed
+                    // Reset to flow.imzqqq.top if the location is a disallowed
                     // domain.
                     if (
                         inDisallowedDomains(result.registration.defaultInstance)
                     ) {
                         console.warn(
-                            `The default instance field in config.json contains an unsupported domain (${result.registration.defaultInstance}), so it's been reset to flow.dingshunyu.top.`
+                            `The default instance field in config.json contains an unsupported domain (${result.registration.defaultInstance}), so it's been reset to flow.imzqqq.top.`
                         );
-                        result.registration.defaultInstance = "flow.dingshunyu.top";
+                        result.registration.defaultInstance = "flow.imzqqq.top";
                     }
 
                     // Update the state as per the configuration
@@ -393,10 +393,10 @@ class WelcomePage extends Component<IWelcomeProps, IWelcomeState> {
                 return "https://" + newUser.split("@")[1];
             } else {
                 let newUser = `${user}@${this.state.registerBase ??
-                    "flow.dingshunyu.top"}`;
+                    "flow.imzqqq.top"}`;
                 this.setState({ user: newUser });
                 return (
-                    "https://" + (this.state.registerBase ?? "flow.dingshunyu.top")
+                    "https://" + (this.state.registerBase ?? "flow.imzqqq.top")
                 );
             }
         }
@@ -404,9 +404,9 @@ class WelcomePage extends Component<IWelcomeProps, IWelcomeState> {
         // Otherwise, treat them as if they're from the server
         else {
             let newUser = `${user}@${this.state.registerBase ??
-                "flow.dingshunyu.top"}`;
+                "flow.imzqqq.top"}`;
             this.setState({ user: newUser });
-            return "https://" + (this.state.registerBase ?? "flow.dingshunyu.top");
+            return "https://" + (this.state.registerBase ?? "flow.imzqqq.top");
         }
     }
 
@@ -602,7 +602,7 @@ class WelcomePage extends Component<IWelcomeProps, IWelcomeState> {
                     }
                 } else if (
                     username.includes(
-                        this.state.registerBase ?? "flow.dingshunyu.top"
+                        this.state.registerBase ?? "flow.imzqqq.top"
                     )
                 ) {
                     this.setState({ userInputError, userInputErrorMessage });
@@ -1033,7 +1033,7 @@ class WelcomePage extends Component<IWelcomeProps, IWelcomeState> {
                                 : ""}{" "}
                             <Link
                                 className={classes.welcomeLink}
-								href="https://flow.dingshunyu.top"
+								href="https://flow.imzqqq.top"
                                 target="_blank"
                                 rel="noreferrer"
                             >
@@ -1062,7 +1062,7 @@ class WelcomePage extends Component<IWelcomeProps, IWelcomeState> {
                                 className={classes.welcomeLink}
                                 href={
                                     this.state.license ??
-                                    "https://flow.dingshunyu.top/license.html"
+                                    "https://flow.imzqqq.top/license.html"
                                 }
                                 target="_blank"
                                 rel="noreferrer"

@@ -23,7 +23,7 @@ Since this project hits API endpoints you should make requests in [`componentDid
 
 
 A list of API end points can be found here:
-https://live.dingshunyu.top/api/development/
+https://live.imzqqq.top/api/development/
 
 ### Auth-ing for APIs
 Auth: HTTP Basic

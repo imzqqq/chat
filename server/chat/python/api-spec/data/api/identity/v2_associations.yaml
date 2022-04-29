@@ -130,7 +130,7 @@ paths:
             example: {
               "sid": "1234",
               "client_secret": "monkeys_are_GREAT",
-              "mxid": "@ears:chat.dingshunyu.top"
+              "mxid": "@ears:chat.imzqqq.top"
             }
             properties:
               sid:
@@ -150,12 +150,12 @@ paths:
             application/json: {
               "address": "louise@bobs.burgers",
               "medium": "email",
-              "mxid": "@ears:chat.dingshunyu.top",
+              "mxid": "@ears:chat.imzqqq.top",
               "not_before": 1428825849161,
               "not_after": 4582425849161,
               "ts": 1428825849161,
               "signatures": {
-                "chat.dingshunyu.top": {
+                "chat.imzqqq.top": {
                   "ed25519:0": "ENiU2YORYUJgE6WBMitU0mppbQjidDLanAusj8XS2nVRHPu+0t42OKA/r6zV6i2MzUbNQ3c3MiLScJuSsOiVDQ"
                 }
               }

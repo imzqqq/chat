@@ -563,7 +563,7 @@
     <string name="room_settings_never_send_to_unverified_devices_summary">Nunca enviar mensajes cifrados a dispositivos no verificados en esta sala de este dispositivo.</string>
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">Esta sala no tiene direcciones locales</string>
-    <string name="room_settings_addresses_add_new_address">Dirección nueva (e.g #foo:chat.dingshunyu.top")</string>
+    <string name="room_settings_addresses_add_new_address">Dirección nueva (e.g #foo:chat.imzqqq.top")</string>
     <string name="room_settings_addresses_invalid_format_dialog_title">Formato de alias no válido</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' no es formato válido de alias</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">No habra dirección principal seleccionado. La dirección principal de esta sala por defecto será seleccionado al azar"</string>

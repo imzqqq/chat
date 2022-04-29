@@ -1841,7 +1841,7 @@
     <string name="soft_logout_clear_data_dialog_submit">Vyčistit data</string>
     <string name="template_soft_logout_sso_not_same_user_error">Tato relace je pro uživatele %1$s a Vy jste zadali údaje pro uživatele %2$s. ${app_name} toto nepodporuje.
 \nProsím, nejdříve vyčistěte data a pak se přihlaste k jinému účtu.</string>
-    <string name="permalink_malformed">Váš odkaz to.chat.dingshunyu.top byl chybný</string>
+    <string name="permalink_malformed">Váš odkaz to.chat.imzqqq.top byl chybný</string>
     <string name="bug_report_error_too_short">Popis je příliš krátký</string>
     <string name="notification_initial_sync">Prvotní sync…</string>
     <string name="settings_show_devices_list">Ukázat všechny mé relace</string>

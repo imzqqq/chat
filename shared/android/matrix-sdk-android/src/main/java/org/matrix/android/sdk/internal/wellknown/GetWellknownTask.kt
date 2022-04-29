@@ -39,7 +39,7 @@ import javax.net.ssl.HttpsURLConnection
 internal interface GetWellknownTask : Task<GetWellknownTask.Params, WellknownResult> {
     data class Params(
             /**
-             * domain, for instance "chat.dingshunyu.top"
+             * domain, for instance "chat.imzqqq.top"
              * the URL will be https://{domain}/.well-known/matrix/client
              */
             val domain: String,
@@ -79,7 +79,7 @@ internal class DefaultGetWellknownTask @Inject constructor(
      * - validate homeserver url and identity server url if provide in .well-known result
      * - return action and .well-known data
      *
-     * @param domain: homeserver domain, deduced from mx userId (ex: "chat.dingshunyu.top" from userId "@user:chat.dingshunyu.top")
+     * @param domain: homeserver domain, deduced from mx userId (ex: "chat.imzqqq.top" from userId "@user:chat.imzqqq.top")
      */
     private suspend fun findClientConfig(domain: String, client: OkHttpClient): WellknownResult {
         val wellKnownAPI = retrofitFactory.create(client, "https://dummy.org")

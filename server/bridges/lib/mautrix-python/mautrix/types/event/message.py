@@ -375,8 +375,8 @@ class MessageUnsigned(BaseUnsigned, SerializableAttrs):
 
 
 html_reply_fallback_format = ("<mx-reply><blockquote>"
-                              "<a href='https://to.chat.dingshunyu.top/#/{room_id}/{event_id}'>In reply to</a> "
-                              "<a href='https://to.chat.dingshunyu.top/#/{sender}'>{displayname}</a><br/>"
+                              "<a href='https://to.chat.imzqqq.top/#/{room_id}/{event_id}'>In reply to</a> "
+                              "<a href='https://to.chat.imzqqq.top/#/{sender}'>{displayname}</a><br/>"
                               "{content}"
                               "</blockquote></mx-reply>")
 

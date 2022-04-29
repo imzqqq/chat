@@ -6,4 +6,4 @@ bridges, like setting up the bridge, are right below the "Python-based bridges"
 header. Things specific to mautrix-instagram are under this page.
 
 ## Discussion
-Matrix room: [#instagram:maunium.net](https://to.chat.dingshunyu.top/#/#instagram:maunium.net)
+Matrix room: [#instagram:maunium.net](https://to.chat.imzqqq.top/#/#instagram:maunium.net)

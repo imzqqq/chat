@@ -30,7 +30,7 @@ const ClientsMatrix = ({data}) => {
         </Helmet>
         
           <h1>Clients Chat</h1>
-          <p>To connect to the Chat federation, you will use a client. These are some of the most popular Chat clients available today, and more are available at  <a href="/docs/projects/try-matrix-now/">try-matrix-now</a>. To get started using Chat, pick a client and join <a href="https://to.chat.dingshunyu.top/#/#matrix:matrix.org">#matrix:matrix.org</a></p>
+          <p>To connect to the Chat federation, you will use a client. These are some of the most popular Chat clients available today, and more are available at  <a href="/docs/projects/try-matrix-now/">try-matrix-now</a>. To get started using Chat, pick a client and join <a href="https://to.chat.imzqqq.top/#/#matrix:matrix.org">#matrix:matrix.org</a></p>
           <div className="mxgrid mxgrid--clients">
             <div className="mxgrid_item33">
               <h3 style={{"lineHeight": "0px", "paddingBottom": "10px"}}>
@@ -132,7 +132,7 @@ const ClientsMatrix = ({data}) => {
                 {clients.map(function(client, i) {
                     return (
                       <td key={client.title} data-platforms={client.platformString}>
-                        <small><a href={"https://to.chat.dingshunyu.top/#/" + client.room}>{client.room}</a></small>
+                        <small><a href={"https://to.chat.imzqqq.top/#/" + client.room}>{client.room}</a></small>
                       </td>
                     )
                   })}

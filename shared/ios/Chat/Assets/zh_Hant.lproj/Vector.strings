@@ -51,7 +51,7 @@
 "auth_phone_placeholder" = "電話號碼";
 "auth_repeat_password_placeholder" = "確認密碼";
 "auth_repeat_new_password_placeholder" = "確認新密碼";
-"auth_home_server_placeholder" = "URL（例如 https://chat.dingshunyu.top）";
+"auth_home_server_placeholder" = "URL（例如 https://chat.imzqqq.top）";
 "auth_identity_server_placeholder" = "URL（例如 https://vector.im）";
 "auth_invalid_login_param" = "使用者名稱或密碼錯誤";
 "auth_invalid_user_name" = "使用者名稱只能包含英數字、點 (.)、減號 (-) 、底線 (_)";
@@ -456,7 +456,7 @@
 "directory_server_all_rooms" = "在 %@ 伺服器上的所有聊天室";
 "directory_server_all_native_rooms" = "所有本地 Matrix 聊天室";
 "directory_server_type_homeserver" = "輸入一個家伺服器來列出所有公開聊天室";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 // Events formatter
 "event_formatter_member_updates" = "%tu 成員身份改變";
 "event_formatter_widget_added" = "%@ widget 已由 %@ 新增";

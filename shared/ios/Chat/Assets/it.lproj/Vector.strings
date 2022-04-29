@@ -3,7 +3,7 @@
 "title_favourites" = "Preferiti";
 "title_people" = "Chat dirette";
 "title_rooms" = "Stanze";
-"store_full_description" = "Element è un nuovo tipo di app di messaggistica e collaborazione che:\n\n1. Ti dà il controllo per preservare la tua privacy\n2. Ti permette di comunicare con chiunque nella rete Matrix e anche oltre, integrandosi con app come Slack\n3. Ti protegge da pubblicità, datamining, backdoor ed ecosistemi chiusi\n4. Ti protegge tramite crittografia end-to-end, con la firma incrociata per verificare gli altri\n\nElement è completamente diverso dalle altre app di messaggistica e collaborazione perchè è decentralizzato e open source.\n\nElement può essere auto-ospitato - o puoi scegliere un host - in modo da avere privacy, proprietà e controllo dei tuoi dati e delle conversazioni. Ti dà l'accesso a una rete aperta, perciò non sei limitato a parlare solo con gli altri utenti Element. È anche molto sicuro.\n\nElement può fare tutto questo perchè opera su Matrix - lo standard per le comunicazioni aperte e decentralizzate. \n\nElement ti dà il controllo lasciandoti scegliere chi ospita le tue conversazioni. Dall'app Element, puoi scegliere l'host in diversi modi:\n\n1. Ottieni un account gratuito sul server pubblico chat.dingshunyu.top\n2. Auto-ospita il tuo account gestendo un server su tuo hardware personale\n3. Registra un account su un server personalizzato sottoscrivendoti alla piattaforma di hosting Element Matrix Services\n\nPerché scegliere Element?\n\nPOSSIEDI I TUOI DATI: decidi tu dove tenere i tuoi dati e messaggi. Sei tu che li possiedi e li controlli, non una MEGADITTA che estrae i tuoi dati o ne dà l'accesso a terze parti.\n\nMESSAGGISTICA APERTA E COLLABORAZIONE: puoi parlare con chiunque nella rete Matrix, sia che usino Element o un'altra app Matrix, e addirittura anche se usano un altro sistema di messaggistica come Slack, IRC o XMPP.\n\nSUPER SICURO: vera crittografia end-to-end (solo chi è nella conversazione può decifrare i messaggi) e firma incrociata per verificare i dispositivi dei partecipanti alla conversazione.\n\nCOMUNICAZIONE COMPLETA: messaggi, telefonate e videochiamate, condivisione file, condivisione schermo e un sacco di integrazioni, bot e widget. Crea stanze, comunità, resta in contatto e porta a termine le cose.\n\nOVUNQUE TU SIA: resta in contatto ovunque tu sia con la cronologia dei messaggi totalmente sincronizzata tra i tuoi dispositivi e sul web su https://element.io/app.";
+"store_full_description" = "Element è un nuovo tipo di app di messaggistica e collaborazione che:\n\n1. Ti dà il controllo per preservare la tua privacy\n2. Ti permette di comunicare con chiunque nella rete Matrix e anche oltre, integrandosi con app come Slack\n3. Ti protegge da pubblicità, datamining, backdoor ed ecosistemi chiusi\n4. Ti protegge tramite crittografia end-to-end, con la firma incrociata per verificare gli altri\n\nElement è completamente diverso dalle altre app di messaggistica e collaborazione perchè è decentralizzato e open source.\n\nElement può essere auto-ospitato - o puoi scegliere un host - in modo da avere privacy, proprietà e controllo dei tuoi dati e delle conversazioni. Ti dà l'accesso a una rete aperta, perciò non sei limitato a parlare solo con gli altri utenti Element. È anche molto sicuro.\n\nElement può fare tutto questo perchè opera su Matrix - lo standard per le comunicazioni aperte e decentralizzate. \n\nElement ti dà il controllo lasciandoti scegliere chi ospita le tue conversazioni. Dall'app Element, puoi scegliere l'host in diversi modi:\n\n1. Ottieni un account gratuito sul server pubblico chat.imzqqq.top\n2. Auto-ospita il tuo account gestendo un server su tuo hardware personale\n3. Registra un account su un server personalizzato sottoscrivendoti alla piattaforma di hosting Element Matrix Services\n\nPerché scegliere Element?\n\nPOSSIEDI I TUOI DATI: decidi tu dove tenere i tuoi dati e messaggi. Sei tu che li possiedi e li controlli, non una MEGADITTA che estrae i tuoi dati o ne dà l'accesso a terze parti.\n\nMESSAGGISTICA APERTA E COLLABORAZIONE: puoi parlare con chiunque nella rete Matrix, sia che usino Element o un'altra app Matrix, e addirittura anche se usano un altro sistema di messaggistica come Slack, IRC o XMPP.\n\nSUPER SICURO: vera crittografia end-to-end (solo chi è nella conversazione può decifrare i messaggi) e firma incrociata per verificare i dispositivi dei partecipanti alla conversazione.\n\nCOMUNICAZIONE COMPLETA: messaggi, telefonate e videochiamate, condivisione file, condivisione schermo e un sacco di integrazioni, bot e widget. Crea stanze, comunità, resta in contatto e porta a termine le cose.\n\nOVUNQUE TU SIA: resta in contatto ovunque tu sia con la cronologia dei messaggi totalmente sincronizzata tra i tuoi dispositivi e sul web su https://element.io/app.";
 "title_groups" = "Comunità";
 "warning" = "Attenzione";
 "next" = "Prossimo";
@@ -35,7 +35,7 @@
 "auth_phone_placeholder" = "Numero di telefono";
 "auth_repeat_password_placeholder" = "Ripeti la password";
 "auth_repeat_new_password_placeholder" = "Conferma la nuova password";
-"auth_home_server_placeholder" = "URL (es. https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (es. https://chat.imzqqq.top)";
 "auth_identity_server_placeholder" = "URL (es. https://vector.im)";
 "auth_invalid_login_param" = "Nome utente e/o password non corretti";
 "auth_invalid_user_name" = "Il nome utente può contenere solo lettere, numeri, punti, trattini e linee basse";
@@ -486,7 +486,7 @@
 "directory_server_all_rooms" = "Tutte le stanze sul server %@";
 "directory_server_all_native_rooms" = "Tutte le stanze Matrix native";
 "directory_server_type_homeserver" = "Digita un Homeserver per vedere l'elenco delle sue stanze pubbliche";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 // Events formatter
 "event_formatter_member_updates" = "%tu cambi d'appartenenza";
 "event_formatter_widget_added" = "%@ widget aggiunto da %@";
@@ -1193,7 +1193,7 @@
 "create_room_section_footer_type" = "Le persone entrano in una stanza privata solo su invito.";
 "create_room_show_in_directory" = "Mostra la stanza nell'elenco";
 "create_room_section_header_address" = "Indirizzo stanza";
-"create_room_placeholder_address" = "#stanzatest:chat.dingshunyu.top";
+"create_room_placeholder_address" = "#stanzatest:chat.imzqqq.top";
 "room_info_list_room_encrypted" = "I messaggi in questa stanza sono cifrati end-to-end";
 "room_info_list_one_member" = "1 membro";
 "room_info_list_several_members" = "%@ membri";

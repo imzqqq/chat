@@ -358,7 +358,7 @@ class EmailConfig(Config):
         # Configuration for sending emails from Chat server.
         #
         # Server admins can configure custom templates for email content. See
-        # https://chat.docs.dingshunyu.top/templates.html for more information.
+        # https://chat.docs.imzqqq.top/templates.html for more information.
         #
         email:
           # The hostname of the outgoing SMTP server to use. Defaults to 'localhost'.
@@ -418,7 +418,7 @@ class EmailConfig(Config):
           notif_for_new_users: true
 
           # Custom URL for client links within the email notifications. By default
-          # links will be based on "https://to.chat.dingshunyu.top".
+          # links will be based on "https://to.chat.imzqqq.top".
           #
           # (This setting used to be called riot_base_url; the old name is still
           # supported for backwards-compatibility but is now deprecated.)
@@ -434,7 +434,7 @@ class EmailConfig(Config):
           # to the identity server as the org.matrix.web_client_location key. Defaults
           # to unset, giving no guidance to the identity server.
           #
-          invite_client_location: https://apps.chat.dingshunyu.top
+          invite_client_location: https://apps.chat.imzqqq.top
 
           # Subjects to use when sending emails from Chat server.
           #

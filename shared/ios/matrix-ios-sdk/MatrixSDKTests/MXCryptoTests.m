@@ -328,9 +328,9 @@
 - (void)testDownloadKeysWithUnreachableHS
 {
     [matrixSDKTestsE2EData doE2ETestWithBobAndAlice:self readyToTest:^(MXSession *bobSession, MXSession *aliceSession, XCTestExpectation *expectation) {
-        // Try to get info from a user on chat.dingshunyu.top.
-        // The local hs we use for tests is not federated and is not able to talk with chat.dingshunyu.top
-        [aliceSession.crypto.deviceList downloadKeys:@[bobSession.myUser.userId, @"@auser:chat.dingshunyu.top"] forceDownload:NO success:^(MXUsersDevicesMap<MXDeviceInfo *> *usersDevicesInfoMap, NSDictionary<NSString *,MXCrossSigningInfo *> *crossSigningKeysMap) {
+        // Try to get info from a user on chat.imzqqq.top.
+        // The local hs we use for tests is not federated and is not able to talk with chat.imzqqq.top
+        [aliceSession.crypto.deviceList downloadKeys:@[bobSession.myUser.userId, @"@auser:chat.imzqqq.top"] forceDownload:NO success:^(MXUsersDevicesMap<MXDeviceInfo *> *usersDevicesInfoMap, NSDictionary<NSString *,MXCrossSigningInfo *> *crossSigningKeysMap) {
 
             // We can get info only for Bob
             XCTAssertEqual(1, usersDevicesInfoMap.map.count);

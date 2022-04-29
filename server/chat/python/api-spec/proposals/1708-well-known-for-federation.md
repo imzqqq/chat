@@ -90,7 +90,7 @@ the request is considered to have failed, and no fallback to port 8880 takes
 place.
 
 The formal grammar for the `m.server` property is the same as that of a [server
-name](https://chat.api-spec.dingshunyu.top/appendices.html#server-name): it is a
+name](https://chat.api-spec.imzqqq.top/appendices.html#server-name): it is a
 hostname or IP address, followed by an optional port.
 
 ### Caching

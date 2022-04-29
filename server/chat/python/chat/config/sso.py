@@ -87,7 +87,7 @@ class SSOConfig(Config):
         # SAML2 and CAS.
         #
         # Server admins can configure custom templates for pages related to SSO. See
-        # https://chat.docs.dingshunyu.top/templates.html for more information.
+        # https://chat.docs.imzqqq.top/templates.html for more information.
         #
         sso:
             # A list of client URLs which are whitelisted so that the user does not

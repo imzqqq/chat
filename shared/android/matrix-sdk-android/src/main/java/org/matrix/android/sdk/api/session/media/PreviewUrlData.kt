@@ -33,7 +33,7 @@ package org.matrix.android.sdk.api.session.media
  *     "og:site_name": "Matrix.org",
  *     "og:title": "Matrix.org",
  *     "og:type": "website",
- *     "og:url": "https://chat.dingshunyu.top"
+ *     "og:url": "https://chat.imzqqq.top"
  * }
  * </pre>
  */

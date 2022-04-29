@@ -20,7 +20,7 @@ import com.squareup.moshi.JsonClass
 
 /**
  * Represents "Filter" as mentioned in the SPEC
- * https://chat.docs.dingshunyu.top/spec/client_server/r0.3.0.html#post-matrix-client-r0-user-userid-filter
+ * https://chat.docs.imzqqq.top/spec/client_server/r0.3.0.html#post-matrix-client-r0-user-userid-filter
  */
 @JsonClass(generateAdapter = true)
 data class EventFilter(

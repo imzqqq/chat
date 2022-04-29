@@ -19,7 +19,7 @@ package org.matrix.android.sdk.api.pushrules
 /**
  * Known rule ids
  *
- * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#predefined-rules
+ * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#predefined-rules
  */
 object RuleIds {
     // Default Override Rules

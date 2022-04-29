@@ -75,7 +75,7 @@ async def delete_portal(evt: CommandEvent) -> Optional[EventID]:
                                                             portal.cleanup_and_delete, "delete",
                                                             "Portal successfully deleted.")
     return await evt.reply("Please confirm deletion of portal "
-                           f"[{portal.alias or portal.mxid}](https://to.chat.dingshunyu.top/#/{portal.mxid}) "
+                           f"[{portal.alias or portal.mxid}](https://to.chat.imzqqq.top/#/{portal.mxid}) "
                            f"to Telegram chat \"{portal.title}\" "
                            "by typing `$cmdprefix+sp confirm-delete`"
                            "\n\n"
@@ -96,5 +96,5 @@ async def unbridge(evt: CommandEvent) -> Optional[EventID]:
                                                             portal.unbridge, "unbridge",
                                                             "Room successfully unbridged.")
     return await evt.reply(f"Please confirm unbridging chat \"{portal.title}\" from room "
-                           f"[{portal.alias or portal.mxid}](https://to.chat.dingshunyu.top/#/{portal.mxid}) "
+                           f"[{portal.alias or portal.mxid}](https://to.chat.imzqqq.top/#/{portal.mxid}) "
                            "by typing `$cmdprefix+sp confirm-unbridge`")

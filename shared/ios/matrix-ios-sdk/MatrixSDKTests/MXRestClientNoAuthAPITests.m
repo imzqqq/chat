@@ -363,7 +363,7 @@
             XCTAssertNotNil(theMXPublicRoom);
             XCTAssertEqualObjects(theMXPublicRoom.name, @"MX Public Room test");
             XCTAssertEqualObjects(theMXPublicRoom.topic, @"The public room used by SDK tests");
-            XCTAssertGreaterThan(theMXPublicRoom.numJoinedMembers, 0, @"The is at least mxBob at #matrix:chat.dingshunyu.top");
+            XCTAssertGreaterThan(theMXPublicRoom.numJoinedMembers, 0, @"The is at least mxBob at #matrix:chat.imzqqq.top");
 
             if (publicRoomsResponse.nextBatch)
             {
@@ -414,7 +414,7 @@
             XCTAssertNotNil(theMXPublicRoom);
             XCTAssertEqualObjects(theMXPublicRoom.name, @"MX Public Room test");
             XCTAssertEqualObjects(theMXPublicRoom.topic, @"The public room used by SDK tests");
-            XCTAssertGreaterThan(theMXPublicRoom.numJoinedMembers, 0, @"The is at least mxBob at #matrix:chat.dingshunyu.top");
+            XCTAssertGreaterThan(theMXPublicRoom.numJoinedMembers, 0, @"The is at least mxBob at #matrix:chat.imzqqq.top");
 
             if (publicRoomsResponse.nextBatch)
             {

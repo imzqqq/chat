@@ -25,12 +25,12 @@ var (
 )
 
 func TestMatrixURI_MatrixToURL(t *testing.T) {
-	assert.Equal(t, "https://to.chat.dingshunyu.top/#/%217NdBVvkd4aLSbgKt9RXl%3Aexample.org", roomIDLink.MatrixToURL())
-	assert.Equal(t, "https://to.chat.dingshunyu.top/#/%217NdBVvkd4aLSbgKt9RXl%3Aexample.org?via=maunium.net&via=matrix.org", roomIDViaLink.MatrixToURL())
-	assert.Equal(t, "https://to.chat.dingshunyu.top/#/%23someroom%3Aexample.org", roomAliasLink.MatrixToURL())
-	assert.Equal(t, "https://to.chat.dingshunyu.top/#/%217NdBVvkd4aLSbgKt9RXl%3Aexample.org/%24uOH4C9cK4HhMeFWkUXMbdF_dtndJ0j9je-kIK3XpV1s", roomIDEventLink.MatrixToURL())
-	assert.Equal(t, "https://to.chat.dingshunyu.top/#/%23someroom%3Aexample.org/%24uOH4C9cK4HhMeFWkUXMbdF_dtndJ0j9je-kIK3XpV1s", roomAliasEventLink.MatrixToURL())
-	assert.Equal(t, "https://to.chat.dingshunyu.top/#/%40user%3Aexample.org", userLink.MatrixToURL())
+	assert.Equal(t, "https://to.chat.imzqqq.top/#/%217NdBVvkd4aLSbgKt9RXl%3Aexample.org", roomIDLink.MatrixToURL())
+	assert.Equal(t, "https://to.chat.imzqqq.top/#/%217NdBVvkd4aLSbgKt9RXl%3Aexample.org?via=maunium.net&via=matrix.org", roomIDViaLink.MatrixToURL())
+	assert.Equal(t, "https://to.chat.imzqqq.top/#/%23someroom%3Aexample.org", roomAliasLink.MatrixToURL())
+	assert.Equal(t, "https://to.chat.imzqqq.top/#/%217NdBVvkd4aLSbgKt9RXl%3Aexample.org/%24uOH4C9cK4HhMeFWkUXMbdF_dtndJ0j9je-kIK3XpV1s", roomIDEventLink.MatrixToURL())
+	assert.Equal(t, "https://to.chat.imzqqq.top/#/%23someroom%3Aexample.org/%24uOH4C9cK4HhMeFWkUXMbdF_dtndJ0j9je-kIK3XpV1s", roomAliasEventLink.MatrixToURL())
+	assert.Equal(t, "https://to.chat.imzqqq.top/#/%40user%3Aexample.org", userLink.MatrixToURL())
 }
 
 func TestMatrixURI_String(t *testing.T) {
@@ -44,7 +44,7 @@ func TestMatrixURI_String(t *testing.T) {
 
 func TestParseMatrixURIOrMatrixToURL(t *testing.T) {
 	const inputURI = "matrix:u/user:example.org"
-	const inputMatrixToURL = "https://to.chat.dingshunyu.top/#/%40user%3Aexample.org"
+	const inputMatrixToURL = "https://to.chat.imzqqq.top/#/%40user%3Aexample.org"
 	parsed1, err := id.ParseMatrixURIOrMatrixToURL(inputURI)
 	require.NoError(t, err)
 	require.NotNil(t, parsed1)
@@ -110,10 +110,10 @@ func TestParseMatrixURI_EventID(t *testing.T) {
 }
 
 func TestParseMatrixToURL_RoomAlias(t *testing.T) {
-	parsed, err := id.ParseMatrixToURL("https://to.chat.dingshunyu.top/#/#someroom:example.org")
+	parsed, err := id.ParseMatrixToURL("https://to.chat.imzqqq.top/#/#someroom:example.org")
 	require.NoError(t, err)
 	require.NotNil(t, parsed)
-	parsedEncoded, err := id.ParseMatrixToURL("https://to.chat.dingshunyu.top/#/%23someroom%3Aexample.org")
+	parsedEncoded, err := id.ParseMatrixToURL("https://to.chat.imzqqq.top/#/%23someroom%3Aexample.org")
 	require.NoError(t, err)
 	require.NotNil(t, parsedEncoded)
 
@@ -122,16 +122,16 @@ func TestParseMatrixToURL_RoomAlias(t *testing.T) {
 }
 
 func TestParseMatrixToURL_RoomID(t *testing.T) {
-	parsed, err := id.ParseMatrixToURL("https://to.chat.dingshunyu.top/#/!7NdBVvkd4aLSbgKt9RXl:example.org")
+	parsed, err := id.ParseMatrixToURL("https://to.chat.imzqqq.top/#/!7NdBVvkd4aLSbgKt9RXl:example.org")
 	require.NoError(t, err)
 	require.NotNil(t, parsed)
-	parsedEncoded, err := id.ParseMatrixToURL("https://to.chat.dingshunyu.top/#/%217NdBVvkd4aLSbgKt9RXl%3Aexample.org")
+	parsedEncoded, err := id.ParseMatrixToURL("https://to.chat.imzqqq.top/#/%217NdBVvkd4aLSbgKt9RXl%3Aexample.org")
 	require.NoError(t, err)
 	require.NotNil(t, parsedEncoded)
-	parsedVia, err := id.ParseMatrixToURL("https://to.chat.dingshunyu.top/#/!7NdBVvkd4aLSbgKt9RXl:example.org?via=maunium.net&via=matrix.org")
+	parsedVia, err := id.ParseMatrixToURL("https://to.chat.imzqqq.top/#/!7NdBVvkd4aLSbgKt9RXl:example.org?via=maunium.net&via=matrix.org")
 	require.NoError(t, err)
 	require.NotNil(t, parsedVia)
-	parsedViaEncoded, err := id.ParseMatrixToURL("https://to.chat.dingshunyu.top/#/%217NdBVvkd4aLSbgKt9RXl%3Aexample.org?via=maunium.net&via=matrix.org")
+	parsedViaEncoded, err := id.ParseMatrixToURL("https://to.chat.imzqqq.top/#/%217NdBVvkd4aLSbgKt9RXl%3Aexample.org?via=maunium.net&via=matrix.org")
 	require.NoError(t, err)
 	require.NotNil(t, parsedViaEncoded)
 
@@ -142,10 +142,10 @@ func TestParseMatrixToURL_RoomID(t *testing.T) {
 }
 
 func TestParseMatrixToURL_UserID(t *testing.T) {
-	parsed, err := id.ParseMatrixToURL("https://to.chat.dingshunyu.top/#/@user:example.org")
+	parsed, err := id.ParseMatrixToURL("https://to.chat.imzqqq.top/#/@user:example.org")
 	require.NoError(t, err)
 	require.NotNil(t, parsed)
-	parsedEncoded, err := id.ParseMatrixToURL("https://to.chat.dingshunyu.top/#/%40user%3Aexample.org")
+	parsedEncoded, err := id.ParseMatrixToURL("https://to.chat.imzqqq.top/#/%40user%3Aexample.org")
 	require.NoError(t, err)
 	require.NotNil(t, parsedEncoded)
 
@@ -154,16 +154,16 @@ func TestParseMatrixToURL_UserID(t *testing.T) {
 }
 
 func TestParseMatrixToURL_EventID(t *testing.T) {
-	parsed1, err := id.ParseMatrixToURL("https://to.chat.dingshunyu.top/#/#someroom:example.org/$uOH4C9cK4HhMeFWkUXMbdF_dtndJ0j9je-kIK3XpV1s")
+	parsed1, err := id.ParseMatrixToURL("https://to.chat.imzqqq.top/#/#someroom:example.org/$uOH4C9cK4HhMeFWkUXMbdF_dtndJ0j9je-kIK3XpV1s")
 	require.NoError(t, err)
 	require.NotNil(t, parsed1)
-	parsed2, err := id.ParseMatrixToURL("https://to.chat.dingshunyu.top/#/!7NdBVvkd4aLSbgKt9RXl:example.org/$uOH4C9cK4HhMeFWkUXMbdF_dtndJ0j9je-kIK3XpV1s")
+	parsed2, err := id.ParseMatrixToURL("https://to.chat.imzqqq.top/#/!7NdBVvkd4aLSbgKt9RXl:example.org/$uOH4C9cK4HhMeFWkUXMbdF_dtndJ0j9je-kIK3XpV1s")
 	require.NoError(t, err)
 	require.NotNil(t, parsed2)
-	parsed1Encoded, err := id.ParseMatrixToURL("https://to.chat.dingshunyu.top/#/%23someroom:example.org/%24uOH4C9cK4HhMeFWkUXMbdF_dtndJ0j9je-kIK3XpV1s")
+	parsed1Encoded, err := id.ParseMatrixToURL("https://to.chat.imzqqq.top/#/%23someroom:example.org/%24uOH4C9cK4HhMeFWkUXMbdF_dtndJ0j9je-kIK3XpV1s")
 	require.NoError(t, err)
 	require.NotNil(t, parsed1)
-	parsed2Encoded, err := id.ParseMatrixToURL("https://to.chat.dingshunyu.top/#/%217NdBVvkd4aLSbgKt9RXl:example.org/%24uOH4C9cK4HhMeFWkUXMbdF_dtndJ0j9je-kIK3XpV1s")
+	parsed2Encoded, err := id.ParseMatrixToURL("https://to.chat.imzqqq.top/#/%217NdBVvkd4aLSbgKt9RXl:example.org/%24uOH4C9cK4HhMeFWkUXMbdF_dtndJ0j9je-kIK3XpV1s")
 	require.NoError(t, err)
 	require.NotNil(t, parsed2)
 

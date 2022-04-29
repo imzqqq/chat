@@ -3448,7 +3448,7 @@ const NSTimeInterval kResizeComposerAnimationDuration = .05;
                 
                 [self cancelEventSelection];
                 
-                // Create a to.chat.dingshunyu.top permalink that is common to all matrix clients
+                // Create a to.chat.imzqqq.top permalink that is common to all matrix clients
                 NSString *permalink = [MXTools permalinkToEvent:selectedEvent.eventId inRoom:selectedEvent.roomId];
                 
                 if (permalink)

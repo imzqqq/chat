@@ -30,7 +30,7 @@ Response:
 
 ```json
 {
-    "replacement_room": "!QtykxKocfsgujksjgd:chat.dingshunyu.top"
+    "replacement_room": "!QtykxKocfsgujksjgd:chat.imzqqq.top"
 }
 ```
 
@@ -46,12 +46,12 @@ When this is called, the server:
        "sender": "@alice:somewhere.com",
        "type": "m.room.create",
        "state_key": "",
-       "room_id": "!QtykxKocfsgujksjgd:chat.dingshunyu.top",
+       "room_id": "!QtykxKocfsgujksjgd:chat.imzqqq.top",
        "content": {
            "room_version": "2",
            "predecessor": {
-               "room_id": "!cURbaf:chat.dingshunyu.top",
-               "event_id": "$1235135aksjgdkg:chat.dingshunyu.top"
+               "room_id": "!cURbaf:chat.imzqqq.top",
+               "event_id": "$1235135aksjgdkg:chat.imzqqq.top"
            }
        }
    }
@@ -69,10 +69,10 @@ When this is called, the server:
        "sender": "@alice:somewhere.com",
        "type": "m.room.tombstone",
        "state_key": "",
-       "room_id": "!cURbaf:chat.dingshunyu.top",
+       "room_id": "!cURbaf:chat.imzqqq.top",
        "content": {
            "body": "This room has been replaced",
-           "replacement_room": "!QtykxKocfsgujksjgd:chat.dingshunyu.top"
+           "replacement_room": "!QtykxKocfsgujksjgd:chat.imzqqq.top"
        }
    }
    ```
@@ -291,7 +291,7 @@ PUT /chat/federation/v1/send/991079979
 
 {
  "origin_server_ts": 1404835423000,
- "origin": "chat.dingshunyu.top",
+ "origin": "chat.imzqqq.top",
  "pdus": [],
  "versioned_pdus": {
    2: [...]

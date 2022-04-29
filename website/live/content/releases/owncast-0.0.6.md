@@ -54,7 +54,7 @@ The `backup` directory will include a periodic backup of your Live server data. 
 
 ### Live Directory
 
-The [directory](https://directory.live.dingshunyu.top) can be easily enabled in the admin via the General settings page. We look forward to seeing everyone's streams show up there if you're looking for viewers, or are streaming something that's publicly available.
+The [directory](https://directory.live.imzqqq.top) can be easily enabled in the admin via the General settings page. We look forward to seeing everyone's streams show up there if you're looking for viewers, or are streaming something that's publicly available.
 
 # Changelog
 

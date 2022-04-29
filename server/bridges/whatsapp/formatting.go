@@ -121,7 +121,7 @@ func (formatter *Formatter) ParseWhatsApp(content *event.MessageEventContent, me
 		}
 		mxid, displayname := formatter.getMatrixInfoByJID(jid)
 		number := "@" + jid.User
-		output = strings.ReplaceAll(output, number, fmt.Sprintf(`<a href="https://to.chat.dingshunyu.top/#/%s">%s</a>`, mxid, displayname))
+		output = strings.ReplaceAll(output, number, fmt.Sprintf(`<a href="https://to.chat.imzqqq.top/#/%s">%s</a>`, mxid, displayname))
 		content.Body = strings.ReplaceAll(content.Body, number, displayname)
 	}
 	if output != content.Body {

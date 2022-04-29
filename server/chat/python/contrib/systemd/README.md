@@ -3,7 +3,7 @@ This is a setup for managing chat with a user contributed systemd unit
 file. It provides a `chat-server` systemd unit file that should be tailored 
 to accommodate your installation in accordance with the installation 
 instructions provided in
-[installation instructions](https://chat.docs.dingshunyu.top/setup/installation.html).
+[installation instructions](https://chat.docs.imzqqq.top/setup/installation.html).
 
 ## Setup
 1. Under the service section, ensure the `User` variable matches which user

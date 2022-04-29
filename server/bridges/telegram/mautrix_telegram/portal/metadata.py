@@ -138,7 +138,7 @@ class PortalMetadata(BasePortal, ABC):
                 info, mxid = await self.bot.get_me()
                 raise ValueError("Not enough Telegram users to create a chat. "
                                  "Invite more Telegram ghost users to the room, such as the "
-                                 f"relaybot ([{info.first_name}](https://to.chat.dingshunyu.top/#/{mxid})).")
+                                 f"relaybot ([{info.first_name}](https://to.chat.imzqqq.top/#/{mxid})).")
             raise ValueError("Not enough Telegram users to create a chat. "
                              "Invite more Telegram ghost users to the room.")
         if self.peer_type == "chat":

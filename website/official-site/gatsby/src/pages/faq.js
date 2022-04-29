@@ -617,7 +617,7 @@ const Faq = ({ data }) => {
                   create a user account
                 </a>{" "}
                 and come say hi on{" "}
-                <a href="https://to.chat.dingshunyu.top/#/#matrix:matrix.org">
+                <a href="https://to.chat.imzqqq.top/#/#matrix:matrix.org">
                   #matrix:matrix.org
                 </a>
                 !
@@ -720,7 +720,7 @@ const Faq = ({ data }) => {
               </h4>
               <p>
                 The point of entry for everything matrix is{" "}
-                <a href="https://to.chat.dingshunyu.top/#/#matrix:matrix.org">
+                <a href="https://to.chat.imzqqq.top/#/#matrix:matrix.org">
                   #matrix:matrix.org
                 </a>{" "}
                 aka #matrix on irc.freenode.
@@ -728,14 +728,14 @@ const Faq = ({ data }) => {
               <p>
                 If you're a developer and are looking to get involved with
                 building something on Chat, try{" "}
-                <a href="https://to.chat.dingshunyu.top/#/#matrix-dev:matrix.org">
+                <a href="https://to.chat.imzqqq.top/#/#matrix-dev:matrix.org">
                   #matrix-dev:matrix.org
                 </a>
                 .
               </p>
               <p>
                 If you host a{" "}
-                <a href="https://to.chat.dingshunyu.top/#/#synapse-community:matrix.org">
+                <a href="https://to.chat.imzqqq.top/#/#synapse-community:matrix.org">
                   #synapse-community:matrix.org
                 </a>
                 .
@@ -781,7 +781,7 @@ const Faq = ({ data }) => {
               </h4>
               <p>
                 You can link to a Chat room or user by going to{" "}
-                <a href="https://to.chat.dingshunyu.top">to.chat.dingshunyu.top</a>, and typing in the
+                <a href="https://to.chat.imzqqq.top">to.chat.imzqqq.top</a>, and typing in the
                 room alias or ID for linking to rooms, or a user's Chat ID for
                 linking to users. In the future, there will be a URL scheme for
                 Chat rooms and users, similar to email's <code>mailto</code>{" "}
@@ -1347,7 +1347,7 @@ const Faq = ({ data }) => {
                 We're not yet managing a registry of custom matrix event types.
                 If you have any particularly good ones you want to tell the
                 world about, please let us know on{" "}
-                <a href="https://to.chat.dingshunyu.top/#/#matrix-dev:matrix.org">
+                <a href="https://to.chat.imzqqq.top/#/#matrix-dev:matrix.org">
                   #matrix-dev:matrix.org
                 </a>
                 .
@@ -2404,7 +2404,7 @@ const Faq = ({ data }) => {
               <p>
                 Groups are now known as communities, they are collections of
                 rooms.{" "}
-                <a href="https://to.chat.dingshunyu.top/#/+matrix:matrix.org">
+                <a href="https://to.chat.imzqqq.top/#/+matrix:matrix.org">
                   +matrix:matrix.org
                 </a>{" "}
                 is the official community containing rooms managed by the core
@@ -2613,7 +2613,7 @@ const Faq = ({ data }) => {
               </p>
               <p>
                 To see the proposals currently under discussion,join us in{" "}
-                <a href="https://to.chat.dingshunyu.top/#/#matrix-spec:matrix.org">
+                <a href="https://to.chat.imzqqq.top/#/#matrix-spec:matrix.org">
                   #matrix-spec:matrix.org
                 </a>
                 .

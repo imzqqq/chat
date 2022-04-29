@@ -1870,7 +1870,7 @@
     <string name="soft_logout_clear_data_dialog_submit">Daten löschen</string>
     <string name="template_soft_logout_sso_not_same_user_error">Die aktuelle Sitzung gehört dem Benutzer %1$s. Die angegebenen Anmeldeinformationen sind vom Benutzer %2$s. Dies wird nicht von ${app_name} unterstützt.
 \nBitte zuerst die Daten löschen und dann erneut anmelden.</string>
-    <string name="permalink_malformed">to.chat.dingshunyu.top-Link fehlerhaft</string>
+    <string name="permalink_malformed">to.chat.imzqqq.top-Link fehlerhaft</string>
     <string name="bug_report_error_too_short">Die Beschreibung ist zu kurz</string>
     <string name="notification_initial_sync">Initiale Synchronisierung…</string>
     <string name="settings_show_devices_list">Alle meine Sitzungen anzeigen</string>

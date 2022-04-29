@@ -72,7 +72,7 @@ async def bridge(evt: CommandEvent) -> EventID:
     if portal.mxid:
         has_portal_message = (
             "That Telegram chat already has a portal at "
-            f"[{portal.alias or portal.mxid}](https://to.chat.dingshunyu.top/#/{portal.mxid}). ")
+            f"[{portal.alias or portal.mxid}](https://to.chat.imzqqq.top/#/{portal.mxid}). ")
         if not await user_has_power_level(portal.mxid, evt.az.intent, evt.sender, "unbridge"):
             return await evt.reply(f"{has_portal_message}"
                                    "Additionally, you do not have the permissions to unbridge "

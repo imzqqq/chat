@@ -8,13 +8,13 @@ const expect = chai.expect;
 describe('matrixUtils', function() {
     describe('parseHostnameAndPort', function() {
         it('returns correct results', async () => {
-            expect(matrixUtils.parseHostnameAndPort('chat.dingshunyu.top')).to.deep.equal({
-                hostname: 'chat.dingshunyu.top',
+            expect(matrixUtils.parseHostnameAndPort('chat.imzqqq.top')).to.deep.equal({
+                hostname: 'chat.imzqqq.top',
                 port: '8880',
                 defaultPort: true,
             });
-            expect(matrixUtils.parseHostnameAndPort('chat.dingshunyu.top:1234')).to.deep.equal({
-                hostname: 'chat.dingshunyu.top',
+            expect(matrixUtils.parseHostnameAndPort('chat.imzqqq.top:1234')).to.deep.equal({
+                hostname: 'chat.imzqqq.top',
                 port: '1234',
                 defaultPort: false,
             });
@@ -23,7 +23,7 @@ describe('matrixUtils', function() {
 
     describe('validateDomain', function() {
         it('returns correct results', async () => {
-            expect(matrixUtils.validateDomain('chat.dingshunyu.top')).to.be.true;
+            expect(matrixUtils.validateDomain('chat.imzqqq.top')).to.be.true;
             expect(matrixUtils.validateDomain('matrix.domain.tld')).to.be.true;
 
             expect(matrixUtils.validateDomain('1.2.3.4')).to.be.false;

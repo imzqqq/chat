@@ -10,8 +10,8 @@ that Alice is able to alter any entry within the dictionary including ones,
 that are above her own power level, which is inconsistent with the behaviour
 for the other two dictionaries.
 
-[m.room.power_levels](https://chat.api-spec.dingshunyu.top/client_server/r0.5.0#m-room-power-levels)
-[room version 1](https://chat.api-spec.dingshunyu.top/rooms/v1)
+[m.room.power_levels](https://chat.api-spec.imzqqq.top/client_server/r0.5.0#m-room-power-levels)
+[room version 1](https://chat.api-spec.imzqqq.top/rooms/v1)
 
 ## Proposal
 
@@ -47,7 +47,7 @@ are higher than her own, even though her own value is lower.
 The proposed solution is to alter the auth rules and add the `notifications` dictionary
 to the same rules that handle `events` and `users`.
 
-So the rule [10.d](https://chat.api-spec.dingshunyu.top/rooms/v1.html) of the auth rules in
+So the rule [10.d](https://chat.api-spec.imzqqq.top/rooms/v1.html) of the auth rules in
 room version 1 would be updated in a new room version to:
 
 

@@ -53,7 +53,7 @@ internal class MarkdownParser @Inject constructor(
         }
 
         return if (isFormattedTextPertinent(source, cleanHtmlText)) {
-            // According to https://chat.docs.dingshunyu.top/spec/client_server/latest#m-room-message-msgtypes:
+            // According to https://chat.docs.imzqqq.top/spec/client_server/latest#m-room-message-msgtypes:
             // The plain text version of the HTML should be provided in the body.
             // But it caused too many problems so it has been removed in #2002
             // See #739

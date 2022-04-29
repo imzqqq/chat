@@ -12,7 +12,7 @@ python -m pip install -e ".[all,lint,mypy,test]"
 python -m pip install tox
 
 # 1.Create the homeserver.yaml config once
-python3 -m chat.app.homeserver --server-name chat.dingshunyu.top --config-path homeserver.yaml --generate-config --report-stats=yes
+python3 -m chat.app.homeserver --server-name chat.imzqqq.top --config-path homeserver.yaml --generate-config --report-stats=yes
 
 # 2.Start the app
 python3 -m chat.app.homeserver --config-path homeserver.yaml

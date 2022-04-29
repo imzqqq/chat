@@ -12,7 +12,7 @@ LEGACY_SPAM_CHECKER_WARNING = """
 This server is using a spam checker module that is implementing the deprecated spam
 checker interface. Please check with the module's maintainer to see if a new version
 supporting Chat server's generic modules system is available.
-For more information, please see https://chat.docs.dingshunyu.top/modules.html
+For more information, please see https://chat.docs.imzqqq.top/modules.html
 ---------------------------------------------------------------------------------------"""
 
 

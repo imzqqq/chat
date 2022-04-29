@@ -84,11 +84,11 @@ issues so that there is always a way for new people to come and get involved.
 ## Getting Help
 
 For questions related to developing on Dendrite we have a dedicated room on
-Matrix [#dendrite-dev:matrix.org](https://to.chat.dingshunyu.top/#/#dendrite-dev:matrix.org)
+Matrix [#dendrite-dev:matrix.org](https://to.chat.imzqqq.top/#/#dendrite-dev:matrix.org)
 where we're happy to help.
 
 For more general questions please use
-[#dendrite:matrix.org](https://to.chat.dingshunyu.top/#/#dendrite:matrix.org).
+[#dendrite:matrix.org](https://to.chat.imzqqq.top/#/#dendrite:matrix.org).
 
 ## Sign off
 

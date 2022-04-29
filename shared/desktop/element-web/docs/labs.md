@@ -2,7 +2,7 @@
 
 If Labs is enabled in the [Chat config](config.md), you can enable some of these features by going
 to `Settings->Labs`. This list is non-exhaustive and subject to change, chat in
-[#element-web:chat.dingshunyu.top](https://to.chat.dingshunyu.top/#/#element-web:chat.dingshunyu.top) for more information.
+[#element-web:chat.imzqqq.top](https://to.chat.imzqqq.top/#/#element-web:chat.imzqqq.top) for more information.
 
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
 dropped. Ask in the room if you are unclear about any details here.**

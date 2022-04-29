@@ -59,7 +59,7 @@ class PushRulesConditionTest : MatrixTest {
         val simpleRoomMemberEvent = Event(
                 type = "m.room.member",
                 eventId = "mx0",
-                stateKey = "@foo:chat.dingshunyu.top",
+                stateKey = "@foo:chat.imzqqq.top",
                 content = rm.toContent(),
                 originServerTs = 0)
 
@@ -78,7 +78,7 @@ class PushRulesConditionTest : MatrixTest {
         Event(
                 type = "m.room.member",
                 eventId = "mx0",
-                stateKey = "@foo:chat.dingshunyu.top",
+                stateKey = "@foo:chat.imzqqq.top",
                 content = RoomMemberContent(
                         Membership.INVITE,
                         displayName = "Foo",

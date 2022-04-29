@@ -3,7 +3,7 @@
 This informal document contains specification for common brands that clients might experience
 in the wild as part of `m.login.sso` flows. To add your brand, open a PR against this document
 with the relevant additions (using the existing specification as reference) - an MSC is not
-required. Once opened, mention your PR in [#sct-office:chat.dingshunyu.top](https://to.chat.dingshunyu.top/#/#sct-office:chat.dingshunyu.top)
+required. Once opened, mention your PR in [#sct-office:chat.imzqqq.top](https://to.chat.imzqqq.top/#/#sct-office:chat.imzqqq.top)
 on Chat so it doesn't end up lost.
 
 Please also take some time to read the [contributing guidelines](https://github.com/matrix-org/matrix-doc/blob/master/CONTRIBUTING.rst)

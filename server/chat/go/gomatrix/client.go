@@ -1,6 +1,6 @@
 // Package gomatrix implements the Matrix Client-Server API.
 //
-// Specification can be found at http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html
+// Specification can be found at http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html
 package gomatrix
 
 import (
@@ -30,7 +30,7 @@ type Client struct {
 
 	// The ?user_id= query parameter for application services. This must be set *prior* to calling a method. If this is empty,
 	// no user_id parameter will be sent.
-	// See http://chat.docs.dingshunyu.top/spec/application_service/unstable.html#identity-assertion
+	// See http://chat.docs.imzqqq.top/spec/application_service/unstable.html#identity-assertion
 	AppServiceUserID string
 
 	syncingMutex sync.Mutex // protects syncingID
@@ -248,14 +248,14 @@ func (cli *Client) MakeRequest(method string, httpURL string, reqBody interface{
 	return nil
 }
 
-// CreateFilter makes an HTTP request according to http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-user-userid-filter
+// CreateFilter makes an HTTP request according to http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-user-userid-filter
 func (cli *Client) CreateFilter(filter json.RawMessage) (resp *RespCreateFilter, err error) {
 	urlPath := cli.BuildURL("user", cli.UserID, "filter")
 	err = cli.MakeRequest("POST", urlPath, &filter, &resp)
 	return
 }
 
-// SyncRequest makes an HTTP request according to http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#get-matrix-client-r0-sync
+// SyncRequest makes an HTTP request according to http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#get-matrix-client-r0-sync
 func (cli *Client) SyncRequest(timeout int, since, filterID string, fullState bool, setPresence string) (resp *RespSync, err error) {
 	query := map[string]string{
 		"timeout": strconv.Itoa(timeout),
@@ -293,7 +293,7 @@ func (cli *Client) register(u string, req *ReqRegister) (resp *RespRegister, uia
 	return
 }
 
-// Register makes an HTTP request according to http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-register
+// Register makes an HTTP request according to http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-register
 //
 // Registers with kind=user. For kind=guest, see RegisterGuest.
 func (cli *Client) Register(req *ReqRegister) (*RespRegister, *RespUserInteractive, error) {
@@ -301,7 +301,7 @@ func (cli *Client) Register(req *ReqRegister) (*RespRegister, *RespUserInteracti
 	return cli.register(u, req)
 }
 
-// RegisterGuest makes an HTTP request according to http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-register
+// RegisterGuest makes an HTTP request according to http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-register
 // with kind=guest.
 //
 // For kind=user, see Register.
@@ -313,7 +313,7 @@ func (cli *Client) RegisterGuest(req *ReqRegister) (*RespRegister, *RespUserInte
 	return cli.register(u, req)
 }
 
-// RegisterDummy performs m.login.dummy registration according to https://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#dummy-auth
+// RegisterDummy performs m.login.dummy registration according to https://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#dummy-auth
 //
 // Only a username and password need to be provided on the ReqRegister struct. Most local/developer homeservers will allow registration
 // this way. If the homeserver does not, an error is returned.
@@ -349,7 +349,7 @@ func (cli *Client) RegisterDummy(req *ReqRegister) (*RespRegister, error) {
 	return res, nil
 }
 
-// Login a user to the homeserver according to http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-login
+// Login a user to the homeserver according to http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-login
 // This does not set credentials on this client instance. See SetCredentials() instead.
 func (cli *Client) Login(req *ReqLogin) (resp *RespLogin, err error) {
 	urlPath := cli.BuildURL("login")
@@ -357,7 +357,7 @@ func (cli *Client) Login(req *ReqLogin) (resp *RespLogin, err error) {
 	return
 }
 
-// Logout the current user. See http://chat.docs.dingshunyu.top/spec/client_server/r0.6.0.html#post-matrix-client-r0-logout
+// Logout the current user. See http://chat.docs.imzqqq.top/spec/client_server/r0.6.0.html#post-matrix-client-r0-logout
 // This does not clear the credentials from the client instance. See ClearCredentials() instead.
 func (cli *Client) Logout() (resp *RespLogout, err error) {
 	urlPath := cli.BuildURL("logout")
@@ -365,7 +365,7 @@ func (cli *Client) Logout() (resp *RespLogout, err error) {
 	return
 }
 
-// LogoutAll logs the current user out on all devices. See https://chat.docs.dingshunyu.top/spec/client_server/r0.6.0#post-matrix-client-r0-logout-all
+// LogoutAll logs the current user out on all devices. See https://chat.docs.imzqqq.top/spec/client_server/r0.6.0#post-matrix-client-r0-logout-all
 // This does not clear the credentials from the client instance. See ClearCredentails() instead.
 func (cli *Client) LogoutAll() (resp *RespLogoutAll, err error) {
 	urlPath := cli.BuildURL("logout/all")
@@ -373,14 +373,14 @@ func (cli *Client) LogoutAll() (resp *RespLogoutAll, err error) {
 	return
 }
 
-// Versions returns the list of supported Matrix versions on this homeserver. See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#get-matrix-client-versions
+// Versions returns the list of supported Matrix versions on this homeserver. See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#get-matrix-client-versions
 func (cli *Client) Versions() (resp *RespVersions, err error) {
 	urlPath := cli.BuildBaseURL("chat", "client", "versions")
 	err = cli.MakeRequest("GET", urlPath, nil, &resp)
 	return
 }
 
-// PublicRooms returns the list of public rooms on target server. See https://chat.docs.dingshunyu.top/spec/client_server/r0.6.0#get-matrix-client-unstable-publicrooms
+// PublicRooms returns the list of public rooms on target server. See https://chat.docs.imzqqq.top/spec/client_server/r0.6.0#get-matrix-client-unstable-publicrooms
 func (cli *Client) PublicRooms(limit int, since string, server string) (resp *RespPublicRooms, err error) {
 	args := map[string]string{}
 
@@ -400,7 +400,7 @@ func (cli *Client) PublicRooms(limit int, since string, server string) (resp *Re
 }
 
 // PublicRoomsFiltered returns a subset of PublicRooms filtered server side.
-// See https://chat.docs.dingshunyu.top/spec/client_server/r0.6.0#post-matrix-client-unstable-publicrooms
+// See https://chat.docs.imzqqq.top/spec/client_server/r0.6.0#post-matrix-client-unstable-publicrooms
 func (cli *Client) PublicRoomsFiltered(limit int, since string, server string, filter string) (resp *RespPublicRooms, err error) {
 	content := map[string]string{}
 
@@ -427,7 +427,7 @@ func (cli *Client) PublicRoomsFiltered(limit int, since string, server string, f
 	return
 }
 
-// JoinRoom joins the client to a room ID or alias. See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-join-roomidoralias
+// JoinRoom joins the client to a room ID or alias. See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-join-roomidoralias
 //
 // If serverName is specified, this will be added as a query param to instruct the homeserver to join via that server. If content is specified, it will
 // be JSON encoded and used as the request body.
@@ -444,21 +444,21 @@ func (cli *Client) JoinRoom(roomIDorAlias, serverName string, content interface{
 	return
 }
 
-// GetDisplayName returns the display name of the user from the specified MXID. See https://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#get-matrix-client-r0-profile-userid-displayname
+// GetDisplayName returns the display name of the user from the specified MXID. See https://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#get-matrix-client-r0-profile-userid-displayname
 func (cli *Client) GetDisplayName(mxid string) (resp *RespUserDisplayName, err error) {
 	urlPath := cli.BuildURL("profile", mxid, "displayname")
 	err = cli.MakeRequest("GET", urlPath, nil, &resp)
 	return
 }
 
-// GetOwnDisplayName returns the user's display name. See https://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#get-matrix-client-r0-profile-userid-displayname
+// GetOwnDisplayName returns the user's display name. See https://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#get-matrix-client-r0-profile-userid-displayname
 func (cli *Client) GetOwnDisplayName() (resp *RespUserDisplayName, err error) {
 	urlPath := cli.BuildURL("profile", cli.UserID, "displayname")
 	err = cli.MakeRequest("GET", urlPath, nil, &resp)
 	return
 }
 
-// SetDisplayName sets the user's profile display name. See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#put-matrix-client-r0-profile-userid-displayname
+// SetDisplayName sets the user's profile display name. See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#put-matrix-client-r0-profile-userid-displayname
 func (cli *Client) SetDisplayName(displayName string) (err error) {
 	urlPath := cli.BuildURL("profile", cli.UserID, "displayname")
 	s := struct {
@@ -468,7 +468,7 @@ func (cli *Client) SetDisplayName(displayName string) (err error) {
 	return
 }
 
-// GetAvatarURL gets the user's avatar URL. See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#get-matrix-client-r0-profile-userid-avatar-url
+// GetAvatarURL gets the user's avatar URL. See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#get-matrix-client-r0-profile-userid-avatar-url
 func (cli *Client) GetAvatarURL() (string, error) {
 	urlPath := cli.BuildURL("profile", cli.UserID, "avatar_url")
 	s := struct {
@@ -483,7 +483,7 @@ func (cli *Client) GetAvatarURL() (string, error) {
 	return s.AvatarURL, nil
 }
 
-// SetAvatarURL sets the user's avatar URL. See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#put-matrix-client-r0-profile-userid-avatar-url
+// SetAvatarURL sets the user's avatar URL. See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#put-matrix-client-r0-profile-userid-avatar-url
 func (cli *Client) SetAvatarURL(url string) error {
 	urlPath := cli.BuildURL("profile", cli.UserID, "avatar_url")
 	s := struct {
@@ -497,19 +497,19 @@ func (cli *Client) SetAvatarURL(url string) error {
 	return nil
 }
 
-// GetStatus returns the status of the user from the specified MXID. See https://chat.docs.dingshunyu.top/spec/client_server/r0.6.0#get-matrix-client-r0-presence-userid-status
+// GetStatus returns the status of the user from the specified MXID. See https://chat.docs.imzqqq.top/spec/client_server/r0.6.0#get-matrix-client-r0-presence-userid-status
 func (cli *Client) GetStatus(mxid string) (resp *RespUserStatus, err error) {
 	urlPath := cli.BuildURL("presence", mxid, "status")
 	err = cli.MakeRequest("GET", urlPath, nil, &resp)
 	return
 }
 
-// GetOwnStatus returns the user's status. See https://chat.docs.dingshunyu.top/spec/client_server/r0.6.0#get-matrix-client-r0-presence-userid-status
+// GetOwnStatus returns the user's status. See https://chat.docs.imzqqq.top/spec/client_server/r0.6.0#get-matrix-client-r0-presence-userid-status
 func (cli *Client) GetOwnStatus() (resp *RespUserStatus, err error) {
 	return cli.GetStatus(cli.UserID)
 }
 
-// SetStatus sets the user's status. See https://chat.docs.dingshunyu.top/spec/client_server/r0.6.0#put-matrix-client-r0-presence-userid-status
+// SetStatus sets the user's status. See https://chat.docs.imzqqq.top/spec/client_server/r0.6.0#put-matrix-client-r0-presence-userid-status
 func (cli *Client) SetStatus(presence, status string) (err error) {
 	urlPath := cli.BuildURL("presence", cli.UserID, "status")
 	s := struct {
@@ -520,7 +520,7 @@ func (cli *Client) SetStatus(presence, status string) (err error) {
 	return
 }
 
-// SendMessageEvent sends a message event into a room. See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#put-matrix-client-r0-rooms-roomid-send-eventtype-txnid
+// SendMessageEvent sends a message event into a room. See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#put-matrix-client-r0-rooms-roomid-send-eventtype-txnid
 // contentJSON should be a pointer to something that can be encoded as JSON using json.Marshal.
 func (cli *Client) SendMessageEvent(roomID string, eventType string, contentJSON interface{}) (resp *RespSendEvent, err error) {
 	txnID := txnID()
@@ -529,7 +529,7 @@ func (cli *Client) SendMessageEvent(roomID string, eventType string, contentJSON
 	return
 }
 
-// SendStateEvent sends a state event into a room. See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#put-matrix-client-r0-rooms-roomid-state-eventtype-statekey
+// SendStateEvent sends a state event into a room. See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#put-matrix-client-r0-rooms-roomid-state-eventtype-statekey
 // contentJSON should be a pointer to something that can be encoded as JSON using json.Marshal.
 func (cli *Client) SendStateEvent(roomID, eventType, stateKey string, contentJSON interface{}) (resp *RespSendEvent, err error) {
 	urlPath := cli.BuildURL("rooms", roomID, "state", eventType, stateKey)
@@ -538,21 +538,21 @@ func (cli *Client) SendStateEvent(roomID, eventType, stateKey string, contentJSO
 }
 
 // SendText sends an m.room.message event into the given room with a msgtype of m.text
-// See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#m-text
+// See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#m-text
 func (cli *Client) SendText(roomID, text string) (*RespSendEvent, error) {
 	return cli.SendMessageEvent(roomID, "m.room.message",
 		TextMessage{MsgType: "m.text", Body: text})
 }
 
 // SendFormattedText sends an m.room.message event into the given room with a msgtype of m.text, supports a subset of HTML for formatting.
-// See https://chat.docs.dingshunyu.top/spec/client_server/r0.6.0#m-text
+// See https://chat.docs.imzqqq.top/spec/client_server/r0.6.0#m-text
 func (cli *Client) SendFormattedText(roomID, text, formattedText string) (*RespSendEvent, error) {
 	return cli.SendMessageEvent(roomID, "m.room.message",
 		TextMessage{MsgType: "m.text", Body: text, FormattedBody: formattedText, Format: "org.matrix.custom.html"})
 }
 
 // SendImage sends an m.room.message event into the given room with a msgtype of m.image
-// See https://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#m-image
+// See https://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#m-image
 func (cli *Client) SendImage(roomID, body, url string) (*RespSendEvent, error) {
 	return cli.SendMessageEvent(roomID, "m.room.message",
 		ImageMessage{
@@ -563,7 +563,7 @@ func (cli *Client) SendImage(roomID, body, url string) (*RespSendEvent, error) {
 }
 
 // SendVideo sends an m.room.message event into the given room with a msgtype of m.video
-// See https://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#m-video
+// See https://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#m-video
 func (cli *Client) SendVideo(roomID, body, url string) (*RespSendEvent, error) {
 	return cli.SendMessageEvent(roomID, "m.room.message",
 		VideoMessage{
@@ -574,13 +574,13 @@ func (cli *Client) SendVideo(roomID, body, url string) (*RespSendEvent, error) {
 }
 
 // SendNotice sends an m.room.message event into the given room with a msgtype of m.notice
-// See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#m-notice
+// See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#m-notice
 func (cli *Client) SendNotice(roomID, text string) (*RespSendEvent, error) {
 	return cli.SendMessageEvent(roomID, "m.room.message",
 		TextMessage{MsgType: "m.notice", Body: text})
 }
 
-// RedactEvent redacts the given event. See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#put-matrix-client-r0-rooms-roomid-redact-eventid-txnid
+// RedactEvent redacts the given event. See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#put-matrix-client-r0-rooms-roomid-redact-eventid-txnid
 func (cli *Client) RedactEvent(roomID, eventID string, req *ReqRedact) (resp *RespSendEvent, err error) {
 	txnID := txnID()
 	urlPath := cli.BuildURL("rooms", roomID, "redact", eventID, txnID)
@@ -588,13 +588,13 @@ func (cli *Client) RedactEvent(roomID, eventID string, req *ReqRedact) (resp *Re
 	return
 }
 
-// MarkRead marks eventID in roomID as read, signifying the event, and all before it have been read. See https://chat.docs.dingshunyu.top/spec/client_server/r0.6.0#post-matrix-client-r0-rooms-roomid-receipt-receipttype-eventid
+// MarkRead marks eventID in roomID as read, signifying the event, and all before it have been read. See https://chat.docs.imzqqq.top/spec/client_server/r0.6.0#post-matrix-client-r0-rooms-roomid-receipt-receipttype-eventid
 func (cli *Client) MarkRead(roomID, eventID string) error {
 	urlPath := cli.BuildURL("rooms", roomID, "receipt", "m.read", eventID)
 	return cli.MakeRequest("POST", urlPath, nil, nil)
 }
 
-// CreateRoom creates a new Matrix room. See https://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-createroom
+// CreateRoom creates a new Matrix room. See https://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-createroom
 //  resp, err := cli.CreateRoom(&gomatrix.ReqCreateRoom{
 //  	Preset: "public_chat",
 //  })
@@ -605,56 +605,56 @@ func (cli *Client) CreateRoom(req *ReqCreateRoom) (resp *RespCreateRoom, err err
 	return
 }
 
-// LeaveRoom leaves the given room. See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-rooms-roomid-leave
+// LeaveRoom leaves the given room. See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-rooms-roomid-leave
 func (cli *Client) LeaveRoom(roomID string) (resp *RespLeaveRoom, err error) {
 	u := cli.BuildURL("rooms", roomID, "leave")
 	err = cli.MakeRequest("POST", u, struct{}{}, &resp)
 	return
 }
 
-// ForgetRoom forgets a room entirely. See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-rooms-roomid-forget
+// ForgetRoom forgets a room entirely. See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-rooms-roomid-forget
 func (cli *Client) ForgetRoom(roomID string) (resp *RespForgetRoom, err error) {
 	u := cli.BuildURL("rooms", roomID, "forget")
 	err = cli.MakeRequest("POST", u, struct{}{}, &resp)
 	return
 }
 
-// InviteUser invites a user to a room. See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-rooms-roomid-invite
+// InviteUser invites a user to a room. See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-rooms-roomid-invite
 func (cli *Client) InviteUser(roomID string, req *ReqInviteUser) (resp *RespInviteUser, err error) {
 	u := cli.BuildURL("rooms", roomID, "invite")
 	err = cli.MakeRequest("POST", u, req, &resp)
 	return
 }
 
-// InviteUserByThirdParty invites a third-party identifier to a room. See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#invite-by-third-party-id-endpoint
+// InviteUserByThirdParty invites a third-party identifier to a room. See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#invite-by-third-party-id-endpoint
 func (cli *Client) InviteUserByThirdParty(roomID string, req *ReqInvite3PID) (resp *RespInviteUser, err error) {
 	u := cli.BuildURL("rooms", roomID, "invite")
 	err = cli.MakeRequest("POST", u, req, &resp)
 	return
 }
 
-// KickUser kicks a user from a room. See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-rooms-roomid-kick
+// KickUser kicks a user from a room. See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-rooms-roomid-kick
 func (cli *Client) KickUser(roomID string, req *ReqKickUser) (resp *RespKickUser, err error) {
 	u := cli.BuildURL("rooms", roomID, "kick")
 	err = cli.MakeRequest("POST", u, req, &resp)
 	return
 }
 
-// BanUser bans a user from a room. See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-rooms-roomid-ban
+// BanUser bans a user from a room. See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-rooms-roomid-ban
 func (cli *Client) BanUser(roomID string, req *ReqBanUser) (resp *RespBanUser, err error) {
 	u := cli.BuildURL("rooms", roomID, "ban")
 	err = cli.MakeRequest("POST", u, req, &resp)
 	return
 }
 
-// UnbanUser unbans a user from a room. See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-rooms-roomid-unban
+// UnbanUser unbans a user from a room. See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#post-matrix-client-r0-rooms-roomid-unban
 func (cli *Client) UnbanUser(roomID string, req *ReqUnbanUser) (resp *RespUnbanUser, err error) {
 	u := cli.BuildURL("rooms", roomID, "unban")
 	err = cli.MakeRequest("POST", u, req, &resp)
 	return
 }
 
-// UserTyping sets the typing status of the user. See https://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#put-matrix-client-r0-rooms-roomid-typing-userid
+// UserTyping sets the typing status of the user. See https://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#put-matrix-client-r0-rooms-roomid-typing-userid
 func (cli *Client) UserTyping(roomID string, typing bool, timeout int64) (resp *RespTyping, err error) {
 	req := ReqTyping{Typing: typing, Timeout: timeout}
 	u := cli.BuildURL("rooms", roomID, "typing", cli.UserID)
@@ -664,7 +664,7 @@ func (cli *Client) UserTyping(roomID string, typing bool, timeout int64) (resp *
 
 // StateEvent gets a single state event in a room. It will attempt to JSON unmarshal into the given "outContent" struct with
 // the HTTP response body, or return an error.
-// See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#get-matrix-client-r0-rooms-roomid-state-eventtype-statekey
+// See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#get-matrix-client-r0-rooms-roomid-state-eventtype-statekey
 func (cli *Client) StateEvent(roomID, eventType, stateKey string, outContent interface{}) (err error) {
 	u := cli.BuildURL("rooms", roomID, "state", eventType, stateKey)
 	err = cli.MakeRequest("GET", u, nil, outContent)
@@ -684,7 +684,7 @@ func (cli *Client) UploadLink(link string) (*RespMediaUpload, error) {
 }
 
 // UploadToContentRepo uploads the given bytes to the content repository and returns an MXC URI.
-// See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#post-matrix-media-r0-upload
+// See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#post-matrix-media-r0-upload
 func (cli *Client) UploadToContentRepo(content io.Reader, contentType string, contentLength int64) (*RespMediaUpload, error) {
 	req, err := http.NewRequest("POST", cli.BuildBaseURL("chat/media/r0/upload"), content)
 	if err != nil {
@@ -750,7 +750,7 @@ func (cli *Client) JoinedRooms() (resp *RespJoinedRooms, err error) {
 
 // Messages returns a list of message and state events for a room. It uses
 // pagination query parameters to paginate history in the room.
-// See https://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#get-matrix-client-r0-rooms-roomid-messages
+// See https://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#get-matrix-client-r0-rooms-roomid-messages
 func (cli *Client) Messages(roomID, from, to string, dir rune, limit int) (resp *RespMessages, err error) {
 	query := map[string]string{
 		"from": from,
@@ -769,7 +769,7 @@ func (cli *Client) Messages(roomID, from, to string, dir rune, limit int) (resp 
 }
 
 // TurnServer returns turn server details and credentials for the client to use when initiating calls.
-// See http://chat.docs.dingshunyu.top/spec/client_server/r0.2.0.html#get-matrix-client-r0-voip-turnserver
+// See http://chat.docs.imzqqq.top/spec/client_server/r0.2.0.html#get-matrix-client-r0-voip-turnserver
 func (cli *Client) TurnServer() (resp *RespTurnServer, err error) {
 	urlPath := cli.BuildURL("voip", "turnServer")
 	err = cli.MakeRequest("GET", urlPath, nil, &resp)

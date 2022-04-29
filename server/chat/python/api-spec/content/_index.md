@@ -32,7 +32,7 @@ information required to understand the specific APIs, including the
 section the [overall architecture](#architecture).
 
 The [Chat Client-Server API Swagger
-Viewer](https://chat.dingshunyu.top/docs/api/client-server/) is useful for
+Viewer](https://chat.imzqqq.top/docs/api/client-server/) is useful for
 browsing the Client-Server API.
 
 ## Introduction to the Chat APIs
@@ -262,41 +262,41 @@ appendices](/appendices#identifier-grammar) for full details of the
 structure of a room ID.
 
 The following conceptual diagram shows an `m.room.message` event being
-sent to the room `!qporfwt:chat.dingshunyu.top`:
+sent to the room `!qporfwt:chat.imzqqq.top`:
 
-    { @alice:chat.dingshunyu.top }                             { @bob:example.org }
+    { @alice:chat.imzqqq.top }                             { @bob:example.org }
             |                                                 ^
             |                                                 |
     [HTTP POST]                                  [HTTP GET]
-    Room ID: !qporfwt:chat.dingshunyu.top                 Room ID: !qporfwt:chat.dingshunyu.top
+    Room ID: !qporfwt:chat.imzqqq.top                 Room ID: !qporfwt:chat.imzqqq.top
     Event type: m.room.message                   Event type: m.room.message
     Content: { JSON object }                     Content: { JSON object }
             |                                                 |
             V                                                 |
     +------------------+                          +------------------+
     |   homeserver     |                          |   homeserver     |
-    |   chat.dingshunyu.top     |                          |   example.org    |
+    |   chat.imzqqq.top     |                          |   example.org    |
     +------------------+                          +------------------+
             |                                                 ^
             |         [HTTP PUT]                              |
-            |         Room ID: !qporfwt:chat.dingshunyu.top            |
+            |         Room ID: !qporfwt:chat.imzqqq.top            |
             |         Event type: m.room.message              |
             |         Content: { JSON object }                |
             `-------> Pointer to the preceding message  ------`
-                      PKI signature from chat.dingshunyu.top
+                      PKI signature from chat.imzqqq.top
                       Transaction-layer metadata
                       PKI Authorization header
 
                   ....................................
                  |           Shared Data              |
                  | State:                             |
-                 |   Room ID: !qporfwt:chat.dingshunyu.top     |
-                 |   Servers: chat.dingshunyu.top, example.org |
+                 |   Room ID: !qporfwt:chat.imzqqq.top     |
+                 |   Servers: chat.imzqqq.top, example.org |
                  |   Members:                         |
-                 |    - @alice:chat.dingshunyu.top             |
+                 |    - @alice:chat.imzqqq.top             |
                  |    - @bob:example.org              |
                  | Messages:                          |
-                 |   - @alice:chat.dingshunyu.top              |
+                 |   - @alice:chat.imzqqq.top              |
                  |     Content: { JSON object }       |
                  |....................................|
 
@@ -357,15 +357,15 @@ When resolving a room alias the server will also respond with a list of
 servers that are in the room that can be used to join via.
 
     HTTP GET
-    #matrix:example.org      !aaabaa:chat.dingshunyu.top
+    #matrix:example.org      !aaabaa:chat.imzqqq.top
        |                    ^
        |                    |
     _______V____________________|____
     |          example.org           |
     | Mappings:                      |
-    | #matrix >> !aaabaa:chat.dingshunyu.top  |
+    | #matrix >> !aaabaa:chat.imzqqq.top  |
     | #golf   >> !wfeiofh:sport.com  |
-    | #bike   >> !4rguxf:chat.dingshunyu.top  |
+    | #bike   >> !4rguxf:chat.imzqqq.top  |
     |________________________________|
 
 ### Identity

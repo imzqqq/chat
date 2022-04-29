@@ -24,17 +24,17 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 /**
- * Ref: https://chat.docs.dingshunyu.top/spec/identity_service/latest
+ * Ref: https://chat.docs.imzqqq.top/spec/identity_service/latest
  * This contain the requests which do not need an identity server token
  */
 internal interface IdentityAuthAPI {
 
     /**
-     * https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0.html#server-discovery
+     * https://chat.docs.imzqqq.top/spec/client_server/r0.4.0.html#server-discovery
      * Simple ping call to check if server exists and is alive
      *
-     * Ref: https://chat.docs.dingshunyu.top/spec/identity_service/unstable#status-check
-     * https://chat.docs.dingshunyu.top/spec/identity_service/latest#get-matrix-identity-v2
+     * Ref: https://chat.docs.imzqqq.top/spec/identity_service/unstable#status-check
+     * https://chat.docs.imzqqq.top/spec/identity_service/latest#get-matrix-identity-v2
      *
      * @return 200 in case of success
      */

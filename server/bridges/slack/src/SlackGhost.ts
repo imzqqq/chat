@@ -475,8 +475,8 @@ export class SlackGhost {
             originalHtml = originalBody;
         }
         return "<mx-reply><blockquote>"
-              + `<a href="https://to.chat.dingshunyu.top/#/${roomId}/${replyEvent.event_id}">In reply to</a>`
-              + `<a href="https://to.chat.dingshunyu.top/#/${replyEvent.sender}">${replyEvent.sender}</a>`
+              + `<a href="https://to.chat.imzqqq.top/#/${roomId}/${replyEvent.event_id}">In reply to</a>`
+              + `<a href="https://to.chat.imzqqq.top/#/${replyEvent.sender}">${replyEvent.sender}</a>`
               + `<br />${originalHtml}`
               + "</blockquote></mx-reply>";
     }

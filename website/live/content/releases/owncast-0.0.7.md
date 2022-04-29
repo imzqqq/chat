@@ -15,9 +15,9 @@ This release focuses on a handful of things that should improve the day to day u
 1. Unzip the file, allowing it to overwrite old files.
 1. Restart the service.
 
-**Beta:** The [Live installer](https://live.dingshunyu.top/quickstart) has support for upgrades, but this functionality is new. So feel free to give it a try by re-running it in your Live directory.
+**Beta:** The [Live installer](https://live.imzqqq.top/quickstart) has support for upgrades, but this functionality is new. So feel free to give it a try by re-running it in your Live directory.
 
-For installing from scratch, see the [Quickstart](https://live.dingshunyu.top/quickstart).
+For installing from scratch, see the [Quickstart](https://live.imzqqq.top/quickstart).
 
 ## Breaking changes
 
@@ -32,7 +32,7 @@ This release adds initial support for using different video codecs in your encod
 
 ## News in the admin
 
-We added a general purpose place to put information that may be of interest to people operating Live instances. Since we're not focused on having a social media presence, we wanted a simple way to reach out to people running Live if there's anything useful or important. This simply pulls a static [RSS feed](https://live.dingshunyu.top/news/index.json) from our web site that is hosted on Github pages, so we have no logs of this request. Additionally we [wipe out the referrer value](https://github.com/imzqqq-admin/blob/develop/utils/apis.ts#L122) in this request. Feel free to reach out if you have any concerns.
+We added a general purpose place to put information that may be of interest to people operating Live instances. Since we're not focused on having a social media presence, we wanted a simple way to reach out to people running Live if there's anything useful or important. This simply pulls a static [RSS feed](https://live.imzqqq.top/news/index.json) from our web site that is hosted on Github pages, so we have no logs of this request. Additionally we [wipe out the referrer value](https://github.com/imzqqq-admin/blob/develop/utils/apis.ts#L122) in this request. Feel free to reach out if you have any concerns.
 
 ## More detailed logging
 
@@ -58,7 +58,7 @@ To assist people in troubleshooting things that go wrong, this release offers mo
 - Allow system messages to utilize full html for styling [#747](https://github.com/imzqqq/issues/747)
 - Allow admins to disable the chat [#472](https://github.com/imzqqq/issues/472)
 - 3rd party actions + content modal [#679](https://github.com/imzqqq/issues/679)
-- Add noreferrer to all Live and Live-admin links to live.dingshunyu.top documentation [#822](https://github.com/imzqqq/issues/822)
+- Add noreferrer to all Live and Live-admin links to live.imzqqq.top documentation [#822](https://github.com/imzqqq/issues/822)
 - Add ability to upload logo via the admin [#716](https://github.com/imzqqq/issues/716)
 - Show initial loading spinner on the player [#848](https://github.com/imzqqq/issues/848)
 - Show news/updates in the admin [#865](https://github.com/imzqqq/issues/865)
@@ -94,7 +94,7 @@ To assist people in troubleshooting things that go wrong, this release offers mo
 
 ### Notes about future releases
 
-This will be the the last release to allow external access to the websocket. If you have built tools or utilities that utilize getting chat events it is recommended that you migrate to supported [3rd party APIs](https://live.dingshunyu.top/thirdparty/) instead. If you have a use case that doesn't fit these APIs please let us know and in the future we may find a safe way to support the features you require.
+This will be the the last release to allow external access to the websocket. If you have built tools or utilities that utilize getting chat events it is recommended that you migrate to supported [3rd party APIs](https://live.imzqqq.top/thirdparty/) instead. If you have a use case that doesn't fit these APIs please let us know and in the future we may find a safe way to support the features you require.
 
 ## Thank you to our contributors!
 

@@ -43,7 +43,7 @@ paths:
           type: string
           description: The room ID that is about to be joined.
           required: true
-          x-example: "!abc123:chat.dingshunyu.top"
+          x-example: "!abc123:chat.imzqqq.top"
         - in: path
           name: userId
           type: string
@@ -91,7 +91,7 @@ paths:
                   origin:
                     type: string
                     description: The name of the resident homeserver.
-                    example: "chat.dingshunyu.top"
+                    example: "chat.imzqqq.top"
                   origin_server_ts:
                     type: integer
                     format: int64
@@ -195,7 +195,7 @@ paths:
           type: string
           description: The room ID that is about to be joined.
           required: true
-          x-example: "!abc123:chat.dingshunyu.top"
+          x-example: "!abc123:chat.imzqqq.top"
         - in: path
           name: eventId
           type: string
@@ -216,7 +216,7 @@ paths:
               origin:
                 type: string
                 description: The name of the joining homeserver.
-                example: "chat.dingshunyu.top"
+                example: "chat.imzqqq.top"
               origin_server_ts:
                 type: integer
                 format: int64
@@ -276,7 +276,7 @@ paths:
             application/json: [
               200,
               {
-                "origin": "chat.dingshunyu.top",
+                "origin": "chat.imzqqq.top",
                 "auth_chain": [{"$ref": "examples/minimal_pdu.json"}],
                 "state": [{"$ref": "examples/minimal_pdu.json"}]
               }

@@ -429,8 +429,8 @@ characters or hyphens.
 
 Examples of valid server names are:
 
--   `chat.dingshunyu.top`
--   `chat.dingshunyu.top:8888`
+-   `chat.imzqqq.top`
+-   `chat.imzqqq.top:8888`
 -   `1.2.3.4` (IPv4 literal)
 -   `1.2.3.4:1234` (IPv4 literal with explicit port)
 -   `[1234:5678::abcd]` (IPv6 literal)
@@ -444,7 +444,7 @@ IPv6 literals.
 {{% /boxes/note %}}
 
 Server names must be treated case-sensitively: in other words,
-`@user:chat.dingshunyu.top` is a different person from `@user:MATRIX.ORG`.
+`@user:chat.imzqqq.top` is a different person from `@user:MATRIX.ORG`.
 
 Some recommendations for a choice of server name follow:
 
@@ -527,13 +527,13 @@ able to distinguish similar user IDs manually, if somewhat laboriously.
 
 We chose to disallow upper-case characters because we do not consider it
 valid to have two user IDs which differ only in case: indeed it should
-be possible to reach `@user:chat.dingshunyu.top` as `@USER:chat.dingshunyu.top`. However,
+be possible to reach `@user:chat.imzqqq.top` as `@USER:chat.imzqqq.top`. However,
 user IDs are necessarily used in a number of situations which are
 inherently case-sensitive (notably in the `state_key` of `m.room.member`
 events). Forbidding upper-case characters (and requiring homeservers to
 downcase usernames when creating user IDs for new users) is a relatively
-simple way to ensure that `@USER:chat.dingshunyu.top` cannot refer to a different
-user to `@user:chat.dingshunyu.top`.
+simple way to ensure that `@USER:chat.imzqqq.top` cannot refer to a different
+user to `@user:chat.imzqqq.top`.
 
 Finally, we decided to restrict the allowable punctuation to a very
 basic set to reduce the possibility of conflicts with special characters
@@ -624,7 +624,7 @@ homeserver to look up the alias.
 Room aliases MUST NOT exceed 255 bytes (including the `#` sigil and the
 domain).
 
-#### to.chat.dingshunyu.top navigation
+#### to.chat.imzqqq.top navigation
 
 {{% boxes/note %}}
 This namespacing is in place pending a `matrix://` (or similar) URI
@@ -632,43 +632,43 @@ scheme. This is **not** meant to be interpreted as an available web
 service - see below for more details.
 {{% /boxes/note %}}
 
-Rooms, users, aliases, and groups may be represented as a "to.chat.dingshunyu.top"
+Rooms, users, aliases, and groups may be represented as a "to.chat.imzqqq.top"
 URI. This URI can be used to reference particular objects in a given
 context, such as mentioning a user in a message or linking someone to a
 particular point in the room's history (a permalink).
 
-A to.chat.dingshunyu.top URI has the following format, based upon the specification
+A to.chat.imzqqq.top URI has the following format, based upon the specification
 defined in RFC 3986:
 
-> <https://to.chat.dingshunyu.top/#/>&lt;identifier&gt;/&lt;extra
+> <https://to.chat.imzqqq.top/#/>&lt;identifier&gt;/&lt;extra
 > parameter&gt;?&lt;additional arguments&gt;
 
 The identifier may be a room ID, room alias, user ID, or group ID. The
 extra parameter is only used in the case of permalinks where an event ID
-is referenced. The to.chat.dingshunyu.top URI, when referenced, must always start
-with `https://to.chat.dingshunyu.top/#/` followed by the identifier.
+is referenced. The to.chat.imzqqq.top URI, when referenced, must always start
+with `https://to.chat.imzqqq.top/#/` followed by the identifier.
 
 The `<additional arguments>` and the preceding question mark are
 optional and only apply in certain circumstances, documented below.
 
-Clients should not rely on to.chat.dingshunyu.top URIs falling back to a web server
+Clients should not rely on to.chat.imzqqq.top URIs falling back to a web server
 if accessed and instead should perform some sort of action within the
-client. For example, if the user were to click on a to.chat.dingshunyu.top URI for a
+client. For example, if the user were to click on a to.chat.imzqqq.top URI for a
 room alias, the client may open a view for the user to participate in
 the room.
 
-The components of the to.chat.dingshunyu.top URI (`<identifier>` and
+The components of the to.chat.imzqqq.top URI (`<identifier>` and
 `<extra parameter>`) are to be percent-encoded as per RFC 3986.
 
-Examples of to.chat.dingshunyu.top URIs are:
+Examples of to.chat.imzqqq.top URIs are:
 
--   Room alias: `https://to.chat.dingshunyu.top/#/%23somewhere%3Aexample.org`
--   Room: `https://to.chat.dingshunyu.top/#/!somewhere%3Aexample.org`
+-   Room alias: `https://to.chat.imzqqq.top/#/%23somewhere%3Aexample.org`
+-   Room: `https://to.chat.imzqqq.top/#/!somewhere%3Aexample.org`
 -   Permalink by room:
-    `https://to.chat.dingshunyu.top/#/!somewhere%3Aexample.org/%24event%3Aexample.org`
+    `https://to.chat.imzqqq.top/#/!somewhere%3Aexample.org/%24event%3Aexample.org`
 -   Permalink by room alias:
-    `https://to.chat.dingshunyu.top/#/%23somewhere:example.org/%24event%3Aexample.org`
--   User: `https://to.chat.dingshunyu.top/#/%40alice%3Aexample.org`
+    `https://to.chat.imzqqq.top/#/%23somewhere:example.org/%24event%3Aexample.org`
+-   User: `https://to.chat.imzqqq.top/#/%40alice%3Aexample.org`
 
 {{% boxes/note %}}
 Historically, clients have not produced URIs which are fully encoded.
@@ -678,10 +678,10 @@ the client if possible.
 {{% /boxes/note %}}
 
 {{% boxes/note %}}
-Clients should be aware that decoding a to.chat.dingshunyu.top URI may result in
+Clients should be aware that decoding a to.chat.imzqqq.top URI may result in
 extra slashes appearing due to some [room
 versions](/rooms). These slashes should normally be
-encoded when producing to.chat.dingshunyu.top URIs, however.
+encoded when producing to.chat.imzqqq.top URIs, however.
 {{% /boxes/note %}}
 
 {{% boxes/note %}}
@@ -689,8 +689,8 @@ encoded when producing to.chat.dingshunyu.top URIs, however.
 In prior versions of this specification, a concept of "groups" were mentioned
 to organize rooms. This functionality did not properly get introduced into
 the specification and is subsequently replaced with "Spaces". Historical
-to.chat.dingshunyu.top URIs pointing to groups might still exist: they take the form
-`https://to.chat.dingshunyu.top/#/%2Bexample%3Aexample.org` (where the `+` sigil may or
+to.chat.imzqqq.top URIs pointing to groups might still exist: they take the form
+`https://to.chat.imzqqq.top/#/%2Bexample%3Aexample.org` (where the `+` sigil may or
 may not be encoded).
 {{% /boxes/note %}}
 
@@ -698,7 +698,7 @@ may not be encoded).
 
 Room IDs are not routable on their own as there is no reliable domain to
 send requests to. This is partially mitigated with the addition of a
-`via` argument on a to.chat.dingshunyu.top URI, however the problem of routability is
+`via` argument on a to.chat.imzqqq.top URI, however the problem of routability is
 still present. Clients should do their best to route Room IDs to where
 they need to go, however they should also be aware of [issue
 \#1579](https://github.com/matrix-org/matrix-doc/issues/1579).
@@ -706,7 +706,7 @@ they need to go, however they should also be aware of [issue
 A room (or room permalink) which isn't using a room alias should supply
 at least one server using `via` in the `<additional arguments>`, like
 so:
-`https://to.chat.dingshunyu.top/#/!somewhere%3Aexample.org?via=example.org&via=alt.example.org`.
+`https://to.chat.imzqqq.top/#/!somewhere%3Aexample.org?via=example.org&via=alt.example.org`.
 The parameter can be supplied multiple times to specify multiple servers
 to try.
 

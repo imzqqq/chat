@@ -23,7 +23,7 @@ export default function Help() {
       content: (
         <div>
           <a
-            href="https://live.docs.dingshunyu.top/docs/configuration/?source=admin"
+            href="https://live.docs.imzqqq.top/docs/configuration/?source=admin"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -38,7 +38,7 @@ export default function Help() {
       content: (
         <div>
           <a
-            href="https://live.docs.dingshunyu.top/docs/broadcasting/?source=admin"
+            href="https://live.docs.imzqqq.top/docs/broadcasting/?source=admin"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -53,7 +53,7 @@ export default function Help() {
       content: (
         <div>
           <a
-            href="https://live.docs.dingshunyu.top/docs/embed/?source=admin"
+            href="https://live.docs.imzqqq.top/docs/embed/?source=admin"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -68,7 +68,7 @@ export default function Help() {
       content: (
         <div>
           <a
-            href="https://live.docs.dingshunyu.top/docs/website/?source=admin"
+            href="https://live.docs.imzqqq.top/docs/website/?source=admin"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -83,7 +83,7 @@ export default function Help() {
       content: (
         <div>
           <a
-            href="https://live.docs.dingshunyu.top/docs/encoding/?source=admin"
+            href="https://live.docs.imzqqq.top/docs/encoding/?source=admin"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -98,7 +98,7 @@ export default function Help() {
       content: (
         <div>
           <a
-            href="https://live.docs.dingshunyu.top/docs/storage/?source=admin"
+            href="https://live.docs.imzqqq.top/docs/storage/?source=admin"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -134,7 +134,7 @@ export default function Help() {
         <div>
           Most general questions are answered in our
           <a
-            href="https://live.docs.dingshunyu.top/docs/faq/?source=admin"
+            href="https://live.docs.imzqqq.top/docs/faq/?source=admin"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -155,7 +155,7 @@ export default function Help() {
         <div>
           You can build your own bots, overlays, tools and add-ons with our
           <a
-            href="https://live.dingshunyu.top/thirdparty?source=admin"
+            href="https://live.imzqqq.top/thirdparty?source=admin"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -176,7 +176,7 @@ export default function Help() {
           <Button
             target="_blank"
             rel="noopener noreferrer"
-            href="https://live.docs.dingshunyu.top/docs/troubleshooting/?source=admin"
+            href="https://live.docs.imzqqq.top/docs/troubleshooting/?source=admin"
             icon={<LinkOutlined />}
             type="primary"
           >
@@ -189,7 +189,7 @@ export default function Help() {
           <Button
             target="_blank"
             rel="noopener noreferrer"
-            href="https://live.docs.dingshunyu.top/docs?source=admin"
+            href="https://live.docs.imzqqq.top/docs?source=admin"
             icon={<LinkOutlined />}
             type="primary"
           >

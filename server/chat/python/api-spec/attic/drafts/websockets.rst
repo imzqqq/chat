@@ -42,13 +42,13 @@ Client request:
 .. code:: http
 
     GET /chat/client/v2_alpha/stream?access_token=123456&since=s72594_4483_1934 HTTP/1.1
-    Host: chat.dingshunyu.top
+    Host: chat.imzqqq.top
     Upgrade: websocket
     Connection: Upgrade
     Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==
     Sec-WebSocket-Protocol: m.json
     Sec-WebSocket-Version: 13
-    Origin: https://chat.dingshunyu.top
+    Origin: https://chat.imzqqq.top
 
 Server response:
 
@@ -200,7 +200,7 @@ Client request:
         "id": "12345",
         "method": "send",
         "params": {
-            "room_id": "!d41d8cd:chat.dingshunyu.top",
+            "room_id": "!d41d8cd:chat.imzqqq.top",
             "event_type": "m.room.message",
             "content": {
                 "msgtype": "m.text",
@@ -216,7 +216,7 @@ Server response:
     {
         "id": "12345",
         "result": {
-            "event_id": "$66697273743031:chat.dingshunyu.top"
+            "event_id": "$66697273743031:chat.imzqqq.top"
         }
     }
 

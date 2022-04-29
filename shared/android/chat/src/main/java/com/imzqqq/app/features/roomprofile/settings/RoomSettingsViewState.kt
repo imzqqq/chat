@@ -14,7 +14,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 
 data class RoomSettingsViewState(
         val roomId: String,
-        // Default value: https://chat.docs.dingshunyu.top/spec/client_server/r0.6.1#id88
+        // Default value: https://chat.docs.imzqqq.top/spec/client_server/r0.6.1#id88
         val currentHistoryVisibility: RoomHistoryVisibility = RoomHistoryVisibility.SHARED,
         val currentRoomJoinRules: RoomJoinRules = RoomJoinRules.INVITE,
         val currentGuestAccess: GuestAccess? = null,

@@ -17,7 +17,7 @@
 
 // String for App Store
 "store_short_description" = "Secure decentralised chat/VoIP";
-"store_full_description" = "Element is a new type of messenger and collaboration app that:\n\n1. Puts you in control to preserve your privacy\n2. Lets you communicate with anyone in the Matrix network, and even beyond by integrating with apps such as Slack\n3. Protects you from advertising, datamining, backdoors and walled gardens\n4. Secures you through end-to-end encryption, with cross-signing to verify others\n\nElement is completely different from other messaging and collaboration apps because it is decentralised and open source.\n\nElement lets you self-host - or choose a host - so that you have privacy, ownership and control of your data and conversations. It gives you access to an open network; so you’re not just stuck speaking to other Element users only. And it is very secure.\n\nElement is able to do all this because it operates on Matrix - the standard for open, decentralised communication. \n\nElement puts you in control by letting you choose who hosts your conversations. From the Element app, you can choose to host in different ways:\n\n1. Get a free account on the chat.dingshunyu.top public server\n2. Self-host your account by running a server on your own hardware\n3. Sign up for an account on a custom server by simply subscribing to the Element Matrix Services hosting platform\n\nWhy choose Element?\n\nOWN YOUR DATA: You decide where to keep your data and messages. You own it and control it, not some MEGACORP that mines your data or gives access to third parties.\n\nOPEN MESSAGING AND COLLABORATION: You can chat with anyone else in the Matrix network, whether they’re using Element or another Matrix app, and even if they are using a different messaging system of the likes of Slack, IRC or XMPP.\n\nSUPER-SECURE: Real end-to-end encryption (only those in the conversation can decrypt messages), and cross-signing to verify the devices of conversation participants.\n\nCOMPLETE COMMUNICATION: Messaging, voice and video calls, file sharing, screen sharing and a whole bunch of integrations, bots and widgets. Build rooms, communities, stay in touch and get things done.\n\nEVERYWHERE YOU ARE: Stay in touch wherever you are with fully synchronised message history across all your devices and on the web at https://element.io/app.";
+"store_full_description" = "Element is a new type of messenger and collaboration app that:\n\n1. Puts you in control to preserve your privacy\n2. Lets you communicate with anyone in the Matrix network, and even beyond by integrating with apps such as Slack\n3. Protects you from advertising, datamining, backdoors and walled gardens\n4. Secures you through end-to-end encryption, with cross-signing to verify others\n\nElement is completely different from other messaging and collaboration apps because it is decentralised and open source.\n\nElement lets you self-host - or choose a host - so that you have privacy, ownership and control of your data and conversations. It gives you access to an open network; so you’re not just stuck speaking to other Element users only. And it is very secure.\n\nElement is able to do all this because it operates on Matrix - the standard for open, decentralised communication. \n\nElement puts you in control by letting you choose who hosts your conversations. From the Element app, you can choose to host in different ways:\n\n1. Get a free account on the chat.imzqqq.top public server\n2. Self-host your account by running a server on your own hardware\n3. Sign up for an account on a custom server by simply subscribing to the Element Matrix Services hosting platform\n\nWhy choose Element?\n\nOWN YOUR DATA: You decide where to keep your data and messages. You own it and control it, not some MEGACORP that mines your data or gives access to third parties.\n\nOPEN MESSAGING AND COLLABORATION: You can chat with anyone else in the Matrix network, whether they’re using Element or another Matrix app, and even if they are using a different messaging system of the likes of Slack, IRC or XMPP.\n\nSUPER-SECURE: Real end-to-end encryption (only those in the conversation can decrypt messages), and cross-signing to verify the devices of conversation participants.\n\nCOMPLETE COMMUNICATION: Messaging, voice and video calls, file sharing, screen sharing and a whole bunch of integrations, bots and widgets. Build rooms, communities, stay in touch and get things done.\n\nEVERYWHERE YOU ARE: Stay in touch wherever you are with fully synchronised message history across all your devices and on the web at https://element.io/app.";
 "store_promotional_text" = "Privacy-preserving chat and collaboration app, on an open network. Decentralised to put you in control. No datamining, no backdoors and no third party access.";
 
 // Titles
@@ -96,7 +96,7 @@
 "auth_phone_placeholder" = "Phone number";
 "auth_repeat_password_placeholder" = "Repeat password";
 "auth_repeat_new_password_placeholder" = "Confirm your new password";
-"auth_home_server_placeholder" = "URL (e.g. https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (e.g. https://chat.imzqqq.top)";
 "auth_identity_server_placeholder" = "URL (e.g. https://vector.im)";
 "auth_invalid_login_param" = "Incorrect username and/or password";
 "auth_invalid_user_name" = "User names may only contain letters, numbers, dots, hyphens and underscores";
@@ -868,7 +868,7 @@ Tap the + to start adding people.";
 "directory_server_all_rooms" = "All rooms on %@ server";
 "directory_server_all_native_rooms" = "All native Matrix rooms";
 "directory_server_type_homeserver" = "Type a homeserver to list public rooms from";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 
 // Events formatter
 "event_formatter_member_updates" = "%tu membership changes";
@@ -1645,7 +1645,7 @@ Tap the + to start adding people.";
 "create_room_section_footer_type" = "People join a private room only with the room invitation.";
 "create_room_show_in_directory" = "Show the room in the directory";
 "create_room_section_header_address" = "Room address";
-"create_room_placeholder_address" = "#testroom:chat.dingshunyu.top";
+"create_room_placeholder_address" = "#testroom:chat.imzqqq.top";
 
 // MARK: - Room Info
 

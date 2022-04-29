@@ -23,7 +23,7 @@ import com.squareup.moshi.JsonClass
  */
 
 /**
- * https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0.html#server-discovery
+ * https://chat.docs.imzqqq.top/spec/client_server/r0.4.0.html#server-discovery
  * <pre>
  * {
  *     "preferredDomain": "https://jitsi.riot.im/"

@@ -82,7 +82,7 @@ it should return an error response with HTTP status code of 400 and an `errcode`
 of `M_UNABLE_TO_GRANT_JOIN`. The joining server should attempt to join via another
 resident homeserver.
 
-From the perspective of the [auth rules](https://spec.chat.dingshunyu.top/unstable/rooms/v1/#authorization-rules),
+From the perspective of the [auth rules](https://spec.chat.imzqqq.top/unstable/rooms/v1/#authorization-rules),
 the `restricted` join rule has the same behavior as `public`, with the additional
 caveat that servers must ensure that, for `m.room.member` events with a `membership` of `join`:
 
@@ -129,7 +129,7 @@ join a room.
 
 ## Summary of the behaviour of join rules
 
-See the [join rules](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#m-room-join-rules)
+See the [join rules](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#m-room-join-rules)
 specification for full details; the summary below is meant to highlight the differences
 between `public`, `invite`, and `restricted` from a user perspective. Note that
 all join rules are subject to `ban` and `server_acls`.
@@ -172,7 +172,7 @@ understand the new behaviour). This could be solved by introducing a new room
 version, thus it seems clearer to introduce a new join rule -- `restricted`.
 
 Using an `allow` key with the `invite` join rules to broaden who can join was rejected
-as an option since it requires weakening the [auth rules](https://spec.chat.dingshunyu.top/unstable/rooms/v1/#authorization-rules).
+as an option since it requires weakening the [auth rules](https://spec.chat.imzqqq.top/unstable/rooms/v1/#authorization-rules).
 From the perspective of the auth rules, the `restricted` join rule is identical
 to `public` with additional checks on the signature of the event.
 
@@ -260,7 +260,7 @@ If there is some overlap between the lists of servers the join request should
 complete successfully.
 
 Clients should also consider the authorised servers when generating candidate
-servers to embed in links to the room, e.g. via to.chat.dingshunyu.top.
+servers to embed in links to the room, e.g. via to.chat.imzqqq.top.
 
 A future MSC may define a way to override or update the `via` key in a coherent
 manner.
@@ -272,7 +272,7 @@ of the #catlovers:example.com space" is less useful since:
 
 1. Users in the banned room could simply leave it at any time
 2. This functionality is already partially provided by
-   [Moderation policy lists](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#moderation-policy-lists). [↩](#a1)
+   [Moderation policy lists](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#moderation-policy-lists). [↩](#a1)
 
 <a id="f2"/>[2]: Note that there is nothing stopping users sending and
 receiving invites in `public` rooms today, and they work as you might expect.

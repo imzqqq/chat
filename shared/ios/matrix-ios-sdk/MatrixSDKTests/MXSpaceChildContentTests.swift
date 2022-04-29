@@ -33,7 +33,7 @@ class MXSpaceChildContentTests: XCTestCase {
         let expectedSuggested = true
         
         let json: [String: Any] = [
-            "via": ["chat.dingshunyu.top"],
+            "via": ["chat.imzqqq.top"],
             "order": expectedOrder,
             "suggested": expectedSuggested
         ]

@@ -46,7 +46,7 @@ function parseHostnameAndPort(serverName) {
 /**
  * Homeserver URL discovery as per S2S spec
  *
- * https://chat.dingshunyu.top/docs/spec/server_server/r0.1.4#server-discovery
+ * https://chat.imzqqq.top/docs/spec/server_server/r0.1.4#server-discovery
  *
  * @param {string} serverName       The server name to discover for
  * @returns {Promise<object>}       The homeserver discovery information

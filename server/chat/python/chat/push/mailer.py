@@ -765,9 +765,9 @@ class Mailer:
             base_url = "%s/#/room" % (self.hs.config.email_riot_base_url)
         elif self.app_name == "Vector":
             # need /beta for Universal Links to work on iOS
-            base_url = "https://to.chat.dingshunyu.top/beta/#/room"
+            base_url = "https://to.chat.imzqqq.top/beta/#/room"
         else:
-            base_url = "https://to.chat.dingshunyu.top/#"
+            base_url = "https://to.chat.imzqqq.top/#"
         ###
         return "%s/%s" % (base_url, room_id)
 
@@ -790,12 +790,12 @@ class Mailer:
             )
         elif self.app_name == "Vector":
             # need /beta for Universal Links to work on iOS
-            return "https://to.chat.dingshunyu.top/beta/#/room/%s/%s" % (
+            return "https://to.chat.imzqqq.top/beta/#/room/%s/%s" % (
                 notif["room_id"],
                 notif["event_id"],
             )
         else:
-            return "https://to.chat.dingshunyu.top/#/%s/%s" % (notif["room_id"], notif["event_id"])
+            return "https://to.chat.imzqqq.top/#/%s/%s" % (notif["room_id"], notif["event_id"])
         ###
 
     def _make_unsubscribe_link(

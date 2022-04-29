@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # this script will use the api:
-#    https://chat.docs.dingshunyu.top/admin_api/purge_history_api.html
+#    https://chat.docs.imzqqq.top/admin_api/purge_history_api.html
 # 
 # It will purge all messages in a list of rooms up to a cetrain event
 

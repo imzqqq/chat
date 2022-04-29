@@ -126,7 +126,7 @@ describe('editor/deserialize', function() {
             expect(parts[5]).toStrictEqual({ type: "plain", text: "indeed" });
         });
         it('user pill', function() {
-            const html = "Hi <a href=\"https://to.chat.dingshunyu.top/#/@alice:hs.tld\">Alice</a>!";
+            const html = "Hi <a href=\"https://to.chat.imzqqq.top/#/@alice:hs.tld\">Alice</a>!";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(3);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "Hi " });
@@ -134,7 +134,7 @@ describe('editor/deserialize', function() {
             expect(parts[2]).toStrictEqual({ type: "plain", text: "!" });
         });
         it('user pill with displayname containing backslash', function() {
-            const html = "Hi <a href=\"https://to.chat.dingshunyu.top/#/@alice:hs.tld\">Alice\\</a>!";
+            const html = "Hi <a href=\"https://to.chat.imzqqq.top/#/@alice:hs.tld\">Alice\\</a>!";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(3);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "Hi " });
@@ -142,7 +142,7 @@ describe('editor/deserialize', function() {
             expect(parts[2]).toStrictEqual({ type: "plain", text: "!" });
         });
         it('user pill with displayname containing opening square bracket', function() {
-            const html = "Hi <a href=\"https://to.chat.dingshunyu.top/#/@alice:hs.tld\">Alice[[</a>!";
+            const html = "Hi <a href=\"https://to.chat.imzqqq.top/#/@alice:hs.tld\">Alice[[</a>!";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(3);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "Hi " });
@@ -150,7 +150,7 @@ describe('editor/deserialize', function() {
             expect(parts[2]).toStrictEqual({ type: "plain", text: "!" });
         });
         it('user pill with displayname containing closing square bracket', function() {
-            const html = "Hi <a href=\"https://to.chat.dingshunyu.top/#/@alice:hs.tld\">Alice]</a>!";
+            const html = "Hi <a href=\"https://to.chat.imzqqq.top/#/@alice:hs.tld\">Alice]</a>!";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(3);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "Hi " });
@@ -158,7 +158,7 @@ describe('editor/deserialize', function() {
             expect(parts[2]).toStrictEqual({ type: "plain", text: "!" });
         });
         it('room pill', function() {
-            const html = "Try <a href=\"https://to.chat.dingshunyu.top/#/#room:hs.tld\">#room:hs.tld</a>?";
+            const html = "Try <a href=\"https://to.chat.imzqqq.top/#/#room:hs.tld\">#room:hs.tld</a>?";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(3);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "Try " });

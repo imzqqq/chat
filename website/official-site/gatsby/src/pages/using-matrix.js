@@ -70,7 +70,7 @@ const UsingMatrix = ({ data }) => {
                 <h3>Rooms</h3>
                 <p>
                   Join their main room:{" "}
-                  <a href={"https://to.chat.dingshunyu.top/#/" + fm.main_room}>
+                  <a href={"https://to.chat.imzqqq.top/#/" + fm.main_room}>
                     {fm.main_room}
                   </a>
                 </p>
@@ -79,7 +79,7 @@ const UsingMatrix = ({ data }) => {
                   fm.rooms.map(room => {
                     return (
                       <div key={fm.title + room}>
-                        <a href={"https://to.chat.dingshunyu.top/#/" + room}>{room}</a>
+                        <a href={"https://to.chat.imzqqq.top/#/" + room}>{room}</a>
                       </div>
                     );
                   })}

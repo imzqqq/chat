@@ -17,4 +17,4 @@ All setup and usage instructions are located on
 contains a general overview of what is supported by the bridge.
 
 ## Discussion
-Matrix room: [#imessage:maunium.net](https://to.chat.dingshunyu.top/#/#imessage:maunium.net)
+Matrix room: [#imessage:maunium.net](https://to.chat.imzqqq.top/#/#imessage:maunium.net)

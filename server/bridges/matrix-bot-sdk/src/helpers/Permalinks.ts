@@ -48,7 +48,7 @@ export class Permalinks {
      * @returns {string} A room permalink.
      */
     public static forRoom(roomIdOrAlias: string, viaServers: string[] = []): string {
-        return `https://to.chat.dingshunyu.top/#/${roomIdOrAlias}${Permalinks.encodeViaArgs(viaServers)}`;
+        return `https://to.chat.imzqqq.top/#/${roomIdOrAlias}${Permalinks.encodeViaArgs(viaServers)}`;
     }
 
     /**
@@ -57,7 +57,7 @@ export class Permalinks {
      * @returns {string} A user permalink.
      */
     public static forUser(userId: string): string {
-        return `https://to.chat.dingshunyu.top/#/${userId}`;
+        return `https://to.chat.imzqqq.top/#/${userId}`;
     }
 
     /**
@@ -68,20 +68,20 @@ export class Permalinks {
      * @returns {string} An event permalink.
      */
     public static forEvent(roomIdOrAlias: string, eventId: string, viaServers: string[] = []): string {
-        return `https://to.chat.dingshunyu.top/#/${roomIdOrAlias}/${eventId}${Permalinks.encodeViaArgs(viaServers)}`;
+        return `https://to.chat.imzqqq.top/#/${roomIdOrAlias}/${eventId}${Permalinks.encodeViaArgs(viaServers)}`;
     }
 
     /**
      * Parses a permalink URL into usable parts.
-     * @param {string} matrixTo The to.chat.dingshunyu.top URL to parse.
+     * @param {string} matrixTo The to.chat.imzqqq.top URL to parse.
      * @returns {PermalinkParts} The parts of the permalink.
      */
     public static parseUrl(matrixTo: string): PermalinkParts {
-        if (!matrixTo || !matrixTo.startsWith("https://to.chat.dingshunyu.top/#/")) {
-            throw new Error("Not a valid to.chat.dingshunyu.top URL");
+        if (!matrixTo || !matrixTo.startsWith("https://to.chat.imzqqq.top/#/")) {
+            throw new Error("Not a valid to.chat.imzqqq.top URL");
         }
 
-        const parts = matrixTo.substring("https://to.chat.dingshunyu.top/#/".length).split("/");
+        const parts = matrixTo.substring("https://to.chat.imzqqq.top/#/".length).split("/");
 
         const entity = decodeURIComponent(parts[0]);
         if (entity[0] === '@') {

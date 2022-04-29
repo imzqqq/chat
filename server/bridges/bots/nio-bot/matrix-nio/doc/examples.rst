@@ -125,7 +125,7 @@ example we'll document automatic emoji verification.
 It may look long at first but much of the program is actually documentation
 explaining how it works. If you have questions about the example, please
 don't hesitate to ask them on
-`#nio:matrix.org <https://to.chat.dingshunyu.top/#/!JiiOHXrIUCtcOJsZCa:matrix.org?via=matrix.org&via=maunium.net&via=t2l.io>`_.
+`#nio:matrix.org <https://to.chat.imzqqq.top/#/!JiiOHXrIUCtcOJsZCa:matrix.org?via=matrix.org&via=maunium.net&via=t2l.io>`_.
 
 If you are stuck, it may be useful to read this primer from Matrix.org on
 implementing end-to-end encryption:

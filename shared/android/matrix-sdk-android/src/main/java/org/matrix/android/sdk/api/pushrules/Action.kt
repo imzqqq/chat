@@ -29,7 +29,7 @@ sealed class Action {
         const val ACTION_DONT_NOTIFY = "dont_notify"
         const val ACTION_COALESCE = "coalesce"
 
-        // Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#tweaks
+        // Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#tweaks
         const val ACTION_OBJECT_SET_TWEAK_KEY = "set_tweak"
 
         const val ACTION_OBJECT_SET_TWEAK_VALUE_SOUND = "sound"
@@ -42,7 +42,7 @@ sealed class Action {
 }
 
 /**
- * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#actions
+ * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#actions
  *
  * Convert
  * <pre>

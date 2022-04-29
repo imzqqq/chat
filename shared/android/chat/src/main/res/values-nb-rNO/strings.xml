@@ -1301,7 +1301,7 @@
     <string name="login_signin_matrix_id_error_invalid_matrix_id">Dette er ikke en gyldig brukeridentifikator. Forventet format: \'@bruker:homeserver.org\'</string>
     <string name="soft_logout_signin_e2e_warning_notice">Logg på for å gjenopprette krypteringsnøkler som er lagret eksklusivt på denne enheten. Du trenger dem for å lese alle dine sikre meldinger på hvilken som helst enhet.</string>
     <string name="soft_logout_clear_data_title">Fjern personlige data</string>
-    <string name="permalink_malformed">Linken din til to.chat.dingshunyu.top var feil</string>
+    <string name="permalink_malformed">Linken din til to.chat.imzqqq.top var feil</string>
     <string name="bug_report_error_too_short">Beskrivelsen er for kort</string>
     <string name="autocomplete_limited_results">Viser bare de første resultatene, skriv flere bokstaver…</string>
     <string name="hide_advanced">Skjul avansert</string>

@@ -48,7 +48,7 @@ jobs:
         uses: EndBug/add-and-commit@v5
         with:
           author_name: Live
-          author_email: owncast@live.dingshunyu.top
+          author_email: owncast@live.imzqqq.top
           message: "Update dynamic content"
           add: "static/api/development/index.html data/contributors.json"
         env:

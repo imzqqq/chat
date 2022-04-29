@@ -10,7 +10,7 @@ export const DEFAULTS: ConfigOptions = {
     // Base URL to the REST interface of the integrations server
     integrations_rest_url: "https://scalar.vector.im/api",
     // Where to send bug reports. If not specified, bugs cannot be sent.
-    bug_report_endpoint_url: "https://bugs.dingshunyu.top/api/submit",
+    bug_report_endpoint_url: "https://bugs.imzqqq.top/api/submit",
     // Meet conference options
     jitsi: {
         // Default conference domain
@@ -19,7 +19,7 @@ export const DEFAULTS: ConfigOptions = {
     desktopBuilds: {
         available: true,
         logo: require("../res/img/element-desktop-logo.svg"),
-        url: "https://apps.chat.dingshunyu.top/desktop",
+        url: "https://apps.chat.imzqqq.top/desktop",
     },
 };
 

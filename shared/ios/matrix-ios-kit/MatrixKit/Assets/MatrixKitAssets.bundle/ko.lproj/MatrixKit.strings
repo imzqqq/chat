@@ -9,10 +9,10 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "계정 만들기:";
-"login_server_url_placeholder" = "URL (예: https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (예: https://chat.imzqqq.top)";
 "login_home_server_title" = "홈서버 URL:";
 "login_identity_server_title" = "ID 서버 URL:";
-"login_user_id_placeholder" = "Matrix ID (예: @bob:chat.dingshunyu.top 혹은 bob)";
+"login_user_id_placeholder" = "Matrix ID (예: @bob:chat.imzqqq.top 혹은 bob)";
 "login_password_placeholder" = "비밀번호";
 "login_optional_field" = "선택";
 "login_email_placeholder" = "이메일 주소";

@@ -14,7 +14,7 @@ La grande nouveauté de cette version 3.3, c'est la possibilité de créer une p
 
 ![img](/img/news/release-3.3/fr/FR-page-accueil-personnalisee-900px.png "la page d'accueil réalisée sur notre instance de test")
 
-Pour personnaliser votre page d'accueil, il vous suffit, une fois connecté, de vous rendre dans le menu *Administration*, rubrique *Configuration*, onglet *Homepage*. Là, un bloc totalement vide vous permet d'ajouter les éléments souhaités, au format Markdown ou HTML. De nombreuses possibilités de mises en forme s'offrent à vous via des balises HTML personnalisées créées pour l'occasion. Pour les découvrir, n'hésitez pas à consulter [notre documentation (en anglais)](https://tube.docs.dingshunyu.top/api-custom-client-markup).
+Pour personnaliser votre page d'accueil, il vous suffit, une fois connecté, de vous rendre dans le menu *Administration*, rubrique *Configuration*, onglet *Homepage*. Là, un bloc totalement vide vous permet d'ajouter les éléments souhaités, au format Markdown ou HTML. De nombreuses possibilités de mises en forme s'offrent à vous via des balises HTML personnalisées créées pour l'occasion. Pour les découvrir, n'hésitez pas à consulter [notre documentation (en anglais)](https://tube.docs.imzqqq.top/api-custom-client-markup).
 
 ![img](/img/news/release-3.3/fr/FR-admin-page-accueil.png "le code correspondant à la page d'accueil affichée ci-dessus")
 

@@ -216,7 +216,7 @@ export abstract class BaseSlackHandler {
                 text = text.slice(0, match.index) + displayName + text.slice(match.index + match[0].length);
             } else {
                 displayName = users.display_name || userId;
-                text = text.slice(0, match.index) + `<https://to.chat.dingshunyu.top/#/${userId}|${displayName}>` + text.slice(match.index + match[0].length);
+                text = text.slice(0, match.index) + `<https://to.chat.imzqqq.top/#/${userId}|${displayName}>` + text.slice(match.index + match[0].length);
             }
         }
         return text;

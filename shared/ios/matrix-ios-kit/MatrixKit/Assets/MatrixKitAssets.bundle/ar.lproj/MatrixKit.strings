@@ -58,15 +58,15 @@
 "login_error_no_login_flow" = "لَقَد فَشلنَا في اِستِرداد بَيَانات المُصادَقَة مِن هَذَا الخادِم الرَّئيس";
 "login_error_title" = "فَشَلَ تَسجيلُ الدُّخُول";
 "login_prompt_email_token" = "يُرجى إدخال رَمز التَّحقُّق مِنَ البَريد الإلِكتُرونيّ الخاص بِك:";
-"login_user_id_placeholder" = "مُعَرِّف Matrix (مِثل bob:chat.dingshunyu.top@ أو bob)";
+"login_user_id_placeholder" = "مُعَرِّف Matrix (مِثل bob:chat.imzqqq.top@ أو bob)";
 "login_display_name_placeholder" = "الاِسم الظّاهِر (مِثل. محمد عبدالله)";
 "login_optional_field" = "اِختياري";
 "login_password_placeholder" = "كَلِمَةُ المُرُور";
-"login_identity_server_info" = "تُوَفِّرُ Matrix خَوادِم هُويَّة لتَتَبُع عَناوين البَريد الإلِكتُرونيّ وَما إلى ذَلِكَ مِنَ الَّتي تَنتَمي إلى مُعَرِّفات Matrix. فَقَط https://chat.dingshunyu.top مُتَوَفِّر حاليًا.";
+"login_identity_server_info" = "تُوَفِّرُ Matrix خَوادِم هُويَّة لتَتَبُع عَناوين البَريد الإلِكتُرونيّ وَما إلى ذَلِكَ مِنَ الَّتي تَنتَمي إلى مُعَرِّفات Matrix. فَقَط https://chat.imzqqq.top مُتَوَفِّر حاليًا.";
 "login_identity_server_title" = "عُنوان URL لِخادِم الهُويَّة:";
 "login_home_server_info" = "الخادِم الرَّئيس الخاصّ بِك يُخَزِّنُ جَميع مُحادَثاتك وَمَعلُومات حِسابك";
 "login_home_server_title" = "عُنوان URL لِلخادِم الرَّئيس:";
-"login_server_url_placeholder" = "عُنوان URL (مِثل https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "عُنوان URL (مِثل https://chat.imzqqq.top)";
 
 // Login Screen
 "login_create_account" = "إنشاءُ حِساب:";
@@ -363,7 +363,7 @@
 "settings_title_notifications" = "الإِشعَارات";
 
 // contacts list screen 
-"invitation_message" = "أوَدُّ أن أتَحَدَّثَ مَعكَ بِاستِخدامِ matrix. يرُجَى زيارَةُ المَوقِع https://chat.dingshunyu.top لِلحُصُولِ عَلَى مَزيدٍ مِنَ المَعلُومات.";
+"invitation_message" = "أوَدُّ أن أتَحَدَّثَ مَعكَ بِاستِخدامِ matrix. يرُجَى زيارَةُ المَوقِع https://chat.imzqqq.top لِلحُصُولِ عَلَى مَزيدٍ مِنَ المَعلُومات.";
 
 // members list Screen 
 

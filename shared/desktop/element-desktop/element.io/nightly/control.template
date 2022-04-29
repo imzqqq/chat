@@ -6,6 +6,6 @@ Depends: libgtk-3-0, libnotify4, libnss3, libxss1, libxtst6, xdg-utils, libatspi
 Recommends: libappindicator3-1
 Section: net
 Priority: extra
-Homepage: https://chat.dingshunyu.top/
+Homepage: https://chat.imzqqq.top/
 Description: 
  A feature-rich client for Chat (nightly unstable build).

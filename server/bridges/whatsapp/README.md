@@ -15,4 +15,4 @@ All setup and usage instructions are located on [docs.mau.fi]. Some quick links:
 contains a general overview of what is supported by the bridge.
 
 ## Discussion
-Matrix room: [#whatsapp:maunium.net](https://to.chat.dingshunyu.top/#/#whatsapp:maunium.net)
+Matrix room: [#whatsapp:maunium.net](https://to.chat.imzqqq.top/#/#whatsapp:maunium.net)

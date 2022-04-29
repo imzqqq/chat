@@ -8,7 +8,7 @@ describe('MentionPill', () => {
         it('should accept static inputs', async () => {
             const userId = "@test:example.org";
             const displayName = "John Doe";
-            const expectedHtml = `<a href="https://to.chat.dingshunyu.top/#/${userId}">${displayName}</a>`;
+            const expectedHtml = `<a href="https://to.chat.imzqqq.top/#/${userId}">${displayName}</a>`;
             const expectedText = displayName;
 
             const mention = await MentionPill.withDisplayName(userId, displayName);
@@ -20,7 +20,7 @@ describe('MentionPill', () => {
         it('should generate a pill for a user', async () => {
             const userId = "@test:example.org";
             const displayName = userId; //"John Doe";
-            const expectedHtml = `<a href="https://to.chat.dingshunyu.top/#/${userId}">${displayName}</a>`;
+            const expectedHtml = `<a href="https://to.chat.imzqqq.top/#/${userId}">${displayName}</a>`;
             const expectedText = displayName;
 
             const mention = await MentionPill.forUser(userId);
@@ -34,7 +34,7 @@ describe('MentionPill', () => {
 
             const userId = "@test:example.org";
             const displayName = "John Doe";
-            const expectedHtml = `<a href="https://to.chat.dingshunyu.top/#/${userId}">${displayName}</a>`;
+            const expectedHtml = `<a href="https://to.chat.imzqqq.top/#/${userId}">${displayName}</a>`;
             const expectedText = displayName;
 
             const profileSpy = simple.mock(client, "getUserProfile").callFn((uid) => {
@@ -59,7 +59,7 @@ describe('MentionPill', () => {
             const userId = "@test:example.org";
             const roomId = "!somewhere:example.org";
             const displayName = "John Doe";
-            const expectedHtml = `<a href="https://to.chat.dingshunyu.top/#/${userId}">${displayName}</a>`;
+            const expectedHtml = `<a href="https://to.chat.imzqqq.top/#/${userId}">${displayName}</a>`;
             const expectedText = displayName;
 
             const profileSpy = simple.mock(client, "getUserProfile").callFn((uid) => {
@@ -86,7 +86,7 @@ describe('MentionPill', () => {
             const userId = "@test:example.org";
             const roomId = "!somewhere:example.org";
             const displayName = "John Doe";
-            const expectedHtml = `<a href="https://to.chat.dingshunyu.top/#/${userId}">${userId}</a>`;
+            const expectedHtml = `<a href="https://to.chat.imzqqq.top/#/${userId}">${userId}</a>`;
             const expectedText = userId;
 
             const profileSpy = simple.mock(client, "getUserProfile").callFn((uid) => {
@@ -110,7 +110,7 @@ describe('MentionPill', () => {
             const userId = "@test:example.org";
             const roomId = "!somewhere:example.org";
             const displayName = "John Doe";
-            const expectedHtml = `<a href="https://to.chat.dingshunyu.top/#/${userId}">${userId}</a>`;
+            const expectedHtml = `<a href="https://to.chat.imzqqq.top/#/${userId}">${userId}</a>`;
             const expectedText = userId;
 
             const profileSpy = simple.mock(client, "getUserProfile").callFn((uid) => {
@@ -131,7 +131,7 @@ describe('MentionPill', () => {
         it('should generate a pill for a room alias', async () => {
             const roomAlias = "#test:example.org";
             const displayName = roomAlias;
-            const expectedHtml = `<a href="https://to.chat.dingshunyu.top/#/${roomAlias}">${displayName}</a>`;
+            const expectedHtml = `<a href="https://to.chat.imzqqq.top/#/${roomAlias}">${displayName}</a>`;
             const expectedText = displayName;
 
             const mention = await MentionPill.forRoom(roomAlias);
@@ -143,7 +143,7 @@ describe('MentionPill', () => {
         it('should generate a pill for a room ID', async () => {
             const roomId = "!test:example.org";
             const displayName = roomId;
-            const expectedHtml = `<a href="https://to.chat.dingshunyu.top/#/${roomId}">${displayName}</a>`;
+            const expectedHtml = `<a href="https://to.chat.imzqqq.top/#/${roomId}">${displayName}</a>`;
             const expectedText = displayName;
 
             const mention = await MentionPill.forRoom(roomId);
@@ -158,7 +158,7 @@ describe('MentionPill', () => {
             const roomAlias = "#alias:example.org";
             const canonicalAlias = "#canonical:example.org";
             const roomId = "!test:example.org";
-            const expectedHtml = `<a href="https://to.chat.dingshunyu.top/#/${canonicalAlias}">${canonicalAlias}</a>`;
+            const expectedHtml = `<a href="https://to.chat.imzqqq.top/#/${canonicalAlias}">${canonicalAlias}</a>`;
             const expectedText = canonicalAlias;
 
             const resolveSpy = simple.mock(client, "resolveRoom").callFn(async ref => {

@@ -2182,7 +2182,7 @@
     "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "Saknar publik nyckel för captcha i hemserverns konfiguration. Vänligen rapportera detta till din hemservers administratör.",
     "Please review and accept all of the homeserver's policies": "Vänligen granska och acceptera alla hemserverns policyer",
     "Unable to validate homeserver/identity server": "Kunde inte validera hemserver/identitetsserver",
-    "Enter the location of your Chat Chat Services homeserver. It may use your own domain name or be a subdomain of <a>element.io</a>.": "Ange platsen för din Chat Chat Services-hemserver. Den kan använda ditt eget domännamn eller vara en underdomän till <a>apps.chat.dingshunyu.top</a>.",
+    "Enter the location of your Chat Chat Services homeserver. It may use your own domain name or be a subdomain of <a>element.io</a>.": "Ange platsen för din Chat Chat Services-hemserver. Den kan använda ditt eget domännamn eller vara en underdomän till <a>apps.chat.imzqqq.top</a>.",
     "Enter password": "Skriv in lösenord",
     "Nice, strong password!": "Bra, säkert lösenord!",
     "Password is allowed, but unsafe": "Lösenordet är tillåtet men osäkert",

@@ -248,7 +248,7 @@ QR code.
 ### Cancellation
 
 In addition to the cancellation codes specified in [the spec for
-`m.key.verification.cancel`](https://chat.api-spec.dingshunyu.top/client_server/r0.5.0#m-key-verification-cancel),
+`m.key.verification.cancel`](https://chat.api-spec.imzqqq.top/client_server/r0.5.0#m-key-verification-cancel),
 the following cancellation codes may be used:
 
 - `m.qr_code.invalid`: The QR code is invalid (e.g. it is not a URL of the

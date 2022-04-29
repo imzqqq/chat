@@ -1,12 +1,12 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "Tạo tài khoản:";
-"login_server_url_placeholder" = "URL (e.g. https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (e.g. https://chat.imzqqq.top)";
 "login_home_server_title" = "Máy chủ nhà:";
 "login_home_server_info" = "Máy chủ nhà của bạn lưu trữ tất cả dữ liệu cần giữ gìn và tài khoản";
 "login_identity_server_title" = "Máy chủ xác thực:";
-"login_identity_server_info" = "Matrix cung cấp máy chủ xác thực để theo dõi email nào thuộc về Matrix IDs nào. Chỉ https://chat.dingshunyu.top hiện đang tồn tại.";
-"login_user_id_placeholder" = "Matrix ID (ví dụ: @bob:chat.dingshunyu.top hoặc bob)";
+"login_identity_server_info" = "Matrix cung cấp máy chủ xác thực để theo dõi email nào thuộc về Matrix IDs nào. Chỉ https://chat.imzqqq.top hiện đang tồn tại.";
+"login_user_id_placeholder" = "Matrix ID (ví dụ: @bob:chat.imzqqq.top hoặc bob)";
 "login_password_placeholder" = "Mật khẩu";
 "login_optional_field" = "không bắt buộc";
 "login_display_name_placeholder" = "Tên hiển thị (ví dụ: Bob Obson)";
@@ -304,7 +304,7 @@
 // room details dialog screen
 "room_details_title" = "Chi tiết phòng chat";
 // contacts list screen 
-"invitation_message" = "Tôi muốn trò chuyện với bạn với matrix. Vui lòng truy cập trang web http://chat.dingshunyu.top để biết thêm thông tin.";
+"invitation_message" = "Tôi muốn trò chuyện với bạn với matrix. Vui lòng truy cập trang web http://chat.imzqqq.top để biết thêm thông tin.";
 // Settings screen 
 "settings_title_config" = "Cấu hình";
 "settings_title_notifications" = "Thông báo";

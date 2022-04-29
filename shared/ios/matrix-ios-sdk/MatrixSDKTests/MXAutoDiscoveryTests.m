@@ -306,7 +306,7 @@ static NSString *const kIdendityServerPingPath = @"chat/identity/api/v1";
 
 // Same test as testAutoDiscoverySuccessful but with .well-known/matrix/client
 // not returned with a JSON content type.
-// This is what happens on chat.dingshunyu.top
+// This is what happens on chat.imzqqq.top
 - (void)testAutoDiscoverySuccessfulWithNoContentType
 {
     NSString *baseURL = @"https://myhs.org";
@@ -384,17 +384,17 @@ static NSString *const kIdendityServerPingPath = @"chat/identity/api/v1";
 
 
 
-// Test on chat.dingshunyu.top
+// Test on chat.imzqqq.top
 // Only for development. Must be disabled for automatic tests
 //- (void)testAutoDiscoveryWithMatrixDotOrg
 //{
 //    XCTestExpectation *expectation = [self expectationWithDescription:@"asyncTest"];
 //
-//    MXAutoDiscovery *autoDiscovery = [[MXAutoDiscovery alloc] initWithDomain:@"chat.dingshunyu.top"];
+//    MXAutoDiscovery *autoDiscovery = [[MXAutoDiscovery alloc] initWithDomain:@"chat.imzqqq.top"];
 //    [autoDiscovery findClientConfig:^(MXDiscoveredClientConfig * _Nonnull discoveredClientConfig) {
 //
 //        XCTAssertEqual(discoveredClientConfig.action, MXDiscoveredClientConfigActionPrompt);
-//        XCTAssertEqualObjects(discoveredClientConfig.wellKnown.homeServer.baseUrl, @"https://chat.dingshunyu.top");
+//        XCTAssertEqualObjects(discoveredClientConfig.wellKnown.homeServer.baseUrl, @"https://chat.imzqqq.top");
 //        XCTAssertEqualObjects(discoveredClientConfig.wellKnown.identityServer.baseUrl,  @"https://vector.im");
 //
 //        [expectation fulfill];

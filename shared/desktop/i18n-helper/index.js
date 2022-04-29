@@ -35,7 +35,7 @@ function writeStrings(p, strings) {
 		let strings = readStrings(p);
 
 		for (const key of Object.keys(strings)) {
-			strings[key] = strings[key].replace(/Chat/g, "Chat").replace(/element\.io/g, "apps.chat.dingshunyu.top");
+			strings[key] = strings[key].replace(/Chat/g, "Chat").replace(/element\.io/g, "apps.chat.imzqqq.top");
 		}
 
 		if (overlayPath) {

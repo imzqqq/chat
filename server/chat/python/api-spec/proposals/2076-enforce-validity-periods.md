@@ -3,16 +3,16 @@
 ## Background
 
 The [Federation API
-specification](https://chat.api-spec.dingshunyu.top/server_server/r0.1.1.html#validating-hashes-and-signatures-on-received-events)
+specification](https://chat.api-spec.imzqqq.top/server_server/r0.1.1.html#validating-hashes-and-signatures-on-received-events)
 specifies that events should be validated via the signature verification
 algorithm, but does not specify how the keys for that check should be obtained
 and validated.
 
 In practice, the implementation has been as follows. The receiving server
 first requests a copy of the key via the [`GET /chat/key/v2/server/`
-API](https://chat.api-spec.dingshunyu.top/server_server/r0.1.1.html#get-matrix-key-v2-server-keyid)
+API](https://chat.api-spec.imzqqq.top/server_server/r0.1.1.html#get-matrix-key-v2-server-keyid)
 directly from the server which created the signature, or via the [`POST
-/chat/key/v2/query` API](https://chat.api-spec.dingshunyu.top/server_server/r0.1.1.html#post-matrix-key-v2-query)
+/chat/key/v2/query` API](https://chat.api-spec.imzqqq.top/server_server/r0.1.1.html#post-matrix-key-v2-query)
 from a trusted key server. Once such a key is obtained, it is then cached
 forever. No check is made on the `valid_until_ts` field, and
 `minimum_valid_until_ts` is set to zero for calls to `POST

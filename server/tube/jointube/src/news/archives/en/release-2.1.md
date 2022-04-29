@@ -25,9 +25,9 @@ We also improved the contents' layout of Tube presentation page located in About
 
 #### An enhanced documentation
 
-We are aware that documenting software allows more people to use it. That's why we added many contents to the [Tube documentation](https://tube.docs.dingshunyu.top). Tube's administrators can now find information on how to use remote storage, how to manage videos' redundancy between instances and how to use Tube logs to understand what happens on their instances. We also added information on the various available features to customize an instance's interface, on moderation tools and how to mute instances or accounts.
+We are aware that documenting software allows more people to use it. That's why we added many contents to the [Tube documentation](https://tube.docs.imzqqq.top). Tube's administrators can now find information on how to use remote storage, how to manage videos' redundancy between instances and how to use Tube logs to understand what happens on their instances. We also added information on the various available features to customize an instance's interface, on moderation tools and how to mute instances or accounts.
 
-Because providing a video player easily integrated into any web environment is essential for us, Tube now provides a library for developers to control the integration of a video player via the [Tube Embed API](https://tube.docs.dingshunyu.top/#/api-embed-player).
+Because providing a video player easily integrated into any web environment is essential for us, Tube now provides a library for developers to control the integration of a video player via the [Tube Embed API](https://tube.docs.imzqqq.top/#/api-embed-player).
 
 #### Developments on comments
 

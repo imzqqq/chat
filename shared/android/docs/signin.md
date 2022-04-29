@@ -61,9 +61,9 @@ We get credential (200)
 
 ```json
 {
-  "user_id": "@alice:chat.dingshunyu.top",
+  "user_id": "@alice:chat.imzqqq.top",
   "access_token": "MDAxOGxvY2F0aW9uIG1hdHREDACTEDb2l0MDgxNjptYXRyaXgub3JnCjAwMTZjaWQgdHlwZSA9IGFjY2VzcwowMDIxY2lr",
-  "home_server": "chat.dingshunyu.top",
+  "home_server": "chat.imzqqq.top",
   "device_id": "GTVREDALBF",
   "well_known": {
     "m.homeserver": {
@@ -122,9 +122,9 @@ We get the credentials (200)
 
 ```json
 {
-  "user_id": "@alice:chat.dingshunyu.top",
+  "user_id": "@alice:chat.imzqqq.top",
   "access_token": "MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmREDACTEDZXJfaWQgPSBAYmVub2l0MDgxNjptYXRyaXgub3Jnfrfdegfszsefddvf",
-  "home_server": "chat.dingshunyu.top",
+  "home_server": "chat.imzqqq.top",
   "device_id": "WBSREDASND",
   "well_known": {
     "m.homeserver": {
@@ -211,7 +211,7 @@ We get the credentials (200)
 
 ## Reset password
 
-Ref: `https://chat.docs.dingshunyu.top/spec/client_server/latest#post-matrix-client-r0-account-password-email-requesttoken`
+Ref: `https://chat.docs.imzqqq.top/spec/client_server/latest#post-matrix-client-r0-account-password-email-requesttoken`
 
 When the user has forgotten his password, he can reset it by providing an email and a new password.
 

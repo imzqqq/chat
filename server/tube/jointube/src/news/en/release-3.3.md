@@ -14,7 +14,7 @@ The great novelty of this 3.3 version is the ability to create a custom homepage
 
 ![img](/img/news/release-3.3/en/EN-homepage-900px.png "the homepage created on our test instance")
 
-To customise your homepage, once you are logged in, simply go to the *Administration* menu, *Configuration* section, *Homepage* tab. There, an empty block allows you to add the elements you want, in Markdown or HTML format. Many elements are available via custom HTML tags created for the occasion. To discover them, do not hesitate to consult [our documentation](https://tube.docs.dingshunyu.top/api-custom-client-markup).
+To customise your homepage, once you are logged in, simply go to the *Administration* menu, *Configuration* section, *Homepage* tab. There, an empty block allows you to add the elements you want, in Markdown or HTML format. Many elements are available via custom HTML tags created for the occasion. To discover them, do not hesitate to consult [our documentation](https://tube.docs.imzqqq.top/api-custom-client-markup).
 
 ![img](/img/news/release-3.3/en/EN-admin-homepage.png "code corresponding to the homepage displayed above")
 

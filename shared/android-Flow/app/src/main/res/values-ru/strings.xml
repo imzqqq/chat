@@ -143,13 +143,13 @@
     <string name="label_header">Заголовок</string>
     <string name="link_whats_an_instance">Что такое узел?</string>
     <string name="login_connection">Соединение…</string>
-    <string name="dialog_whats_an_instance">Здесь можно ввести адрес или домен любого узла, например, flow.dingshunyu.top, icosahedron.website, social.tchncs.de и <a href="https://instances.social/">других</a>!
+    <string name="dialog_whats_an_instance">Здесь можно ввести адрес или домен любого узла, например, flow.imzqqq.top, icosahedron.website, social.tchncs.de и <a href="https://instances.social/">других</a>!
 \n
 \nЕсли у вас ещё нет аккаунта, введите адрес узла, на котором хотите зарегистрироваться, и создайте аккаунт.
 \n
 \n Узел - это то место, где размещён ваш аккаунт, но вы можете взаимодействовать с пользователями других узлов, как будто вы находитесь на одном сайте.
 \n 
-\n Чтобы получить больше информации посетите <a href="https://flow.join.dingshunyu.top">flow.join.dingshunyu.top</a>. </string>
+\n Чтобы получить больше информации посетите <a href="https://flow.join.imzqqq.top">flow.join.imzqqq.top</a>. </string>
     <string name="dialog_title_finishing_media_upload">Завершается загрузка медиаконтента</string>
     <string name="dialog_message_uploading_media">Загружается…</string>
     <string name="dialog_download_image">Скачать</string>

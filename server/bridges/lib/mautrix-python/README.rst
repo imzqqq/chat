@@ -48,7 +48,7 @@ Components
   * Color logging utility
   * Very simple HMAC-SHA256 utility for signing tokens (like JWT, but hardcoded to use a single good algorithm)
 
-.. _#maunium:maunium.net: https://to.chat.dingshunyu.top/#/#maunium:maunium.net
+.. _#maunium:maunium.net: https://to.chat.imzqqq.top/#/#maunium:maunium.net
 .. _python-appservice-framework: https://github.com/Cadair/python-appservice-framework/
 .. _Client API: https://matrix.org/docs/spec/client_server/r0.6.1.html
 

@@ -66,7 +66,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
             clickTarget === this.anchorElement.current
         ) {
             // This allows the permalink to be opened in a new tab/window or copied as
-            // to.chat.dingshunyu.top, but also for it to enable routing within Classic_Chat when clicked.
+            // to.chat.imzqqq.top, but also for it to enable routing within Classic_Chat when clicked.
             e.preventDefault();
             dis.dispatch({
                 action: 'view_room',

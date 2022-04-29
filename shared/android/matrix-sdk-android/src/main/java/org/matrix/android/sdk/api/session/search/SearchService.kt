@@ -23,7 +23,7 @@ interface SearchService {
 
     /**
      * Generic function to search a term in a room.
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#module-search
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#module-search
      * @param searchTerm the term to search
      * @param roomId the roomId to search term inside
      * @param nextBatch the token that retrieved from the previous response. Should be provided to get the next batch of results

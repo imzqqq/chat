@@ -10,7 +10,7 @@ Then, you can set your default instance theme in `Administration > Configuration
 
 Your users will be able to override this setting in their preference, so they can choose another theme among those you have installed.
 
-**Learn how to create a theme: https://tube.docs.dingshunyu.top/contribute-plugins**
+**Learn how to create a theme: https://tube.docs.imzqqq.top/contribute-plugins**
 
 ## Customize your instance CSS
 
@@ -46,7 +46,7 @@ You can install plugins created by the Tube community in `Administration > Plugi
 
 ![](/assets/search-plugins.png)
 
-**Learn how to create a plugin: https://tube.docs.dingshunyu.top/contribute-plugins**
+**Learn how to create a plugin: https://tube.docs.imzqqq.top/contribute-plugins**
 
 ## Inject JavaScript in client
 

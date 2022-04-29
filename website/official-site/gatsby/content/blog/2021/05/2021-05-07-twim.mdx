@@ -15,13 +15,13 @@ image: https://matrix.org/blog/img/2021-05-07-jh7X9-image.png
 
 ### Chat Server_Stats Bot
 
-[MTRNord](https://to.chat.dingshunyu.top/#/@mtrnord:nordgedanken.dev) announced:
+[MTRNord](https://to.chat.imzqqq.top/#/@mtrnord:nordgedanken.dev) announced:
 
 > The first iteration of visually representing the data gathered by Server Stats Discoverer (traveler bot)  is now publicly available at https://serverstats.nordgedanken.dev/
 >
 > It for now is only a graph of room relations but in the future is supposed to be extended for a server based graph as well as a Table to search your room within.
 >
-> Be aware that the page is best viewed and used on desktop. Clicking a Room Node will open a new tab with the to.chat.dingshunyu.top link. If this fails this might be because of no canonical alias being available.
+> Be aware that the page is best viewed and used on desktop. Clicking a Room Node will open a new tab with the to.chat.imzqqq.top link. If this fails this might be because of no canonical alias being available.
 >
 > For the developers the data can be taken from https://serverstats.nordgedanken.dev/relations  The format currently is only available in the d3js format but in the future that API also will be extended for different usecases.
 >
@@ -33,7 +33,7 @@ image: https://matrix.org/blog/img/2021-05-07-jh7X9-image.png
 
 ### Spec
 
-[anoa](https://to.chat.dingshunyu.top/#/@andrewm:amorgan.xyz) said:
+[anoa](https://to.chat.imzqqq.top/#/@andrewm:amorgan.xyz) said:
 
 > Here's your weekly spec update! The heart of Chat is the specification - and this is modified by Chat Spec Change (MSC) proposals. Learn more about how the process works at https://spec.matrix.org/unstable/proposals.
 >
@@ -81,7 +81,7 @@ image: https://matrix.org/blog/img/2021-05-07-jh7X9-image.png
 > * [#3163 Describe social-sign-on (multiple SSO providers)](https://github.com/matrix-org/matrix-doc/pull/3163)
 > #### Spec Updates
 >
-> A reminder that [#sct-office:matrix.org](https://to.chat.dingshunyu.top/#/#sct-office:matrix.org) is available to communicate directly with the Spec Core Team. A clarification from the last edition of TWIM is that this room is intended to be a low-traffic room solely for asking about the status of a/your MSC, rather than the Spec process or anything else. There is however [#matrix-spec-process:matrix.org](https://to.chat.dingshunyu.top/#/#matrix-spec-process:matrix.org) for discussion of the Spec process, and [#matrix-spec:matrix.org](https://to.chat.dingshunyu.top/#/#matrix-spec:matrix.org) for discussion of the Chat spec and MSCs in general.
+> A reminder that [#sct-office:matrix.org](https://to.chat.imzqqq.top/#/#sct-office:matrix.org) is available to communicate directly with the Spec Core Team. A clarification from the last edition of TWIM is that this room is intended to be a low-traffic room solely for asking about the status of a/your MSC, rather than the Spec process or anything else. There is however [#matrix-spec-process:matrix.org](https://to.chat.imzqqq.top/#/#matrix-spec-process:matrix.org) for discussion of the Spec process, and [#matrix-spec:matrix.org](https://to.chat.imzqqq.top/#/#matrix-spec:matrix.org) for discussion of the Chat spec and MSCs in general.
 >
 > Otherwise the Spec Core Team has been doing a little bit of house-keeping. For those that have been living under a rock, [Spaces](https://github.com/matrix-org/matrix-doc/pull/1772) is an upcoming feature intended to replace the old Groups/Community stuff with a much-improved implementation. And one that will actually make it into the spec! We've closed all old groups-related MSCs as they are now obselete.
 >
@@ -95,13 +95,13 @@ image: https://matrix.org/blog/img/2021-05-07-jh7X9-image.png
 
 ### Pinecone
 
-[Neil Alexander](https://to.chat.dingshunyu.top/#/@neilalexander:matrix.org) reported:
+[Neil Alexander](https://to.chat.imzqqq.top/#/@neilalexander:matrix.org) reported:
 
 > Yesterday we announced the source code release of Pinecone, our new peer-to-peer overlay network, which we are developing under the P2P Chat banner. 
 >
 > If you missed it, we wrote a [blog post](https://matrix.org/blog/2021/05/06/introducing-the-pinecone-overlay-network) that explains some of the juicy details. The source code is available on [GitHub](https://github.com/matrix-org/pinecone).
 >
-> Join us in [#p2p:matrix.org](https://to.chat.dingshunyu.top/#/#p2p:matrix.org) for the latest P2P developments!
+> Join us in [#p2p:matrix.org](https://to.chat.imzqqq.top/#/#p2p:matrix.org) for the latest P2P developments!
 
 
 
@@ -111,7 +111,7 @@ image: https://matrix.org/blog/img/2021-05-07-jh7X9-image.png
 
 Chat is a popular homeserver written in Python.
 
-[callahad](https://to.chat.dingshunyu.top/#/@callahad:matrix.org) offered:
+[callahad](https://to.chat.imzqqq.top/#/@callahad:matrix.org) offered:
 
 > It's a release! [Chat 1.33 is out](https://matrix.org/blog/2021/05/05/synapse-1-33-0-released), and we plan to release a security patch for it on Tuesday, May 11th. This follows our [previous discussion](https://github.com/matrix-org/synapse/discussions/9914) where we committed to trying to decouple routine security updates from our regular feature releases.
 >
@@ -126,7 +126,7 @@ Chat is a popular homeserver written in Python.
 
 > These changes are still a work in progress, but we hope to get them merged into Chat in time for the 1.35 release on June 1st.
 
-Additionally, [Nico (@deepbluev7:neko.dev)](https://to.chat.dingshunyu.top/#/@deepbluev7:neko.dev) has a request:
+Additionally, [Nico (@deepbluev7:neko.dev)](https://to.chat.imzqqq.top/#/@deepbluev7:neko.dev) has a request:
 
 > I wrote a patch for synapse, that reduces the size of almost empty incremental syncs by 50% (30% if you include http headers). If you are a client developer, you may want to test your client against a synapse with that patch applied, since it broke quite a few clients, that relied on synapse sending empty fields. While synapse sends empty fields, other server implementations, like conduit, don't, so fixing any issues here will help with portability across different server implementations too. With a bit of hope this patch can actually be applied in a few weeks to the official synapse, but it was backed out from the next RC because of the breakage. So if you can, please test your client, which you are developing, against the following PR and fix any issues you experience from it: https://github.com/matrix-org/synapse/pull/9919
 >
@@ -136,7 +136,7 @@ Additionally, [Nico (@deepbluev7:neko.dev)](https://to.chat.dingshunyu.top/#/@de
 
 ### Kubernetes
 
-[Ananace](https://to.chat.dingshunyu.top/#/@ace:kittenface.studio) said:
+[Ananace](https://to.chat.imzqqq.top/#/@ace:kittenface.studio) said:
 
 > The regular updates for my [Helm charts](https://gitlab.com/ananace/charts) (and still deprecated [Chat image](https://github.com/ananace/matrix-synapse)) have been pushed, for Chat 1.33.0/1 and the Chat Media Repo 1.2.8. (technically last week, but it was after friday, so I'm throwing it in again)
 
@@ -146,19 +146,19 @@ Additionally, [Nico (@deepbluev7:neko.dev)](https://to.chat.dingshunyu.top/#/@de
 
 ### mautrix-imessage on iOS
 
-[Tulir](https://to.chat.dingshunyu.top/#/@tulir:maunium.net) announced:
+[Tulir](https://to.chat.imzqqq.top/#/@tulir:maunium.net) announced:
 
 > The initial alpha version of [Brooklyn](https://gitlab.com/beeper/brooklyn) is now public, which means you can now (try to) use [mautrix-imessage](https://github.com/tulir/mautrix-imessage) on a jailbroken iOS device for iMessage bridging. Setup instructions are on docs.mau.fi: https://docs.mau.fi/bridges/go/imessage/ios/setup.html
 >
 > Brooklyn was developed by ethanrdoesmc. It's an app/tweak that handles communicating with iMessage and runs mautrix-imessage as a subprocess for the Chat side. The initial alpha supports basic text and media message bridging. Sending and receiving tapbacks, replies, read receipts and typing notifications will also be supported in the future.
 >
-> Feedback is welcome in the mautrix-imessage room: [#imessage:maunium.net](https://to.chat.dingshunyu.top/#/#imessage:maunium.net)
+> Feedback is welcome in the mautrix-imessage room: [#imessage:maunium.net](https://to.chat.imzqqq.top/#/#imessage:maunium.net)
 
 
 
 ### Heisenbridge
 
-[hifi](https://to.chat.dingshunyu.top/#/@hifi:vi.fi) told us:
+[hifi](https://to.chat.imzqqq.top/#/@hifi:vi.fi) told us:
 
 > [Heisenbridge](https://github.com/hifi/heisenbridge/) the bouncer style Chat IRC bridge has seen numerous updates in the past week:
 >
@@ -180,7 +180,7 @@ Additionally, [Nico (@deepbluev7:neko.dev)](https://to.chat.dingshunyu.top/#/@de
 
 ### matrix-pstn-bridge
 
-[KB1RD](https://to.chat.dingshunyu.top/#/@kb1rd:kb1rd.net) reported:
+[KB1RD](https://to.chat.imzqqq.top/#/@kb1rd:kb1rd.net) reported:
 
 > Experimental support for call bridging has landed. Now you can call phone numbers right from Chat, with partial support for MSC2746. A few things to keep in mind:
 >
@@ -188,13 +188,13 @@ Additionally, [Nico (@deepbluev7:neko.dev)](https://to.chat.dingshunyu.top/#/@de
 >
 > * **If you tried any of the earlier versions,** you will need to re-run the `link` command since I made some breaking changes. Sorry.
 >
-> Just a reminder, the GH repo is [here](https://github.com/KB1RD/matrix-pstn-bridge) and the Chat room is [#matrix-pstn-bridge:kb1rd.net](https://to.chat.dingshunyu.top/#/#matrix-pstn-bridge:kb1rd.net) . There's also a general VoIP bridging room at [#matrix-voip-bridging:kb1rd.net](https://to.chat.dingshunyu.top/#/#matrix-voip-bridging:kb1rd.net).
+> Just a reminder, the GH repo is [here](https://github.com/KB1RD/matrix-pstn-bridge) and the Chat room is [#matrix-pstn-bridge:kb1rd.net](https://to.chat.imzqqq.top/#/#matrix-pstn-bridge:kb1rd.net) . There's also a general VoIP bridging room at [#matrix-voip-bridging:kb1rd.net](https://to.chat.imzqqq.top/#/#matrix-voip-bridging:kb1rd.net).
 
 
 
 ### matrix-appservice-irc has a new release candidate
 
-[Christian](https://to.chat.dingshunyu.top/#/@christianp:vector.modular.im) reported:
+[Christian](https://to.chat.imzqqq.top/#/@christianp:vector.modular.im) reported:
 
 > The IRC bridge matrix-appservice-irc has a new release candidate. The upcoming version 0.26.0 will include many features and bug fixes. Here are three highlights:
 >
@@ -215,7 +215,7 @@ Additionally, [Nico (@deepbluev7:neko.dev)](https://to.chat.dingshunyu.top/#/@de
 
 [FluffyChat](https://fluffychat.im) is the cutest cross-platform matrix client. It is available for Android, iOS, Web and Desktop.
 
-[krille](https://to.chat.dingshunyu.top/#/@krille:janian.de) announced:
+[krille](https://to.chat.imzqqq.top/#/@krille:janian.de) announced:
 
 > FluffyChat 0.30.0 has been released
 >
@@ -223,7 +223,7 @@ Additionally, [Nico (@deepbluev7:neko.dev)](https://to.chat.dingshunyu.top/#/@de
 >
 > Version 0.30.0 will be the first version with arm64 support. You can download binaries from the CI and we will try to publish it on Flathub. Together with the new Linux Desktop Notifications feature, this might be interesting for the Librem 5 or the PinePhone. Sadly I don't own one of these very interesting devices. If you have one, I would very like to see some screenshots of it! :-)
 
-Additionally, [Shine](https://to.chat.dingshunyu.top/#/@shiny:shine.horse) told us:
+Additionally, [Shine](https://to.chat.imzqqq.top/#/@shiny:shine.horse) told us:
 
 > Fluffychat update: Native Fluffychat Linux build now works well on aarch64 devices!
 >
@@ -240,7 +240,7 @@ Nice sticker
 
 [Nheko](https://github.com/Nheko-Reborn/nheko) is a desktop client using Qt, Boost.Asio and C++17. It supports E2EE and intends to be full featured and nice to look at
 
-[Nico (@deepbluev7:neko.dev)](https://to.chat.dingshunyu.top/#/@deepbluev7:neko.dev) told us:
+[Nico (@deepbluev7:neko.dev)](https://to.chat.imzqqq.top/#/@deepbluev7:neko.dev) told us:
 
 > Nheko now should stop showing you actions, that you can't do anyway, because that is confusing and useless. This includes the following and more:
 >
@@ -258,13 +258,13 @@ Nice sticker
 > * **greyish**: The message is from an unverified device, but that user has never rotated their master signing key and has cross-signed that device. As such we can probably assume, that this is a trusted device. For extra safety, you should of course verify that user, but if it is just an internet personality you will never meet, you trust you are speaking to the right party anyway and can't really verify them anyway, since you don't know how they look either! We don't want to prompt users with red warning signs in such cases, which will lead to them not doing verification properly, because they just want the red marks to go away. Many people are also not interested in the MITM aspects of E2EE. We think this is an okay tradeoff, but any feedback is welcome of course! This is basically Trust On First Use (TOFU), if you heard that term before.
 > * **red**: The device is not verified. This can have a few reasons. Either we verified the user, but they didn't verify that device. Or we didn't verify that user and they have changed their master key at some point. Or the signatures for that device are wrong, etc. If you see such a device, you should probably investigate, why that is the case.
 >
-> These are some biggish changes, so if you experience issues, tell us in [#nheko:nheko.im](https://to.chat.dingshunyu.top/#/#nheko:nheko.im)!
+> These are some biggish changes, so if you experience issues, tell us in [#nheko:nheko.im](https://to.chat.imzqqq.top/#/#nheko:nheko.im)!
 
 
 
 ### Fractal
 
-[Alexandre Franke](https://to.chat.dingshunyu.top/#/@afranke:matrix.org) reported:
+[Alexandre Franke](https://to.chat.imzqqq.top/#/@afranke:matrix.org) reported:
 
 > Hot on the heels of [our previous announcement](https://matrix.org/blog/2021/04/23/this-week-in-matrix-2021-04-23#fractal) and building on the fresh foundations of our rewrite, Julian got busy on room history. It now appears when a room is selected in the sidebar! To make that selection easier, room filtering in the sidebar [has been implemented by new contributor Veli Tasali](https://gitlab.gnome.org/GNOME/fractal/-/merge_requests/726). Once a room is selected and displayed, messages can even be sent to them! Sounds like we’re done and the client is ready… SHIP IT! Not really though, as it’s still very basic, but at least [the bare minimum to make it actually usable is now here](https://gitlab.gnome.org/GNOME/fractal/-/issues/720).
 
@@ -318,7 +318,7 @@ Very excited about the Spaces progress! Looks like everything that I found in re
 
 ### Trixnity released
 
-[Benedict](https://to.chat.dingshunyu.top/#/@benedict:imbitbu.de) announced:
+[Benedict](https://to.chat.imzqqq.top/#/@benedict:imbitbu.de) announced:
 
 > [Trixnity](https://github.com/benkuly/trixnity) finally got released this week. It's a Kotlin multiplatform Chat SDK for high level access to Client-Server API and Appservice API. It has all (and some more) features from [matrix-spring-boot-sdk](https://github.com/benkuly/matrix-spring-boot-sdk) which is based on Trixnity now (an update for that will be released soon). Trixnity can currently be used on JVM and JS as platform (Native is not working yet). It is also very customizable by adding custom room and state event types.
 
@@ -327,7 +327,7 @@ Very excited about the Spaces progress! Looks like everything that I found in re
 
 ### Cactus Comments 🌵
 
-[Asbjørn](https://to.chat.dingshunyu.top/#/@asbjorn:olli.ng) offered:
+[Asbjørn](https://to.chat.imzqqq.top/#/@asbjorn:olli.ng) offered:
 
 > Cactus Comments is a federated comment system for the open web built on Chat.
 >
@@ -348,13 +348,13 @@ Very excited about the Spaces progress! Looks like everything that I found in re
 >
 > Come play with the demo: [https://cactus.chat/demo](https://cactus.chat/demo)
 >
-> Join our Chat room: [#cactus:cactus.chat](https://to.chat.dingshunyu.top/#/#cactus:cactus.chat)
+> Join our Chat room: [#cactus:cactus.chat](https://to.chat.imzqqq.top/#/#cactus:cactus.chat)
 
 
 
 ### Phonehome stats viz
 
-[Matthew](https://to.chat.dingshunyu.top/#/@matthew:matrix.org) reported:
+[Matthew](https://to.chat.imzqqq.top/#/@matthew:matrix.org) reported:
 
 > I did a video a few months back trying to show the physical layout of Chat over the years by looking at the phonehome stats and the number of active users per server (showing full-mesh edges between the top 100 servers, heatmapped by how busy the servers were at either end of the edge).  There was a bug in the phonehome stats during 2017, but it's still fairly cool...
 
@@ -365,8 +365,8 @@ Very excited about the Spaces progress! Looks like everything that I found in re
 
 Here we reveal, rank, and applaud the homeservers with the lowest ping, as measured by [pingbot](https://github.com/maubot/echo), a [maubot](https://github.com/maubot/maubot) that you can host on your own server.
 
-### [#ping:maunium.net](https://to.chat.dingshunyu.top/#/#ping:maunium.net)
-Join [#ping:maunium.net](https://to.chat.dingshunyu.top/#/#ping:maunium.net) to experience the fun live, and to find out how to add YOUR server to the game.
+### [#ping:maunium.net](https://to.chat.imzqqq.top/#/#ping:maunium.net)
+Join [#ping:maunium.net](https://to.chat.imzqqq.top/#/#ping:maunium.net) to experience the fun live, and to find out how to add YOUR server to the game.
 
 |Rank|Hostname|Median MS|
 |:---:|:---:|:---:|
@@ -381,8 +381,8 @@ Join [#ping:maunium.net](https://to.chat.dingshunyu.top/#/#ping:maunium.net) to 
 |9|kittenface.studio|1180|
 |10|dendrite.foxomy.com|1320|
 
-### [#ping-no-synapse:maunium.net](https://to.chat.dingshunyu.top/#/#ping-no-synapse:maunium.net)
-Join [#ping-no-synapse:maunium.net](https://to.chat.dingshunyu.top/#/#ping-no-synapse:maunium.net) to experience the fun live, and to find out how to add YOUR server to the game.
+### [#ping-no-synapse:maunium.net](https://to.chat.imzqqq.top/#/#ping-no-synapse:maunium.net)
+Join [#ping-no-synapse:maunium.net](https://to.chat.imzqqq.top/#/#ping-no-synapse:maunium.net) to experience the fun live, and to find out how to add YOUR server to the game.
 
 |Rank|Hostname|Median MS|
 |:---:|:---:|:---:|
@@ -395,4 +395,4 @@ Join [#ping-no-synapse:maunium.net](https://to.chat.dingshunyu.top/#/#ping-no-sy
 
 See you next week, and be sure to stop by [#twim:matrix.org] with your updates!
 
-[#TWIM:matrix.org]: https://to.chat.dingshunyu.top/#/#TWIM:matrix.org
+[#TWIM:matrix.org]: https://to.chat.imzqqq.top/#/#TWIM:matrix.org

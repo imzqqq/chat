@@ -55,7 +55,7 @@ async def signal_to_matrix(message: MessageData) -> TextMessageEventContent:
             puppet = await pu.Puppet.get_by_address(Address(uuid=mention.uuid))
             name = add_surrogate(puppet.name or puppet.mxid)
             text_chunks.append(name)
-            html_chunks.append(f'<a href="https://to.chat.dingshunyu.top/#/{puppet.mxid}">{name}</a>')
+            html_chunks.append(f'<a href="https://to.chat.imzqqq.top/#/{puppet.mxid}">{name}</a>')
         end = surrogated_text[last_offset:]
         text_chunks.append(end)
         html_chunks.append(escape(end))

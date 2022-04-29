@@ -49,7 +49,7 @@
 - (void)checkPaginateWhenJoiningAgainAfterLeft:(MXRoom*)room;
 - (void)checkLastMessageProfileChange:(MXRoom*)room;
 - (void)checkLastMessageIgnoreProfileChange:(MXRoom*)room;
-- (void)checkPaginateWhenReachingTheExactBeginningOfTheRoom:(MXRoom*)room;  // Test for https://chat.dingshunyu.top/jira/browse/SYN-162
+- (void)checkPaginateWhenReachingTheExactBeginningOfTheRoom:(MXRoom*)room;  // Test for https://chat.imzqqq.top/jira/browse/SYN-162
 - (void)checkRedactEvent:(MXRoom*)room;
 
 // Tests that may not relevant for all implementations

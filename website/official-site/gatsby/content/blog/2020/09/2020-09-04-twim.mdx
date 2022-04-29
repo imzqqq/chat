@@ -20,7 +20,7 @@ image: https://matrix.org/blog/img/2020-09-04-complement.png
 
 ### Next step in world domination
 
-[Alexander Olofsson](https://to.chat.dingshunyu.top/#/@aleol57:liu.se) reported:
+[Alexander Olofsson](https://to.chat.imzqqq.top/#/@aleol57:liu.se) reported:
 
 > The Chat service at Linköping University has now passed its soft launch state and headed straight into full and proper deployment territory. (Though we're still not being overly vocal about it, don't want to crash our deployment on day one after all.)
 
@@ -36,13 +36,13 @@ But then:
 
 ## Dept of Spec 📜
 
-[sorunome](https://to.chat.dingshunyu.top/#/@sorunome:sorunome.de) asks for attention on MSC2545:
+[sorunome](https://to.chat.imzqqq.top/#/@sorunome:sorunome.de) asks for attention on MSC2545:
 
 > As a lot of people in TWIM were originally interested in it, soru just wanted to say that [MSC2545](https://github.com/matrix-org/matrix-doc/pull/2545) (emotes) is no longer WIP, it is ready for review
 
 ### Spec
 
-[anoa](https://to.chat.dingshunyu.top/#/@andrewm:amorgan.xyz) reported:
+[anoa](https://to.chat.imzqqq.top/#/@andrewm:amorgan.xyz) reported:
 
 > Here's your weekly spec update! The heart of Chat is the specification - and this is modified by Chat Spec Change (MSC) proposals. Learn more about how the process works at <https://matrix.org/docs/spec/proposals>.
 >
@@ -78,7 +78,7 @@ But then:
 
 ### Chat
 
-[anoa](https://to.chat.dingshunyu.top/#/@andrewm:amorgan.xyz) said:
+[anoa](https://to.chat.imzqqq.top/#/@andrewm:amorgan.xyz) said:
 
 > Erik has made an initial, naive implementation of a sharded Event Persister worker - the non-sharded version currently being one of the biggest bottlenecks on matrix.org right now. It still needs a bit of polish to be production ready, and Sytest will need some updating to support testing it, but otherwise progress is looking good!
 >
@@ -98,7 +98,7 @@ As someone who had my own server outage this week I'm looking forward to seeing 
 
 Dendrite is a next-generation homeserver written in Go
 
-[Neil Alexander](https://to.chat.dingshunyu.top/#/@neilalexander:matrix.org) said:
+[Neil Alexander](https://to.chat.imzqqq.top/#/@neilalexander:matrix.org) said:
 
 > This week we have been continuing on our bug-hunt mission and have been working on refactoring some significant parts of the codebase to simplify the API surfaces and avoid race conditions.
 >
@@ -131,13 +131,13 @@ Dendrite is a next-generation homeserver written in Go
 >
 > Last week, we updated some of our documentation and created a whole new set of [easy first issues](https://github.com/matrix-org/dendrite/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) and [medium to hard issues](https://github.com/matrix-org/dendrite/issues?q=is%3Aissue+is%3Aopen+label%3Ahelp-wanted) for contributors.
 >
-> If contributing to Dendrite sounds like something you would be interested in, please take a look at these issues and join us in [#dendrite-dev:matrix.org](https://to.chat.dingshunyu.top/#/#dendrite-dev:matrix.org)! There's also [#dendrite:matrix.org](https://to.chat.dingshunyu.top/#/#dendrite:matrix.org) for general Dendrite chat and updates.
+> If contributing to Dendrite sounds like something you would be interested in, please take a look at these issues and join us in [#dendrite-dev:matrix.org](https://to.chat.imzqqq.top/#/#dendrite-dev:matrix.org)! There's also [#dendrite:matrix.org](https://to.chat.imzqqq.top/#/#dendrite:matrix.org) for general Dendrite chat and updates.
 
 ## Chat Deployment 📥️
 
 ### YunoHost
 
-[Pierre](https://to.chat.dingshunyu.top/#/@pierre:mamieserv.fr) announced:
+[Pierre](https://to.chat.imzqqq.top/#/@pierre:mamieserv.fr) announced:
 
 > [YunoHost](https://yunohost.org) is an operating system aiming for the simplest administration of a server, and therefore democratize self-hosting.
 >
@@ -149,7 +149,7 @@ Dendrite is a next-generation homeserver written in Go
 
 ### tomsg-matrix
 
-[Lieuwe](https://to.chat.dingshunyu.top/#/@lieuwe:lieuwe.xyz) told us:
+[Lieuwe](https://to.chat.imzqqq.top/#/@lieuwe:lieuwe.xyz) told us:
 
 > Introducing a new bridge to the family, tomsg-matrix!
 >
@@ -159,19 +159,19 @@ Dendrite is a next-generation homeserver written in Go
 >
 > The code for tomsg-matrix is [open source](https://github.com/lieuwex/tomsg-matrix), but be prepared, I hastily pushed it to GitHub without cleaning it up.
 >
-> Come chat to us over at [#tomsg:lieuwe.xyz](https://to.chat.dingshunyu.top/#/#tomsg:lieuwe.xyz), hoping that it doesn't break. :P
+> Come chat to us over at [#tomsg:lieuwe.xyz](https://to.chat.imzqqq.top/#/#tomsg:lieuwe.xyz), hoping that it doesn't break. :P
 
 Making your own chat protocol in a world of well established options seems, frankly- oh right.
 
 ### matrix-sms-bridge
 
-[Benedict](https://to.chat.dingshunyu.top/#/@benedict:imbitbu.de) told us:
+[Benedict](https://to.chat.imzqqq.top/#/@benedict:imbitbu.de) told us:
 
 > We are currently working on an Android-App to use an old smartphone as SMS-Gateway for [matrix-sms-bridge](https://github.com/benkuly/matrix-sms-bridge), because using [gammu](https://wammu.eu/gammu/) in production (>50 SMS/day) seems not to be very reliable with our USB-modem.
 
 ### im_sender_service, for zabbix bridging and more
 
-[progserega](https://to.chat.dingshunyu.top/#/@progserega:rsprim.ru) said:
+[progserega](https://to.chat.imzqqq.top/#/@progserega:rsprim.ru) said:
 
 > I create  service for sending corporate information: some service (for example zabbix) can send message to this service (over http-api) and service will create room (if needed), invite user and send message to this room. Service will change status of message in his database to `readed` when user will read this message. Also service can send any changes statuses of this message by callback url. Editing old messages also supported: for example zabbix can send UID problem to this service and it is will edit old "problem message" to "problem resolved".
 >
@@ -183,7 +183,7 @@ Making your own chat protocol in a world of well established options seems, fran
 
 Ditto is a Chat client for iOS & Android
 
-[Annie](https://to.chat.dingshunyu.top/#/@annie:ditto.chat) offered:
+[Annie](https://to.chat.imzqqq.top/#/@annie:ditto.chat) offered:
 
 > Ditto development is back from hiatus! 
 >
@@ -197,13 +197,13 @@ Ditto is a Chat client for iOS & Android
 >
 > Links:
 >
-> [Chat Room](https://to.chat.dingshunyu.top/#/#ditto:ditto.chat)
+> [Chat Room](https://to.chat.imzqqq.top/#/#ditto:ditto.chat)
 
 Big exciting things happening!
 
 ### Hydrogen
 
-[Bruno](https://to.chat.dingshunyu.top/#/@bwindels:matrix.org) offered:
+[Bruno](https://to.chat.imzqqq.top/#/@bwindels:matrix.org) offered:
 
 > Good progress this week, I just got end-to-end encryption working. The code still needs some cleanup and polishing to be able to release it in the wild, but expect a release somewhere next week with E2EE enabled.
 
@@ -215,7 +215,7 @@ YESSSS - see Chat Live for a demo.
 
 [gomuks](https://maunium.net/go/gomuks) is a terminal based Chat client written in Go. [Source on GitHub](https://github.com/tulir/gomuks)
 
-[Tulir](https://to.chat.dingshunyu.top/#/@tulir:maunium.net) said:
+[Tulir](https://to.chat.imzqqq.top/#/@tulir:maunium.net) said:
 
 > gomuks now supports importing and exporting message decryption keys. It even supports exporting the keys for a specific room, e.g. for sharing them with someone else. To help with sharing exported key files with someone else, gomuks also got support for uploading media.
 >
@@ -225,7 +225,7 @@ YESSSS - see Chat Live for a demo.
 
 ### NovaChat
 
-[eric](https://to.chat.dingshunyu.top/#/@eric:nova.chat) told us:
+[eric](https://to.chat.imzqqq.top/#/@eric:nova.chat) told us:
 
 > [NovaChat](https://nova.chat/) is a new Chat-based desktop client that aggregates all your chat networks into one app. We now have integrated bridges for Whatsapp, Twitter, Telegram, Hangouts, Slack, Messenger, Android Messages (SMS), Skype, Discord, Instagram and IRC.
 >
@@ -250,7 +250,7 @@ YESSSS - see Chat Live for a demo.
 
 [Nheko](https://github.com/Nheko-Reborn/nheko) is a desktop client using Qt, Boost.Asio and C++17. It supports E2EE (with the notable exception being device verification for now) and intends to be full featured and nice to look at
 
-[Nico (@deepbluev7:neko.dev)](https://to.chat.dingshunyu.top/#/@deepbluev7:neko.dev) announced:
+[Nico (@deepbluev7:neko.dev)](https://to.chat.imzqqq.top/#/@deepbluev7:neko.dev) announced:
 
 > * Lurkki added an emoji completer to the message area! This was a super requested feature and it is pretty awesome, that someone picked this up and implemented it! This means you can finally write `:fire:` and have it expand to 🔥! Seems like this will also lead to a few more improvements to our other completers down the line (user, room, etc completions), so thank you very much Lurkki!
 >
@@ -261,7 +261,7 @@ YESSSS - see Chat Live for a demo.
 
 ### Fluffychat
 
-[sorunome](https://to.chat.dingshunyu.top/#/@sorunome:sorunome.de) offered:
+[sorunome](https://to.chat.imzqqq.top/#/@sorunome:sorunome.de) offered:
 
 > Fluffychat 0.17.0 is released!
 >
@@ -292,7 +292,7 @@ Definitely hoping to see these issues resolved.
 
 ### SchildiChat for Android
 
-[SpiritCroc](https://to.chat.dingshunyu.top/#/@spiritcroc:matrix.org) offered:
+[SpiritCroc](https://to.chat.imzqqq.top/#/@spiritcroc:matrix.org) offered:
 
 > I removed SchildiChat from the Google Play for now, due to the complications of providing encryption-capable software from US servers. Huge thanks to the FluffyChat team for providing insight into their investigations concerning the US export regulations!
 >
@@ -311,7 +311,7 @@ Definitely hoping to see these issues resolved.
 
 ### Element-iOS
 
-[Manu](https://to.chat.dingshunyu.top/#/@Manu:matrix.org) announced:
+[Manu](https://to.chat.imzqqq.top/#/@Manu:matrix.org) announced:
 
 > This week, we should have fixed the background crash that was happening in TestFlight 1.0.7. TestFlight 1.0.9 has been submitted yesterday.
 >
@@ -319,7 +319,7 @@ Definitely hoping to see these issues resolved.
 
 ### Element Android
 
-[benoit](https://to.chat.dingshunyu.top/#/@benoit.marty:matrix.org) reported:
+[benoit](https://to.chat.imzqqq.top/#/@benoit.marty:matrix.org) reported:
 
 > We have just merged a few big PRs to develop: add emails and phone numbers to Chat account, rework of upload attachment management, and other stuff related to 1-1 calls. It will live on `develop` for the week-end and we will prepare the release v1.0.6 at the beginning of next week.
 
@@ -329,7 +329,7 @@ Definitely hoping to see these issues resolved.
 
 rn-matrix is a React Native SDK for matrix
 
-[Annie](https://to.chat.dingshunyu.top/#/@annie:ditto.chat) offered:
+[Annie](https://to.chat.imzqqq.top/#/@annie:ditto.chat) offered:
 
 > Built on the matrix-js-sdk, this NPM package will help any React Native developer drop matrix into their app. 
 >
@@ -337,13 +337,13 @@ rn-matrix is a React Native SDK for matrix
 >
 > Would love feedback on docs, installation, and usage, so try it out and drop me a line! 
 >
-> Links: [Docs (start here!)](https://rnmatrix.com) | [Chat Room](https://to.chat.dingshunyu.top/#/#rnmatrix:ditto.chat)
+> Links: [Docs (start here!)](https://rnmatrix.com) | [Chat Room](https://to.chat.imzqqq.top/#/#rnmatrix:ditto.chat)
 
 NB, this update should be read together with the Ditto update above
 
 ### Ruma
 
-[iinuwa](https://to.chat.dingshunyu.top/#/@iinuwa:matrix.org) said:
+[iinuwa](https://to.chat.imzqqq.top/#/@iinuwa:matrix.org) said:
 
 > Over the past couple of weeks, jplatte has been hard at work making sure we can introduce new fields to request and response types as non-breaking updates. Thanks to @nicholaswyoung, consumers can opt-in to breaking changes to ensure compliance with the spec on each update.
 >
@@ -359,7 +359,7 @@ NB, this update should be read together with the Ditto update above
 
 This [Ansible playbook](https://github.com/spantaleev/matrix-docker-ansible-deploy) is meant to easily let you run your own Chat homeserver.
 
-[Slavi](https://to.chat.dingshunyu.top/#/@slavi:devture.com) reported:
+[Slavi](https://to.chat.imzqqq.top/#/@slavi:devture.com) reported:
 
 > [matrix-docker-ansible-deploy](https://github.com/spantaleev/matrix-docker-ansible-deploy) can now help you set up [matrix-registration](https://github.com/ZerataX/matrix-registration) - an application that lets you keep your Chat server's registration private, but still allow certain users (those having a unique registration link) to register by themselves.
 >
@@ -369,7 +369,7 @@ This [Ansible playbook](https://github.com/spantaleev/matrix-docker-ansible-depl
 
 ### Chat talk @ FrOSCon 2020 (in German)
 
-[Oleg](https://to.chat.dingshunyu.top/#/@oleg:fiksel.info) reported:
+[Oleg](https://to.chat.imzqqq.top/#/@oleg:fiksel.info) reported:
 
 > I did a talk on Chat bridges at the annual Free Open Source Conference.
 >
@@ -385,7 +385,7 @@ Apparently
 
 ## Dept of Ping 🏓
 
-Here we reveal, rank, and applaud the homeservers with the lowest ping, as measured by [pingbot](https://github.com/maubot/echo), a [maubot](https://github.com/maubot/maubot) that you can host on your own server. Join [#ping:maunium.net](https://to.chat.dingshunyu.top/#/#ping:maunium.net) to experience the fun live, and to find out how to add YOUR server to the game.
+Here we reveal, rank, and applaud the homeservers with the lowest ping, as measured by [pingbot](https://github.com/maubot/echo), a [maubot](https://github.com/maubot/maubot) that you can host on your own server. Join [#ping:maunium.net](https://to.chat.imzqqq.top/#/#ping:maunium.net) to experience the fun live, and to find out how to add YOUR server to the game.
 
 |Rank|Hostname|Median MS|
 |:---:|:---:|:---:|
@@ -404,4 +404,4 @@ Here we reveal, rank, and applaud the homeservers with the lowest ping, as measu
 
 See you next week, and be sure to stop by [#twim:matrix.org] with your updates!
 
-[#TWIM:matrix.org]: <https://to.chat.dingshunyu.top/#/#TWIM:matrix.org>
+[#TWIM:matrix.org]: <https://to.chat.imzqqq.top/#/#TWIM:matrix.org>

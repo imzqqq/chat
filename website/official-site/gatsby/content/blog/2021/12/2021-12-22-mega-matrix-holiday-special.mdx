@@ -147,7 +147,7 @@ You can read all about it in [the blog post](https://matrix.org/blog/2021/05/06/
 
 ![Pinecone perf benchmarks](/blog/img/2021-12-22-pinecone-perf.png)
 
-You can play with P2P Chat today on iOS and Android (head over to [#p2p:matrix.org](https://to.chat.dingshunyu.top/#/#p2p:matrix.org) for builds), but there is some major work still to be done:
+You can play with P2P Chat today on iOS and Android (head over to [#p2p:matrix.org](https://to.chat.imzqqq.top/#/#p2p:matrix.org) for builds), but there is some major work still to be done:
 
 * We need to bridge to today’s Chat network. Right now, having a weird experimental test network for P2P means that in practice nobody actually uses it other than for demos - whereas if you could actually talk to everything else in Chat, it’d be way more compelling and interesting to use and dogfood.  We’re currently thinking about how best to do this!
 * We need to standardise the actual transport to be used over Pinecone.  Currently it uses HTTPS over [μTP](https://en.wikipedia.org/wiki/Micro_Transport_Protocol) (purely because empirically it handled packet loss and congestion well, and LB Chat wasn’t ready at the time).  We’re currently experimenting with switching to LB Chat using our own CoAP implementation called PineCoAP (potentially using pCoCoA congestion control, given CoAP doesn’t provide any congestion control out of the box), but this is early days.

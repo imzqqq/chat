@@ -36,7 +36,7 @@ their knock attempt.
 ### `POST /chat/client/r0/knock/{roomIdOrAlias}`
 Or the knocking equivalent of
 [`POST
-/chat/client/r0/join/{roomIdOrAlias}`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#post-matrix-client-r0-join-roomidoralias).
+/chat/client/r0/join/{roomIdOrAlias}`](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#post-matrix-client-r0-join-roomidoralias).
 
 The path parameter (`roomIdOrAlias`) is either the room ID or the alias of
 the room you want to knock on. Additionally, several `server_name` parameters
@@ -45,7 +45,7 @@ string parameter, `reason`, which is the reason you want to join the room. A
 request could look as follows:
 
 ```json
-POST /chat/client/r0/knock/%23foxes%3Amatrix.org?server_name=chat.dingshunyu.top&server_name=elsewhere.ca  HTTP/1.1
+POST /chat/client/r0/knock/%23foxes%3Amatrix.org?server_name=chat.imzqqq.top&server_name=elsewhere.ca  HTTP/1.1
 Content-Type: application/json
 
 {
@@ -62,7 +62,7 @@ The user knocked successfully. The room ID of the knocked on room is returned. E
 reply:
 ```json
 {
-  "room_id": "!ZclcEpFTORTjmWIrqH:chat.dingshunyu.top"
+  "room_id": "!ZclcEpFTORTjmWIrqH:chat.imzqqq.top"
 }
 ```
 
@@ -87,7 +87,7 @@ The room was not found. Example error reply:
 ### Extensions to `GET /chat/client/r0/sync`
 
 In [the response to
-`/sync`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#get-matrix-client-r0-sync)
+`/sync`](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#get-matrix-client-r0-sync)
 is a `rooms` field. This is a dictionary which currently contains keys
 `join`, `invite` and `leave`, which each provide information to the client on
 various membership states regarding the user.
@@ -185,7 +185,7 @@ Response:
 A problem arises for discovery of knockable rooms. Ideally one wouldn't have
 to send their colleagues a room ID for a room that they need to knock on. One
 of these methods for room discovery is the [public rooms
-directory](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#get-matrix-client-r0-publicrooms),
+directory](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#get-matrix-client-r0-publicrooms),
 which allows us to explore a list of rooms we may be able to join.
 
 The spec does not prevent us from adding rooms with 'knock' join_rules to the
@@ -236,8 +236,8 @@ the underlying push rules architecture can support it.
 
 
 ## Server-Server API
-Similarly to [join](https://chat.api-spec.dingshunyu.top/server_server/r0.1.4#joining-rooms)
-and [leave](https://chat.api-spec.dingshunyu.top/server_server/r0.1.4#leaving-rooms-rejecting-invites)
+Similarly to [join](https://chat.api-spec.imzqqq.top/server_server/r0.1.4#joining-rooms)
+and [leave](https://chat.api-spec.imzqqq.top/server_server/r0.1.4#leaving-rooms-rejecting-invites)
 over federation, a ping-pong game with two new endpoints is introduced: `make_knock`
 and `send_knock`. Both endpoints must be protected via server ACLs.
 
@@ -348,7 +348,7 @@ Content-Type: application/json
 
 {
   "sender": "@someone:example.org",
-  "origin": "chat.dingshunyu.top",
+  "origin": "chat.imzqqq.top",
   "origin_server_ts": 1234567890,
   "type": "m.room.member",
   "state_key": "@someone:example.org",
@@ -373,7 +373,7 @@ types that can be sent here should match those of the `/sync` extensions
 mentioned above.
 
 This is loosely based on the
-[federated invite](https://chat.api-spec.dingshunyu.top/server_server/r0.1.4#put-matrix-federation-v2-invite-roomid-eventid)
+[federated invite](https://chat.api-spec.imzqqq.top/server_server/r0.1.4#put-matrix-federation-v2-invite-roomid-eventid)
 request content.
 ```json
 {
@@ -457,7 +457,7 @@ membership to "knock" under certain conditions.
 
 Each room version defines the auth rules which should be applied in that room version.
 This MSC proposes a new room version with the following changes to the [auth
-rules from room version 6](https://chat.api-spec.dingshunyu.top/rooms/v6#authorization-rules-for-events):
+rules from room version 6](https://chat.api-spec.imzqqq.top/rooms/v6#authorization-rules-for-events):
 
 * Under "5. If type is `m.room.member`", insert the following after "e. If membership is `ban`":
 
@@ -509,12 +509,12 @@ necessary - to the knocking user. The knocking user may then join the room as
 if they had been invited normally.
 
 To accept a knock, the client should call [`POST
-/chat/client/r0/rooms/{roomId}/invite`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#post-matrix-client-r0-rooms-roomid-invite)
+/chat/client/r0/rooms/{roomId}/invite`](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#post-matrix-client-r0-rooms-roomid-invite)
 with the user ID of the knocking user in the JSON body.
 
 If the knocking user is on another homeserver, then the homeserver of the
 accepting user will call [`PUT
-/chat/federation/v2/invite/{roomId}/{eventId}`](https://chat.api-spec.dingshunyu.top/server_server/r0.1.4#put-matrix-federation-v2-invite-roomid-eventid)
+/chat/federation/v2/invite/{roomId}/{eventId}`](https://chat.api-spec.imzqqq.top/server_server/r0.1.4#put-matrix-federation-v2-invite-roomid-eventid)
 on the knocking homeserver to inform it that the knock has been accepted.
 
 The knocking homeserver should assume an invite to a room it has knocked on means
@@ -533,7 +533,7 @@ discretion.
 The knock has been rejected by someone in the room.
 
 To reject a knock, the rejecting user's client must call [`POST
-/chat/client/r0/rooms/{roomId}/kick`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#post-matrix-client-r0-rooms-roomid-kick)
+/chat/client/r0/rooms/{roomId}/kick`](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#post-matrix-client-r0-rooms-roomid-kick)
 with the user ID of the knocking user in the JSON body. Rejecting a knock
 over federation has a slight catch, though.
 
@@ -573,10 +573,10 @@ they have access to the events it references.
 The knocking user has rescinded their knock.
 
 To rescind a knock, the knocking user's client must call [`POST
-/chat/client/r0/rooms/{roomId}/leave`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#post-matrix-client-r0-rooms-roomid-leave).
+/chat/client/r0/rooms/{roomId}/leave`](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#post-matrix-client-r0-rooms-roomid-leave).
 To rescind a knock over federation, the knocking homeserver must complete
 a [`make_leave`, `send_leave` dance](
-https://chat.api-spec.dingshunyu.top/server_server/r0.1.4#leaving-rooms-rejecting-invites)
+https://chat.api-spec.imzqqq.top/server_server/r0.1.4#leaving-rooms-rejecting-invites)
 with a homeserver in the room.
 
 ### Membership change to `ban`
@@ -593,7 +593,7 @@ If the user is unbanned, they will be able to send a new knock which could be
 accepted.
 
 To ban the user, the client should call [`POST
-/chat/client/r0/rooms/{roomId}/ban`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#post-matrix-client-r0-rooms-roomid-ban) with the user ID of the knocking user in the JSON body.
+/chat/client/r0/rooms/{roomId}/ban`](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#post-matrix-client-r0-rooms-roomid-ban) with the user ID of the knocking user in the JSON body.
 
 Informing the knocking user about the update is the same as rejecting the
 knock.
@@ -656,7 +656,7 @@ tools easy even if the offensive user or server is not present in the room.
 An unstable feature flag is not required due to this proposal's requirement
 of a new room version. Clients can check for a room version that includes
 knocking via the Client-Server API's [capabilities
-endpoint](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#get-matrix-client-r0-capabilities).
+endpoint](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#get-matrix-client-r0-capabilities).
 Experimental implementation should use `xyz.amorgan.knock` as a room version identifier.
 
 The new endpoints should contain an unstable prefix during experimental

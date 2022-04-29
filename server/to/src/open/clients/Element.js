@@ -2,7 +2,7 @@ import {Maturity, Platform, LinkKind,
     FDroidLink, AppleStoreLink, PlayStoreLink, WebsiteLink} from "../types.js";
 
 const trustedWebInstances = [
-    "web.chat.dingshunyu.top",   // first one is the default one
+    "web.chat.imzqqq.top",   // first one is the default one
     "develop.element.io",
     "chat.fosdem.org",
     "chat.mozilla.org",
@@ -27,7 +27,7 @@ export class Element {
     get appleAssociatedAppId() { return "7J4U792NQT.im.vector.app"; }
     get name() {return "Chat"; }
     get description() { return 'Fully-featured Chat client, used by millions.'; }
-    get homepage() { return "https://apps.chat.dingshunyu.top"; }
+    get homepage() { return "https://apps.chat.imzqqq.top"; }
     get author() { return "imqzzZ"; }
     getMaturity(platform) { return Maturity.Stable; }
 
@@ -69,7 +69,7 @@ export class Element {
         switch (platform) {
             case Platform.iOS: return [new AppleStoreLink('vector', 'id1083446067')];
             case Platform.Android: return [new PlayStoreLink('im.vector.app'), new FDroidLink('im.vector.app')];
-            default: return [new WebsiteLink("https://chat.dingshunyu.top/get-started")];
+            default: return [new WebsiteLink("https://chat.imzqqq.top/get-started")];
         }
     }
 

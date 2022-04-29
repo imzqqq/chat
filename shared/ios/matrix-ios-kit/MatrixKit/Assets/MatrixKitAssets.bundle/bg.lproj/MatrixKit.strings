@@ -11,12 +11,12 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "Регистрация:";
-"login_server_url_placeholder" = "URL (напр. https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (напр. https://chat.imzqqq.top)";
 "login_home_server_title" = "Home сървър адрес:";
 "login_home_server_info" = "Сървърът Ви съхранява цялата кореспонденция и профилни данни";
 "login_identity_server_title" = "Адрес на сървър за самоличност:";
-"login_identity_server_info" = "Matrix предоставя сървъри за самоличност, които проследяват кои имейли и т.н. на кои Matrix идентификатори принадлежат. В момента съществува само https://chat.dingshunyu.top.";
-"login_user_id_placeholder" = "Matrix ID (напр. @ivan:chat.dingshunyu.top или ivan)";
+"login_identity_server_info" = "Matrix предоставя сървъри за самоличност, които проследяват кои имейли и т.н. на кои Matrix идентификатори принадлежат. В момента съществува само https://chat.imzqqq.top.";
+"login_user_id_placeholder" = "Matrix ID (напр. @ivan:chat.imzqqq.top или ivan)";
 "login_password_placeholder" = "Парола";
 "login_optional_field" = "по избор";
 "login_display_name_placeholder" = "Име (напр. Иван Георгиев)";
@@ -308,7 +308,7 @@
 "login_error_already_logged_in" = "Вече сте в профила си";
 "login_error_must_start_http" = "URL адресът трябва да започва с http[s]://";
 // contacts list screen 
-"invitation_message" = "Бих искал да си пиша с Вас в matrix. За повече информация, моля, посетете уебсайта http://chat.dingshunyu.top.";
+"invitation_message" = "Бих искал да си пиша с Вас в matrix. За повече информация, моля, посетете уебсайта http://chat.imzqqq.top.";
 // Settings screen 
 "settings_title_config" = "Конфигурация";
 "settings_title_notifications" = "Известия";

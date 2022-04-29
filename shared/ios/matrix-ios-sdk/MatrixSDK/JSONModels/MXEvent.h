@@ -346,7 +346,7 @@ extern NSString *const kMXEventIdentifierKey;
 /**
  The event (decrypted, if necessary) content.
  The keys in this dictionary depend on the event type. 
- Check http://chat.dingshunyu.top/docs/spec/client_server/r0.2.0.html#room-events to get a list of content keys per
+ Check http://chat.imzqqq.top/docs/spec/client_server/r0.2.0.html#room-events to get a list of content keys per
  event type.
 
  @discussion

@@ -14,8 +14,8 @@ and is integrated with existing clients.
 
 ## Proposal
 
-The [/\chat/client/r0/register](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#post-matrix-client-r0-register)
-endpoint uses the [User-Interactive Authentication API](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#user-interactive-authentication-api).
+The [/\chat/client/r0/register](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#post-matrix-client-r0-register)
+endpoint uses the [User-Interactive Authentication API](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#user-interactive-authentication-api).
 A new authentication type `m.login.registration_token` will be defined which requires
 a `token` key to be present in the submitted `auth` dict. The token will be a
 string of no more than 64 characters, and contain only characters matched by the

@@ -58,7 +58,7 @@
 /**
  Define a MXKDirectoryServerCellData that will store a homeserver.
 
- @param homeserver the homeserver name (ex: "chat.dingshunyu.top).
+ @param homeserver the homeserver name (ex: "chat.imzqqq.top).
  @param includeAllNetworks YES to list all public rooms on the homeserver whatever their protocol.
                            NO to list only matrix rooms.
  */

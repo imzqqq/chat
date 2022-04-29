@@ -1016,7 +1016,7 @@ NSString *const kRoomSettingsAdvancedE2eEnabledCellViewIdentifier = @"kRoomSetti
                                                                typeof(self) self = weakSelf;
                                                                self->currentAlert = nil;
                                                                
-                                                               // Create a to.chat.dingshunyu.top permalink to the room
+                                                               // Create a to.chat.imzqqq.top permalink to the room
                                                                
                                                                NSString *permalink = [MXTools permalinkToRoom:roomAliasLabel.text];
                                                                

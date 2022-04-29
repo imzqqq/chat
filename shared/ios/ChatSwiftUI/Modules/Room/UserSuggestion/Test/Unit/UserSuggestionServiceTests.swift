@@ -25,7 +25,7 @@ class UserSuggestionServiceTests: XCTestCase {
         service?.processTextMessage("@Alice")
         assert(service?.items.value.first?.displayName == "Alice")
         
-        service?.processTextMessage("@alice:chat.dingshunyu.top")
+        service?.processTextMessage("@alice:chat.imzqqq.top")
         assert(service?.items.value.first?.displayName == "Alice")
     }
     
@@ -60,7 +60,7 @@ class UserSuggestionServiceTests: XCTestCase {
         service?.processTextMessage("@@")
         assert(service?.items.value.count == 0)
         
-        service?.processTextMessage("alice@chat.dingshunyu.top")
+        service?.processTextMessage("alice@chat.imzqqq.top")
         assert(service?.items.value.count == 0)
     }
     
@@ -94,8 +94,8 @@ class UserSuggestionServiceTests: XCTestCase {
 extension UserSuggestionServiceTests: RoomMembersProviderProtocol {
     func fetchMembers(_ members: @escaping ([RoomMembersProviderMember]) -> Void) {
         
-        let users = [("Alice", "@alice:chat.dingshunyu.top"),
-                     ("Bob", "@bob:chat.dingshunyu.top")]
+        let users = [("Alice", "@alice:chat.imzqqq.top"),
+                     ("Bob", "@bob:chat.imzqqq.top")]
         
         members(users.map({ user in
             RoomMembersProviderMember(userId: user.1, displayName: user.0, avatarUrl: "")

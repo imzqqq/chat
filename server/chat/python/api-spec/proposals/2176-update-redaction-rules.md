@@ -1,7 +1,7 @@
 # MSC2176: Update the redaction rules
 
 The current [redaction
-algorithm](https://chat.api-spec.dingshunyu.top/client_server/r0.5.0#redactions) is now
+algorithm](https://chat.api-spec.imzqqq.top/client_server/r0.5.0#redactions) is now
 somewhat dated. This MSC proposes a number of changes to the rules which will
 improve the security and reliability of the Chat protocol.
 
@@ -9,7 +9,7 @@ improve the security and reliability of the Chat protocol.
 
 The following changes will require a new room version, since changes to the
 redaction algorithm also change the way that [event
-hashes](https://chat.api-spec.dingshunyu.top/server_server/r0.1.2#calculating-the-reference-hash-for-an-event)
+hashes](https://chat.api-spec.imzqqq.top/server_server/r0.1.2#calculating-the-reference-hash-for-an-event)
 (and hence event IDs) are calculated.
 
 The following *event* keys are to be *removed* from the list of those to be

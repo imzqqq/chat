@@ -114,13 +114,13 @@
     <string name="label_header">Nagłówek</string>
     <string name="link_whats_an_instance">Czym jest instancja?</string>
     <string name="login_connection">Łączenie…</string>
-    <string name="dialog_whats_an_instance">Tutaj można wprowadzić domenę lub adres instancji, np. flow.dingshunyu.top, icosahedron.website, social.tchncs.de, i <a href="https://instances.social">wiele więcej!</a> 
+    <string name="dialog_whats_an_instance">Tutaj można wprowadzić domenę lub adres instancji, np. flow.imzqqq.top, icosahedron.website, social.tchncs.de, i <a href="https://instances.social">wiele więcej!</a> 
 \n
 \nJeżeli nie posiadasz jeszcze konta, wprowadź tu nazwę instancji, na której chcesz się zarejestrować.
 \n
 \nInstancja jest miejscem, na którym znajduje się twoje konto, lecz komunikując się z innymi serwerami, działa tak, jakby były jednym portalem.
 \n
-\nWięcej informacji można znaleźć na <a href="https://flow.join.dingshunyu.top">flow.join.dingshunyu.top</a>. </string>
+\nWięcej informacji można znaleźć na <a href="https://flow.join.imzqqq.top">flow.join.imzqqq.top</a>. </string>
     <string name="dialog_title_finishing_media_upload">Kończenie wysyłania treści</string>
     <string name="dialog_message_uploading_media">Wysyłanie…</string>
     <string name="dialog_download_image">Pobierz</string>

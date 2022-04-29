@@ -2787,7 +2787,7 @@
     <string name="template_settings_developer_mode_fail_fast_summary">${app_name} може частіше виходити з ладу, коли виникає несподівана помилка</string>
     <string name="settings_developer_mode_fail_fast_title">Швидкий збій</string>
     <string name="autocomplete_limited_results">Показано лише перші результати, введіть більше букв…</string>
-    <string name="permalink_malformed">Ваше посилання to.chat.dingshunyu.top неправильне</string>
+    <string name="permalink_malformed">Ваше посилання to.chat.imzqqq.top неправильне</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Ви втратите доступ до захищених повідомлень, якщо ви не увійдете, щоб відновити ключі шифрування.</string>
     <string name="autodiscover_well_known_error">Не вдалося знайти чинний домашній сервер. Перевірте свій ідентифікатор</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">Це хибний ідентифікатор користувача. Очікуваний формат: «@user:homeserver.org»</string>

@@ -2,7 +2,7 @@
 
 [RFC822](https://tools.ietf.org/html/rfc822#section-3.4.7) mandates that
 localparts in e-mail addresses must be processed with the original case
-preserved. [The Chat spec](https://chat.api-spec.dingshunyu.top/appendices#pid-types)
+preserved. [The Chat spec](https://chat.api-spec.imzqqq.top/appendices#pid-types)
 doesn't mandate anything about processing e-mail addresses, other than the fact
 that the domain part must be converted to lowercase, as domain names are case
 insensitive.
@@ -21,7 +21,7 @@ Sydent.
 ## Proposal
 
 This proposal suggests changing the specification of the e-mail 3PID type in
-[the Chat spec appendices](https://chat.api-spec.dingshunyu.top/appendices#pid-types)
+[the Chat spec appendices](https://chat.api-spec.imzqqq.top/appendices#pid-types)
 to mandate that, before any processing, e-mail addresses must go through a full
 case folding as described under "Caseless Matching" in
 [chapter 5 of the unicode standard](https://www.unicode.org/versions/Unicode13.0.0/ch05.pdf#G21790), on top of

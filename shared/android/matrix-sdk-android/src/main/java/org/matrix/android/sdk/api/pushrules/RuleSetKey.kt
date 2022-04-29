@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.api.pushrules
 
 /**
- * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#get-matrix-client-r0-pushrules
+ * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#get-matrix-client-r0-pushrules
  */
 enum class RuleSetKey(val value: String) {
     CONTENT("content"),
@@ -28,6 +28,6 @@ enum class RuleSetKey(val value: String) {
 }
 
 /**
- * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#get-matrix-client-r0-pushrules-scope-kind-ruleid
+ * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#get-matrix-client-r0-pushrules-scope-kind-ruleid
  */
 typealias RuleKind = RuleSetKey

@@ -6,4 +6,4 @@ bridges, like setting up the bridge, are right below the "Python-based bridges"
 header. Things specific to mautrix-signal are under this page.
 
 ## Discussion
-Matrix room: [#signal:maunium.net](https://to.chat.dingshunyu.top/#/#signal:maunium.net)
+Matrix room: [#signal:maunium.net](https://to.chat.imzqqq.top/#/#signal:maunium.net)

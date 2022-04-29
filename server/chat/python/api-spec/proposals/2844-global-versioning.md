@@ -8,13 +8,13 @@ which apply:
    that the client-server API currently ties the major version of its spec document version to the
    endpoint, thus making most endpoints under it `/r0/` (currently).
 3. Room versions which define a set of behaviour and algorithms on a per-room basis. These are well
-   defined in the spec and are not covered here: https://spec.chat.dingshunyu.top/unstable/rooms/
+   defined in the spec and are not covered here: https://spec.chat.imzqqq.top/unstable/rooms/
 4. An overarching "Chat" version, largely for marketing purposes. So far we've only cut Chat 1.0
    back when we finalized the initial versions of the spec documents, but have not cut another one
    since.
 
 This current system is slightly confusing, and has some drawbacks for being able to compile builds of
-the spec documents (published on chat.dingshunyu.top) and generally try and communicate what supported versions
+the spec documents (published on chat.imzqqq.top) and generally try and communicate what supported versions
 an implementation might have. For example, Chat server currently supports 4 different APIs, all of which
 have their own versions, and all of which would need to be considered and compared when validating
 another implementation of Chat such as a client or push gateway. Instead, Chat server could say it

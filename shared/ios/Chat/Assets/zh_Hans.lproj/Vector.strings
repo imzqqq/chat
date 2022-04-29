@@ -365,7 +365,7 @@
 "directory_server_all_rooms" = "%@ 服务器上的所有聊天室";
 "directory_server_all_native_rooms" = "所有本地 Matrix 聊天室";
 "directory_server_type_homeserver" = "输入一个主服务器来列出公共聊天室";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 // Others
 "or" = "或";
 "you" = "您";
@@ -410,7 +410,7 @@
 "settings_ui_dark_theme" = "暗色主题";
 // Events formatter
 "event_formatter_member_updates" = "%tu 的成员身份变化";
-"auth_home_server_placeholder" = "URL（例如 https://chat.dingshunyu.top）";
+"auth_home_server_placeholder" = "URL（例如 https://chat.imzqqq.top）";
 "auth_identity_server_placeholder" = "URL（例如 https://vector.im）";
 "contacts_user_directory_section" = "用户目录";
 "contacts_user_directory_offline_section" = "用户目录（离线）";
@@ -525,7 +525,7 @@
 "room_resource_usage_limit_reached_message_contact_3" = " 以提高限制。";
 // String for App Store
 "store_short_description" = "安全、去中心化的聊天及 VoIP 应用";
-"store_full_description" = "Element 是一种新型的通讯与协作应用：\n\n1. 使您可以掌控您的隐私\n2. 使您与 Matrix 网络中的任何人交流，甚至可以通过集成功能与如 Slack 之类的其他应用通讯\n3. 保护您免受广告，大数据挖掘和封闭服务的侵害\n4. 通过端到端加密保证安全，通过交叉签名验证其他人\n\nElement 与其他通讯与协作应用完全不同，因为它是去中心化且开源的。\n\nElement 允许您自托管——或者选择托管商——因此，您能拥有数据和会话的隐私权，所有权和控制权。它允许您访问开放网络；因此，您可以与 Element 用户以外的人交流。并且它非常安全。\n\nElement 之所以可以做到这些，是因为它在 Matrix 上运行——开放，去中心化通讯的标准。\n\n通过让您选择由谁来托管您的会话，Element 让您掌控一切。在 Element 应用中，您可以选择不同的托管方式：\n\n1. 在由 Matrix 开发者托管的 chat.dingshunyu.top 公共服务器上获取免费帐户，或从志愿者托管的上千个公共服务器中选择\n2. 在您自己的硬件上运行服务器，自托管您的会话\n3. 通过订阅 Element Matrix Services 托管平台，简单地在自定义服务器上注册账户\n\n为什么选择 Element？\n\n掌控您的数据：您来决定存放您的数据和消息的位置。拥有并控制它的是您，而不是挖掘您的数据或与第三方分享的巨型企业。\n\n开放通讯与协作：您可以与 Matrix 网络中的任何人聊天，不论他们使用 Element 还是其他 Matrix 应用，甚至/即使他们在使用不同的通讯系统，例如 Slack，IRC 或 XMPP。\n\n超级安全：支持真正的端到端加密（仅有会话中的人可以解密消息），还有能够验证会话参与方的设备的交叉签名。\n\n完善的通讯方式：消息，语音和视频通话，文件共享，屏幕共享和大量集成功能，机器人和挂件。建立房间与社区，保持联系并完成工作。\n\n随时随地：消息历史可在您的全部设备和 https://app.element.io 网页端之间完全同步，无论您在哪里，都可以保持联系。";
+"store_full_description" = "Element 是一种新型的通讯与协作应用：\n\n1. 使您可以掌控您的隐私\n2. 使您与 Matrix 网络中的任何人交流，甚至可以通过集成功能与如 Slack 之类的其他应用通讯\n3. 保护您免受广告，大数据挖掘和封闭服务的侵害\n4. 通过端到端加密保证安全，通过交叉签名验证其他人\n\nElement 与其他通讯与协作应用完全不同，因为它是去中心化且开源的。\n\nElement 允许您自托管——或者选择托管商——因此，您能拥有数据和会话的隐私权，所有权和控制权。它允许您访问开放网络；因此，您可以与 Element 用户以外的人交流。并且它非常安全。\n\nElement 之所以可以做到这些，是因为它在 Matrix 上运行——开放，去中心化通讯的标准。\n\n通过让您选择由谁来托管您的会话，Element 让您掌控一切。在 Element 应用中，您可以选择不同的托管方式：\n\n1. 在由 Matrix 开发者托管的 chat.imzqqq.top 公共服务器上获取免费帐户，或从志愿者托管的上千个公共服务器中选择\n2. 在您自己的硬件上运行服务器，自托管您的会话\n3. 通过订阅 Element Matrix Services 托管平台，简单地在自定义服务器上注册账户\n\n为什么选择 Element？\n\n掌控您的数据：您来决定存放您的数据和消息的位置。拥有并控制它的是您，而不是挖掘您的数据或与第三方分享的巨型企业。\n\n开放通讯与协作：您可以与 Matrix 网络中的任何人聊天，不论他们使用 Element 还是其他 Matrix 应用，甚至/即使他们在使用不同的通讯系统，例如 Slack，IRC 或 XMPP。\n\n超级安全：支持真正的端到端加密（仅有会话中的人可以解密消息），还有能够验证会话参与方的设备的交叉签名。\n\n完善的通讯方式：消息，语音和视频通话，文件共享，屏幕共享和大量集成功能，机器人和挂件。建立房间与社区，保持联系并完成工作。\n\n随时随地：消息历史可在您的全部设备和 https://app.element.io 网页端之间完全同步，无论您在哪里，都可以保持联系。";
 "auth_accept_policies" = "请查看并接受此主页服务器的服务条款：";
 "room_replacement_information" = "这个聊天室已被替换，不再有效。";
 "settings_flair" = "在允许的地方显示个性徽章";
@@ -1172,7 +1172,7 @@
 "dialpad_title" = "拨号键盘";
 "room_info_list_section_other" = "其他";
 "create_room_section_footer_encryption" = "加密一经启用，便无法禁用。";
-"create_room_placeholder_address" = "#testroom:chat.dingshunyu.top";
+"create_room_placeholder_address" = "#testroom:chat.imzqqq.top";
 "create_room_section_header_address" = "聊天室地址";
 "create_room_section_header_type" = "聊天室类型";
 "create_room_enable_encryption" = "启用加密";

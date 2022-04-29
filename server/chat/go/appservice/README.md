@@ -1,7 +1,7 @@
 # Application Service
 
 This component interfaces with external [Application
-Services](https://chat.docs.dingshunyu.top/spec/application_service/unstable.html).
+Services](https://chat.docs.imzqqq.top/spec/application_service/unstable.html).
 This includes any HTTP endpoints that application services call, as well as talking
 to any HTTP endpoints that application services provide themselves.
 

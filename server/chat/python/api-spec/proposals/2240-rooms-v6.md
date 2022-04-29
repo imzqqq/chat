@@ -1,6 +1,6 @@
 # MSC2240: Room Version 6
 
-A new room version, `6`, is proposed using [room version 5](https://chat.api-spec.dingshunyu.top/rooms/v5.html) as a base
+A new room version, `6`, is proposed using [room version 5](https://chat.api-spec.imzqqq.top/rooms/v5.html) as a base
 and incorporating the following MSCs:
 
 * [MSC2209](https://github.com/matrix-org/matrix-doc/pull/2209) - Including notifications in power level auth rules.

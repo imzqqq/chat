@@ -86,7 +86,7 @@ async def search(evt: CommandEvent) -> EventID:
         reply += ["**Results from Telegram server:**", ""]
     else:
         reply += ["**Results in contacts:**", ""]
-    reply += [(f"* [{puppet.displayname}](https://to.chat.dingshunyu.top/#/{puppet.mxid}): "
+    reply += [(f"* [{puppet.displayname}](https://to.chat.imzqqq.top/#/{puppet.mxid}): "
                f"{puppet.id} ({similarity}% match)")
               for puppet, similarity in results]
 

@@ -14,10 +14,10 @@ const MXProjectHeader = ({ project, imageSize }) => {
             <h3 id={"title-" + kebabCase(project.title)}>{project.title}</h3>
             <a href={project.slug}>{project.title} on matrix.org</a><br />
             <a href={project.repo}>{project.repo}</a><br />
-            <a href={"https://to.chat.dingshunyu.top/#/" + project.room}>{project.room}</a><br />
+            <a href={"https://to.chat.imzqqq.top/#/" + project.room}>{project.room}</a><br />
             {project.example_mxid &&
                 <div>
-                    Example mxid: <a href={"https://to.chat.dingshunyu.top/#/" + project.example_mxid}>{project.example_mxid}</a>
+                    Example mxid: <a href={"https://to.chat.imzqqq.top/#/" + project.example_mxid}>{project.example_mxid}</a>
                 </div>
             }
 

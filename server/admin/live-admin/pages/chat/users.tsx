@@ -58,7 +58,7 @@ export default function ChatUsers() {
       <p className="description">
         Visit the{' '}
         <a
-          href="https://live.docs.dingshunyu.top/docs/viewers/?source=admin"
+          href="https://live.docs.imzqqq.top/docs/viewers/?source=admin"
           target="_blank"
           rel="noopener noreferrer"
         >

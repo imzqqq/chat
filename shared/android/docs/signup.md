@@ -2,7 +2,7 @@
 
 This document describes the flow of registration to a homeserver. Examples come from the `matrix.org` homeserver.
 
-*Ref*: https://chat.docs.dingshunyu.top/spec/client_server/latest#account-registration-and-management
+*Ref*: https://chat.docs.imzqqq.top/spec/client_server/latest#account-registration-and-management
 
 ## Sign up flows
 
@@ -397,8 +397,8 @@ curl -X POST --data $'{"auth":{"response":"03AOLTBLSiGS9GhFDpAMblJ2nlXOmHXqAYJ5O
 
 ```json
 {
-  "user_id": "@alice:chat.dingshunyu.top",
-  "home_server": "chat.dingshunyu.top",
+  "user_id": "@alice:chat.imzqqq.top",
+  "home_server": "chat.imzqqq.top",
   "access_token": "MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMoREDACTEDo50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI5Y2lkIHVzZXJfaWQgPSBAYmVub2l0eHh4eDptYXRoREDACTEDoCjAwMTZjaWQgdHlwZSA9IGFjY2VzcwowMDIxY2lkIG5vbmNlID0gNHVSVm00aVFDaWlKdoREDACTEDoJmc2lnbmF0dXJlIOmHnTLRfxiPjhrWhS-dThUX-qAzZktfRThzH1YyAsxaCg",
   "device_id": "FLBAREDAJZ"
 }

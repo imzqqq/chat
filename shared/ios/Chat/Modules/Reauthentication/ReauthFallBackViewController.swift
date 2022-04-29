@@ -1,6 +1,6 @@
 import UIKit
 
-/// View controller used for User-Interactive Authentication fallback (https://chat.dingshunyu.top/docs/spec/client_server/latest#fallback)
+/// View controller used for User-Interactive Authentication fallback (https://chat.imzqqq.top/docs/spec/client_server/latest#fallback)
 final class ReauthFallBackViewController: AuthFallBackViewController, Themable {
     
     // MARK: - Properties

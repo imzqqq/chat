@@ -110,7 +110,7 @@ paths:
         - in: path
           type: string
           name: serverName
-          x-example: chat.dingshunyu.top
+          x-example: chat.imzqqq.top
           required: true
           description: |
             The server name from the `mxc://` URI (the authoritory component)
@@ -175,7 +175,7 @@ paths:
         - in: path
           type: string
           name: serverName
-          x-example: chat.dingshunyu.top
+          x-example: chat.imzqqq.top
           required: true
           description: |
             The server name from the `mxc://` URI (the authoritory component)
@@ -362,7 +362,7 @@ paths:
         - in: query
           type: string
           format: uri
-          x-example: "https://chat.dingshunyu.top"
+          x-example: "https://chat.imzqqq.top"
           name: url
           description: "The URL to get a preview of."
           required: true
@@ -397,7 +397,7 @@ paths:
           examples:
             application/json: {
                 "og:title": "Chat Blog Post",
-                "og:description": "This is a really cool blog post from chat.dingshunyu.top",
+                "og:description": "This is a really cool blog post from chat.imzqqq.top",
                 "og:image": "mxc://example.com/ascERGshawAWawugaAcauga",
                 "og:image:type": "image/png",
                 "og:image:height": 48,

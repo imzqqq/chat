@@ -14,7 +14,7 @@ In other massive news, <a href="https://github.com/mujx">mujx</a> has an initial
 
 <h3>Seaglass</h3>
 The elegant macOS native client entered the second week of its existence!  <a href="https://github.com/neilalexander/seaglass">Seaglass</a> is now released under AGPLv3, and has lots more refinements - Markdown support, UTF8 bugfixes, Bubble UI and more!
-There's also experimentation on the horizon to use NSWebKit rather than NSAttributedString for rendering. For more info, join <a href="https://to.chat.dingshunyu.top/#/#seaglass:matrix.org">#seaglass:matrix.org</a>.
+There's also experimentation on the horizon to use NSWebKit rather than NSAttributedString for rendering. For more info, join <a href="https://to.chat.imzqqq.top/#/#seaglass:matrix.org">#seaglass:matrix.org</a>.
 <h3>Fractal</h3>
 Tobias Bernard tells us that Fractal 3.29.0 was released: "our first release following the GNOME versioning scheme. It includes Eisha's redesigned room directory, and the all-new account settings by Julian. Daniel worked on adding a message queue, which makes Fractal much more usable on slow internet connections.".  And here's a pic of the new room directory!
 
@@ -71,7 +71,7 @@ Meanwhile, APwhitehat is filling in gaps on the S2S API where possible (and is a
 Implementing E2E key requests is almost finished on both iOS &amp; Android
 Lots of perf work ongoing - e.g. Realm on Android and UI thread profiling on iOS (turns out read receipt animations are way slower than they should be)
 
-Unfortunately the GSoC project for implementing alternative push mechanisms (i.e. free alternatives to GCM/FCM/APNS) hasn't worked out. We would love contributors to pick it up however - <a href="https://docs.google.com/document/d/1ULOMnR7YehCJD-VCYplWC3e9KRZynSgUo5wk-nwnzds">https://docs.google.com/document/d/1ULOMnR7YehCJD-VCYplWC3e9KRZynSgUo5wk-nwnzds</a> is a Google Doc which lists various possible approaches.  This is a really important project; please get in touch with <a href="https://to.chat.dingshunyu.top/#/@matthew:matrix.org">Matthew</a> or <a href="https://to.chat.dingshunyu.top/#/@dave:matrix.org">Dave</a> if you want to help make it happen!
+Unfortunately the GSoC project for implementing alternative push mechanisms (i.e. free alternatives to GCM/FCM/APNS) hasn't worked out. We would love contributors to pick it up however - <a href="https://docs.google.com/document/d/1ULOMnR7YehCJD-VCYplWC3e9KRZynSgUo5wk-nwnzds">https://docs.google.com/document/d/1ULOMnR7YehCJD-VCYplWC3e9KRZynSgUo5wk-nwnzds</a> is a Google Doc which lists various possible approaches.  This is a really important project; please get in touch with <a href="https://to.chat.imzqqq.top/#/@matthew:matrix.org">Matthew</a> or <a href="https://to.chat.imzqqq.top/#/@dave:matrix.org">Dave</a> if you want to help make it happen!
 <h3>Riot/Web</h3>
 Residual GDPR erasure work ongoing and generally distracting from everything
 Lots of E2E-capable antivirus work (more details coming soon)

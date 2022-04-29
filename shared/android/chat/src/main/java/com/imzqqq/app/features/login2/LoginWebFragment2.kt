@@ -161,9 +161,9 @@ class LoginWebFragment2 @Inject constructor(
              * js:{
              *     "action":"onLogin",
              *     "credentials":{
-             *         "user_id":"@user:chat.dingshunyu.top",
+             *         "user_id":"@user:chat.imzqqq.top",
              *         "access_token":"[ACCESS_TOKEN]",
-             *         "home_server":"chat.dingshunyu.top",
+             *         "home_server":"chat.imzqqq.top",
              *         "device_id":"[DEVICE_ID]",
              *         "well_known":{
              *             "m.homeserver":{

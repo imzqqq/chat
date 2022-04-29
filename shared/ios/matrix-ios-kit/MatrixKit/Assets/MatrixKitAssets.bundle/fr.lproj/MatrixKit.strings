@@ -11,12 +11,12 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "Créer un compte :";
-"login_server_url_placeholder" = "URL (par ex. https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (par ex. https://chat.imzqqq.top)";
 "login_home_server_title" = "URL du serveur d’accueil :";
 "login_home_server_info" = "Votre serveur d’accueil stocke toutes vos discussions et les données de votre compte";
 "login_identity_server_title" = "URL du serveur d’identité :";
-"login_identity_server_info" = "Matrix fournit des serveurs d’identité pour lier les e-mail, etc aux identifiants Matrix. Seul https://chat.dingshunyu.top existe pour l’instant.";
-"login_user_id_placeholder" = "Identifiant Matrix (par ex. @bob:chat.dingshunyu.top ou bob)";
+"login_identity_server_info" = "Matrix fournit des serveurs d’identité pour lier les e-mail, etc aux identifiants Matrix. Seul https://chat.imzqqq.top existe pour l’instant.";
+"login_user_id_placeholder" = "Identifiant Matrix (par ex. @bob:chat.imzqqq.top ou bob)";
 "login_password_placeholder" = "Mot de passe";
 "login_optional_field" = "facultatif";
 "login_display_name_placeholder" = "Nom d’affichage (par ex. Bob Obson)";
@@ -301,7 +301,7 @@
 "login_error_already_logged_in" = "Déjà connecté";
 "login_error_must_start_http" = "L’URL doit débuter par http[s]://";
 // contacts list screen 
-"invitation_message" = "Je souhaiterais discuter avec vous sur Matrix. Veuillez visiter le site web http://chat.dingshunyu.top pour plus d’informations.";
+"invitation_message" = "Je souhaiterais discuter avec vous sur Matrix. Veuillez visiter le site web http://chat.imzqqq.top pour plus d’informations.";
 // Settings screen 
 "settings_title_config" = "Configuration";
 "settings_title_notifications" = "Notifications";

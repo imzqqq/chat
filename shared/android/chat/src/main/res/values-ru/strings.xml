@@ -783,7 +783,7 @@
     <string name="room_settings_never_send_to_unverified_devices_summary">Никогда не отправлять шифрованное сообщение на непроверенные сессии в этой комнате с этой сессии.</string>
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">У этой комнаты еще нет локального адреса</string>
-    <string name="room_settings_addresses_add_new_address">Новый адрес (например #foo:chat.dingshunyu.top")</string>
+    <string name="room_settings_addresses_add_new_address">Новый адрес (например #foo:chat.imzqqq.top")</string>
     <string name="room_settings_addresses_invalid_format_dialog_title">Неверный формат псевдонима</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' неверный формат псевдонима</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">Для этой комнаты не будет основного адреса.</string>
@@ -1889,7 +1889,7 @@
     <string name="soft_logout_clear_data_dialog_submit">Очистить данные</string>
     <string name="template_soft_logout_sso_not_same_user_error">Текущая сессия предназначена для пользователя %1$s, а вы предоставляете учётные данные для пользователя %2$s. Это не поддерживается в ${app_name}.
 \nПожалуйста, сначала очистите данные, а затем снова войдите под другим аккаунтом.</string>
-    <string name="permalink_malformed">Ваша ссылка на to.chat.dingshunyu.top неверна</string>
+    <string name="permalink_malformed">Ваша ссылка на to.chat.imzqqq.top неверна</string>
     <string name="bug_report_error_too_short">Описание слишком короткое</string>
     <string name="settings_show_devices_list">Посмотреть все мои сессии</string>
     <string name="settings_advanced_settings">Дополнительные настройки</string>

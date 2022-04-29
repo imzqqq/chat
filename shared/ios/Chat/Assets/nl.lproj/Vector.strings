@@ -387,7 +387,7 @@
 "directory_server_all_rooms" = "Alle kamers op server %@";
 "directory_server_all_native_rooms" = "Alle lokale Matrix-kamers";
 "directory_server_type_homeserver" = "Voer een server in om de publieke kamers ervan weer te geven";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 // Others
 "or" = "of";
 "you" = "U";
@@ -435,7 +435,7 @@
 // Events formatter
 "event_formatter_member_updates" = "%tu lidmaatschapsaanpassingen";
 "bug_report_send" = "Versturen";
-"auth_home_server_placeholder" = "URL (bv. https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (bv. https://chat.imzqqq.top)";
 "auth_identity_server_placeholder" = "URL (bv. https://vector.im)";
 "room_ongoing_conference_call_with_close" = "Er is een vergadergesprek gaande. Neem deel met %@ of %@. %@ het.";
 "room_ongoing_conference_call_close" = "Sluiten";
@@ -564,7 +564,7 @@
 "room_message_reply_to_short_placeholder" = "Stuur een antwoord…";
 // String for App Store
 "store_short_description" = "Veilig en gedecentraliseerd chatten en bellen";
-"store_full_description" = "Element is een nieuw type messenger en samenwerkings app die:\n\n1. U de controle geeft om uw privacy te behouden\n2. U laat communiceren met iedereen in het Matrix-netwerk, en zelfs daarbuiten door integratie met apps zoals Slack\n3. Beschermt u tegen reclame, datamining, achterdeurtjes en ommuurde netwerken\n4. Beveiligt u door eind-tot-eind versleuteling, met kruislings ondertekenen om anderen te verifiëren\n\nElement is compleet anders dan andere messengers en samenwerkings-apps, omdat het gedecentraliseerd en open source is.\n\nMet Element kunt u zelf hosten - of een host kiezen - zodat u privacy, eigendom en controle heeft over uw gegevens en gesprekken. Het geeft u toegang tot een open netwerk; u zit dus niet vast aan het praten met alleen andere Element-gebruikers. En het is zeer veilig.\n\nElement is hiertoe in staat omdat het werkt op basis van Matrix - de standaard voor open, gedecentraliseerde communicatie. \n\nElement geeft u de controle door u te laten kiezen wie uw gesprekken host. Vanuit de Element app kunt u kiezen om op verschillende manieren te hosten:\n\n1. Neem een gratis account op de publieke server chat.dingshunyu.top\n2. Host het zelf, uw account door draait op uw eigen server\n3. Laat ons het hosten, meld u aan voor een account op een aangepaste server bij het Element Matrix Services hosting platform\n\nWaarom kiest u voor Element?\n\nEIGENAAR VAN UW GEGEVENS: U bepaalt waar uw gegevens en berichten worden bewaard. U bent de eigenaar en heeft de controle, niet een of andere MEGACORP die uw gegevens mijnt of toegang geeft aan derden.\n\nOPEN MESSAGING EN SAMENWERKING: U kunt met iedereen in het Matrix-netwerk chatten, of ze nu Element of een andere Matrix-app gebruiken, en zelfs als ze een ander messaging-systeem gebruiken zoals Slack, IRC of XMPP.\n\nSUPER-VEILIG: Echte eind-tot-eind versleuteling (alleen degenen in de conversatie kunnen berichten ontsleutelen), en kruislings ondertekenen om de apparaten van gespreksdeelnemers te verifiëren.\n\nCOMPLETE COMMUNICATIE: Berichten, spraak- en videogesprekken, bestandsdeling, schermdeling en een heleboel integraties, bots en widgets. Bouw kamers, ruimtes, blijf in contact en krijg het gedaan.\n\nOVERAL WAAR U BENT: Blijf in contact waar u ook bent met volledig gesynchroniseerde berichtgeschiedenis op al uw apparaten en op het web op https://element.io/app.";
+"store_full_description" = "Element is een nieuw type messenger en samenwerkings app die:\n\n1. U de controle geeft om uw privacy te behouden\n2. U laat communiceren met iedereen in het Matrix-netwerk, en zelfs daarbuiten door integratie met apps zoals Slack\n3. Beschermt u tegen reclame, datamining, achterdeurtjes en ommuurde netwerken\n4. Beveiligt u door eind-tot-eind versleuteling, met kruislings ondertekenen om anderen te verifiëren\n\nElement is compleet anders dan andere messengers en samenwerkings-apps, omdat het gedecentraliseerd en open source is.\n\nMet Element kunt u zelf hosten - of een host kiezen - zodat u privacy, eigendom en controle heeft over uw gegevens en gesprekken. Het geeft u toegang tot een open netwerk; u zit dus niet vast aan het praten met alleen andere Element-gebruikers. En het is zeer veilig.\n\nElement is hiertoe in staat omdat het werkt op basis van Matrix - de standaard voor open, gedecentraliseerde communicatie. \n\nElement geeft u de controle door u te laten kiezen wie uw gesprekken host. Vanuit de Element app kunt u kiezen om op verschillende manieren te hosten:\n\n1. Neem een gratis account op de publieke server chat.imzqqq.top\n2. Host het zelf, uw account door draait op uw eigen server\n3. Laat ons het hosten, meld u aan voor een account op een aangepaste server bij het Element Matrix Services hosting platform\n\nWaarom kiest u voor Element?\n\nEIGENAAR VAN UW GEGEVENS: U bepaalt waar uw gegevens en berichten worden bewaard. U bent de eigenaar en heeft de controle, niet een of andere MEGACORP die uw gegevens mijnt of toegang geeft aan derden.\n\nOPEN MESSAGING EN SAMENWERKING: U kunt met iedereen in het Matrix-netwerk chatten, of ze nu Element of een andere Matrix-app gebruiken, en zelfs als ze een ander messaging-systeem gebruiken zoals Slack, IRC of XMPP.\n\nSUPER-VEILIG: Echte eind-tot-eind versleuteling (alleen degenen in de conversatie kunnen berichten ontsleutelen), en kruislings ondertekenen om de apparaten van gespreksdeelnemers te verifiëren.\n\nCOMPLETE COMMUNICATIE: Berichten, spraak- en videogesprekken, bestandsdeling, schermdeling en een heleboel integraties, bots en widgets. Bouw kamers, ruimtes, blijf in contact en krijg het gedaan.\n\nOVERAL WAAR U BENT: Blijf in contact waar u ook bent met volledig gesynchroniseerde berichtgeschiedenis op al uw apparaten en op het web op https://element.io/app.";
 "auth_login_single_sign_on" = "Aanmelden met enkele aanmelding";
 "auth_accept_policies" = "Gelieve het beleid van deze server te lezen en aanvaarden:";
 "auth_autodiscover_invalid_response" = "Ongeldig server-ontdekkings-antwoord";
@@ -929,7 +929,7 @@
 
 "room_info_list_one_member" = "1 persoon";
 "room_info_list_several_members" = "%@ personen";
-"create_room_placeholder_address" = "#testkamer:chat.dingshunyu.top";
+"create_room_placeholder_address" = "#testkamer:chat.imzqqq.top";
 "create_room_section_header_address" = "Kameradres";
 "create_room_show_in_directory" = "Kamer weergeven in de gids";
 "create_room_section_footer_type" = "Personen kunnen alleen met een uitnodiging deelnemen aan een privékamer.";

@@ -129,7 +129,7 @@ export default function CodecSelector() {
         you may be able to improve your video encoding performance.
         <p>
           <a
-            href="https://live.docs.dingshunyu.top/docs/codecs?source=admin"
+            href="https://live.docs.imzqqq.top/docs/codecs?source=admin"
             target="_blank"
             rel="noopener noreferrer"
           >

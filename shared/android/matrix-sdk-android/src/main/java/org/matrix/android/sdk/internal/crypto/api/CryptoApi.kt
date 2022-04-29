@@ -42,21 +42,21 @@ internal interface CryptoApi {
 
     /**
      * Get the devices list
-     * Doc: https://chat.docs.dingshunyu.top/spec/client_server/latest#get-matrix-client-r0-devices
+     * Doc: https://chat.docs.imzqqq.top/spec/client_server/latest#get-matrix-client-r0-devices
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "devices")
     suspend fun getDevices(): DevicesListResponse
 
     /**
      * Get the device info by id
-     * Doc: https://chat.docs.dingshunyu.top/spec/client_server/latest#get-matrix-client-r0-devices-deviceid
+     * Doc: https://chat.docs.imzqqq.top/spec/client_server/latest#get-matrix-client-r0-devices-deviceid
      */
     @GET(NetworkConstants.URI_API_PREFIX_PATH_R0 + "devices/{deviceId}")
     suspend fun getDeviceInfo(@Path("deviceId") deviceId: String): DeviceInfo
 
     /**
      * Upload device and/or one-time keys.
-     * Doc: https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0.html#post-matrix-client-r0-keys-upload
+     * Doc: https://chat.docs.imzqqq.top/spec/client_server/r0.4.0.html#post-matrix-client-r0-keys-upload
      *
      * @param body the keys to be sent.
      */
@@ -65,7 +65,7 @@ internal interface CryptoApi {
 
     /**
      * Download device keys.
-     * Doc: https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0.html#post-matrix-client-r0-keys-query
+     * Doc: https://chat.docs.imzqqq.top/spec/client_server/r0.4.0.html#post-matrix-client-r0-keys-query
      *
      * @param params the params.
      */
@@ -101,7 +101,7 @@ internal interface CryptoApi {
 
     /**
      * Claim one-time keys.
-     * Doc: https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0.html#post-matrix-client-r0-keys-claim
+     * Doc: https://chat.docs.imzqqq.top/spec/client_server/r0.4.0.html#post-matrix-client-r0-keys-claim
      *
      * @param params the params.
      */
@@ -110,7 +110,7 @@ internal interface CryptoApi {
 
     /**
      * Send an event to a specific list of devices
-     * Doc: https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0.html#put-matrix-client-r0-sendtodevice-eventtype-txnid
+     * Doc: https://chat.docs.imzqqq.top/spec/client_server/r0.4.0.html#put-matrix-client-r0-sendtodevice-eventtype-txnid
      *
      * @param eventType     the type of event to send
      * @param transactionId the transaction ID for this event
@@ -123,7 +123,7 @@ internal interface CryptoApi {
 
     /**
      * Delete a device.
-     * Doc: https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0.html#delete-matrix-client-r0-devices-deviceid
+     * Doc: https://chat.docs.imzqqq.top/spec/client_server/r0.4.0.html#delete-matrix-client-r0-devices-deviceid
      *
      * @param deviceId the device id
      * @param params   the deletion parameters
@@ -134,7 +134,7 @@ internal interface CryptoApi {
 
     /**
      * Update the device information.
-     * Doc: https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0.html#put-matrix-client-r0-devices-deviceid
+     * Doc: https://chat.docs.imzqqq.top/spec/client_server/r0.4.0.html#put-matrix-client-r0-devices-deviceid
      *
      * @param deviceId the device id
      * @param params   the params
@@ -145,7 +145,7 @@ internal interface CryptoApi {
 
     /**
      * Get the update devices list from two sync token.
-     * Doc: https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0.html#get-matrix-client-r0-keys-changes
+     * Doc: https://chat.docs.imzqqq.top/spec/client_server/r0.4.0.html#get-matrix-client-r0-keys-changes
      *
      * @param oldToken the start token.
      * @param newToken the up-to token.

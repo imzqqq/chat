@@ -51,7 +51,7 @@ paths:
           name: roomId
           description: The room identifier to leave.
           required: true
-          x-example: "!nkl290a:chat.dingshunyu.top"
+          x-example: "!nkl290a:chat.imzqqq.top"
         - in: body
           name: body
           required: true
@@ -104,7 +104,7 @@ paths:
           name: roomId
           description: The room identifier to forget.
           required: true
-          x-example: "!au1ba7o:chat.dingshunyu.top"
+          x-example: "!au1ba7o:chat.imzqqq.top"
       responses:
         200:
           description: |-
@@ -119,7 +119,7 @@ paths:
           examples:
             application/json: {
               "errcode": "M_UNKNOWN",
-              "error": "User @example:chat.dingshunyu.top is in room !au1ba7o:chat.dingshunyu.top"
+              "error": "User @example:chat.imzqqq.top is in room !au1ba7o:chat.imzqqq.top"
             }
           schema:
             "$ref": "definitions/errors/error.yaml"

@@ -1582,10 +1582,10 @@
 
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">This room has no local addresses</string>
-    <string name="room_settings_addresses_add_new_address">New address (e.g #foo:chat.dingshunyu.top")</string>
+    <string name="room_settings_addresses_add_new_address">New address (e.g #foo:chat.imzqqq.top")</string>
 
     <string name="room_settings_no_flair">This room is not showing flair for any communities</string>
-    <string name="room_settings_add_new_group">New community ID (e.g +foo:chat.dingshunyu.top")</string>
+    <string name="room_settings_add_new_group">New community ID (e.g +foo:chat.imzqqq.top")</string>
     <string name="room_settings_invalid_group_format_dialog_title">Invalid community ID</string>
     <string name="room_settings_invalid_group_format_dialog_body">\'%s\' is not a valid community ID</string>
 
@@ -2663,7 +2663,7 @@
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_soft_logout_sso_not_same_user_error">The current session is for user %1$s and you provide credentials for user %2$s. This is not supported by ${app_name}.\nPlease first clear data, then sign in again on another account.</string>
 
-    <string name="permalink_malformed">Your to.chat.dingshunyu.top link was malformed</string>
+    <string name="permalink_malformed">Your to.chat.imzqqq.top link was malformed</string>
     <string name="bug_report_error_too_short">The description is too short</string>
 
     <string name="notification_initial_sync">Initial Sync…</string>
@@ -3497,7 +3497,7 @@
     <string name="invite_to_space_with_name_desc">"They’ll be able to explore %s"</string>
     <string name="invite_just_to_this_room">Just to this room</string>
     <string name="invite_just_to_this_room_desc">"They won’t be a part of %s"</string>
-    <!-- First one is the space name, and the second one is the to.chat.dingshunyu.top link -->
+    <!-- First one is the space name, and the second one is the to.chat.imzqqq.top link -->
     <string name="share_space_link_message">Join my space %1$s %2$s</string>
     <string name="skip_for_now">Skip for now</string>
     <string name="create_space">Create Space</string>

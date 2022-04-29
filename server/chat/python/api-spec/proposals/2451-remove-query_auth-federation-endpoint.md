@@ -19,7 +19,7 @@ proposal process.
 
 Remove the following endpoint:
 
-* [POST `/chat/federation/v1/query_auth/{roomId}/{eventId}`](https://chat.api-spec.dingshunyu.top/server_server/r0.1.3#post-matrix-federation-v1-query-auth-roomid-eventid)
+* [POST `/chat/federation/v1/query_auth/{roomId}/{eventId}`](https://chat.api-spec.imzqqq.top/server_server/r0.1.3#post-matrix-federation-v1-query-auth-roomid-eventid)
 
 ## Potential issues
 

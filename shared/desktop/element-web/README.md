@@ -124,7 +124,7 @@ entirely static content.
 
 Other options for running as a desktop app:
 
-* @asdf:chat.dingshunyu.top points out that you can use nativefier and it just works(tm)
+* @asdf:chat.imzqqq.top points out that you can use nativefier and it just works(tm)
 
 ```bash
 yarn global add nativefier
@@ -205,7 +205,7 @@ which also defines the design, architecture and style for Chat too.
 
 Before starting work on a feature, it's best to ensure your plan aligns well
 with our vision for Chat. Please chat with the team in
-[#element-dev:chat.dingshunyu.top](https://to.chat.dingshunyu.top/#/#element-dev:chat.dingshunyu.top) before you
+[#element-dev:chat.imzqqq.top](https://to.chat.imzqqq.top/#/#element-dev:chat.imzqqq.top) before you
 start so we can ensure it's something we'd be willing to merge.
 
 You should also familiarise yourself with the ["Here be Dragons" guide

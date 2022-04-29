@@ -1,6 +1,6 @@
 # MSC3289: Room Version 8
 
-A new room version, `8`, is proposed using [room version 7](https://spec.chat.dingshunyu.top/unstable/rooms/v7/)
+A new room version, `8`, is proposed using [room version 7](https://spec.chat.imzqqq.top/unstable/rooms/v7/)
 as a base and incorporating the following MSCs:
 
 * [MSC3083](https://github.com/matrix-org/matrix-doc/pull/3083) - Restricting room

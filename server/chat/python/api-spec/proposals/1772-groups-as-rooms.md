@@ -9,7 +9,7 @@ Collecting rooms together into groups is useful for a number of
 purposes. Examples include:
 
  * Allowing users to discover different rooms related to a particular topic:
-   for example "official chat.dingshunyu.top rooms".
+   for example "official chat.imzqqq.top rooms".
  * Allowing administrators to manage permissions across a number of rooms: for
    example "a new employee has joined my company and needs access to all of our
    rooms".
@@ -52,7 +52,7 @@ should note that a future conversation-like type (for example) might be
 introduced and could be considered "unknown" by older versions of their client.
 
 As with regular rooms, public spaces are expected to have an alias, for example
-`#foo:chat.dingshunyu.top`, which can be used to refer to the space.
+`#foo:chat.imzqqq.top`, which can be used to refer to the space.
 
 Space-rooms may have `m.room.name`, `m.room.avatar` and `m.room.topic` state
 events in the same way as a normal room.
@@ -67,7 +67,7 @@ clogging up with messages from random members of the space.
 
 Users can be members of spaces (represented by `m.room.member` state events as
 normal). The existing [`m.room.history_visibility`
-mechanism](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#room-history-visibility)
+mechanism](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#room-history-visibility)
 controls whether membership of the space is required to view the room list,
 membership list, etc. "Public" or "community" spaces would be set to
 `world_readable` to allow clients to see the directory of rooms within the
@@ -223,7 +223,7 @@ child with `"suggested": false`. A suggested child may be a room or a subspace.
 The specification is currently vague about what room state should be available
 to users that have been invited to a room, though the Federation API spec does
 recommend that the `invite_room_state` sent over federation via [PUT
-`/chat/federation/v2/invite`](https://chat.api-spec.dingshunyu.top/server_server/r0.1.4#put-matrix-federation-v2-invite-roomid-eventid)
+`/chat/federation/v2/invite`](https://chat.api-spec.imzqqq.top/server_server/r0.1.4#put-matrix-federation-v2-invite-roomid-eventid)
 should include "the join rules, canonical alias, avatar, and name of the room".
 
 This MSC proposes adding `m.room.create` to that list, so that the recipient of
@@ -255,7 +255,7 @@ for a space to try to autojoin its members to more than 100 children (in total).
 Clients could display the auto-joined children in the room list whenever the
 space appears in the list - thus helping users discover other rooms in a space
 even if they're not joined to that space.  For instance, if you join
-`#matrix:chat.dingshunyu.top`, your client could show that room in the context of its
+`#matrix:chat.imzqqq.top`, your client could show that room in the context of its
 parent space, with that space's auto-joined children shown alongside it as
 siblings.
 
@@ -271,8 +271,8 @@ into Chat, it may be overengineered. Instead, the common case is (we believe)
 a space where some users are publicly visible as members, and others are not.
 
 One way of achieving this would be to create a separate space for the
-private members - e.g. have `#foo:chat.dingshunyu.top` and `#foo-private:chat.dingshunyu.top`.
-`#foo-private:chat.dingshunyu.top` is set up with `m.room.history_visibility` to not to
+private members - e.g. have `#foo:chat.imzqqq.top` and `#foo-private:chat.imzqqq.top`.
+`#foo-private:chat.imzqqq.top` is set up with `m.room.history_visibility` to not to
 allow peeking; you have to be joined to see the members.
 
 It's worth noting that any member of a space can currently see who else is a
@@ -371,12 +371,12 @@ to valid spaces, etc.
 
 ### Use a different sigil/twigil for spaces
 
-Groups used + as a sigil to differentiate them from rooms (e.g. +matrix:chat.dingshunyu.top).
+Groups used + as a sigil to differentiate them from rooms (e.g. +matrix:chat.imzqqq.top).
 We considered doing similar for Spaces, e.g. a #+ twigil or reuse the + sigil,
 but concluded that the resulting complexity and exoticism is not worth it.
-This means that clients such as to.chat.dingshunyu.top have to peek into rooms to find out their
+This means that clients such as to.chat.imzqqq.top have to peek into rooms to find out their
 `type` before being able to display an appropriate UI, and users will not know
-whether #matrix:chat.dingshunyu.top is a room or a space without using a client (e.g. if
+whether #matrix:chat.imzqqq.top is a room or a space without using a client (e.g. if
 reading an advert).  It also means that if the client UI requires a space alias the
 client will need to validate the entered data serverside.
 

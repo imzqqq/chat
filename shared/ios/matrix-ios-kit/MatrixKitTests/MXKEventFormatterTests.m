@@ -95,10 +95,10 @@
 
 - (void)testRoomAliasLink
 {
-    NSString *s = @"Matrix HQ room is at #matrix:chat.dingshunyu.top.";
+    NSString *s = @"Matrix HQ room is at #matrix:chat.imzqqq.top.";
     NSAttributedString *as = [eventFormatter renderString:s forEvent:anEvent];
 
-    NSRange linkRange = [s rangeOfString:@"#matrix:chat.dingshunyu.top"];
+    NSRange linkRange = [s rangeOfString:@"#matrix:chat.imzqqq.top"];
 
     __block NSUInteger ranges = 0;
     __block BOOL linkCreated = NO;
@@ -119,7 +119,7 @@
 
 - (void)testLinkWithRoomAliasLink
 {
-    NSString *s = @"Matrix HQ room is at https://to.chat.dingshunyu.top/#/room/#matrix:chat.dingshunyu.top.";
+    NSString *s = @"Matrix HQ room is at https://to.chat.imzqqq.top/#/room/#matrix:chat.imzqqq.top.";
     NSAttributedString *as = [eventFormatter renderString:s forEvent:anEvent];
 
     __block NSUInteger ranges = 0;
@@ -135,34 +135,34 @@
 #pragma mark - Event sender/target info
 
 - (void)testUserDisplayNameFromEventContent {
-    MXEvent *event = [self eventFromJSON:@"{\"sender\":\"@alice:chat.dingshunyu.top\",\"content\":{\"displayname\":\"bob\",\"membership\":\"invite\"},\"origin_server_ts\":1616488993287,\"state_key\":\"@bob:chat.dingshunyu.top\",\"room_id\":\"!foofoofoofoofoofoo:chat.dingshunyu.top\",\"event_id\":\"$lGK3budX5w009ErtQwE9ZFhwyUUAV9DqEN5yb2fI4Do\",\"type\":\"m.room.member\",\"unsigned\":{}}"];
+    MXEvent *event = [self eventFromJSON:@"{\"sender\":\"@alice:chat.imzqqq.top\",\"content\":{\"displayname\":\"bob\",\"membership\":\"invite\"},\"origin_server_ts\":1616488993287,\"state_key\":\"@bob:chat.imzqqq.top\",\"room_id\":\"!foofoofoofoofoofoo:chat.imzqqq.top\",\"event_id\":\"$lGK3budX5w009ErtQwE9ZFhwyUUAV9DqEN5yb2fI4Do\",\"type\":\"m.room.member\",\"unsigned\":{}}"];
     XCTAssertEqualObjects([eventFormatter userDisplayNameFromContentInEvent:event withMembershipFilter:nil], @"bob");
     XCTAssertEqualObjects([eventFormatter userDisplayNameFromContentInEvent:event withMembershipFilter:@"invite"], @"bob");
     XCTAssertEqualObjects([eventFormatter userDisplayNameFromContentInEvent:event withMembershipFilter:@"join"], nil);
 }
 
 - (void)testUserDisplayNameFromNonMembershipEventContent {
-    MXEvent *event = [self eventFromJSON:@"{\"sender\":\"@alice:chat.dingshunyu.top\",\"content\":{\"ciphertext\":\"foo\",\"sender_key\":\"bar\",\"device_id\":\"foobar\",\"algorithm\":\"m.megolm.v1.aes-sha2\"}},\"origin_server_ts\":1616488993287,\"state_key\":\"@bob:chat.dingshunyu.top\",\"room_id\":\"!foofoofoofoofoofoo:chat.dingshunyu.top\",\"event_id\":\"$lGK3budX5w009ErtQwE9ZFhwyUUAV9DqEN5yb2fI4Do\",\"type\":\"m.room.encrypted\",\"unsigned\":{}}"];
+    MXEvent *event = [self eventFromJSON:@"{\"sender\":\"@alice:chat.imzqqq.top\",\"content\":{\"ciphertext\":\"foo\",\"sender_key\":\"bar\",\"device_id\":\"foobar\",\"algorithm\":\"m.megolm.v1.aes-sha2\"}},\"origin_server_ts\":1616488993287,\"state_key\":\"@bob:chat.imzqqq.top\",\"room_id\":\"!foofoofoofoofoofoo:chat.imzqqq.top\",\"event_id\":\"$lGK3budX5w009ErtQwE9ZFhwyUUAV9DqEN5yb2fI4Do\",\"type\":\"m.room.encrypted\",\"unsigned\":{}}"];
     XCTAssertEqualObjects([eventFormatter userDisplayNameFromContentInEvent:event withMembershipFilter:nil], nil);
     XCTAssertEqualObjects([eventFormatter userDisplayNameFromContentInEvent:event withMembershipFilter:@"join"], nil);
 }
 
 - (void)testUserAvatarUrlFromEventContent {
-    MXEvent *event = [self eventFromJSON:@"{\"sender\":\"@alice:chat.dingshunyu.top\",\"content\":{\"displayname\":\"bob\",\"avatar_url\":\"mxc://foo.bar\",\"membership\":\"join\"},\"origin_server_ts\":1616488993287,\"state_key\":\"@bob:chat.dingshunyu.top\",\"room_id\":\"!foofoofoofoofoofoo:chat.dingshunyu.top\",\"event_id\":\"$lGK3budX5w009ErtQwE9ZFhwyUUAV9DqEN5yb2fI4Do\",\"type\":\"m.room.member\",\"unsigned\":{}}"];
+    MXEvent *event = [self eventFromJSON:@"{\"sender\":\"@alice:chat.imzqqq.top\",\"content\":{\"displayname\":\"bob\",\"avatar_url\":\"mxc://foo.bar\",\"membership\":\"join\"},\"origin_server_ts\":1616488993287,\"state_key\":\"@bob:chat.imzqqq.top\",\"room_id\":\"!foofoofoofoofoofoo:chat.imzqqq.top\",\"event_id\":\"$lGK3budX5w009ErtQwE9ZFhwyUUAV9DqEN5yb2fI4Do\",\"type\":\"m.room.member\",\"unsigned\":{}}"];
     XCTAssertEqualObjects([eventFormatter userAvatarUrlFromContentInEvent:event withMembershipFilter:nil], @"mxc://foo.bar");
     XCTAssertEqualObjects([eventFormatter userAvatarUrlFromContentInEvent:event withMembershipFilter:@"invite"], nil);
     XCTAssertEqualObjects([eventFormatter userAvatarUrlFromContentInEvent:event withMembershipFilter:@"join"], @"mxc://foo.bar");
 }
 
 - (void)testUserAvatarUrlFromEventWithNonMXCAvatarUrlContent {
-    MXEvent *event = [self eventFromJSON:@"{\"sender\":\"@alice:chat.dingshunyu.top\",\"content\":{\"displayname\":\"bob\",\"avatar_url\":\"http://foo.bar\",\"membership\":\"join\"},\"origin_server_ts\":1616488993287,\"state_key\":\"@bob:chat.dingshunyu.top\",\"room_id\":\"!foofoofoofoofoofoo:chat.dingshunyu.top\",\"event_id\":\"$lGK3budX5w009ErtQwE9ZFhwyUUAV9DqEN5yb2fI4Do\",\"type\":\"m.room.member\",\"unsigned\":{}}"];
+    MXEvent *event = [self eventFromJSON:@"{\"sender\":\"@alice:chat.imzqqq.top\",\"content\":{\"displayname\":\"bob\",\"avatar_url\":\"http://foo.bar\",\"membership\":\"join\"},\"origin_server_ts\":1616488993287,\"state_key\":\"@bob:chat.imzqqq.top\",\"room_id\":\"!foofoofoofoofoofoo:chat.imzqqq.top\",\"event_id\":\"$lGK3budX5w009ErtQwE9ZFhwyUUAV9DqEN5yb2fI4Do\",\"type\":\"m.room.member\",\"unsigned\":{}}"];
     XCTAssertEqualObjects([eventFormatter userAvatarUrlFromContentInEvent:event withMembershipFilter:nil], nil);
     XCTAssertEqualObjects([eventFormatter userAvatarUrlFromContentInEvent:event withMembershipFilter:@"invite"], nil);
     XCTAssertEqualObjects([eventFormatter userAvatarUrlFromContentInEvent:event withMembershipFilter:@"join"], nil);
 }
 
 - (void)testUserAvatarUrlFromNonMembershipEventContent {
-    MXEvent *event = [self eventFromJSON:@"{\"sender\":\"@alice:chat.dingshunyu.top\",\"content\":{\"ciphertext\":\"foo\",\"sender_key\":\"bar\",\"device_id\":\"foobar\",\"algorithm\":\"m.megolm.v1.aes-sha2\"}},\"origin_server_ts\":1616488993287,\"state_key\":\"@bob:chat.dingshunyu.top\",\"room_id\":\"!foofoofoofoofoofoo:chat.dingshunyu.top\",\"event_id\":\"$lGK3budX5w009ErtQwE9ZFhwyUUAV9DqEN5yb2fI4Do\",\"type\":\"m.room.encrypted\",\"unsigned\":{}}"];
+    MXEvent *event = [self eventFromJSON:@"{\"sender\":\"@alice:chat.imzqqq.top\",\"content\":{\"ciphertext\":\"foo\",\"sender_key\":\"bar\",\"device_id\":\"foobar\",\"algorithm\":\"m.megolm.v1.aes-sha2\"}},\"origin_server_ts\":1616488993287,\"state_key\":\"@bob:chat.imzqqq.top\",\"room_id\":\"!foofoofoofoofoofoo:chat.imzqqq.top\",\"event_id\":\"$lGK3budX5w009ErtQwE9ZFhwyUUAV9DqEN5yb2fI4Do\",\"type\":\"m.room.encrypted\",\"unsigned\":{}}"];
     XCTAssertEqualObjects([eventFormatter userAvatarUrlFromContentInEvent:event withMembershipFilter:nil], nil);
     XCTAssertEqualObjects([eventFormatter userAvatarUrlFromContentInEvent:event withMembershipFilter:@"join"], nil);
 }

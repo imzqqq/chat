@@ -24,7 +24,7 @@ import retrofit2.http.Query
 internal interface MediaAPI {
     /**
      * Retrieve the configuration of the content repository
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/r0.6.1#get-matrix-media-r0-config
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/r0.6.1#get-matrix-media-r0-config
      */
     @GET(NetworkConstants.URI_API_MEDIA_PREFIX_PATH_R0 + "config")
     suspend fun getMediaConfig(): GetMediaConfigResult
@@ -32,7 +32,7 @@ internal interface MediaAPI {
     /**
      * Get information about a URL for the client. Typically this is called when a client
      * sees a URL in a message and wants to render a preview for the user.
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/r0.6.1#get-matrix-media-r0-preview-url
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/r0.6.1#get-matrix-media-r0-preview-url
      * @param url Required. The URL to get a preview of.
      * @param ts The preferred point in time to return a preview for. The server may return a newer version
      * if it does not have the requested version available.

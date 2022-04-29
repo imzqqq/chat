@@ -15,21 +15,21 @@ No attempt is made here to bring existing identifiers into line; however
 examples of identifiers which might have benefitted from such a grammar in the
 past include:
 
- * [`capabilities`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#get-matrix-client-r0-capabilities)
+ * [`capabilities`](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#get-matrix-client-r0-capabilities)
    identifiers.
- * authentication types for the [User-Interactive Authentication mechanism](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#user-interactive-authentication-api).
- * login types for [`/chat/client/r0/login`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#post-matrix-client-r0-login).
+ * authentication types for the [User-Interactive Authentication mechanism](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#user-interactive-authentication-api).
+ * login types for [`/chat/client/r0/login`](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#post-matrix-client-r0-login).
  * event types
- * [`m.room.message` `msgtypes`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#m-room-message-msgtypes)
- * `app_id` for [`POST /chat/client/r0/pushers/set`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#post-matrix-client-r0-pushers-set).
- * `rule_ids`, `actions` and `tweaks` for [push rules](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#push-rules).
- * [E2E messaging algorithm names](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#messaging-algorithm-names).
+ * [`m.room.message` `msgtypes`](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#m-room-message-msgtypes)
+ * `app_id` for [`POST /chat/client/r0/pushers/set`](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#post-matrix-client-r0-pushers-set).
+ * `rule_ids`, `actions` and `tweaks` for [push rules](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#push-rules).
+ * [E2E messaging algorithm names](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#messaging-algorithm-names).
 
 ## Proposal
 
 We define a "common namespaced identifier grammar". This can then be referenced
 by other parts of the grammar, in much the same way as [Unpadded
-Base64](https://chat.api-spec.dingshunyu.top/appendices#unpadded-base64) is defined
+Base64](https://chat.api-spec.imzqqq.top/appendices#unpadded-base64) is defined
 today.
 
 The grammar is defined as follows:

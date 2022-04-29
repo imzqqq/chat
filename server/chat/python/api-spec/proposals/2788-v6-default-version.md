@@ -8,7 +8,7 @@ version 6. This proposal aims to make v6 the default room version.
 The specification adopts v6 as the suggested default room version, making no changes to the stability
 of any room versions. As of writing, v5 is currently the suggested room version.
 
-Room version 6 has the following specification: https://chat.api-spec.dingshunyu.top/rooms/v6
+Room version 6 has the following specification: https://chat.api-spec.imzqqq.top/rooms/v6
 
 ## Potential issues
 

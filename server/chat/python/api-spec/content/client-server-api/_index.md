@@ -723,7 +723,7 @@ follows:
     {
       "sid": "<identity server session id>",
       "client_secret": "<identity server client secret>",
-      "id_server": "<url of identity server authed with, e.g. 'chat.dingshunyu.top:8090'>",
+      "id_server": "<url of identity server authed with, e.g. 'chat.imzqqq.top:8090'>",
       "id_access_token": "<access token previously registered with the identity server>"
     }
   ],
@@ -754,7 +754,7 @@ follows:
     {
       "sid": "<identity server session id>",
       "client_secret": "<identity server client secret>",
-      "id_server": "<url of identity server authed with, e.g. 'chat.dingshunyu.top:8090'>",
+      "id_server": "<url of identity server authed with, e.g. 'chat.imzqqq.top:8090'>",
       "id_access_token": "<access token previously registered with the identity server>"
     }
   ],
@@ -840,7 +840,7 @@ window which will handle unknown login types:
 ```js
 /**
  * Arguments:
- *     homeserverUrl: the base url of the homeserver (e.g. "https://chat.dingshunyu.top")
+ *     homeserverUrl: the base url of the homeserver (e.g. "https://chat.imzqqq.top")
  *
  *     apiEndpoint: the API endpoint being used (e.g.
  *        "/chat/client/v3/account/password")

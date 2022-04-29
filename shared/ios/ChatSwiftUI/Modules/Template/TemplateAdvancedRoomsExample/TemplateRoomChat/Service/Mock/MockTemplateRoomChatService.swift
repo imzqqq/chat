@@ -6,13 +6,13 @@ class MockTemplateRoomChatService: TemplateRoomChatServiceProtocol {
     
     let roomName: String? = "New Vector"
     
-    static let amadine = TemplateRoomChatMember(id: "@amadine:chat.dingshunyu.top", avatarUrl: "!aaabaa:chat.dingshunyu.top", displayName: "Amadine")
-    static let mathew = TemplateRoomChatMember(id: "@mathew:chat.dingshunyu.top", avatarUrl: "!bbabb:chat.dingshunyu.top", displayName: "Mathew")
+    static let amadine = TemplateRoomChatMember(id: "@amadine:chat.imzqqq.top", avatarUrl: "!aaabaa:chat.imzqqq.top", displayName: "Amadine")
+    static let mathew = TemplateRoomChatMember(id: "@mathew:chat.imzqqq.top", avatarUrl: "!bbabb:chat.imzqqq.top", displayName: "Mathew")
     static let mockMessages = [
-        TemplateRoomChatMessage(id: "!0:chat.dingshunyu.top", content: .text(TemplateRoomChatMessageTextContent(body: "Shall I put it live?")) , sender: amadine, timestamp: Date(timeIntervalSinceNow: 60 * -3)),
-        TemplateRoomChatMessage(id: "!1:chat.dingshunyu.top", content: .text(TemplateRoomChatMessageTextContent(body: "Yea go for it! ...and then let's head to the pub")), sender: mathew, timestamp: Date(timeIntervalSinceNow: 60)),
-        TemplateRoomChatMessage(id: "!2:chat.dingshunyu.top", content: .text(TemplateRoomChatMessageTextContent(body: "Deal.")), sender: amadine, timestamp: Date(timeIntervalSinceNow: 60 * -2)),
-        TemplateRoomChatMessage(id: "!3:chat.dingshunyu.top", content: .text(TemplateRoomChatMessageTextContent(body: "Ok, Done. 🍻")), sender: amadine, timestamp: Date(timeIntervalSinceNow: 60 * -1)),
+        TemplateRoomChatMessage(id: "!0:chat.imzqqq.top", content: .text(TemplateRoomChatMessageTextContent(body: "Shall I put it live?")) , sender: amadine, timestamp: Date(timeIntervalSinceNow: 60 * -3)),
+        TemplateRoomChatMessage(id: "!1:chat.imzqqq.top", content: .text(TemplateRoomChatMessageTextContent(body: "Yea go for it! ...and then let's head to the pub")), sender: mathew, timestamp: Date(timeIntervalSinceNow: 60)),
+        TemplateRoomChatMessage(id: "!2:chat.imzqqq.top", content: .text(TemplateRoomChatMessageTextContent(body: "Deal.")), sender: amadine, timestamp: Date(timeIntervalSinceNow: 60 * -2)),
+        TemplateRoomChatMessage(id: "!3:chat.imzqqq.top", content: .text(TemplateRoomChatMessageTextContent(body: "Ok, Done. 🍻")), sender: amadine, timestamp: Date(timeIntervalSinceNow: 60 * -1)),
     ]
     var roomInitializationStatus: CurrentValueSubject<TemplateRoomChatRoomInitializationStatus, Never>
     var chatMessagesSubject: CurrentValueSubject<[TemplateRoomChatMessage], Never>
@@ -23,7 +23,7 @@ class MockTemplateRoomChatService: TemplateRoomChatServiceProtocol {
     }
     
     func send(textMessage: String) {
-        let newMessage = TemplateRoomChatMessage(id: "!\(chatMessagesSubject.value.count):chat.dingshunyu.top", content: .text(TemplateRoomChatMessageTextContent(body: textMessage)), sender: Self.amadine, timestamp: Date())
+        let newMessage = TemplateRoomChatMessage(id: "!\(chatMessagesSubject.value.count):chat.imzqqq.top", content: .text(TemplateRoomChatMessageTextContent(body: textMessage)), sender: Self.amadine, timestamp: Date())
         self.chatMessagesSubject.value += [newMessage]
     }
     

@@ -5,9 +5,9 @@ import Combine
 class MockTemplateRoomListService: TemplateRoomListServiceProtocol {
     
     static let mockRooms = [
-        TemplateRoomListRoom(id: "!aaabaa:chat.dingshunyu.top", avatar: MockAvatarInput.example, displayName: "Matrix Discussion"),
-        TemplateRoomListRoom(id: "!zzasds:chat.dingshunyu.top", avatar: MockAvatarInput.example, displayName: "Element Mobile"),
-        TemplateRoomListRoom(id: "!scthve:chat.dingshunyu.top", avatar: MockAvatarInput.example, displayName: "Alice Personal")
+        TemplateRoomListRoom(id: "!aaabaa:chat.imzqqq.top", avatar: MockAvatarInput.example, displayName: "Matrix Discussion"),
+        TemplateRoomListRoom(id: "!zzasds:chat.imzqqq.top", avatar: MockAvatarInput.example, displayName: "Element Mobile"),
+        TemplateRoomListRoom(id: "!scthve:chat.imzqqq.top", avatar: MockAvatarInput.example, displayName: "Alice Personal")
     ]
     var roomsSubject: CurrentValueSubject<[TemplateRoomListRoom], Never>
 

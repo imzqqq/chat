@@ -60,12 +60,12 @@ whatever additional parameters are required for that login or registration type
 ID and a new access token MUST be returned::
 
   {
-    "user_id": "@user:chat.dingshunyu.top",
+    "user_id": "@user:chat.imzqqq.top",
     "access_token": "abcdef0123456789"
   }
 
 The ``user_id`` key is particularly useful if the homeserver wishes to support
-localpart entry of usernames (e.g. "user" rather than "@user:chat.dingshunyu.top"), as
+localpart entry of usernames (e.g. "user" rather than "@user:chat.imzqqq.top"), as
 the client may not be able to determine its ``user_id`` in this case.
 
 If the flow has multiple stages to it, the homeserver may wish to create a
@@ -175,7 +175,7 @@ The client then visits this URI and authorizes the homeserver. The client then
 visits the REDIRECT_URI with the auth code= query parameter which returns::
 
   {
-    "user_id": "@user:chat.dingshunyu.top",
+    "user_id": "@user:chat.imzqqq.top",
     "access_token": "0123456789abcdef"
   }
 
@@ -274,7 +274,7 @@ To respond to this type, reply with::
       {
         "sid": "<identity server session id>",
         "clientSecret": "<identity server client secret>",
-        "idServer": "<url of identity server authed with, e.g. 'chat.dingshunyu.top:8090'>"
+        "idServer": "<url of identity server authed with, e.g. 'chat.imzqqq.top:8090'>"
       }
     ]
   }

@@ -14,7 +14,7 @@ export default function ConfigVideoSettings() {
       <p className="description">
         Before changing your video configuration{' '}
         <a
-          href="https://live.docs.dingshunyu.top/docs/video?source=admin"
+          href="https://live.docs.imzqqq.top/docs/video?source=admin"
           target="_blank"
           rel="noopener noreferrer"
         >

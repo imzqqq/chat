@@ -36,7 +36,7 @@ date: December 16, 2020
     alt=""></figure>
 <h4>Deux façons de configurer votre direct</h4>
 <p>Comme vous pouvez le voir <a
-    href="https://tube.docs.dingshunyu.top/use-create-upload-video?id=publish-a-live-in-tube-gt-v3">dans notre
+    href="https://tube.docs.imzqqq.top/use-create-upload-video?id=publish-a-live-in-tube-gt-v3">dans notre
     documentation sur <i>comment faire un live</i></a>, les vidéastes utilisant la version 3 de Tube auront besoin
   d'un logiciel pour créer le flux de leur direct (nous recommandons le logiciel libre <a
     href="https://obsproject.com">OBS</a>), et utiliser une clé RTMP.</p>

@@ -6,4 +6,4 @@ bridges, like setting up the bridge, are right below the "Python-based bridges"
 header. Things specific to mautrix-googlechat are under this page.
 
 ## Discussion
-Matrix room: [#googlechat:maunium.net](https://to.chat.dingshunyu.top/#/#googlechat:maunium.net)
+Matrix room: [#googlechat:maunium.net](https://to.chat.imzqqq.top/#/#googlechat:maunium.net)

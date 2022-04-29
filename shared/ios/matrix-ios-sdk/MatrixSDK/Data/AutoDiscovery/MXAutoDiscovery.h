@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Create a `MXAutoDiscovery` instance.
 
- @param url the homeserver url (ex: "https://chat.dingshunyu.top").
+ @param url the homeserver url (ex: "https://chat.imzqqq.top").
  @return a `MXAutoDiscovery` instance.
  */
 - (nullable instancetype)initWithUrl:(NSString *)url;
@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Create a `MXAutoDiscovery` instance.
 
- @param domain  homeserver domain (ex: "chat.dingshunyu.top" from userId "@user:chat.dingshunyu.top").
+ @param domain  homeserver domain (ex: "chat.imzqqq.top" from userId "@user:chat.imzqqq.top").
  @return a `MXAutoDiscovery` instance.
  */
 - (nullable instancetype)initWithDomain:(NSString*)domain;

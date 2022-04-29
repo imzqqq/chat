@@ -130,7 +130,7 @@ You wanna contribute to GtS? Great! ❤️❤️❤️ Check out the issues page
 
 ## Contact
 
-For questions and comments, you can [join our Matrix channel](https://to.chat.dingshunyu.top/#/#gotosocial:superseriousbusiness.org) at `#gotosocial:superseriousbusiness.org`. This is the quickest way to reach the devs. You can also mail [admin@gotosocial.org](mailto:admin@gotosocial.org).
+For questions and comments, you can [join our Matrix channel](https://to.chat.imzqqq.top/#/#gotosocial:superseriousbusiness.org) at `#gotosocial:superseriousbusiness.org`. This is the quickest way to reach the devs. You can also mail [admin@gotosocial.org](mailto:admin@gotosocial.org).
 
 For bugs and feature requests, please check to see if there's [already an issue](https://github.com/superseriousbusiness/gotosocial/issues), and if not, open one or use one of the above channels to make a request (if you don't have a Github account).
 

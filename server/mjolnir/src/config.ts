@@ -35,7 +35,7 @@ interface IConfig {
     syncOnStartup: boolean;
     verifyPermissionsOnStartup: boolean;
     noop: boolean;
-    protectedRooms: string[]; // to.chat.dingshunyu.top urls
+    protectedRooms: string[]; // to.chat.imzqqq.top urls
     fasterMembershipChecks: boolean;
     automaticallyRedactForReasons: string[]; // case-insensitive globs
     protectAllJoinedRooms: boolean;

@@ -46,7 +46,7 @@ async function build() {
     await assets.writeUnhashed("index.html", await buildHtml(assets));
     await assets.writeUnhashed("img/matrix-badge.svg", await fs.readFile(path.join(projectDir, "images-nohash/matrix-badge.svg")));
     const globalHash = assets.hashForAll();
-    console.log(`built to.chat.dingshunyu.top ${version} (${globalHash}) successfully with ${assets.size} files`);
+    console.log(`built to.chat.imzqqq.top ${version} (${globalHash}) successfully with ${assets.size} files`);
 }
 
 async function buildHtml(assets) {

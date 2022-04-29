@@ -98,7 +98,7 @@ Si vous aussi vous voulez soutenir ce développement, cela se passe ici : [https
 
 Ces deux outils apportent une belle valeur ajoutée à Tube et à nos libertés de diffusion. Leur amélioration dépend maintenant des contributions qui leur seront apportées.
 
-Nous constatons de plus en plus la richesse  de l'écosystème Tube : [clients](https://tube.docs.dingshunyu.top/use-third-party-application), [plugins](https://joinpeertube.org/plugins-selection)... De nombreuses contributions externes viennent offrir de nouvelles options et de nouvelles libertés à la communauté : merci mille fois !
+Nous constatons de plus en plus la richesse  de l'écosystème Tube : [clients](https://tube.docs.imzqqq.top/use-third-party-application), [plugins](https://joinpeertube.org/plugins-selection)... De nombreuses contributions externes viennent offrir de nouvelles options et de nouvelles libertés à la communauté : merci mille fois !
 
 Si nous avons pu financer et accompagner ces deux développements externes, c'est en partie grâce à la bourse de NLnet dont nous vous parlions en annonçant le chemin vers la [v4 de Tube](https://joinpeertube.org/news#roadmap-v4), et en partie grâce à vos dons qui financent l'ensemble des actions de Framasoft [https://soutenir.framasoft.org](https://soutenir.framasoft.org).
 

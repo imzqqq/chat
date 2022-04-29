@@ -214,7 +214,7 @@ typedef enum : NSUInteger
 } MXTimelineDirection NS_REFINED_FOR_SWIFT;
 
 /**
- The to.chat.dingshunyu.top base URL.
+ The to.chat.imzqqq.top base URL.
  */
 FOUNDATION_EXPORT NSString *const kMXMatrixDotToUrl;
 

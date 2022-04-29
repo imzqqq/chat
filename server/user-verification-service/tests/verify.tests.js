@@ -89,7 +89,7 @@ describe('verify', function() {
 
             before(() => {
                 originalEnv = mockedEnv({
-                    UVS_OPENID_VERIFY_SERVER_NAME: 'chat.dingshunyu.top',
+                    UVS_OPENID_VERIFY_SERVER_NAME: 'chat.imzqqq.top',
                 });
             });
 

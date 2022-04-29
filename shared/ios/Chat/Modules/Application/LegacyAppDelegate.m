@@ -1123,7 +1123,7 @@ NSString *const AppDelegateUniversalLinkDidChangeNotification = @"AppDelegateUni
     
     // Manage email validation links from homeserver for registration (/registration/email/submit_token)
     // and email addition (/add_threepid/email/submit_token)
-    // They look like https://chat.dingshunyu.top/chat/client/unstable/registration/email/submit_token?token=vtQjQIZfwdoREDACTEDozrmKYSWlCXsJ&client_secret=53e679ea-oRED-ACTED-92b8-3012c49c6cfa&sid=qlBCREDACTEDEtgxD
+    // They look like https://chat.imzqqq.top/chat/client/unstable/registration/email/submit_token?token=vtQjQIZfwdoREDACTEDozrmKYSWlCXsJ&client_secret=53e679ea-oRED-ACTED-92b8-3012c49c6cfa&sid=qlBCREDACTEDEtgxD
     if ([webURL.path hasSuffix:@"/email/submit_token"])
     {
         MXLogDebug(@"[AppDelegate] handleUniversalLink: Validate link");
@@ -1283,7 +1283,7 @@ NSString *const AppDelegateUniversalLinkDidChangeNotification = @"AppDelegateUni
     else if (([pathParams[0] hasPrefix:@"#"] || [pathParams[0] hasPrefix:@"!"]) && pathParams.count >= 1)
     {
         // The link is the form of "/#/[roomIdOrAlias]" or "/#/[roomIdOrAlias]/[eventId]"
-        // Such links come from to.chat.dingshunyu.top permalinks
+        // Such links come from to.chat.imzqqq.top permalinks
         roomIdOrAlias = pathParams[0];
         eventId = (pathParams.count >= 2) ? pathParams[1] : nil;
     }
@@ -1296,7 +1296,7 @@ NSString *const AppDelegateUniversalLinkDidChangeNotification = @"AppDelegateUni
     else if ([pathParams[0] hasPrefix:@"@"] && pathParams.count == 1)
     {
         // The link is the form of "/#/[userId]"
-        // Such links come from to.chat.dingshunyu.top permalinks
+        // Such links come from to.chat.imzqqq.top permalinks
         userId = pathParams[0];
     }
     
@@ -1381,7 +1381,7 @@ NSString *const AppDelegateUniversalLinkDidChangeNotification = @"AppDelegateUni
                                     
                                     // The previous operation can fail because of percent encoding
                                     // TBH we are not clean on data inputs. For the moment, just give another try with no encoding
-                                    // TODO: Have a dedicated module and tests to handle universal links (to.chat.dingshunyu.top, email link, etc)
+                                    // TODO: Have a dedicated module and tests to handle universal links (to.chat.imzqqq.top, email link, etc)
                                     if ([newUniversalLinkFragment isEqualToString:fragment])
                                     {
                                         newUniversalLinkFragment =

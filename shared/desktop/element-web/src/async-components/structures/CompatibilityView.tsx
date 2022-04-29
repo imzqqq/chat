@@ -114,7 +114,7 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
                         <h2 id="step2_heading">Use Chat on mobile</h2>
                         <p><strong>Android</strong></p>
                         All the instructions and download links can be found on
-                        <a href="https://apps.chat.dingshunyu.top/android">https://apps.chat.dingshunyu.top/android</a>.
+                        <a href="https://apps.chat.imzqqq.top/android">https://apps.chat.imzqqq.top/android</a>.
                         <p className="mx_Spacer"><strong>iOS</strong> (iPhone or iPad)</p>
                         Chat is not available for iOS, but you can download
                         <a href="https://apps.apple.com/app/vector/id1083446067" target="_blank">Chat</a>
@@ -125,8 +125,8 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
 
             <div className="mx_HomePage_row mx_Center mx_Spacer">
                 <p className="mx_Spacer">
-                    <a href="https://apps.chat.dingshunyu.top" target="_blank" className="mx_FooterLink">
-                        Go to apps.chat.dingshunyu.top
+                    <a href="https://apps.chat.imzqqq.top" target="_blank" className="mx_FooterLink">
+                        Go to apps.chat.imzqqq.top
                     </a>
                 </p>
             </div>

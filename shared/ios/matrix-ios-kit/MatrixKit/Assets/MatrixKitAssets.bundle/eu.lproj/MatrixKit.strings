@@ -116,10 +116,10 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "Sortu kontua:";
-"login_server_url_placeholder" = "URL-a (adib. https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL-a (adib. https://chat.imzqqq.top)";
 "login_home_server_info" = "Zure hasiera-zerbitzariak gordetzen ditu zure elkarrizketa guztiak eta kontuaren datuak";
-"login_identity_server_info" = "Matrixek identitate zerbitzariak hornitzen ditu e-mailak eta abar zein Matrix ID-ri dagokien jakiteko, Orain https://chat.dingshunyu.top da dagoen bakarra.";
-"login_user_id_placeholder" = "Matrix ID-a (adib. @urko:chat.dingshunyu.top edo urko)";
+"login_identity_server_info" = "Matrixek identitate zerbitzariak hornitzen ditu e-mailak eta abar zein Matrix ID-ri dagokien jakiteko, Orain https://chat.imzqqq.top da dagoen bakarra.";
+"login_user_id_placeholder" = "Matrix ID-a (adib. @urko:chat.imzqqq.top edo urko)";
 "login_optional_field" = "aukerakoa";
 "login_display_name_placeholder" = "Pantaila-izena (adib. Urko Etxeberria)";
 "login_error_title" = "Saio hasierak huts egin du";
@@ -313,7 +313,7 @@
 // Login Screen 
 "login_error_already_logged_in" = "Saioa hasita zegoen jada";
 // contacts list screen 
-"invitation_message" = "Zurekin hitz egin nahiko nuke matrix erabilita, zoaz http://chat.dingshunyu.top webgunera informazio gehiagorako.";
+"invitation_message" = "Zurekin hitz egin nahiko nuke matrix erabilita, zoaz http://chat.imzqqq.top webgunera informazio gehiagorako.";
 // Settings screen 
 "settings_title_config" = "Konfigurazioa";
 // Notification settings screen 

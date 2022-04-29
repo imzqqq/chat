@@ -78,7 +78,7 @@ accept the change without tests for now, but we'd eventually like to be more
 strict about this further down the road.
 
 If you do spot areas that are quite hard to test today, please let us know in
-[#element-dev:matrix.org](https://to.chat.dingshunyu.top/#/#element-dev:matrix.org). We can
+[#element-dev:matrix.org](https://to.chat.imzqqq.top/#/#element-dev:matrix.org). We can
 work on improving the app architecture and testing helpers so that future tests
 are easier for everyone to write, but we won't know which parts are difficult
 unless people shout when stumbling through them.
@@ -116,5 +116,5 @@ easily.
 
 Before starting work on a feature, it's best to ensure your plan aligns well
 with our vision for Chat. Please chat with the team in
-[#element-dev:matrix.org](https://to.chat.dingshunyu.top/#/#element-dev:matrix.org) before
+[#element-dev:matrix.org](https://to.chat.imzqqq.top/#/#element-dev:matrix.org) before
 you start so we can ensure it's something we'd be willing to merge.

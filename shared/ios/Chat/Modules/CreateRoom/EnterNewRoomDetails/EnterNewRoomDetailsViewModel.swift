@@ -74,7 +74,7 @@ final class EnterNewRoomDetailsViewModel: EnterNewRoomDetailsViewModelType {
         }
         
         //  TODO: Fix below somehow
-        alias = alias.replacingOccurrences(of: ":chat.dingshunyu.top", with: "")
+        alias = alias.replacingOccurrences(of: ":chat.imzqqq.top", with: "")
         if let homeserver = session.credentials.homeServer {
             alias = alias.replacingOccurrences(of: ":" + homeserver, with: "")
         }

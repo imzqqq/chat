@@ -35,6 +35,6 @@ async def search(evt: CommandEvent) -> None:
     for user in resp.users[:10]:
         puppet = await pu.Puppet.get_by_pk(user.pk, create=True)
         await puppet.update_info(user, evt.sender)
-        response_list.append(f"* [{puppet.name}](https://to.chat.dingshunyu.top/#/{puppet.mxid})"
+        response_list.append(f"* [{puppet.name}](https://to.chat.imzqqq.top/#/{puppet.mxid})"
                              f" ([@{user.username}](https://instagram.com/{user.username}))")
     await evt.reply("\n".join(response_list))

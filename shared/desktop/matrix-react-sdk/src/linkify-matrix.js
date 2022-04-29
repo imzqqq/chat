@@ -165,7 +165,7 @@ const escapeRegExp = function(string) {
 };
 
 // Recognise URLs from both our local and official Chat deployments.
-// Anyone else really should be using to.chat.dingshunyu.top.
+// Anyone else really should be using to.chat.imzqqq.top.
 matrixLinkify.ELEMENT_URL_PATTERN =
     "^(?:https?://)?(?:" +
         escapeRegExp(window.location.host + window.location.pathname) + "|" +

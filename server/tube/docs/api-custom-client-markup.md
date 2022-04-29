@@ -109,8 +109,8 @@ Inject a list of videos.
  * `data-max-rows`: limit number of video rows
  * `data-only-local`: only display local videos?
  * `data-is-live` (**Tube >= 3.4**): only display VOD or live videos
- * `data-category-one-of`: coma separated Tube categories (use keys of https://tube.docs.dingshunyu.top/api-rest-reference.html#operation/getCategories)
- * `data-language-one-of`:  coma separated Tube languages (use keys of https://tube.docs.dingshunyu.top/api-rest-reference.html#operation/getLanguages)
+ * `data-category-one-of`: coma separated Tube categories (use keys of https://tube.docs.imzqqq.top/api-rest-reference.html#operation/getCategories)
+ * `data-language-one-of`:  coma separated Tube languages (use keys of https://tube.docs.imzqqq.top/api-rest-reference.html#operation/getLanguages)
  * `data-channel-handle`:  only display videos of this channel (`chocobozzz_channel` for a local channel, or `chocobozzz_channel@peertube2.cpy.re` for a remote channel)
  * `data-account-handle`:  only display videos of this account (`chocobozzz` for a local account, or `chocobozzz@peertube2.cpy.re` for a remote account)
  * `data-only-display-title`: display or not miniature attributes (views, channel etc)

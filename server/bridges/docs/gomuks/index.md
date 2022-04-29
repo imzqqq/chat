@@ -4,4 +4,4 @@ Welcome to the gomuks docs!
 
 ## Discussion
 
-Matrix room: [#gomuks:maunium.net](https://to.chat.dingshunyu.top/#/#gomuks:maunium.net)
+Matrix room: [#gomuks:maunium.net](https://to.chat.imzqqq.top/#/#gomuks:maunium.net)

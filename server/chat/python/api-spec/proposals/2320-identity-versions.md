@@ -29,7 +29,7 @@ this identity server supports. Its response uses the following format:
 ## Alternative solutions
 
 Another solution which was considered was using the status check endpoint ([`GET
-/chat/api/v1`](https://chat.api-spec.dingshunyu.top/identity_service/r0.2.0#get-matrix-identity-api-v1))
+/chat/api/v1`](https://chat.api-spec.imzqqq.top/identity_service/r0.2.0#get-matrix-identity-api-v1))
 to serve this information. This solution was discarded because it's using a
 versioned endpoint, which doesn't make sense to advertise the supported versions
 of the API to use.

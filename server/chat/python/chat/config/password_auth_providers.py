@@ -43,7 +43,7 @@ class PasswordAuthProviderConfig(Config):
         # ex. LDAP, external tokens, etc.
         #
         # For more information and known implementations, please see
-        # https://chat.docs.dingshunyu.top/password_auth_providers.html
+        # https://chat.docs.imzqqq.top/password_auth_providers.html
         #
         # Note: instances wishing to use SAML or CAS authentication should
         # instead use the `saml2_config` or `cas_config` options,

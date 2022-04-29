@@ -26,7 +26,7 @@ welcome.
    ```toml
    [params.version]
    status = "stable"
-   current_version_url = "https://spec.chat.dingshunyu.top/latest"
+   current_version_url = "https://spec.chat.imzqqq.top/latest"
 
    # This will be the spec version you're releasing. If that's v1.2, then `major = "1"`
    # and `minor = "2"`
@@ -53,12 +53,12 @@ welcome.
      will be at `content/partials/changelogs/v1.2.md` - copy/paste verbatim.
    * Upload the artifacts of the GitHub Actions build for the release to the GitHub
      release as artifacts themselves. This should be the tarball that got deployed
-     to spec.chat.dingshunyu.top.
+     to spec.chat.imzqqq.top.
 8. Commit a reversion to `params.version` of `config.toml` on `main`:
    ```toml
    [params.version]
    status = "unstable"
-   current_version_url = "https://spec.chat.dingshunyu.top/latest"
+   current_version_url = "https://spec.chat.imzqqq.top/latest"
    # major = "1"
    # minor = "2"
    # release_date = "October 01, 2021"

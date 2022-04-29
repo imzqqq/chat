@@ -1794,7 +1794,7 @@
     <string name="soft_logout_clear_data_dialog_submit">Spastro të dhënat</string>
     <string name="template_soft_logout_sso_not_same_user_error">Sesioni i tanishëm është për përdoruesin %1$s dhe ju jepni kredenciale për përdoruesin %2$s. Kjo nuk mbulohet nga ${app_name}.
 \nJu lutemi, së pari spastroni të dhëna, mandej hyni sërish në një tjetër llogari.</string>
-    <string name="permalink_malformed">Lidhja juaj to.chat.dingshunyu.top është e keqformuar</string>
+    <string name="permalink_malformed">Lidhja juaj to.chat.imzqqq.top është e keqformuar</string>
     <string name="bug_report_error_too_short">Përshkrimi është shumë i shkurtër</string>
     <string name="room_settings_labs_pref_title">Labs</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Token regjistrimi</string>

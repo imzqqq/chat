@@ -11,12 +11,12 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "创建账户：";
-"login_server_url_placeholder" = "网址（例如 https://chat.dingshunyu.top）";
+"login_server_url_placeholder" = "网址（例如 https://chat.imzqqq.top）";
 "login_home_server_title" = "主服务器网址：";
 "login_home_server_info" = "您的主服务器存储了您所有的对话和账户数据";
 "login_identity_server_title" = "身份认证服务器网址：";
-"login_identity_server_info" = "Matrix 提供了身份认证服务器以验证邮箱地址等是否属于某个 Matrix ID。目前只有 https://chat.dingshunyu.top 支持。";
-"login_user_id_placeholder" = "Matrix ID（例如 @bob:chat.dingshunyu.top 或 bob）";
+"login_identity_server_info" = "Matrix 提供了身份认证服务器以验证邮箱地址等是否属于某个 Matrix ID。目前只有 https://chat.imzqqq.top 支持。";
+"login_user_id_placeholder" = "Matrix ID（例如 @bob:chat.imzqqq.top 或 bob）";
 "login_password_placeholder" = "密码";
 "login_optional_field" = "可选";
 "login_display_name_placeholder" = "显示名（例如 Bob Obson）";

@@ -52,7 +52,7 @@ paths:
           type: string
           description: The room ID that the user is being invited to.
           required: true
-          x-example: "!abc123:chat.dingshunyu.top"
+          x-example: "!abc123:chat.imzqqq.top"
         - in: path
           name: eventId
           type: string

@@ -76,7 +76,7 @@ class MatrixHandler(BaseMatrixHandler):
             if len(members) > 2:
                 await intent.error_and_leave(room_id, text=None, html=(
                     f"Please invite "
-                    f"<a href='https://to.chat.dingshunyu.top/#/{self.az.bot_mxid}'>the bridge bot</a> "
+                    f"<a href='https://to.chat.imzqqq.top/#/{self.az.bot_mxid}'>the bridge bot</a> "
                     f"first if you want to create a Telegram chat."))
                 return
 
@@ -88,7 +88,7 @@ class MatrixHandler(BaseMatrixHandler):
                     await intent.send_notice(
                         room_id, text=f"You already have a private chat with me: {portal.mxid}",
                         html=("You already have a private chat with me: "
-                              f"<a href='https://to.chat.dingshunyu.top/#/{portal.mxid}'>Link to room</a>"))
+                              f"<a href='https://to.chat.imzqqq.top/#/{portal.mxid}'>Link to room</a>"))
                     await intent.leave_room(room_id)
                     return
                 except MatrixError:

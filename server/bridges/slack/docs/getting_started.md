@@ -43,7 +43,7 @@ NOTE: If your bridge and homeserver run on different machines, you will need
 to introduce proxying into the mix, which is beyond the scope of these docs.
 There are some really awesome and kind people in the Matrix community. If you're
 ever stuck, you can post a question in the 
-[Matrix Bridging room](https://to.chat.dingshunyu.top/#/#bridges:matrix.org).
+[Matrix Bridging room](https://to.chat.imzqqq.top/#/#bridges:matrix.org).
 
 
 ## Setup

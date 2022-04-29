@@ -1,6 +1,6 @@
 # Chat Server Documentation
 
-**The documentation is currently hosted [here](https:/chat.docs.dingshunyu.top).**
+**The documentation is currently hosted [here](https:/chat.docs.imzqqq.top).**
 Please update any links to point to the new website instead.
 
 ## About
@@ -55,7 +55,7 @@ You can also have mdbook host the docs on a local webserver with hot-reload func
 mdbook serve --hostname 0.0.0.0 --port 3004
 ```
 
-Open <https://chat.docs.dingshunyu.top/welcome_and_overview.html> in the browser. The URL at which the docs can be viewed at will be logged.
+Open <https://chat.docs.imzqqq.top/welcome_and_overview.html> in the browser. The URL at which the docs can be viewed at will be logged.
 
 ## Configuration and theming
 

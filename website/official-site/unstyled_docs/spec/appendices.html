@@ -1050,7 +1050,7 @@ table.docutils tbody th.stub {
 <li><a class="reference internal" href="#room-ids-and-event-ids" id="id15">4.2.2&nbsp;&nbsp;&nbsp;Room IDs and Event IDs</a></li>
 <li><a class="reference internal" href="#group-identifiers" id="id16">4.2.3&nbsp;&nbsp;&nbsp;Group Identifiers</a></li>
 <li><a class="reference internal" href="#room-aliases" id="id17">4.2.4&nbsp;&nbsp;&nbsp;Room Aliases</a></li>
-<li><a class="reference internal" href="#matrix-to-navigation" id="id18">4.2.5&nbsp;&nbsp;&nbsp;to.chat.dingshunyu.top navigation</a><ul class="auto-toc">
+<li><a class="reference internal" href="#matrix-to-navigation" id="id18">4.2.5&nbsp;&nbsp;&nbsp;to.chat.imzqqq.top navigation</a><ul class="auto-toc">
 <li><a class="reference internal" href="#routing" id="id19">4.2.5.1&nbsp;&nbsp;&nbsp;Routing</a></li>
 </ul>
 </li>
@@ -1713,41 +1713,41 @@ domain).</p>
 </div>
 <p><a class="anchor" id="matrix-to-navigation"></a></p>
 <div class="section" id="matrix-to-navigation">
-<h3><a class="toc-backref" href="#id18">4.2.5&nbsp;&nbsp;&nbsp;to.chat.dingshunyu.top navigation</a></h3>
+<h3><a class="toc-backref" href="#id18">4.2.5&nbsp;&nbsp;&nbsp;to.chat.imzqqq.top navigation</a></h3>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This namespacing is in place pending a <tt class="docutils literal"><span class="pre">matrix://</span></tt> (or similar) URI scheme.
 This is <strong>not</strong> meant to be interpreted as an available web service - see
 below for more details.</p>
 </div>
-<p>Rooms, users, aliases, and groups may be represented as a &quot;to.chat.dingshunyu.top&quot; URI.
+<p>Rooms, users, aliases, and groups may be represented as a &quot;to.chat.imzqqq.top&quot; URI.
 This URI can be used to reference particular objects in a given context, such
 as mentioning a user in a message or linking someone to a particular point
 in the room's history (a permalink).</p>
-<p>A to.chat.dingshunyu.top URI has the following format, based upon the specification defined
+<p>A to.chat.imzqqq.top URI has the following format, based upon the specification defined
 in RFC 3986:</p>
 <blockquote>
-<a class="reference external" href="https://to.chat.dingshunyu.top">https://to.chat.dingshunyu.top</a>/#/&lt;identifier&gt;/&lt;extra parameter&gt;?&lt;additional arguments&gt;</blockquote>
+<a class="reference external" href="https://to.chat.imzqqq.top">https://to.chat.imzqqq.top</a>/#/&lt;identifier&gt;/&lt;extra parameter&gt;?&lt;additional arguments&gt;</blockquote>
 <p>The identifier may be a room ID, room alias, user ID, or group ID. The extra
 parameter is only used in the case of permalinks where an event ID is referenced.
-The to.chat.dingshunyu.top URI, when referenced, must always start with <tt class="docutils literal"><span class="pre">https://to.chat.dingshunyu.top/#/</span></tt>
+The to.chat.imzqqq.top URI, when referenced, must always start with <tt class="docutils literal"><span class="pre">https://to.chat.imzqqq.top/#/</span></tt>
 followed by the identifier.</p>
 <p>The <tt class="docutils literal">&lt;additional arguments&gt;</tt> and the preceding question mark are optional and
 only apply in certain circumstances, documented below.</p>
-<p>Clients should not rely on to.chat.dingshunyu.top URIs falling back to a web server if accessed
+<p>Clients should not rely on to.chat.imzqqq.top URIs falling back to a web server if accessed
 and instead should perform some sort of action within the client. For example, if
-the user were to click on a to.chat.dingshunyu.top URI for a room alias, the client may open
+the user were to click on a to.chat.imzqqq.top URI for a room alias, the client may open
 a view for the user to participate in the room.</p>
-<p>The components of the to.chat.dingshunyu.top URI (<tt class="docutils literal">&lt;identifier&gt;</tt> and <tt class="docutils literal">&lt;extra parameter&gt;</tt>)
+<p>The components of the to.chat.imzqqq.top URI (<tt class="docutils literal">&lt;identifier&gt;</tt> and <tt class="docutils literal">&lt;extra parameter&gt;</tt>)
 are to be percent-encoded as per RFC 3986.</p>
-<p>Examples of to.chat.dingshunyu.top URIs are:</p>
+<p>Examples of to.chat.imzqqq.top URIs are:</p>
 <ul class="simple">
-<li>Room alias: <tt class="docutils literal"><span class="pre">https://to.chat.dingshunyu.top/#/%23somewhere%3Aexample.org</span></tt></li>
-<li>Room: <tt class="docutils literal"><span class="pre">https://to.chat.dingshunyu.top/#/!somewhere%3Aexample.org</span></tt></li>
-<li>Permalink by room: <tt class="docutils literal"><span class="pre">https://to.chat.dingshunyu.top/#/!somewhere%3Aexample.org/%24event%3Aexample.org</span></tt></li>
-<li>Permalink by room alias: <tt class="docutils literal"><span class="pre">https://to.chat.dingshunyu.top/#/%23somewhere:example.org/%24event%3Aexample.org</span></tt></li>
-<li>User: <tt class="docutils literal"><span class="pre">https://to.chat.dingshunyu.top/#/%40alice%3Aexample.org</span></tt></li>
-<li>Group: <tt class="docutils literal"><span class="pre">https://to.chat.dingshunyu.top/#/%2Bexample%3Aexample.org</span></tt></li>
+<li>Room alias: <tt class="docutils literal"><span class="pre">https://to.chat.imzqqq.top/#/%23somewhere%3Aexample.org</span></tt></li>
+<li>Room: <tt class="docutils literal"><span class="pre">https://to.chat.imzqqq.top/#/!somewhere%3Aexample.org</span></tt></li>
+<li>Permalink by room: <tt class="docutils literal"><span class="pre">https://to.chat.imzqqq.top/#/!somewhere%3Aexample.org/%24event%3Aexample.org</span></tt></li>
+<li>Permalink by room alias: <tt class="docutils literal"><span class="pre">https://to.chat.imzqqq.top/#/%23somewhere:example.org/%24event%3Aexample.org</span></tt></li>
+<li>User: <tt class="docutils literal"><span class="pre">https://to.chat.imzqqq.top/#/%40alice%3Aexample.org</span></tt></li>
+<li>Group: <tt class="docutils literal"><span class="pre">https://to.chat.imzqqq.top/#/%2Bexample%3Aexample.org</span></tt></li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -1757,21 +1757,21 @@ room alias should still work within the client if possible.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Clients should be aware that decoding a to.chat.dingshunyu.top URI may result in extra slashes
+<p class="last">Clients should be aware that decoding a to.chat.imzqqq.top URI may result in extra slashes
 appearing due to some <a class="reference external" href="index.html#room-versions">room versions</a>. These slashes
-should normally be encoded when producing to.chat.dingshunyu.top URIs, however.</p>
+should normally be encoded when producing to.chat.imzqqq.top URIs, however.</p>
 </div>
 <p><a class="anchor" id="routing"></a></p>
 <div class="section" id="routing">
 <h4><a class="toc-backref" href="#id19">4.2.5.1&nbsp;&nbsp;&nbsp;Routing</a></h4>
 <p>Room IDs are not routable on their own as there is no reliable domain to send requests
-to. This is partially mitigated with the addition of a <tt class="docutils literal">via</tt> argument on a to.chat.dingshunyu.top
+to. This is partially mitigated with the addition of a <tt class="docutils literal">via</tt> argument on a to.chat.imzqqq.top
 URI, however the problem of routability is still present. Clients should do their best
 to route Room IDs to where they need to go, however they should also be aware of
 <a class="reference external" href="https://github.com/matrix-org/matrix-doc/issues/1579">issue #1579</a>.</p>
 <p>A room (or room permalink) which isn't using a room alias should supply at least one
 server using <tt class="docutils literal">via</tt> in the <tt class="docutils literal">&lt;additional arguments&gt;</tt>, like so:
-<tt class="docutils literal"><span class="pre">https://to.chat.dingshunyu.top/!somewhere%3Aexample.org?via=example.org&amp;via=alt.example.org</span></tt>. The
+<tt class="docutils literal"><span class="pre">https://to.chat.imzqqq.top/!somewhere%3Aexample.org?via=example.org&amp;via=alt.example.org</span></tt>. The
 parameter can be supplied multiple times to specify multiple servers to try.</p>
 <p>The values of <tt class="docutils literal">via</tt> are intended to be passed along as the <tt class="docutils literal">server_name</tt> parameters
 on the Client Server <tt class="docutils literal">/join</tt> API.</p>

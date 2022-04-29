@@ -151,7 +151,7 @@ class OIDCConfig(Config):
         #
         #       module: The class name of a custom mapping module. Default is
         #           {mapping_provider!r}.
-        #           See https://chat.docs.dingshunyu.top/sso_mapping_providers.html#openid-mapping-providers
+        #           See https://chat.docs.imzqqq.top/sso_mapping_providers.html#openid-mapping-providers
         #           for information on implementing a custom mapping provider.
         #
         #       config: Configuration for the mapping provider module. This section will
@@ -202,7 +202,7 @@ class OIDCConfig(Config):
         #     - attribute: groups
         #       value: "admin"
         #
-        # See https://chat.docs.dingshunyu.top/openid.html
+        # See https://chat.docs.imzqqq.top/openid.html
         # for information on how to configure these options.
         #
         # For backwards compatibility, it is also possible to configure a single OIDC

@@ -115,7 +115,7 @@ export function buildMenuTemplate(): Menu {
             submenu: [
                 {
                     label: _t('Chat Help'),
-                    click() { shell.openExternal('https://chat.docs.dingshunyu.top/'); },
+                    click() { shell.openExternal('https://chat.docs.imzqqq.top/'); },
                 },
             ],
         },

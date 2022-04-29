@@ -1332,7 +1332,7 @@
     <string name="settings_show_devices_list">לראות את כל ההפעלות שלי</string>
     <string name="notification_initial_sync">סנכרון ראשוני …</string>
     <string name="bug_report_error_too_short">התיאור קצר מדי</string>
-    <string name="permalink_malformed">הקישור שלך ל- to.chat.dingshunyu.top היה תקין</string>
+    <string name="permalink_malformed">הקישור שלך ל- to.chat.imzqqq.top היה תקין</string>
     <string name="template_soft_logout_sso_not_same_user_error">ההפעלה הנוכחית מיועדת למשתמש %1$s ואתה מספק אישורי משתמש %2$s. זה אינו נתמך על ידי אלמנט.
 \nראשית נקה נתונים ואז היכנס שוב לחשבון אחר.</string>
     <string name="soft_logout_clear_data_dialog_submit">נקה נתונים</string>

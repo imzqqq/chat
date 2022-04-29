@@ -47,12 +47,12 @@ This is also useful for streamers who just want to bring up a full-screen chat t
 1. Stop the service from running. If you're using a pre-installed image through a hosting provider, or setup Live to run under systemd you can probably just simply run `systemctl stop owncast`.
 1. Change to the directory where Live is installed on your server. In a pre-installed hosting scenario it's likely in `/opt/owncast`.
 1. If you’ve customized your web interface in any way you will want to back up the files you’ve changed or customized.
-1. Re-run the installer as the user you run Live under. For example if you are running owncast as the user "owncast": `su -c "curl https://live.dingshunyu.top/install.sh |bash" owncast`
+1. Re-run the installer as the user you run Live under. For example if you are running owncast as the user "owncast": `su -c "curl https://live.imzqqq.top/install.sh |bash" owncast`
 1. Restart the service. If you're running under systemd `systemctl start owncast`.
 
 ## Breaking changes
 
-[As noted previously](https://live.dingshunyu.top/news/20210615-apis-future-releases/), two APIs will no longer be available:
+[As noted previously](https://live.imzqqq.top/news/20210615-apis-future-releases/), two APIs will no longer be available:
 
 - `/api/integrations/chat/user` is no longer supported, removing the ability to send a chat message as arbitrary users. [#1092](https://github.com/imzqqq/issues/1092)
 

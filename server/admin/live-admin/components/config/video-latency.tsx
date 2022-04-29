@@ -107,7 +107,7 @@ export default function VideoLatency() {
         For interactive live streams you may want to experiment with a lower latency, for
         non-interactive broadcasts you may want to increase it.{' '}
         <a
-          href="https://live.docs.dingshunyu.top/docs/encoding#latency-buffer?source=admin"
+          href="https://live.docs.imzqqq.top/docs/encoding#latency-buffer?source=admin"
           target="_blank"
           rel="noopener noreferrer"
         >

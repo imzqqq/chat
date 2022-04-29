@@ -15,7 +15,7 @@
 package gomatrix
 
 // TagContent contains the data for an m.tag message type
-// https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0.html#m-tag
+// https://chat.docs.imzqqq.top/spec/client_server/r0.4.0.html#m-tag
 type TagContent struct {
 	Tags map[string]TagProperties `json:"tags"`
 }

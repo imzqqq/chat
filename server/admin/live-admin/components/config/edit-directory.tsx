@@ -39,7 +39,7 @@ export default function EditYPDetails() {
 
       <p className="description">
         Would you like to appear in the{' '}
-        <a href="https://directory.live.dingshunyu.top" target="_blank" rel="noreferrer">
+        <a href="https://directory.live.imzqqq.top" target="_blank" rel="noreferrer">
           <strong>Live Directory</strong>
         </a>
         ?

@@ -9,8 +9,8 @@ import { fetchExternalData } from '../utils/apis';
 const { Panel } = Collapse;
 const { Title, Link } = Typography;
 
-const OWNCAST_FEED_URL = 'https://live.dingshunyu.top/news/index.json';
-const OWNCAST_BASE_URL = 'https://live.dingshunyu.top';
+const OWNCAST_FEED_URL = 'https://live.imzqqq.top/news/index.json';
+const OWNCAST_BASE_URL = 'https://live.imzqqq.top';
 
 interface Article {
   title: string;

@@ -413,7 +413,7 @@ NodeJS для написания «мостов»</li>
 
 <h5 id="-11">Как я могу вам помочь с этим?</h5>
 
-<p>Придите и скажите «привет» в <a href="https://to.chat.dingshunyu.top/#/#matrix:matrix.org">#matrix:matrix.org</a>! 
+<p>Придите и скажите «привет» в <a href="https://to.chat.imzqqq.top/#/#matrix:matrix.org">#matrix:matrix.org</a>! 
 Установите synapse и скажите как он вам. 
 Критикуйте спецификации. Пишите клиенты. Пишите «мосты»! Пройдитесь по нашим репозиториям 
 на <a href="https://github.com/matrix-org">GitHub</a> и отправляйте нам PR с исправлениями ошибок 
@@ -426,7 +426,7 @@ Chat делает реализацию серверов куда более сл
 
 <h5 id="-12">Где я могу получить помощь?</h5>
 
-<p><a href="https://to.chat.dingshunyu.top/#/#matrix:matrix.org">#matrix:matrix.org</a> он же #matrix on irc.freenode.net -
+<p><a href="https://to.chat.imzqqq.top/#/#matrix:matrix.org">#matrix:matrix.org</a> он же #matrix on irc.freenode.net -
 это ваш лучший выбор.</p>
 
 <h5 id="matrix-9">Как я могу зарегистрировать собственные типы событий в Chat?</h5>
@@ -558,7 +558,7 @@ Chat для определения MXID по его контакту.</p>
 <p>Да. Chat это всего лишь спецификация, поэтому реализации только приветствуются! 
 Следует отметить, что по состоянию на октябрь 2015 изменения всё ещё производятся в 
 спецификации, поэтому, если вы хотите написать свой Chat-сервер, настроятельно рекомендуем 
-общаться с разработчиками Chat.org в <a href="https://to.chat.dingshunyu.top/#/#matrix:matrix.org">#matrix:matrix.orgg</a>! 
+общаться с разработчиками Chat.org в <a href="https://to.chat.imzqqq.top/#/#matrix:matrix.org">#matrix:matrix.orgg</a>! 
 Вы также можете почитать о API федерации <a href="https://matrix.org/docs/spec/server_server/unstable.html">здесь</a>.</p>
 
 <h5 id="-20">Насколько это безопасно?</h5>
@@ -802,9 +802,9 @@ event<em>cache</em>size: чем больше событий в кеше, тем 
 
 
 
-<p>У вас остались вопросы? Свяжитесь с нами в <a href="https://to.chat.dingshunyu.top/#/#matrix:matrix.org">#matrix:matrix.org</a>.</p>
+<p>У вас остались вопросы? Свяжитесь с нами в <a href="https://to.chat.imzqqq.top/#/#matrix:matrix.org">#matrix:matrix.org</a>.</p>
 
-<p>Copyleft by Perevodators team. <a href="https://to.chat.dingshunyu.top/#/#perevodators:matrix.org">#perevodators:matrix.org</a></p>
+<p>Copyleft by Perevodators team. <a href="https://to.chat.imzqqq.top/#/#perevodators:matrix.org">#perevodators:matrix.org</a></p>
             </MXContentMain>
         
     </Layout>)

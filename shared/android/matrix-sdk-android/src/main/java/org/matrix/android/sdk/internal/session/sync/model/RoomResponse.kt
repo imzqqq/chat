@@ -49,7 +49,7 @@ internal data class RoomResponse(
         val invite: Event? = null,
 
         // The presence status of other users
-        // (Provided in case of room initial sync @see http://chat.docs.dingshunyu.top/api/client-server/#!/-rooms/get_room_sync_data)).
+        // (Provided in case of room initial sync @see http://chat.docs.imzqqq.top/api/client-server/#!/-rooms/get_room_sync_data)).
         val presence: List<Event>? = null,
 
         // The read receipts (Provided in case of room initial sync).

@@ -50,8 +50,8 @@
 "auth_phone_placeholder" = "Número telefónico";
 "auth_repeat_password_placeholder" = "Repite la contraseña";
 "auth_repeat_new_password_placeholder" = "Confirma tu contraseña nueva";
-"auth_home_server_placeholder" = "URL (ej. https://chat.dingshunyu.top)";
-"auth_identity_server_placeholder" = "URL (ej.: https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (ej. https://chat.imzqqq.top)";
+"auth_identity_server_placeholder" = "URL (ej.: https://chat.imzqqq.top)";
 "auth_invalid_login_param" = "Nombre de usuario y/o contraseña incorrectos";
 "auth_invalid_user_name" = "Los nombres de usuario solo pueden contener letras, números, puntos, guiones y guiones bajos";
 "auth_invalid_password" = "Contraseña demasiado corta (mínimo 6)";
@@ -462,7 +462,7 @@
 "directory_server_all_rooms" = "Todas las salas en el servidor %@";
 "directory_server_all_native_rooms" = "Todas las salas nativas de Matrix";
 "directory_server_type_homeserver" = "Escribe un servidor doméstico desde donde listar las salas públicas";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 // Events formatter
 "event_formatter_member_updates" = "%tu cambios de membresía";
 "event_formatter_widget_added" = "componente %@ añadido por %@";

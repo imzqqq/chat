@@ -4,7 +4,7 @@ This MSC offers an alternative to [MSC2260](https://github.com/matrix-org/matrix
 
 ## Background
 
-The [`m.room.aliases`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#m-room-aliases)
+The [`m.room.aliases`](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#m-room-aliases)
 state event exists to list the available aliases for a given room. This serves
 two purposes:
 
@@ -48,16 +48,16 @@ A detailed list of proposed modifications to the Chat spec follows:
 
    * Clients and servers should no longer consider `m.room.aliases` when
      [calculating the display name for a
-     room](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#calculating-the-display-name-for-a-room).
+     room](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#calculating-the-display-name-for-a-room).
 
      (Note: servers follow the room display-name algorithm when calculating
      room names for certain types of push notification.)
 
    * A future room version will remove the special [authorization
-rules](https://chat.api-spec.dingshunyu.top/rooms/v1#authorization-rules) and
-[redaction rules](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#redactions).
+rules](https://chat.api-spec.imzqqq.top/rooms/v1#authorization-rules) and
+[redaction rules](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#redactions).
 
- * [`m.room.canonical_alias`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#m-room-canonical-alias)
+ * [`m.room.canonical_alias`](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#m-room-canonical-alias)
    is extended to include a new `alt_aliases` property. This, if present,
    should be a list of alternative aliases for the room. An example event might
    look like:
@@ -87,10 +87,10 @@ rules](https://chat.api-spec.dingshunyu.top/rooms/v1#authorization-rules) and
    (For clarity: it is not proposed that the `alt_aliases` be considered when
    calculating the displayname for a room.)
 
- * [`PUT /chat/client/r0/rooms/{roomId}/state/{eventType}/{stateKey}`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#put-matrix-client-r0-rooms-roomid-state-eventtype-statekey)
+ * [`PUT /chat/client/r0/rooms/{roomId}/state/{eventType}/{stateKey}`](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#put-matrix-client-r0-rooms-roomid-state-eventtype-statekey)
    is extended to recommend that servers validate any *new* aliases added to
    `m.room.canonical_alias` by checking that it is a valid alias according to
-   the [syntax](https://chat.api-spec.dingshunyu.top/appendices#room-aliases), and by
+   the [syntax](https://chat.api-spec.imzqqq.top/appendices#room-aliases), and by
    looking up the alias and and that it corresponds to the expected room ID.
 
    (Note: Chat server currently implements this check on the main alias, though
@@ -107,12 +107,12 @@ rules](https://chat.api-spec.dingshunyu.top/rooms/v1#authorization-rules) and
      be resolved due to an unreachable server, or because the alias points at a
      different room).
 
- * Currently, [`PUT /chat/client/r0/directory/room/{roomAlias}`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#put-matrix-client-r0-directory-room-roomalias)
+ * Currently, [`PUT /chat/client/r0/directory/room/{roomAlias}`](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#put-matrix-client-r0-directory-room-roomalias)
    attempts to send updated `m.room.aliases` events on the caller's
    behalf. (This is implemented in Chat server but does not appear to be explicitly
    specced.) This functionality should be removed.
 
- * Currently, [`DELETE /chat/client/r0/directory/room/{roomAlias}`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#delete-matrix-client-r0-directory-room-roomalias),
+ * Currently, [`DELETE /chat/client/r0/directory/room/{roomAlias}`](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#delete-matrix-client-r0-directory-room-roomalias),
    attempts to send updated `m.room.aliases` and/or `m.room.canonical_alias`
    events on the caller's behalf, removing any aliases which have been
    deleted. (Again, this is implemented in Chat server but does not appear to be
@@ -167,7 +167,7 @@ proposed changes to Chat server's implementation:
    sufficient to send an `m.room.canonical_alias` event in the room that the
    alias currently points to.
 
- * [`PUT /chat/client/r0/directory/list/room/{roomId}`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#put-matrix-client-r0-directory-list-room-roomid)
+ * [`PUT /chat/client/r0/directory/list/room/{roomId}`](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#put-matrix-client-r0-directory-list-room-roomid)
    and the corresponding unspecced `DELETE` api (both of which set the
    visibility of a room in the public directory): currently Chat server restricts
    their use to server admins and local users who have a PL sufficient to send

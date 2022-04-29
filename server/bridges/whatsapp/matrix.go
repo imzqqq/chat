@@ -158,7 +158,7 @@ func (mx *MatrixHandler) handlePrivatePortal(roomID id.RoomID, inviter *User, pu
 		return
 	}
 	intent := puppet.DefaultIntent()
-	errorMessage := fmt.Sprintf("You already have a private chat portal with me at [%[1]s](https://to.chat.dingshunyu.top/#/%[1]s)", portal.MXID)
+	errorMessage := fmt.Sprintf("You already have a private chat portal with me at [%[1]s](https://to.chat.imzqqq.top/#/%[1]s)", portal.MXID)
 	errorContent := format.RenderMarkdown(errorMessage, true, false)
 	_, _ = intent.SendMessageEvent(roomID, event.EventMessage, errorContent)
 	mx.log.Debugfln("Leaving private chat room %s as %s after accepting invite from %s as we already have chat with the user", roomID, puppet.MXID, inviter.MXID)

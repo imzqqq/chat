@@ -3,7 +3,7 @@
     "consumes": [
         "application/json"
     ],
-    "host": "chat.dingshunyu.top",
+    "host": "chat.imzqqq.top",
     "info": {
         "title": "Chat Client-Server API",
         "version": "unstable"
@@ -96,7 +96,7 @@
                                 "three_pid_creds": {
                                     "client_secret": "d0nt-T3ll",
                                     "id_access_token": "abc123_OpaqueString",
-                                    "id_server": "chat.dingshunyu.top",
+                                    "id_server": "chat.imzqqq.top",
                                     "sid": "abc123987"
                                 }
                             },
@@ -2774,7 +2774,7 @@
                         "name": "roomId",
                         "required": true,
                         "type": "string",
-                        "x-example": "!curbf:chat.dingshunyu.top"
+                        "x-example": "!curbf:chat.imzqqq.top"
                     }
                 ],
                 "responses": {
@@ -2844,7 +2844,7 @@
                         "name": "roomId",
                         "required": true,
                         "type": "string",
-                        "x-example": "!curbf:chat.dingshunyu.top"
+                        "x-example": "!curbf:chat.imzqqq.top"
                     },
                     {
                         "description": "The new visibility for the room on the room directory.",
@@ -2928,7 +2928,7 @@
                         "name": "roomAlias",
                         "required": true,
                         "type": "string",
-                        "x-example": "#monkeys:chat.dingshunyu.top"
+                        "x-example": "#monkeys:chat.imzqqq.top"
                     }
                 ],
                 "responses": {
@@ -2991,7 +2991,7 @@
                         "name": "roomAlias",
                         "required": true,
                         "type": "string",
-                        "x-example": "#monkeys:chat.dingshunyu.top"
+                        "x-example": "#monkeys:chat.imzqqq.top"
                     }
                 ],
                 "responses": {
@@ -3002,7 +3002,7 @@
                                 "room_id": "!abnjk1jdasj98:capuchins.com",
                                 "servers": [
                                     "capuchins.com",
-                                    "chat.dingshunyu.top",
+                                    "chat.imzqqq.top",
                                     "another.com"
                                 ]
                             }
@@ -3030,7 +3030,7 @@
                         "examples": {
                             "application/json": {
                                 "errcode": "M_NOT_FOUND",
-                                "error": "Room alias #monkeys:chat.dingshunyu.top not found."
+                                "error": "Room alias #monkeys:chat.imzqqq.top not found."
                             }
                         },
                         "schema": {
@@ -3069,7 +3069,7 @@
                         "name": "roomAlias",
                         "required": true,
                         "type": "string",
-                        "x-example": "#monkeys:chat.dingshunyu.top"
+                        "x-example": "#monkeys:chat.imzqqq.top"
                     },
                     {
                         "description": "Information about this room alias.",
@@ -3108,7 +3108,7 @@
                         "examples": {
                             "application/json": {
                                 "errcode": "M_UNKNOWN",
-                                "error": "Room alias #monkeys:chat.dingshunyu.top already exists."
+                                "error": "Room alias #monkeys:chat.imzqqq.top already exists."
                             }
                         },
                         "schema": {
@@ -3154,7 +3154,7 @@
                         "name": "serverName",
                         "required": true,
                         "type": "string",
-                        "x-example": "chat.dingshunyu.top"
+                        "x-example": "chat.imzqqq.top"
                     },
                     {
                         "description": "The media ID from the `mxc://` URI (the path component)\n",
@@ -3270,7 +3270,7 @@
                         "name": "serverName",
                         "required": true,
                         "type": "string",
-                        "x-example": "chat.dingshunyu.top"
+                        "x-example": "chat.imzqqq.top"
                     },
                     {
                         "description": "The media ID from the `mxc://` URI (the path component)\n",
@@ -3386,7 +3386,7 @@
         "/events": {
             "get": {
                 "deprecated": true,
-                "description": "This will listen for new events and return them to the caller. This will\nblock until an event is received, or until the `timeout` is reached.\n\nThis endpoint was deprecated in r0 of this specification. Clients\nshould instead call the [`/sync`](/client-server-api/#get_matrixclientv3sync)\nendpoint with a `since` parameter. See\nthe [migration guide](https://chat.dingshunyu.top/docs/guides/migrating-from-client-server-api-v-1#deprecated-endpoints).",
+                "description": "This will listen for new events and return them to the caller. This will\nblock until an event is received, or until the `timeout` is reached.\n\nThis endpoint was deprecated in r0 of this specification. Clients\nshould instead call the [`/sync`](/client-server-api/#get_matrixclientv3sync)\nendpoint with a `since` parameter. See\nthe [migration guide](https://chat.imzqqq.top/docs/guides/migrating-from-client-server-api-v-1#deprecated-endpoints).",
                 "operationId": "getEvents",
                 "parameters": [
                     {
@@ -3745,7 +3745,7 @@
                         "name": "eventId",
                         "required": true,
                         "type": "string",
-                        "x-example": "$asfDuShaf7Gafaw:chat.dingshunyu.top"
+                        "x-example": "$asfDuShaf7Gafaw:chat.imzqqq.top"
                     }
                 ],
                 "responses": {
@@ -3811,7 +3811,7 @@
         "/initialSync": {
             "get": {
                 "deprecated": true,
-                "description": "This returns the full state for this user, with an optional limit on the\nnumber of messages per room to return.\n\nThis endpoint was deprecated in r0 of this specification. Clients\nshould instead call the [`/sync`](/client-server-api/#get_matrixclientv3sync)\nendpoint with no `since` parameter. See\nthe [migration guide](https://chat.dingshunyu.top/docs/guides/migrating-from-client-server-api-v-1#deprecated-endpoints).",
+                "description": "This returns the full state for this user, with an optional limit on the\nnumber of messages per room to return.\n\nThis endpoint was deprecated in r0 of this specification. Clients\nshould instead call the [`/sync`](/client-server-api/#get_matrixclientv3sync)\nendpoint with no `since` parameter. See\nthe [migration guide](https://chat.imzqqq.top/docs/guides/migrating-from-client-server-api-v-1#deprecated-endpoints).",
                 "operationId": "initialSync",
                 "parameters": [
                     {
@@ -4864,7 +4864,7 @@
                         "name": "roomIdOrAlias",
                         "required": true,
                         "type": "string",
-                        "x-example": "#monkeys:chat.dingshunyu.top"
+                        "x-example": "#monkeys:chat.imzqqq.top"
                     },
                     {
                         "description": "The servers to attempt to join the room through. One of the servers\nmust be participating in the room.",
@@ -4875,7 +4875,7 @@
                         "name": "server_name",
                         "type": "array",
                         "x-example": [
-                            "chat.dingshunyu.top",
+                            "chat.imzqqq.top",
                             "elsewhere.ca"
                         ]
                     },
@@ -4950,7 +4950,7 @@
                         "description": "The room has been joined.\n\nThe joined room ID must be returned in the `room_id` field.",
                         "examples": {
                             "application/json": {
-                                "room_id": "!d41d8cd:chat.dingshunyu.top"
+                                "room_id": "!d41d8cd:chat.imzqqq.top"
                             }
                         },
                         "schema": {
@@ -6206,7 +6206,7 @@
                         "name": "roomIdOrAlias",
                         "required": true,
                         "type": "string",
-                        "x-example": "#monkeys:chat.dingshunyu.top"
+                        "x-example": "#monkeys:chat.imzqqq.top"
                     },
                     {
                         "description": "The servers to attempt to knock on the room through. One of the servers\nmust be participating in the room.",
@@ -6217,7 +6217,7 @@
                         "name": "server_name",
                         "type": "array",
                         "x-example": [
-                            "chat.dingshunyu.top",
+                            "chat.imzqqq.top",
                             "elsewhere.ca"
                         ]
                     },
@@ -6242,7 +6242,7 @@
                         "description": "The room has been knocked upon.\n\nThe knocked room ID must be returned in the `room_id` field.",
                         "examples": {
                             "application/json": {
-                                "room_id": "!d41d8cd:chat.dingshunyu.top"
+                                "room_id": "!d41d8cd:chat.imzqqq.top"
                             }
                         },
                         "schema": {
@@ -6512,7 +6512,7 @@
                             "application/json": {
                                 "access_token": "abc123",
                                 "device_id": "GHTYAJCE",
-                                "user_id": "@cheeky_monkey:chat.dingshunyu.top",
+                                "user_id": "@cheeky_monkey:chat.imzqqq.top",
                                 "well_known": {
                                     "m.homeserver": {
                                         "base_url": "https://example.org"
@@ -7315,7 +7315,7 @@
                         "name": "url",
                         "required": true,
                         "type": "string",
-                        "x-example": "https://chat.dingshunyu.top"
+                        "x-example": "https://chat.imzqqq.top"
                     },
                     {
                         "description": "The preferred point in time to return a preview for. The server may\nreturn a newer version if it does not have the requested version\navailable.",
@@ -7335,7 +7335,7 @@
                         "examples": {
                             "application/json": {
                                 "matrix:image:size": 102400,
-                                "og:description": "This is a really cool blog post from chat.dingshunyu.top",
+                                "og:description": "This is a really cool blog post from chat.imzqqq.top",
                                 "og:image": "mxc://example.com/ascERGshawAWawugaAcauga",
                                 "og:image:height": 48,
                                 "og:image:type": "image/png",
@@ -7418,7 +7418,7 @@
                         "description": "The avatar URL for this user.",
                         "examples": {
                             "application/json": {
-                                "avatar_url": "mxc://chat.dingshunyu.top/SDGdghriugerRg",
+                                "avatar_url": "mxc://chat.imzqqq.top/SDGdghriugerRg",
                                 "displayname": "Alice Margatroid"
                             }
                         },
@@ -7466,7 +7466,7 @@
                         "description": "The avatar URL for this user.",
                         "examples": {
                             "application/json": {
-                                "avatar_url": "mxc://chat.dingshunyu.top/SDGdghriugerRg"
+                                "avatar_url": "mxc://chat.imzqqq.top/SDGdghriugerRg"
                             }
                         },
                         "schema": {
@@ -7508,7 +7508,7 @@
                         "required": true,
                         "schema": {
                             "example": {
-                                "avatar_url": "mxc://chat.dingshunyu.top/wefh34uihSDRGhw34"
+                                "avatar_url": "mxc://chat.imzqqq.top/wefh34uihSDRGhw34"
                             },
                             "properties": {
                                 "avatar_url": {
@@ -9935,7 +9935,7 @@
                             "application/json": {
                                 "access_token": "abc123",
                                 "device_id": "GHTYAJCE",
-                                "user_id": "@cheeky_monkey:chat.dingshunyu.top"
+                                "user_id": "@cheeky_monkey:chat.imzqqq.top"
                             }
                         },
                         "schema": {
@@ -12698,7 +12698,7 @@
                         "name": "roomId",
                         "required": true,
                         "type": "string",
-                        "x-example": "!e42d8c:chat.dingshunyu.top"
+                        "x-example": "!e42d8c:chat.imzqqq.top"
                     },
                     {
                         "in": "body",
@@ -12707,7 +12707,7 @@
                         "schema": {
                             "example": {
                                 "reason": "Telling unfunny jokes",
-                                "user_id": "@cheeky_monkey:chat.dingshunyu.top"
+                                "user_id": "@cheeky_monkey:chat.imzqqq.top"
                             },
                             "properties": {
                                 "reason": {
@@ -13412,7 +13412,7 @@
                         "name": "roomId",
                         "required": true,
                         "type": "string",
-                        "x-example": "!636q39766251:chat.dingshunyu.top"
+                        "x-example": "!636q39766251:chat.imzqqq.top"
                     },
                     {
                         "description": "The event ID to get.",
@@ -13420,7 +13420,7 @@
                         "name": "eventId",
                         "required": true,
                         "type": "string",
-                        "x-example": "$asfDuShaf7Gafaw:chat.dingshunyu.top"
+                        "x-example": "$asfDuShaf7Gafaw:chat.imzqqq.top"
                     }
                 ],
                 "responses": {
@@ -13436,7 +13436,7 @@
                                 },
                                 "event_id": "$143273582443PhrSn:example.org",
                                 "origin_server_ts": 1432735824653,
-                                "room_id": "!636q39766251:chat.dingshunyu.top",
+                                "room_id": "!636q39766251:chat.imzqqq.top",
                                 "sender": "@example:example.org",
                                 "type": "m.room.message",
                                 "unsigned": {
@@ -13520,7 +13520,7 @@
                         "name": "roomId",
                         "required": true,
                         "type": "string",
-                        "x-example": "!au1ba7o:chat.dingshunyu.top"
+                        "x-example": "!au1ba7o:chat.imzqqq.top"
                     }
                 ],
                 "responses": {
@@ -13538,7 +13538,7 @@
                         "examples": {
                             "application/json": {
                                 "errcode": "M_UNKNOWN",
-                                "error": "User @example:chat.dingshunyu.top is in room !au1ba7o:chat.dingshunyu.top"
+                                "error": "User @example:chat.imzqqq.top is in room !au1ba7o:chat.imzqqq.top"
                             }
                         },
                         "schema": {
@@ -13605,7 +13605,7 @@
         "/rooms/{roomId}/initialSync": {
             "get": {
                 "deprecated": true,
-                "description": "Get a copy of the current state and the most recent messages in a room.\n\nThis endpoint was deprecated in r0 of this specification. There is no\ndirect replacement; the relevant information is returned by the\n[`/sync`](/client-server-api/#get_matrixclientv3sync) API. See the\n[migration guide](https://chat.dingshunyu.top/docs/guides/migrating-from-client-server-api-v-1#deprecated-endpoints).",
+                "description": "Get a copy of the current state and the most recent messages in a room.\n\nThis endpoint was deprecated in r0 of this specification. There is no\ndirect replacement; the relevant information is returned by the\n[`/sync`](/client-server-api/#get_matrixclientv3sync) API. See the\n[migration guide](https://chat.imzqqq.top/docs/guides/migrating-from-client-server-api-v-1#deprecated-endpoints).",
                 "operationId": "roomInitialSync",
                 "parameters": [
                     {
@@ -14148,7 +14148,7 @@
                         "name": "roomId",
                         "required": true,
                         "type": "string",
-                        "x-example": "!d41d8cd:chat.dingshunyu.top"
+                        "x-example": "!d41d8cd:chat.imzqqq.top"
                     },
                     {
                         "in": "body",
@@ -14158,7 +14158,7 @@
                             "example": {
                                 "address": "cheeky@monkey.com",
                                 "id_access_token": "abc123_OpaqueString",
-                                "id_server": "chat.dingshunyu.top",
+                                "id_server": "chat.imzqqq.top",
                                 "medium": "email"
                             },
                             "properties": {
@@ -14204,7 +14204,7 @@
                         "examples": {
                             "application/json": {
                                 "errcode": "M_FORBIDDEN",
-                                "error": "@cheeky_monkey:chat.dingshunyu.top is banned from the room"
+                                "error": "@cheeky_monkey:chat.imzqqq.top is banned from the room"
                             }
                         },
                         "schema": {
@@ -14279,7 +14279,7 @@
                         "name": "roomId",
                         "required": true,
                         "type": "string",
-                        "x-example": "!d41d8cd:chat.dingshunyu.top"
+                        "x-example": "!d41d8cd:chat.imzqqq.top"
                     },
                     {
                         "in": "body",
@@ -14288,7 +14288,7 @@
                         "schema": {
                             "example": {
                                 "reason": "Welcome to the team!",
-                                "user_id": "@cheeky_monkey:chat.dingshunyu.top"
+                                "user_id": "@cheeky_monkey:chat.imzqqq.top"
                             },
                             "properties": {
                                 "reason": {
@@ -14346,7 +14346,7 @@
                         "examples": {
                             "application/json": {
                                 "errcode": "M_FORBIDDEN",
-                                "error": "@cheeky_monkey:chat.dingshunyu.top is banned from the room"
+                                "error": "@cheeky_monkey:chat.imzqqq.top is banned from the room"
                             }
                         },
                         "schema": {
@@ -14421,7 +14421,7 @@
                         "name": "roomId",
                         "required": true,
                         "type": "string",
-                        "x-example": "!d41d8cd:chat.dingshunyu.top"
+                        "x-example": "!d41d8cd:chat.imzqqq.top"
                     },
                     {
                         "in": "body",
@@ -14494,7 +14494,7 @@
                         "description": "The room has been joined.\n\nThe joined room ID must be returned in the `room_id` field.",
                         "examples": {
                             "application/json": {
-                                "room_id": "!d41d8cd:chat.dingshunyu.top"
+                                "room_id": "!d41d8cd:chat.imzqqq.top"
                             }
                         },
                         "schema": {
@@ -14657,7 +14657,7 @@
                         "name": "roomId",
                         "required": true,
                         "type": "string",
-                        "x-example": "!e42d8c:chat.dingshunyu.top"
+                        "x-example": "!e42d8c:chat.imzqqq.top"
                     },
                     {
                         "in": "body",
@@ -14666,7 +14666,7 @@
                         "schema": {
                             "example": {
                                 "reason": "Telling unfunny jokes",
-                                "user_id": "@cheeky_monkey:chat.dingshunyu.top"
+                                "user_id": "@cheeky_monkey:chat.imzqqq.top"
                             },
                             "properties": {
                                 "reason": {
@@ -14747,7 +14747,7 @@
                         "name": "roomId",
                         "required": true,
                         "type": "string",
-                        "x-example": "!nkl290a:chat.dingshunyu.top"
+                        "x-example": "!nkl290a:chat.imzqqq.top"
                     },
                     {
                         "in": "body",
@@ -15924,7 +15924,7 @@
                         "name": "eventId",
                         "required": true,
                         "type": "string",
-                        "x-example": "bai2b1i9:chat.dingshunyu.top"
+                        "x-example": "bai2b1i9:chat.imzqqq.top"
                     },
                     {
                         "description": "The transaction ID for this event. Clients should generate a\nunique ID; it will be used by the server to ensure idempotency of requests.",
@@ -16729,7 +16729,7 @@
                         "name": "roomId",
                         "required": true,
                         "type": "string",
-                        "x-example": "!e42d8c:chat.dingshunyu.top"
+                        "x-example": "!e42d8c:chat.imzqqq.top"
                     },
                     {
                         "in": "body",
@@ -16738,7 +16738,7 @@
                         "schema": {
                             "example": {
                                 "reason": "They've been banned long enough",
-                                "user_id": "@cheeky_monkey:chat.dingshunyu.top"
+                                "user_id": "@cheeky_monkey:chat.imzqqq.top"
                             },
                             "properties": {
                                 "reason": {
@@ -18021,7 +18021,7 @@
                                                     {
                                                         "content": {
                                                             "user_ids": [
-                                                                "@alice:chat.dingshunyu.top",
+                                                                "@alice:chat.imzqqq.top",
                                                                 "@bob:example.com"
                                                             ]
                                                         },
@@ -19007,7 +19007,7 @@
                         "name": "alias",
                         "required": true,
                         "type": "string",
-                        "x-example": "#matrix:chat.dingshunyu.top"
+                        "x-example": "#matrix:chat.imzqqq.top"
                     }
                 ],
                 "responses": {
@@ -19019,7 +19019,7 @@
                                 "properties": {
                                     "alias": {
                                         "description": "An alias for a matrix room.",
-                                        "example": "#freenode_#matrix:chat.dingshunyu.top",
+                                        "example": "#freenode_#matrix:chat.imzqqq.top",
                                         "type": "string"
                                     },
                                     "fields": {
@@ -19116,7 +19116,7 @@
                                 "properties": {
                                     "alias": {
                                         "description": "An alias for a matrix room.",
-                                        "example": "#freenode_#matrix:chat.dingshunyu.top",
+                                        "example": "#freenode_#matrix:chat.imzqqq.top",
                                         "type": "string"
                                     },
                                     "fields": {
@@ -19580,7 +19580,7 @@
                         "name": "userid",
                         "required": true,
                         "type": "string",
-                        "x-example": "@bob:chat.dingshunyu.top"
+                        "x-example": "@bob:chat.imzqqq.top"
                     }
                 ],
                 "responses": {
@@ -19604,7 +19604,7 @@
                                     },
                                     "userid": {
                                         "description": "A Chat User ID represting a third party user.",
-                                        "example": "@_gitter_jim:chat.dingshunyu.top",
+                                        "example": "@_gitter_jim:chat.imzqqq.top",
                                         "type": "string"
                                     }
                                 },
@@ -19700,7 +19700,7 @@
                                     },
                                     "userid": {
                                         "description": "A Chat User ID represting a third party user.",
-                                        "example": "@_gitter_jim:chat.dingshunyu.top",
+                                        "example": "@_gitter_jim:chat.imzqqq.top",
                                         "type": "string"
                                     }
                                 },
@@ -21996,7 +21996,7 @@
             "url": "https://{homeserver_address}/",
             "variables": {
                 "homeserver_address": {
-                    "default": "matrix-client.chat.dingshunyu.top",
+                    "default": "matrix-client.chat.imzqqq.top",
                     "description": "The base URL for your homeserver"
                 }
             }

@@ -3,7 +3,7 @@
 //  MatrixSDK
 //
 //  Created by Avery Pierce on 2/11/17.
-//  Copyright © 2017 chat.dingshunyu.top. All rights reserved.
+//  Copyright © 2017 chat.imzqqq.top. All rights reserved.
 //  Copyright 2019 The Matrix.org Foundation C.I.C
 //
 

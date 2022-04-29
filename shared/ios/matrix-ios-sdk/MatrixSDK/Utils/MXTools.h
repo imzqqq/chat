@@ -141,7 +141,7 @@ FOUNDATION_EXPORT NSString *const kMXToolsRegexStringForMatrixGroupIdentifier;
 /**
  Extract the server name part of a matrix identifier.
 
- For example, this methods returns "chat.dingshunyu.top" from "!anEvent:chat.dingshunyu.top"
+ For example, this methods returns "chat.imzqqq.top" from "!anEvent:chat.imzqqq.top"
 
  @param identifier a Matrix identifier.
  @return the server name part.
@@ -162,7 +162,7 @@ FOUNDATION_EXPORT NSString *const kMXToolsRegexStringForMatrixGroupIdentifier;
 #pragma mark - Permalink
 /*
  Return a permalink to a room.
- The permalink could be to.chat.dingshunyu.top format or a custom client permalink (see `MXSDKOptions.clientPermalinkBaseUrl`).
+ The permalink could be to.chat.imzqqq.top format or a custom client permalink (see `MXSDKOptions.clientPermalinkBaseUrl`).
 
  @param roomIdOrAlias the id or the alias of the room to link to.
  @return the permalink.
@@ -171,7 +171,7 @@ FOUNDATION_EXPORT NSString *const kMXToolsRegexStringForMatrixGroupIdentifier;
 
 /*
  Return a permalink to an event.
- The permalink could be to.chat.dingshunyu.top format or a custom client permalink (see `MXSDKOptions.clientPermalinkBaseUrl`).
+ The permalink could be to.chat.imzqqq.top format or a custom client permalink (see `MXSDKOptions.clientPermalinkBaseUrl`).
  
  @param eventId the id of the event to link to.
  @param roomIdOrAlias the room the event belongs to.
@@ -181,7 +181,7 @@ FOUNDATION_EXPORT NSString *const kMXToolsRegexStringForMatrixGroupIdentifier;
 
 /*
  Return a permalink to a user.
- The permalink could be to.chat.dingshunyu.top format or a custom client permalink (see `MXSDKOptions.clientPermalinkBaseUrl`).
+ The permalink could be to.chat.imzqqq.top format or a custom client permalink (see `MXSDKOptions.clientPermalinkBaseUrl`).
  
  @param userId the id of the user to link to.
  @return the permalink.

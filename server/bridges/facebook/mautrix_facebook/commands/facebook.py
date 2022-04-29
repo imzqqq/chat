@@ -39,7 +39,7 @@ async def search(evt: CommandEvent) -> None:
     puppets = await asyncio.gather(*[_get_search_result_puppet(evt.sender, edge.node)
                                      for edge in resp.search_results.edges
                                      if isinstance(edge.node, graphql.Participant)])
-    results = "".join(f"* [{puppet.name}](https://to.chat.dingshunyu.top/#/{puppet.default_mxid})\n"
+    results = "".join(f"* [{puppet.name}](https://to.chat.imzqqq.top/#/{puppet.default_mxid})\n"
                       for puppet in puppets)
     if results:
         await evt.reply(f"Search results:\n\n{results}")

@@ -8,7 +8,7 @@
 
 - Implements a basic [ActivityPub](https://activitypub.rocks/) server (with federation)
   - S2S (Server to Server) and C2S (Client to Server) protocols
-  - Compatible with [Flow](https://flow.join.dingshunyu.top/) and others ([Pleroma](https://pleroma.social/), Misskey, Plume, PixelFed, Hubzilla...)
+  - Compatible with [Flow](https://flow.join.imzqqq.top/) and others ([Pleroma](https://pleroma.social/), Misskey, Plume, PixelFed, Hubzilla...)
 - Exposes your outbox as a basic microblog
   - Support all content types from the Fediverse (`Note`, `Article`, `Page`, `Video`, `Image`, `Question`...)
   - Markdown support

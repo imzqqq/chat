@@ -145,7 +145,7 @@
     <string name="login_connection">正在连接…</string>
     <string name="dialog_whats_an_instance">请输入你帐号所在的 Flow 站点的域名，比如 pawoo.net，acg.mn，wxw.moe，<a href="https://instances.social">等等</a> 。
         \n\n还没有 Flow 帐号？你也可以输入想注册的 Flow 站点的域名，然后在该服务器创建新的帐号并授权 Flow 登入。
-        \n\n在 Flow 里，跨站互动和站内互动一样简单。可以前往 <a href="https://flow.join.dingshunyu.top">https://flow.join.dingshunyu.top</a> 了解更多信息。
+        \n\n在 Flow 里，跨站互动和站内互动一样简单。可以前往 <a href="https://flow.join.imzqqq.top">https://flow.join.imzqqq.top</a> 了解更多信息。
     </string>
     <string name="dialog_title_finishing_media_upload">正在结束上传…</string>
     <string name="dialog_message_uploading_media">正在上传…</string>

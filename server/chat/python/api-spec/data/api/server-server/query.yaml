@@ -158,11 +158,11 @@ paths:
                 description: |-
                   The avatar URL for the user's avatar. May be omitted if the user does not
                   have an avatar set.
-                x-example: "mxc://chat.dingshunyu.top/MyC00lAvatar"
+                x-example: "mxc://chat.imzqqq.top/MyC00lAvatar"
           examples:
             application/json: {
               "displayname": "John Doe",
-              "avatar_url": "mxc://chat.dingshunyu.top/MyC00lAvatar"
+              "avatar_url": "mxc://chat.imzqqq.top/MyC00lAvatar"
             }
         404:
           description: The user does not exist or does not have a profile.

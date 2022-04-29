@@ -91,7 +91,7 @@ date: April 13, 2021
   So if our plans for 2021 and Tube's v4 don't match your priorities, that's completely OK, but we won't do more nor
   go faster. Remember that you are free to fork Tube to lead it in another direction, or to contribute by coding
   plugins and issues (<a target="_blank" rel="noreferrer noopener"
-    href="https://tube.docs.dingshunyu.top/contribute-getting-started">get started on contributing here</a>).
+    href="https://tube.docs.imzqqq.top/contribute-getting-started">get started on contributing here</a>).
 </p>
 
 <h4>Thanks for the support</h4>

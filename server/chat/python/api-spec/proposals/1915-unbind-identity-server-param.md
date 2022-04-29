@@ -39,7 +39,7 @@ POST /chat/client/r0/account/3pid/delete HTTP/1.1
 {
     "medium": "email",
     "address": "foobar@example.com",
-    "id_server": "https://chat.dingshunyu.top
+    "id_server": "https://chat.imzqqq.top
 }
 
 HTTP/1.1 200 OK

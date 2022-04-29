@@ -26,7 +26,7 @@ server:
     hostname: 0.0.0.0
     port: 29316
     # Public base URL where the server is visible.
-    public_url: https://bot.dingshunyu.top
+    public_url: https://bot.imzqqq.top
     # The base management API path.
     base_path: /chat/maubot/v1
     # The base path for the UI.
@@ -47,9 +47,9 @@ server:
 # clients in the management UI, since you can also just type the homeserver URL
 # into the box there.
 homeservers:
-    chat.dingshunyu.top:
+    chat.imzqqq.top:
         # Client-server API URL
-        url: https:/chat.dingshunyu.top
+        url: https:/chat.imzqqq.top
         # registration_shared_secret from synapse config
         # You can leave this empty if you don't have access to the homeserver.
         # When this is empty, `mbc auth --register` won't work, but `mbc auth` (login) will.

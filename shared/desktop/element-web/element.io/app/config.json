@@ -1,5 +1,5 @@
 {
-    "default_server_name": "chat.dingshunyu.top",
+    "default_server_name": "chat.imzqqq.top",
     "brand": "Chat",
     "integrations_ui_url": "https://scalar.vector.im/",
     "integrations_rest_url": "https://scalar.vector.im/api",
@@ -20,18 +20,18 @@
     },
     "roomDirectory": {
         "servers": [
-            "chat.dingshunyu.top",
+            "chat.imzqqq.top",
             "gitter.im",
             "libera.chat"
         ]
     },
     "enable_presence_by_hs_url": {
-        "https://chat.dingshunyu.top": false,
-        "https://matrix-client.chat.dingshunyu.top": false
+        "https://chat.imzqqq.top": false,
+        "https://matrix-client.chat.imzqqq.top": false
     },
     "terms_and_conditions_links": [
         {
-            "url": "https://apps.chat.dingshunyu.top/desktop/privacy",
+            "url": "https://apps.chat.imzqqq.top/desktop/privacy",
             "text": "Privacy Policy"
         }
     ],
@@ -39,7 +39,7 @@
       "brand": "Chat Home",
       "cookiePolicyUrl": "https://element.io/cookie-policy",
       "domains": [
-          "chat.dingshunyu.top"
+          "chat.imzqqq.top"
       ],
       "privacyPolicyUrl": "https://element.io/privacy",
       "termsOfServiceUrl": "https://element.io/terms-of-service",

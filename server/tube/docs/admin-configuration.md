@@ -27,7 +27,7 @@ We recommand you to enable HLS (and disable WebTorrent if you don't want to stor
 
 The main drawback is that this HLS with P2P player is not compatible with WebTorrent, so you won't be able to help the swarm using your BitTorrent client.
 This is a disadvantage that we accept, because we realized that BitTorrent client that helped to seed Tube files were not really used.
-Moreover, the [Tube redundancy system](https://tube.docs.dingshunyu.top/admin-following-instances?id=instances-redundancy) can be another way to help the origin instance to seed the video.
+Moreover, the [Tube redundancy system](https://tube.docs.imzqqq.top/admin-following-instances?id=instances-redundancy) can be another way to help the origin instance to seed the video.
 
 ![](/assets/transcoding-hls-webtorrent.png)
 

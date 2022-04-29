@@ -891,7 +891,7 @@
     }];
 }
 
-// Test for https://chat.dingshunyu.top/jira/browse/SYN-162
+// Test for https://chat.imzqqq.top/jira/browse/SYN-162
 - (void)checkPaginateWhenReachingTheExactBeginningOfTheRoom:(MXRoom*)room
 {
     __block NSUInteger eventCount = 0;
@@ -1113,9 +1113,9 @@
 
                         XCTAssertEqualObjects(myUser.displayname, @"Alicia");
 
-                        [mxSession.myUser setAvatarUrl:@"http://chat.dingshunyu.top/matrix.png" success:^{
+                        [mxSession.myUser setAvatarUrl:@"http://chat.imzqqq.top/matrix.png" success:^{
 
-                            XCTAssertEqualObjects(myUser.avatarUrl, @"http://chat.dingshunyu.top/matrix.png");
+                            XCTAssertEqualObjects(myUser.avatarUrl, @"http://chat.imzqqq.top/matrix.png");
 
                             [mxSession close];
                             mxSession = nil;
@@ -1126,7 +1126,7 @@
 
                                 MXUser *myUser = [store2 userWithUserId:aliceRestClient.credentials.userId];
                                 XCTAssertEqualObjects(myUser.displayname, @"Alicia");
-                                XCTAssertEqualObjects(myUser.avatarUrl, @"http://chat.dingshunyu.top/matrix.png");
+                                XCTAssertEqualObjects(myUser.avatarUrl, @"http://chat.imzqqq.top/matrix.png");
 
                                 if ([store2 respondsToSelector:@selector(close)])
                                 {

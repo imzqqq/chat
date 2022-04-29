@@ -25,7 +25,7 @@ document is an example of what we mean.
 TODOs
 -----
 
-Any file in this repository might make it onto the chat.dingshunyu.top site, and as such
+Any file in this repository might make it onto the chat.imzqqq.top site, and as such
 we do not want ``TODO`` markers visible there. For internal comments, notes, TODOs,
 etc please use standard markdown comments (`<!-- TODO TravisR: Fix this -->`). Please
 include your name in the TODO comment so we know who to ask about it in the future.

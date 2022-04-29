@@ -14,7 +14,7 @@ We present, among other things:
 - features and improvements since v1 of November 2018
 - work to facilitate the federation and presentation of proceedings
 - the new version of [JoinPeertube](https://joinpeertube.org), which is enriched by this work
-- [Tube's official documentation site](https://tube.docs.dingshunyu.top) (administration and use)
+- [Tube's official documentation site](https://tube.docs.imzqqq.top) (administration and use)
 - our desires and projects for the future of Tube (we are considering a new crowdfunding, and dreaming of a video-remix tool and of live streaming!)
 
 These improvements are the result of the many contributions of the members of the Tube community (thank you!), but also of a year of work that we have financed through [donations that support all of our association's projects](https://soutenir.framasoft.org), currently in a [donation campaign](https://contributopia.org/journal).

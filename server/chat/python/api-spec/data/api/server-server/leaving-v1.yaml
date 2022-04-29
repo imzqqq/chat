@@ -43,7 +43,7 @@ paths:
           type: string
           description: The room ID that is about to be left.
           required: true
-          x-example: "!abc123:chat.dingshunyu.top"
+          x-example: "!abc123:chat.imzqqq.top"
         - in: path
           name: userId
           type: string
@@ -82,7 +82,7 @@ paths:
                   origin:
                     type: string
                     description: The name of the resident homeserver.
-                    example: "chat.dingshunyu.top"
+                    example: "chat.imzqqq.top"
                   origin_server_ts:
                     type: integer
                     format: int64
@@ -162,7 +162,7 @@ paths:
           type: string
           description: The room ID that is about to be left.
           required: true
-          x-example: "!abc123:chat.dingshunyu.top"
+          x-example: "!abc123:chat.imzqqq.top"
         - in: path
           name: eventId
           type: string
@@ -183,7 +183,7 @@ paths:
               origin:
                 type: string
                 description: The name of the leaving homeserver.
-                example: "chat.dingshunyu.top"
+                example: "chat.imzqqq.top"
               origin_server_ts:
                 type: integer
                 format: int64

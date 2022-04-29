@@ -3,7 +3,7 @@
 Appservices within Chat are increasingly attempting to support End-to-End Encryption. As such, they
 need a way to generate devices for their users so that they can participate in E2E rooms. In order to
 do so, this proposal suggests implementing an appservice extension to the
-[`POST /login` endpoint](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#post-matrix-client-r0-login).
+[`POST /login` endpoint](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#post-matrix-client-r0-login).
 
 Appservice users do not usually need to log in as they do not need their own access token, and do not
 traditionally need a "device". However, E2E encryption demands that at least one user in a room has a

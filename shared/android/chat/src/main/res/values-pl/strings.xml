@@ -1641,7 +1641,7 @@ Spróbuj uruchomić ponownie aplikację.</string>
     <string name="soft_logout_clear_data_dialog_submit">Wyczyść dane</string>
     <string name="template_soft_logout_sso_not_same_user_error">Aktualna sesja jest dla użytkownika %1$s, podajesz natomiast dane dla użytkownika %2$s. Nie jest to wspierane przez ${app_name}.
 \nNa początku usuń dane, następnie zaloguj ponownie na innym koncie.</string>
-    <string name="permalink_malformed">Link to.chat.dingshunyu.top został zdeformowany</string>
+    <string name="permalink_malformed">Link to.chat.imzqqq.top został zdeformowany</string>
     <string name="bug_report_error_too_short">Opis zbyt krótki</string>
     <string name="notification_initial_sync">Synchronizacja wstępna…</string>
     <string name="settings_show_devices_list">Zobacz wszystkie sesje</string>

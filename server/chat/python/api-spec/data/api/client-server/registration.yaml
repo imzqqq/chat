@@ -132,7 +132,7 @@ paths:
           description: The account has been registered.
           examples:
             application/json: {
-                "user_id": "@cheeky_monkey:chat.dingshunyu.top",
+                "user_id": "@cheeky_monkey:chat.imzqqq.top",
                 "access_token": "abc123",
                 "device_id": "GHTYAJCE"
               }

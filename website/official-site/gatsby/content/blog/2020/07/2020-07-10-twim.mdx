@@ -13,13 +13,13 @@ This week it's Open Tech Will Save Us!
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/_2DQ_iYZi5U" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-* **Jay Graber** ([@arcalinea](https://twitter.com/arcalinea), [@arcalinea:matrix.org](https://to.chat.dingshunyu.top/#/@arcalinea:matrix.org)), creator of [Happening](https://happening.net/) and [all-around decentralisation fan](https://medium.com/decentralized-web/decentralized-social-networks-e5a7a2603f53) gave an overview of the decentralized social media ecosystem.
+* **Jay Graber** ([@arcalinea](https://twitter.com/arcalinea), [@arcalinea:matrix.org](https://to.chat.imzqqq.top/#/@arcalinea:matrix.org)), creator of [Happening](https://happening.net/) and [all-around decentralisation fan](https://medium.com/decentralized-web/decentralized-social-networks-e5a7a2603f53) gave an overview of the decentralized social media ecosystem.
 * **Ania M. Piotrowska** ([@aniampiotrowska](https://twitter.com/aniampiotrowska)), known for her work on [Nym](https://nymtech.net/), Loopix, and at UCL presented "Building private future for the internet with the Nym mixnet".
-* **Burak Nehbit** ([@nehbit](https://twitter.com/nehbit), [@burak:tomesh.net](https://to.chat.dingshunyu.top/#/@burak:tomesh.net)) gave a deep dive into his work on [Aether P2P](https://getaether.net/).
+* **Burak Nehbit** ([@nehbit](https://twitter.com/nehbit), [@burak:tomesh.net](https://to.chat.imzqqq.top/#/@burak:tomesh.net)) gave a deep dive into his work on [Aether P2P](https://getaether.net/).
 
 ## Dept of Spec 📜
 
-[anoa](https://to.chat.dingshunyu.top/#/@andrewm:amorgan.xyz) reported:
+[anoa](https://to.chat.imzqqq.top/#/@andrewm:amorgan.xyz) reported:
 
 > Here's your weekly spec update! The heart of Chat is the specification - and this is modified by Chat Spec Change (MSC) proposals. Learn more about how the process works at <https://matrix.org/docs/spec/proposals.>
 >
@@ -59,7 +59,7 @@ Check out that graph!
 
 ### HTML embeddable client GSoC project
 
-[arnav-t](https://to.chat.dingshunyu.top/#/@arnav-t:matrix.org) told us:
+[arnav-t](https://to.chat.imzqqq.top/#/@arnav-t:matrix.org) told us:
 
 > This week for my HTML embeddable client GSoC project:
 >
@@ -70,7 +70,7 @@ Check out that graph!
 
 ### go-neb
 
-[nikofil](https://to.chat.dingshunyu.top/#/@nikofil:matrix.org) said:
+[nikofil](https://to.chat.imzqqq.top/#/@nikofil:matrix.org) said:
 
 > * work is still being done on the bot's functionality to test different crypto functionalities of other Chat clients when thrown in a room with them
 >
@@ -83,7 +83,7 @@ Check out that graph!
 
 [Nheko](https://github.com/Nheko-Reborn/nheko) is a desktop client using Qt, Boost.Asio and C++17. It supports E2EE (with the notable exception being device verification for now) and intends to be full featured and nice to look at
 
-[Chethan](https://to.chat.dingshunyu.top/#/@crdy2k1:matrix.org) said:
+[Chethan](https://to.chat.imzqqq.top/#/@crdy2k1:matrix.org) said:
 
 > * Added user cache which stores the encrypted user keys and updates them on sync
 >
@@ -94,7 +94,7 @@ Check out that graph!
 
 ### Riot iOS P2P Demo
 
-[Neil Alexander](https://to.chat.dingshunyu.top/#/@neilalexander:matrix.org) announced:
+[Neil Alexander](https://to.chat.imzqqq.top/#/@neilalexander:matrix.org) announced:
 
 > Over the last couple of weeks I have been working on the next P2P demo, using [Yggdrasil](https://yggdrasil-network.github.io/) as the transport instead of [libp2p](https://libp2p.io/). Although libp2p is arguably more featureful in many ways, Yggdrasil does have one major benefit in that it provides full overlay routing. Participants in the network can carry traffic on behalf of other participants, resulting in something much closer to a true mesh network.
 >
@@ -112,7 +112,7 @@ Check out that graph!
 
 ### A new way to test homeservers - [Complement](https://github.com/matrix-org/complement)
 
-[kegan](https://to.chat.dingshunyu.top/#/@kegan:matrix.org) reported:
+[kegan](https://to.chat.imzqqq.top/#/@kegan:matrix.org) reported:
 
 > Many of you know that I work on a Go homeserver called **Dendrite**, and so I've had to get familiar with **SyTest**: a black-box homeserver integration testing project. Unfortunately SyTest has a number of problems: from the dialect of perl, lack of documentation for federation bits, the inability to run a single test, and so on. Having a solid black-box integration testing project is crucial for the ecosystem to ensure spec compliance (and hence compatibility between server implementations) and for making all servers more stable and reliable.
 >
@@ -134,13 +134,13 @@ Asked about Sytest and SyTS, Kegan added:
 >
 > The problem with SyTS was that the test tooling around it ultimately wasn't expressive enough. I was using Jest and kept finding myself fighting it by bumping up against issues like <https://github.com/facebook/jest/pull/8751> and the multi-process parallelisation stuff was too opaque. The assertion helper functions also lacked context because they rely on behavioural testing names like `describe("foo") { it("should say bar") { ... }` etc so when your assertion fails (eg wrong value for a JSON key using assert equals) it just says unhelpfully "foo != bar" where what I really want is to know what it actually does say then, and other contextual info around the object (maybe the key name was typod). When I realised that the assertion lib didn't have this and I'd need to add it, coupled with parallelisation concerns and head-desking against Jest, I found myself wishing I just used something else. I stuck with it though and then realised that all the federation stuff (signature checking, canonical JSON, etc) would need to re-implemented when I knew I had working code in Go. Both of these things combined and I thought "you know what, I'm just going to do this in Go" but you'll note that the architecture is identical, so SyTS lives on as an early prototype for Complement ;)
 
-Find out more in the room: [#complement:matrix.org](https://to.chat.dingshunyu.top/#/#complement:matrix.org).
+Find out more in the room: [#complement:matrix.org](https://to.chat.imzqqq.top/#/#complement:matrix.org).
 
 ### Dendrite / gomatrixserverlib
 
 Dendrite is a next-generation homeserver written in Go
 
-[Neil Alexander](https://to.chat.dingshunyu.top/#/@neilalexander:matrix.org) told us:
+[Neil Alexander](https://to.chat.imzqqq.top/#/@neilalexander:matrix.org) told us:
 
 > While I've been busy distracted with the P2P demo, Kegan has been on a mission to implement some new features. Changes this week include:
 >
@@ -164,7 +164,7 @@ Dendrite is a next-generation homeserver written in Go
 
 Conduit is a Chat homeserver written in Rust <https://conduit.rs>
 
-[timo](https://to.chat.dingshunyu.top/#/@timo:koesters.xyz) said:
+[timo](https://to.chat.imzqqq.top/#/@timo:koesters.xyz) said:
 
 > Conduit
 >
@@ -185,7 +185,7 @@ Conduit is a Chat homeserver written in Rust <https://conduit.rs>
 
 ### Chat
 
-[Neil](https://to.chat.dingshunyu.top/#/@neilj:matrix.org) reported:
+[Neil](https://to.chat.imzqqq.top/#/@neilj:matrix.org) reported:
 
 > In Chat land this week, we shipped [1.16.0](https://matrix.org/blog/2020/07/08/synapse-1-16-0-released) and err [1.16.1](https://github.com/matrix-org/synapse/releases/tag/v1.16.1). 
 >
@@ -213,7 +213,7 @@ Conduit is a Chat homeserver written in Rust <https://conduit.rs>
 
 ### dacruz21/matrix-chart
 
-[Typo Kign](https://to.chat.dingshunyu.top/#/@david:typokign.com) reported:
+[Typo Kign](https://to.chat.imzqqq.top/#/@david:typokign.com) reported:
 
 > v2.3.0 of [dacruz21/matrix-chart](https://hub.helm.sh/charts/dacruz21/matrix) has been published with Chat 1.16.
 
@@ -222,15 +222,15 @@ Conduit is a Chat homeserver written in Rust <https://conduit.rs>
 
 ### New WireGuard-based deployment
 
-[balaa](https://to.chat.dingshunyu.top/#/@balaa:pi2.noteworthy.im) announced:
+[balaa](https://to.chat.imzqqq.top/#/@balaa:pi2.noteworthy.im) announced:
 
-> Hi everyone, my friend Patrick and I have been working on making Chat more accessible in the context of personal overlay networks powered by WireGuard. We’ve built a 1-click deployment solution for Chat & Riot based on docker. The interesting part is that it gives you public addressability via a distributed proxy service that we have been developing. We are free and open source and welcoming contributors and testers ASAP! We are imagining an ecosystem for building collaborative intranets and see them as foundational to a freer, more equitable internet. Please join us at [#noteworthy:tincan.community](https://to.chat.dingshunyu.top/#/#noteworthy:tincan.community) See <https://www.patrickdlg.com/personal-messaging/> and <https://noteworthy.tech/start/>
+> Hi everyone, my friend Patrick and I have been working on making Chat more accessible in the context of personal overlay networks powered by WireGuard. We’ve built a 1-click deployment solution for Chat & Riot based on docker. The interesting part is that it gives you public addressability via a distributed proxy service that we have been developing. We are free and open source and welcoming contributors and testers ASAP! We are imagining an ecosystem for building collaborative intranets and see them as foundational to a freer, more equitable internet. Please join us at [#noteworthy:tincan.community](https://to.chat.imzqqq.top/#/#noteworthy:tincan.community) See <https://www.patrickdlg.com/personal-messaging/> and <https://noteworthy.tech/start/>
 
 ## Dept of Bridges 🌉
 
 ### mautrix-whatsapp
 
-[Tulir](https://to.chat.dingshunyu.top/#/@tulir:maunium.net) announced:
+[Tulir](https://to.chat.imzqqq.top/#/@tulir:maunium.net) announced:
 
 > mautrix-whatsapp got some bugfixes and improvements:
 >
@@ -240,7 +240,7 @@ Conduit is a Chat homeserver written in Rust <https://conduit.rs>
 
 ### matrix-sms-bridge
 
-[Benedict](https://to.chat.dingshunyu.top/#/@benedict:imbitbu.de) offered:
+[Benedict](https://to.chat.imzqqq.top/#/@benedict:imbitbu.de) offered:
 
 > I fixed some bugs in [matrix-sms-bridge](https://github.com/benkuly/matrix-sms-bridge) and added a feature that allows delayed sending of sms messages with the `sms send` command. It runs very fast and stable in my production environment.
 
@@ -250,7 +250,7 @@ Conduit is a Chat homeserver written in Rust <https://conduit.rs>
 
 [Nheko](https://github.com/Nheko-Reborn/nheko) is a desktop client using Qt, Boost.Asio and C++17. It supports E2EE (with the notable exception being device verification for now) and intends to be full featured and nice to look at
 
-[Nico (@deepbluev7:neko.dev)](https://to.chat.dingshunyu.top/#/@deepbluev7:neko.dev) reported:
+[Nico (@deepbluev7:neko.dev)](https://to.chat.imzqqq.top/#/@deepbluev7:neko.dev) reported:
 
 > Not much to talk about currently, since I'm breaking my Nheko to replace the entire event store at this moment, but I have some heads up on an annoying bug that I fixed on my branch:
 >
@@ -260,19 +260,19 @@ Conduit is a Chat homeserver written in Rust <https://conduit.rs>
 
 ### Riot-iOS
 
-[steve](https://to.chat.dingshunyu.top/#/@stevio:matrix.org) offered:
+[steve](https://to.chat.imzqqq.top/#/@stevio:matrix.org) offered:
 
 > This week, we worked on the rebranding.
 
 ### RiotX / Riot-Android
 
-[benoit](https://to.chat.dingshunyu.top/#/@benoit.marty:matrix.org) announced:
+[benoit](https://to.chat.imzqqq.top/#/@benoit.marty:matrix.org) announced:
 
 > We will release a beta (0.91.5) of Riot-Android this evening, including all the recent changes and lots of fixes. We are still working to prepare the great release!
 
 ### Daydream
 
-[MTRNord](https://to.chat.dingshunyu.top/#/@mtrnord:nordgedanken.dev) told us:
+[MTRNord](https://to.chat.imzqqq.top/#/@mtrnord:nordgedanken.dev) told us:
 
 > While not much is happening on the master branch some things happened on the Redesign branch:
 >
@@ -285,7 +285,7 @@ Conduit is a Chat homeserver written in Rust <https://conduit.rs>
 
 ### mautrix-python
 
-[Tulir](https://to.chat.dingshunyu.top/#/@tulir:maunium.net) offered:
+[Tulir](https://to.chat.imzqqq.top/#/@tulir:maunium.net) offered:
 
 > When I initially implemented end-to-bridge encryption in mautrix-python, I used matrix-nio in a slightly hacky way to get it done quickly. It worked fine in some cases, but also caused some undecryptable messages. I tried switching to using matrix-nio's crypto module directly, but the sans-I/O design made that difficult: there were too many parts that needed to be hooked up to the actual I/O and I wasn't able to find them all. In the end, I just decided to implement the basic e2ee stuff directly in mautrix-python the same way it's implemented in mautrix-go.
 >
@@ -295,7 +295,7 @@ Conduit is a Chat homeserver written in Rust <https://conduit.rs>
 
 ### Mozilla IoT Chat Adapter 0.3
 
-[Christian](https://to.chat.dingshunyu.top/#/@christianp:vector.modular.im) reported:
+[Christian](https://to.chat.imzqqq.top/#/@christianp:vector.modular.im) reported:
 
 > The [Mozilla IoT Chat Adapter](https://gitlab.com/webthings/matrix-adapter) can send posts based on events in your home.
 >
@@ -310,7 +310,7 @@ Due to utter negligence and malpractice by myself, we missed the update for this
 
 ### Cat Disruptor 7000
 
-[Stephen D](https://to.chat.dingshunyu.top/#/@stephen:m.scd31.com) told us:
+[Stephen D](https://to.chat.imzqqq.top/#/@stephen:m.scd31.com) told us:
 
 > I wrote a pretty simple Chat bot in Rust which is loosely based on Cat Disruptor 6000. It will react with 🐈️ to any message containing the string "cat" \*. Since it is a small project, I hope it can be used as an example for other people interested in writing Chat bots in Rust. It implements several important features (crypto/device store, auto-accepting invites, crafting custom events, etc.) You can host it yourself, or you can try it out by inviting the user "@catdisruptor:m.scd31.com" to your room! <https://git.scd31.com/stephen/cat-disruptor-7000>
 >
@@ -318,7 +318,7 @@ Due to utter negligence and malpractice by myself, we missed the update for this
 
 ### matrix-imposter-bot
 
-[mr_johnson22](https://to.chat.dingshunyu.top/#/@mr_johnson22:matrix.org) said:
+[mr_johnson22](https://to.chat.imzqqq.top/#/@mr_johnson22:matrix.org) said:
 
 > **matrix-imposter-bot** - _A bot that uses your account to repeat other people's messages. This gives relay-bot capabilities to puppet-only bridges._
 >
@@ -335,7 +335,7 @@ Due to utter negligence and malpractice by myself, we missed the update for this
 
 ### cody
 
-[carl](https://to.chat.dingshunyu.top/#/@carl:bordum.dk) offered:
+[carl](https://to.chat.imzqqq.top/#/@carl:bordum.dk) offered:
 
 > cody is a REPL for your matrix chat rooms.
 >
@@ -349,7 +349,7 @@ Due to utter negligence and malpractice by myself, we missed the update for this
 
 ### Famedly is recruiting
 
-[sorunome](https://to.chat.dingshunyu.top/#/@sorunome:sorunome.de) announced:
+[sorunome](https://to.chat.imzqqq.top/#/@sorunome:sorunome.de) announced:
 
 > Heya, we ([famedly](https://famedly.com)) are looking for about 2-3 more flutter developers. We are a german startup which works on revolutionizing communication in the medical area. We build on top of matrix, so having some matrix-knowledge would be very beneficial.
 >
@@ -357,11 +357,11 @@ Due to utter negligence and malpractice by myself, we missed the update for this
 >
 > While we are based in Berlin we do allow remote work, and communication in english is fine, too.
 >
-> If you are interested or have more questions, please message [Niklas Zender](https://to.chat.dingshunyu.top/#/@larodar:famedly.de).
+> If you are interested or have more questions, please message [Niklas Zender](https://to.chat.imzqqq.top/#/@larodar:famedly.de).
 
 ## Dept of Ping 🏓
 
-Here we reveal, rank, and applaud the homeservers with the lowest ping, as measured by [pingbot](https://github.com/maubot/echo), a [maubot](https://github.com/maubot/maubot) that you can host on your own server. Join [#ping:maunium.net](https://to.chat.dingshunyu.top/#/#ping:maunium.net) to experience the fun live, and to find out how to add YOUR server to the game.
+Here we reveal, rank, and applaud the homeservers with the lowest ping, as measured by [pingbot](https://github.com/maubot/echo), a [maubot](https://github.com/maubot/maubot) that you can host on your own server. Join [#ping:maunium.net](https://to.chat.imzqqq.top/#/#ping:maunium.net) to experience the fun live, and to find out how to add YOUR server to the game.
 
 |Rank|Hostname|Median MS|
 |:---:|:---:|:---:|
@@ -380,4 +380,4 @@ Here we reveal, rank, and applaud the homeservers with the lowest ping, as measu
 
 See you next week, and be sure to stop by [#twim:matrix.org] with your updates!
 
-[#TWIM:matrix.org]: <https://to.chat.dingshunyu.top/#/#TWIM:matrix.org>
+[#TWIM:matrix.org]: <https://to.chat.imzqqq.top/#/#TWIM:matrix.org>

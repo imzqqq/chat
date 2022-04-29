@@ -128,7 +128,7 @@ public extension MXRestClient {
     /**
      Generic registration action request.
      
-     As described in [the specification](http://chat.dingshunyu.top/docs/spec/client_server/r0.2.0.html#client-authentication),
+     As described in [the specification](http://chat.imzqqq.top/docs/spec/client_server/r0.2.0.html#client-authentication),
      some registration flows require to complete several stages in order to complete user registration.
      This can lead to make several requests to the home server with different kinds of parameters.
      This generic method with open parameters and response exists to handle any kind of registration flow stage.
@@ -160,7 +160,7 @@ public extension MXRestClient {
      
      - parameters:
          - loginType: the login type. Only `MXLoginFlowType.password` and `MXLoginFlowType.dummy` (m.login.password and m.login.dummy) are supported.
-         - username: the user id (ex: "@bob:chat.dingshunyu.top") or the user id localpart (ex: "bob") of the user to register. Can be nil.
+         - username: the user id (ex: "@bob:chat.imzqqq.top") or the user id localpart (ex: "bob") of the user to register. Can be nil.
          - password: the user's password.
          - completion: A block object called when the operation completes.
          - response: Provides credentials to use to create a `MXRestClient`.
@@ -201,7 +201,7 @@ public extension MXRestClient {
     /**
      Generic login action request.
      
-     As described in [the specification](http://chat.dingshunyu.top/docs/spec/client_server/r0.2.0.html#client-authentication),
+     As described in [the specification](http://chat.imzqqq.top/docs/spec/client_server/r0.2.0.html#client-authentication),
      some login flows require to complete several stages in order to complete authentication.
      This can lead to make several requests to the home server with different kinds of parameters.
      This generic method with open parameters and response exists to handle any kind of authentication flow stage.
@@ -227,7 +227,7 @@ public extension MXRestClient {
      
      - parameters:
          - type: the login type. Only `MXLoginFlowType.password` (m.login.password) is supported.
-         - username: the user id (ex: "@bob:chat.dingshunyu.top") or the user id localpart (ex: "bob") of the user to authenticate.
+         - username: the user id (ex: "@bob:chat.imzqqq.top") or the user id localpart (ex: "bob") of the user to authenticate.
          - password: the user's password.
          - completion: A block object called when the operation succeeds.
          - response: Provides credentials for this user on `success`
@@ -1043,7 +1043,7 @@ public extension MXRestClient {
      
      This is equivalent to the events returned under the 'state' key for this room in initialSyncOfRoom.
      
-     See [the matrix documentation on state events](http://chat.dingshunyu.top/docs/api/client-server/#!/-rooms/get_state_events)
+     See [the matrix documentation on state events](http://chat.imzqqq.top/docs/api/client-server/#!/-rooms/get_state_events)
      for more detail.
      
      - parameters:
@@ -1134,7 +1134,7 @@ public extension MXRestClient {
     /**
      Get all the current information for this room, including messages and state events.
      
-     See [the matrix documentation](http://chat.dingshunyu.top/docs/api/client-server/#!/-rooms/get_room_sync_data)
+     See [the matrix documentation](http://chat.imzqqq.top/docs/api/client-server/#!/-rooms/get_room_sync_data)
      for more detail.
      
      - parameters:
@@ -1201,7 +1201,7 @@ public extension MXRestClient {
      
      - parameters:
         - roomIdOrAlias: the id of the room or its alias
-        - via: servers, that should be tried to request a summary from, if it can't be generated locally. These can be from a matrix URI, to.chat.dingshunyu.top link or a `m.space.child` event for example.
+        - via: servers, that should be tried to request a summary from, if it can't be generated locally. These can be from a matrix URI, to.chat.imzqqq.top link or a `m.space.child` event for example.
         - completion: A block object called when the operation completes.
         - response: Provides the model created from the homeserver JSON response on success.
      
@@ -1720,7 +1720,7 @@ public extension MXRestClient {
      Make a search.
      
      - parameters:
-        - parameters: the search parameters as defined by the Matrix search spec (http://chat.dingshunyu.top/docs/api/client-server/#!/Search/post_search ).
+        - parameters: the search parameters as defined by the Matrix search spec (http://chat.imzqqq.top/docs/api/client-server/#!/Search/post_search ).
         - nextBatch: the token to pass for doing pagination from a previous response.
         - completion: A block object called when the operation completes.
         - response: Provides the search results on success.

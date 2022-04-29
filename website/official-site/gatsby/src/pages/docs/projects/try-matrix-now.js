@@ -37,7 +37,7 @@ const TryMatrixNow = ({data}) => {
                 <script type="text/javascript" src="/js/tmn-control.js"></script>
             </Helmet>
             <h1>Try Chat Now</h1>
-            <p>To get started using Chat, pick a client and join <a href="https://to.chat.dingshunyu.top/#/#matrix:matrix.org">#matrix:matrix.org</a>. You can also check the <a href="/docs/projects/clients-matrix">Chat Clients Chat</a> to see more detail.</p>
+            <p>To get started using Chat, pick a client and join <a href="https://to.chat.imzqqq.top/#/#matrix:matrix.org">#matrix:matrix.org</a>. You can also check the <a href="/docs/projects/clients-matrix">Chat Clients Chat</a> to see more detail.</p>
         <div className="mxblock">
           <div className="mxgrid mxgrid--discover">
             <div className="mxgrid_item33">
@@ -95,7 +95,7 @@ const TryMatrixNow = ({data}) => {
           </div>
         </div>
             <h2>Let's go deeper</h2>
-            <p>Chat is a whole ecosystem of Chat-enabled clients, servers, gateways, bots, etc. If you’d like to learn more, this page aims to collect all known Chat projects. To add a new one (or update an existing one), you can submit a PR to the <a href="https://github.com/matrix-org/matrix.org">matrix.org</a> project on github - the existing projects can be found <a href="https://github.com/matrix-org/matrix.org/tree/master/gatsby/content/projects">here</a> - or just let us know in the <a href="https://to.chat.dingshunyu.top/#/#matrix:matrix.org">#matrix:matrix.org</a> room.<br /></p>
+            <p>Chat is a whole ecosystem of Chat-enabled clients, servers, gateways, bots, etc. If you’d like to learn more, this page aims to collect all known Chat projects. To add a new one (or update an existing one), you can submit a PR to the <a href="https://github.com/matrix-org/matrix.org">matrix.org</a> project on github - the existing projects can be found <a href="https://github.com/matrix-org/matrix.org/tree/master/gatsby/content/projects">here</a> - or just let us know in the <a href="https://to.chat.imzqqq.top/#/#matrix:matrix.org">#matrix:matrix.org</a> room.<br /></p>
             <div className="mxblock">
             <div className="mxgrid mxgrid--discover">
                 <div className="mxgrid__item20">

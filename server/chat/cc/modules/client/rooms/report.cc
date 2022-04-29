@@ -100,7 +100,7 @@ post__report(client &client,
 		R"(
 			<h4>Reported %s</h4>
 			<blockquote>%s</blockquote>
-			https://to.chat.dingshunyu.top/#/%s/%s
+			https://to.chat.imzqqq.top/#/%s/%s
 		)",
 		string_view{room_id},
 		string_view{reason},

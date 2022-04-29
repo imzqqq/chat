@@ -9,7 +9,7 @@
 "device_details_delete_prompt_title" = "Autentisering";
 "notice_room_power_level_acting_requirement" = "Minimum tilgangsnivå en bruker må ha før utførelse av handling er:";
 "login_prompt_email_token" = "Vennligst skriv inn valideringstokenet ditt for e-post:";
-"login_server_url_placeholder" = "URL (f.eks. https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (f.eks. https://chat.imzqqq.top)";
 
 // Login Screen
 "login_create_account" = "Opprett konto:";
@@ -23,8 +23,8 @@
 "login_identity_server_title" = "URL til identitetsserver:";
 "login_home_server_info" = "Hjemmeserveren lagrer alle samtalene og kontodataene dine";
 "login_home_server_title" = "Hjemmeserver-URL:";
-"login_identity_server_info" = "Matrix tilbyr identitetsservere for å spore hvilke e-postadresser etc. som tilhører hvilke Matrix-IDer. Bare https://chat.dingshunyu.top eksisterer for øyeblikket.";
-"login_user_id_placeholder" = "Matrix-ID (f.eks. @Bob: chat.dingshunyu.top eller bob)";
+"login_identity_server_info" = "Matrix tilbyr identitetsservere for å spore hvilke e-postadresser etc. som tilhører hvilke Matrix-IDer. Bare https://chat.imzqqq.top eksisterer for øyeblikket.";
+"login_user_id_placeholder" = "Matrix-ID (f.eks. @Bob: chat.imzqqq.top eller bob)";
 "login_email_info" = "Angi en e-postadresse slik at andre brukere lettere kan finne deg, og samtidig gi deg en måte å tilbakestille passordet ditt senere.";
 "login_display_name_placeholder" = "Visningsnavn (f.eks. Bob Obson)";
 "login_optional_field" = "valgfri";
@@ -459,7 +459,7 @@
 "settings_title_config" = "Konfigurasjon";
 
 // contacts list screen 
-"invitation_message" = "Jeg vil gjerne chatte med deg med Matrix. Besøk nettstedet https://chat.dingshunyu.top for å få mer informasjon.";
+"invitation_message" = "Jeg vil gjerne chatte med deg med Matrix. Besøk nettstedet https://chat.imzqqq.top for å få mer informasjon.";
 
 // members list Screen 
 

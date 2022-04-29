@@ -25,7 +25,7 @@ package org.matrix.android.sdk.api.auth.registration
  *  - Fulfill all mandatory stages using the methods [performReCaptcha] [acceptTerms] [dummy], etc.
  *
  * More documentation can be found in the file https://github.com/vector-im/element-android/blob/main/docs/signup.md
- * and https://chat.docs.dingshunyu.top/spec/client_server/latest#account-registration-and-management
+ * and https://chat.docs.imzqqq.top/spec/client_server/latest#account-registration-and-management
  */
 interface RegistrationWizard {
     /**

@@ -35,7 +35,7 @@ import javax.net.ssl.HttpsURLConnection
  *      mockInterceptor.addRule(MockOkHttpInterceptor.SimpleRule(".well-known/matrix/client", 200, "{}"))
  *
  *      RestHttpClientFactoryProvider.defaultProvider = RestClientHttpClientFactory(mockInterceptor)
- *      AutoDiscovery().findClientConfig("chat.dingshunyu.top", <callback>)
+ *      AutoDiscovery().findClientConfig("chat.imzqqq.top", <callback>)
  * </code>
  */
 class MockOkHttpInterceptor : TestInterceptor {

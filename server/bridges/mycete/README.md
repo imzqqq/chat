@@ -63,10 +63,10 @@ twitter=true
 mastodon=true
 
 [matrix]
-user=@fakeuser:chat.dingshunyu.top
+user=@fakeuser:chat.imzqqq.top
 password=snakesonaplane
-url=https://chat.dingshunyu.top
-room_id=!iasdfadsfadsfafs:chat.dingshunyu.top
+url=https://chat.imzqqq.top
+room_id=!iasdfadsfadsfafs:chat.imzqqq.top
 guard_prefix=t>
 reblog_cmd=reblog>
 favourite_cmd=+1>
@@ -102,7 +102,7 @@ subscribe_tagstreams=interesstingtag otherinteresstingtag
 configurations=filter1 filter2
 
 [feed2morerooms_filter1]
-target_room=!example1:chat.dingshunyu.top
+target_room=!example1:chat.imzqqq.top
 filter_visibility=public
 filter_for_tags=interesstingtag
 filter_sensitive=false
@@ -112,7 +112,7 @@ filter_otherpeoplesposts=false
 filter_unfollowed=false
 
 [feed2morerooms_filter2]
-target_room=!example2:chat.dingshunyu.top
+target_room=!example2:chat.imzqqq.top
 filter_visibility=public
 filter_for_tags=otherinteresstingtag
 filter_sensitive=false

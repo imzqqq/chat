@@ -31,7 +31,7 @@ import org.json.JSONObject;
 public class Credentials {
     public String userId;
 
-    // This is the server name and not a URI, e.g. "chat.dingshunyu.top". Spec says it's now deprecated
+    // This is the server name and not a URI, e.g. "chat.imzqqq.top". Spec says it's now deprecated
     @Deprecated
     public String homeServer;
 

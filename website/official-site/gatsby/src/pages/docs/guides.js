@@ -147,7 +147,7 @@ const Guides = ({data}) => {
     <tbody>
       <tr>
         <td><a href="https://www.natrius.eu/dokuwiki/doku.php?id=digital:server:matrixsynapse">Install Chat Chat</a></td>
-        <td><a href="https://to.chat.dingshunyu.top/#/#synapseguide:matrix.org">Stefan</a></td>
+        <td><a href="https://to.chat.imzqqq.top/#/#synapseguide:matrix.org">Stefan</a></td>
         <td>English</td>
       </tr>
       <tr>

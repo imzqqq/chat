@@ -475,8 +475,8 @@ internal class LocalEchoEventFactory @Inject constructor(
     companion object {
         // <mx-reply>
         //     <blockquote>
-        //         <a href="https://to.chat.dingshunyu.top/#/!somewhere:domain.com/$event:domain.com">In reply to</a>
-        //         <a href="https://to.chat.dingshunyu.top/#/@alice:example.org">@alice:example.org</a>
+        //         <a href="https://to.chat.imzqqq.top/#/!somewhere:domain.com/$event:domain.com">In reply to</a>
+        //         <a href="https://to.chat.imzqqq.top/#/@alice:example.org">@alice:example.org</a>
         //         <br />
         //         <!-- This is where the related event's HTML would be. -->
         //     </blockquote>

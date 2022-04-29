@@ -15,7 +15,7 @@ properties:
   alias:
     description: An alias for a matrix room.
     type: string
-    example: "#freenode_#matrix:chat.dingshunyu.top"
+    example: "#freenode_#matrix:chat.imzqqq.top"
   protocol:
     description: The protocol ID that the third party location is a part of.
     type: string

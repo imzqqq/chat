@@ -26,13 +26,13 @@ already created one for that given device in the past 1 hour.
 Clients may wish to take steps to mitigate the loss of the undecryptable
 messages.  For example, megolm sessions that were sent using the old session
 would have been lost, so the client can send
-[`m.room_key_request`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1.html#m-room-key-request)
+[`m.room_key_request`](https://chat.api-spec.imzqqq.top/client_server/r0.6.1.html#m-room-key-request)
 messages to re-request any megolm sessions that it is unable to decrypt.
 
 The spec currently says, "If a client has multiple sessions established with
 another device, it should use the session from which it last received a
 message." (the last paragraph of the [`m.olm.v1.curve25519-aes-sha2`
-section](https://chat.api-spec.dingshunyu.top/client_server/r0.4.0.html#m-olm-v1-curve25519-aes-sha2)).
+section](https://chat.api-spec.imzqqq.top/client_server/r0.4.0.html#m-olm-v1-curve25519-aes-sha2)).
 When comparing the time of the last received message for each session, the
 client should only consider messages that were successfully decrypted,
 and for sessions that have never received a message, it should use the creation

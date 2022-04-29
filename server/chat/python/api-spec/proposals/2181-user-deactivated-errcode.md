@@ -40,7 +40,7 @@ None
 
 While the existence of a user was already public knowledge (one can check if
 the User ID is available through
-[/chat/client/r0/register/available](https://chat.api-spec.dingshunyu.top/client_server/r0.5.0#get-matrix-client-r0-register-available),
+[/chat/client/r0/register/available](https://chat.api-spec.imzqqq.top/client_server/r0.5.0#get-matrix-client-r0-register-available),
 this proposal would allow any user to be able to detect if a registered
 account has been deactivated, depending on the homeserver's implementation.
 

@@ -11,16 +11,16 @@ system, the user doesn't have a password registered with the homeserver. Instead
 we need to delegate that check to the SSO system.
 
 At the protocol level, this means adding support for SSO to the
-[user-interactive authentication API](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#user-interactive-authentication-api).
+[user-interactive authentication API](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#user-interactive-authentication-api).
 
 In theory, once SSO is added as a possible flow for authentication, any clients
-that already implement the [fallback process for unknown authentication types](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#fallback)
+that already implement the [fallback process for unknown authentication types](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#fallback)
 will work fine without modification. It is unknown whether this is widely
 supported among clients.
 
 ## Proposal
 
-An [additional authentication type](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#authentication-types)
+An [additional authentication type](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#authentication-types)
 of `m.login.sso` is added to the user-interactive authentication specification.
 
 There are no additional parameters as part of this authentication type. As per
@@ -37,7 +37,7 @@ the `auth` dictionary should be the session ID from the homeserver, e.g.:
 
 ### Detailed fallback authentication flow:
 
-The following is a re-iteration of the [fallback authentication flow](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#fallback), 
+The following is a re-iteration of the [fallback authentication flow](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#fallback), 
 but with details filled in for the proposed new authentication type.
 
 When choosing this authentication flow, the following should occur:
@@ -58,7 +58,7 @@ When choosing this authentication flow, the following should occur:
     homeserver.
 4.  The homeserver validates the response from the SSO provider, updates the
     user-interactive auth session to show that the SSO has completed, and
-    [serves the fallback auth completion page as specced](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#fallback).
+    [serves the fallback auth completion page as specced](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#fallback).
 5.  The client resubmits its original request, with its original session id,
     which now should complete.
 

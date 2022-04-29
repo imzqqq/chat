@@ -1,12 +1,12 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "Creu cyfrif:";
-"login_server_url_placeholder" = "URL (e.e. https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (e.e. https://chat.imzqqq.top)";
 "login_home_server_title" = "URL Hafanweinydd:";
 "login_home_server_info" = "Mae'ch hafanweinydd yn cadw'ch holl sgyrsiau a gwybodaeth cyfrif";
 "login_identity_server_title" = "URL Gweinydd Adnabod:";
-"login_identity_server_info" = "Mae Matrix yn darparu gweinyddwyr adnabod i olrhain pa e-byst ac ati sy'n perthyn i IDau Matrix. Dim ond https://chat.dingshunyu.top sy'n bodoli ar hyn o bryd.";
-"login_user_id_placeholder" = "ID Matrix (e.g. @bob:chat.dingshunyu.top neu bob)";
+"login_identity_server_info" = "Mae Matrix yn darparu gweinyddwyr adnabod i olrhain pa e-byst ac ati sy'n perthyn i IDau Matrix. Dim ond https://chat.imzqqq.top sy'n bodoli ar hyn o bryd.";
+"login_user_id_placeholder" = "ID Matrix (e.g. @bob:chat.imzqqq.top neu bob)";
 "login_password_placeholder" = "Cyfrinair";
 "login_optional_field" = "dewisol";
 "login_display_name_placeholder" = "Enw arddangos (e.e. Jac y Jwc)";
@@ -326,7 +326,7 @@
 // room details dialog screen
 "room_details_title" = "Manylion Ystafell";
 // contacts list screen 
-"invitation_message" = "Hoffwn sgwrsio â chi gyda Matrix. Os gwelwch yn dda, ewch i'r wefan https://chat.dingshunyu.top i gael mwy o wybodaeth.";
+"invitation_message" = "Hoffwn sgwrsio â chi gyda Matrix. Os gwelwch yn dda, ewch i'r wefan https://chat.imzqqq.top i gael mwy o wybodaeth.";
 // Settings screen 
 "settings_title_config" = "Gosodiadau";
 "settings_title_notifications" = "Hysbysebiadau";

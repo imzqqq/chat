@@ -2,7 +2,7 @@
 
 "auth_invalid_login_param" = "Nama pengguna dan/atau kata sandi tidak benar";
 "auth_identity_server_placeholder" = "URL (contoh https://vector.im)";
-"auth_home_server_placeholder" = "URL (contoh https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (contoh https://chat.imzqqq.top)";
 "auth_repeat_new_password_placeholder" = "Konfirmasi kata sandi baru Anda";
 "auth_repeat_password_placeholder" = "Ulangi kata sandi";
 "auth_phone_placeholder" = "Nomor telepon";
@@ -102,7 +102,7 @@
 "joined" = "Bergabung";
 "collapse" = "tutup";
 "store_promotional_text" = "Aplikasi perpesanan dan kolaborasi yang menjaga privasi, pada jaringan terbuka. Terdesentralisasi untuk Anda kendali. Tidak ada penambangan data, tidak ada backdoor dan tidak ada akses pihak ketiga.";
-"store_full_description" = "Element adalah aplikasi messenger dan kolaborasi tipe baru yang:\n\n1. Menempatkan Anda dalam kendali untuk mempertahankan privasi Anda\n2. Memungkinkan Anda berkomunikasi dengan siapa pun di jaringan Matrix, dan bahkan di luar dengan mengintegrasikan dengan aplikasi seperti Slack\n3. Melindungi Anda dari iklan, menambangan data, backdoor, dan taman berdinding\n4. Mengamankan Anda melalui enkripsi ujung-ke-ujung, dengan penandatanganan-silang untuk memverifikasi orang lain\n\nElement benar-benar berbeda dari aplikasi perpesanan dan kolaborasi lain karena terdesentralisasi dan sumber terbuka.\n\nElement memungkinkan Anda host sendiri - atau memilih host - sehingga Anda memiliki privasi, kepemilikan, dan kontrol data dan percakapan Anda. Ini memberi Anda akses ke jaringan terbuka; jadi Anda tidak hanya terjebak berbicara dengan pengguna Element. Itu sangat aman.\n\nElement dapat melakukan semua ini karena beroperasi pada Matrix - standar untuk komunikasi terdesentralisasi terbuka.\n\nElement menempatkan Anda dalam kendali dengan membiarkan Anda memilih siapa yang meng-host percakapan Anda. Dari aplikasi Element, Anda dapat memilih untuk meng-host dengan cara yang berbeda:\n\n1. Dapatkan akun gratis pada server publik chat.dingshunyu.top\n2. Host sendiri akun Anda dengan menjalankan server pada perangkat keras Anda sendiri\n3. Mendaftar untuk akun di server khusus dengan hanya berlangganan platform hosting Element Matrix Services\n\nMengapa memilih Element?\n\nMILIKI DATA ANDA: Anda memutuskan di mana harus menyimpan data dan pesan Anda. Anda memilikinya dan mengendalikannya, bukan perusahaan besar yang menambang data Anda atau memberikan akses ke pihak ketiga.\n\nPESAN DAN KOLABORASI TERBUKA: Anda dapat mengobrol dengan orang lain di jaringan Matrix, jika mereka menggunakan Element atau aplikasi Matrix lain, dan bahkan jika mereka menggunakan sistem perpesanan seperti Slack, IRC atau XMPP.\n\nSUPER-AMAN: Enkripsi ujung-ke-ujung (hanya mereka yang dalam percakapan dapat mendekripsi pesan), dan penandatanganan-silang untuk memverifikasi perangkat peserta percakapan.\n\nKOMUNIKASI LENGKAP: Pesan, panggilan suara dan video, berbagi file, berbagi layar dan banyak integrasi, bot dan widget. Buat ruangan, komunitas, tetap terhubung dan selesaikan hal-hal.\n\nDI MANA PUN ANDA BERADA: Tetap berkomunikasi di mana pun Anda berada dengan riwayat pesan yang sepenuhnya disinkronkan di semua perangkat Anda dan di web di https://app.element.io/.";
+"store_full_description" = "Element adalah aplikasi messenger dan kolaborasi tipe baru yang:\n\n1. Menempatkan Anda dalam kendali untuk mempertahankan privasi Anda\n2. Memungkinkan Anda berkomunikasi dengan siapa pun di jaringan Matrix, dan bahkan di luar dengan mengintegrasikan dengan aplikasi seperti Slack\n3. Melindungi Anda dari iklan, menambangan data, backdoor, dan taman berdinding\n4. Mengamankan Anda melalui enkripsi ujung-ke-ujung, dengan penandatanganan-silang untuk memverifikasi orang lain\n\nElement benar-benar berbeda dari aplikasi perpesanan dan kolaborasi lain karena terdesentralisasi dan sumber terbuka.\n\nElement memungkinkan Anda host sendiri - atau memilih host - sehingga Anda memiliki privasi, kepemilikan, dan kontrol data dan percakapan Anda. Ini memberi Anda akses ke jaringan terbuka; jadi Anda tidak hanya terjebak berbicara dengan pengguna Element. Itu sangat aman.\n\nElement dapat melakukan semua ini karena beroperasi pada Matrix - standar untuk komunikasi terdesentralisasi terbuka.\n\nElement menempatkan Anda dalam kendali dengan membiarkan Anda memilih siapa yang meng-host percakapan Anda. Dari aplikasi Element, Anda dapat memilih untuk meng-host dengan cara yang berbeda:\n\n1. Dapatkan akun gratis pada server publik chat.imzqqq.top\n2. Host sendiri akun Anda dengan menjalankan server pada perangkat keras Anda sendiri\n3. Mendaftar untuk akun di server khusus dengan hanya berlangganan platform hosting Element Matrix Services\n\nMengapa memilih Element?\n\nMILIKI DATA ANDA: Anda memutuskan di mana harus menyimpan data dan pesan Anda. Anda memilikinya dan mengendalikannya, bukan perusahaan besar yang menambang data Anda atau memberikan akses ke pihak ketiga.\n\nPESAN DAN KOLABORASI TERBUKA: Anda dapat mengobrol dengan orang lain di jaringan Matrix, jika mereka menggunakan Element atau aplikasi Matrix lain, dan bahkan jika mereka menggunakan sistem perpesanan seperti Slack, IRC atau XMPP.\n\nSUPER-AMAN: Enkripsi ujung-ke-ujung (hanya mereka yang dalam percakapan dapat mendekripsi pesan), dan penandatanganan-silang untuk memverifikasi perangkat peserta percakapan.\n\nKOMUNIKASI LENGKAP: Pesan, panggilan suara dan video, berbagi file, berbagi layar dan banyak integrasi, bot dan widget. Buat ruangan, komunitas, tetap terhubung dan selesaikan hal-hal.\n\nDI MANA PUN ANDA BERADA: Tetap berkomunikasi di mana pun Anda berada dengan riwayat pesan yang sepenuhnya disinkronkan di semua perangkat Anda dan di web di https://app.element.io/.";
 // String for App Store
 "store_short_description" = "Obrolan/VoIP terdesentralisasi aman";
 
@@ -257,7 +257,7 @@
 // MARK: - Call Transfer
 "call_transfer_title" = "Pindahkan";
 "room_info_list_section_other" = "Lainnya";
-"create_room_placeholder_address" = "#ruangantest:chat.dingshunyu.top";
+"create_room_placeholder_address" = "#ruangantest:chat.imzqqq.top";
 "create_room_placeholder_topic" = "Topik";
 "create_room_placeholder_name" = "Nama";
 "biometrics_cant_unlocked_alert_message_retry" = "Coba lagi";
@@ -415,7 +415,7 @@
 "event_formatter_call_answer" = "Jawab";
 "event_formatter_call_decline" = "Tolak";
 "event_formatter_message_edited_mention" = "(diedit)";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 
 // Directory
 "directory_title" = "Direktori";

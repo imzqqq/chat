@@ -1,7 +1,7 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "Krijo llogari:";
-"login_server_url_placeholder" = "URL (p.sh. https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (p.sh. https://chat.imzqqq.top)";
 "login_home_server_title" = "URL Shërbyesi Home:";
 "login_identity_server_title" = "URL Shërbyesi Identitetesh:";
 "login_password_placeholder" = "Fjalëkalim";
@@ -303,8 +303,8 @@
 "network_error_not_reachable" = "Ju lutemi, kontrolloni aftësinë e lidhjes në rrjetin tuaj";
 "share" = "Ndajeni me të tjerët";
 "login_home_server_info" = "Shërbyesi juaj home depoziton krejt të dhënat e bisedave dhe llogarive tuaja";
-"login_identity_server_info" = "Matrix ofron shërbyes identiteti për të ndjekur se cilat email-e, etj, u përkasin ID-ve Matrix IDs. Hëpërhë ekziston vetëm https://chat.dingshunyu.top.";
-"login_user_id_placeholder" = "ID Matrix (p.sh. @poku:chat.dingshunyu.top ose poku)";
+"login_identity_server_info" = "Matrix ofron shërbyes identiteti për të ndjekur se cilat email-e, etj, u përkasin ID-ve Matrix IDs. Hëpërhë ekziston vetëm https://chat.imzqqq.top.";
+"login_user_id_placeholder" = "ID Matrix (p.sh. @poku:chat.imzqqq.top ose poku)";
 "login_display_name_placeholder" = "Emër në ekran (p.sh. Mane Trimi)";
 "login_email_info" = "Përcaktimi i një adrese email i lejon përdoruesit e tjerë t’ju gjejnë më lehtë në Matrix, dhe do t’ju japë një rrugë për ricaktimin e fjalëkalimit tuaj në të ardhmen.";
 "login_error_no_login_flow" = "Dështuam në marrje të dhënash mirëfilltësimi nga ky Shërbyes Home";
@@ -346,7 +346,7 @@
 "notice_room_unban" = "%@ i hoqi dëbimin %@";
 "redact" = "Hiqe";
 // contacts list screen 
-"invitation_message" = "Do të doja të bisedoja me ju me Matrix. Për të pasur më tepër itë dhëna, ju lutem, vizitoni sajtin http://chat.dingshunyu.top.";
+"invitation_message" = "Do të doja të bisedoja me ju me Matrix. Për të pasur më tepër itë dhëna, ju lutem, vizitoni sajtin http://chat.imzqqq.top.";
 "notification_settings_global_info" = "Rregullimet mbi njoftimet ruhen te llogaria juaj e përdoruesit dhe ndahen me krejt klientët që i mbulojnë ato (përfshi njoftimet në desktop).\n\nRregullat zbatohen sipas një radhe; rregulli i parë që ka përputhje përcakton lëndën për mesazhin.\nKështu: njoftimet sipas fjalësh janë më të rëndësishme se njoftimet sipas dhomash të cilat janë më të rëndësishme se njoftimet sipas dërguesish.\nFor multiple rules of the same kind, the first one in the list that matches takes priority.";
 "notification_settings_per_word_notifications" = "Njoftime sipas fjale";
 "notification_settings_per_word_info" = "Për fjalët përputhjet gjenden pa marrë parasysh shkrimin me të madhe apo të vogël, dhe mund të përfshijnë një shenjë të gjithëpushtetshme *. Kështu:\nkot përputhet me vargun kot të rrethuar nga përkufizues fjalësh (p.sh. shenja pikësimi apo hapësira, ose fillim/fund rreshti).\nkot* përputhet me çfarëdo fjale që fillon me kot.\n*kot* përputhet me çfarëdo fjale që përfshin 3 shkronjat kot.";

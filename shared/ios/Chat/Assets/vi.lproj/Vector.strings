@@ -49,8 +49,8 @@
 "auth_phone_placeholder" = "Số điện thoại";
 "auth_repeat_password_placeholder" = "Nhật lại mật khẩu";
 "auth_repeat_new_password_placeholder" = "Xác nhận mật khẩu mới";
-"auth_home_server_placeholder" = "URL (ví dụ: https://chat.dingshunyu.top)";
-"auth_identity_server_placeholder" = "URL (ví dụ: https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (ví dụ: https://chat.imzqqq.top)";
+"auth_identity_server_placeholder" = "URL (ví dụ: https://chat.imzqqq.top)";
 "auth_invalid_login_param" = "Tên đăng nhập hoặc mật khẩu không đúng";
 "warning" = "Cảnh báo";
 "auth_invalid_user_name" = "Tên đăng nhập chỉ được chứa các chữ cái, dấu chấm, dấu gạch ngang và dấu gạch dưới";
@@ -396,7 +396,7 @@
 "directory_server_all_rooms" = "Tất cả phòng trong máy chủ %@";
 "directory_server_all_native_rooms" = "Tất cả phòng thuần Matrix";
 "directory_server_type_homeserver" = "Gõ một máy chủ nhà để liệt kê danh sách phòng";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 // Events formatter
 "event_formatter_member_updates" = "%tu thành viên thay đổi";
 "event_formatter_widget_added" = "%@ widget tạo bởi %@";

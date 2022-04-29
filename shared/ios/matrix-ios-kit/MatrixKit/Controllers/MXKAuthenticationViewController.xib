@@ -124,7 +124,7 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="URL (e.g. https://chat.dingshunyu.top)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="G8l-AP-iRs">
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="URL (e.g. https://chat.imzqqq.top)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="G8l-AP-iRs">
                                             <rect key="frame" x="106" y="0.0" width="250" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" priority="750" constant="250" id="Bus-fe-qDE"/>
@@ -166,7 +166,7 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="URL (e.g. https://chat.dingshunyu.top)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PZC-Hd-Q6a">
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="URL (e.g. https://chat.imzqqq.top)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PZC-Hd-Q6a">
                                             <rect key="frame" x="120" y="0.0" width="250" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="30" id="9Mz-m5-EB9"/>
@@ -192,7 +192,7 @@
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="NDg-U7-lEi" userLabel="IdentityServerInfoLabel">
                                     <rect key="frame" x="24.5" y="492" width="551.5" height="31.5"/>
-                                    <string key="text">Matrix provides identity servers to track which emails etc. belong to which Matrix IDs. Only https://chat.dingshunyu.top currently exists.</string>
+                                    <string key="text">Matrix provides identity servers to track which emails etc. belong to which Matrix IDs. Only https://chat.imzqqq.top currently exists.</string>
                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>

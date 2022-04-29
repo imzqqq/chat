@@ -1803,8 +1803,8 @@ static NSString *const kHTMLATagRegexPattern = @"<a href=\"(.*?)\">([^<]*)</a>";
     
     // Note: Take care to replace text starting with the end
     
-    // Replace <a href=\"https://to.chat.dingshunyu.top/#/mxid\">mxid</a>
-    // By <a href=\"https://to.chat.dingshunyu.top/#/mxid\">Display name</a>
+    // Replace <a href=\"https://to.chat.imzqqq.top/#/mxid\">mxid</a>
+    // By <a href=\"https://to.chat.imzqqq.top/#/mxid\">Display name</a>
     // To replace the user Matrix ID by his display name when available.
     // This link is the second <a> HTML node of the html string
     

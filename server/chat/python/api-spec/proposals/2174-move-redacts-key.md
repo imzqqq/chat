@@ -1,6 +1,6 @@
 # MSC2174: move the `redacts` property to `content`
 
-[`m.room.redaction`](https://chat.api-spec.dingshunyu.top/client_server/r0.5.0#m-room-redaction)
+[`m.room.redaction`](https://chat.api-spec.imzqqq.top/client_server/r0.5.0#m-room-redaction)
 events currently have an *event-level* property `redacts` which gives the event
 ID of the event being redacted.
 

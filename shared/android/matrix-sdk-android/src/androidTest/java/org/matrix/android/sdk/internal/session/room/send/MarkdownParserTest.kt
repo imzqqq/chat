@@ -38,7 +38,7 @@ import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
  * Element Web should be used as a reference for expected results, but not always.
  * Also Element Web does not provide plain text body when formatted text is provided. The body contains what the user has entered. We are doing
  * the same to be able to edit messages (See #1939)
- * See https://chat.docs.dingshunyu.top/spec/client_server/latest#m-room-message-msgtypes
+ * See https://chat.docs.imzqqq.top/spec/client_server/latest#m-room-message-msgtypes
  */
 @Suppress("SpellCheckingInspection")
 @RunWith(AndroidJUnit4::class)

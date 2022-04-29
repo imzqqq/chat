@@ -9,12 +9,12 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "建立帳號：";
-"login_server_url_placeholder" = "URL（如 https://chat.dingshunyu.top）";
+"login_server_url_placeholder" = "URL（如 https://chat.imzqqq.top）";
 "login_home_server_title" = "主伺服器：";
 "login_home_server_info" = "您的主伺服器會儲存所有的對話紀錄跟帳號資料";
 "login_identity_server_title" = "身份認證伺服器：";
-"login_identity_server_info" = "Matrix 提供身份認證伺服器來追蹤電子郵件信箱與 Matrix ID 的關係。目前只有 https://chat.dingshunyu.top 提供這個服務。";
-"login_user_id_placeholder" = "Matrix ID（如 @bob:chat.dingshunyu.top 或 bob）";
+"login_identity_server_info" = "Matrix 提供身份認證伺服器來追蹤電子郵件信箱與 Matrix ID 的關係。目前只有 https://chat.imzqqq.top 提供這個服務。";
+"login_user_id_placeholder" = "Matrix ID（如 @bob:chat.imzqqq.top 或 bob）";
 "login_password_placeholder" = "密碼";
 "login_optional_field" = "選擇性";
 "login_display_name_placeholder" = "顯示名稱（如 Bob Obson）";

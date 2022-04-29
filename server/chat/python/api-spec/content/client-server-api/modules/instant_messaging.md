@@ -216,7 +216,7 @@ algorithm:
 
 -   The user-visible display name of one member can be affected by
     changes in the state of another member. For example, if
-    `@user1:chat.dingshunyu.top` is present in a room, with `displayname: Alice`,
+    `@user1:chat.imzqqq.top` is present in a room, with `displayname: Alice`,
     then when `@user2:example.com` joins the room, also with
     `displayname: Alice`, *both* users must be given disambiguated
     display names. Similarly, when one of the users then changes their
@@ -365,8 +365,8 @@ The `formatted_body` should use the following template:
 
     <mx-reply>
       <blockquote>
-        <a href="https://to.chat.dingshunyu.top/#/!somewhere:example.org/$event:example.org">In reply to</a>
-        <a href="https://to.chat.dingshunyu.top/#/@alice:example.org">@alice:example.org</a>
+        <a href="https://to.chat.imzqqq.top/#/!somewhere:example.org/$event:example.org">In reply to</a>
+        <a href="https://to.chat.imzqqq.top/#/@alice:example.org">@alice:example.org</a>
         <br />
         <!-- This is where the related event's HTML would be. -->
       </blockquote>
@@ -375,7 +375,7 @@ The `formatted_body` should use the following template:
 
 If the related event does not have a `formatted_body`, the event's
 `body` should be considered after encoding any HTML special characters.
-Note that the `href` in both of the anchors use a [to.chat.dingshunyu.top
+Note that the `href` in both of the anchors use a [to.chat.imzqqq.top
 URI](/appendices#matrixto-navigation).
 
 ###### Stripping the fallback
@@ -426,8 +426,8 @@ asterisk is also inserted ahead of the user's ID:
 
     <mx-reply>
       <blockquote>
-        <a href="https://to.chat.dingshunyu.top/#/!somewhere:example.org/$event:example.org">In reply to</a>
-        * <a href="https://to.chat.dingshunyu.top/#/@alice:example.org">@alice:example.org</a>
+        <a href="https://to.chat.imzqqq.top/#/!somewhere:example.org/$event:example.org">In reply to</a>
+        * <a href="https://to.chat.imzqqq.top/#/@alice:example.org">@alice:example.org</a>
         <br />
         <!-- This is where the related event's HTML would be. -->
       </blockquote>
@@ -450,8 +450,8 @@ to the following:
 
     <mx-reply>
       <blockquote>
-        <a href="https://to.chat.dingshunyu.top/#/!somewhere:example.org/$event:example.org">In reply to</a>
-        <a href="https://to.chat.dingshunyu.top/#/@alice:example.org">@alice:example.org</a>
+        <a href="https://to.chat.imzqqq.top/#/!somewhere:example.org/$event:example.org">In reply to</a>
+        <a href="https://to.chat.imzqqq.top/#/@alice:example.org">@alice:example.org</a>
         <br />
         sent a file.
       </blockquote>

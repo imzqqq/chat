@@ -101,7 +101,7 @@ If you want to support this development, too, please go here: [https://liberapay
 
 These two tools add great value to Tube and our freedom to distribute... livestreams! Their improvement now depends on your contributions.
 
-We are increasingly aware of the richness of the Tube ecosystem: [clients](https://tube.docs.dingshunyu.top/use-third-party-application), [plugins](https://joinpeertube.org/plugins-selection)... Numerous external contributions offer new options and new freedoms to the community: thank you very much!
+We are increasingly aware of the richness of the Tube ecosystem: [clients](https://tube.docs.imzqqq.top/use-third-party-application), [plugins](https://joinpeertube.org/plugins-selection)... Numerous external contributions offer new options and new freedoms to the community: thank you very much!
 
 If we have been able to finance and support these two external developments, it is partly thanks to the NLnet grant we mentioned when announcing the path to [v4 of Tube](https://joinpeertube.org/news#roadmap-v4), and partly thanks to your donations which finance all the actions of Framasoft [https://soutenir.framasoft.org/en/](https://soutenir.framasoft.org/en/).
 

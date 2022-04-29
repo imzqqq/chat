@@ -72,24 +72,24 @@ async def clean_rooms(evt: CommandEvent) -> EventID:
     results = await _find_rooms(evt.bridge)
 
     reply = ["#### Management rooms (M)"]
-    reply += ([f"{n + 1}. [M{n + 1}](https://to.chat.dingshunyu.top/#/{room}) (with {other_member}"
+    reply += ([f"{n + 1}. [M{n + 1}](https://to.chat.imzqqq.top/#/{room}) (with {other_member}"
                for n, (room, other_member) in enumerate(results.management_rooms)]
               or ["No management rooms found."])
     reply.append("#### Active portal rooms (A)")
-    reply += ([f"{n + 1}. [A{n + 1}](https://to.chat.dingshunyu.top/#/{portal.mxid}) "
+    reply += ([f"{n + 1}. [A{n + 1}](https://to.chat.imzqqq.top/#/{portal.mxid}) "
                f"(to remote chat \"{portal.name}\")"
                for n, portal in enumerate(results.portals)]
               or ["No active portal rooms found."])
     reply.append("#### Unidentified rooms (U)")
-    reply += ([f"{n + 1}. [U{n + 1}](https://to.chat.dingshunyu.top/#/{room})"
+    reply += ([f"{n + 1}. [U{n + 1}](https://to.chat.imzqqq.top/#/{room})"
                for n, room in enumerate(results.unidentified_rooms)]
               or ["No unidentified rooms found."])
     reply.append("#### Tombstoned rooms (T)")
-    reply += ([f"{n + 1}. [T{n + 1}](https://to.chat.dingshunyu.top/#/{room})"
+    reply += ([f"{n + 1}. [T{n + 1}](https://to.chat.imzqqq.top/#/{room})"
                for n, room in enumerate(results.tombstoned_rooms)]
               or ["No tombstoned rooms found."])
     reply.append("#### Inactive portal rooms (I)")
-    reply += ([f"{n}. [I{n}](https://to.chat.dingshunyu.top/#/{portal.mxid}) "
+    reply += ([f"{n}. [I{n}](https://to.chat.imzqqq.top/#/{portal.mxid}) "
                f"(to remote chat \"{portal.name}\")"
                for n, portal in enumerate(results.empty_portals)]
               or ["No inactive portal rooms found."])

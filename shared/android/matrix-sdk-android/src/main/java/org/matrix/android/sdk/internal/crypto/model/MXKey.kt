@@ -92,7 +92,7 @@ data class MXKey(
          *     "key": "IjwIcskng7YjYcn0tS8TUOT2OHHtBSfMpcfIczCgXj4",
          *     "fallback" : true|false
          *     "signatures": {
-         *       "@userId:chat.dingshunyu.top": {
+         *       "@userId:chat.imzqqq.top": {
          *         "ed25519:GMJRREOASV": "EUjp6pXzK9u3SDFR\/qLbzpOi3bEREeI6qMnKzXu992HsfuDDZftfJfiUXv9b\/Hqq1og4qM\/vCQJGTHAWMmgkCg"
          *       }
          *     }

@@ -136,7 +136,7 @@ paths:
             required: ["three_pid_creds"]
             example: {
                 "three_pid_creds": {
-                  "id_server": "chat.dingshunyu.top",
+                  "id_server": "chat.imzqqq.top",
                   "id_access_token": "abc123_OpaqueString",
                   "sid": "abc123987",
                   "client_secret": "d0nt-T3ll"

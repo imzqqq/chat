@@ -10,7 +10,7 @@
 
     <!--
         Pusher config for the application
-        https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0#id128
+        https://chat.docs.imzqqq.top/spec/client_server/r0.4.0#id128
      -->
 
     <!-- Note: pusher_http_url should have path '/chat/push/v1/notify' -->

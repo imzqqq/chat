@@ -1,7 +1,7 @@
 package com.imzqqq.app.core.extensions
 
 /**
- * Ex: "https://matrix.org/" -> "chat.dingshunyu.top"
+ * Ex: "https://matrix.org/" -> "chat.imzqqq.top"
  */
 fun String?.toReducedUrl(): String {
     return (this ?: "")

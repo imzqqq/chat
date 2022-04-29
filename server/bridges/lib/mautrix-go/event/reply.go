@@ -51,7 +51,7 @@ func (content *MessageEventContent) GetReplyTo() id.EventID {
 	return ""
 }
 
-const ReplyFormat = `<mx-reply><blockquote><a href="https://to.chat.dingshunyu.top/#/%s/%s">In reply to</a> <a href="https://to.chat.dingshunyu.top/#/%s">%s</a><br>%s</blockquote></mx-reply>`
+const ReplyFormat = `<mx-reply><blockquote><a href="https://to.chat.imzqqq.top/#/%s/%s">In reply to</a> <a href="https://to.chat.imzqqq.top/#/%s">%s</a><br>%s</blockquote></mx-reply>`
 
 func (evt *Event) GenerateReplyFallbackHTML() string {
 	parsedContent, ok := evt.Content.Parsed.(*MessageEventContent)

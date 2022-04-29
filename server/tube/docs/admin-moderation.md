@@ -37,7 +37,7 @@ Admins/moderators can:
 
 ## Mute accounts/instances
 
-See https://tube.docs.dingshunyu.top/use-mute
+See https://tube.docs.imzqqq.top/use-mute
 
 You can also try the auto mute plugin: https://framagit.org/framasoft/tube/official-plugins/-/tree/master/tube-plugin-auto-mute
 It automatically mutes accounts or instances depending on a public mute list (hosted on Github, Gitlab, pastebin etc).
@@ -107,7 +107,7 @@ Here are some things that could help:
 ### Understand what happens on your instance
 
 To check what videos are uploaded on your server, or what your users do you can:
- * Check your [standard & audit logs](https://tube.docs.dingshunyu.top/admin-logs)
+ * Check your [standard & audit logs](https://tube.docs.imzqqq.top/admin-logs)
  * List all private/unlisted/public videos in the `Local` page, and then click on `Display all videos (private, unlisted or not yet published)`
  * Subscribe to your global videos feed (for example: https://peertube2.cpy.re/feeds/videos.xml?sort=-publishedAt&filter=local)
  * Subscribe to your global comments feed (for example: https://peertube2.cpy.re/feeds/video-comments.xml?sort=-publishedAt&filter=local)

@@ -159,16 +159,16 @@ sudo apt-get -y install postgresql
 
 ## Set the user as administrator
 
-- Mark a user as server admin: `UPDATE users SET admin = 1 WHERE name = '@notices:chat.dingshunyu.top';`
+- Mark a user as server admin: `UPDATE users SET admin = 1 WHERE name = '@notices:chat.imzqqq.top';`
 
 ## GitLab
 
 ```bash
 export GITLAB_HOME=/srv/gitlab
 
-sudo docker run --detach  --hostname gitlab.dingshunyu.top --publish 16443:443 --publish 16680:80 --publish 16622:22  --name gitlab --restart always --volume $GITLAB_HOME/config:/etc/gitlab  --volume $GITLAB_HOME/logs:/var/log/gitlab  --volume $GITLAB_HOME/data:/var/opt/gitlab  gitlab/gitlab-ee:latest
+sudo docker run --detach  --hostname gitlab.imzqqq.top --publish 16443:443 --publish 16680:80 --publish 16622:22  --name gitlab --restart always --volume $GITLAB_HOME/config:/etc/gitlab  --volume $GITLAB_HOME/logs:/var/log/gitlab  --volume $GITLAB_HOME/data:/var/opt/gitlab  gitlab/gitlab-ee:latest
 
-# sudo docker run --detach  --hostname gitlab.dingshunyu.top --publish 16443:443 --publish 16680:80 --publish 16622:22  --name gitlab --restart always --volume $GITLAB_HOME/config:/etc/gitlab:Z  --volume $GITLAB_HOME/logs:/var/log/gitlab:Z  --volume $GITLAB_HOME/data:/var/opt/gitlab:Z  gitlab/gitlab-ee:latest
+# sudo docker run --detach  --hostname gitlab.imzqqq.top --publish 16443:443 --publish 16680:80 --publish 16622:22  --name gitlab --restart always --volume $GITLAB_HOME/config:/etc/gitlab:Z  --volume $GITLAB_HOME/logs:/var/log/gitlab:Z  --volume $GITLAB_HOME/data:/var/opt/gitlab:Z  gitlab/gitlab-ee:latest
 
 sudo docker exec -it gitlab /bin/bash
 sudo docker exec -it gitlab editor /etc/gitlab/gitlab.rb

@@ -238,7 +238,7 @@ export default function AccessTokens() {
       <Paragraph>
         Read more about how to use these tokens, with examples, at{' '}
         <a
-          href="https://live.docs.dingshunyu.top/docs/integrations/?source=admin"
+          href="https://live.docs.imzqqq.top/docs/integrations/?source=admin"
           target="_blank"
           rel="noopener noreferrer"
         >

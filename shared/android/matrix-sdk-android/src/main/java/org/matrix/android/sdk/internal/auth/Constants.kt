@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.auth
 
 /**
  * Path to use when the client does not supported any or all login flows
- * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#login-fallback
+ * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#login-fallback
  */
 internal const val LOGIN_FALLBACK_PATH = "/chat/static/client/login/"
 
@@ -30,11 +30,11 @@ internal const val REGISTER_FALLBACK_PATH = "/chat/static/client/register/"
 
 /**
  * Path to use when the client want to connect using SSO
- * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#sso-client-login
+ * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#sso-client-login
  */
 internal const val SSO_REDIRECT_PATH = "/chat/client/r0/login/sso/redirect"
 
 internal const val SSO_REDIRECT_URL_PARAM = "redirectUrl"
 
-// Ref: https://chat.docs.dingshunyu.top/spec/client_server/r0.6.1#single-sign-on
+// Ref: https://chat.docs.imzqqq.top/spec/client_server/r0.6.1#single-sign-on
 internal const val SSO_UIA_FALLBACK_PATH = "/chat/client/r0/auth/m.login.sso/fallback/web"

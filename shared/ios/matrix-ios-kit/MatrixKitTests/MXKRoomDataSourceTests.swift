@@ -93,7 +93,7 @@ private final class StubMXKRoomDataSource: MXKRoomDataSource {
 private final class FakeMXKRoomDataSource: MXKRoomDataSource {
 
     class func make() throws -> FakeMXKRoomDataSource {
-        let dataSource = try XCTUnwrap(FakeMXKRoomDataSource(roomId: "!foofoofoofoofoofoo:chat.dingshunyu.top", andMatrixSession: nil))
+        let dataSource = try XCTUnwrap(FakeMXKRoomDataSource(roomId: "!foofoofoofoofoofoo:chat.imzqqq.top", andMatrixSession: nil))
         dataSource.registerCellDataClass(CollapsibleBubbleCellData.self, forCellIdentifier: kMXKRoomBubbleCellDataIdentifier)
         dataSource.eventFormatter = CountingEventFormatter(matrixSession: nil)
         return dataSource
@@ -108,11 +108,11 @@ private final class FakeMXKRoomDataSource: MXKRoomDataSource {
     }
 
     func queueEvent1() throws {
-        try queueEvent(json: #"{"sender":"@alice:chat.dingshunyu.top","content":{"displayname":"bob","membership":"invite"},"origin_server_ts":1616488993287,"state_key":"@bob:chat.dingshunyu.top","room_id":"!foofoofoofoofoofoo:chat.dingshunyu.top","event_id":"$lGK3budX5w009ErtQwE9ZFhwyUUAV9DqEN5yb2fI4Do","type":"m.room.member","unsigned":{"age":1204610,"prev_sender":"@alice:chat.dingshunyu.top","prev_content":{"membership":"leave"},"replaces_state":"$9mQ6RtscXqHCxWqOElI-eP_kwpkuPd2Czm3UHviGoyE"}}"#)
+        try queueEvent(json: #"{"sender":"@alice:chat.imzqqq.top","content":{"displayname":"bob","membership":"invite"},"origin_server_ts":1616488993287,"state_key":"@bob:chat.imzqqq.top","room_id":"!foofoofoofoofoofoo:chat.imzqqq.top","event_id":"$lGK3budX5w009ErtQwE9ZFhwyUUAV9DqEN5yb2fI4Do","type":"m.room.member","unsigned":{"age":1204610,"prev_sender":"@alice:chat.imzqqq.top","prev_content":{"membership":"leave"},"replaces_state":"$9mQ6RtscXqHCxWqOElI-eP_kwpkuPd2Czm3UHviGoyE"}}"#)
     }
 
     func queueEvent2() throws {
-        try queueEvent(json: #"{"sender":"@alice:chat.dingshunyu.top","content":{"displayname":"john","membership":"invite"},"origin_server_ts":1616488967295,"state_key":"@john:chat.dingshunyu.top","room_id":"!foofoofoofoofoofoo:chat.dingshunyu.top","event_id":"$-00slfAluxVTP2VWytgDThTmh3nLd0WJD6gzBo2scJM","type":"m.room.member","unsigned":{"age":1712006,"prev_sender":"@alice:chat.dingshunyu.top","prev_content":{"membership":"leave"},"replaces_state":"$NRNkCMKeKK5NtTfWkMfTlMr5Ygw60Q2CQYnJNkbzyrs"}}"#)
+        try queueEvent(json: #"{"sender":"@alice:chat.imzqqq.top","content":{"displayname":"john","membership":"invite"},"origin_server_ts":1616488967295,"state_key":"@john:chat.imzqqq.top","room_id":"!foofoofoofoofoofoo:chat.imzqqq.top","event_id":"$-00slfAluxVTP2VWytgDThTmh3nLd0WJD6gzBo2scJM","type":"m.room.member","unsigned":{"age":1712006,"prev_sender":"@alice:chat.imzqqq.top","prev_content":{"membership":"leave"},"replaces_state":"$NRNkCMKeKK5NtTfWkMfTlMr5Ygw60Q2CQYnJNkbzyrs"}}"#)
     }
 
     private func queueEvent(json: String) throws {

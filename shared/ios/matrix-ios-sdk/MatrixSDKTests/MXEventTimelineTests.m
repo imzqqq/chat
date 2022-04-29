@@ -232,10 +232,10 @@ NSString *theInitialEventMessage = @"The initial timelime event";
                 // Get all past messages
                 [eventTimeline paginate:100 direction:MXTimelineDirectionBackwards onlyFromStore:NO complete:^{
 
-                    // @TODO: The result should be 26 but it fails because of https://chat.dingshunyu.top/jira/browse/SYN-641
+                    // @TODO: The result should be 26 but it fails because of https://chat.imzqqq.top/jira/browse/SYN-641
                     // @TODO: Come back to 26 once Synapse is fixed
                     //XCTAssertEqual(events.count, 26, @"20 + 1 + 5 = 26");
-                    XCTAssertEqual(events.count, 31, @"If the result 26, this means that https://chat.dingshunyu.top/jira/browse/SYN-641 is fixed ");
+                    XCTAssertEqual(events.count, 31, @"If the result 26, this means that https://chat.imzqqq.top/jira/browse/SYN-641 is fixed ");
 
                     // Do one more request to test end
                     [eventTimeline paginate:1 direction:MXTimelineDirectionBackwards onlyFromStore:NO complete:^{

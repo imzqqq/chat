@@ -2,10 +2,10 @@
 
 The Chat Client-Server spec includes a [section on client login using Central
 Authentication Service
-(CAS)](https://chat.api-spec.dingshunyu.top/client_server/r0.4.0.html#cas-based-client-login).
+(CAS)](https://chat.api-spec.imzqqq.top/client_server/r0.4.0.html#cas-based-client-login).
 
 The spec currently fails to mention it, but this process is triggered when [`GET
-/login`](https://chat.api-spec.dingshunyu.top/client_server/r0.4.0.html#get-matrix-client-r0-login)
+/login`](https://chat.api-spec.imzqqq.top/client_server/r0.4.0.html#get-matrix-client-r0-login)
 returns a flow type of `m.login.cas`.
 
 Nothing in this flow is specific to CAS - it is equally applicable for other
@@ -28,5 +28,5 @@ Accordingly, we should rename `cas` to `sso`.
    their configured single-sign-on system.
 
 4. Servers which support `m.login.sso` should make sure they update their [login
-   fallback page](https://chat.api-spec.dingshunyu.top/client_server/r0.4.0.html#login-fallback)
+   fallback page](https://chat.api-spec.imzqqq.top/client_server/r0.4.0.html#login-fallback)
    to understand the new login type.

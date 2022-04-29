@@ -51,7 +51,7 @@ paths:
           name: roomId
           description: The room identifier (not alias) to join.
           required: true
-          x-example: "!d41d8cd:chat.dingshunyu.top"
+          x-example: "!d41d8cd:chat.imzqqq.top"
         - in: body
           name: body
           required: true
@@ -80,7 +80,7 @@ paths:
             The joined room ID must be returned in the `room_id` field.
           examples:
             application/json: {
-              "room_id": "!d41d8cd:chat.dingshunyu.top"}
+              "room_id": "!d41d8cd:chat.imzqqq.top"}
           schema:
             type: object
             properties:
@@ -129,7 +129,7 @@ paths:
           name: roomIdOrAlias
           description: The room identifier or alias to join.
           required: true
-          x-example: "#monkeys:chat.dingshunyu.top"
+          x-example: "#monkeys:chat.imzqqq.top"
         - in: query
           type: array
           items:
@@ -138,7 +138,7 @@ paths:
           description: |-
             The servers to attempt to join the room through. One of the servers
             must be participating in the room.
-          x-example: ["chat.dingshunyu.top", "elsewhere.ca"]
+          x-example: ["chat.imzqqq.top", "elsewhere.ca"]
         - in: body
           name: body
           required: true
@@ -167,7 +167,7 @@ paths:
             The joined room ID must be returned in the `room_id` field.
           examples:
             application/json: {
-              "room_id": "!d41d8cd:chat.dingshunyu.top"}
+              "room_id": "!d41d8cd:chat.imzqqq.top"}
           schema:
             type: object
             properties:

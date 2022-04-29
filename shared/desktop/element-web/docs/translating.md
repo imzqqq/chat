@@ -8,8 +8,8 @@
 
 ## Step 0: Join #element-translations:matrix.org
 
-1. Come and join <https://to.chat.dingshunyu.top/#/#element-translations:matrix.org> for general discussion
-2. Join <https://to.chat.dingshunyu.top/#/#element-translators:matrix.org> for language-specific rooms
+1. Come and join <https://to.chat.imzqqq.top/#/#element-translations:matrix.org> for general discussion
+2. Join <https://to.chat.imzqqq.top/#/#element-translators:matrix.org> for language-specific rooms
 3. Read scrollback and/or ask if anyone else is working on your language, and co-ordinate if needed.  In general little-or-no coordination is needed though :)
 
 ## Step 1: Preparing your Weblate Profile

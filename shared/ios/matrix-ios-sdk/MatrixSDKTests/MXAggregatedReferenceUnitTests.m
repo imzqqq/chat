@@ -37,14 +37,14 @@ static NSString* const kThreadedMessage1Text = @"Morning!";
                                                @"body": kOriginalMessageText,
                                                @"msgtype": @"m.text"
                                                },
-                                       @"event_id": @"$messageeventid:chat.dingshunyu.top",
+                                       @"event_id": @"$messageeventid:chat.imzqqq.top",
                                        @"origin_server_ts": @(1560253386247),
-                                       @"sender": @"@billsam:chat.dingshunyu.top",
+                                       @"sender": @"@billsam:chat.imzqqq.top",
                                        @"type": @"m.room.message",
                                        @"unsigned": @{
                                                @"age": @(6117832)
                                                },
-                                       @"room_id": @"!roomid:chat.dingshunyu.top"
+                                       @"room_id": @"!roomid:chat.imzqqq.top"
                                        };
 
     NSDictionary *referenceEventDict = @{
@@ -52,19 +52,19 @@ static NSString* const kThreadedMessage1Text = @"Morning!";
                                                @"body": kThreadedMessage1Text,
                                                @"msgtype": @"m.text",
                                                @"m.relates_to": @{
-                                                       @"event_id": @"$messageeventid:chat.dingshunyu.top",
+                                                       @"event_id": @"$messageeventid:chat.imzqqq.top",
                                                        @"rel_type": @"m.replace"
                                                        },
                                                @"msgtype": @"m.text"
                                                },
-                                       @"event_id": @"$replaceeventid:chat.dingshunyu.top",
+                                       @"event_id": @"$replaceeventid:chat.imzqqq.top",
                                        @"origin_server_ts": @(1560254175300),
-                                       @"sender": @"@billsam:chat.dingshunyu.top",
+                                       @"sender": @"@billsam:chat.imzqqq.top",
                                        @"type": @"m.room.message",
                                        @"unsigned": @{
                                                @"age": @(5328779)
                                                },
-                                       @"room_id": @"!roomid:chat.dingshunyu.top"
+                                       @"room_id": @"!roomid:chat.imzqqq.top"
                                        };
 
 
@@ -77,7 +77,7 @@ static NSString* const kThreadedMessage1Text = @"Morning!";
 
     MXEventReferenceChunk *references = referencedEvent.unsignedData.relations.reference;
     XCTAssertNotNil(references);
-    XCTAssertEqualObjects(references.chunk.firstObject.eventId, @"$replaceeventid:chat.dingshunyu.top");
+    XCTAssertEqualObjects(references.chunk.firstObject.eventId, @"$replaceeventid:chat.imzqqq.top");
 
     XCTAssertEqual(references.count, 1);
     XCTAssertFalse(references.limited);

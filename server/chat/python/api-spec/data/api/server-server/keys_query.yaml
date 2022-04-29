@@ -38,7 +38,7 @@ paths:
           type: string
           description: The server's DNS name to query
           required: true
-          x-example: chat.dingshunyu.top
+          x-example: chat.imzqqq.top
         - in: path
           name: keyId
           type: string
@@ -94,7 +94,7 @@ paths:
                 type: object
                 description: |-
                   The query criteria. The outer `string` key on the object is the
-                  server name (eg: `chat.dingshunyu.top`). The inner `string` key is the
+                  server name (eg: `chat.imzqqq.top`). The inner `string` key is the
                   Key ID to query for the particular server. If no key IDs are given
                   to be queried, the notary server should query for all keys. If no
                   servers are given, the notary server must return an empty `server_keys`

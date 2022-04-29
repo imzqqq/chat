@@ -5,7 +5,7 @@ A Golang Matrix framework. Used by [gomuks](https://matrix.org/docs/projects/cli
 [go-neb](https://github.com/matrix-org/go-neb), [mautrix-whatsapp](https://github.com/tulir/mautrix-whatsapp)
 and others.
 
-Matrix room: [`#maunium:maunium.net`](https://to.chat.dingshunyu.top/#/#maunium:maunium.net)
+Matrix room: [`#maunium:maunium.net`](https://to.chat.imzqqq.top/#/#maunium:maunium.net)
 
 This project is based on [matrix-org/gomatrix](https://github.com/matrix-org/gomatrix).
 The original project is licensed under [Apache 2.0](https://github.com/matrix-org/gomatrix/blob/master/LICENSE).

@@ -78,7 +78,7 @@ When a user is watching a video:
 
 ![Sharing videos metadata to build an index of more than just local videos](/assets/schema/decentralized.png)
 
-- We use the [server-server ActivityPub](https://www.w3.org/TR/activitypub/) protocol. Activities and model documentation can be found on https://tube.docs.dingshunyu.top/api-activitypub.
+- We use the [server-server ActivityPub](https://www.w3.org/TR/activitypub/) protocol. Activities and model documentation can be found on https://tube.docs.imzqqq.top/api-activitypub.
 - ActivityPub messages are signed with [JSON Linked Data Signatures](https://w3c-dvcg.github.io/ld-signatures/) with the private key of the account that authored the action.
 - ActivityPub messages are also signed with [HTTP Signatures](https://datatracker.ietf.org/doc/draft-cavage-http-signatures/) with the private key of the account that sent the message.
 - All the requests are retried several times if they fail.
@@ -214,7 +214,7 @@ All other server files are in the [server](https://github.com/Chocobozzz/Tube/tr
 
 The server is composed of:
 
-  * a REST API (relying on the Express framework) documented on https://tube.docs.dingshunyu.top/api-rest-reference.html
+  * a REST API (relying on the Express framework) documented on https://tube.docs.imzqqq.top/api-rest-reference.html
   * a WebTorrent Tracker (slightly custom version of [webtorrent/bittorrent-tracker](https://github.com/webtorrent/bittorrent-tracker#server))
 
 A video is seeded by the server with the [WebSeed](http://www.bittorrent.org/beps/bep_0019.html) protocol (HTTP).
@@ -229,7 +229,7 @@ The user also downloads segments using HTTP.
 
 #### Transcoding
 
-Please read the documentation regarding WebTorrent and HLS transcoding first: https://tube.docs.dingshunyu.top/admin-configuration?id=vod-transcoding
+Please read the documentation regarding WebTorrent and HLS transcoding first: https://tube.docs.imzqqq.top/admin-configuration?id=vod-transcoding
 
 After the video upload:
  * An optimize transcoding job is created by Tube.

@@ -76,7 +76,7 @@
         <com.imzqqq.app.core.preference.VectorPreference
             android:key="SETTINGS_LOGGED_IN_PREFERENCE_KEY"
             android:title="@string/settings_logged_in"
-            tools:summary="\@user:chat.dingshunyu.top" />
+            tools:summary="\@user:chat.imzqqq.top" />
 
         <com.imzqqq.app.core.preference.VectorPreference
             android:key="SETTINGS_HOME_SERVER_PREFERENCE_KEY"

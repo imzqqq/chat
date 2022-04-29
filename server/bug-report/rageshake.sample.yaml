@@ -22,7 +22,7 @@ github_project_mappings:
 # `api` scope. If omitted, no issues will be created.
 gitlab_token: secrettoken
 # the base URL of the GitLab instance to use
-gitlab_url: https://gitlab.dingshunyu.top
+gitlab_url: https://gitlab.imzqqq.top
 
 # mappings from app name (as submitted in the API) to the GitLab Project ID (not name!) for issue reporting.
 gitlab_project_mappings:
@@ -41,10 +41,10 @@ slack_webhook_url: https://hooks.slack.com/services/TTTTTTT/XXXXXXXXXX/YYYYYYYYY
 # notification can also be pushed by email.
 # this param controls the target emails
 email_addresses:
-  - support@dingshunyu.top
+  - support@imzqqq.top
 
 # this is the from field that will be used in the email notifications
-email_from: BurReport <rageshake@dingshunyu.top>
+email_from: BurReport <rageshake@imzqqq.top>
 
 # SMTP server configuration
 smtp_server: smtp.qq.com

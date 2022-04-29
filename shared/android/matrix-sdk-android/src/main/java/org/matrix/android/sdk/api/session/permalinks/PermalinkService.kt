@@ -19,21 +19,21 @@ package org.matrix.android.sdk.api.session.permalinks
 import org.matrix.android.sdk.api.session.events.model.Event
 
 /**
- * Useful methods to create permalink (like to.chat.dingshunyu.top links or client permalinks).
+ * Useful methods to create permalink (like to.chat.imzqqq.top links or client permalinks).
  * See [org.matrix.android.sdk.api.MatrixConfiguration.clientPermalinkBaseUrl] to setup a custom permalink base url.
  */
 interface PermalinkService {
 
     companion object {
-        const val MATRIX_TO_URL_BASE = "https://to.chat.dingshunyu.top/#/"
+        const val MATRIX_TO_URL_BASE = "https://to.chat.imzqqq.top/#/"
     }
 
     /**
      * Creates a permalink for an event.
-     * Ex: "https://to.chat.dingshunyu.top/#/!nbzmcXAqpxBXjAdgoX:matrix.org/$1531497316352799BevdV:chat.dingshunyu.top"
+     * Ex: "https://to.chat.imzqqq.top/#/!nbzmcXAqpxBXjAdgoX:matrix.org/$1531497316352799BevdV:chat.imzqqq.top"
      *
      * @param event the event
-     * @param forceMatrixTo whether we should force using to.chat.dingshunyu.top base URL
+     * @param forceMatrixTo whether we should force using to.chat.imzqqq.top base URL
      *
      * @return the permalink, or null in case of error
      */
@@ -42,10 +42,10 @@ interface PermalinkService {
     /**
      * Creates a permalink for an id (can be a user Id, etc.).
      * For a roomId, consider using [createRoomPermalink]
-     * Ex: "https://to.chat.dingshunyu.top/#/@benoit:chat.dingshunyu.top"
+     * Ex: "https://to.chat.imzqqq.top/#/@benoit:chat.imzqqq.top"
      *
      * @param id the id
-     * @param forceMatrixTo whether we should force using to.chat.dingshunyu.top base URL
+     * @param forceMatrixTo whether we should force using to.chat.imzqqq.top base URL
      *
      * @return the permalink, or null in case of error
      */
@@ -55,7 +55,7 @@ interface PermalinkService {
      * Creates a permalink for a roomId, including the via parameters
      *
      * @param roomId the room id
-     * @param forceMatrixTo whether we should force using to.chat.dingshunyu.top base URL
+     * @param forceMatrixTo whether we should force using to.chat.imzqqq.top base URL
      *
      * @return the permalink, or null in case of error
      */
@@ -63,11 +63,11 @@ interface PermalinkService {
 
     /**
      * Creates a permalink for an event. If you have an event you can use [createPermalink]
-     * Ex: "https://to.chat.dingshunyu.top/#/!nbzmcXAqpxBXjAdgoX:matrix.org/$1531497316352799BevdV:matrix.org?via=chat.dingshunyu.top"
+     * Ex: "https://to.chat.imzqqq.top/#/!nbzmcXAqpxBXjAdgoX:matrix.org/$1531497316352799BevdV:matrix.org?via=chat.imzqqq.top"
      *
      * @param roomId  the id of the room
      * @param eventId the id of the event
-     * @param forceMatrixTo whether we should force using to.chat.dingshunyu.top base URL
+     * @param forceMatrixTo whether we should force using to.chat.imzqqq.top base URL
      *
      * @return the permalink
      */
@@ -76,8 +76,8 @@ interface PermalinkService {
     /**
      * Extract the linked id from the universal link
      *
-     * @param url the universal link, Ex: "https://to.chat.dingshunyu.top/#/@benoit:chat.dingshunyu.top"
-     * @return the id from the url, ex: "@benoit:chat.dingshunyu.top", or null if the url is not a permalink
+     * @param url the universal link, Ex: "https://to.chat.imzqqq.top/#/@benoit:chat.imzqqq.top"
+     * @return the id from the url, ex: "@benoit:chat.imzqqq.top", or null if the url is not a permalink
      */
     fun getLinkedId(url: String): String?
 }

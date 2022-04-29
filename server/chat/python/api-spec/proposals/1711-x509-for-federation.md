@@ -38,11 +38,11 @@ Chat was unable to make use of the existing notary servers (largely because
 we wanted to extend the protocol to include signing keys): the intention was
 that, as the Chat ecosystem grew, public Chat servers would act as notary
 servers. However, in practice we have ended up in a situation where almost <sup
-id="a1">[1](#f1)</sup> every Chat homeserver either uses `chat.dingshunyu.top` as the
+id="a1">[1](#f1)</sup> every Chat homeserver either uses `chat.imzqqq.top` as the
 sole notary, or does no certificate verification at all. Far from avoiding the
 centralisation of the Certificate Authorities, the entire protocol is therefore
-dependent on a single point of control at `chat.dingshunyu.top` - and because
-`chat.dingshunyu.top` only monitors from a single location, the protection against MitM
+dependent on a single point of control at `chat.imzqqq.top` - and because
+`chat.imzqqq.top` only monitors from a single location, the protection against MitM
 attacks is weak.
 
 It is also clear that the Perspectives approach is poorly-understood. It is a
@@ -68,7 +68,7 @@ will not accept self-signed certificates, nor will it include the
 [`/chat/key/v2`](https://github.com/matrix-org/matrix-doc/blob/6dab4b28f80f5beeb1d4f475ddc624cf9e7ad085/specification/server_server_api.rst#23retrieving-server-keys)
 endpoints. Chat server 1.0 will not accept self-signed certificates by default.
 
-The `chat.dingshunyu.top` team will proactively attempt to reach out to homeserver
+The `chat.imzqqq.top` team will proactively attempt to reach out to homeserver
 administrators who do not update their certificates in the coming weeks.
 
 The process of determining which CAs are trusted to sign certificates would be
@@ -86,13 +86,13 @@ such as like `.onion` domains on Tor or `fc00::/8` IPs on cjdns.
 
 With the use of `SRV` records, it is possible for the hostname of a homeserver
 to be quite different from the matrix domain it is hosting. For example, if
-there were an SRV record at `chat._tcp.chat.dingshunyu.top` which pointed to
-`server.example.com`, then any federation requests for `chat.dingshunyu.top` would be
+there were an SRV record at `chat._tcp.chat.imzqqq.top` which pointed to
+`server.example.com`, then any federation requests for `chat.imzqqq.top` would be
 routed to `server.example.com`. The question arises as to which certificate
 `server.example.com` should present.
 
 In short: the server should present a certificate for the matrix domain
-(`chat.dingshunyu.top` in the above example). This ensures that traffic cannot be
+(`chat.imzqqq.top` in the above example). This ensures that traffic cannot be
 intercepted by a MitM who can control the DNS response for the `SRV` record
 (perhaps via cache-poisoning or falsifying DNS responses).
 
@@ -138,14 +138,14 @@ model.
 ### Improving support for the Perspectives model
 
 In principle, we could double-down on the Perspectives approach, and make an effort
-to get servers other than `chat.dingshunyu.top` used as notary servers. However, there
+to get servers other than `chat.imzqqq.top` used as notary servers. However, there
 remain significant problems with such an approach:
 
 * Perspectives remain complex to configure correctly. Ideally, administrators
   need to make conscious choices about which notaries to trust, which is hard
   to do, especially for newcomers to the ecosystem. (In practice, people use
   the out-of-the-box configuration, which is why everyone just uses
-  `chat.dingshunyu.top` today).
+  `chat.imzqqq.top` today).
 
 * A *correct* implementation of Perspectives really needs to take into account
   more than the latest state seen by the notary servers: some level of history
@@ -198,7 +198,7 @@ particular, Let's Encrypt will not issue certificates for IP literals. This may
 make it impractical to run a homeserver which uses an IP literal, rather than a
 DNS name, as its `server_name`.
 
-It has long been the view of the `chat.dingshunyu.top` administrators that IP literals
+It has long been the view of the `chat.imzqqq.top` administrators that IP literals
 are only really suitable for internal testing. Those who wish to use them for
 that purpose could either disable certificate checks inside their network, or
 use their own CA to issue certificates.
@@ -222,7 +222,7 @@ a recognised Certificate Authority will improve security, reduce
 centralisation, and eliminate some common deployment pitfalls.
 
 <a id="f1"/>[1] It's *possible* to set up homeservers to use servers other than
-`chat.dingshunyu.top` as notaries, but only a minority are actually set up this
+`chat.imzqqq.top` as notaries, but only a minority are actually set up this
 way. [↩](#a1)
 
 <a id="f2"/>[2] I've not been able to find an authoritative source on this, but

@@ -24,7 +24,7 @@ class ModulesConfig(Config):
 
             # Server admins can expand Chat server's functionality with external modules.
             #
-            # See https://chat.docs.dingshunyu.top/modules.html for more
+            # See https://chat.docs.imzqqq.top/modules.html for more
             # documentation on how to configure or create custom modules for Chat server.
             #
             modules:

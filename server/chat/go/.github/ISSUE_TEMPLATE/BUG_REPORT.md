@@ -44,6 +44,6 @@ If you can identify any relevant log snippets from server logs, please include
 those (please be careful to remove any personal or private data). Please surround them with
 ``` (three backticks, on a line on their own), so that they are formatted legibly.
 
-Alternatively, please send logs to @imqzzZ:dingshunyu.top
+Alternatively, please send logs to @imqzzZ:imzqqq.top
 with a link to the respective Github issue, thanks!
 -->

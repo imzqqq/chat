@@ -135,7 +135,7 @@ android {
         buildConfigField("String", 'FLAVOR', "\"green\"")
         buildConfigField("String", "CUSTOM_LOGO_URL", "\"\"")
         buildConfigField("String", "CUSTOM_INSTANCE", "\"\"")
-        buildConfigField("String", "SUPPORT_ACCOUNT_URL", "\"https://flow.dingshunyu.top/@imzqqq\"")
+        buildConfigField("String", "SUPPORT_ACCOUNT_URL", "\"https://flow.imzqqq.top/@imzqqq\"")
         kapt {
             arguments {
                 arg("room.schemaLocation", "$projectDir/schemas")

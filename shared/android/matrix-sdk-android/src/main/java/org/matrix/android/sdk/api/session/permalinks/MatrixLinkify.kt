@@ -34,7 +34,7 @@ object MatrixLinkify {
     fun addLinks(spannable: Spannable, callback: MatrixPermalinkSpan.Callback?): Boolean {
         /**
          * I disable it because it mess up with pills, and even with pills, it does not work correctly:
-         * The url is not correct. Ex: for @user:matrix.org, the url will be @user:matrix.org, instead of a to.chat.dingshunyu.top
+         * The url is not correct. Ex: for @user:matrix.org, the url will be @user:matrix.org, instead of a to.chat.imzqqq.top
          */
 
         // sanity checks

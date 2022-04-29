@@ -719,7 +719,7 @@
     <string name="room_settings_never_send_to_unverified_devices_summary">Älä lähetä tältä laitteelta salattuja viestejä tämän huoneen vahvistamattomille laitteille.</string>
     <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">Huoneella ei ole paikallisia osoitteita</string>
-    <string name="room_settings_addresses_add_new_address">Uusi osoite (esim. #foo:chat.dingshunyu.top")</string>
+    <string name="room_settings_addresses_add_new_address">Uusi osoite (esim. #foo:chat.imzqqq.top")</string>
     <string name="room_settings_addresses_invalid_format_dialog_title">Virheellinen aliaksen muoto</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' ei ole kelvollinen muoto aliakselle</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">Tälle huoneelle ei ole määritetty pääosoitetta.</string>
@@ -1816,7 +1816,7 @@
     <string name="soft_logout_clear_data_dialog_submit">Poista tiedot</string>
     <string name="template_soft_logout_sso_not_same_user_error">Nykyinen istunto on käyttäjälle %1$s, ja yritit kirjautuas isään käyttäjälle %2$s. ${app_name} ei tue tätä.
 \nPoista ensin tietosi ja kirjaudu sen jälkeen toisella tunnuksella. Voit vaihtoehtoisesti käyttää ${app_name}in selainversiota.</string>
-    <string name="permalink_malformed">to.chat.dingshunyu.top-linkkisi oli epämuodostunut</string>
+    <string name="permalink_malformed">to.chat.imzqqq.top-linkkisi oli epämuodostunut</string>
     <string name="bug_report_error_too_short">Kuvaus on liian lyhyt</string>
     <string name="signed_out_notice">Se voi johtua monesta eri syystä:
 \n

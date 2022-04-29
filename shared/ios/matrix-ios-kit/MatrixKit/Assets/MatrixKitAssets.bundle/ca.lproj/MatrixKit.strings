@@ -12,12 +12,12 @@
 "save" = "Desar";
 // Login Screen
 "login_create_account" = "Crear compte:";
-"login_server_url_placeholder" = "URL (ex. https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (ex. https://chat.imzqqq.top)";
 "login_home_server_title" = "Servidor hoste:";
 "login_home_server_info" = "El teu servidor hoste desa totes les teves converses i dades del compte";
 "login_identity_server_title" = "Servidor d'identitat:";
-"login_identity_server_info" = "Matrix proporciona servidors d'identitat per fer un seguiment dels correus electrònics etc. que pertanyen als identificadors Matrix. Actualment només existeix https://chat.dingshunyu.top.";
-"login_user_id_placeholder" = "ID a Matrix (ex @bob:chat.dingshunyu.top o bob)";
+"login_identity_server_info" = "Matrix proporciona servidors d'identitat per fer un seguiment dels correus electrònics etc. que pertanyen als identificadors Matrix. Actualment només existeix https://chat.imzqqq.top.";
+"login_user_id_placeholder" = "ID a Matrix (ex @bob:chat.imzqqq.top o bob)";
 "login_display_name_placeholder" = "Mostra nom (ex. Bob Obson)";
 // room details dialog screen
 "room_details_title" = "Detalls de la sala";
@@ -308,7 +308,7 @@
 "login_error_already_logged_in" = "Ja autenticat";
 "login_error_must_start_http" = "La URL ha de començar per http[s]://";
 // contacts list screen 
-"invitation_message" = "M'agradaría xatejar amb tu amb matrix. Si us plau visita el lloc http://chat.dingshunyu.top per a més informació.";
+"invitation_message" = "M'agradaría xatejar amb tu amb matrix. Si us plau visita el lloc http://chat.imzqqq.top per a més informació.";
 // Settings screen 
 "settings_title_config" = "Configuració";
 "settings_title_notifications" = "Notificacions";

@@ -56,7 +56,7 @@ async def warn_missing_power(levels: PowerLevelStateEventContent, evt: CommandEv
         await evt.reply("Warning: The bot does not have privileges to redact messages on Matrix. "
                         "Message deletions from Telegram will not be bridged unless you give "
                         "redaction permissions to "
-                        f"[{evt.az.bot_mxid}](https://to.chat.dingshunyu.top/#/{evt.az.bot_mxid})")
+                        f"[{evt.az.bot_mxid}](https://to.chat.imzqqq.top/#/{evt.az.bot_mxid})")
 
 
 async def user_has_power_level(room_id: RoomID, intent: IntentAPI, sender: u.User,

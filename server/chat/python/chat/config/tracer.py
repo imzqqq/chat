@@ -67,7 +67,7 @@ class TracerConfig(Config):
             #enabled: true
 
             # The list of homeservers we wish to send and receive span contexts and span baggage.
-            # See https://chat.docs.dingshunyu.top/opentracing.html.
+            # See https://chat.docs.imzqqq.top/opentracing.html.
             #
             # This is a list of regexes which are matched against the server_name of the
             # homeserver.

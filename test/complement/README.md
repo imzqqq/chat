@@ -1,5 +1,5 @@
 [![Tests](https://github.com/matrix-org/complement/actions/workflows/ci.yaml/badge.svg)](https://github.com/matrix-org/complement/actions/workflows/ci.yaml)
-[![Complement Dev](https://img.shields.io/matrix/complement:matrix.org.svg?label=%23complement%3Amatrix.org&logo=matrix&server_fqdn=matrix.org)](https://to.chat.dingshunyu.top/#/#complement:matrix.org)
+[![Complement Dev](https://img.shields.io/matrix/complement:matrix.org.svg?label=%23complement%3Amatrix.org&logo=matrix&server_fqdn=matrix.org)](https://to.chat.imzqqq.top/#/#complement:matrix.org)
 
 # Complement
 

@@ -379,7 +379,7 @@ Once the signing key has been verified, it is then up to the encryption
 protocol to verify that a given message was sent from a device holding
 that Ed25519 private key, or to encrypt a message so that it may only be
 decrypted by such a device. For the Olm protocol, this is documented at
-<https://chat.dingshunyu.top/docs/olm_signing.html>.
+<https://chat.imzqqq.top/docs/olm_signing.html>.
 {{% /boxes/note %}}
 
 ##### Key verification framework
@@ -1247,7 +1247,7 @@ The `session_data` field in the backups is constructed as follows:
 | forwarding_curve25519_key_chain | [string]          | **Required.** Chain of Curve25519 keys through which this session was forwarded, via [m.forwarded_room_key](#mforwarded_room_key) events.                                   |
 | sender_key                      | string            | **Required.** Unpadded base64-encoded device curve25519 key.                                                                                                                |
 | sender_claimed_keys             | {string: string}  | **Required.** A map from algorithm name (`ed25519`) to the identity key for the sending device.                                                                             |
-| session_key                     | string            | **Required.** Unpadded base64-encoded session key in [session-sharing format](https://gitlab.chat.dingshunyu.top/matrix-org/olm/blob/master/docs/megolm.md#session-sharing-format).  |
+| session_key                     | string            | **Required.** Unpadded base64-encoded session key in [session-sharing format](https://gitlab.chat.imzqqq.top/matrix-org/olm/blob/master/docs/megolm.md#session-sharing-format).  |
 
 2.  Generate an ephemeral curve25519 key, and perform an ECDH with the
     ephemeral key and the backup's public key to generate a shared
@@ -1381,7 +1381,7 @@ readers without adding any useful extra information.
 
 The name `m.olm.v1.curve25519-aes-sha2` corresponds to version 1 of the
 Olm ratchet, as defined by the [Olm
-specification](http://chat.api-spec.dingshunyu.top/olm.html). This uses:
+specification](http://chat.api-spec.imzqqq.top/olm.html). This uses:
 
 -   Curve25519 for the initial key agreement.
 -   HKDF-SHA-256 for ratchet key derivation.
@@ -1509,7 +1509,7 @@ through `m.room_key_request` messages.
 
 The name `m.megolm.v1.aes-sha2` corresponds to version 1 of the Megolm
 ratchet, as defined by the [Megolm
-specification](http://chat.api-spec.dingshunyu.top/megolm.html). This uses:
+specification](http://chat.api-spec.imzqqq.top/megolm.html). This uses:
 
 -   HMAC-SHA-256 for the hash ratchet.
 -   HKDF-SHA-256, AES-256 in CBC mode, and 8 byte truncated HMAC-SHA-256

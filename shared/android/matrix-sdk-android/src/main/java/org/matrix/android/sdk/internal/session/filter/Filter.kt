@@ -22,7 +22,7 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 /**
  * Class which can be parsed to a filter json string. Used for POST and GET
  * Have a look here for further information:
- * https://chat.docs.dingshunyu.top/spec/client_server/r0.3.0.html#post-matrix-client-r0-user-userid-filter
+ * https://chat.docs.imzqqq.top/spec/client_server/r0.3.0.html#post-matrix-client-r0-user-userid-filter
  */
 @JsonClass(generateAdapter = true)
 internal data class Filter(

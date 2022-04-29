@@ -6,4 +6,4 @@ bridges, like setting up the bridge, are right below the "Python-based bridges"
 header. Things specific to mautrix-facebook are under this page.
 
 ## Discussion
-Matrix room: [#facebook:maunium.net](https://to.chat.dingshunyu.top/#/#facebook:maunium.net)
+Matrix room: [#facebook:maunium.net](https://to.chat.imzqqq.top/#/#facebook:maunium.net)

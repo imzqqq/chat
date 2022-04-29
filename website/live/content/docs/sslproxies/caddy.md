@@ -58,7 +58,7 @@ It offers automatic configuration of HTTPS with a single command.
 caddy reverse-proxy --from owncast.mydomain.com --to 127.0.0.1:8080
 {{</ highlight >}}
 
-Replace `owncast.mydomain.com` with the public hostname of your Live server like `watch.live.dingshunyu.top` for example.
+Replace `owncast.mydomain.com` with the public hostname of your Live server like `watch.live.imzqqq.top` for example.
 
 [Read the Caddy reverse proxy documentation for more details.](https://caddyserver.com/docs/quick-starts/reverse-proxy)
 
@@ -79,7 +79,7 @@ tls webmaster@mydomain.com
 }
 {{</ highlight >}}
 
-Replace `owncast.mydomain.com` with the public hostname of your Live server like `watch.live.dingshunyu.top` for example.
+Replace `owncast.mydomain.com` with the public hostname of your Live server like `watch.live.imzqqq.top` for example.
 
 </details>
 
@@ -97,4 +97,4 @@ Continue to run Live on port 8080.
 
 You should now be able to access your Live server by visiting https://owncast.mydomain.com instead of http://owncast.mydomain.com:8080.
 
-Replace `owncast.mydomain.com` with the public hostname of your Live server like `watch.live.dingshunyu.top` for example.
+Replace `owncast.mydomain.com` with the public hostname of your Live server like `watch.live.imzqqq.top` for example.

@@ -155,7 +155,7 @@ export class MatrixAction {
 
             const regex = MentionRegex(escapeStringRegexp(matchName));
             this.htmlText = this.htmlText.replace(regex,
-                `$1<a href="https://to.chat.dingshunyu.top/#/${userId}">`+
+                `$1<a href="https://to.chat.imzqqq.top/#/${userId}">`+
                 `${ircFormatting.escapeHtmlChars(identifier)}</a>`
             );
             this.text = this.text.replace(regex, `$1${identifier}`);

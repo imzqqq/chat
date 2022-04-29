@@ -584,7 +584,7 @@ export class AdminRoomHandler {
             const rooms = await this.ircBridge.getStore().getMatrixRoomsForChannel(server, channel);
             chanList += `- \`${channel}\` which is bridged to ${rooms.map((r) => r.getId()).join(", ")}`;
             const roomMentions = rooms
-                .map((r) => `<a href="https://to.chat.dingshunyu.top/#/${r.getId()}">${r.getId()}</a>`)
+                .map((r) => `<a href="https://to.chat.imzqqq.top/#/${r.getId()}">${r.getId()}</a>`)
                 .join(", ");
             chanListHTML += `<li><code>${channel}</code> which is bridged to ${roomMentions} </li>`
         }

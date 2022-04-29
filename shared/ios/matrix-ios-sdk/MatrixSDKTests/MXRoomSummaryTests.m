@@ -497,7 +497,7 @@ NSString *uisiString = @"The sender's device has not sent us the keys for this m
         MXRoomSummary *summary = room.summary;
         MXRoomSummaryUpdater *updater = (MXRoomSummaryUpdater*)bobSession.roomSummaryUpdateDelegate;
         
-        NSString *avatarURL = @"http://chat.dingshunyu.top/matrix.png";
+        NSString *avatarURL = @"http://chat.imzqqq.top/matrix.png";
         
         [room setIsDirect:YES withUserId:bobSession.myUserId success:^{
             [aliceRestClient setAvatarUrl:avatarURL success:^{

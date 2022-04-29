@@ -61,26 +61,26 @@ internal interface ProfileAPI {
 
     /**
      * Bind a threePid
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#post-matrix-client-r0-account-3pid-bind
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#post-matrix-client-r0-account-3pid-bind
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "account/3pid/bind")
     suspend fun bindThreePid(@Body body: BindThreePidBody)
 
     /**
      * Unbind a threePid
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#post-matrix-client-r0-account-3pid-unbind
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#post-matrix-client-r0-account-3pid-unbind
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "account/3pid/unbind")
     suspend fun unbindThreePid(@Body body: UnbindThreePidBody): UnbindThreePidResponse
 
     /**
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-email-requesttoken
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-email-requesttoken
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid/email/requestToken")
     suspend fun addEmail(@Body body: AddEmailBody): AddEmailResponse
 
     /**
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-msisdn-requesttoken
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-msisdn-requesttoken
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid/msisdn/requestToken")
     suspend fun addMsisdn(@Body body: AddMsisdnBody): AddMsisdnResponse
@@ -93,13 +93,13 @@ internal interface ProfileAPI {
                                @Body params: ValidationCodeBody): SuccessResult
 
     /**
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-add
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-add
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid/add")
     suspend fun finalizeAddThreePid(@Body body: FinalizeAddThreePidBody)
 
     /**
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-delete
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/r0.6.1#post-matrix-client-r0-account-3pid-delete
      */
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "account/3pid/delete")
     suspend fun deleteThreePid(@Body body: DeleteThreePidBody): DeleteThreePidResponse

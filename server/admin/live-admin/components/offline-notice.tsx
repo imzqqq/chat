@@ -42,7 +42,7 @@ export default function Offline({ logs = [], config }: OfflineProps) {
       content: (
         <div>
           <a
-            href="https://live.docs.dingshunyu.top/docs/broadcasting/?source=admin"
+            href="https://live.docs.imzqqq.top/docs/broadcasting/?source=admin"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -72,7 +72,7 @@ export default function Offline({ logs = [], config }: OfflineProps) {
       content: (
         <div>
           <a
-            href="https://live.docs.dingshunyu.top/docs/embed?source=admin"
+            href="https://live.docs.imzqqq.top/docs/embed?source=admin"
             target="_blank"
             rel="noopener noreferrer"
           >

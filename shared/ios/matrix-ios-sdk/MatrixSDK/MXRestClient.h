@@ -139,7 +139,7 @@ typedef MXHTTPOperation* (^MXRestClientIdentityServerAccessTokenHandler)(void (^
 @property (nonatomic, readonly) NSString *homeserver;
 
 /**
- The homeserver suffix (for example ":chat.dingshunyu.top"). Available only when credentials have been set.
+ The homeserver suffix (for example ":chat.imzqqq.top"). Available only when credentials have been set.
  */
 @property (nonatomic, readonly) NSString *homeserverSuffix;
 
@@ -282,7 +282,7 @@ typedef MXHTTPOperation* (^MXRestClientIdentityServerAccessTokenHandler)(void (^
 /**
  Generic registration action request.
 
- As described in http://chat.dingshunyu.top/docs/spec/client_server/r0.2.0.html#client-authentication some registration flows require to
+ As described in http://chat.imzqqq.top/docs/spec/client_server/r0.2.0.html#client-authentication some registration flows require to
  complete several stages in order to complete user registration.
  This can lead to make several requests to the home server with different kinds of parameters.
  This generic method with open parameters and response exists to handle any kind of registration flow stage.
@@ -311,7 +311,7 @@ typedef MXHTTPOperation* (^MXRestClientIdentityServerAccessTokenHandler)(void (^
  This method manages the full flow for simple login types and returns the credentials of the newly created matrix user.
 
  @param loginType the login type. Only kMXLoginFlowTypePassword and kMXLoginFlowTypeDummy (m.login.password and m.login.dummy) are supported.
- @param username the user id (ex: "@bob:chat.dingshunyu.top") or the user id localpart (ex: "bob") of the user to register. Can be nil.
+ @param username the user id (ex: "@bob:chat.imzqqq.top") or the user id localpart (ex: "bob") of the user to register. Can be nil.
  @param password his password.
  @param success A block object called when the operation succeeds. It provides credentials to use to create a MXRestClient.
  @param failure A block object called when the operation fails.
@@ -398,7 +398,7 @@ typedef MXHTTPOperation* (^MXRestClientIdentityServerAccessTokenHandler)(void (^
  @note The device display name field is filled with the device name by default.
 
  @param loginType the login type. Only kMXLoginFlowTypePassword (m.login.password) is supported.
- @param username the user id (ex: "@bob:chat.dingshunyu.top") or the user id localpart (ex: "bob") of the user to register.
+ @param username the user id (ex: "@bob:chat.imzqqq.top") or the user id localpart (ex: "bob") of the user to register.
  @param password his password.
  @param success A block object called when the operation succeeds. It provides credentials to use to create a MXRestClient.
  @param failure A block object called when the operation fails.
@@ -1319,7 +1319,7 @@ typedef MXHTTPOperation* (^MXRestClientIdentityServerAccessTokenHandler)(void (^
  @param roomId the id of the room.
 
  @param success A block object called when the operation succeeds. It provides the raw
- home server JSON response. @see http://chat.dingshunyu.top/docs/api/client-server/#!/-rooms/get_state_events
+ home server JSON response. @see http://chat.imzqqq.top/docs/api/client-server/#!/-rooms/get_state_events
  @param failure A block object called when the operation fails.
 
  @return a MXHTTPOperation instance.
@@ -1393,7 +1393,7 @@ typedef MXHTTPOperation* (^MXRestClientIdentityServerAccessTokenHandler)(void (^
  @param limit the maximum number of messages to return.
 
  @param success A block object called when the operation succeeds. It provides the model created from
- the homeserver JSON response. @see http://chat.dingshunyu.top/docs/api/client-server/#!/-rooms/get_room_sync_data
+ the homeserver JSON response. @see http://chat.imzqqq.top/docs/api/client-server/#!/-rooms/get_room_sync_data
  @param failure A block object called when the operation fails.
 
  @return a MXHTTPOperation instance.
@@ -1488,7 +1488,7 @@ typedef MXHTTPOperation* (^MXRestClientIdentityServerAccessTokenHandler)(void (^
  Get the room summary of a room
  
  @param roomIdOrAlias the id of the room or its alias
- @param via servers, that should be tried to request a summary from, if it can't be generated locally. These can be from a matrix URI, to.chat.dingshunyu.top link or a `m.space.child` event for example.
+ @param via servers, that should be tried to request a summary from, if it can't be generated locally. These can be from a matrix URI, to.chat.imzqqq.top link or a `m.space.child` event for example.
  @param success A block object called when the operation succeeds. It provides the public room data.
  @param failure A block object called when the operation fails.
  
@@ -2131,7 +2131,7 @@ Note: Clients should consider avoiding this endpoint for URLs posted in encrypte
 /**
  Make a search.
 
- @param parameters the search parameters as defined by the Matrix search spec (http://chat.dingshunyu.top/docs/api/client-server/#!/Search/post_search ).
+ @param parameters the search parameters as defined by the Matrix search spec (http://chat.imzqqq.top/docs/api/client-server/#!/Search/post_search ).
  @param nextBatch the token to pass for doing pagination from a previous response.
 
  @param success A block object called when the operation succeeds.

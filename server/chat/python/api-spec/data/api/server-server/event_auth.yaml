@@ -41,7 +41,7 @@ paths:
           type: string
           description: The room ID to get the auth chain for.
           required: true
-          x-example: "!abc123:chat.dingshunyu.top"
+          x-example: "!abc123:chat.imzqqq.top"
         - in: path
           name: eventId
           type: string

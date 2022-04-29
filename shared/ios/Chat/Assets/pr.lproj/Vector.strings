@@ -69,8 +69,8 @@
 "auth_phone_placeholder" = "شماره تلفن";
 "auth_repeat_password_placeholder" = "تکرار گذرواژه";
 "auth_repeat_new_password_placeholder" = "تایید گذرواژه";
-"auth_home_server_placeholder" = "URL (e.g. https://chat.dingshunyu.top)";
-"auth_identity_server_placeholder" = "URL (e.g. https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (e.g. https://chat.imzqqq.top)";
+"auth_identity_server_placeholder" = "URL (e.g. https://chat.imzqqq.top)";
 "auth_invalid_login_param" = "گذرواژه و نام کاربری اشتباه است";
 "auth_invalid_user_name" = "نام کاربری وارد شده فرمت صحیح ندارد";
 "auth_invalid_password" = "گذرواژه عبور کوتاه است(حداقل 6 کارکتر) ";
@@ -394,11 +394,11 @@
 "settings_version" = "نسخه %@";
 "settings_olm_version" = "نسخه olm %@";
 "settings_copyright" = "کپی رایت";
-"settings_copyright_url" = "https://apps.chat.dingshunyu.top/copyright";
+"settings_copyright_url" = "https://apps.chat.imzqqq.top/copyright";
 "settings_term_conditions" = "شرایط استفاده";
-"settings_term_conditions_url" = "https://apps.chat.dingshunyu.top/tac_apple";
+"settings_term_conditions_url" = "https://apps.chat.imzqqq.top/tac_apple";
 "settings_privacy_policy" = "سیاست های حریم خصوصی";
-"settings_privacy_policy_url" = "https://apps.chat.dingshunyu.top/privacy";
+"settings_privacy_policy_url" = "https://apps.chat.imzqqq.top/privacy";
 "settings_third_party_notices" = "Third-party اطلاعیه های";
 "settings_send_crash_report" = "ارسال اطلاعات توقف و یا داده ها";
 "settings_enable_rageshake" = "تکان دادن برای ارسال گزارش";
@@ -528,7 +528,7 @@
 "directory_server_all_rooms" = "تمام گفتگوها  %@ سرور";
 "directory_server_all_native_rooms" = "تمام گفتگوهای ماتریسی";
 "directory_server_type_homeserver" = "نوشتن نام برای لیست کردن گفتگو";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 
 // Events formatter
 "event_formatter_member_updates" = "%tu عضویت تغییر کرد";

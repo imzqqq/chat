@@ -830,7 +830,7 @@ export default class EventTile extends React.Component<IProps, IState> {
 
     onPermalinkClicked = e => {
         // This allows the permalink to be opened in a new tab/window or copied as
-        // to.chat.dingshunyu.top, but also for it to enable routing within Chat when clicked.
+        // to.chat.imzqqq.top, but also for it to enable routing within Chat when clicked.
         e.preventDefault();
         dis.dispatch({
             action: 'view_room',

@@ -59,7 +59,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
- * for documentation of the Flow REST API see https://docs.flow.join.dingshunyu.top/api/
+ * for documentation of the Flow REST API see https://docs.flow.join.imzqqq.top/api/
  */
 
 @JvmSuppressWildcards

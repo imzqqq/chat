@@ -45,9 +45,9 @@ homeserver before binding it to an identity server. It also prevents users
 from binding the same 3PID to multiple identity servers. The line "The
 homeserver must check that the given email address is **not** already
 associated with an account on this homeserver." appears under the [POST
-/chat/client/r0/account/3pid/email/requestToken](https://chat.api-spec.dingshunyu.top/client_server/r0.5.0#post-matrix-client-r0-account-3pid-email-requesttoken)
+/chat/client/r0/account/3pid/email/requestToken](https://chat.api-spec.imzqqq.top/client_server/r0.5.0#post-matrix-client-r0-account-3pid-email-requesttoken)
 endpoint description. The same goes for the [equivalent msisdn (phone)
-endpoint](https://chat.api-spec.dingshunyu.top/client_server/r0.5.0#post-matrix-client-r0-account-3pid-msisdn-requesttoken).
+endpoint](https://chat.api-spec.imzqqq.top/client_server/r0.5.0#post-matrix-client-r0-account-3pid-msisdn-requesttoken).
 
 When a user adds an email to their account on their homeserver, they can
 choose to bind that email to an identity server at the same time. This is
@@ -67,9 +67,9 @@ request as this address has already been bound.
 
 This proposal calls for allowing 3PID owners to rebind their 3PIDs using the
 [`POST
-/chat/client/r0/account/3pid/email/requestToken`](https://chat.api-spec.dingshunyu.top/client_server/r0.5.0#post-matrix-client-r0-account-3pid-email-requesttoken)
+/chat/client/r0/account/3pid/email/requestToken`](https://chat.api-spec.imzqqq.top/client_server/r0.5.0#post-matrix-client-r0-account-3pid-email-requesttoken)
 and [`POST
-/chat/client/r0/account/3pid/msisdn/requestToken`](https://chat.api-spec.dingshunyu.top/client_server/r0.5.0#post-matrix-client-r0-account-3pid-msisdn-requesttoken)
+/chat/client/r0/account/3pid/msisdn/requestToken`](https://chat.api-spec.imzqqq.top/client_server/r0.5.0#post-matrix-client-r0-account-3pid-msisdn-requesttoken)
 endpoints by extending the definition of what homeservers should check before
 rejecting a bind.
 

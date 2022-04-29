@@ -1773,7 +1773,7 @@
     <string name="soft_logout_clear_data_dialog_submit">清除資料</string>
     <string name="template_soft_logout_sso_not_same_user_error">使用者 %1$s 目前的工作階段與您提供的使用者 %2$s 憑證。${app_name} 並不支援。
 \n請先清除您的資料，然後再以其他帳號登入。</string>
-    <string name="permalink_malformed">您的 to.chat.dingshunyu.top 連結格式錯誤</string>
+    <string name="permalink_malformed">您的 to.chat.imzqqq.top 連結格式錯誤</string>
     <string name="bug_report_error_too_short">描述太短了</string>
     <string name="notification_initial_sync">初始化同步……</string>
     <string name="settings_show_devices_list">檢視我的所有工作階段</string>

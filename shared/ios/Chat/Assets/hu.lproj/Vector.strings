@@ -53,7 +53,7 @@
 "auth_phone_placeholder" = "Telefonszám";
 "auth_repeat_password_placeholder" = "Jelszó megerősítés";
 "auth_repeat_new_password_placeholder" = "Új jelszó megerősítés";
-"auth_home_server_placeholder" = "URL (pl. https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (pl. https://chat.imzqqq.top)";
 "auth_identity_server_placeholder" = "URL (pl. https://vector.im)";
 "auth_invalid_login_param" = "Hibás felhasználói név és/vagy jelszó";
 "auth_invalid_user_name" = "A felhasználói név tartalmazhat betűket, számokat, pontokat, kötőjeleket és aláhúzást";
@@ -450,7 +450,7 @@
 "directory_server_all_rooms" = "%@ szerveren az összes szoba";
 "directory_server_all_native_rooms" = "Minden eredeti Matrix szoba";
 "directory_server_type_homeserver" = "Add meg a Matrix szervert aminek a nyilvános szobáit listázni szeretnéd";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 // Events formatter
 "event_formatter_member_updates" = "%tu tagság változás";
 "event_formatter_widget_added" = "%@ kisalkalmazás innen: %@";
@@ -673,7 +673,7 @@
 "store_short_description" = "Biztonságos elosztott csevegés/VoIP";
 "auth_login_single_sign_on" = "Bejelentkezés";
 "room_message_unable_open_link_error_message" = "A linket nem lehet megnyitni.";
-"store_full_description" = "Element egy újfajta csevegő és együttműködést segítő alkalmazás ami:\n\n1. Visszaadja az irányítást neked, hogy megvédd a magánéleted információit\n2. Lépj kapcsolatba bárkivel a Matrix hálózatban, és azon túl alkalmazások integrálásával mint amilyen például a slack\n3. Megvéd a hirdetőktől, adatbányászoktól, hátsó kapuktól és fallal védett rendszerektől\n4. Végpontok közötti titkosítással véd, ahol egymás személyazonosságát ellenőrizhetitek\n\nElement a többi üzenetküldő és kollaborációs alkalmazástól teljesen eltérő abban a tekintetben, hogy elosztott és nyílt forrású rendszer.\n\nElement megengedi, hogy saját magadnak üzemeltess szervert vagy válassz szervert tetszés szerint - így biztonságban vagy te vagy a tulajdonosa az üzeneteidnek és te irányítod az adatokat és a beszélgetéseket. Egy nyílt hálózathoz enged hozzáférést; tehát nem csak más Element felhasználókkal beszélgethetsz. És nagyon biztonságos.\n\nElement mindezt a Matrix miatt tudja ami egy szabványos nyílt és elosztott kommunikációs rendszer.\n\nElement visszaadja az irányítást azzal, hogy kiválaszthatod ki kezelje a beszélgetéseidet. Az Element alkalmazásból különbözőképpen választhatod ki a szerverd:\n\n1. Kérj egy ingyenes fiókot a chat.dingshunyu.top nyilvános szerveren\n2. Saját szervert is üzemeltethetsz a fiókodnak saját hardveren\n3. Jelentkezz egy fiókért egy egyedi szerveren az Element Matrix Services hosting platformra való feliratkozással\n\nMiért válasz az Elementet?\n\nAZ ADATOD A TULAJDONOD: Te döntöd el hol tárolod az adataidat és üzeneteidet. A tiéd és nálad az irányítás és nem valami NAGYVÁLLALATNÁL ami elemzi az adataidat és odaadja másoknak.\n\nNYILT ÜZENETKÜLDÉS ÉS KOLLABORÁCIÓ: Bárkivel beszélgethetsz a Matrix hálózaton, akár az Elementet használja akár más Matrix alkalmazást vagy akár másik üzenetküldő rendszert használ mint például a Slack, IRC vagy XMPP.\n\nSZUPER-BIZTONSÁGOS: Igazi végpontok közötti titkosítás (csak a beszélgetés résztvevői tudják visszafejteni az üzenetet), és kereszt aláírásokkal lehet a beszélgetésben résztvevő eszközöket ellenőrizni.\n\nTELJES KOMMUNIKÁCIÓ: Üzenetküldés, hang és videó hívások, fájl megosztás, képernyő megosztás és egy csomó egyéb integráció, botok és kisalkalmazások. Építs szobákat, közösségeket, maradj kapcsolatban és vigyél véghez dolgokat. \n\nBÁRHOL VAGY: Maradj kapcsolatban akárhol vagy az összes üzeneteddel minden eszközödön vagy a weben a https://element.io/app -pal.";
+"store_full_description" = "Element egy újfajta csevegő és együttműködést segítő alkalmazás ami:\n\n1. Visszaadja az irányítást neked, hogy megvédd a magánéleted információit\n2. Lépj kapcsolatba bárkivel a Matrix hálózatban, és azon túl alkalmazások integrálásával mint amilyen például a slack\n3. Megvéd a hirdetőktől, adatbányászoktól, hátsó kapuktól és fallal védett rendszerektől\n4. Végpontok közötti titkosítással véd, ahol egymás személyazonosságát ellenőrizhetitek\n\nElement a többi üzenetküldő és kollaborációs alkalmazástól teljesen eltérő abban a tekintetben, hogy elosztott és nyílt forrású rendszer.\n\nElement megengedi, hogy saját magadnak üzemeltess szervert vagy válassz szervert tetszés szerint - így biztonságban vagy te vagy a tulajdonosa az üzeneteidnek és te irányítod az adatokat és a beszélgetéseket. Egy nyílt hálózathoz enged hozzáférést; tehát nem csak más Element felhasználókkal beszélgethetsz. És nagyon biztonságos.\n\nElement mindezt a Matrix miatt tudja ami egy szabványos nyílt és elosztott kommunikációs rendszer.\n\nElement visszaadja az irányítást azzal, hogy kiválaszthatod ki kezelje a beszélgetéseidet. Az Element alkalmazásból különbözőképpen választhatod ki a szerverd:\n\n1. Kérj egy ingyenes fiókot a chat.imzqqq.top nyilvános szerveren\n2. Saját szervert is üzemeltethetsz a fiókodnak saját hardveren\n3. Jelentkezz egy fiókért egy egyedi szerveren az Element Matrix Services hosting platformra való feliratkozással\n\nMiért válasz az Elementet?\n\nAZ ADATOD A TULAJDONOD: Te döntöd el hol tárolod az adataidat és üzeneteidet. A tiéd és nálad az irányítás és nem valami NAGYVÁLLALATNÁL ami elemzi az adataidat és odaadja másoknak.\n\nNYILT ÜZENETKÜLDÉS ÉS KOLLABORÁCIÓ: Bárkivel beszélgethetsz a Matrix hálózaton, akár az Elementet használja akár más Matrix alkalmazást vagy akár másik üzenetküldő rendszert használ mint például a Slack, IRC vagy XMPP.\n\nSZUPER-BIZTONSÁGOS: Igazi végpontok közötti titkosítás (csak a beszélgetés résztvevői tudják visszafejteni az üzenetet), és kereszt aláírásokkal lehet a beszélgetésben résztvevő eszközöket ellenőrizni.\n\nTELJES KOMMUNIKÁCIÓ: Üzenetküldés, hang és videó hívások, fájl megosztás, képernyő megosztás és egy csomó egyéb integráció, botok és kisalkalmazások. Építs szobákat, közösségeket, maradj kapcsolatban és vigyél véghez dolgokat. \n\nBÁRHOL VAGY: Maradj kapcsolatban akárhol vagy az összes üzeneteddel minden eszközödön vagy a weben a https://element.io/app -pal.";
 "auth_autodiscover_invalid_response" = "Matrix szerver felderítésénél érvénytelen válasz érkezett";
 "room_event_action_reply" = "Válasz";
 "room_event_action_edit" = "Szerkeszt";
@@ -1240,7 +1240,7 @@
 "create_room_section_footer_type" = "Emberek csak meghívóval csatlakozhatnak a privát szobához.";
 "create_room_show_in_directory" = "A szoba megjelenítése a listában";
 "create_room_section_header_address" = "Szoba címe";
-"create_room_placeholder_address" = "#testroom:chat.dingshunyu.top";
+"create_room_placeholder_address" = "#testroom:chat.imzqqq.top";
 "room_info_list_one_member" = "1 tag";
 "room_info_list_several_members" = "%@ tag";
 "room_info_list_section_other" = "Más";

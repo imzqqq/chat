@@ -7,7 +7,7 @@ object MatrixConstants {
     /**
      * Max length for an alias. Room aliases MUST NOT exceed 255 bytes (including the # sigil and the domain).
      * See [maxAliasLocalPartLength]
-     * Ref. https://chat.docs.dingshunyu.top/spec/appendices#room-aliases
+     * Ref. https://chat.docs.imzqqq.top/spec/appendices#room-aliases
      */
     const val ALIAS_MAX_LENGTH = 255
 

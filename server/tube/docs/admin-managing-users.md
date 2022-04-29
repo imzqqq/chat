@@ -112,7 +112,7 @@ User is the default role.
 - Upload, Edit, and Delete videos to their account, associated with one of their channels
 - Comment on videos
 - Add videos to playlists, or remove videos from them
-- Change user settings ([See the Use Tube page](https://tube.docs.dingshunyu.top/use-setup-account?id=update-your-profile) for more information)
+- Change user settings ([See the Use Tube page](https://tube.docs.imzqqq.top/use-setup-account?id=update-your-profile) for more information)
 - Report videos to the moderators with a comment about why the video is being reported
 
 ### Quotas
@@ -133,7 +133,7 @@ Once you are satisfied with your user, you can click on the "Update User" button
 
 ## External auths support
 
-You can [install plugins](https://tube.docs.dingshunyu.top/admin-customize-instance?id=install-a-plugin) so your users can login using external auths.
+You can [install plugins](https://tube.docs.imzqqq.top/admin-customize-instance?id=install-a-plugin) so your users can login using external auths.
 
 For example:
  * [LDAP](https://framagit.org/framasoft/tube/official-plugins/-/tree/master/tube-plugin-auth-ldap)

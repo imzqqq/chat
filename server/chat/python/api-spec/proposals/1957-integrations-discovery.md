@@ -26,7 +26,7 @@ This is left as an implementation detail. In the case of Riot, this is likely to
 #### Homeserver-configured integration managers
 
 The integration managers suggested by a homeserver are done through the existing
-[.well-known](https://chat.api-spec.dingshunyu.top/client_server/r0.4.0.html#get-well-known-matrix-client) discovery
+[.well-known](https://chat.api-spec.imzqqq.top/client_server/r0.4.0.html#get-well-known-matrix-client) discovery
 mechanism. The added optional fields, which should not affect a client's ability to log a user in, are:
 ```json
 {

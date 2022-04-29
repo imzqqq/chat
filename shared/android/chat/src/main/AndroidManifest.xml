@@ -230,7 +230,7 @@
             </intent-filter>
         </activity>
 
-        <!-- Activity alias for to.chat.dingshunyu.top or element permalinks -->
+        <!-- Activity alias for to.chat.imzqqq.top or element permalinks -->
         <!-- exported="true" is required to handle android.intent.action.VIEW for URL redirection-->
         <activity-alias
             android:name=".features.permalink.PermalinkHandlerActivity"
@@ -246,7 +246,7 @@
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
-                <data android:host="to.chat.dingshunyu.top" />
+                <data android:host="to.chat.imzqqq.top" />
                 <data
                     android:host="user"
                     android:scheme="element" />

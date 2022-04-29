@@ -39,13 +39,13 @@ paths:
           type: string
           description: The room ID to get state for.
           required: true
-          x-example: "!abc123:chat.dingshunyu.top"
+          x-example: "!abc123:chat.imzqqq.top"
         - in: query
           name: event_id
           type: string
           description: An event ID in the room to retrieve the state at.
           required: true
-          x-example: "$helloworld:chat.dingshunyu.top"
+          x-example: "$helloworld:chat.imzqqq.top"
       responses:
         200:
           description: |-
@@ -105,13 +105,13 @@ paths:
           type: string
           description: The room ID to get state for.
           required: true
-          x-example: "!abc123:chat.dingshunyu.top"
+          x-example: "!abc123:chat.imzqqq.top"
         - in: query
           name: event_id
           type: string
           description: An event ID in the room to retrieve the state at.
           required: true
-          x-example: "$helloworld:chat.dingshunyu.top"
+          x-example: "$helloworld:chat.imzqqq.top"
       responses:
         200:
           description: |-
@@ -151,7 +151,7 @@ paths:
           type: string
           description: The event ID to get.
           required: true
-          x-example: "$abc123:chat.dingshunyu.top"
+          x-example: "$abc123:chat.imzqqq.top"
       responses:
         200:
           description: A transaction containing a single PDU which is the event requested.

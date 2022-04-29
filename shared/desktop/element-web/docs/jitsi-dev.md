@@ -40,8 +40,8 @@ are underway in [MSC1286](https://github.com/matrix-org/matrix-doc/issues/1286).
 
 Integration managers will often "wrap" a widget by using a widget `url` which points
 to the integration manager instead of to where the user requested the widget be. For
-example, a custom widget added in an integration manager for <https://chat.dingshunyu.top> will
-end up creating a widget with a URL like `https://integrations.example.org?widgetUrl=https%3A%2F%2Fchat.dingshunyu.top`.
+example, a custom widget added in an integration manager for <https://chat.imzqqq.top> will
+end up creating a widget with a URL like `https://integrations.example.org?widgetUrl=https%3A%2F%2Fchat.imzqqq.top`.
 
 The integration manager's wrapper will typically have another iframe to isolate the
 widget from the client by yet another layer. The wrapper often provides other functionality
@@ -74,7 +74,7 @@ people in the room, a plain WebRTC call is made instead of using a widget at all
 are defined in the Chat specification.
 
 The Meet widget created by Chat uses a local `jitsi.html` wrapper (or one hosted by
-`https://apps.chat.dingshunyu.top` for desktop users or those on non-https domains) as the widget
+`https://apps.chat.imzqqq.top` for desktop users or those on non-https domains) as the widget
 `url`. The wrapper has some basic functionality for talking to Chat to ensure the
 required `postMessage` calls are fulfilled.
 
@@ -85,7 +85,7 @@ client .well-known data.
 
 Whenever Chat sees a Meet widget, it ditches the `url` and instead replaces it with
 its local wrapper, much like what it would do when creating a widget. However, instead
-of using one from [apps.chat.dingshunyu.top](https://apps.chat.dingshunyu.top), it will use one local to the client instead.
+of using one from [apps.chat.imzqqq.top](https://apps.chat.imzqqq.top), it will use one local to the client instead.
 
 The wrapper is used to provide a consistent experience to users, as well as being faster
 and less risky to load. The local wrapper URL is populated with the conference information

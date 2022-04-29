@@ -48,7 +48,7 @@ data class DeviceKeys(
 
         /**
          * Required. Signatures for the device key object. A map from user ID, to a map from <algorithm>:<device_id> to the signature.
-         * The signature is calculated using the process described at https://chat.docs.dingshunyu.top/spec/appendices.html#signing-json.
+         * The signature is calculated using the process described at https://chat.docs.imzqqq.top/spec/appendices.html#signing-json.
          */
         @Json(name = "signatures")
         val signatures: Map<String, Map<String, String>>?

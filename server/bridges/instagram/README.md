@@ -20,4 +20,4 @@ Some quick links:
 contains a general overview of what is supported by the bridge.
 
 ## Discussion
-Matrix room: [`#instagram:maunium.net`](https://to.chat.dingshunyu.top/#/#instagram:maunium.net)
+Matrix room: [`#instagram:maunium.net`](https://to.chat.imzqqq.top/#/#instagram:maunium.net)

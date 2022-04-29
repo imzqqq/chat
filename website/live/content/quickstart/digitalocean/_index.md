@@ -43,7 +43,7 @@ As a bonus you'll get **$100 worth of service for free** if you sign up with Dig
 
 ## Configure
 
-With Live running you can begin to configure your new server by visiting the Admin located at `/admin`. Visit the [Configuration Instructions](https://live.docs.dingshunyu.top/docs/configuration) to learn how you can change your video settings, web page content, and more.
+With Live running you can begin to configure your new server by visiting the Admin located at `/admin`. Visit the [Configuration Instructions](https://live.docs.imzqqq.top/docs/configuration) to learn how you can change your video settings, web page content, and more.
 
 ## Notes
 
@@ -56,5 +56,5 @@ Since the DigitalOcean droplet comes with Live pre-installed you might find that
 1. ssh into your droplet as root: `ssh root@_your_droplet_ip`
 1. Run `cd /opt/owncast` to change directory.
 1. Stop Live from running by running `systemctl stop owncast`
-1. Run the Live installer as the owncast user: `su -c "curl https://live.dingshunyu.top/install.sh |bash" owncast`
+1. Run the Live installer as the owncast user: `su -c "curl https://live.imzqqq.top/install.sh |bash" owncast`
 1. Restart Live: `systemctl start owncast`

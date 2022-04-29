@@ -37,7 +37,7 @@ class UserDirectoryConfig(Config):
             #
             # If you set it true, you'll have to rebuild the user_directory search
             # indexes, see:
-            # https://chat.docs.dingshunyu.top/user_directory.html
+            # https://chat.docs.imzqqq.top/user_directory.html
             #
             # Uncomment to return search results containing all known users, even if that
             # user does not share a room with the requester.

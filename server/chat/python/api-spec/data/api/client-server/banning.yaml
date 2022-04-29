@@ -45,7 +45,7 @@ paths:
           name: roomId
           description: The room identifier (not alias) from which the user should be banned.
           required: true
-          x-example: "!e42d8c:chat.dingshunyu.top"
+          x-example: "!e42d8c:chat.imzqqq.top"
         - in: body
           name: body
           required: true
@@ -53,7 +53,7 @@ paths:
             type: object
             example: {
                 "reason": "Telling unfunny jokes",
-                "user_id": "@cheeky_monkey:chat.dingshunyu.top"
+                "user_id": "@cheeky_monkey:chat.imzqqq.top"
               }
             properties:
               user_id:
@@ -105,14 +105,14 @@ paths:
           name: roomId
           description: The room identifier (not alias) from which the user should be unbanned.
           required: true
-          x-example: "!e42d8c:chat.dingshunyu.top"
+          x-example: "!e42d8c:chat.imzqqq.top"
         - in: body
           name: body
           required: true
           schema:
             type: object
             example: {
-              "user_id": "@cheeky_monkey:chat.dingshunyu.top",
+              "user_id": "@cheeky_monkey:chat.imzqqq.top",
               "reason": "They've been banned long enough"
             }
             properties:

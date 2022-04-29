@@ -23,7 +23,7 @@ interface ReportingService {
 
     /**
      * Report content
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#post-matrix-client-r0-rooms-roomid-report-eventid
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#post-matrix-client-r0-rooms-roomid-report-eventid
      */
     suspend fun reportContent(eventId: String, score: Int, reason: String)
 }

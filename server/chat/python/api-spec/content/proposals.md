@@ -18,7 +18,7 @@ by everyone, having the proposal being accepted, then actually having
 your ideas implemented as committed changes to the [Specification
 repository](https://github.com/matrix-org/matrix-doc).
 
-Meet the [members of the Core Team](https://chat.dingshunyu.top/foundation), a
+Meet the [members of the Core Team](https://chat.imzqqq.top/foundation), a
 group of individuals tasked with ensuring the spec process is as smooth
 and painless as possible. Members of the Spec Core Team will do their
 best to participate in discussion, summarise when things become
@@ -205,14 +205,14 @@ is as follows:
         Sometimes trade-offs are required to meet this goal. Decisions
         should be made to the benefit of all major use cases.
     -   A good place to ask for feedback on a specific proposal is
-        [\#matrix-spec:chat.dingshunyu.top](https://to.chat.dingshunyu.top/#/#matrix-spec:chat.dingshunyu.top).
+        [\#matrix-spec:chat.imzqqq.top](https://to.chat.imzqqq.top/#/#matrix-spec:chat.imzqqq.top).
         If preferred, an alternative room can be created and advertised
-        in \#matrix-spec:chat.dingshunyu.top. Please also link to the room in
+        in \#matrix-spec:chat.imzqqq.top. Please also link to the room in
         your PR description.
     -   For additional discussion areas, know that
-        \#matrix-dev:chat.dingshunyu.top is for developers using existing Chat
-        APIs, \#matrix:chat.dingshunyu.top is for users trying to run Chat apps
-        (clients & servers) and \#matrix-architecture:chat.dingshunyu.top is for
+        \#matrix-dev:chat.imzqqq.top is for developers using existing Chat
+        APIs, \#matrix:chat.imzqqq.top is for users trying to run Chat apps
+        (clients & servers) and \#matrix-architecture:chat.imzqqq.top is for
         cross-cutting discussion of Chat's architectural design.
     -   The point of the spec proposal process is to be collaborative
         rather than competitive, and to try to solve the problem in
@@ -382,7 +382,7 @@ a branch/pull request to whichever implementation of choice that proves
 the MSC works in practice, though in some cases the MSC itself will be
 small enough to be considered proven. Where it's unclear if an MSC will
 require an implementation proof, ask in
-[\#matrix-spec:chat.dingshunyu.top](https://to.chat.dingshunyu.top/#/#matrix-spec:chat.dingshunyu.top).
+[\#matrix-spec:chat.imzqqq.top](https://to.chat.imzqqq.top/#/#matrix-spec:chat.imzqqq.top).
 
 ### Early release of an MSC/idea
 

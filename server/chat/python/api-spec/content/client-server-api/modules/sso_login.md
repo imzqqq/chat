@@ -93,7 +93,7 @@ These steps are illustrated as follows:
 
 {{% boxes/note %}}
 In the older [r0.4.0
-version](https://chat.api-spec.dingshunyu.top/client_server/r0.4.0.html#cas-based-client-login)
+version](https://chat.api-spec.imzqqq.top/client_server/r0.4.0.html#cas-based-client-login)
 of this specification it was possible to authenticate via CAS when the
 homeserver provides a `m.login.cas` login flow. This specification
 deprecates the use of `m.login.cas` to instead prefer `m.login.sso`,

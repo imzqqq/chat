@@ -74,7 +74,7 @@ NSString *const kMXRoomGuestAccessForbidden = @"forbidden";
 
 NSString *const kMXRoomMessageFormatHTML = @"org.matrix.custom.html";
 
-NSString *const kMXMatrixDotToUrl = @"https://to.chat.dingshunyu.top";
+NSString *const kMXMatrixDotToUrl = @"https://to.chat.imzqqq.top";
 
 
 #pragma mark - Analytics

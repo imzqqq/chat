@@ -141,7 +141,7 @@ class FilterTest {
     ): Status {
         return Status(
             id = "123",
-            url = "https://flow.dingshunyu.top/@Flow/100571663297225812",
+            url = "https://flow.imzqqq.top/@Flow/100571663297225812",
             account = mock(),
             inReplyToId = null,
             inReplyToAccountId = null,

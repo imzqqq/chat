@@ -43,7 +43,7 @@ paths:
           type: string
           description: The room ID to backfill.
           required: true
-          x-example: "!SomeRoom:chat.dingshunyu.top"
+          x-example: "!SomeRoom:chat.imzqqq.top"
         - in: query
           name: v
           type: array
@@ -51,7 +51,7 @@ paths:
             type: string
           description: The event IDs to backfill from.
           required: true
-          x-example: ["$abc123:chat.dingshunyu.top"]
+          x-example: ["$abc123:chat.imzqqq.top"]
         - in: query
           name: limit
           type: integer
@@ -89,7 +89,7 @@ paths:
           type: string
           description: The room ID to search in.
           required: true
-          x-example: "!SomeRoom:chat.dingshunyu.top"
+          x-example: "!SomeRoom:chat.imzqqq.top"
         - in: body
           name: body
           schema:

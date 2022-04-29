@@ -841,7 +841,7 @@
     <string name="settings_show_devices_list">Vidi ĉiujn miajn salutaĵojn</string>
     <string name="notification_initial_sync">Komenca spegulado…</string>
     <string name="bug_report_error_too_short">La priskribo estas tro mallonga</string>
-    <string name="permalink_malformed">Via ligilo al to.chat.dingshunyu.top estis misformita</string>
+    <string name="permalink_malformed">Via ligilo al to.chat.imzqqq.top estis misformita</string>
     <string name="template_soft_logout_sso_not_same_user_error">Ĉi tiu salutaĵo estas por uzanto %1$s kaj vi donas salutilojn por uzanto %2$s. ${app_name} ne subtenas tion.
 \nBonvolu unue vakigi datumojn, kaj poste saluti alian konton.</string>
     <string name="soft_logout_clear_data_dialog_submit">Vakigi datumojn</string>

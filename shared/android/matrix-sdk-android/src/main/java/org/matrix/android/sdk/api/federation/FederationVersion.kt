@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.api.federation
 
 /**
- * Ref: https://chat.docs.dingshunyu.top/spec/server_server/latest#get-matrix-federation-v1-version
+ * Ref: https://chat.docs.imzqqq.top/spec/server_server/latest#get-matrix-federation-v1-version
  */
 data class FederationVersion(
         /**

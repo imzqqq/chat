@@ -400,7 +400,7 @@
 "directory_server_all_rooms" = "Tous les salons sur le serveur %@";
 "directory_server_all_native_rooms" = "Tous les salons Matrix natifs";
 "directory_server_type_homeserver" = "Saisir un serveur d’accueil pour lister ses salons publics";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 // Others
 "or" = "ou";
 "you" = "Vous";
@@ -450,7 +450,7 @@
 "settings_user_interface" = "INTERFACE UTILISATEUR";
 // Events formatter
 "event_formatter_member_updates" = "%tu modifications dans les membres";
-"auth_home_server_placeholder" = "URL (par ex. https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (par ex. https://chat.imzqqq.top)";
 "auth_identity_server_placeholder" = "URL (par ex. https://vector.im)";
 "room_ongoing_conference_call_with_close" = "Téléconférence en cours. Rejoindre en %@ ou %@. %@.";
 "room_ongoing_conference_call_close" = "Fermer";
@@ -666,7 +666,7 @@
 "key_backup_setup_intro_manual_export_action" = "Exporter les clés manuellement";
 // String for App Store
 "store_short_description" = "Discussions et appels sécurisés et décentralisés";
-"store_full_description" = "Element est un nouveau type d’application de messagerie et de collaboration qui :\n\n1. Vous permet de préserver votre vie privée \n2. Vous permet de communiquer avec n’importe qui sur le réseau Matrix, et même plus en intégrant des applications telles que Slack \n3. Vous protège des pubs, du de l’extraction de vos données, des porte dérobées et des silos\n4. Vous protège avec le chiffrement de bout en bout et la signature croisée pour vérifier l’identité des autres\n\nElement est totalement différent des autres applications de messagerie et de collaboration puisqu’il est décentralisé et open source.\n\nElement vous permet de vous auto-héberger, ou de choisir un serveur, pour vous permettre de garder la main sur votre confidentialité, vos données et vous conversations. Il vous permet d’accéder à un réseau ouvert, de sorte à ce que vous ne soyez pas limité aux discussions avec les autres utilisateurs d’Element exclusivement. Il est très sécurisé.\n\nElement s’appuie sur Matrix - la norme pour les communications ouvertes et décentralisées.\n\nElement vous permet de choisir qui héberge vos conversations. Depuis l’application Element, vous pouvez choisir votre fournisseur de plusieurs manières :\n\n1. Inscrivez vous gratuitement sur les serveurs publics de chat.dingshunyu.top\n2. Hébergez votre compte sur votre propre serveur\n3. Obtenez un serveur personnalisé en vous abonnant a la plateforme d’hébergement Element Matrix Services\n\nPourquoi choisir Element ?\n\nVOS DONNÉES VOUS APPARTIENNENT : vous décidez où stocker vos données et messages. Ils vous appartiennent et vous les maîtrisez. Aucune multinationale ne viendra extraire vos données pour les envoyer au plus offrant.\n\nMESSAGERIE ET COLLABORATION OUVERTES : vous pouvez discuter avec tout le réseau Matrix, qu’ils utilisent Element ou une autre application Matrix, même s’ils utilisent une autre plateforme de messagerie telle que Slack, IRC ou XMPP.\n\nULTRA SÉCURISÉ : chiffrement de bout en bout (seuls les membres d’une conversation peuvent déchiffrer les messages), et signature croisée pour vérifier les appareils de vos interlocuteurs.\n\nTOUTES VOS COMMUNICATIONS : messagerie, appels audio et vidéo, partage de fichier, partage d’écran et un grand nombre d’intégrations, robots et widgets. Participez à des salons, des communautés, restez en contact et faites avancer vos projets.\n\nPARTOUT AVEC VOUS : votre historique reste synchronisé entre tous vos appareils et sur le web sur https://element.io/app.";
+"store_full_description" = "Element est un nouveau type d’application de messagerie et de collaboration qui :\n\n1. Vous permet de préserver votre vie privée \n2. Vous permet de communiquer avec n’importe qui sur le réseau Matrix, et même plus en intégrant des applications telles que Slack \n3. Vous protège des pubs, du de l’extraction de vos données, des porte dérobées et des silos\n4. Vous protège avec le chiffrement de bout en bout et la signature croisée pour vérifier l’identité des autres\n\nElement est totalement différent des autres applications de messagerie et de collaboration puisqu’il est décentralisé et open source.\n\nElement vous permet de vous auto-héberger, ou de choisir un serveur, pour vous permettre de garder la main sur votre confidentialité, vos données et vous conversations. Il vous permet d’accéder à un réseau ouvert, de sorte à ce que vous ne soyez pas limité aux discussions avec les autres utilisateurs d’Element exclusivement. Il est très sécurisé.\n\nElement s’appuie sur Matrix - la norme pour les communications ouvertes et décentralisées.\n\nElement vous permet de choisir qui héberge vos conversations. Depuis l’application Element, vous pouvez choisir votre fournisseur de plusieurs manières :\n\n1. Inscrivez vous gratuitement sur les serveurs publics de chat.imzqqq.top\n2. Hébergez votre compte sur votre propre serveur\n3. Obtenez un serveur personnalisé en vous abonnant a la plateforme d’hébergement Element Matrix Services\n\nPourquoi choisir Element ?\n\nVOS DONNÉES VOUS APPARTIENNENT : vous décidez où stocker vos données et messages. Ils vous appartiennent et vous les maîtrisez. Aucune multinationale ne viendra extraire vos données pour les envoyer au plus offrant.\n\nMESSAGERIE ET COLLABORATION OUVERTES : vous pouvez discuter avec tout le réseau Matrix, qu’ils utilisent Element ou une autre application Matrix, même s’ils utilisent une autre plateforme de messagerie telle que Slack, IRC ou XMPP.\n\nULTRA SÉCURISÉ : chiffrement de bout en bout (seuls les membres d’une conversation peuvent déchiffrer les messages), et signature croisée pour vérifier les appareils de vos interlocuteurs.\n\nTOUTES VOS COMMUNICATIONS : messagerie, appels audio et vidéo, partage de fichier, partage d’écran et un grand nombre d’intégrations, robots et widgets. Participez à des salons, des communautés, restez en contact et faites avancer vos projets.\n\nPARTOUT AVEC VOUS : votre historique reste synchronisé entre tous vos appareils et sur le web sur https://element.io/app.";
 "auth_login_single_sign_on" = "Se connecter avec l’authentification unique";
 "room_message_unable_open_link_error_message" = "Impossible d’ouvrir le lien.";
 "auth_autodiscover_invalid_response" = "Réponse de découverte du serveur d’accueil non valide";
@@ -1216,7 +1216,7 @@
 // MARK: - Room Info
 
 "room_info_list_one_member" = "1 membre";
-"create_room_placeholder_address" = "#salondetest:chat.dingshunyu.top";
+"create_room_placeholder_address" = "#salondetest:chat.imzqqq.top";
 "create_room_section_header_address" = "Adresse du salon";
 "create_room_show_in_directory" = "Publier le salon dans le répertoire";
 "create_room_section_footer_type" = "Les personnes ne rejoignent un salon privé que sur invitation.";

@@ -18,7 +18,7 @@ package org.matrix.android.sdk.internal.auth.version
 
 /**
  * Values will take the form "rX.Y.Z".
- * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#get-matrix-client-versions
+ * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#get-matrix-client-versions
  */
 internal data class HomeServerVersion(
         val major: Int,

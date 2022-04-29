@@ -57,7 +57,7 @@ Below are the templates Chat server will look for when generating the content of
           accepted yet, `False` otherwise
         * `notifs`: a list of events, or an empty list if `invite` is `True`. Each element
           is an object with the following attributes:
-            * `link`: a `to.chat.dingshunyu.top` link to the event
+            * `link`: a `to.chat.imzqqq.top` link to the event
             * `ts`: the time in milliseconds at which the event was received
             * `messages`: a list of messages containing one message before the event, the
               message in the event, and one message after the event. Each element is an
@@ -71,7 +71,7 @@ Below are the templates Chat server will look for when generating the content of
                 * `sender_avatar_url`: the avatar URL (as a `mxc://` URL) for the event's
                   sender
                 * `sender_hash`: a hash of the user ID of the sender
-        * `link`: a `to.chat.dingshunyu.top` link to the room
+        * `link`: a `to.chat.imzqqq.top` link to the room
     * `reason`: information on the event that triggered the email to be sent. It's an
       object with the following attributes:
         * `room_id`: the ID of the room the event was sent in

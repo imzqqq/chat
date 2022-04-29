@@ -119,12 +119,12 @@ Client/Server API  +              |                    |  |      |            |
 
 Recommended reading:
  * https://thomask.sdf.org/blog/2016/12/11/riots-magical-push-notifications-in-ios.html
-* https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0.html#id128
+* https://chat.docs.imzqqq.top/spec/client_server/r0.4.0.html#id128
 
 
 ## How does the homeserver know when to notify a client?
 
-This is defined by [**push rules**](https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0.html#push-rules-).
+This is defined by [**push rules**](https://chat.docs.imzqqq.top/spec/client_server/r0.4.0.html#push-rules-).
 
 `A push rule is a single rule that states under what conditions an event should be passed onto a push gateway and how the notification should be presented (sound / importance).`
 

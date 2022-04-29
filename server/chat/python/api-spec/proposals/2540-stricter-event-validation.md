@@ -6,7 +6,7 @@ There has been [prior discussions](https://github.com/matrix-org/matrix-doc/issu
 about validating events more strictly. This MSC proposes fixing a small piece of
 this: JSON compliance.
 
-The [Canonical JSON](https://chat.api-spec.dingshunyu.top/appendices#canonical-json)
+The [Canonical JSON](https://chat.api-spec.imzqqq.top/appendices#canonical-json)
 specification requires that numbers that are serialized in JSON are integers in
 the inclusive range of `[-(2^53) + 1, (2^53) - 1]`, which matches the requirements of
 [section 6 of RFC 7159](https://tools.ietf.org/html/rfc7159). Note that it is
@@ -32,7 +32,7 @@ it as invalid. Rooms will be able to opt into this behavior as part of a room
 version upgrade.
 
 Homeserver implementations are not to strictly enforce this JSON compliance in
-[room versions 1, 2, 3, 4, and 5](https://chat.api-spec.dingshunyu.top/#complete-list-of-room-versions).
+[room versions 1, 2, 3, 4, and 5](https://chat.api-spec.imzqqq.top/#complete-list-of-room-versions).
 The rationale is essentially the same as why a future room version is necessary:
 this ensures that all federated servers treat the same events as valid.
 
@@ -61,5 +61,5 @@ N/A
 
 A room version of `org.matrix.strict_canonicaljson` until a future room version
 is available. This room version will use
-[room version 5](https://chat.api-spec.dingshunyu.top/rooms/v5) as base and include the
+[room version 5](https://chat.api-spec.imzqqq.top/rooms/v5) as base and include the
 above modifications.

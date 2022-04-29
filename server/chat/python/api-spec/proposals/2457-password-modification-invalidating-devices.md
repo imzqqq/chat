@@ -12,7 +12,7 @@ These can be summarized into two groups:
 1. "My account has been compromised and I need to re-secure it."
 2. "I just want to change my password."
 
-The [current Chat specification](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#post-matrix-client-r0-account-password)
+The [current Chat specification](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#post-matrix-client-r0-account-password)
 does not provide a way to differentiate between these use cases. It currently
 specifies behavior that fits well into the first use-case above: that the
 sessions except the current session should be revoked.
@@ -29,7 +29,7 @@ Alternately a client may default to whichever workflow is best for their users.
 
 ## Proposal
 
-An optional field is added to the JSON body of the [password reset endpoint](https://chat.api-spec.dingshunyu.top/client_server/r0.6.0#post-matrix-client-r0-account-password)
+An optional field is added to the JSON body of the [password reset endpoint](https://chat.api-spec.imzqqq.top/client_server/r0.6.0#post-matrix-client-r0-account-password)
 called `logout_devices`. This is a boolean flag (defaulting to `true`) that
 signals to whether other devices and sessions should be invalidated after
 modifying the password.

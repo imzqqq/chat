@@ -32,7 +32,7 @@ matrix_bot_mjolnir_access_token: ""
 
 # The room ID where people can use the bot. The bot has no access controls, so
 # anyone in this room can use the bot - secure your room!
-# This should be a room alias or room ID - not a to.chat.dingshunyu.top URL.
+# This should be a room alias or room ID - not a to.chat.imzqqq.top URL.
 # Note: Mjolnir is fairly verbose - expect a lot of messages from it.
 matrix_bot_mjolnir_management_room: ""
 

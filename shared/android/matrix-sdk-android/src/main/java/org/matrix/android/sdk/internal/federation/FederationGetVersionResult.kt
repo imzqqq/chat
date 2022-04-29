@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Ref: https://chat.docs.dingshunyu.top/spec/server_server/latest#get-matrix-federation-v1-version
+ * Ref: https://chat.docs.imzqqq.top/spec/server_server/latest#get-matrix-federation-v1-version
  */
 @JsonClass(generateAdapter = true)
 internal data class FederationGetVersionResult(

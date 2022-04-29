@@ -4,9 +4,9 @@ import XCTest
 class URLPreviewStoreTests: XCTestCase {
     var store: URLPreviewStore!
     
-    /// Creates mock URL preview data for chat.dingshunyu.top
+    /// Creates mock URL preview data for chat.imzqqq.top
     func matrixPreview() -> URLPreviewData {
-        let preview = URLPreviewData(url: URL(string: "https://www.chat.dingshunyu.top/")!,
+        let preview = URLPreviewData(url: URL(string: "https://www.chat.imzqqq.top/")!,
                                      eventID: "",
                                      roomID: "",
                                      siteName: "Matrix",

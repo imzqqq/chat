@@ -1,10 +1,10 @@
 import PermalinkConstructor, { PermalinkParts } from "./PermalinkConstructor";
 
-export const host = "to.chat.dingshunyu.top";
+export const host = "to.chat.imzqqq.top";
 export const baseUrl = `https://${host}`;
 
 /**
- * Generates to.chat.dingshunyu.top permalinks
+ * Generates to.chat.imzqqq.top permalinks
  */
 export default class SpecPermalinkConstructor extends PermalinkConstructor {
     constructor() {

@@ -8,13 +8,13 @@ describe('editor/serialize', function() {
         const pc = createPartCreator();
         const model = new EditorModel([pc.userPill("Alice", "@alice:hs.tld")]);
         const html = htmlSerializeIfNeeded(model, {});
-        expect(html).toBe("<a href=\"https://to.chat.dingshunyu.top/#/@alice:hs.tld\">Alice</a>");
+        expect(html).toBe("<a href=\"https://to.chat.imzqqq.top/#/@alice:hs.tld\">Alice</a>");
     });
     it('room pill turns message into html', function() {
         const pc = createPartCreator();
         const model = new EditorModel([pc.roomPill("#room:hs.tld")]);
         const html = htmlSerializeIfNeeded(model, {});
-        expect(html).toBe("<a href=\"https://to.chat.dingshunyu.top/#/#room:hs.tld\">#room:hs.tld</a>");
+        expect(html).toBe("<a href=\"https://to.chat.imzqqq.top/#/#room:hs.tld\">#room:hs.tld</a>");
     });
     it('@room pill turns message into html', function() {
         const pc = createPartCreator();
@@ -32,19 +32,19 @@ describe('editor/serialize', function() {
         const pc = createPartCreator();
         const model = new EditorModel([pc.userPill("Displayname\\", "@user:server")]);
         const html = htmlSerializeIfNeeded(model, {});
-        expect(html).toBe("<a href=\"https://to.chat.dingshunyu.top/#/@user:server\">Displayname\\</a>");
+        expect(html).toBe("<a href=\"https://to.chat.imzqqq.top/#/@user:server\">Displayname\\</a>");
     });
     it('displaynames containing an opening square bracket work', function() {
         const pc = createPartCreator();
         const model = new EditorModel([pc.userPill("Displayname[[", "@user:server")]);
         const html = htmlSerializeIfNeeded(model, {});
-        expect(html).toBe("<a href=\"https://to.chat.dingshunyu.top/#/@user:server\">Displayname[[</a>");
+        expect(html).toBe("<a href=\"https://to.chat.imzqqq.top/#/@user:server\">Displayname[[</a>");
     });
     it('displaynames containing a closing square bracket work', function() {
         const pc = createPartCreator();
         const model = new EditorModel([pc.userPill("Displayname]", "@user:server")]);
         const html = htmlSerializeIfNeeded(model, {});
-        expect(html).toBe("<a href=\"https://to.chat.dingshunyu.top/#/@user:server\">Displayname]</a>");
+        expect(html).toBe("<a href=\"https://to.chat.imzqqq.top/#/@user:server\">Displayname]</a>");
     });
     it('escaped markdown should not retain backslashes', function() {
         const pc = createPartCreator();

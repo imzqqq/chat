@@ -81,7 +81,7 @@ extern NSString *const kMXProtocolVectorSipVirtual;
 
 /**
  The `MXCallManager` object manages calls for a given Matrix session.
- It manages call signaling over Matrix (@see http://chat.dingshunyu.top/docs/spec/#id9) and then opens
+ It manages call signaling over Matrix (@see http://chat.imzqqq.top/docs/spec/#id9) and then opens
  a stream between peers devices using a third party VoIP library.
  */
 @interface MXCallManager : NSObject

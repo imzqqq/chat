@@ -44,7 +44,7 @@ paths:
           type: string
           description: The room ID to exchange a third party invite in
           required: true
-          x-example: "!abc123:chat.dingshunyu.top"
+          x-example: "!abc123:chat.imzqqq.top"
         - in: body
           name: body
           type: object
@@ -62,13 +62,13 @@ paths:
                 description: |-
                   The room ID the event is for. Must match the ID given in
                   the path.
-                example: "!abc123:chat.dingshunyu.top"
+                example: "!abc123:chat.imzqqq.top"
               sender:
                 type: string
                 description: |-
                   The user ID of the user who sent the original `m.room.third_party_invite`
                   event.
-                example: "@joe:chat.dingshunyu.top"
+                example: "@joe:chat.imzqqq.top"
               state_key:
                 type: string
                 description: The user ID of the invited user
@@ -172,8 +172,8 @@ paths:
               - content
           example: {
             "type": "m.room.member",
-            "room_id": "!abc123:chat.dingshunyu.top",
-            "sender": "@joe:chat.dingshunyu.top",
+            "room_id": "!abc123:chat.imzqqq.top",
+            "sender": "@joe:chat.imzqqq.top",
             "state_key": "@someone:example.org",
             "content": {
               "membership": "invite",
@@ -232,7 +232,7 @@ paths:
               mxid:
                 type: string
                 description: The user that is now bound to the third party identifier.
-                example: "@alice:chat.dingshunyu.top"
+                example: "@alice:chat.imzqqq.top"
               invites:
                 type: array
                 description: |-
@@ -255,7 +255,7 @@ paths:
                     mxid:
                       type: string
                       description: The now-bound user ID that received the invite.
-                      example: "@alice:chat.dingshunyu.top"
+                      example: "@alice:chat.imzqqq.top"
                     room_id:
                       type: string
                       description: The room ID the invite is valid for.
@@ -263,7 +263,7 @@ paths:
                     sender:
                       type: string
                       description: The user ID that sent the invite.
-                      example: "@bob:chat.dingshunyu.top"
+                      example: "@bob:chat.imzqqq.top"
                     # TODO (TravisR): Make this reusable when doing IS spec changes
                     #   also make sure it isn't lying about anything, like the key version
                     signed:
@@ -278,7 +278,7 @@ paths:
                           description: |-
                             The user ID that has been bound to the third party
                             identifier.
-                          example: "@alice:chat.dingshunyu.top"
+                          example: "@alice:chat.imzqqq.top"
                         token:
                           type: string
                           # TODO: What is this actually?

@@ -27,7 +27,7 @@ verification as a whole.
 ## Proposal
 
 Two new event types are added to the [key verification
-framework](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#key-verification-framework)
+framework](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#key-verification-framework)
 when verifying in to-device messages.  The new event
 types are already described in [MSC2241 (Key verification in
 DMs)](https://github.com/matrix-org/matrix-doc/pull/2241).  This proposal adds

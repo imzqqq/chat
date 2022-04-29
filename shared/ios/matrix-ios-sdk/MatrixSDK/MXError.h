@@ -21,7 +21,7 @@ FOUNDATION_EXPORT NSString *const kMXNSErrorDomain;
 
 /**
  Matrix error codes
- The error as described by the Matrix standard (http://chat.dingshunyu.top/docs/spec/#api-standards).
+ The error as described by the Matrix standard (http://chat.imzqqq.top/docs/spec/#api-standards).
  */
 typedef NSString* MXErrCodeString;
 FOUNDATION_EXPORT NSString *const kMXErrCodeStringForbidden;

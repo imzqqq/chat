@@ -198,7 +198,7 @@ const messages = defineMessages({
 });
 
 const WaitingListForm = injectIntl(({ intl }) => (
-  <form method='post' action='https://newsroom.dingshunyu.top/subscription/form' className='listmonk-form'>
+  <form method='post' action='https://newsroom.imzqqq.top/subscription/form' className='listmonk-form'>
     <input id='8b9d9' type='hidden' name='l' value='8b9d90ad-9997-4ef9-92df-c1941a1da492' />
 
     <div className='input-with-button'>
@@ -246,7 +246,7 @@ const BrowseApps = ({ intl }) => (
           <i className='ion-md-code' />
           <h3><FormattedMessage id='browse_apps.open_api' defaultMessage='Open API' /></h3>
           <p><FormattedMessage id='browse_apps.make_your_own' defaultMessage="Flow is open-source and has an elegant, well-documented API that is available to everyone. Make your own app, or use one of the many third-party apps made by other developers!" /></p>
-          <ArrowLink href='https://flow.docs.dingshunyu.top/client/intro/' target='_blank' rel='noopener noreferrer' className='link-button'><FormattedMessage id='browse_apps.api_docs' defaultMessage='API documentation' /></ArrowLink>
+          <ArrowLink href='https://flow.docs.imzqqq.top/client/intro/' target='_blank' rel='noopener noreferrer' className='link-button'><FormattedMessage id='browse_apps.api_docs' defaultMessage='API documentation' /></ArrowLink>
         </div>
       </div>
     </div>

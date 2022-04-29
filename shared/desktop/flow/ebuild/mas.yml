@@ -30,7 +30,7 @@ mac:
 # Note that you will need the proper entitlements files for the following keys below. Refer to
 # the Flow Desktop documentation regarding what keys will need to be inserted into the
 # entitlements files:
-# https://flow..docs.dingshunyu.top/desktop-build-desktop.html
+# https://flow..docs.imzqqq.top/desktop-build-desktop.html
 mas:
     entitlements: desktop/entitlements.mas.plist
     entitlementsInherit: desktop/entitlements.mas.inherit.plist

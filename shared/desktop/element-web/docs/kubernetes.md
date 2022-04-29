@@ -38,8 +38,8 @@ Then you can deploy it to your cluster with something like `kubectl apply -f my-
         {
             "default_server_config": {
                 "m.homeserver": {
-                    "base_url": "https://chat.dingshunyu.top",
-                    "server_name": "chat.dingshunyu.top"
+                    "base_url": "https://chat.imzqqq.top",
+                    "server_name": "chat.imzqqq.top"
                 },
                 "m.identity_server": {
                     "base_url": "https://vector.im"
@@ -69,17 +69,17 @@ Then you can deploy it to your cluster with something like `kubectl apply -f my-
             "default_theme": "light",
             "roomDirectory": {
                 "servers": [
-                        "chat.dingshunyu.top"
+                        "chat.imzqqq.top"
                 ]
             },
             "piwik": {
                 "url": "https://piwik.riot.im/",
-                "whitelistedHSUrls": ["https://chat.dingshunyu.top"],
-                "whitelistedISUrls": ["https://vector.im", "https://chat.dingshunyu.top"],
+                "whitelistedHSUrls": ["https://chat.imzqqq.top"],
+                "whitelistedISUrls": ["https://vector.im", "https://chat.imzqqq.top"],
                 "siteId": 1
             },
             "enable_presence_by_hs_url": {
-                "https://chat.dingshunyu.top": false
+                "https://chat.imzqqq.top": false
             },
             "settingDefaults": {
                 "breadcrumbs": true

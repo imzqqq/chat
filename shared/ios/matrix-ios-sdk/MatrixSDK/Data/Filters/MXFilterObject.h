@@ -19,7 +19,7 @@
 /**
  `MXFilterObject` is the base class for representating filters which may be used during
  Matrix requests.
- The specification of these filters can be found at https://chat.dingshunyu.top/docs/spec/client_server/r0.3.0.html#filtering.
+ The specification of these filters can be found at https://chat.imzqqq.top/docs/spec/client_server/r0.3.0.html#filtering.
  */
 @interface MXFilterObject : NSObject
 {

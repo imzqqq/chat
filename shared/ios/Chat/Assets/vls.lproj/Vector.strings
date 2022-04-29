@@ -10,7 +10,7 @@
 // Actions
 "view" = "Toogn";
 "next" = "Volgende";
-"store_full_description" = "Communiceert ip joun manier.\n\nE chat-app, onder joun controle en zeer flexibel. Chat lat je communiceern lyk of da je wilt. Gemakt vo [matrix] - de standoard voor open, gedecentraliseerde communicoasje.\n\nMakt e gratis account aan ip chat.dingshunyu.top, verkrygt jen eigen server ip https://modular.im, of gebruukt een andere Matrix-server.\n\nVowa zoun ’kik vo Chat.im kiezn?\n\n• VOLLEDIGE COMMUNICOASJE: makt gesprekkn an rond je teams, je moats, je gemeenschap - gelyk of da je gy ’t mo wilt! Chat, deelt bestandn, voegt widgets toe en makt stem- en video-iproepn - ollemoale volledig gratis.\n\n• KRACHTIGE INTEGROASJE: gebruukt Chat.im met de hulpmiddeln woamee da je vertrouwd zyt. Me Chat.im ku je zelfst chattn me gebrukers en groepn ip andere chat-apps.\n\n• PRIVÉ EN VEILIG: houdt je gesprekkn geheim. End-tout-end-versleuterienge van de bovenste plank zorgt dervoorn da je privécommunicoasje ook privé bluuft.\n\n• OPEN, NIE GESLOOTN: vrye software, gebouwd ip Matrix. Zy den boas over jen eigen gegeevns deur jen eigen server te gebruukn, of te kiezn voor een andere server da je vertrouwt.\n\n• WOA DA J’OOK ZYT: houdt contact woa da j’ook zyt me volledig gesynchroniseerde berichtgeschiedenisse ip al je toestelln, en online ip https://apps.chat.dingshunyu.top.";
+"store_full_description" = "Communiceert ip joun manier.\n\nE chat-app, onder joun controle en zeer flexibel. Chat lat je communiceern lyk of da je wilt. Gemakt vo [matrix] - de standoard voor open, gedecentraliseerde communicoasje.\n\nMakt e gratis account aan ip chat.imzqqq.top, verkrygt jen eigen server ip https://modular.im, of gebruukt een andere Matrix-server.\n\nVowa zoun ’kik vo Chat.im kiezn?\n\n• VOLLEDIGE COMMUNICOASJE: makt gesprekkn an rond je teams, je moats, je gemeenschap - gelyk of da je gy ’t mo wilt! Chat, deelt bestandn, voegt widgets toe en makt stem- en video-iproepn - ollemoale volledig gratis.\n\n• KRACHTIGE INTEGROASJE: gebruukt Chat.im met de hulpmiddeln woamee da je vertrouwd zyt. Me Chat.im ku je zelfst chattn me gebrukers en groepn ip andere chat-apps.\n\n• PRIVÉ EN VEILIG: houdt je gesprekkn geheim. End-tout-end-versleuterienge van de bovenste plank zorgt dervoorn da je privécommunicoasje ook privé bluuft.\n\n• OPEN, NIE GESLOOTN: vrye software, gebouwd ip Matrix. Zy den boas over jen eigen gegeevns deur jen eigen server te gebruukn, of te kiezn voor een andere server da je vertrouwt.\n\n• WOA DA J’OOK ZYT: houdt contact woa da j’ook zyt me volledig gesynchroniseerde berichtgeschiedenisse ip al je toestelln, en online ip https://apps.chat.imzqqq.top.";
 "back" = "Weere";
 "continue" = "Verdergoan";
 "create" = "Anmoakn";
@@ -56,8 +56,8 @@
 "auth_phone_placeholder" = "Telefongnumero";
 "auth_repeat_password_placeholder" = "Paswoord herhoaln";
 "auth_repeat_new_password_placeholder" = "Bevestigt je nieuw paswoord";
-"auth_home_server_placeholder" = "URL (bv. https://chat.dingshunyu.top)";
-"auth_identity_server_placeholder" = "URL (bv. https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (bv. https://chat.imzqqq.top)";
+"auth_identity_server_placeholder" = "URL (bv. https://chat.imzqqq.top)";
 "auth_invalid_login_param" = "Verkeerd(e) gebrukersnoame en/of paswoord";
 "auth_invalid_user_name" = "Gebrukersnoamn meugn alleene mo letters, cyfers, puntn, koppelteekns en underscores bevattn";
 "auth_invalid_password" = "’t Paswoord is te kort (min 6)";

@@ -17,7 +17,7 @@ data class MatrixConfiguration(
                 "https://scalar-staging.riot.im/scalar/api"
         ),
         /**
-         * Optional base url to create client permalinks (eg. https://www.example.com/#/) instead of Matrix ones (to.chat.dingshunyu.top links).
+         * Optional base url to create client permalinks (eg. https://www.example.com/#/) instead of Matrix ones (to.chat.imzqqq.top links).
          * Do not forget to add the "#" which is required by the permalink parser.
          *
          * Note: this field is only used for permalinks creation, you will also have to edit the string-array `permalink_supported_hosts` in the config file

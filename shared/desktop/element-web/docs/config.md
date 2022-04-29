@@ -88,7 +88,7 @@ For a good example, see <../config/config.sample.json>.
 21. `disable_custom_urls`: disallow the user to change the
    default homeserver when signing up or logging in.
 22. `permalinkPrefix`: Used to change the URL that Chat generates permalinks with.
-   By default, this is "https://to.chat.dingshunyu.top" to generate to.chat.dingshunyu.top (spec) permalinks.
+   By default, this is "https://to.chat.imzqqq.top" to generate to.chat.imzqqq.top (spec) permalinks.
    Set this to your Chat instance URL if you run an unfederated server (eg:
    "https://element.example.org").
 23. `jitsi`: Used to change the default conference options. Learn more about the
@@ -109,7 +109,7 @@ For a good example, see <../config/config.sample.json>.
 28. `default_federate`: Default option for room federation when creating a room
     Defaults to true (room federation enabled).
 29. `desktopBuilds`: Used to alter promotional links to the desktop app. By default
-   the builds are considered available and accessible from <https://apps.chat.dingshunyu.top>. This
+   the builds are considered available and accessible from <https://apps.chat.imzqqq.top>. This
    config option is typically used in the context of encouraging encrypted message
    search capabilities (Seshat). All the options listed below are required if this
    option is specified.
@@ -118,15 +118,15 @@ For a good example, see <../config/config.sample.json>.
       an SVG.
 32. `url`: An HTTP URL for where to send the user to download the desktop build.
 33. `mobileBuilds`: Used to alter promotional links to the mobile app. By default the
-   builds are considered available and accessible from <https://apps.chat.dingshunyu.top>. This config
+   builds are considered available and accessible from <https://apps.chat.imzqqq.top>. This config
    option is typically used in a context of encouraging the user to try the mobile app
    instead of a mobile/incompatible browser.
 34. `ios`: The URL to the iOS build. If `null`, it will be assumed to be not available.
-       If not set, the default apps.chat.dingshunyu.top builds will be used.
+       If not set, the default apps.chat.imzqqq.top builds will be used.
 35. `android`: The URL to the Android build. If `null`, it will be assumed to be not available.
-       If not set, the default apps.chat.dingshunyu.top builds will be used.
+       If not set, the default apps.chat.imzqqq.top builds will be used.
 36. `fdroid`: The URL to the FDroid build. If `null`, it will be assumed to be not available.
-      If not set, the default apps.chat.dingshunyu.top builds will be used.
+      If not set, the default apps.chat.imzqqq.top builds will be used.
 37. `mobileGuideToast`: Whether to show a toast a startup which nudges users on
    iOS and Android towards the native mobile apps. The toast redirects to the
    mobile guide if they accept. Defaults to false.
@@ -178,7 +178,7 @@ user to set an identity server first when attempting to use features that
 require one.
 
 Currently, the only two public identity servers are <https://vector.im> and
-<https://chat.dingshunyu.top>, however in the future identity servers will be
+<https://chat.imzqqq.top>, however in the future identity servers will be
 decentralized.
 
 ## Desktop app configuration

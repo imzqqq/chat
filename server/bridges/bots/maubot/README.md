@@ -12,7 +12,7 @@ All setup and usage instructions are located on
 * [Encryption](https://docs.mau.fi/maubot/usage/encryption.html)
 
 ## Discussion
-Matrix room: [#maubot:maunium.net](https://to.chat.dingshunyu.top/#/#maubot:maunium.net)
+Matrix room: [#maubot:maunium.net](https://to.chat.imzqqq.top/#/#maubot:maunium.net)
 
 ## Plugins
 Open a pull request or join the Matrix room linked above to get your plugin listed here.

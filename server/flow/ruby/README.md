@@ -4,7 +4,7 @@ Flow is a **free, open-source social network server** based on ActivityPub where
 
 ## Features
 
-<img src="http://flow.docs.dingshunyu.top/elephant.svg" align="right" width="30%" />
+<img src="http://flow.docs.imzqqq.top/elephant.svg" align="right" width="30%" />
 
 **No vendor lock-in: Fully interoperable with any conforming platform**
 
@@ -53,6 +53,6 @@ sudo systemctl enable --now flow-web flow-sidekiq flow-streaming
 - **Ruby** 2.5+
 - **Node.js** 12+
 
-The repository includes deployment configurations for **Docker and docker-compose**, but also a few specific platforms like **Heroku**, **Scalingo**, and **Nanobox**. The [**stand-alone** installation guide](https://flow.docs.dingshunyu.top/admin/install) is available in the documentation.
+The repository includes deployment configurations for **Docker and docker-compose**, but also a few specific platforms like **Heroku**, **Scalingo**, and **Nanobox**. The [**stand-alone** installation guide](https://flow.docs.imzqqq.top/admin/install) is available in the documentation.
 
 A **Vagrant** configuration is included for development purposes.

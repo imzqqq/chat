@@ -43,12 +43,12 @@
 
 - (void)testMatrixIdentifiers
 {
-    // Tests on homeserver domain (https://chat.dingshunyu.top/docs/spec/legacy/#users)
-    XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@bob:chat.dingshunyu.top"]);
-    XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@bob:chat1234.chat.dingshunyu.top"]);
-    XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@bob:chat-1234.chat.dingshunyu.top"]);
-    XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@bob:chat-1234.aa.bbbb.chat.dingshunyu.top"]);
-    XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@bob:chat.dingshunyu.top:8480"]);
+    // Tests on homeserver domain (https://chat.imzqqq.top/docs/spec/legacy/#users)
+    XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@bob:chat.imzqqq.top"]);
+    XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@bob:chat1234.chat.imzqqq.top"]);
+    XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@bob:chat-1234.chat.imzqqq.top"]);
+    XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@bob:chat-1234.aa.bbbb.chat.imzqqq.top"]);
+    XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@bob:chat.imzqqq.top:8480"]);
     XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@bob:localhost"]);
     XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@bob:localhost:8480"]);
     XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@bob:127.0.0.1"]);
@@ -56,45 +56,45 @@
     
     XCTAssertFalse([MXTools isMatrixUserIdentifier:@"@bob:matrix+25.org"]);
     XCTAssertFalse([MXTools isMatrixUserIdentifier:@"@bob:matrix[].org"]);
-    XCTAssertFalse([MXTools isMatrixUserIdentifier:@"@bob:chat.dingshunyu.top."]);
-    XCTAssertFalse([MXTools isMatrixUserIdentifier:@"@bob:chat.dingshunyu.top-"]);
+    XCTAssertFalse([MXTools isMatrixUserIdentifier:@"@bob:chat.imzqqq.top."]);
+    XCTAssertFalse([MXTools isMatrixUserIdentifier:@"@bob:chat.imzqqq.top-"]);
     XCTAssertFalse([MXTools isMatrixUserIdentifier:@"@bob:matrix-.org"]);
     XCTAssertFalse([MXTools isMatrixUserIdentifier:@"@bob:matrix.&aaz.org"]);
     
-    XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@Bob:chat.dingshunyu.top"]);
-    XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@bob1234:chat.dingshunyu.top"]);
-    XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@+33012:chat.dingshunyu.top"]);
+    XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@Bob:chat.imzqqq.top"]);
+    XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@bob1234:chat.imzqqq.top"]);
+    XCTAssertTrue([MXTools isMatrixUserIdentifier:@"@+33012:chat.imzqqq.top"]);
 
-    XCTAssertTrue([MXTools isMatrixEventIdentifier:@"$123456EventId:chat.dingshunyu.top"]);
+    XCTAssertTrue([MXTools isMatrixEventIdentifier:@"$123456EventId:chat.imzqqq.top"]);
     XCTAssertTrue([MXTools isMatrixEventIdentifier:@"$pmOSN/DognfuSfhdW/qivXT19lfCWpdSfaPFKDBTJUk+"]);
 
-    XCTAssertTrue([MXTools isMatrixRoomIdentifier:@"!an1234Room:chat.dingshunyu.top"]);
+    XCTAssertTrue([MXTools isMatrixRoomIdentifier:@"!an1234Room:chat.imzqqq.top"]);
 
-    XCTAssertTrue([MXTools isMatrixRoomAlias:@"#matrix:chat.dingshunyu.top"]);
-    XCTAssertTrue([MXTools isMatrixRoomAlias:@"#matrix:chat.dingshunyu.top:1234"]);
+    XCTAssertTrue([MXTools isMatrixRoomAlias:@"#matrix:chat.imzqqq.top"]);
+    XCTAssertTrue([MXTools isMatrixRoomAlias:@"#matrix:chat.imzqqq.top:1234"]);
 
-    XCTAssertTrue([MXTools isMatrixGroupIdentifier:@"+matrix:chat.dingshunyu.top"]);
+    XCTAssertTrue([MXTools isMatrixGroupIdentifier:@"+matrix:chat.imzqqq.top"]);
 }
 
 
 #pragma mark - Strings encoding
 
-// Matrix identifiers can be found at https://chat.dingshunyu.top/docs/spec/appendices.html#common-identifier-format
+// Matrix identifiers can be found at https://chat.imzqqq.top/docs/spec/appendices.html#common-identifier-format
 - (void)testRoomIdEscaping
 {
-    NSString *string = @"!tDRGDwZwQnlkowsjsm:chat.dingshunyu.top";
+    NSString *string = @"!tDRGDwZwQnlkowsjsm:chat.imzqqq.top";
     XCTAssertEqualObjects([MXTools encodeURIComponent:string], @"!tDRGDwZwQnlkowsjsm%3Amatrix.org");
 }
 
 - (void)testRoomAliasEscaping
 {
-    NSString *string = @"#riot-ios:chat.dingshunyu.top";
+    NSString *string = @"#riot-ios:chat.imzqqq.top";
     XCTAssertEqualObjects([MXTools encodeURIComponent:string], @"%23riot-ios%3Amatrix.org");
 }
 
 - (void)testEventIdEscaping
 {
-    NSString *string = @"$155006612045UiBxj:chat.dingshunyu.top";
+    NSString *string = @"$155006612045UiBxj:chat.imzqqq.top";
     XCTAssertEqualObjects([MXTools encodeURIComponent:string], @"%24155006612045UiBxj%3Amatrix.org");
 }
 
@@ -106,7 +106,7 @@
 
 - (void)testGroupIdEscaping
 {
-    NSString *string = @"+matrix:chat.dingshunyu.top";
+    NSString *string = @"+matrix:chat.imzqqq.top";
     XCTAssertEqualObjects([MXTools encodeURIComponent:string], @"%2Bmatrix%3Amatrix.org");
 }
 

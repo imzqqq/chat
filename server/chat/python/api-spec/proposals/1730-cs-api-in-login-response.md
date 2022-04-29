@@ -19,7 +19,7 @@ The response to `POST /chat/client/r0/login` currently includes the fields
 
 We will add to this the the field `well_known`, which has the same format as
 the [`/.well-known/matrix/client`
-object](https://chat.api-spec.dingshunyu.top/client_server/r0.4.0.html#get-well-known-matrix-client).
+object](https://chat.api-spec.imzqqq.top/client_server/r0.4.0.html#get-well-known-matrix-client).
 
 Servers MAY add this field to the login response if they wish to redirect
 clients to an alternative homeserver after login. Clients SHOULD use the

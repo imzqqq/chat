@@ -23,7 +23,7 @@ describe('RichRepliesPreprocessor', () => {
                 },
                 format: "org.matrix.custom.html",
                 body: `> <${originalUserId}> ${originalPlainText}\n\n${replyPlainText}`,
-                formatted_body: `<mx-reply><blockquote><a href="https://to.chat.dingshunyu.top/#/${originalRoomId}/${originalEventId}">In reply to</a> <a href="https://to.chat.dingshunyu.top/#/${originalUserId}">${originalUserId}</a><br />${originalHtml}</blockquote></mx-reply>${replyHtml}`,
+                formatted_body: `<mx-reply><blockquote><a href="https://to.chat.imzqqq.top/#/${originalRoomId}/${originalEventId}">In reply to</a> <a href="https://to.chat.imzqqq.top/#/${originalUserId}">${originalUserId}</a><br />${originalHtml}</blockquote></mx-reply>${replyHtml}`,
             },
         };
         const event2 = {
@@ -35,7 +35,7 @@ describe('RichRepliesPreprocessor', () => {
                 },
                 format: "org.matrix.custom.html",
                 body: `> <${originalUserId}> ${originalPlainText}\n\n${replyPlainText}`,
-                formatted_body: `<mx-reply><blockquote><a href="https://to.chat.dingshunyu.top/#/${originalRoomId}/${originalEventId}">In reply to</a> <a href="https://to.chat.dingshunyu.top/#/${originalUserId}">${originalUserId}</a><br />${originalHtml}</blockquote></mx-reply>${replyHtml}`,
+                formatted_body: `<mx-reply><blockquote><a href="https://to.chat.imzqqq.top/#/${originalRoomId}/${originalEventId}">In reply to</a> <a href="https://to.chat.imzqqq.top/#/${originalUserId}">${originalUserId}</a><br />${originalHtml}</blockquote></mx-reply>${replyHtml}`,
             },
         };
         let result = await processor.processEvent(event1, client, EventKind.EphemeralEvent);
@@ -105,7 +105,7 @@ describe('RichRepliesPreprocessor', () => {
                 },
                 format: "org.matrix.custom.html",
                 body: `> <${originalUserId}> ${originalPlainText}\n\n${replyPlainText}`,
-                formatted_body: `<mx-reply><blockquote><a href="https://to.chat.dingshunyu.top/#/${originalRoomId}/${originalEventId}">In reply to</a> <a href="https://to.chat.dingshunyu.top/#/${originalUserId}">${originalUserId}</a><br />${originalHtml}</blockquote></mx-reply>${replyHtml}`,
+                formatted_body: `<mx-reply><blockquote><a href="https://to.chat.imzqqq.top/#/${originalRoomId}/${originalEventId}">In reply to</a> <a href="https://to.chat.imzqqq.top/#/${originalUserId}">${originalUserId}</a><br />${originalHtml}</blockquote></mx-reply>${replyHtml}`,
             },
         };
 
@@ -152,7 +152,7 @@ describe('RichRepliesPreprocessor', () => {
                 },
                 format: "org.matrix.custom.html",
                 body: `> <${originalUserId}> ${originalPlainText.split('\n').join('\n> ')}\n\n${replyPlainText}`,
-                formatted_body: `<mx-reply><blockquote><a href="https://to.chat.dingshunyu.top/#/${originalRoomId}/${originalEventId}">In reply to</a> <a href="https://to.chat.dingshunyu.top/#/${originalUserId}">${originalUserId}</a><br />${originalHtml}</blockquote></mx-reply>${replyHtml}`,
+                formatted_body: `<mx-reply><blockquote><a href="https://to.chat.imzqqq.top/#/${originalRoomId}/${originalEventId}">In reply to</a> <a href="https://to.chat.imzqqq.top/#/${originalUserId}">${originalUserId}</a><br />${originalHtml}</blockquote></mx-reply>${replyHtml}`,
             },
         };
 
@@ -209,7 +209,7 @@ describe('RichRepliesPreprocessor', () => {
                 },
                 format: "org.matrix.custom.html",
                 body: `> <${originalUserId}> ${originalPlainText.split('\n').join('\n> ')}\n\n${replyPlainText}`,
-                formatted_body: `<mx-reply><blockquote><a href="https://to.chat.dingshunyu.top/#/${originalRoomId}/${originalEventId}">In reply to</a> <a href="https://to.chat.dingshunyu.top/#/${originalUserId}">${originalUserId}</a><br />${originalHtml}</blockquote></mx-reply>${replyHtml}`,
+                formatted_body: `<mx-reply><blockquote><a href="https://to.chat.imzqqq.top/#/${originalRoomId}/${originalEventId}">In reply to</a> <a href="https://to.chat.imzqqq.top/#/${originalUserId}">${originalUserId}</a><br />${originalHtml}</blockquote></mx-reply>${replyHtml}`,
             },
 
             // TODO: Pre-processors need to be able to support events without room_id set

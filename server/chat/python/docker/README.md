@@ -135,7 +135,7 @@ For documentation on using a reverse proxy, see
 <https://github.com/matrix-org/chat/blob/master/docs/reverse_proxy.md>.
 
 For more information on enabling TLS support in Chat server itself, see
-<https://chat.docs.dingshunyu.top/setup/installation.html#tls-certificates>. Of
+<https://chat.docs.imzqqq.top/setup/installation.html#tls-certificates>. Of
 course, you will need to expose the TLS port from the container with a `-p`
 argument to `docker run`.
 

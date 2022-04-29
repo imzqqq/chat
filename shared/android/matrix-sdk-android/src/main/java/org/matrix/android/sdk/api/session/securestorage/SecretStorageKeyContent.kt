@@ -37,7 +37,7 @@ import org.matrix.android.sdk.internal.util.JsonCanonicalizer
  *     },
  *     "pubkey": "qql1q3IvBbwMU97zLnyh9HYW5x/zqTy5eoK1n+9fm1Y",
  *     "signatures": {
- *         "@valere35:chat.dingshunyu.top": {
+ *         "@valere35:chat.imzqqq.top": {
  *             "ed25519:nOUQYiH9L8uKp5JajqiQyv+Loa3+lsdil7UBverz/Ko": "QtePmwfUL7+SHYRJT/HaTgF7gUFog1E/wtUCt0qc5aB8N+Sz5iCOvQ0KtaFHQ5SJzsBlYH8k7ejoBc0RcnU7BA"
  *         }
  *     }

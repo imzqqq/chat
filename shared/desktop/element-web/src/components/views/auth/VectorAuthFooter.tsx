@@ -5,7 +5,7 @@ import { _t } from 'matrix-react-sdk/src/languageHandler';
 const VectorAuthFooter = () => {
     const brandingConfig = SdkConfig.get().branding;
     let links = [
-        { "text": "About", "url": "https://apps.chat.dingshunyu.top" },
+        { "text": "About", "url": "https://apps.chat.imzqqq.top" },
         { "text": "GitHub", "url": "https://github.com/imzqqq" },
     ];
 
@@ -25,7 +25,7 @@ const VectorAuthFooter = () => {
     return (
         <div className="mx_AuthFooter">
             { authFooterLinks }
-            <a href="https://dingshunyu.top" target="_blank" rel="noreferrer noopener">{ _t('Powered by Chat') }</a>
+            <a href="https://imzqqq.top" target="_blank" rel="noreferrer noopener">{ _t('Powered by Chat') }</a>
         </div>
     );
 };

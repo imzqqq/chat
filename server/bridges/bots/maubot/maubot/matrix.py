@@ -77,7 +77,7 @@ class MaubotMessageEvent(MessageEvent):
             if reply != "force" and self.disable_reply:
                 content.body = f"{self.sender}: {content.body}"
                 fmt_body = content.formatted_body or escape(content.body).replace("\n", "<br>")
-                content.formatted_body = (f'<a href="https://to.chat.dingshunyu.top/#/{self.sender}">'
+                content.formatted_body = (f'<a href="https://to.chat.imzqqq.top/#/{self.sender}">'
                                           f'{self.sender}'
                                           f'</a>: {fmt_body}')
             else:

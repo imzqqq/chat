@@ -33,7 +33,7 @@ Here's some example HTML you can use.
 
 It will look something like:
 
-{{< owncastembed "https://watch.live.dingshunyu.top/embed/video" >}}
+{{< owncastembed "https://watch.live.imzqqq.top/embed/video" >}}
 
 ## Embedding chat
 
@@ -49,7 +49,7 @@ The standalone chat URL lives at: `http://your.host/embed/chat/readwrite`.
 
 It will look something like:
 
-{{< owncastembed "https://watch.live.dingshunyu.top/embed/chat/readwrite" >}}
+{{< owncastembed "https://watch.live.imzqqq.top/embed/chat/readwrite" >}}
 
 ### Embedding read-only chat
 

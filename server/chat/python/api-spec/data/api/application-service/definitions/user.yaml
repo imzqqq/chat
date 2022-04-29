@@ -17,7 +17,7 @@ properties:
   userid:
     description: A Chat User ID represting a third party user.
     type: string
-    example: "@_gitter_jim:chat.dingshunyu.top"
+    example: "@_gitter_jim:chat.imzqqq.top"
   protocol:
     description: The protocol ID that the third party location is a part of.
     type: string

@@ -1,12 +1,12 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "Crear cuenta:";
-"login_server_url_placeholder" = "URL (p.ej. https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (p.ej. https://chat.imzqqq.top)";
 "login_home_server_title" = "Servidor Local:";
 "login_home_server_info" = "Tu servidor local almacena todas tus conversaciones y los datos de tu cuenta";
 "login_identity_server_title" = "URL de servidor de identidad:";
-"login_identity_server_info" = "Matrix proporciona servidores de identidades para rastrear qué correos electrónicos, etc. pertenecen a qué IDs de Matrix. Actualmente solo existe https://chat.dingshunyu.top.";
-"login_user_id_placeholder" = "ID de Matrix (p.ej. @juan:chat.dingshunyu.top o juan)";
+"login_identity_server_info" = "Matrix proporciona servidores de identidades para rastrear qué correos electrónicos, etc. pertenecen a qué IDs de Matrix. Actualmente solo existe https://chat.imzqqq.top.";
+"login_user_id_placeholder" = "ID de Matrix (p.ej. @juan:chat.imzqqq.top o juan)";
 "login_password_placeholder" = "Contraseña";
 "login_optional_field" = "opcional";
 "login_display_name_placeholder" = "Nombre público (p.ej. Juan Pérez)";
@@ -321,7 +321,7 @@
 // room details dialog screen
 "room_details_title" = "Detalles de Sala";
 // contacts list screen 
-"invitation_message" = "Me gustaría chatear contigo vía Matrix. Por favor, visita la página http://chat.dingshunyu.top para obtener más información.";
+"invitation_message" = "Me gustaría chatear contigo vía Matrix. Por favor, visita la página http://chat.imzqqq.top para obtener más información.";
 // Settings screen 
 "settings_title_config" = "Ajustes";
 "settings_title_notifications" = "Notificaciones";

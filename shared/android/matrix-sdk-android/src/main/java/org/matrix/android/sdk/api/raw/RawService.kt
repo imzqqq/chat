@@ -29,7 +29,7 @@ interface RawService {
 
     /**
      * Specific case for the well-known file. Cache validity is 8 hours
-     * @param domain the domain to get the .well-known file, for instance "chat.dingshunyu.top".
+     * @param domain the domain to get the .well-known file, for instance "chat.imzqqq.top".
      * The URL will be "https://{domain}/.well-known/matrix/client"
      */
     suspend fun getWellknown(domain: String): String

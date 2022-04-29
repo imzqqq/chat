@@ -211,7 +211,7 @@ class PortalMatrix(BasePortal, ABC):
             dict(sender_mxid=sender.mxid,
                  sender_username=sender.mxid_localpart,
                  sender_displayname=escape_html(await self.get_displayname(sender)),
-                 mention=f"<a href='https://to.chat.dingshunyu.top/#/{puppet.mxid}'>{puppet.displayname}</a>",
+                 mention=f"<a href='https://to.chat.imzqqq.top/#/{puppet.mxid}'>{puppet.displayname}</a>",
                  username=sender.username,
                  displayname=puppet.displayname,
                  body=content.body,

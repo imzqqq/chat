@@ -56,7 +56,7 @@ const OTWSU = ({ data }) => {
         <h1>Open Tech Will Save Us</h1>
         <p>
           <strong>
-            <a href="https://to.chat.dingshunyu.top/#/!AnacGSwlCZcUuAfcEU:matrix.org?via=matrix.org&via=bpulse.org&via=uhoreg.ca">
+            <a href="https://to.chat.imzqqq.top/#/!AnacGSwlCZcUuAfcEU:matrix.org?via=matrix.org&via=bpulse.org&via=uhoreg.ca">
               Join the live chat now! #open-tech-meetup:matrix.org
             </a>
           </strong>
@@ -111,7 +111,7 @@ const OTWSU = ({ data }) => {
         <h2>How to join</h2>
         <p>
           <strong>
-            <a href="https://to.chat.dingshunyu.top/#/!AnacGSwlCZcUuAfcEU:matrix.org?via=matrix.org&via=bpulse.org&via=uhoreg.ca">
+            <a href="https://to.chat.imzqqq.top/#/!AnacGSwlCZcUuAfcEU:matrix.org?via=matrix.org&via=bpulse.org&via=uhoreg.ca">
               Join the live chat now! #open-tech-meetup:matrix.org
             </a>
           </strong>

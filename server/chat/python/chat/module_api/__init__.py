@@ -615,7 +615,7 @@ class ModuleApi:
             f: The function to call repeatedly. f can be either synchronous or
                 asynchronous, and must follow Chat's logcontext rules.
                 More info about logcontexts is available at
-                https://chat.docs.dingshunyu.top/log_contexts.html
+                https://chat.docs.imzqqq.top/log_contexts.html
             msec: How long to wait between calls in milliseconds.
             *args: Positional arguments to pass to function.
             desc: The background task's description. Default to the function's name.

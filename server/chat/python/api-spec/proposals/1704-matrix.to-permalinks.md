@@ -1,27 +1,27 @@
-# to.chat.dingshunyu.top permalink navigation
+# to.chat.imzqqq.top permalink navigation
 
-Currently Chat uses to.chat.dingshunyu.top URIs to reference rooms and other entities in a
+Currently Chat uses to.chat.imzqqq.top URIs to reference rooms and other entities in a
 permanent manner. With just a room ID, users can't get into rooms if their server
 is not already aware of the room. This makes permalinks to rooms or events difficult
-as the user won't actually be able to join. A to.chat.dingshunyu.top link generated using a
+as the user won't actually be able to join. A to.chat.imzqqq.top link generated using a
 room's alias is not a permanent link due to aliases being transferable.
 
 In lieu of an improved way to reference entities permanently in Chat, a new parameter
-is to be added to to.chat.dingshunyu.top URIs to assist clients and servers receiving permanent links
+is to be added to to.chat.imzqqq.top URIs to assist clients and servers receiving permanent links
 in joining the room.
 
 For reference, existing permalinks look like this:
 
 ```
-https://to.chat.dingshunyu.top/#/!somewhere:example.org
-https://to.chat.dingshunyu.top/#/!somewhere:example.org/$something:example.org
+https://to.chat.imzqqq.top/#/!somewhere:example.org
+https://to.chat.imzqqq.top/#/!somewhere:example.org/$something:example.org
 ```
 
 By adding a new parameter to the end, receivers can more easily join the room:
 
 ```
-https://to.chat.dingshunyu.top/#/!somewhere:example.org?via=example-1.org&via=example-2.org
-https://to.chat.dingshunyu.top/#/!somewhere:example.org/$something:example.org?via=example-1.org&via=example-2.org
+https://to.chat.imzqqq.top/#/!somewhere:example.org?via=example-1.org&via=example-2.org
+https://to.chat.imzqqq.top/#/!somewhere:example.org/$something:example.org?via=example-1.org&via=example-2.org
 ```
 
 Clients can pass the servers directly to `/join` in the form of `server_name`

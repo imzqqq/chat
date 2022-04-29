@@ -57,7 +57,7 @@ paths:
           name: eventId
           description: The ID of the event to redact
           required: true
-          x-example: "bai2b1i9:chat.dingshunyu.top"
+          x-example: "bai2b1i9:chat.imzqqq.top"
         - in: path
           name: txnId
           type: string

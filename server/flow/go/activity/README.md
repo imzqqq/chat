@@ -107,6 +107,6 @@ feedback.
 [License-Image]: https://img.shields.io/github/license/go-fed/activity?color=blue
 [License-Url]: https://opensource.org/licenses/BSD-3-Clause
 [Chat-Image]: https://img.shields.io/matrix/go-fed:feneas.org?server_fqdn=matrix.org
-[Chat-Url]: https://to.chat.dingshunyu.top/#/!BLOSvIyKTDLIVjRKSc:feneas.org?via=feneas.org&via=matrix.org
+[Chat-Url]: https://to.chat.imzqqq.top/#/!BLOSvIyKTDLIVjRKSc:feneas.org?via=feneas.org&via=matrix.org
 [OpenCollective-Image]: https://img.shields.io/opencollective/backers/go-fed-activitypub-labs
 [OpenCollective-Url]: https://opencollective.com/go-fed-activitypub-labs

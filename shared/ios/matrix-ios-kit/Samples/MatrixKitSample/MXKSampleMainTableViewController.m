@@ -665,7 +665,7 @@
         {
             case 0:
             {
-                MXKWebViewViewController *webViewViewController = [[MXKWebViewViewController alloc] initWithURL:@"https://www.chat.dingshunyu.top"];
+                MXKWebViewViewController *webViewViewController = [[MXKWebViewViewController alloc] initWithURL:@"https://www.chat.imzqqq.top"];
                 [self.navigationController pushViewController:webViewViewController animated:YES];
                 break;
             }
@@ -797,8 +797,8 @@
     {
         MXKAuthenticationViewController *authViewController = (MXKAuthenticationViewController *)destinationViewController;
         authViewController.delegate = self;
-        authViewController.defaultHomeServerUrl = @"https://chat.dingshunyu.top";
-        authViewController.defaultIdentityServerUrl = @"https://chat.dingshunyu.top";
+        authViewController.defaultHomeServerUrl = @"https://chat.imzqqq.top";
+        authViewController.defaultIdentityServerUrl = @"https://chat.imzqqq.top";
     }
     else if ([segue.identifier isEqualToString:@"showMXKContactListViewController"])
     {

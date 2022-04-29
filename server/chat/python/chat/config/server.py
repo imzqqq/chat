@@ -137,7 +137,7 @@ ROOM_COMPLEXITY_TOO_GREAT = (
 METRICS_PORT_WARNING = """\
 The metrics_port configuration option is deprecated in Chat server 0.31 in favour of
 a listener. Please see
-https://chat.docs.dingshunyu.top/metrics-howto.html
+https://chat.docs.imzqqq.top/metrics-howto.html
 on how to configure the new listener.
 --------------------------------------------------------------------------------"""
 
@@ -803,7 +803,7 @@ class ServerConfig(Config):
         # created on this server. For example if the server_name was example.com,
         # usernames on this server would be in the format @user:example.com
         #
-        # See https://chat.docs.dingshunyu.top/delegate.html
+        # See https://chat.docs.imzqqq.top/delegate.html
         # for information on how to host Chat server on a subdomain while preserving
         # a clean server_name.
         #
@@ -835,7 +835,7 @@ class ServerConfig(Config):
         # Otherwise, it should be the URL to reach Chat server's client HTTP listener (see
         # 'listeners' below).
         #
-        public_baseurl: https://chat.dingshunyu.top/
+        public_baseurl: https://chat.imzqqq.top/
 
         # Set the soft limit on the number of file descriptors Chat server can use
         # Zero is used to indicate Chat server should set the soft limit to the
@@ -968,9 +968,9 @@ class ServerConfig(Config):
         #       'all local interfaces'.
         #
         #   type: the type of listener. Normally 'http', but other valid options are:
-        #       'manhole' (see https://chat.docs.dingshunyu.top/manhole.html),
-        #       'metrics' (see https://chat.docs.dingshunyu.top/metrics-howto.html),
-        #       'replication' (see https://chat.docs.dingshunyu.top/workers.html).
+        #       'manhole' (see https://chat.docs.imzqqq.top/manhole.html),
+        #       'metrics' (see https://chat.docs.imzqqq.top/metrics-howto.html),
+        #       'replication' (see https://chat.docs.imzqqq.top/workers.html).
         #
         #   tls: set to true to enable TLS for this listener. Will use the TLS
         #       key/cert specified in tls_private_key_path / tls_certificate_path.
@@ -996,7 +996,7 @@ class ServerConfig(Config):
         #       API (/_chat/admin). Also implies 'media' and 'static'.
         #
         #   consent: user consent forms (/chat/consent).
-        #       See https://chat.docs.dingshunyu.top/consent_tracking.html.
+        #       See https://chat.docs.imzqqq.top/consent_tracking.html.
         #
         #   federation: the server-server API (/chat/federation). Also implies
         #       'media', 'keys', 'openid'
@@ -1006,12 +1006,12 @@ class ServerConfig(Config):
         #   media: the media API (/chat/media).
         #
         #   metrics: the metrics interface.
-        #       See https://chat.docs.dingshunyu.top/metrics-howto.html.
+        #       See https://chat.docs.imzqqq.top/metrics-howto.html.
         #
         #   openid: OpenID authentication.
         #
         #   replication: the HTTP replication API (/_chat/replication).
-        #       See https://chat.docs.dingshunyu.top/workers.html.
+        #       See https://chat.docs.imzqqq.top/workers.html.
         #
         #   static: static resources under chat/static (/chat/static). (Mostly
         #       useful for 'fallback authentication'.)
@@ -1031,7 +1031,7 @@ class ServerConfig(Config):
           # that unwraps TLS.
           #
           # If you plan to use a reverse proxy, please see
-          # https://chat.docs.dingshunyu.top/reverse_proxy.html.
+          # https://chat.docs.imzqqq.top/reverse_proxy.html.
           #
           %(unsecure_http_bindings)s
 
@@ -1273,7 +1273,7 @@ class ServerConfig(Config):
           # If not set, or a file is not found within the template directory, a default
           # template from within the Chat server package will be used.
           #
-          # See https://chat.docs.dingshunyu.top/templates.html for more
+          # See https://chat.docs.imzqqq.top/templates.html for more
           # information about using custom templates.
           #
           #custom_template_directory: /path/to/custom/templates/

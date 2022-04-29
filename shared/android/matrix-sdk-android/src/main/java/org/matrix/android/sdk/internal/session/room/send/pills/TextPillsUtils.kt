@@ -107,8 +107,8 @@ internal class TextPillsUtils @Inject constructor(
     }
 
     companion object {
-        private const val MENTION_SPAN_TO_HTML_TEMPLATE = "<a href=\"https://to.chat.dingshunyu.top/#/%1\$s\">%2\$s</a>"
+        private const val MENTION_SPAN_TO_HTML_TEMPLATE = "<a href=\"https://to.chat.imzqqq.top/#/%1\$s\">%2\$s</a>"
 
-        private const val MENTION_SPAN_TO_MD_TEMPLATE = "[%2\$s](https://to.chat.dingshunyu.top/#/%1\$s)"
+        private const val MENTION_SPAN_TO_MD_TEMPLATE = "[%2\$s](https://to.chat.imzqqq.top/#/%1\$s)"
     }
 }

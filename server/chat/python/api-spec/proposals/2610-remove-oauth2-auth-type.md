@@ -1,7 +1,7 @@
 # MSC2610: Remove `m.login.oauth2` User-Interactive Authentication type from the specification
 
 The client-server API specification
-[defines](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#authentication-types)
+[defines](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#authentication-types)
 a number of "authentication types" for use with the User-Interactive
 Authentication protocol.
 
@@ -11,7 +11,7 @@ real use. This MSC proposes removing them.
 ## Proposal
 
 The definition of
-[OAuth2-based](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#oauth2-based)
+[OAuth2-based](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#oauth2-based)
 authentication is incomplete. [OAuth2](https://oauth.net/2/) is best considered
 as a framework for implementing authentication protocols rather than a protocol
 in its own right, and this section says nothing about the grant types, flows

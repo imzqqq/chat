@@ -1825,7 +1825,7 @@
     <string name="soft_logout_clear_data_dialog_submit">清除数据</string>
     <string name="template_soft_logout_sso_not_same_user_error">当前会话用于用户 %1$s 而你提供了用户 %2$s 的凭证。${app_name} 不支持此功能。
 \n请先清除数据，然后重新登录另一个账号。</string>
-    <string name="permalink_malformed">你的 to.chat.dingshunyu.top 链接更是不正确</string>
+    <string name="permalink_malformed">你的 to.chat.imzqqq.top 链接更是不正确</string>
     <string name="bug_report_error_too_short">描述太短</string>
     <string name="notification_initial_sync">初始同步…</string>
     <string name="settings_show_devices_list">查看我的全部会话</string>

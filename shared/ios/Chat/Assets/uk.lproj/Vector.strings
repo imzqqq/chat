@@ -51,7 +51,7 @@
 "auth_phone_placeholder" = "Номер телефону";
 "auth_repeat_password_placeholder" = "Повторіть пароль";
 "auth_repeat_new_password_placeholder" = "Підтвердьте новий пароль";
-"auth_home_server_placeholder" = "URL (наприклад, https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (наприклад, https://chat.imzqqq.top)";
 "auth_identity_server_placeholder" = "URL (наприклад, https://vector.im)";
 "auth_invalid_login_param" = "Неправильне ім'я користувача або пароль";
 "auth_invalid_user_name" = "Імена користувачів можуть містити лише літери, цифри, крапки, дефіси й підкреслення";
@@ -550,7 +550,7 @@
 "room_participants_action_ban" = "Заблокувати у цій кімнаті";
 "room_intro_cell_information_dm_sentence1_part1" = "Це початок вашого особистого спілкування з ";
 "create_room_show_in_directory" = "Показати кімнату в каталозі";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 "directory_server_all_rooms" = "Усі кімнати на сервері %@";
 "directory_server_picker_title" = "Вибрати каталог";
 
@@ -609,7 +609,7 @@
 
 "home_empty_view_title" = "Вітаємо у %@,\n%@";
 "call_transfer_users" = "Користувачі";
-"create_room_placeholder_address" = "#testroom:chat.dingshunyu.top";
+"create_room_placeholder_address" = "#testroom:chat.imzqqq.top";
 "create_room_section_header_address" = "Адреса кімнати";
 "create_room_type_public" = "Загальнодоступна кімната";
 "create_room_type_private" = "Приватна кімната";

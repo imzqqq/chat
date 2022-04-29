@@ -44,7 +44,7 @@ or mandatory service provider, unlike WhatsApp, Facebook, Hangouts, etc.
 `Federation`:
 
 - For details on how to install chat, see
-  [Installation Instructions](https://chat.docs.dingshunyu.top/installation.html).
+  [Installation Instructions](https://chat.docs.imzqqq.top/installation.html).
 - For specific details on how to configure Chat for federation see [Federate](docs/federate.md).
 
 ## Connecting to Server from a client
@@ -53,7 +53,7 @@ The easiest way to try out your new Chat server installation is by connecting to
 from a web client.
 
 Unless you are running a test instance of Chat server on your local machine, in general, you will need to enable TLS support before you can successfully connect from a client: see
-[TLS Certificates](https://chat.docs.dingshunyu.top/installation.html#tls-certificates).
+[TLS Certificates](https://chat.docs.imzqqq.top/installation.html#tls-certificates).
 
 An easy way to get started is to login or register via Web at
 <https://app.example.com/#/login> or <https://app.example.com/#/register> respectively. You will need to specify a Homeserver URL of ``https://<server_name>:8880`` (or just `https://<server_name>` if you are using a reverse proxy).
@@ -104,7 +104,7 @@ Following this advice ensures that even if an XSS is found in Chat server, the i
 
 The instructions for upgrading Chat server are in `the upgrade notes`. Please check these instructions as upgrading may require extra steps for some versions of Chat server.
 
-`the upgrade notes`: <https://chat.docs.dingshunyu.top/upgrade.html>
+`the upgrade notes`: <https://chat.docs.imzqqq.top/upgrade.html>
 
 `reverse-proxy`:
 

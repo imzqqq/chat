@@ -10,7 +10,7 @@ thereafter returned anytime a client or remote server requests it.
 
 ## Proposal
 
-[The redaction algorithm](https://chat.api-spec.dingshunyu.top/client_server/r0.4.0.html#redactions)
+[The redaction algorithm](https://chat.api-spec.imzqqq.top/client_server/r0.4.0.html#redactions)
 defines which keys must be retained through a redaction. Currently it lists
 ```prev_content``` as a key to retain, though in practice there is no need to
 do so at the protocol level.
@@ -27,7 +27,7 @@ implementations) have not implemented the bug and already omit
 ## Tradeoffs
 
 When sending events over federation the events are [hashed and
-signed](https://chat.api-spec.dingshunyu.top/server_server/r0.1.0#adding-hashes-and-signatures-to-outgoing-events),
+signed](https://chat.api-spec.imzqqq.top/server_server/r0.1.0#adding-hashes-and-signatures-to-outgoing-events),
 this involves operating not only on the original event but also the redacted
 form of the event. The redacted hash and redacted signed event are necessary if
 the event is ever redacted in future. As a result, any change of the essential

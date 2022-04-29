@@ -87,7 +87,7 @@ export default function EditCustomStyles() {
         Customize the look and feel of your Live instance by overriding the CSS styles of various
         components on the page. Refer to the{' '}
         <a
-          href="https://live.docs.dingshunyu.top/docs/website/"
+          href="https://live.docs.imzqqq.top/docs/website/"
           rel="noopener noreferrer"
           target="_blank"
         >

@@ -7,7 +7,7 @@ import org.matrix.android.sdk.api.session.Session
 import timber.log.Timber
 
 private const val SUCCESS_URL_SUFFIX = "/chat/consent"
-private const val RIOT_BOT_ID = "@riot-bot:chat.dingshunyu.top"
+private const val RIOT_BOT_ID = "@riot-bot:chat.imzqqq.top"
 
 /**
  * This class is the Consent implementation of WebViewEventListener.

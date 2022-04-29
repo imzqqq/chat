@@ -20,15 +20,15 @@ properties:
   room_id:
     type: string
     description: Room identifier.
-    example: "!abc123:chat.dingshunyu.top"
+    example: "!abc123:chat.imzqqq.top"
   sender:
     type: string
     description: The ID of the user sending the event.
-    example: "@someone:chat.dingshunyu.top"
+    example: "@someone:chat.imzqqq.top"
   origin:
     type: string
     description: The `server_name` of the homeserver that created this event.
-    example: "chat.dingshunyu.top"
+    example: "chat.imzqqq.top"
   origin_server_ts:
     type: integer
     format: int64
@@ -62,7 +62,7 @@ properties:
       items:
         - type: string
           title: Event ID
-          example: "$abc123:chat.dingshunyu.top"
+          example: "$abc123:chat.imzqqq.top"
         - type: object
           title: Event Hash
           example: {
@@ -97,7 +97,7 @@ properties:
       items:
         - type: string
           title: Event ID
-          example: "$abc123:chat.dingshunyu.top"
+          example: "$abc123:chat.imzqqq.top"
         - type: object
           title: Event Hash
           example: {
@@ -112,7 +112,7 @@ properties:
   redacts:
     type: string
     description: For redaction events, the ID of the event being redacted.
-    example: "$def456:chat.dingshunyu.top"
+    example: "$def456:chat.imzqqq.top"
   unsigned:
     type: object
     title: UnsignedData

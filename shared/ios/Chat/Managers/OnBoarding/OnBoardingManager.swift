@@ -6,7 +6,7 @@ final public class OnBoardingManager: NSObject {
     // MARK: - Constants
     
     private enum Constants {
-        static let riotBotMatrixId = "@riot-bot:chat.dingshunyu.top"
+        static let riotBotMatrixId = "@riot-bot:chat.imzqqq.top"
         static let createChatBotDMRequestMaxNumberOfTries: UInt = UInt.max
     }
     

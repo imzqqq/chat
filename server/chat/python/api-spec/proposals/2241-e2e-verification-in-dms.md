@@ -14,10 +14,10 @@ This proposal will solve both problems.
 ## Proposal
 
 The current [key verification
-framework](https://chat.api-spec.dingshunyu.top/client_server/r0.5.0#key-verification-framework)
+framework](https://chat.api-spec.imzqqq.top/client_server/r0.5.0#key-verification-framework)
 will be replaced by a new framework that uses room messages rather than
 `to_device` messages.  Key verification messages will be sent in a [Direct
-Messaging](https://chat.api-spec.dingshunyu.top/client_server/r0.5.0#id185) room.  If
+Messaging](https://chat.api-spec.imzqqq.top/client_server/r0.5.0#id185) room.  If
 there is no Direct Messaging room between the two users involved, the client
 that initiates the key verification will create one.
 
@@ -44,7 +44,7 @@ following properties in its contents:
 
   The event may also contain `format` and `formatted_body` properties as
   described in the [m.room.message
-  msgtypes](https://chat.api-spec.dingshunyu.top/client_server/r0.5.0#m-room-message-msgtypes)
+  msgtypes](https://chat.api-spec.imzqqq.top/client_server/r0.5.0#m-room-message-msgtypes)
   section of the spec.  Clients that support the key verification should
   similarly hide these from the user.
 - `msgtype`: `m.key.verification.request`
@@ -138,7 +138,7 @@ contents:
 - `code`: The error code for why the process/request was cancelled by the
   user. The contents are the same as the `code` property of the currently
   defined [`m.key.verification.cancel` to-device
-  event](https://chat.api-spec.dingshunyu.top/client_server/r0.5.0#m-key-verification-cancel),
+  event](https://chat.api-spec.imzqqq.top/client_server/r0.5.0#m-key-verification-cancel),
   or as defined for specific key verification methods.
 
 This message may be sent at any point in the key verification process.  Any

@@ -1,6 +1,6 @@
 name: Chat
 attributes:
-  ORGANIZATIONNAME: chat.dingshunyu.top
+  ORGANIZATIONNAME: chat.imzqqq.top
 
 configs:
   Debug: debug

@@ -455,7 +455,7 @@ public class MatrixKitL10n: NSObject {
   public static var incomingVoiceCall: String { 
     return MatrixKitL10n.tr("incoming_voice_call") 
   }
-  /// I'd like to chat with you with matrix. Please, visit the website http://chat.dingshunyu.top to have more information.
+  /// I'd like to chat with you with matrix. Please, visit the website http://chat.imzqqq.top to have more information.
   public static var invitationMessage: String { 
     return MatrixKitL10n.tr("invitation_message") 
   }
@@ -603,7 +603,7 @@ public class MatrixKitL10n: NSObject {
   public static var loginHomeServerTitle: String { 
     return MatrixKitL10n.tr("login_home_server_title") 
   }
-  /// Matrix provides identity servers to track which emails etc. belong to which Matrix IDs. Only https://chat.dingshunyu.top currently exists.
+  /// Matrix provides identity servers to track which emails etc. belong to which Matrix IDs. Only https://chat.imzqqq.top currently exists.
   public static var loginIdentityServerInfo: String { 
     return MatrixKitL10n.tr("login_identity_server_info") 
   }
@@ -635,7 +635,7 @@ public class MatrixKitL10n: NSObject {
   public static var loginPromptEmailToken: String { 
     return MatrixKitL10n.tr("login_prompt_email_token") 
   }
-  /// URL (e.g. https://chat.dingshunyu.top)
+  /// URL (e.g. https://chat.imzqqq.top)
   public static var loginServerUrlPlaceholder: String { 
     return MatrixKitL10n.tr("login_server_url_placeholder") 
   }
@@ -647,7 +647,7 @@ public class MatrixKitL10n: NSObject {
   public static var loginUseFallback: String { 
     return MatrixKitL10n.tr("login_use_fallback") 
   }
-  /// Matrix ID (e.g. @bob:chat.dingshunyu.top or bob)
+  /// Matrix ID (e.g. @bob:chat.imzqqq.top or bob)
   public static var loginUserIdPlaceholder: String { 
     return MatrixKitL10n.tr("login_user_id_placeholder") 
   }

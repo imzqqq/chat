@@ -41,7 +41,7 @@ it('ensures redirection domain is not blacklisted', async() => {
                                                                  
     let raised;
     try {
-        await utils.axiosGet('https://chat.dingshunyu.top');
+        await utils.axiosGet('https://chat.imzqqq.top');
         raised = false;
     } catch (error) {
         raised = true;
@@ -55,7 +55,7 @@ it('ensures redirection domain is not blacklisted', async() => {
         it('calls axios', async() => {
             axiosStub = sinon.stub(axios, 'get');
             try {
-                await utils.axiosGet('https://chat.dingshunyu.top');
+                await utils.axiosGet('https://chat.imzqqq.top');
             } catch (error) {
                 // pass
             }
@@ -66,25 +66,25 @@ it('ensures redirection domain is not blacklisted', async() => {
             axiosStub = sinon.stub(axios, 'get');
             axiosStub.onFirstCall().returns({
                 headers: {
-                    location: 'https://to.chat.dingshunyu.top',
+                    location: 'https://to.chat.imzqqq.top',
                 },
                 status: 301,
             });
             axiosStub.onSecondCall().returns({status: 200});
             try {
-                await utils.axiosGet('https://chat.dingshunyu.top');
+                await utils.axiosGet('https://chat.imzqqq.top');
             } catch (error) {
                 // pass
             }
-            expect(axiosStub.firstCall.args[0]).to.equal('https://chat.dingshunyu.top');
-            expect(axiosStub.secondCall.args[0]).to.equal('https://to.chat.dingshunyu.top');
+            expect(axiosStub.firstCall.args[0]).to.equal('https://chat.imzqqq.top');
+            expect(axiosStub.secondCall.args[0]).to.equal('https://to.chat.imzqqq.top');
         });
 
         it('returns a response', async() => {
             axiosStub = sinon.stub(axios, 'get').returns({status: 200});
             let response;
             try {
-                response = await utils.axiosGet('https://chat.dingshunyu.top');
+                response = await utils.axiosGet('https://chat.imzqqq.top');
             } catch (error) {
                 // pass
             }
@@ -103,7 +103,7 @@ it('ensures redirection domain is not blacklisted', async() => {
 
     describe('resolveDomain', () => {
         it('returns correct results', async() => {
-            expect(await utils.resolveDomain('chat.dingshunyu.top')).to.have.lengthOf.above(0);
+            expect(await utils.resolveDomain('chat.imzqqq.top')).to.have.lengthOf.above(0);
             expect(await utils.resolveDomain('test.local')).to.have.lengthOf(0);
             expect(await utils.resolveDomain('test.example.com')).to.have.lengthOf(0);
         });

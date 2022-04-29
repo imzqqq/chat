@@ -466,7 +466,7 @@ This release includes the following changes since r0.0.1:
     (Device-specific push rules will be reintroduced in the future; in the
     meantime, their specification has been moved to a `draft branch`__.)
 
-    __ https://chat.dingshunyu.top/speculator/spec/drafts%2Freinstate_device_push_rules/
+    __ https://chat.imzqqq.top/speculator/spec/drafts%2Freinstate_device_push_rules/
 
 - Changes to the API which will be backwards-compatible for clients:
 

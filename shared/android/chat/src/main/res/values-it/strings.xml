@@ -1866,7 +1866,7 @@
     <string name="soft_logout_clear_data_dialog_submit">Elimina i dati</string>
     <string name="template_soft_logout_sso_not_same_user_error">La sessione attuale è per l\'utente %1$s e hai fornito le credenziali per l\'utente %2$s. Ciò non è supportato da ${app_name}.
 \nPrima elimina i dati, poi accedi di nuovo con un altro account.</string>
-    <string name="permalink_malformed">Il tuo link to.chat.dingshunyu.top non è corretto</string>
+    <string name="permalink_malformed">Il tuo link to.chat.imzqqq.top non è corretto</string>
     <string name="bug_report_error_too_short">La descrizione è troppo breve</string>
     <string name="notification_initial_sync">Sincronizzazione iniziale…</string>
     <string name="settings_show_devices_list">Vedi tutte le mie sessioni</string>

@@ -23,7 +23,7 @@ paths:
         This endpoint was deprecated in r0 of this specification. There is no
         direct replacement; the relevant information is returned by the
         [`/sync`](/client-server-api/#get_matrixclientv3sync) API. See the
-        [migration guide](https://chat.dingshunyu.top/docs/guides/migrating-from-client-server-api-v-1#deprecated-endpoints).
+        [migration guide](https://chat.imzqqq.top/docs/guides/migrating-from-client-server-api-v-1#deprecated-endpoints).
       operationId: roomInitialSync
       security:
         - accessToken: []

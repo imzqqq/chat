@@ -10,7 +10,7 @@ export default class VectorEmbeddedPage extends EmbeddedPage {
         s = sanitizeHtml(_t(s));
         // ugly fix for https://github.com/vector-im/element-web/issues/4243
         // eslint-disable-next-line max-len
-        s = s.replace(/\[matrix\]/, '<a href="https://chat.dingshunyu.top" target="_blank" rel="noreferrer noopener"><img width="79" height="34" alt="Chat" style="padding-left: 1px;vertical-align: middle" src="welcome/images/matrix.svg"/></a>');
+        s = s.replace(/\[matrix\]/, '<a href="https://chat.imzqqq.top" target="_blank" rel="noreferrer noopener"><img width="79" height="34" alt="Chat" style="padding-left: 1px;vertical-align: middle" src="welcome/images/matrix.svg"/></a>');
         return s;
     }
 }

@@ -193,7 +193,7 @@ describe("<TextualBody />", () => {
                     body: "Hey User",
                     msgtype: "m.text",
                     format: "org.matrix.custom.html",
-                    formatted_body: "Hey <a href=\"https://to.chat.dingshunyu.top/#/@user:server\">Member</a>",
+                    formatted_body: "Hey <a href=\"https://to.chat.imzqqq.top/#/@user:server\">Member</a>",
                 },
                 event: true,
             });
@@ -216,12 +216,12 @@ describe("<TextualBody />", () => {
                 user: "sender",
                 content: {
                     body:
-                        "An [event link](https://to.chat.dingshunyu.top/#/!ZxbRYPQXDXKGmDnJNg:example.com/" +
+                        "An [event link](https://to.chat.imzqqq.top/#/!ZxbRYPQXDXKGmDnJNg:example.com/" +
                         "$16085560162aNpaH:example.com?via=example.com) with text",
                     msgtype: "m.text",
                     format: "org.matrix.custom.html",
                     formatted_body:
-                        "An <a href=\"https://to.chat.dingshunyu.top/#/!ZxbRYPQXDXKGmDnJNg:example.com/" +
+                        "An <a href=\"https://to.chat.imzqqq.top/#/!ZxbRYPQXDXKGmDnJNg:example.com/" +
                         "$16085560162aNpaH:example.com?via=example.com\">event link</a> with text",
                 },
                 event: true,
@@ -245,12 +245,12 @@ describe("<TextualBody />", () => {
                 user: "sender",
                 content: {
                     body:
-                        "A [room link](https://to.chat.dingshunyu.top/#/!ZxbRYPQXDXKGmDnJNg:example.com" +
+                        "A [room link](https://to.chat.imzqqq.top/#/!ZxbRYPQXDXKGmDnJNg:example.com" +
                         "?via=example.com&via=bob.com) with vias",
                     msgtype: "m.text",
                     format: "org.matrix.custom.html",
                     formatted_body:
-                        "A <a href=\"https://to.chat.dingshunyu.top/#/!ZxbRYPQXDXKGmDnJNg:example.com" +
+                        "A <a href=\"https://to.chat.imzqqq.top/#/!ZxbRYPQXDXKGmDnJNg:example.com" +
                         "?via=example.com&amp;via=bob.com\">room link</a> with vias",
                 },
                 event: true,

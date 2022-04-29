@@ -259,7 +259,7 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     private onPermalinkClicked = (ev: React.MouseEvent) => {
         // This allows the permalink to be opened in a new tab/window or copied as
-        // to.chat.dingshunyu.top, but also for it to enable routing within Chat when clicked.
+        // to.chat.imzqqq.top, but also for it to enable routing within Chat when clicked.
         ev.preventDefault();
         dis.dispatch({
             action: 'view_room',

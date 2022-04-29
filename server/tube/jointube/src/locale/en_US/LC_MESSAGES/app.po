@@ -1057,8 +1057,8 @@ msgid "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://search.jo
 msgstr "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://search.joinpeertube.org/\">Tube videos/channels search index</a> development and maintenance;"
 
 #: src/views/FAQ.vue:109
-msgid "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top\">Tube documentation website</a> development and maintenance;"
-msgstr "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top\">Tube documentation website</a> development and maintenance;"
+msgid "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top\">Tube documentation website</a> development and maintenance;"
+msgstr "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top\">Tube documentation website</a> development and maintenance;"
 
 #: src/views/FAQ.vue:112
 msgid "Tube support and discussions on bugtrackers, forum, IRC or by email;"
@@ -1153,8 +1153,8 @@ msgid "Customize the interface"
 msgstr "Customize the interface"
 
 #: src/views/FAQ.vue:241
-msgid "Update your name, avatar or description in <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-setup-account?id=update-your-profile\">your profile</a>"
-msgstr "Update your name, avatar or description in <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-setup-account?id=update-your-profile\">your profile</a>"
+msgid "Update your name, avatar or description in <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-setup-account?id=update-your-profile\">your profile</a>"
+msgstr "Update your name, avatar or description in <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-setup-account?id=update-your-profile\">your profile</a>"
 
 #: src/views/FAQ.vue:242
 msgid "Set your appropriate NSFW policy (display, blur or hide NSFW videos)"
@@ -1181,8 +1181,8 @@ msgid "Use the built-in <em>Watch Later</em> playlist and add easily videos in i
 msgstr "Use the built-in <em>Watch Later</em> playlist and add easily videos in it"
 
 #: src/views/FAQ.vue:254
-msgid "Organize videos in public or private <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-library?id=video-history\">playlists</a>"
-msgstr "Organize videos in public or private <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-library?id=video-history\">playlists</a>"
+msgid "Organize videos in public or private <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-library?id=video-history\">playlists</a>"
+msgstr "Organize videos in public or private <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-library?id=video-history\">playlists</a>"
 
 #: src/views/FAQ.vue:255
 msgid "Automatically resume videos from the last time you watched them"
@@ -1209,8 +1209,8 @@ msgid "Share and interact with videos and playlists"
 msgstr "Share and interact with videos and playlists"
 
 #: src/views/FAQ.vue:273
-msgid "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-watch-video\">Share</a> the video or the playlist URL/embed with attributes (automatically start/stop at, loop enabled, muted...)"
-msgstr "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-watch-video\">Share</a> the video or the playlist URL/embed with attributes (automatically start/stop at, loop enabled, muted...)"
+msgid "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-watch-video\">Share</a> the video or the playlist URL/embed with attributes (automatically start/stop at, loop enabled, muted...)"
+msgstr "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-watch-video\">Share</a> the video or the playlist URL/embed with attributes (automatically start/stop at, loop enabled, muted...)"
 
 #: src/views/FAQ.vue:274
 msgid "Download a video using a dedicated modal"
@@ -1225,8 +1225,8 @@ msgid "Search videos or channels"
 msgstr "Search videos or channels"
 
 #: src/views/FAQ.vue:283
-msgid "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-search\">Search</a> local or remote videos and channels"
-msgstr "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-search\">Search</a> local or remote videos and channels"
+msgid "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-search\">Search</a> local or remote videos and channels"
+msgstr "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-search\">Search</a> local or remote videos and channels"
 
 #: src/views/FAQ.vue:284
 msgid "Use many advanced filters (tags, category, licence...)"
@@ -1257,8 +1257,8 @@ msgid "Administrators have full control of the content they want to display, and
 msgstr "Administrators have full control of the content they want to display, and how they want to display it. In the default configuration, Tube hides NSFW videos."
 
 #: src/views/FAQ.vue:340
-msgid "See the dedicated section in the Tube documentation: <a href=\"https://tube.docs.dingshunyu.top/use-report\" target=\"_blank\">https://tube.docs.dingshunyu.top/use-report</a>"
-msgstr "See the dedicated section in the Tube documentation: <a href=\"https://tube.docs.dingshunyu.top/use-report\" target=\"_blank\">https://tube.docs.dingshunyu.top/use-report</a>"
+msgid "See the dedicated section in the Tube documentation: <a href=\"https://tube.docs.imzqqq.top/use-report\" target=\"_blank\">https://tube.docs.imzqqq.top/use-report</a>"
+msgstr "See the dedicated section in the Tube documentation: <a href=\"https://tube.docs.imzqqq.top/use-report\" target=\"_blank\">https://tube.docs.imzqqq.top/use-report</a>"
 
 #: src/views/FAQ.vue:352
 msgid "Your web browser sends a view to the server after 30 seconds of playback. If a video is less than 30 seconds in length, a view is sent after 75% of the video duration. After giving a view, that IP address cannot add another view in the next hour. Views are buffered, so don't panic if the view counter stays the same after you watched a video."
@@ -1293,12 +1293,12 @@ msgid "Set metadata: category, licence, language, tags, description, thumbnail..
 msgstr "Set metadata: category, licence, language, tags, description, thumbnail..."
 
 #: src/views/FAQ.vue:387
-msgid "Choose <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-create-upload-video?id=video-confidentiality-options-what-do-they-mean\">video privacy</a>: public, unlisted, internal or private"
-msgstr "Choose <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-create-upload-video?id=video-confidentiality-options-what-do-they-mean\">video privacy</a>: public, unlisted, internal or private"
+msgid "Choose <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-create-upload-video?id=video-confidentiality-options-what-do-they-mean\">video privacy</a>: public, unlisted, internal or private"
+msgstr "Choose <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-create-upload-video?id=video-confidentiality-options-what-do-they-mean\">video privacy</a>: public, unlisted, internal or private"
 
 #: src/views/FAQ.vue:388
-msgid "Add <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-create-upload-video?id=captions\">subtitles</a>"
-msgstr "Add <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-create-upload-video?id=captions\">subtitles</a>"
+msgid "Add <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-create-upload-video?id=captions\">subtitles</a>"
+msgstr "Add <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-create-upload-video?id=captions\">subtitles</a>"
 
 #: src/views/FAQ.vue:389
 msgid "Easily disable comments or download"
@@ -1309,8 +1309,8 @@ msgid "Upload an audio file and an image and let Tube take care of creating the 
 msgstr "Upload an audio file and an image and let Tube take care of creating the video!"
 
 #: src/views/FAQ.vue:398
-msgid "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-create-upload-video?id=publish-a-live-in-tube-gt-v3\">Publish live videos</a> in Tube using your favorite RTMP compatible software (OBS, Restream, ffmpeg...)"
-msgstr "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-create-upload-video?id=publish-a-live-in-tube-gt-v3\">Publish live videos</a> in Tube using your favorite RTMP compatible software (OBS, Restream, ffmpeg...)"
+msgid "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-create-upload-video?id=publish-a-live-in-tube-gt-v3\">Publish live videos</a> in Tube using your favorite RTMP compatible software (OBS, Restream, ffmpeg...)"
+msgstr "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-create-upload-video?id=publish-a-live-in-tube-gt-v3\">Publish live videos</a> in Tube using your favorite RTMP compatible software (OBS, Restream, ffmpeg...)"
 
 #: src/views/FAQ.vue:399
 msgid "Create permanent lives to stream multiple times inside the same live (URL doesn't change for the viewers)"
@@ -1325,8 +1325,8 @@ msgid "Manage your channels"
 msgstr "Manage your channels"
 
 #: src/views/FAQ.vue:408
-msgid "Create <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-library?id=video-channels\">multiple channels</a> inside your account to group your videos by topic"
-msgstr "Create <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-library?id=video-channels\">multiple channels</a> inside your account to group your videos by topic"
+msgid "Create <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-library?id=video-channels\">multiple channels</a> inside your account to group your videos by topic"
+msgstr "Create <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-library?id=video-channels\">multiple channels</a> inside your account to group your videos by topic"
 
 #: src/views/FAQ.vue:409
 msgid "Brand your channel using a dedicated name, a banner and an avatar"
@@ -1341,8 +1341,8 @@ msgid "People can subscribe to your channel from a Tube website or from an Activ
 msgstr "People can subscribe to your channel from a Tube website or from an ActivityPub compatible software (Mastodon, Pleroma...)"
 
 #: src/views/FAQ.vue:412
-msgid "Create public <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-library?id=playlist\">playlists</a> assigned to your channel to organize your content or remote videos"
-msgstr "Create public <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/use-library?id=playlist\">playlists</a> assigned to your channel to organize your content or remote videos"
+msgid "Create public <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-library?id=playlist\">playlists</a> assigned to your channel to organize your content or remote videos"
+msgstr "Create public <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/use-library?id=playlist\">playlists</a> assigned to your channel to organize your content or remote videos"
 
 #: src/views/FAQ.vue:425
 msgid "Being free doesn't mean being above the law! Each Tube hosting provider can decide on its own general conditions of use, abiding by their local laws."
@@ -1361,8 +1361,8 @@ msgid "For now, the solution proposed the <strong>support</strong> button under 
 msgstr "For now, the solution proposed the <strong>support</strong> button under the video. This button displays a frame in which people who upload videos can display text, images, and links freely (link to Patreon, Tipeee, Paypal, Liberapay...)."
 
 #: src/views/FAQ.vue:453
-msgid "We did not go any further, as we refuse to tie our code to a particular content funding method, that might not fit all communities and deter others. It's the reason why we encourage developers to use the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/contribute-plugins\">Tube plugin API</a> to create their own monetization system."
-msgstr "We did not go any further, as we refuse to tie our code to a particular content funding method, that might not fit all communities and deter others. It's the reason why we encourage developers to use the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/contribute-plugins\">Tube plugin API</a> to create their own monetization system."
+msgid "We did not go any further, as we refuse to tie our code to a particular content funding method, that might not fit all communities and deter others. It's the reason why we encourage developers to use the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/contribute-plugins\">Tube plugin API</a> to create their own monetization system."
+msgstr "We did not go any further, as we refuse to tie our code to a particular content funding method, that might not fit all communities and deter others. It's the reason why we encourage developers to use the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/contribute-plugins\">Tube plugin API</a> to create their own monetization system."
 
 #: src/views/FAQ.vue:465
 msgid "For Tube administrators"
@@ -1377,12 +1377,12 @@ msgid "Install Tube on your server and create your \"homemade YouTube\""
 msgstr "Install Tube on your server and create your \"homemade YouTube\""
 
 #: src/views/FAQ.vue:479
-msgid "Official <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/install-docker\">Docker support</a>"
-msgstr "Official <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/install-docker\">Docker support</a>"
+msgid "Official <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/install-docker\">Docker support</a>"
+msgstr "Official <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/install-docker\">Docker support</a>"
 
 #: src/views/FAQ.vue:480
-msgid "Documented <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/api-rest-reference.html\">REST API</a> and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/maintain-tools\">CLI tools</a>"
-msgstr "Documented <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/api-rest-reference.html\">REST API</a> and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/maintain-tools\">CLI tools</a>"
+msgid "Documented <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/api-rest-reference.html\">REST API</a> and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/maintain-tools\">CLI tools</a>"
+msgstr "Documented <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/api-rest-reference.html\">REST API</a> and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/maintain-tools\">CLI tools</a>"
 
 #: src/views/FAQ.vue:485
 msgid "Federation with ActivityPub"
@@ -1397,8 +1397,8 @@ msgid "Display videos/accounts of other instances on yours"
 msgstr "Display videos/accounts of other instances on yours"
 
 #: src/views/FAQ.vue:490
-msgid "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-following-instances?id=automatically-follow-other-instances\">Automatically follow</a> instances from a public index"
-msgstr "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-following-instances?id=automatically-follow-other-instances\">Automatically follow</a> instances from a public index"
+msgid "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-following-instances?id=automatically-follow-other-instances\">Automatically follow</a> instances from a public index"
+msgstr "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-following-instances?id=automatically-follow-other-instances\">Automatically follow</a> instances from a public index"
 
 #: src/views/FAQ.vue:495
 msgid "P2P with WebRTC"
@@ -1413,16 +1413,16 @@ msgid "Enable or disable easily P2P for your instance"
 msgstr "Enable or disable easily P2P for your instance"
 
 #: src/views/FAQ.vue:500
-msgid "Help (or get help) other instances using <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-following-instances?id=instances-redundancy\">Tube redundancy</a>"
-msgstr "Help (or get help) other instances using <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-following-instances?id=instances-redundancy\">Tube redundancy</a>"
+msgid "Help (or get help) other instances using <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-following-instances?id=instances-redundancy\">Tube redundancy</a>"
+msgstr "Help (or get help) other instances using <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-following-instances?id=instances-redundancy\">Tube redundancy</a>"
 
 #: src/views/FAQ.vue:505
 msgid "Video transcoding"
 msgstr "Video transcoding"
 
 #: src/views/FAQ.vue:508
-msgid "Optimize videos and generate <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-configuration?id=vod-transcoding\">multiple resolutions</a> using ffmpeg"
-msgstr "Optimize videos and generate <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-configuration?id=vod-transcoding\">multiple resolutions</a> using ffmpeg"
+msgid "Optimize videos and generate <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-configuration?id=vod-transcoding\">multiple resolutions</a> using ffmpeg"
+msgstr "Optimize videos and generate <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-configuration?id=vod-transcoding\">multiple resolutions</a> using ffmpeg"
 
 #: src/views/FAQ.vue:509
 msgid "Enable additional video extension (.mkv, .mov, .avi...) or audio uploads"
@@ -1441,8 +1441,8 @@ msgid "Live streaming transcoding"
 msgstr "Live streaming transcoding"
 
 #: src/views/FAQ.vue:519
-msgid "Enable <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-configuration?id=live-streaming\">live streaming</a> for your instance"
-msgstr "Enable <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-configuration?id=live-streaming\">live streaming</a> for your instance"
+msgid "Enable <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-configuration?id=live-streaming\">live streaming</a> for your instance"
+msgstr "Enable <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-configuration?id=live-streaming\">live streaming</a> for your instance"
 
 #: src/views/FAQ.vue:520
 msgid "Add ability for your users to publish a replay of live videos"
@@ -1477,8 +1477,8 @@ msgid "Enable signups and set a max users and upload limits"
 msgstr "Enable signups and set a max users and upload limits"
 
 #: src/views/FAQ.vue:541
-msgid "Assign <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-moderation\">moderator/admin</a> roles"
-msgstr "Assign <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-moderation\">moderator/admin</a> roles"
+msgid "Assign <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-moderation\">moderator/admin</a> roles"
+msgstr "Assign <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-moderation\">moderator/admin</a> roles"
 
 #: src/views/FAQ.vue:542
 msgid "Manage abuse reports on videos, accounts or comments using a dedicated dashboard"
@@ -1505,8 +1505,8 @@ msgid "Easily set instance metadata: name, description, main categories..."
 msgstr "Easily set instance metadata: name, description, main categories..."
 
 #: src/views/FAQ.vue:554
-msgid "Search and install Tube <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-customize-instance\">plugins or themes</a>"
-msgstr "Search and install Tube <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-customize-instance\">plugins or themes</a>"
+msgid "Search and install Tube <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-customize-instance\">plugins or themes</a>"
+msgstr "Search and install Tube <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-customize-instance\">plugins or themes</a>"
 
 #: src/views/FAQ.vue:555
 msgid "Use external auth (LDAP, OpenID Connect...) using auth plugins"
@@ -1525,8 +1525,8 @@ msgid "Broadcast a message to users using a banner"
 msgstr "Broadcast a message to users using a banner"
 
 #: src/views/FAQ.vue:571
-msgid "The <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/install-any-os\">installation guide is here</a> (only in English)."
-msgstr "The <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/install-any-os\">installation guide is here</a> (only in English)."
+msgid "The <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/install-any-os\">installation guide is here</a> (only in English)."
+msgstr "The <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/install-any-os\">installation guide is here</a> (only in English)."
 
 #: src/views/FAQ.vue:576
 msgid "If you need help, check the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://joinpeertube.org/help\">help page</a>."
@@ -1621,12 +1621,12 @@ msgid "As far as we know, there are 3 limitations to handle a large amount of us
 msgstr "As far as we know, there are 3 limitations to handle a large amount of users in Tube:"
 
 #: src/views/FAQ.vue:690
-msgid "Bandwidth: can be mitigated using <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-following-instances?id=instances-redundancy\">Tube redundancy system</a> and cache servers that serve video static files in front of your Tube instance"
-msgstr "Bandwidth: can be mitigated using <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-following-instances?id=instances-redundancy\">Tube redundancy system</a> and cache servers that serve video static files in front of your Tube instance"
+msgid "Bandwidth: can be mitigated using <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-following-instances?id=instances-redundancy\">Tube redundancy system</a> and cache servers that serve video static files in front of your Tube instance"
+msgstr "Bandwidth: can be mitigated using <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-following-instances?id=instances-redundancy\">Tube redundancy system</a> and cache servers that serve video static files in front of your Tube instance"
 
 #: src/views/FAQ.vue:691
-msgid "Storage: can be mitigated using <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-remote-storage\">S3/Object storage</a>"
-msgstr "Storage: can be mitigated using <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-remote-storage\">S3/Object storage</a>"
+msgid "Storage: can be mitigated using <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-remote-storage\">S3/Object storage</a>"
+msgstr "Storage: can be mitigated using <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-remote-storage\">S3/Object storage</a>"
 
 #: src/views/FAQ.vue:692
 msgid "Video transcoding: we may implement <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/Chocobozzz/Tube/issues/947\">transcoding by remote workers</a> in the future"
@@ -1733,12 +1733,12 @@ msgid "Tube REST API"
 msgstr "Tube REST API"
 
 #: src/views/FAQ.vue:855
-msgid "Test Tube REST API with the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/api-rest-getting-started\">getting started guide</a>"
-msgstr "Test Tube REST API with the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/api-rest-getting-started\">getting started guide</a>"
+msgid "Test Tube REST API with the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/api-rest-getting-started\">getting started guide</a>"
+msgstr "Test Tube REST API with the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/api-rest-getting-started\">getting started guide</a>"
 
 #: src/views/FAQ.vue:856
-msgid "Check the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/api-rest-reference.html\">REST API documentation</a>"
-msgstr "Check the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/api-rest-reference.html\">REST API documentation</a>"
+msgid "Check the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/api-rest-reference.html\">REST API documentation</a>"
+msgstr "Check the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/api-rest-reference.html\">REST API documentation</a>"
 
 #: src/views/FAQ.vue:857 src/views/FAQ.vue:867
 msgid "Get help on <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://framacolibri.org/c/tube\">Tube forum</a>"
@@ -1753,20 +1753,20 @@ msgid "Use the Tube player embed on your website"
 msgstr "Use the Tube player embed on your website"
 
 #: src/views/FAQ.vue:866
-msgid "Control the Tube player embed using the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/api-embed-player\">embed API</a>"
-msgstr "Control the Tube player embed using the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/api-embed-player\">embed API</a>"
+msgid "Control the Tube player embed using the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/api-embed-player\">embed API</a>"
+msgstr "Control the Tube player embed using the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/api-embed-player\">embed API</a>"
 
 #: src/views/FAQ.vue:872
 msgid "Plugins & Themes"
 msgstr "Plugins & Themes"
 
 #: src/views/FAQ.vue:875
-msgid "Develop plugins and themes using the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/contribute-plugins\">getting started guide</a>"
-msgstr "Develop plugins and themes using the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/contribute-plugins\">getting started guide</a>"
+msgid "Develop plugins and themes using the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/contribute-plugins\">getting started guide</a>"
+msgstr "Develop plugins and themes using the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/contribute-plugins\">getting started guide</a>"
 
 #: src/views/FAQ.vue:876
-msgid "Check the complete <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/api-plugins\">plugin/theme documentation</a>"
-msgstr "Check the complete <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/api-plugins\">plugin/theme documentation</a>"
+msgid "Check the complete <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/api-plugins\">plugin/theme documentation</a>"
+msgstr "Check the complete <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/api-plugins\">plugin/theme documentation</a>"
 
 #: src/views/FAQ.vue:877
 msgid "Get help on <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://framacolibri.org/c/tube\">Tube forum</a> or ask new plugin/theme API in <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/Chocobozzz/Tube\">Tube issues</a>"
@@ -1777,8 +1777,8 @@ msgid "Tube uses ActivityPub because this federation protocol is recommended by 
 msgstr "Tube uses ActivityPub because this federation protocol is recommended by the W3C and is also used by other projects like the social network <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://joinmastodon.org/\">Mastodon</a>."
 
 #: src/views/FAQ.vue:895
-msgid "IPFS is a great technology, but it still seems too young for streaming large files. The Tube P2P system based on well established protocols like HTTP and WebRTC, and the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-following-instances?id=instances-redundancy\">redundancy system</a> are more easy for us to use and to maintain."
-msgstr "IPFS is a great technology, but it still seems too young for streaming large files. The Tube P2P system based on well established protocols like HTTP and WebRTC, and the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.dingshunyu.top/admin-following-instances?id=instances-redundancy\">redundancy system</a> are more easy for us to use and to maintain."
+msgid "IPFS is a great technology, but it still seems too young for streaming large files. The Tube P2P system based on well established protocols like HTTP and WebRTC, and the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-following-instances?id=instances-redundancy\">redundancy system</a> are more easy for us to use and to maintain."
+msgstr "IPFS is a great technology, but it still seems too young for streaming large files. The Tube P2P system based on well established protocols like HTTP and WebRTC, and the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://tube.docs.imzqqq.top/admin-following-instances?id=instances-redundancy\">redundancy system</a> are more easy for us to use and to maintain."
 
 #: src/views/FAQ.vue:902
 msgid "DTube does not seem open source, because publishing only compiled code hinders freedom of modification."

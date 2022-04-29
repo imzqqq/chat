@@ -146,13 +146,13 @@
     [self.matrixSDKTestsData doMXRestClientTestWithBobAndARoom:self readyToTest:^(MXRestClient *bobRestClient, NSString *roomId, XCTestExpectation *expectation) {
 
         __block MXRestClient *bobRestClient2 = bobRestClient;
-        [bobRestClient setRoomAvatar:roomId avatar:@"http://chat.dingshunyu.top/matrix.png" success:^{
+        [bobRestClient setRoomAvatar:roomId avatar:@"http://chat.imzqqq.top/matrix.png" success:^{
 
             [bobRestClient2 avatarOfRoom:roomId success:^(NSString *avatar) {
 
                 XCTAssertNotNil(avatar);
                 XCTAssertNotEqual(avatar.length, 0);
-                XCTAssertEqualObjects(avatar, @"http://chat.dingshunyu.top/matrix.png");
+                XCTAssertEqualObjects(avatar, @"http://chat.imzqqq.top/matrix.png");
                 [expectation fulfill];
 
             } failure:^(NSError *error) {
@@ -1072,8 +1072,8 @@
         filter.room.ephemeral.notTypes = @[@"notatype"];
         filter.room.ephemeral.rooms = @[@"!aroom_ephemeral:matrix:org"];
         filter.room.ephemeral.notRooms = @[@"!notaroom_ephemeral:matrix:org"];
-        filter.room.ephemeral.senders = @[@"@asender:chat.dingshunyu.top"];
-        filter.room.ephemeral.notSenders = @[@"@notasender:chat.dingshunyu.top"];
+        filter.room.ephemeral.senders = @[@"@asender:chat.imzqqq.top"];
+        filter.room.ephemeral.notSenders = @[@"@notasender:chat.imzqqq.top"];
 
         // This is the basic filter we use
         filter.room.timeline = [[MXRoomEventFilter alloc] init];
@@ -1086,8 +1086,8 @@
         filter.presence = [[MXFilter alloc] init];
         filter.presence.types = @[@"atype"];
         filter.presence.notTypes = @[@"notatype"];
-        filter.presence.senders = @[@"@asender:chat.dingshunyu.top"];
-        filter.presence.notSenders = @[@"@notasender:chat.dingshunyu.top"];
+        filter.presence.senders = @[@"@asender:chat.imzqqq.top"];
+        filter.presence.notSenders = @[@"@notasender:chat.imzqqq.top"];
         filter.presence.limit = 11;
 
         [aliceRestClient setFilter:filter success:^(NSString *filterId) {
@@ -1195,7 +1195,7 @@
     [self.matrixSDKTestsData doMXRestClientTestWithAlice:self readyToTest:^(MXRestClient *aliceRestClient, XCTestExpectation *expectation) {
 
         // Set the avatar url
-        __block NSString *newAvatarUrl = @"http://chat.dingshunyu.top/matrix2.png";
+        __block NSString *newAvatarUrl = @"http://chat.imzqqq.top/matrix2.png";
         [aliceRestClient setAvatarUrl:newAvatarUrl success:^{
 
             // Then retrieve it
@@ -1221,7 +1221,7 @@
     [self.matrixSDKTestsData doMXRestClientTestWithAlice:self readyToTest:^(MXRestClient *aliceRestClient, XCTestExpectation *expectation) {
 
         // Set the avatar url
-        __block NSString *newAvatarUrl = @"http://chat.dingshunyu.top/matrix2.png";
+        __block NSString *newAvatarUrl = @"http://chat.imzqqq.top/matrix2.png";
         [aliceRestClient setAvatarUrl:newAvatarUrl success:^{
 
             [self.matrixSDKTestsData doMXRestClientTestWithBob:nil readyToTest:^(MXRestClient *bobRestClient, XCTestExpectation *expectation2) {

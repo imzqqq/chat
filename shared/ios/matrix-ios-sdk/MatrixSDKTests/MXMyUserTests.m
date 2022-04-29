@@ -107,14 +107,14 @@
             [mxSession.myUser listenToUserUpdate:^(MXEvent *event) {
 
                 XCTAssertEqual(event.eventType, MXEventTypePresence);
-                XCTAssert([mxSession.myUser.avatarUrl isEqualToString:@"mxc://chat.dingshunyu.top/rQkrOoaFIRgiACATXUdQIuNJ"], @"Wrong avatar. Found: %@", mxSession.myUser.avatarUrl);
+                XCTAssert([mxSession.myUser.avatarUrl isEqualToString:@"mxc://chat.imzqqq.top/rQkrOoaFIRgiACATXUdQIuNJ"], @"Wrong avatar. Found: %@", mxSession.myUser.avatarUrl);
 
             }];
 
             // Update the profile with a mxc URL (non mxc url are ignored)
-            [mxSession.myUser setAvatarUrl:@"mxc://chat.dingshunyu.top/rQkrOoaFIRgiACATXUdQIuNJ" success:^{
+            [mxSession.myUser setAvatarUrl:@"mxc://chat.imzqqq.top/rQkrOoaFIRgiACATXUdQIuNJ" success:^{
 
-                XCTAssert([mxSession.myUser.avatarUrl isEqualToString:@"mxc://chat.dingshunyu.top/rQkrOoaFIRgiACATXUdQIuNJ"], @"Wrong avatar. Found: %@", mxSession.myUser.avatarUrl);
+                XCTAssert([mxSession.myUser.avatarUrl isEqualToString:@"mxc://chat.imzqqq.top/rQkrOoaFIRgiACATXUdQIuNJ"], @"Wrong avatar. Found: %@", mxSession.myUser.avatarUrl);
                 [expectation fulfill];
 
             } failure:^(NSError *error) {

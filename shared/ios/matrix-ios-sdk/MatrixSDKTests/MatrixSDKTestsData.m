@@ -39,7 +39,7 @@ NSString *const kMXTestsHomeServerURL = @"http://localhost:8080";
 NSString *const kMXTestsHomeServerHttpsURL = @"https://localhost:8481";
 
 NSString * const kMXTestsAliceDisplayName = @"mxAlice";
-NSString * const kMXTestsAliceAvatarURL = @"mxc://chat.dingshunyu.top/kciiXusgZFKuNLIfLqmmttIQ";
+NSString * const kMXTestsAliceAvatarURL = @"mxc://chat.imzqqq.top/kciiXusgZFKuNLIfLqmmttIQ";
 
 
 @interface MatrixSDKTestsData ()

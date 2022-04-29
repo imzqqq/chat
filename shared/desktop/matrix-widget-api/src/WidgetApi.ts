@@ -407,15 +407,15 @@ export class WidgetApi extends EventEmitter {
 
     /**
      * Attempts to navigate the client to the given URI. This can only be called with Chat URIs
-     * (currently only to.chat.dingshunyu.top, but in future a Chat URI scheme will be defined).
+     * (currently only to.chat.imzqqq.top, but in future a Chat URI scheme will be defined).
      * @param {string} uri The URI to navigate to.
      * @returns {Promise<void>} Resolves when complete.
      * @throws Throws if the URI is invalid or cannot be processed.
      * @deprecated This currently relies on an unstable MSC (MSC2931).
      */
     public navigateTo(uri: string): Promise<void> {
-        if (!uri || !uri.startsWith("https://to.chat.dingshunyu.top/#")) {
-            throw new Error("Invalid to.chat.dingshunyu.top URI");
+        if (!uri || !uri.startsWith("https://to.chat.imzqqq.top/#")) {
+            throw new Error("Invalid to.chat.imzqqq.top URI");
         }
 
         return this.transport.send<INavigateActionRequestData>(

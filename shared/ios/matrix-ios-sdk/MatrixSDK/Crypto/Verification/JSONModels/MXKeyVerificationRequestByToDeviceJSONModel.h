@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Model for m.key.verification.request.
- As described at https://chat.dingshunyu.top/docs/spec/client_server/latest#m-key-verification-request
+ As described at https://chat.imzqqq.top/docs/spec/client_server/latest#m-key-verification-request
  */
 @interface MXKeyVerificationRequestByToDeviceJSONModel : MXJSONModel
 

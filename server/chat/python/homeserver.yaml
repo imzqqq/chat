@@ -11,7 +11,7 @@
 
 # Server admins can expand Chat server's functionality with external modules.
 #
-# See https://chat.docs.dingshunyu.top/modules.html for more
+# See https://chat.docs.imzqqq.top/modules.html for more
 # documentation on how to configure or create custom modules for Chat server.
 #
 modules:
@@ -30,7 +30,7 @@ modules:
 # created on this server. For example if the server_name was example.com,
 # usernames on this server would be in the format @user:example.com
 #
-# See https://chat.docs.dingshunyu.top/delegate.html
+# See https://chat.docs.imzqqq.top/delegate.html
 # for information on how to host Chat server on a subdomain while preserving
 # a clean server_name.
 #
@@ -39,7 +39,7 @@ modules:
 # lowercase and may contain an explicit port.
 # Examples: chat.org, localhost:8080
 #
-server_name: "chat.dingshunyu.top"
+server_name: "chat.imzqqq.top"
 
 # When running as a daemon, the file to store the pid in
 #
@@ -62,7 +62,7 @@ pid_file: /home/imzqqq/workspace/chat/server/chat/python/homeserver.pid
 # Otherwise, it should be the URL to reach Chat server's client HTTP listener (see
 # 'listeners' below).
 #
-public_baseurl: https://chat.dingshunyu.top/
+public_baseurl: https://chat.imzqqq.top/
 
 # Set the soft limit on the number of file descriptors Chat server can use
 # Zero is used to indicate Chat server should set the soft limit to the
@@ -213,9 +213,9 @@ presence:
 #       'all local interfaces'.
 #
 #   type: the type of listener. Normally 'http', but other valid options are:
-#       'manhole' (see https://chat.docs.dingshunyu.top/manhole.html),
-#       'metrics' (see https://chat.docs.dingshunyu.top/metrics-howto.html),
-#       'replication' (see https://chat.docs.dingshunyu.top/workers.html).
+#       'manhole' (see https://chat.docs.imzqqq.top/manhole.html),
+#       'metrics' (see https://chat.docs.imzqqq.top/metrics-howto.html),
+#       'replication' (see https://chat.docs.imzqqq.top/workers.html).
 #
 #   tls: set to true to enable TLS for this listener. Will use the TLS
 #       key/cert specified in tls_private_key_path / tls_certificate_path.
@@ -241,7 +241,7 @@ presence:
 #       API (/_chat/admin). Also implies 'media' and 'static'.
 #
 #   consent: user consent forms (/chat/consent).
-#       See https://chat.docs.dingshunyu.top/consent_tracking.html.
+#       See https://chat.docs.imzqqq.top/consent_tracking.html.
 #
 #   federation: the server-server API (/chat/federation). Also implies
 #       'media', 'keys', 'openid'
@@ -251,12 +251,12 @@ presence:
 #   media: the media API (/chat/media).
 #
 #   metrics: the metrics interface.
-#       See https://chat.docs.dingshunyu.top/metrics-howto.html.
+#       See https://chat.docs.imzqqq.top/metrics-howto.html.
 #
 #   openid: OpenID authentication.
 #
 #   replication: the HTTP replication API (/_chat/replication).
-#       See https://chat.docs.dingshunyu.top/workers.html.
+#       See https://chat.docs.imzqqq.top/workers.html.
 #
 #   static: static resources under chat/static (/chat/static). (Mostly
 #       useful for 'fallback authentication'.)
@@ -280,7 +280,7 @@ listeners:
   # that unwraps TLS.
   #
   # If you plan to use a reverse proxy, please see
-  # https://chat.docs.dingshunyu.top/reverse_proxy.html.
+  # https://chat.docs.imzqqq.top/reverse_proxy.html.
   #
   - port: 8080
     tls: false
@@ -530,7 +530,7 @@ templates:
   # If not set, or a file is not found within the template directory, a default
   # template from within the Chat server package will be used.
   #
-  # See https://chat.docs.dingshunyu.top/templates.html for more
+  # See https://chat.docs.imzqqq.top/templates.html for more
   # information about using custom templates.
   #
   #custom_template_directory: /path/to/custom/templates/
@@ -546,11 +546,11 @@ templates:
 # any intermediate certificates (for instance, if using certbot, use
 # `fullchain.pem` as your certificate, not `cert.pem`).
 #
-#tls_certificate_path: "/etc/letsencrypt/live/chat.dingshunyu.top/fullchain.pem"
+#tls_certificate_path: "/etc/letsencrypt/live/chat.imzqqq.top/fullchain.pem"
 
 # PEM-encoded private key for TLS
 #
-#tls_private_key_path: "/etc/letsencrypt/live/chat.dingshunyu.top/privkey.pem"
+#tls_private_key_path: "/etc/letsencrypt/live/chat.imzqqq.top/privkey.pem"
 
 # Whether to verify TLS server certificates for outbound federation requests.
 #
@@ -739,7 +739,7 @@ caches:
 #    cp_max: 10
 #
 # For more information on using Chat server with Postgres,
-# see https://chat.docs.dingshunyu.top/postgres.html.
+# see https://chat.docs.imzqqq.top/postgres.html.
 #
 database:
   name: psycopg2
@@ -759,7 +759,7 @@ database:
 # A yaml python logging config file as described by
 # https://docs.python.org/3.7/library/logging.config.html#configuration-dictionary-schema
 #
-log_config: "/home/imzqqq/workspace/chat/server/chat/python/chat.dingshunyu.top.log.config"
+log_config: "/home/imzqqq/workspace/chat/server/chat/python/chat.imzqqq.top.log.config"
 
 
 ## Ratelimiting ##
@@ -898,7 +898,7 @@ media_store_path: "/home/imzqqq/workspace/chat/server/chat/python/media_store"
 #
 # If you are using a reverse proxy you may also need to set this value in
 # your reverse proxy's config. Notably Nginx has a small max body size by default.
-# See https://chat.docs.dingshunyu.top/reverse_proxy.html.
+# See https://chat.docs.imzqqq.top/reverse_proxy.html.
 #
 max_upload_size: 1024M
 
@@ -1401,7 +1401,7 @@ form_secret: "o-HCacMxi=mdFKyuDuNQ6xNkDLGn2hqvKWy3X_pu4wp5lj=IrE"
 
 # Path to the signing key to sign messages with
 #
-signing_key_path: "/home/imzqqq/workspace/chat/server/chat/python/chat.dingshunyu.top.signing.key"
+signing_key_path: "/home/imzqqq/workspace/chat/server/chat/python/chat.imzqqq.top.signing.key"
 
 # The keys that the server used to sign messages with but won't use
 # to sign new messages.
@@ -1755,7 +1755,7 @@ saml2_config:
 #
 #       module: The class name of a custom mapping module. Default is
 #           'chat.handlers.oidc.JinjaOidcMappingProvider'.
-#           See https://chat.docs.dingshunyu.top/sso_mapping_providers.html#openid-mapping-providers
+#           See https://chat.docs.imzqqq.top/sso_mapping_providers.html#openid-mapping-providers
 #           for information on implementing a custom mapping provider.
 #
 #       config: Configuration for the mapping provider module. This section will
@@ -1806,7 +1806,7 @@ saml2_config:
 #     - attribute: groups
 #       value: "admin"
 #
-# See https://chat.docs.dingshunyu.top/openid.html
+# See https://chat.docs.imzqqq.top/openid.html
 # for information on how to configure these options.
 #
 # For backwards compatibility, it is also possible to configure a single OIDC
@@ -1876,7 +1876,7 @@ cas_config:
 # SAML2 and CAS.
 #
 # Server admins can configure custom templates for pages related to SSO. See
-# https://chat.docs.dingshunyu.top/templates.html for more information.
+# https://chat.docs.imzqqq.top/templates.html for more information.
 #
 sso:
     # A list of client URLs which are whitelisted so that the user does not
@@ -1924,7 +1924,7 @@ sso:
 # Note that this is a non-standard login type and client support is
 # expected to be non-existent.
 #
-# See https://chat.docs.dingshunyu.top/jwt.html.
+# See https://chat.docs.imzqqq.top/jwt.html.
 #
 #jwt_config:
     # Uncomment the following to enable authorization using JSON web
@@ -2041,7 +2041,7 @@ ui_auth:
 # Configuration for sending emails from Chat server.
 #
 # Server admins can configure custom templates for email content. See
-# https://chat.docs.dingshunyu.top/templates.html for more information.
+# https://chat.docs.imzqqq.top/templates.html for more information.
 #
 email:
   # The hostname of the outgoing SMTP server to use. Defaults to 'localhost'.
@@ -2101,7 +2101,7 @@ email:
   notif_for_new_users: true
 
   # Custom URL for client links within the email notifications. By default
-  # links will be based on "https://to.chat.dingshunyu.top".
+  # links will be based on "https://to.chat.imzqqq.top".
   #
   # (This setting used to be called riot_base_url; the old name is still
   # supported for backwards-compatibility but is now deprecated.)
@@ -2117,7 +2117,7 @@ email:
   # to the identity server as the org.matrix.web_client_location key. Defaults
   # to unset, giving no guidance to the identity server.
   #
-  invite_client_location: https://apps.chat.dingshunyu.top
+  invite_client_location: https://apps.chat.imzqqq.top
 
   # Subjects to use when sending emails from Chat server.
   #
@@ -2192,7 +2192,7 @@ email:
 # ex. LDAP, external tokens, etc.
 #
 # For more information and known implementations, please see
-# https://chat.docs.dingshunyu.top/password_auth_providers.html
+# https://chat.docs.imzqqq.top/password_auth_providers.html
 #
 # Note: instances wishing to use SAML or CAS authentication should
 # instead use the `saml2_config` or `cas_config` options,
@@ -2292,7 +2292,7 @@ user_directory:
     #
     # If you set it true, you'll have to rebuild the user_directory search
     # indexes, see:
-    # https://chat.docs.dingshunyu.top/user_directory.html
+    # https://chat.docs.imzqqq.top/user_directory.html
     #
     # Uncomment to return search results containing all known users, even if that
     # user does not share a room with the requester.
@@ -2312,7 +2312,7 @@ user_directory:
 # User Consent configuration
 #
 # for detailed instructions, see
-# https://chat.docs.dingshunyu.top/consent_tracking.html
+# https://chat.docs.imzqqq.top/consent_tracking.html
 #
 # Parts of this section are required if enabling the 'consent' resource under
 # 'listeners', in particular 'template_dir' and 'version'.
@@ -2361,7 +2361,7 @@ user_directory:
 
 
 # Settings for local room and user statistics collection. See
-# https://chat.docs.dingshunyu.top/room_and_user_statistics.html.
+# https://chat.docs.imzqqq.top/room_and_user_statistics.html.
 #
 stats:
   # Uncomment the following to disable room and user statistics. Note that doing
@@ -2387,7 +2387,7 @@ stats:
 server_notices:
  system_mxid_localpart: notices
  system_mxid_display_name: "Server Notices"
- system_mxid_avatar_url: "https://chat.dingshunyu.top/chat/media/r0/thumbnail/chat.dingshunyu.top/vQnCtgHQwNdaXiEJfEnFzTXV?width=96&height=96&method=crop"
+ system_mxid_avatar_url: "https://chat.imzqqq.top/chat/media/r0/thumbnail/chat.imzqqq.top/vQnCtgHQwNdaXiEJfEnFzTXV?width=96&height=96&method=crop"
  room_name: "Server Notices"
 
 
@@ -2469,7 +2469,7 @@ opentracing:
     #enabled: true
 
     # The list of homeservers we wish to send and receive span contexts and span baggage.
-    # See https://chat.docs.dingshunyu.top/opentracing.html.
+    # See https://chat.docs.imzqqq.top/opentracing.html.
     #
     # This is a list of regexes which are matched against the server_name of the
     # homeserver.

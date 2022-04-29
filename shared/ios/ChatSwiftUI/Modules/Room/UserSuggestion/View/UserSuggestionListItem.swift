@@ -39,7 +39,7 @@ struct UserSuggestionListItem: View {
 @available(iOS 14.0, *)
 struct UserSuggestionHeader_Previews: PreviewProvider {
     static var previews: some View {
-        UserSuggestionListItem(avatar: MockAvatarInput.example, displayName: "Alice", userId: "@alice:chat.dingshunyu.top")
+        UserSuggestionListItem(avatar: MockAvatarInput.example, displayName: "Alice", userId: "@alice:chat.imzqqq.top")
             .addDependency(MockAvatarService.example)
     }
 }

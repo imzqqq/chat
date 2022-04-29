@@ -217,7 +217,7 @@ function showPage(dataset, newTimeline, language) {
 	// if it is.
 	const parsedURL = new URL(name);
 	if (parsedURL && parsedURL.protocol === 'https:') {
-    if (parsedURL.host == 'live.dingshunyu.top') {
+    if (parsedURL.host == 'live.imzqqq.top') {
       console.log(parsedURL)
       window.open(parsedURL.pathname);
       return;

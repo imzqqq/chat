@@ -23,4 +23,4 @@ You can find setup instructions for each of the connectors in the sidebar.
 [IPC protocol]: https://github.com/mautrix/imessage/blob/master/imessage/ios/ipc.md
 
 ## Discussion
-Matrix room: [#imessage:maunium.net](https://to.chat.dingshunyu.top/#/#imessage:maunium.net)
+Matrix room: [#imessage:maunium.net](https://to.chat.imzqqq.top/#/#imessage:maunium.net)

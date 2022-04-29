@@ -176,9 +176,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) Class roomListDataManagerClass;
 
 /**
- For use in clients that use a custom base url for permalinks rather than to.chat.dingshunyu.top.
+ For use in clients that use a custom base url for permalinks rather than to.chat.imzqqq.top.
  This baseURL is used to generate permalinks within the app (E.g. timeline message permalinks).
- An Optional String, when nil to.chat.dingshunyu.top format/hostname is used instead.
+ An Optional String, when nil to.chat.imzqqq.top format/hostname is used instead.
  */
 @property (nonatomic, nullable) NSString *clientPermalinkBaseUrl;
 

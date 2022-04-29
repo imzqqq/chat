@@ -1,7 +1,7 @@
 # MSC3442: move the `prev_content` key to `unsigned`
 
 Background: the Client-Server API specification
-[documents](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#state-event-fields)
+[documents](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#state-event-fields)
 a `prev_content` property to be included on state events. It gives the
 `content` of the previous state event with the same `type` and `state_key`.
 
@@ -15,12 +15,12 @@ and which added retrospectively.
 
 It is also inconsistent with other properties which are added by the local
 homeserver such as `age`, `redacted_because` and `transaction_id`, which are
-returned under `unsigned`: see https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#room-event-fields.
+returned under `unsigned`: see https://chat.api-spec.imzqqq.top/client_server/r0.6.1#room-event-fields.
 
 ## Further background information
 
 1. The specification for the [`GET
-   /chat/client/r0/notifications`](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#get-matrix-client-r0-notifications)
+   /chat/client/r0/notifications`](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#get-matrix-client-r0-notifications)
    API is unusual in that it requires `prev_content` to be returned under
    `unsigned`.
 

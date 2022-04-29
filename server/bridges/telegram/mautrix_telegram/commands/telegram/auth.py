@@ -65,7 +65,7 @@ async def ping_bot(evt: CommandEvent) -> EventID:
         return await evt.reply("Telegram message relay bot not configured.")
     info, mxid = await evt.tgbot.get_me(use_cache=False)
     return await evt.reply("Telegram message relay bot is active: "
-                           f"[{info.first_name}](https://to.chat.dingshunyu.top/#/{mxid}) (ID {info.id})\n\n"
+                           f"[{info.first_name}](https://to.chat.imzqqq.top/#/{mxid}) (ID {info.id})\n\n"
                            "To use the bot, simply invite it to a portal room.")
 
 
@@ -202,7 +202,7 @@ async def login(evt: CommandEvent) -> EventID:
         url = f"{prefix}/login?token={evt.public_website.make_token(evt.sender.mxid, '/login')}"
         if override_sender:
             return await evt.reply(f"[Click here to log in]({url}) as "
-                                   f"[{evt.sender.mxid}](https://to.chat.dingshunyu.top/#/{evt.sender.mxid}).")
+                                   f"[{evt.sender.mxid}](https://to.chat.imzqqq.top/#/{evt.sender.mxid}).")
         elif allow_matrix_login:
             return await evt.reply(f"[Click here to log in]({url}). Alternatively, send your phone"
                                    f" number (or bot auth token) here to log in.\n\n{nb}")
@@ -336,13 +336,13 @@ async def _finish_sign_in(evt: CommandEvent, user: User, login_as: 'u.User' = No
     if existing_user and existing_user != login_as:
         await existing_user.log_out()
         await evt.reply(f"[{existing_user.displayname}]"
-                        f"(https://to.chat.dingshunyu.top/#/{existing_user.mxid})"
+                        f"(https://to.chat.imzqqq.top/#/{existing_user.mxid})"
                         " was logged out from the account.")
     asyncio.ensure_future(login_as.post_login(user, first_login=True), loop=evt.loop)
     evt.sender.command_status = None
     name = f"@{user.username}" if user.username else f"+{user.phone}"
     if login_as != evt.sender:
-        msg = (f"Successfully logged in [{login_as.mxid}](https://to.chat.dingshunyu.top/#/{login_as.mxid})"
+        msg = (f"Successfully logged in [{login_as.mxid}](https://to.chat.imzqqq.top/#/{login_as.mxid})"
                f" as {name}")
     else:
         msg = f"Successfully logged in as {name}"

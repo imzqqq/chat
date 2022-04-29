@@ -22,8 +22,8 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 
 /**
  * Ref:
- * - https://chat.docs.dingshunyu.top/spec/client_server/r0.5.0#password-based
- * - https://chat.docs.dingshunyu.top/spec/client_server/r0.5.0#identifier-types
+ * - https://chat.docs.imzqqq.top/spec/client_server/r0.5.0#password-based
+ * - https://chat.docs.imzqqq.top/spec/client_server/r0.5.0#identifier-types
  */
 @JsonClass(generateAdapter = true)
 internal data class PasswordLoginParams(

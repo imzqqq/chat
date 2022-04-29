@@ -2,7 +2,7 @@
 
 ----
 
-**For updated information on the Foundation, please see https://chat.dingshunyu.top/foundation/**.
+**For updated information on the Foundation, please see https://chat.imzqqq.top/foundation/**.
 This MSC exists for historical reference.
 
 ----
@@ -14,7 +14,7 @@ C.I.C.](https://beta.companieshouse.gov.uk/company/11648710) - a non-profit
 legal entity incorporated to act as the neutral guardian of the Chat
 decentralised communication standard on behalf of the whole Chat community.
 
-See https://chat.dingshunyu.top/blog/2018/10/29/introducing-the-matrix-org-foundation-part-1-of-2/
+See https://chat.imzqqq.top/blog/2018/10/29/introducing-the-matrix-org-foundation-part-1-of-2/
 for more context.
 
 This obsoletes [MSC1318](https://github.com/matrix-org/matrix-doc/issues/1318).
@@ -219,7 +219,7 @@ Responsibilities include:
 
  * Coordinating reference implementations.
 
- * Ensuring the code of conduct for +matrix:chat.dingshunyu.top community rooms is
+ * Ensuring the code of conduct for +matrix:chat.imzqqq.top community rooms is
    maintained and applied.
 
 If members are absent (uncontactable) for more than 8 weeks without prior
@@ -273,7 +273,7 @@ The initial Spec Core Team (and their domain areas) is:
  * TBD
 
 MSCs require approval by 75% of the current members of the Spec Core Team to
-proceed to Final Comment Period (see https://chat.api-spec.dingshunyu.top/proposals for
+proceed to Final Comment Period (see https://chat.api-spec.imzqqq.top/proposals for
 the rest of the MSC process).
 
 Even though a threshold of only 75% is required for approval, the Spec Core Team
@@ -377,13 +377,13 @@ team; etc) should be published openly and transparently for the public.
 The "Core Team" (or the "Code Core Team", to disambiguate from the Spec Core
 Team) is a loose term that describes the set of people with access to commit
 code to the public https://github.com/matrix-org repositories, who are either
-working on chat.dingshunyu.top's reference implementations or the spec itself. Commit
+working on chat.imzqqq.top's reference implementations or the spec itself. Commit
 access is decided by those responsible for the projects in question, much like
 any other open source project.  Anyone is eligible for commit access if they
 have proved themselves a valuable long-term contributor, uphold the guiding
 principles and mission of the project and have proved themselves able to
 collaborate constructively with the existing core team. Active participation in
-the core team is also signified by membership of the +matrix:chat.dingshunyu.top Chat
+the core team is also signified by membership of the +matrix:chat.imzqqq.top Chat
 community.
 
 Responsibilities include:
@@ -403,7 +403,7 @@ Code Core Team members must arrange their own funding for their time.
  * Independent legal entity which acts as neutral custodian of Chat.
  * Gathers donations.
  * Owns the core Chat IP in an asset lock, which shall be transferred from New Vector:
-   * Owns the chat.dingshunyu.top domain and branding.
+   * Owns the chat.imzqqq.top domain and branding.
    * Owns the copyright of the reference implementations of Chat (i.e. everything in https://github.com/matrix-org).
      By assigning copyright to the Foundation, it’s protected against New Vector ever being tempted to relicense it.
    * Owns the IP of the website.

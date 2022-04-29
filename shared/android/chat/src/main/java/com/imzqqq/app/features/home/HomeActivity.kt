@@ -259,7 +259,7 @@ class HomeActivity :
     private fun handleIntent(intent: Intent?) {
         intent?.dataString?.let { deepLink ->
             val resolvedLink = when {
-                // Element custom scheme is not handled by the sdk, convert it to to.chat.dingshunyu.top link for compatibility
+                // Element custom scheme is not handled by the sdk, convert it to to.chat.imzqqq.top link for compatibility
                 deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE) -> {
                     when {
                         deepLink.startsWith(USER_LINK_PREFIX) -> deepLink.substring(USER_LINK_PREFIX.length)

@@ -3,9 +3,9 @@
 As the Chat Specification stands today, it is easy for client developers to
 assume that all events will be structured as documented. For example, the
 `displayname` key of an [`m.room.member`
-event](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#m-room-member) is
+event](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#m-room-member) is
 specified to be "`string` or `null`"; and the `info` key of an [`m.image`
-message event](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#m-image) must
+message event](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#m-image) must
 be a Javascript object.
 
 In reality, these are not safe assumptions. This MSC proposes that the
@@ -37,7 +37,7 @@ these reasons may appear to have trivial solutions; these are discussed below.
 
     However, this problem extends to event types and keys which have been added
     to the specification. For example, the [`m.room.encrypted` event
-    type](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#m-room-encrypted)
+    type](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#m-room-encrypted)
     was added in Client-Server API r0.4.0. It therefore follows that a server
     implementing CS-API r0.3.0 would have no way to validate an
     `m.room.encrypted` event, so if a client is connected to such a server, it
@@ -50,7 +50,7 @@ these reasons may appear to have trivial solutions; these are discussed below.
     This problem also applies to non-room data such as account data. For
     example, Client-Server API r0.6.0 added the [`m.identity_server` account
     data event
-    type](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#m-identity-server).
+    type](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#m-identity-server).
     It is possible, if unlikely, that a client could have uploaded an
     `m.identity_server` event before the administrator upgraded the server.
 
@@ -113,7 +113,7 @@ room state can begin to drift, and the room can eventually become
 not form part of the room state": we have a risk that some servers will accept
 the event, and some will not.
 
-One approach to solving this is via [room versions](https://spec.chat.dingshunyu.top/unstable/rooms/).
+One approach to solving this is via [room versions](https://spec.chat.imzqqq.top/unstable/rooms/).
 By specifying that a change of rules only applies for a future room version,
 we can eliminate this potential disagreement.
 

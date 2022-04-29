@@ -37,7 +37,7 @@ async def twitter_to_matrix(message: MessageData) -> TextMessageEventContent:
         elif isinstance(entity, MessageEntityUserMention):
             puppet = await pu.Puppet.get_by_twid(entity.id, create=False)
             if puppet:
-                user_url = f"https://to.chat.dingshunyu.top/#/{puppet.mxid}"
+                user_url = f"https://to.chat.imzqqq.top/#/{puppet.mxid}"
                 content.formatted_body = (f'{content.formatted_body[:start]}'
                                           f'<a href="{user_url}">{puppet.name or entity.name}</a>'
                                           f'{content.formatted_body[end:]}')

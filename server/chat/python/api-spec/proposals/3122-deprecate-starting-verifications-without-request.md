@@ -1,7 +1,7 @@
 # MSC3122: Deprecate starting key verifications without requesting first
 
 Currently, the [Key verification
-framework](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#key-verification-framework)
+framework](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#key-verification-framework)
 allows a device to begin a verification via to-device messages by sending an
 `m.key.verification.start` event without first sending or receiving an
 `m.key.verification.request` message.  (The last sentence of the 5th paragraph

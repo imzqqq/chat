@@ -66,8 +66,8 @@ struct AboutView: View {
 }
 
 private extension AboutView {
-    static let websiteURL = URL(string: "https://flow.dingshunyu.top")!
-    static let officialAccountURL = URL(string: "https://flow.dingshunyu.top/@imzqqq")!
+    static let websiteURL = URL(string: "https://flow.imzqqq.top")!
+    static let officialAccountURL = URL(string: "https://flow.imzqqq.top/@imzqqq")!
     static let sourceCodeAndIssueTrackerURL = URL(string: "https://github.com/imzqqq")!
     static let translationsURL = URL(string: "https://crowdin.com/project/flow")!
     static let reviewURL = URL(string: "https://apps.apple.com/app/flow/id1523996615?mt=8&action=write-review")!

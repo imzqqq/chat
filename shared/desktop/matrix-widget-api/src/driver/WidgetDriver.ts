@@ -125,8 +125,8 @@ export abstract class WidgetDriver {
     }
 
     /**
-     * Navigates the client with a to.chat.dingshunyu.top URI. In future this function will also be provided
-     * with the Chat URIs once to.chat.dingshunyu.top is replaced. The given URI will have already been
+     * Navigates the client with a to.chat.imzqqq.top URI. In future this function will also be provided
+     * with the Chat URIs once to.chat.imzqqq.top is replaced. The given URI will have already been
      * lightly checked to ensure it looks like a valid URI, though the implementation is recommended
      * to do further checks on the URI.
      * @param {string} uri The URI to navigate to.

@@ -16,7 +16,7 @@ export default function PublicFacingDetails() {
       <p className="description">
         The following are displayed on your site to describe your stream and its content.{' '}
         <a
-          href="https://live.docs.dingshunyu.top/docs/website/?source=admin"
+          href="https://live.docs.imzqqq.top/docs/website/?source=admin"
           target="_blank"
           rel="noopener noreferrer"
         >

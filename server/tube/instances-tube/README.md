@@ -45,7 +45,7 @@ $ node dist/server.js
 
 ## Tube auto follow & Global Search
 
-If you don't want to run this application but would like to have your own index for the [Tube auto follow feature](https://tube.docs.dingshunyu.top/#/admin-following-instances?id=automatically-follow-other-instances) or the [Global Search](https://framagit.org/framasoft/tube/search-index), serve the following JSON format:
+If you don't want to run this application but would like to have your own index for the [Tube auto follow feature](https://tube.docs.imzqqq.top/#/admin-following-instances?id=automatically-follow-other-instances) or the [Global Search](https://framagit.org/framasoft/tube/search-index), serve the following JSON format:
 
 ```
 {

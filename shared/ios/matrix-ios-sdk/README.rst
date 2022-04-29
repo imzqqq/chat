@@ -2,11 +2,11 @@ Matrix iOS SDK
 ==============
 
 This open-source library allows you to build iOS apps compatible with Matrix
-(http://www.chat.dingshunyu.top), an open standard for interoperable Instant Messaging
+(http://www.chat.imzqqq.top), an open standard for interoperable Instant Messaging
 and VoIP.
 
 This SDK implements an interface to communicate with the Matrix Client/Server
-API which is defined at http://chat.dingshunyu.top/docs/api/client-server/.
+API which is defined at http://chat.imzqqq.top/docs/api/client-server/.
 
 
 Use the SDK in your app
@@ -104,7 +104,7 @@ instantiated with initWithHomeServer does the job:
 
 **Obj-C**::
 
-    MXRestClient *mxRestClient = [[MXRestClient alloc] initWithHomeServer:@"http://chat.dingshunyu.top"];
+    MXRestClient *mxRestClient = [[MXRestClient alloc] initWithHomeServer:@"http://chat.imzqqq.top"];
     [mxRestClient publicRooms:^(NSArray *rooms) {
 
         // rooms is an array of MXPublicRoom objects containing information like room id
@@ -115,7 +115,7 @@ instantiated with initWithHomeServer does the job:
 
 **Swift**::
 
-    let homeServerUrl = URL(string: "http://chat.dingshunyu.top")!
+    let homeServerUrl = URL(string: "http://chat.imzqqq.top")!
     let mxRestClient = MXRestClient(homeServer: homeServerUrl, unrecognizedCertificateHandler: nil)
     mxRestClient.publicRooms { response in
         switch response {
@@ -139,8 +139,8 @@ out:
 
 **Obj-C**::
 
-    MXCredentials *credentials = [[MXCredentials alloc] initWithHomeServer:@"http://chat.dingshunyu.top"
-                                                                    userId:@"@your_user_id:chat.dingshunyu.top"
+    MXCredentials *credentials = [[MXCredentials alloc] initWithHomeServer:@"http://chat.imzqqq.top"
+                                                                    userId:@"@your_user_id:chat.imzqqq.top"
                                                                accessToken:@"your_access_token"];
 
     // Create a matrix client
@@ -162,8 +162,8 @@ out:
 
 **Swift**::
 
-    let credentials = MXCredentials(homeServer: "http://chat.dingshunyu.top",
-                                    userId: "@your_user_id:chat.dingshunyu.top",
+    let credentials = MXCredentials(homeServer: "http://chat.imzqqq.top",
+                                    userId: "@your_user_id:chat.imzqqq.top",
                                     accessToken: "your_access_token")
 
     // Create a matrix client
@@ -191,8 +191,8 @@ Plus, it will be able to run in offline mode while syncing with the homeserver:
 
 **Obj-C**::
 
-    MXCredentials *credentials = [[MXCredentials alloc] initWithHomeServer:@"http://chat.dingshunyu.top"
-                                                                    userId:@"@your_user_id:chat.dingshunyu.top"
+    MXCredentials *credentials = [[MXCredentials alloc] initWithHomeServer:@"http://chat.imzqqq.top"
+                                                                    userId:@"@your_user_id:chat.imzqqq.top"
                                                                accessToken:@"your_access_token"];
 
     // Create a matrix client
@@ -221,8 +221,8 @@ Plus, it will be able to run in offline mode while syncing with the homeserver:
 
 **Swift**::
 
-    let credentials = MXCredentials(homeServer: "http://chat.dingshunyu.top",
-                                    userId: "@your_user_id:chat.dingshunyu.top",
+    let credentials = MXCredentials(homeServer: "http://chat.imzqqq.top",
+                                    userId: "@your_user_id:chat.imzqqq.top",
                                     accessToken: "your_access_token")
 
     // Create a matrix client
@@ -258,7 +258,7 @@ We reuse the mxSession instance created before:
 **Obj-C**::
 
     // Retrieve the room from its room id
-    MXRoom *room = [mxSession room:@"!room_id:chat.dingshunyu.top"];
+    MXRoom *room = [mxSession room:@"!room_id:chat.imzqqq.top"];
 
     // Add a listener on events related to this room
     [room.liveTimeline listenToEvents:^(MXEvent *event, MXEventDirection direction, MXRoomState *roomState) {
@@ -275,7 +275,7 @@ We reuse the mxSession instance created before:
 **Swift**::
 
     // Retrieve the room from its room id
-    let room = mxSession.room(withRoomId: "!room_id:chat.dingshunyu.top")
+    let room = mxSession.room(withRoomId: "!room_id:chat.imzqqq.top")
 
     // Add a listener on events related to this room
     _ = room?.liveTimeline.listenToEvents { (event, direction, roomState) in
@@ -355,7 +355,7 @@ therefore requires a seperate server decoupled from the homeserver to send
 Push Notifications, as you cannot trust arbitrary homeservers with your
 application's APNS private key. This is called the 'Push Gateway'. More about
 how notifications work in Matrix can be found at
-https://chat.dingshunyu.top/docs/spec/push_gateway/latest.html
+https://chat.imzqqq.top/docs/spec/push_gateway/latest.html
 
 In simple terms, for your application to receive push notifications, you will
 need to set up a push gateway. This is a publicly accessible server specific
@@ -365,7 +365,7 @@ which can be found at https://github.com/matrix-org/sygnal along with
 instructions on how to set it up.
 
 You can also write your own Push Gateway. See
-https://chat.dingshunyu.top/docs/spec/push_gateway/latest.html
+https://chat.imzqqq.top/docs/spec/push_gateway/latest.html
 for the specification on the HTTP Push Notification protocol. Your push
 gateway can listen for notifications on any path (as long as your app knows
 that path in order to inform the homeserver) but Matrix strongly recommends
@@ -424,7 +424,7 @@ that your session is logged in to. This will send HTTP notifications to a URL
 you supply as the 'url' key in the 'data' argument to setPusherWithPushkey.
 
 You can read more about these parameters in the Client / Server specification
-(http://chat.dingshunyu.top/docs/api/client-server/#!/Push32notifications/post_matrix_client_r0_pushers_set). A
+(http://chat.imzqqq.top/docs/api/client-server/#!/Push32notifications/post_matrix_client_r0_pushers_set). A
 little more information about some of these parameters is included below:
 
 appId
@@ -441,7 +441,7 @@ appId
 profileTag
   This identifies which set of push rules this device should obey. For more
   information about push rules, see the Client / Server push specification:
-  http://chat.dingshunyu.top/docs/api/client-server/#!/Push32notifications/post_matrix_client_r0_pushers_set
+  http://chat.imzqqq.top/docs/api/client-server/#!/Push32notifications/post_matrix_client_r0_pushers_set
   This is an identifier for the set of device-specific push rules that this
   device will obey. The recommendation is to auto-generate a 16 character
   alphanumeric string and use this string for the lifetime of the application
@@ -521,7 +521,7 @@ Registration
 ------------
 The SDK currently manages only login-password type registration.
 This type of registration is not accepted by the homeserver hosted at
-chat.dingshunyu.top. It has been disabled for security and spamming reasons.
+chat.imzqqq.top. It has been disabled for security and spamming reasons.
 So, for now, you will be not be able to register a new account with the SDK on
 such homeserver. But you can login an existing user.
 

@@ -1,12 +1,12 @@
 "matrix" = "Matrix";
 // Login Screen
 "login_create_account" = "Skapa konto:";
-"login_server_url_placeholder" = "URL (t.ex. https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (t.ex. https://chat.imzqqq.top)";
 "login_home_server_title" = "Hemserver-URL:";
 "login_home_server_info" = "Din hemserver lagrar alla dina konversationer och din kontodata";
 "login_identity_server_title" = "Identitetsserver-URL:";
-"login_identity_server_info" = "Matrix tillhandahåller identitetsservrar för att spåra vilka e-postadresser o.s.v. som tillhör vilka Matrix-ID:n. Endast https://chat.dingshunyu.top finns för närvarande.";
-"login_user_id_placeholder" = "Matrix-ID (t.ex. @bob:chat.dingshunyu.top eller bob)";
+"login_identity_server_info" = "Matrix tillhandahåller identitetsservrar för att spåra vilka e-postadresser o.s.v. som tillhör vilka Matrix-ID:n. Endast https://chat.imzqqq.top finns för närvarande.";
+"login_user_id_placeholder" = "Matrix-ID (t.ex. @bob:chat.imzqqq.top eller bob)";
 "login_password_placeholder" = "Lösenord";
 "login_optional_field" = "valfritt";
 "login_display_name_placeholder" = "Visningsnamn (t.ex. Sven Svensson)";
@@ -363,7 +363,7 @@
 // room details dialog screen
 "room_details_title" = "Rumsdetaljer";
 // contacts list screen 
-"invitation_message" = "Jag vill chatta med dig på Matrix. Besök sidan https://chat.dingshunyu.top för mer information.";
+"invitation_message" = "Jag vill chatta med dig på Matrix. Besök sidan https://chat.imzqqq.top för mer information.";
 // Settings screen 
 "settings_title_config" = "Konfiguration";
 "settings_title_notifications" = "Aviseringar";

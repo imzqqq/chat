@@ -15,7 +15,7 @@ associated with them.
 Access tokens are already associated with at most 1 device, and devices are associated with
 exactly 1 access token. Because of this, we do not need to worry about multiple devices
 causing problems. For more information, see
-https://chat.api-spec.dingshunyu.top/client_server/r0.4.0.html#relationship-between-access-tokens-and-devices
+https://chat.api-spec.imzqqq.top/client_server/r0.4.0.html#relationship-between-access-tokens-and-devices
 
 *Note*: Pantalaimon would likely require a `device_id` be returned and error requests
 otherwise. This should be considered expected behaviour by Pantalaimon in the MSC author's

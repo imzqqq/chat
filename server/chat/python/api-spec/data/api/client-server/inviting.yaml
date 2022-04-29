@@ -57,14 +57,14 @@ paths:
           name: roomId
           description: The room identifier (not alias) to which to invite the user.
           required: true
-          x-example: "!d41d8cd:chat.dingshunyu.top"
+          x-example: "!d41d8cd:chat.imzqqq.top"
         - in: body
           name: body
           required: true
           schema:
             type: object
             example: {
-              "user_id": "@cheeky_monkey:chat.dingshunyu.top",
+              "user_id": "@cheeky_monkey:chat.imzqqq.top",
               "reason": "Welcome to the team!"
             }
             properties:
@@ -110,7 +110,7 @@ paths:
             - The inviter's power level is insufficient to invite users to the room.
           examples:
             application/json: {
-              "errcode": "M_FORBIDDEN", "error": "@cheeky_monkey:chat.dingshunyu.top is banned from the room"}
+              "errcode": "M_FORBIDDEN", "error": "@cheeky_monkey:chat.imzqqq.top is banned from the room"}
           schema:
             "$ref": "definitions/errors/error.yaml"
         429:

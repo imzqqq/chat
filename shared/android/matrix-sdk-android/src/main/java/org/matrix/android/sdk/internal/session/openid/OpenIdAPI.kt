@@ -29,7 +29,7 @@ internal interface OpenIdAPI {
      * Gets a bearer token from the homeserver that the user can
      * present to a third party in order to prove their ownership
      * of the Matrix account they are logged into.
-     * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#post-matrix-client-r0-user-userid-openid-request-token
+     * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#post-matrix-client-r0-user-userid-openid-request-token
      *
      * @param userId the user id
      */

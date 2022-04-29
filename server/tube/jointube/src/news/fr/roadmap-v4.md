@@ -71,7 +71,7 @@ date: April 13, 2021
   <p>Donc, si nos plans pour 2021 et la v4 de Tube ne correspondent pas à vos attentes,
     c'est tout à fait OK, mais nous ne ferons pas mieux, ni plus vite. Rappelez-vous que vous êtes libre de forker
     Tube pour le mener dans une autre direction, ou de contribuer en codant des plugins et des issues (<a
-      target="_blank" rel="noreferrer noopener" href="https://tube.docs.dingshunyu.top/contribute-getting-started">commencez
+      target="_blank" rel="noreferrer noopener" href="https://tube.docs.imzqqq.top/contribute-getting-started">commencez
       à contribuer en regardant par ici</a>).
 </p>
 <h4>Merci pour le soutien</h4>

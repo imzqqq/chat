@@ -20,7 +20,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Model for https://chat.docs.dingshunyu.top/spec/client_server/latest#get-matrix-client-versions
+ * Model for https://chat.docs.imzqqq.top/spec/client_server/latest#get-matrix-client-versions
  *
  * Ex:
  * <pre>

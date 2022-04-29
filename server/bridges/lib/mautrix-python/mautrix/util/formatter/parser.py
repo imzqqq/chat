@@ -38,8 +38,8 @@ T = TypeVar('T', bound=FormattedString)
 
 
 class MatrixParser(Generic[T]):
-    mention_regex: Pattern = re.compile("https://to.chat.dingshunyu.top/#/(@.+:.+)")
-    room_regex: Pattern = re.compile("https://to.chat.dingshunyu.top/#/(#.+:.+)")
+    mention_regex: Pattern = re.compile("https://to.chat.imzqqq.top/#/(@.+:.+)")
+    room_regex: Pattern = re.compile("https://to.chat.imzqqq.top/#/(#.+:.+)")
     block_tags: Tuple[str, ...] = ("p", "pre", "blockquote",
                                    "ol", "ul", "li",
                                    "h1", "h2", "h3", "h4", "h5", "h6",

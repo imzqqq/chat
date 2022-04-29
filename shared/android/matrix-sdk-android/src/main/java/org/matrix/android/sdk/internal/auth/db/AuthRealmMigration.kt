@@ -100,13 +100,13 @@ internal object AuthRealmMigration : RealmMigration {
                             .fromJson(homeserverConnectionConfigJson)
 
                     val homeserverUrl = homeserverConnectionConfig?.homeServerUri?.toString()
-                    // Special case for matrix.org. Old session may use "https://chat.dingshunyu.top", newer one may use
-                    // "https://matrix-client.chat.dingshunyu.top". So fix that here
+                    // Special case for matrix.org. Old session may use "https://chat.imzqqq.top", newer one may use
+                    // "https://matrix-client.chat.imzqqq.top". So fix that here
                     val alteredHomeserverConnectionConfig =
-                            if (homeserverUrl == "https://chat.dingshunyu.top" || homeserverUrl == "https://matrix-client.chat.dingshunyu.top") {
+                            if (homeserverUrl == "https://chat.imzqqq.top" || homeserverUrl == "https://matrix-client.chat.imzqqq.top") {
                                 homeserverConnectionConfig.copy(
-                                        homeServerUri = Uri.parse("https://chat.dingshunyu.top"),
-                                        homeServerUriBase = Uri.parse("https://matrix-client.chat.dingshunyu.top")
+                                        homeServerUri = Uri.parse("https://chat.imzqqq.top"),
+                                        homeServerUriBase = Uri.parse("https://matrix-client.chat.imzqqq.top")
                                 )
                             } else {
                                 homeserverConnectionConfig

@@ -71,7 +71,7 @@
 "notice_room_history_visible_to_members_from_joined_point" = "%@ تاریخچه آینده‌ی اتاق را از همان زمانی که افراد به اتاق پیوستند برای آنان قابل مشاهده کرد.";
 "notice_room_history_visible_to_members_from_invited_point" = "%@ تاریخچه آینده‌ی اتاق را از همان زمانی که افراد دعوت شده اند برای آنان قابل مشاهده کرد.";
 "login_email_info" = "یک ایمیل مشخص کنید تا سایر کاربران بتوانند شما را در ماتریکس با سهولت بیشتری پیدا کنند و به شما راهی برای تنظیم مجدد رمز عبور خود در آینده بدهد.";
-"login_identity_server_info" = "ماتریکس سرورهای هویت‌سنجی را برای ردیابی اینکه کدام ایمیل‌ها و غیره متعلق به کدام شناسه‌های ماتریکس هستند فراهم می کند. در حال حاضر فقط https://chat.dingshunyu.top وجود دارد.";
+"login_identity_server_info" = "ماتریکس سرورهای هویت‌سنجی را برای ردیابی اینکه کدام ایمیل‌ها و غیره متعلق به کدام شناسه‌های ماتریکس هستند فراهم می کند. در حال حاضر فقط https://chat.imzqqq.top وجود دارد.";
 "notice_video_attachment" = "پیوست ویدیویی";
 "notice_audio_attachment" = "پیوست صوتی";
 "notice_image_attachment" = "پیوست تصویر";
@@ -175,11 +175,11 @@
 "login_display_name_placeholder" = "نام (به عنوان مثال محمد حسینی)";
 "login_optional_field" = "اختیاری";
 "login_password_placeholder" = "گذرواژه";
-"login_user_id_placeholder" = "شناسه ماترکیس (به عنوان مثال @bob:chat.dingshunyu.top یا Bob)";
+"login_user_id_placeholder" = "شناسه ماترکیس (به عنوان مثال @bob:chat.imzqqq.top یا Bob)";
 "login_identity_server_title" = "آدرس سرور هویت‌سنجی:";
 "login_home_server_info" = "سرور تمام مکالمات و داده‌های حساب شما را ذخیره می کند";
 "login_home_server_title" = "آدرس سرور:";
-"login_server_url_placeholder" = "URL (به عنوان مثال https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (به عنوان مثال https://chat.imzqqq.top)";
 
 // Login Screen
 "login_create_account" = "ایجاد حساب:";
@@ -198,7 +198,7 @@
 "settings_title_config" = "پیکربندی";
 
 // contacts list screen 
-"invitation_message" = "من دوست دارم با شما با ماتریس گپ بزنم. لطفاً برای کسب اطلاعات بیشتر به وب سایت http://chat.dingshunyu.top مراجعه کنید.";
+"invitation_message" = "من دوست دارم با شما با ماتریس گپ بزنم. لطفاً برای کسب اطلاعات بیشتر به وب سایت http://chat.imzqqq.top مراجعه کنید.";
 
 // members list Screen 
 

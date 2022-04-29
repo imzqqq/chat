@@ -2029,7 +2029,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="template_soft_logout_sso_not_same_user_error">Oraingo saioa %1$s erabiltzailearena da eta %2$s erabiltzailearen kredentzialak eman dituzu. ${app_name}-k ez du hau onartzen.
 \nAurretik garbitu datuak, gero hasi saioa berriro beste kontu batekin.</string>
 
-    <string name="permalink_malformed">Zure to.chat.dingshunyu.top esteka gaizki osatua dago</string>
+    <string name="permalink_malformed">Zure to.chat.imzqqq.top esteka gaizki osatua dago</string>
     <string name="bug_report_error_too_short">Deskripzio hau laburregia da</string>
 
     <string name="notification_initial_sync">Lehen sinkronizazioa…</string>

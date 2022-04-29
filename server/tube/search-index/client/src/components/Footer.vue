@@ -11,7 +11,7 @@
       <div>
         <div v-translate class="subtitle">Open your own videos website with Tube!</div>
 
-        <a target="_blank" v-translate href="https://tube.docs.dingshunyu.top/#/install-any-os">Install Tube</a>
+        <a target="_blank" v-translate href="https://tube.docs.imzqqq.top/#/install-any-os">Install Tube</a>
 
         <a target="_blank" v-translate href="https://joinpeertube.org#what-is-tube">Why should I have my own Tube website?</a>
       </div>
@@ -21,7 +21,7 @@
 
         <a target="_blank" v-translate href="https://joinpeertube.org/instances">Open an account on a Tube website</a>
 
-        <a target="_blank" v-translate href="https://tube.docs.dingshunyu.top/#/use-library?id=playlist">Create playlists</a>
+        <a target="_blank" v-translate href="https://tube.docs.imzqqq.top/#/use-library?id=playlist">Create playlists</a>
       </div>
     </div>
 

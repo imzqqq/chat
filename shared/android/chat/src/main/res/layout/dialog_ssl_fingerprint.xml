@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="6dp"
-            tools:text="Homeserver URL: http://chat.dingshunyu.top" />
+            tools:text="Homeserver URL: http://chat.imzqqq.top" />
 
         <TextView
             android:id="@+id/ssl_fingerprint_title"

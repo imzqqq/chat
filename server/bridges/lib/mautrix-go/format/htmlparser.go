@@ -29,16 +29,16 @@ func DefaultPillConverter(displayname, mxid, eventID string, _ Context) string {
 		return displayname
 	case len(eventID) > 0:
 		// Event ID link, always just show the link
-		return fmt.Sprintf("https://to.chat.dingshunyu.top/#/%s/%s", mxid, eventID)
+		return fmt.Sprintf("https://to.chat.imzqqq.top/#/%s/%s", mxid, eventID)
 	case mxid[0] == '!' && displayname == mxid:
 		// Room ID link with no separate display text, just show the link
-		return fmt.Sprintf("https://to.chat.dingshunyu.top/#/%s", mxid)
+		return fmt.Sprintf("https://to.chat.imzqqq.top/#/%s", mxid)
 	case mxid[0] == '#':
 		// Room alias link, just show the alias
 		return mxid
 	default:
 		// Other link (e.g. room ID link with display text), show text and link
-		return fmt.Sprintf("%s (https://to.chat.dingshunyu.top/#/%s)", displayname, mxid)
+		return fmt.Sprintf("%s (https://to.chat.imzqqq.top/#/%s)", displayname, mxid)
 	}
 }
 

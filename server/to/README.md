@@ -9,18 +9,18 @@ Stylistically it serves as a landing page for rooms and communities.
 
 You can use the custom badge image, and use it in a link like this:
 
-[![Chat](./images-nohash/matrix-badge.svg)](https://to.chat.dingshunyu.top/#/#to.chat.dingshunyu.top:matrix.org)
+[![Chat](./images-nohash/matrix-badge.svg)](https://to.chat.imzqqq.top/#/#to.chat.imzqqq.top:matrix.org)
 
 You can use this Markdown:
 
 ```md
-[![Chat](./images-nohash/matrix-badge.svg)](https://to.chat.dingshunyu.top/#/#to.chat.dingshunyu.top:matrix.org)
+[![Chat](./images-nohash/matrix-badge.svg)](https://to.chat.imzqqq.top/#/#to.chat.imzqqq.top:matrix.org)
 ```
 
 Or this HTML:
 
 ```html
-<a href="https://to.chat.dingshunyu.top/#/#to.chat.dingshunyu.top:matrix.org" rel="noopener" target="_blank"><img src="./images-nohash/matrix-badge.svg" alt="Chat"></a>
+<a href="https://to.chat.imzqqq.top/#/#to.chat.imzqqq.top:matrix.org" rel="noopener" target="_blank"><img src="./images-nohash/matrix-badge.svg" alt="Chat"></a>
 ```
 
 to show the badge.
@@ -49,10 +49,10 @@ The `To` URL scheme is
 
 | Entity type: | Example URL                                                       |
 |--------------|-------------------------------------------------------------------|
-| Rooms:       | https://to.chat.dingshunyu.top/#/#matrix:matrix.org                            |
-| Rooms by ID: | https://to.chat.dingshunyu.top/#/!cURbafjkfsMDVwdRDQ:matrix.org                |
-| Users:       | https://to.chat.dingshunyu.top/#/@matthew:matrix.org                           |
-| Messages:    | https://to.chat.dingshunyu.top/#/#matrix:matrix.org/$1448831580433WbpiJ:jki.re |
+| Rooms:       | https://to.chat.imzqqq.top/#/#matrix:matrix.org                            |
+| Rooms by ID: | https://to.chat.imzqqq.top/#/!cURbafjkfsMDVwdRDQ:matrix.org                |
+| Users:       | https://to.chat.imzqqq.top/#/@matthew:matrix.org                           |
+| Messages:    | https://to.chat.imzqqq.top/#/#matrix:matrix.org/$1448831580433WbpiJ:jki.re |
 
 The #/ component is mandatory and exists to avoid leaking the target URL to the
 server hosting `To`.

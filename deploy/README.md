@@ -1,4 +1,4 @@
-[![Support room on Matrix](https://img.shields.io/matrix/matrix-docker-ansible-deploy:devture.com.svg?label=%23matrix-docker-ansible-deploy%3Adevture.com&logo=matrix&style=for-the-badge&server_fqdn=matrix.devture.com)](https://to.chat.dingshunyu.top/#/#matrix-docker-ansible-deploy:devture.com) [![donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/s.pantaleev/donate)
+[![Support room on Matrix](https://img.shields.io/matrix/matrix-docker-ansible-deploy:devture.com.svg?label=%23matrix-docker-ansible-deploy%3Adevture.com&logo=matrix&style=for-the-badge&server_fqdn=matrix.devture.com)](https://to.chat.imzqqq.top/#/#matrix-docker-ansible-deploy:devture.com) [![donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/s.pantaleev/donate)
 
 # Matrix (An open network for secure, decentralized communication) server setup using Ansible and Docker
 
@@ -132,7 +132,7 @@ When updating the playbook, refer to [the changelog](CHANGELOG.md) to catch up w
 
 ## Support
 
-- Matrix room: [#matrix-docker-ansible-deploy:devture.com](https://to.chat.dingshunyu.top/#/#matrix-docker-ansible-deploy:devture.com)
+- Matrix room: [#matrix-docker-ansible-deploy:devture.com](https://to.chat.imzqqq.top/#/#matrix-docker-ansible-deploy:devture.com)
 
 - IRC channel: `#matrix-docker-ansible-deploy` on the [Libera Chat](https://libera.chat/) IRC network (irc.libera.chat:6697)
 
@@ -143,4 +143,4 @@ When updating the playbook, refer to [the changelog](CHANGELOG.md) to catch up w
 
 - [etke.cc](https://etke.cc) - matrix-docker-ansible-deploy and system stuff "as a service". That service will create your matrix homeserver on your domain and server (doesn't matter if it's cloud provider or on an old laptop in the corner of your room), (optional) maintains it (server's system updates, cleanup, security adjustments, tuning, etc.; matrix homeserver updates & maintenance) and (optional) provide full-featured email service for your domain
 
-- [GoMatrixHosting](https://gomatrixhosting.com) - matrix-docker-ansible-deploy "as a service" with [Ansible AWX](https://github.com/ansible/awx). Members can be assigned a server from DigitalOcean, or they can connect their on-premises server. This AWX system can manage the updates, configuration, import and export, backups, and monitoring on its own. For more information [see our GitLab group](https://gitlab.com/GoMatrixHosting) or come [visit us on Matrix](https://to.chat.dingshunyu.top/#/#general:gomatrixhosting.com).
+- [GoMatrixHosting](https://gomatrixhosting.com) - matrix-docker-ansible-deploy "as a service" with [Ansible AWX](https://github.com/ansible/awx). Members can be assigned a server from DigitalOcean, or they can connect their on-premises server. This AWX system can manage the updates, configuration, import and export, backups, and monitoring on its own. For more information [see our GitLab group](https://gitlab.com/GoMatrixHosting) or come [visit us on Matrix](https://to.chat.imzqqq.top/#/#general:gomatrixhosting.com).

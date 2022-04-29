@@ -25,7 +25,7 @@ import java.net.URLDecoder
 /**
  * This class turns a uri to a [PermalinkData]
  * element-based domains (e.g. https://app.element.io/#/user/@chagai95:matrix.org) permalinks
- * or to.chat.dingshunyu.top permalinks (e.g. https://to.chat.dingshunyu.top/#/@chagai95:matrix.org)
+ * or to.chat.imzqqq.top permalinks (e.g. https://to.chat.imzqqq.top/#/@chagai95:matrix.org)
  * or client permalinks (e.g. <clientPermalinkBaseUrl>user/@chagai95:matrix.org)
  */
 object PermalinkParser {
@@ -40,12 +40,12 @@ object PermalinkParser {
 
     /**
      * Turns a uri to a [PermalinkData]
-     * https://github.com/matrix-org/matrix-doc/blob/master/proposals/1704-to.chat.dingshunyu.top-permalinks.md
+     * https://github.com/matrix-org/matrix-doc/blob/master/proposals/1704-to.chat.imzqqq.top-permalinks.md
      */
     fun parse(uri: Uri): PermalinkData {
         // the client or element-based domain permalinks (e.g. https://app.element.io/#/user/@chagai95:matrix.org) don't have the
-        // mxid in the first param (like to.chat.dingshunyu.top does - https://to.chat.dingshunyu.top/#/@chagai95:matrix.org) but rather in the second after /user/ so /user/mxid
-        // so convert URI to to.chat.dingshunyu.top to simplify parsing process
+        // mxid in the first param (like to.chat.imzqqq.top does - https://to.chat.imzqqq.top/#/@chagai95:matrix.org) but rather in the second after /user/ so /user/mxid
+        // so convert URI to to.chat.imzqqq.top to simplify parsing process
         val matrixToUri = MatrixToConverter.convert(uri) ?: return PermalinkData.FallbackLink(uri)
 
         // We can't use uri.fragment as it is decoding to early and it will break the parsing

@@ -29,7 +29,7 @@ class TestLinkifyActivity : AppCompatActivity() {
                 "foo.ansible/xoxys.matrix#2c0b65eb",
                 "foo.ansible.fpo/xoxys.matrix#2c0b65eb",
                 "https://foo.ansible.fpo/xoxys.matrix#2c0b65eb",
-                "@vf:chat.dingshunyu.top",
+                "@vf:chat.imzqqq.top",
                 "+44 207 123 1234",
                 "+33141437940",
                 "1234",

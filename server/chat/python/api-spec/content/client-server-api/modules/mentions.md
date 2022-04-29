@@ -6,7 +6,7 @@ weight: 300
 ### User, room, and group mentions
 
 This module allows users to mention other users, rooms, and groups
-within a room message. This is achieved by including a [to.chat.dingshunyu.top
+within a room message. This is achieved by including a [to.chat.imzqqq.top
 URI](/appendices/#matrixto-navigation) in the HTML body of an
 [m.room.message](#mroommessage) event. This module does not have any server-specific
 behaviour to it.
@@ -23,13 +23,13 @@ To make a mention, reference the entity being mentioned in the
     "body": "Hello Alice!",
     "msgtype": "m.text",
     "format": "org.matrix.custom.html",
-    "formatted_body": "Hello <a href='https://to.chat.dingshunyu.top/#/@alice:example.org'>Alice</a>!"
+    "formatted_body": "Hello <a href='https://to.chat.imzqqq.top/#/@alice:example.org'>Alice</a>!"
 }
 ```
 
 #### Client behaviour
 
-In addition to using the appropriate `to.chat.dingshunyu.top URI` for the mention,
+In addition to using the appropriate `to.chat.imzqqq.top URI` for the mention,
 clients should use the following guidelines when making mentions in
 events to be sent:
 

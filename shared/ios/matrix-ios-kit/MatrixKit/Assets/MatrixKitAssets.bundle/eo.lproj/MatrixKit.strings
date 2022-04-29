@@ -53,12 +53,12 @@
 "login_display_name_placeholder" = "Prezenta nomo (ekz. Ivano Ĥlestakov)";
 "login_optional_field" = "malnepra";
 "login_password_placeholder" = "Pasvorto";
-"login_user_id_placeholder" = "Identigilo de Matrix (ekz. @ivano:chat.dingshunyu.top aŭ ivano)";
-"login_identity_server_info" = "Matrix havas identigajn servilojn por scii, kiuj retleteroj ktp. bezonas al kiuj identigiloj de Matrix. Nur https://chat.dingshunyu.top ekzistas nuntempe.";
+"login_user_id_placeholder" = "Identigilo de Matrix (ekz. @ivano:chat.imzqqq.top aŭ ivano)";
+"login_identity_server_info" = "Matrix havas identigajn servilojn por scii, kiuj retleteroj ktp. bezonas al kiuj identigiloj de Matrix. Nur https://chat.imzqqq.top ekzistas nuntempe.";
 "login_identity_server_title" = "URL de identiga servilo:";
 "login_home_server_info" = "Via hejmservilo konservas ĉiujn viajn interparolojn kaj datumojn de konto";
 "login_home_server_title" = "URL de hejmservilo:";
-"login_server_url_placeholder" = "URL (ekz. https://chat.dingshunyu.top)";
+"login_server_url_placeholder" = "URL (ekz. https://chat.imzqqq.top)";
 
 // Login Screen
 "login_create_account" = "Krei konton:";
@@ -151,7 +151,7 @@
 "settings_title_config" = "Agordaro";
 
 // contacts list screen 
-"invitation_message" = "Mi volus babili kun vi per Matrix. Bonvolu viziti la retpaĝon http://chat.dingshunyu.top por pliaj informoj.";
+"invitation_message" = "Mi volus babili kun vi per Matrix. Bonvolu viziti la retpaĝon http://chat.imzqqq.top por pliaj informoj.";
 "login_error_must_start_http" = "URL devas komenciĝi per http[s]://";
 
 // Login Screen 

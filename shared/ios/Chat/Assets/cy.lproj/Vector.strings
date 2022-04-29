@@ -1,6 +1,6 @@
 // String for App Store
 "store_short_description" = "Sgwrs/VoIP datgonoledig a diogel";
-"store_full_description" = "Cyfathrebu, eich ffordd eich hyn.\n\nAp sgwrsio, o dan eich rheolaeth ac yn hollol hyblyg. Mae Element yn gadael ichi gyfathrebu'r ffordd rydych chi ei eisiau. Wedi'i wneud ar gyfer [matrix] - y safon ar gyfer cyfathrebu agored, datganoledig.\n\nSicrhewch gyfrif chat.dingshunyu.top am ddim, mynnwch eich gweinydd eich hun yn https://ems.element.io, neu defnyddiwch weinydd Matrix arall.\n\nPam dewis Element?\n\nCYFATHREBU LLAWN: Adeiladwch ystafelloedd o amgylch eich timau, eich ffrindiau, eich cymuned - sut bynnag yr ydych chi'n hoffi! Sgwrsiwch, rhannwch ffeiliau, ychwanegwch teclynnau a gwnewch galwadau llais a fideo - i gyd yn rhad ac am ddim.\n\nINTEGREIDDIAU GRYMUS: Defnyddiwch Element gyda'r offer rydych chi'n eu hadnabod ac yn eu caru. Gyda Element gallwch hyd yn oed sgwrsio â defnyddwyr a grwpiau ar apiau sgwrsio eraill.\n\nPREIFAT A DIOGEL: Cadwch eich sgyrsiau yn gyfrinachol. Mae amgryptio o'r dechrau i'r diwedd o'r radd flaenaf yn sicrhau bod cyfathrebu preifat yn aros yn breifat.\n\nAGORED, NID YN GAËDIG: Ffynhonnell agor, ac wedi'i adeiladu ar Matrix. ––Byddwch yn berchen ar eich data eich hun trwy gynnal eich gweinydd eich hun, neu ddewis un rydych chi'n ymddiried ynddo.\n\nBOB MAN YDYCH CHI: Cadwch mewn cysylltiad ble bynnag yr ydych â hanes negeseuon wedi'i gydamseru'n llawn ar draws eich holl ddyfeisiau ac ar-lein yn https://app.element.io.";
+"store_full_description" = "Cyfathrebu, eich ffordd eich hyn.\n\nAp sgwrsio, o dan eich rheolaeth ac yn hollol hyblyg. Mae Element yn gadael ichi gyfathrebu'r ffordd rydych chi ei eisiau. Wedi'i wneud ar gyfer [matrix] - y safon ar gyfer cyfathrebu agored, datganoledig.\n\nSicrhewch gyfrif chat.imzqqq.top am ddim, mynnwch eich gweinydd eich hun yn https://ems.element.io, neu defnyddiwch weinydd Matrix arall.\n\nPam dewis Element?\n\nCYFATHREBU LLAWN: Adeiladwch ystafelloedd o amgylch eich timau, eich ffrindiau, eich cymuned - sut bynnag yr ydych chi'n hoffi! Sgwrsiwch, rhannwch ffeiliau, ychwanegwch teclynnau a gwnewch galwadau llais a fideo - i gyd yn rhad ac am ddim.\n\nINTEGREIDDIAU GRYMUS: Defnyddiwch Element gyda'r offer rydych chi'n eu hadnabod ac yn eu caru. Gyda Element gallwch hyd yn oed sgwrsio â defnyddwyr a grwpiau ar apiau sgwrsio eraill.\n\nPREIFAT A DIOGEL: Cadwch eich sgyrsiau yn gyfrinachol. Mae amgryptio o'r dechrau i'r diwedd o'r radd flaenaf yn sicrhau bod cyfathrebu preifat yn aros yn breifat.\n\nAGORED, NID YN GAËDIG: Ffynhonnell agor, ac wedi'i adeiladu ar Matrix. ––Byddwch yn berchen ar eich data eich hun trwy gynnal eich gweinydd eich hun, neu ddewis un rydych chi'n ymddiried ynddo.\n\nBOB MAN YDYCH CHI: Cadwch mewn cysylltiad ble bynnag yr ydych â hanes negeseuon wedi'i gydamseru'n llawn ar draws eich holl ddyfeisiau ac ar-lein yn https://app.element.io.";
 // Titles
 "title_home" = "Hafan";
 "title_favourites" = "Ffefrynnau";
@@ -56,7 +56,7 @@
 "auth_phone_placeholder" = "Rhif ffôn";
 "auth_repeat_password_placeholder" = "Cyfrinair eto";
 "auth_repeat_new_password_placeholder" = "Cadarnhewch eich cyfrinair";
-"auth_home_server_placeholder" = "URL (e.e. https://chat.dingshunyu.top)";
+"auth_home_server_placeholder" = "URL (e.e. https://chat.imzqqq.top)";
 "auth_identity_server_placeholder" = "URL (e.e. https://vector.im)";
 "auth_invalid_login_param" = "Enw defnyddiwr a/neu cyfrinair anghywir";
 "auth_invalid_user_name" = "Gall enwau defnyddwyr ond cynnwys llythrennau, rhifau, atalnodau-llawn, cysylltnodau a thanlinellau";
@@ -582,7 +582,7 @@
 "directory_server_all_rooms" = "Pob ystafell ar weinydd %@";
 "directory_server_all_native_rooms" = "Pob ystafell Matrix frodorol";
 "directory_server_type_homeserver" = "Teipiwch hafanweinydd i restru ystafelloedd cyhoeddus o";
-"directory_server_placeholder" = "chat.dingshunyu.top";
+"directory_server_placeholder" = "chat.imzqqq.top";
 // Events formatter
 "event_formatter_member_updates" = "%tu newidiadau aelodaeth";
 "event_formatter_widget_added" = "Ychwanegwyd teclyn %@ gan %@";

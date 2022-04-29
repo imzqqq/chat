@@ -166,7 +166,7 @@ describe("Substitutions", () => {
                 content: {
                     body: "You should join my room #working:localhost",
                     format: "org.matrix.custom.html",
-                    formatted_body: "You should join my room <a href=\"https://to.chat.dingshunyu.top/#/#working:localhost\">#working:localhost</a>.",
+                    formatted_body: "You should join my room <a href=\"https://to.chat.imzqqq.top/#/#working:localhost\">#working:localhost</a>.",
                 },
                 sender: "@alice:localhost",
             }, fakeMain, "footeam");
@@ -181,8 +181,8 @@ describe("Substitutions", () => {
                 content: {
                     body: "You should join my room #working:localhost, or perhaps #working2:localhost",
                     format: "org.matrix.custom.html",
-                    formatted_body: "You should join my room <a href=\"https://to.chat.dingshunyu.top/#/#working:localhost\">#working:localhost</a>, " +
-                    "or perhaps <a href=\"https://to.chat.dingshunyu.top/#/#working2:localhost\">#working2:localhost</a>",
+                    formatted_body: "You should join my room <a href=\"https://to.chat.imzqqq.top/#/#working:localhost\">#working:localhost</a>, " +
+                    "or perhaps <a href=\"https://to.chat.imzqqq.top/#/#working2:localhost\">#working2:localhost</a>",
                 },
                 sender: "@alice:localhost",
             }, fakeMain, "footeam");
@@ -197,7 +197,7 @@ describe("Substitutions", () => {
                 content: {
                     body: "Hello! Stranger",
                     format: "org.matrix.custom.html",
-                    formatted_body: "Hello! <a href=\"https://to.chat.dingshunyu.top/#/@stranger:localhost\">Stranger</a>.",
+                    formatted_body: "Hello! <a href=\"https://to.chat.imzqqq.top/#/@stranger:localhost\">Stranger</a>.",
                 },
                 sender: "@alice:localhost",
             }, fakeMain, "footeam");
@@ -212,8 +212,8 @@ describe("Substitutions", () => {
                 content: {
                     body: "Hello! Stranger Thing",
                     format: "org.matrix.custom.html",
-                    formatted_body: "Hello! <a href=\"https://to.chat.dingshunyu.top/#/@stranger:localhost\">Stranger</a> " +
-                    "<a href=\"https://to.chat.dingshunyu.top/#/@thing:localhost\">Thing</a>",
+                    formatted_body: "Hello! <a href=\"https://to.chat.imzqqq.top/#/@stranger:localhost\">Stranger</a> " +
+                    "<a href=\"https://to.chat.imzqqq.top/#/@thing:localhost\">Thing</a>",
                 },
                 sender: "@alice:localhost",
             }, fakeMain, "footeam");

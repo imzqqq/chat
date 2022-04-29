@@ -110,7 +110,7 @@ export default function VideoVariantForm({
     <div className={classes}>
       <p className="description">
         <a
-          href="https://live.docs.dingshunyu.top/docs/video?source=admin"
+          href="https://live.docs.imzqqq.top/docs/video?source=admin"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -155,7 +155,7 @@ export default function VideoVariantForm({
             <p className="read-more-subtext">
               This could mean GPU or CPU usage depending on your server environment.{' '}
               <a
-                href="https://live.docs.dingshunyu.top/docs/video/?source=admin#cpu-usage"
+                href="https://live.docs.imzqqq.top/docs/video/?source=admin#cpu-usage"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -190,7 +190,7 @@ export default function VideoVariantForm({
             </div>
             <p className="read-more-subtext">
               <a
-                href="https://live.docs.dingshunyu.top/docs/video/?source=admin"
+                href="https://live.docs.imzqqq.top/docs/video/?source=admin"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -211,7 +211,7 @@ export default function VideoVariantForm({
                   to optionally resize your content for this stream output then you should either
                   set the width <strong>or</strong> the height to keep your aspect ratio.{' '}
                   <a
-                    href="https://live.docs.dingshunyu.top/docs/video/?source=admin"
+                    href="https://live.docs.imzqqq.top/docs/video/?source=admin"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -250,7 +250,7 @@ export default function VideoVariantForm({
                   </p>
                   <p>
                     <a
-                      href="https://live.docs.dingshunyu.top/docs/video/?source=admin#video-passthrough"
+                      href="https://live.docs.imzqqq.top/docs/video/?source=admin#video-passthrough"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -302,7 +302,7 @@ export default function VideoVariantForm({
             </div>
             <p className="read-more-subtext">
               <a
-                href="https://live.docs.dingshunyu.top/docs/video/?source=admin#framerate"
+                href="https://live.docs.imzqqq.top/docs/video/?source=admin#framerate"
                 target="_blank"
                 rel="noopener noreferrer"
               >

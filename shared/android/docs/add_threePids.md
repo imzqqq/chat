@@ -93,7 +93,7 @@ POST https://homeserver.org/chat/client/r0/account/3pid/add
   "auth": {
     "session": "ppvvnozXCQZFaggUBlHJYPjA",
     "type": "m.login.password",
-    "user": "@benoitx:chat.dingshunyu.top",
+    "user": "@benoitx:chat.imzqqq.top",
     "password": "weak_password"
   }
 }

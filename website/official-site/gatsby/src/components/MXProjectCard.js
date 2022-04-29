@@ -15,7 +15,7 @@ const MXProjectCard = ({ project, imageSize }) => {
         {project.description}
         {project.example_mxid &&
             <div>
-                Example mxid: <a href={"https://to.chat.dingshunyu.top/#/"+project.example_mxid}>{project.example_mxid}</a>
+                Example mxid: <a href={"https://to.chat.imzqqq.top/#/"+project.example_mxid}>{project.example_mxid}</a>
             </div>
         }
     </div>

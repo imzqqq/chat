@@ -1,6 +1,6 @@
 # Remove references to presence lists
 
-[Presence](https://chat.api-spec.dingshunyu.top/client_server/r0.4.0.html#id107) lists
+[Presence](https://chat.api-spec.imzqqq.top/client_server/r0.4.0.html#id107) lists
 allow a given user the ability to subscribe to other users and be alerted to
 their current presence status.
 
@@ -30,9 +30,9 @@ Specifically:-
 
 CS API: Remove
 * [POST
-  /chat/client/r0/presence/list/{userId}](https://chat.api-spec.dingshunyu.top/client_server/r0.4.0.html#post-matrix-client-r0-presence-list-userid)
+  /chat/client/r0/presence/list/{userId}](https://chat.api-spec.imzqqq.top/client_server/r0.4.0.html#post-matrix-client-r0-presence-list-userid)
 * [GET
-  /chat/client/r0/presence/list/{userId}](https://chat.api-spec.dingshunyu.top/client_server/r0.4.0.html#get-matrix-client-r0-presence-list-userid)
+  /chat/client/r0/presence/list/{userId}](https://chat.api-spec.imzqqq.top/client_server/r0.4.0.html#get-matrix-client-r0-presence-list-userid)
 
 SS API: Remove
  * [m.presence_invite](https://github.com/matrix-org/matrix-doc/blob/8b65da1cf6fce5f657a2a46b5c6c8bcc24d32ae3/api/server-server/definitions/event-schemas/m.presence_invite.yaml)

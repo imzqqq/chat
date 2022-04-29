@@ -56,8 +56,8 @@ const Hosting = ({ data }) => {
                         cleanup, security adjustments, tuning, etc.; Chat Homeserver updates & maintenance) and (optional)
                         provide full-featured email service for your domain.
                         <br /><br />
-                        <a href="https://to.chat.dingshunyu.top/#/#service:etke.cc">Chat Space</a>&nbsp;
-                        | <a href="https://to.chat.dingshunyu.top/#/#announcements:etke.cc">Announcements on Chat</a>
+                        <a href="https://to.chat.imzqqq.top/#/#service:etke.cc">Chat Space</a>&nbsp;
+                        | <a href="https://to.chat.imzqqq.top/#/#announcements:etke.cc">Announcements on Chat</a>
                     </p>
                 </div>
 
@@ -76,7 +76,7 @@ const Hosting = ({ data }) => {
                         server. This <a href="https://github.com/ansible/awx">AWX</a> system can manage the updates,
                         configuration, import and export, backups, and monitoring on its own. For more information see 
                         our <a href="https://gitlab.com/GoMatrixHosting">GitLab group</a> or
-                        come <a href="https://to.chat.dingshunyu.top/#/#general:gomatrixhosting.com">visit us on Chat</a>.
+                        come <a href="https://to.chat.imzqqq.top/#/#general:gomatrixhosting.com">visit us on Chat</a>.
                
                     </p> </div>
             </div>

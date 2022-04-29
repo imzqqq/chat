@@ -57,7 +57,7 @@ DEFAULT_CONFIG = """\
 #    cp_max: 10
 #
 # For more information on using Chat server with Postgres,
-# see https://chat.docs.dingshunyu.top/postgres.html.
+# see https://chat.docs.imzqqq.top/postgres.html.
 #
 database:
   name: psycopg2

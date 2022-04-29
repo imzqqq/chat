@@ -21,7 +21,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * Enum for [RoomJoinRulesContent] : https://chat.docs.dingshunyu.top/spec/client_server/r0.4.0#m-room-join-rules
+ * Enum for [RoomJoinRulesContent] : https://chat.docs.imzqqq.top/spec/client_server/r0.4.0#m-room-join-rules
  */
 @JsonClass(generateAdapter = false)
 enum class RoomJoinRules(val value: String) {

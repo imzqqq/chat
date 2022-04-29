@@ -96,7 +96,7 @@ The following admin APIs were deprecated in [Chat server 1.25](https://github.co
 -   `POST /_chat/admin/v1/shutdown_room/<room_id>`
 
 Any scripts still using the above APIs should be converted to use the
-[Delete Room API](https://chat.docs.dingshunyu.top/admin_api/rooms.html#delete-room-api).
+[Delete Room API](https://chat.docs.imzqqq.top/admin_api/rooms.html#delete-room-api).
 
 ## User-interactive authentication fallback templates can now display errors
 
@@ -140,14 +140,14 @@ The `template_dir` settings in the `sso`, `account_validity` and `email` section
 configuration file are now deprecated. Server admins should use the new
 `templates.custom_template_directory` setting in the configuration file and use one single
 custom template directory for all aforementioned features. Template file names remain
-unchanged. See [the related documentation](https://chat.docs.dingshunyu.top/templates.html)
+unchanged. See [the related documentation](https://chat.docs.imzqqq.top/templates.html)
 for more information and examples.
 
 We plan to remove support for these settings in October 2021.
 
 ## `/_chat/admin/v1/users/{userId}/media` must be handled by media workers
 
-The [media repository worker documentation](https://chat.docs.dingshunyu.top/workers.html#synapseappmedia_repository)
+The [media repository worker documentation](https://chat.docs.imzqqq.top/workers.html#synapseappmedia_repository)
 has been updated to reflect that calls to `/_chat/admin/v1/users/{userId}/media`
 must now be handled by media repository workers. This is due to the new `DELETE` method
 of this endpoint modifying the media store.

@@ -34,7 +34,7 @@ class StatsConfig(Config):
         ### MARK -TODO
         return """\
         # Settings for local room and user statistics collection. See
-        # https://chat.docs.dingshunyu.top/room_and_user_statistics.html.
+        # https://chat.docs.imzqqq.top/room_and_user_statistics.html.
         #
         stats:
           # Uncomment the following to disable room and user statistics. Note that doing

@@ -399,7 +399,7 @@ function createMenubar() {
                     label: "Flow Desktop Docs",
                     click() {
                         require("electron").shell.openExternal(
-                            "https://flow.docs.dingshunyu.top/"
+                            "https://flow.docs.imzqqq.top/"
                         );
                     }
                 },

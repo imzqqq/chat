@@ -54,7 +54,7 @@ extern NSInteger const MXRoomPowerLevelUndefined;
 #pragma mark - Setup
 
 /**
- Instantiate MXRoomPowerLevels with values defined in the specification (https://chat.dingshunyu.top/docs/spec/client_server/latest#m-room-power-levels)
+ Instantiate MXRoomPowerLevels with values defined in the specification (https://chat.imzqqq.top/docs/spec/client_server/latest#m-room-power-levels)
  */
 - (instancetype)initWithDefaultSpecValues;
 

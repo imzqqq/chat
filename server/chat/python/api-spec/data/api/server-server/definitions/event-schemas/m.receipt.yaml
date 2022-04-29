@@ -52,7 +52,7 @@ allOf:
                   maxItems: 1
                   items:
                     type: string
-                  example: ['$read_this_event:chat.dingshunyu.top']
+                  example: ['$read_this_event:chat.imzqqq.top']
                 data:
                   type: object
                   description: Metadata for the read receipt.
@@ -71,8 +71,8 @@ allOf:
         example: {
           "!some_room:example.org": {
             "m.read": {
-              "@john:chat.dingshunyu.top": {
-                "event_ids": ["$read_this_event:chat.dingshunyu.top"],
+              "@john:chat.imzqqq.top": {
+                "event_ids": ["$read_this_event:chat.imzqqq.top"],
                 "data": {
                   "ts": 1533358089009
                 }

@@ -57,7 +57,7 @@ def _format_safety_number(number: str) -> str:
 
 
 def _pill(puppet: 'pu.Puppet') -> str:
-    return f"[{puppet.name}](https://to.chat.dingshunyu.top/#/{puppet.mxid})"
+    return f"[{puppet.name}](https://to.chat.imzqqq.top/#/{puppet.mxid})"
 
 
 @command_handler(needs_auth=True, management_only=False, help_section=SECTION_SIGNAL,
@@ -71,7 +71,7 @@ async def pm(evt: CommandEvent) -> None:
                                             create=True)
     if portal.mxid:
         await evt.reply(f"You already have a private chat with {puppet.name}: "
-                        f"[{portal.mxid}](https://to.chat.dingshunyu.top/#/{portal.mxid})")
+                        f"[{portal.mxid}](https://to.chat.imzqqq.top/#/{portal.mxid})")
         await portal.main_intent.invite_user(portal.mxid, evt.sender.mxid)
         return
     await portal.create_matrix_room(evt.sender, puppet.address)

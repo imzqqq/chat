@@ -88,7 +88,7 @@ const Project = ({ pageContext: { postNode } }) => {
                   <p>Chat Room</p>
                 </div>
                 <div className="mxblock--project__content__info__row__p">
-                  <p><a href={"https://to.chat.dingshunyu.top/#/" + post.room}>{post.room}</a><br /></p>
+                  <p><a href={"https://to.chat.imzqqq.top/#/" + post.room}>{post.room}</a><br /></p>
                 </div>
               </div>}
               <MDXRenderer>{postNode.body}</MDXRenderer>

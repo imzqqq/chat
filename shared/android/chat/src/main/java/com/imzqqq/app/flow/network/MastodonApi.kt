@@ -12,7 +12,7 @@ import retrofit2.http.*
 import retrofit2.http.Field
 
 /**
- * For documentation of the FLow REST API see https://flow.docs.dingshunyu.top/api/
+ * For documentation of the FLow REST API see https://flow.docs.imzqqq.top/api/
  */
 @JvmSuppressWildcards
 interface MastodonApi {

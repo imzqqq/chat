@@ -17,6 +17,6 @@ package org.matrix.android.sdk.internal.crypto.model.rest
 
 /**
  * Class representing the dummy content
- * Ref: https://chat.docs.dingshunyu.top/spec/client_server/latest#id82
+ * Ref: https://chat.docs.imzqqq.top/spec/client_server/latest#id82
  */
 typealias DummyContent = Unit

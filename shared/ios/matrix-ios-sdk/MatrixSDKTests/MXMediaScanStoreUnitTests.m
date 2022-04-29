@@ -27,7 +27,7 @@
 
 @end
 
-static NSString* const kDefaultAntivirusServerDomain = @"chat.dingshunyu.top";
+static NSString* const kDefaultAntivirusServerDomain = @"chat.imzqqq.top";
 
 @implementation MXMediaScanStoreUnitTests
 
@@ -48,7 +48,7 @@ static NSString* const kDefaultAntivirusServerDomain = @"chat.dingshunyu.top";
 
 - (void)testCreateMediaScan
 {
-    NSString *mediaURL = @"mxc://chat.dingshunyu.top/7398H34PHL3904U";
+    NSString *mediaURL = @"mxc://chat.imzqqq.top/7398H34PHL3904U";
     
     MXMediaScan *mediaScan = [self.mediaScanStore findOrCreateWithURL:mediaURL];
     
@@ -61,7 +61,7 @@ static NSString* const kDefaultAntivirusServerDomain = @"chat.dingshunyu.top";
 
 - (void)testCreateSameMediaScanTwice
 {
-    NSString *mediaURL = @"mxc://chat.dingshunyu.top/7398H34PHL3904U";
+    NSString *mediaURL = @"mxc://chat.imzqqq.top/7398H34PHL3904U";
     
     MXMediaScan *mediaScan1 = [self.mediaScanStore findOrCreateWithURL:mediaURL];
     MXMediaScan *mediaScan2 = [self.mediaScanStore findOrCreateWithURL:mediaURL];
@@ -71,7 +71,7 @@ static NSString* const kDefaultAntivirusServerDomain = @"chat.dingshunyu.top";
 
 - (void)testCreateMediaScanWithDefaultValue
 {
-    NSString *mediaURL = @"mxc://chat.dingshunyu.top/7398H34PHL3904U";
+    NSString *mediaURL = @"mxc://chat.imzqqq.top/7398H34PHL3904U";
     
     MXAntivirusScanStatus initialAntivirusScanStatus = MXAntivirusScanStatusInProgress;
     
@@ -83,7 +83,7 @@ static NSString* const kDefaultAntivirusServerDomain = @"chat.dingshunyu.top";
 
 - (void)testFindMediaScan
 {
-    NSString *mediaURL = @"mxc://chat.dingshunyu.top/7398H34PHL3904U";
+    NSString *mediaURL = @"mxc://chat.imzqqq.top/7398H34PHL3904U";
     
     MXMediaScan *insertedMediaScan = [self.mediaScanStore findOrCreateWithURL:mediaURL];
     MXMediaScan *foundMediaScan = [self.mediaScanStore findWithURL:mediaURL];
@@ -94,7 +94,7 @@ static NSString* const kDefaultAntivirusServerDomain = @"chat.dingshunyu.top";
 
 - (void)testUpdateMediaScan
 {
-    NSString *mediaURL = @"mxc://chat.dingshunyu.top/7398H34PHL3904U";
+    NSString *mediaURL = @"mxc://chat.imzqqq.top/7398H34PHL3904U";
     
     MXMediaScan *insertedMediaScan = [self.mediaScanStore findOrCreateWithURL:mediaURL];
     

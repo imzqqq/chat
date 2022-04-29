@@ -1760,7 +1760,7 @@
     <string name="soft_logout_clear_data_dialog_submit">Изчисти данните</string>
     <string name="template_soft_logout_sso_not_same_user_error">Текущата сесия е за потребител %1$s, а вие сте въвели данни за вход за %2$s. ${app_name} не поддържа това.
 \nПърво изчистете данните, след това влезте отново с друг профил.</string>
-    <string name="permalink_malformed">to.chat.dingshunyu.top връзката ви беше невалидна</string>
+    <string name="permalink_malformed">to.chat.imzqqq.top връзката ви беше невалидна</string>
     <string name="bug_report_error_too_short">Описанието е прекалено кратко</string>
     <string name="notification_initial_sync">Начална синхронизация…</string>
     <string name="settings_show_devices_list">Виж всички мой устройства</string>

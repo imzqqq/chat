@@ -83,7 +83,7 @@ and
 [release](../../element-desktop/element.io/release/config.json)
 configs.
 
-**Note:** The above will only enable the feature for <https://apps.chat.dingshunyu.top> and official Chat
+**Note:** The above will only enable the feature for <https://apps.chat.imzqqq.top> and official Chat
 Desktop builds. It will not be enabled for self-hosted installed, custom desktop builds, etc. To
 cover these cases, change the setting's `default` in `Settings.ts` to `true`.
 

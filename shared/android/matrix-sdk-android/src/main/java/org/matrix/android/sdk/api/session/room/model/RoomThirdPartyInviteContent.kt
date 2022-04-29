@@ -21,7 +21,7 @@ import com.squareup.moshi.JsonClass
 
 /**
  * Class representing the EventType.STATE_ROOM_THIRD_PARTY_INVITE state event content
- * Ref: https://chat.docs.dingshunyu.top/spec/client_server/r0.6.1#m-room-third-party-invite
+ * Ref: https://chat.docs.imzqqq.top/spec/client_server/r0.6.1#m-room-third-party-invite
  */
 @JsonClass(generateAdapter = true)
 data class RoomThirdPartyInviteContent(

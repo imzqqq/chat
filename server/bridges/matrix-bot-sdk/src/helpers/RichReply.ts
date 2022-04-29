@@ -26,8 +26,8 @@ export class RichReply {
 
         const fallbackText = "> <" + event["sender"] + "> " + originalBody.split("\n").join("\n> ");
         const fallbackHtml = "<mx-reply><blockquote>"
-            + `<a href="https://to.chat.dingshunyu.top/#/${roomId}/${event["event_id"]}">In reply to</a> `
-            + `<a href="https://to.chat.dingshunyu.top/#/${event["sender"]}">${event["sender"]}</a>`
+            + `<a href="https://to.chat.imzqqq.top/#/${roomId}/${event["event_id"]}">In reply to</a> `
+            + `<a href="https://to.chat.imzqqq.top/#/${event["sender"]}">${event["sender"]}</a>`
             + "<br />" + originalHtml
             + "</blockquote></mx-reply>";
 

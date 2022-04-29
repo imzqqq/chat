@@ -665,14 +665,14 @@ The content of the event is the current push rules for the user.
 ###### Examples
 
 To create a rule that suppresses notifications for the room with ID
-`!dj234r78wl45Gh4D:chat.dingshunyu.top`:
+`!dj234r78wl45Gh4D:chat.imzqqq.top`:
 
     curl -X PUT -H "Content-Type: application/json" "https://example.com/chat/client/v3/pushrules/global/room/%21dj234r78wl45Gh4D%3Amatrix.org?access_token=123456" -d \
     '{
        "actions" : ["dont_notify"]
      }'
 
-To suppress notifications for the user `@spambot:chat.dingshunyu.top`:
+To suppress notifications for the user `@spambot:chat.imzqqq.top`:
 
     curl -X PUT -H "Content-Type: application/json" "https://example.com/chat/client/v3/pushrules/global/sender/%40spambot%3Amatrix.org?access_token=123456" -d \
     '{

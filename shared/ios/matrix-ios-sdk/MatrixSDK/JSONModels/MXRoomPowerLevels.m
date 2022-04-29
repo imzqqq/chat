@@ -97,7 +97,7 @@ NSInteger const MXRoomPowerLevelUndefined = -1;
     self = [super init];
     if (self)
     {
-        // See default values here https://chat.dingshunyu.top/docs/spec/client_server/latest#m-room-power-levels
+        // See default values here https://chat.imzqqq.top/docs/spec/client_server/latest#m-room-power-levels
         
         // Filled default values as specified by the doc
         _usersDefault = 0;

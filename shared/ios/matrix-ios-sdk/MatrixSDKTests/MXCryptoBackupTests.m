@@ -137,7 +137,7 @@
                                           @"key": @"value"
                                           };
 
-            NSString *roomId = @"!aRoomId:chat.dingshunyu.top";
+            NSString *roomId = @"!aRoomId:chat.imzqqq.top";
             NSString *sessionId = @"ASession";
 
             [aliceRestClient sendKeyBackup:keyBackupData room:roomId session:sessionId version:version success:^{
@@ -190,7 +190,7 @@
                                           @"key": @"value"
                                           };
 
-            NSString *roomId = @"!aRoomId:chat.dingshunyu.top";
+            NSString *roomId = @"!aRoomId:chat.imzqqq.top";
             NSString *sessionId = @"ASession";
 
             [aliceRestClient sendKeyBackup:keyBackupData room:roomId session:sessionId version:version success:^{

@@ -272,13 +272,13 @@
     <string name="dialog_download_image">ดาวน์โหลด</string>
     <string name="dialog_message_uploading_media">กำลังอัปโหลด…</string>
     <string name="dialog_title_finishing_media_upload">กำลังอัปโหลดสื่อใกล้เสร็จ</string>
-    <string name="dialog_whats_an_instance">ใส่ที่อยู่หรือโดเมนของ Instance ได้ที่นี่ เช่น flow.dingshunyu.top icosahedron.website social.tchncs.de และ <a href="https://instances.social">อีกมากมาย!</a>
+    <string name="dialog_whats_an_instance">ใส่ที่อยู่หรือโดเมนของ Instance ได้ที่นี่ เช่น flow.imzqqq.top icosahedron.website social.tchncs.de และ <a href="https://instances.social">อีกมากมาย!</a>
 \n 
 \nถ้ายังไม่มีบัญชี สามารถใส่ชื่อ Instance ที่ต้องการจะร่วมแล้วสร้างบัญชีที่นั่น 
 \n 
 \nInstance คือที่ที่หนึ่งไว้โฮสต์บัญชีคุณ แต่คุณยังสามารถสื่อสาร ติดตามบุคคลบน Instance อื่นได้เหมือนอยู่บนไซต์เดียวกัน 
 \n 
-\nพบข้อมูลเพิ่มเติมได้ที่ <a href="https://flow.join.dingshunyu.top">flow.join.dingshunyu.top</a> </string>
+\nพบข้อมูลเพิ่มเติมได้ที่ <a href="https://flow.join.imzqqq.top">flow.join.imzqqq.top</a> </string>
     <string name="label_header">ภาพหัวบน</string>
     <string name="login_connection">กำลังเชื่อมต่อ…</string>
     <string name="label_avatar">อวตาร</string>

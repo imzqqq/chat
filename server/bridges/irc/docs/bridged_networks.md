@@ -16,28 +16,28 @@ A wishlist of IRC networks to be bridged is being collected [in a github issue](
 | libera.chat  | `#channame:libera.chat`                   | [`@appservice:libera.chat`]        | [`#libera-matrix:libera.chat`] | [Matrix.org]                              |
 | LibertaCasa  | `#channame:liberta.casa`                  | [`@lunatic:liberta.casa`]          | [`#help:liberta.casa`]         | [LibertaCasa](https://liberta.casa)
 
-[`@IRC-Darkfasel:darkfasel.net`]: https://to.chat.dingshunyu.top/#/@IRC-Darkfasel:darkfasel.net
-[`@fc00ircmtx:m.trnsz.com`]: https://to.chat.dingshunyu.top/#/@fc00ircmtx:m.trnsz.com
-[`@appservice-irc:matrix.org`]: https://to.chat.dingshunyu.top/#/@appservice-irc:matrix.org
-[`@gimpnet-irc:gnome.org`]: https://to.chat.dingshunyu.top/#/@gimpnet-irc:gnome.org
-[`@ircnet:irc.snt.utwente.nl`]: https://to.chat.dingshunyu.top/#/@ircnet:irc.snt.utwente.nl
-[`@oftc-irc:matrix.org`]: https://to.chat.dingshunyu.top/#/@oftc-irc:matrix.org
-[`@pirateirc:diasp.in`]: https://to.chat.dingshunyu.top/#/@pirateirc:diasp.in
-[`@snoonet-irc:matrix.org`]: https://to.chat.dingshunyu.top/#/@snoonet-irc:matrix.org
-[`@tweakers:irc.snt.utwente.nl`]: https://to.chat.dingshunyu.top/#/@tweakers:irc.snt.utwente.nl
-[`@appservice-irc:eggy.cc`]: https://to.chat.dingshunyu.top/#/@appservice-irc:eggy.cc
-[`@w3c-irc:matrix.org`]: https://to.chat.dingshunyu.top/#/@w3c-irc:matrix.org
-[`@appservice:libera.chat`]: https://to.chat.dingshunyu.top/#/@appservice:libera.chat
-[`@lunatic:liberta.casa`]: https://to.chat.dingshunyu.top/#/@lunatic:liberta.casa
+[`@IRC-Darkfasel:darkfasel.net`]: https://to.chat.imzqqq.top/#/@IRC-Darkfasel:darkfasel.net
+[`@fc00ircmtx:m.trnsz.com`]: https://to.chat.imzqqq.top/#/@fc00ircmtx:m.trnsz.com
+[`@appservice-irc:matrix.org`]: https://to.chat.imzqqq.top/#/@appservice-irc:matrix.org
+[`@gimpnet-irc:gnome.org`]: https://to.chat.imzqqq.top/#/@gimpnet-irc:gnome.org
+[`@ircnet:irc.snt.utwente.nl`]: https://to.chat.imzqqq.top/#/@ircnet:irc.snt.utwente.nl
+[`@oftc-irc:matrix.org`]: https://to.chat.imzqqq.top/#/@oftc-irc:matrix.org
+[`@pirateirc:diasp.in`]: https://to.chat.imzqqq.top/#/@pirateirc:diasp.in
+[`@snoonet-irc:matrix.org`]: https://to.chat.imzqqq.top/#/@snoonet-irc:matrix.org
+[`@tweakers:irc.snt.utwente.nl`]: https://to.chat.imzqqq.top/#/@tweakers:irc.snt.utwente.nl
+[`@appservice-irc:eggy.cc`]: https://to.chat.imzqqq.top/#/@appservice-irc:eggy.cc
+[`@w3c-irc:matrix.org`]: https://to.chat.imzqqq.top/#/@w3c-irc:matrix.org
+[`@appservice:libera.chat`]: https://to.chat.imzqqq.top/#/@appservice:libera.chat
+[`@lunatic:liberta.casa`]: https://to.chat.imzqqq.top/#/@lunatic:liberta.casa
 
-[`#irc:matrix.org`]: https://to.chat.dingshunyu.top/#/%23irc:matrix.org
-[`#darkfasel:darkfasel.net`]: https://to.chat.dingshunyu.top/#/%23darkfasel:darkfasel.net
-[`#ircnet:utwente.io`]: https://to.chat.dingshunyu.top/#/%23ircnet:utwente.io
-[`#diasp.in:diasp.in`]: https://to.chat.dingshunyu.top/#/%23diasp.in:diasp.in
-[`#tweakers-irc:utwente.io`]: https://to.chat.dingshunyu.top/#/%23tweakers-irc:utwente.io
-[`#eggster:eggy.cc`]: https://to.chat.dingshunyu.top/#/%23eggster:eggy.cc
-[`#libera-matrix:libera.chat`]: https://to.chat.dingshunyu.top/#/%23libera-matrix:libera.chat
-[`#help:liberta.casa`]: https://to.chat.dingshunyu.top/#/%23help:liberta.casa
+[`#irc:matrix.org`]: https://to.chat.imzqqq.top/#/%23irc:matrix.org
+[`#darkfasel:darkfasel.net`]: https://to.chat.imzqqq.top/#/%23darkfasel:darkfasel.net
+[`#ircnet:utwente.io`]: https://to.chat.imzqqq.top/#/%23ircnet:utwente.io
+[`#diasp.in:diasp.in`]: https://to.chat.imzqqq.top/#/%23diasp.in:diasp.in
+[`#tweakers-irc:utwente.io`]: https://to.chat.imzqqq.top/#/%23tweakers-irc:utwente.io
+[`#eggster:eggy.cc`]: https://to.chat.imzqqq.top/#/%23eggster:eggy.cc
+[`#libera-matrix:libera.chat`]: https://to.chat.imzqqq.top/#/%23libera-matrix:libera.chat
+[`#help:liberta.casa`]: https://to.chat.imzqqq.top/#/%23help:liberta.casa
 
 [Matrix.org]: https://matrix.org/
 [Gnome.org]: https://gnome.org/

@@ -1,14 +1,14 @@
 # Parameters for Login Fallback
 
-The [login fallback](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#login-fallback)
+The [login fallback](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#login-fallback)
 API can be used by clients to support logins that they do not recognize. It is
 expected to be loaded in a web view and calls a JavaScript function
 (`window.onLogin`) when the login process is complete.
 
 Since the login fallback page does the full login process there is no 
 opportunity for the application to provide a device ID (to re-authenticate
-an expired session in the [case of soft-logout](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#soft-logout))
-or an [initial device display name](https://chat.api-spec.dingshunyu.top/client_server/r0.6.1#post-matrix-client-r0-login)
+an expired session in the [case of soft-logout](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#soft-logout))
+or an [initial device display name](https://chat.api-spec.imzqqq.top/client_server/r0.6.1#post-matrix-client-r0-login)
 (in the case of an initial login). This causes a few issues:
 
 * It can make it difficult for a user to manage their sessions (as additional
