@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Stop running instance if needed
+systemctl stop ma1sd.service
+
+# Disable service if exists
+systemctl disable ma1sd.service
+
+# remove symlink
+rm /usr/bin/ma1sd

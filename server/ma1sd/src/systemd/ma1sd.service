@@ -1,0 +1,10 @@
+[Unit]
+Description=ma1sd
+After=syslog.target
+
+[Service]
+User=ma1sd
+ExecStart=/usr/bin/ma1sd -c /etc/ma1sd/ma1sd.yaml
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,19 @@
+#!/bin/bash -e
+
+# Add service account
+useradd -r ma1sd || true
+
+# Set permissions for data directory
+chown -R ma1sd:ma1sd %DEB_DATA_DIR%
+
+# Create symlink to ma1sd run script
+ln -sfT /usr/lib/ma1sd/ma1sd /usr/bin/ma1sd
+
+# Enable systemd service
+systemctl enable ma1sd.service
+
+# If we already have a config file setup, we attempt to run ma1sd automatically
+# Specifically targeted at upgrades where the service needs to be restarted
+if [ -f "%DEB_CONF_FILE%" ]; then
+    systemctl restart ma1sd.service
+fi
