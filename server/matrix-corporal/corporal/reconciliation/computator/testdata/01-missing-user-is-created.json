@@ -1,0 +1,76 @@
+{
+	"currentState": {
+		"users": [
+		]
+	},
+
+	"policy": {
+		"schemaVersion": 1,
+
+		"flags": {
+			"allowCustomUserDisplayNames": true,
+			"allowCustomUserAvatars": true
+		},
+
+		"managedRoomIds": [
+			"!a:host"
+		],
+
+		"managedCommunityIds": [
+			"+a:host"
+		],
+
+		"users": [
+			{
+				"id": "@a:host",
+				"authType": "plain",
+				"authCredential": "test",
+				"active": true,
+				"joinedCommunityIds": ["+a:host"],
+				"joinedRoomIds": ["!a:host"]
+			},
+			{
+				"id": "@b:host",
+				"authType": "sha1",
+				"authCredential": "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3",
+				"active": true,
+				"joinedCommunityIds": [],
+				"joinedRoomIds": []
+			}
+		]
+	},
+
+	"reconciliationState": {
+		"actions": [
+			{
+				"type": "user.create",
+				"payload": {
+					"userId": "@a:host",
+					"password": "__RANDOM__"
+				}
+			},
+			{
+				"type": "community.join",
+				"payload": {
+					"userId": "@a:host",
+					"communityId": "+a:host"
+				}
+			},
+			{
+				"type": "room.join",
+				"payload": {
+					"userId": "@a:host",
+					"roomId": "!a:host"
+				}
+			},
+
+			{
+				"type": "user.create",
+				"payload": {
+					"userId": "@b:host",
+					"password": "__RANDOM__"
+				}
+			}
+		]
+	}
+}
