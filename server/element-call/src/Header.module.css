@@ -1,0 +1,122 @@
+.header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.nav {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  white-space: nowrap;
+  padding: 0 20px;
+  height: 64px;
+}
+
+.headerLogo {
+  display: none;
+  align-items: center;
+  text-decoration: none;
+}
+
+.leftNav.hideMobile {
+  display: none;
+}
+
+.leftNav > * {
+  margin-right: 12px;
+}
+
+.leftNav h3 {
+  margin: 0;
+}
+
+.rightNav {
+  justify-content: flex-end;
+}
+
+.rightNav > * {
+  margin-right: 24px;
+}
+
+.rightNav.hideMobile {
+  display: none;
+}
+
+.nav > :last-child {
+  margin-right: 0;
+}
+
+.roomAvatar {
+  position: relative;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 36px;
+  background-color: #5c56f5;
+}
+
+.roomAvatar > * {
+  fill: white;
+  stroke: white;
+}
+
+.backButton {
+  background: transparent;
+  border: none;
+  display: flex;
+  color: var(--textColor1);
+  cursor: pointer;
+  align-items: center;
+}
+
+.backButton h3 {
+  margin: 0;
+}
+
+.backButton > * {
+  margin-right: 12px;
+}
+
+.backButton > :last-child {
+  margin-right: 0;
+}
+
+.userName {
+  font-weight: 600;
+  margin-right: 8px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  flex-shrink: 1;
+}
+
+.signOutButton {
+  background: transparent;
+  border: none;
+  color: rgb(255, 75, 85);
+  cursor: pointer;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+@media (min-width: 800px) {
+  .headerLogo,
+  .roomAvatar,
+  .leftNav.hideMobile,
+  .rightNav.hideMobile {
+    display: flex;
+  }
+
+  .leftNav h3 {
+    font-size: 18px;
+  }
+
+  .nav {
+    height: 76px;
+  }
+}

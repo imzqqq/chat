@@ -1,0 +1,11 @@
+.facepile {
+  width: 100%;
+  height: 24px;
+  position: relative;
+}
+
+.facepile .avatar {
+  position: absolute;
+  top: 0;
+  border: 1px solid var(--bgColor2);
+}

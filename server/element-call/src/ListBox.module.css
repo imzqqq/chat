@@ -1,0 +1,33 @@
+.listBox {
+  margin: 0;
+  padding: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  list-style: none;
+  background-color: transparent;
+  border: 1px solid var(--inputBorderColor);
+  background-color: var(--bgColor1);
+  border-radius: 8px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: transparent;
+  color: var(--textColor1);
+  padding: 8px 16px;
+  outline: none;
+  cursor: pointer;
+  font-size: 15px;
+  min-height: 32px;
+}
+
+.option.focused {
+  background-color: rgba(111, 120, 130, 0.2);
+}
+
+.option.disabled {
+  color: var(--textColor2);
+  background-color: var(--bgColor3);
+}

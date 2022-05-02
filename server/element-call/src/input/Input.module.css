@@ -1,0 +1,178 @@
+.fieldRow {
+  display: flex;
+  margin-bottom: 32px;
+  align-items: center;
+}
+
+.field {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+.fieldRow.rightAlign {
+  justify-content: flex-end;
+}
+
+.fieldRow > * {
+  margin-right: 24px;
+}
+
+.fieldRow > :last-child {
+  margin-right: 0;
+}
+
+.inputField {
+  border-radius: 4px;
+  transition: border-color 0.25s;
+  border: 1px solid var(--inputBorderColor);
+}
+
+.inputField input,
+.inputField textarea {
+  font-weight: 400;
+  font-size: 15px;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 9px 10px 9px;
+  color: var(--textColor1);
+  background-color: var(--bgColor1);
+  flex: 1;
+  min-width: 0;
+}
+
+.inputField.disabled input,
+.inputField.disabled textarea,
+.inputField.disabled span {
+  color: var(--textColor2);
+}
+
+.inputField span {
+  padding: 11px 9px;
+}
+
+.inputField span:first-child {
+  padding-right: 0;
+}
+
+.inputField input::placeholder,
+.inputField textarea::placeholder {
+  transition: color 0.25s ease-in 0s;
+  color: transparent;
+}
+
+.inputField input:placeholder-shown:focus::placeholder,
+.inputField textarea:placeholder-shown:focus::placeholder {
+  transition: color 0.25s ease-in 0.1s;
+  color: var(--textColor2);
+}
+
+.inputField label {
+  transition: font-size 0.25s ease-out 0.1s, color 0.25s ease-out 0.1s,
+    top 0.25s ease-out 0.1s, background-color 0.25s ease-out 0.1s;
+  color: var(--textColor3);
+  background-color: transparent;
+  font-size: 15px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 9px 8px;
+  padding: 2px;
+  pointer-events: none;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 20px);
+}
+
+.inputField:focus-within {
+  border-color: var(--inputBorderColorFocused);
+}
+
+.inputField input:focus,
+.inputField textarea:focus {
+  outline: 0;
+}
+
+.inputField input:focus + label,
+.inputField input:not(:placeholder-shown) + label,
+.inputField.prefix input + label,
+.inputField textarea:focus + label,
+.inputField textarea:not(:placeholder-shown) + label,
+.inputField.prefix textarea + label {
+  background-color: var(--bgColor2);
+  transition: font-size 0.25s ease-out 0s, color 0.25s ease-out 0s,
+    top 0.25s ease-out 0s, background-color 0.25s ease-out 0s;
+  font-size: 10px;
+  top: -13px;
+  padding: 0 2px;
+  pointer-events: auto;
+}
+
+.inputField input:focus + label,
+.inputField textarea:focus + label {
+  color: var(--inputBorderColorFocused);
+}
+
+.checkboxField {
+  display: flex;
+  align-items: flex-start;
+}
+
+.checkboxField label {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  font-size: 13px;
+}
+
+.checkboxField input {
+  outline: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  padding: 0;
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+  height: 16px;
+  width: 16px;
+  border: 1.5px solid rgba(185, 190, 198, 0.5);
+  box-sizing: border-box;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.checkbox svg {
+  display: none;
+}
+
+.checkbox svg * {
+  stroke: #fff;
+}
+
+.checkboxField input[type="checkbox"]:checked + label > .checkbox {
+  background: var(--primaryColor);
+  border-color: var(--primaryColor);
+}
+
+.checkboxField input[type="checkbox"]:checked + label > .checkbox svg {
+  display: flex;
+}
+
+.checkboxField:focus-within .checkbox {
+  border: 1.5px solid var(--inputBorderColorFocused) !important;
+}
+
+.errorMessage {
+  margin: 0;
+  font-size: 13px;
+  color: #ff5b55;
+  font-weight: 600;
+}

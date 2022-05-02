@@ -1,0 +1,41 @@
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 100%;
+}
+
+.header {
+  padding: 76px 65px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 660px;
+  padding: 0 65px;
+}
+
+.content > * {
+  margin-top: 0;
+  margin-bottom: 32px;
+}
+
+.content > :last-child {
+  margin-bottom: 0;
+}
+
+.homeLink {
+  width: 291px;
+}

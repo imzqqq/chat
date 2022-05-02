@@ -1,0 +1,46 @@
+.selectInput {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 28px;
+  max-width: 444px;
+}
+
+.label {
+  font-weight: 600;
+  font-size: 18px;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.selectTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background-color: var(--bgColor1);
+  border-radius: 8px;
+  border: 1px solid var(--inputBorderColor);
+  font-size: 15px;
+  color: var(--textColor1);
+  height: 40px;
+  max-width: 100%;
+  width: 100%;
+}
+
+.selectTrigger:focus {
+  outline: auto;
+}
+
+.selectedItem {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 20px;
+}
+
+.popover {
+  position: absolute;
+  margin-top: 5px;
+  width: 100%;
+  z-index: 1;
+}
