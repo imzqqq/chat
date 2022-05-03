@@ -1,0 +1,5 @@
+/var
+/vendor/
+/pkg
+/email2matrix-server
+/config.json
