@@ -1,0 +1,152 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.page {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    height: 100%;
+}
+
+.header {
+    margin: 5px;
+}
+
+.statsheader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+#txrx {
+    background-color: black;
+    color: white;
+}
+
+.leftSide {
+    display: flex;
+    background: #f7f7f7;
+    flex-direction: column;
+    height: 100%;
+    width: 50%;
+}
+
+.rightSide {
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    background: #f7f7f7;
+    height: 100%;
+    width: 50%;
+}
+
+#roomlistcontainer {
+    max-height: 100%;
+    display: grid;
+}
+
+#messages {
+    overflow: scroll;
+}
+
+.roomlist {
+    overflow: scroll;
+    background: #f7f7f7;
+}
+
+.roomlistwrapper {
+    overflow: scroll;
+    background: #f7f7f7;
+    border-left: 1px solid #8d99a5;
+    border-right: 1px solid #8d99a5;
+}
+
+.roomlistname {
+    position: sticky;
+    top: 0;
+    background: #8d99a5;
+    text-align: center;
+    padding: 2px;
+    color: #fff;
+}
+
+.roomcell {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid #8d99a5;
+    height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.roomavatar {
+    width: 32px;
+    height: 32px;
+    margin-right: 6px;
+}
+
+.roomtimestamp {
+    color: #737d8c;
+    font-size: small;
+}
+
+.roomsender {
+    color: #737d8c;
+    font-size: small;
+}
+
+.roomcontent {
+    font-size: small;
+}
+
+.unreadcountnotify {
+    background: #d0d0d0;
+    padding: 2px;
+    font-weight: bold;
+}
+.unreadcounthighlight {
+    background: #f33;
+    color: #fff;
+    padding: 2px;
+    font-weight: bold;
+}
+
+.msgheader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 5px 5px 0px 5px;
+}
+
+.msgsender {
+    color: #737d8c;
+    font-size: small;
+}
+
+.msgtimestamp {
+    color: #737d8c;
+    font-size: x-small;
+}
+
+.msgcontent {
+    font-size: small;
+}
+
+#selectedroomtopic {
+    font-size: x-small;
+    border: 1px solid;
+    padding: 5px;
+}
+
+#roomfooter {
+    margin: 5px;
+}
+
+#sendmessageinput {
+    width: 100%;
+}
