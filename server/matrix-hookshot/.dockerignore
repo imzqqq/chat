@@ -1,0 +1,12 @@
+.github/
+*.pem
+config.yml
+lib/
+node_modules/
+public/
+registration.yml
+tests/
+tsconfig.tsbuildinfo
+
+# Added by cargo
+/target

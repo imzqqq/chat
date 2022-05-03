@@ -1,0 +1,17 @@
+*.pem
+config.yml
+lib/
+node_modules/
+public/
+registration.yml
+tsconfig.tsbuildinfo
+public/
+
+.idea
+# Added by cargo
+/target
+
+# Generated during build
+/src/libRs.d.ts
+
+book
