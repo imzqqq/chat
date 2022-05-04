@@ -45,9 +45,11 @@ To build Flow Desktop, you'll need the following tools and packages:
 In the app directory, run the following command to install all of the package dependencies:
 
 ```sh
-yarn install
-# formula:
-export NODE_OPTIONS="--max-old-space-size=(X * 1024)" # Increase to X GB
+yarn setup:deps
+# formula: Increase to X GB
+export NODE_OPTIONS="--max-old-space-size=(X * 1024)" 
+
+yarn start
 ```
 
 Before building, make sure you set the location field in `public/config.json` to "desktop" before continuing.
