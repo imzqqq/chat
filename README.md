@@ -507,6 +507,7 @@ $ yrm use taobao
 $ npm list -g --depth 0
 $ yarn global list
 
+$ sudo nvidia-docker run -p 11100-11200:11100-11200 --name=zzZ -v ~/workspace:/root/workspace -v /data:/root/data --shm-size 64g --device /dev/nvidiactl --device /dev/nvidia-uvm --device /dev/nvidia0 --device /dev/nvidia1 --device /dev/nvidia2 --device /dev/nvidia3 -it node /bin/bash
 $ sudo nvidia-docker run -p 11050:11250 --name=zq_pytorch -v ~/workspace:/root/workspace -v /data:/root/data --shm-size 64g --device /dev/nvidiactl --device /dev/nvidia-uvm --device /dev/nvidia0 --device /dev/nvidia1 --device /dev/nvidia2 --device /dev/nvidia3 -it hetao-pytorch /bin/bash
 $ sudo docker run -itd --name imqzzZ -p 16666-16888:16666-16888/tcp ubuntu /bin/bash
 
