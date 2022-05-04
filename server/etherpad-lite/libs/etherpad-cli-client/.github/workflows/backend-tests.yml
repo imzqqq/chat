@@ -1,0 +1,60 @@
+name: "Backend tests"
+
+# any branch is useful for testing before a PR is submitted
+on: [push, pull_request]
+
+jobs:
+  withplugins:
+    # run on pushes to any branch
+    # run on PRs from external forks
+    if: |
+      (github.event_name != 'pull_request')
+      || (github.event.pull_request.head.repo.id != github.event.pull_request.base.repo.id)
+    name: with Plugins
+    runs-on: ubuntu-latest
+
+    steps:
+      -
+        name: Install etherpad core
+        uses: actions/checkout@v3
+        with:
+          repository: ether/etherpad-lite
+          path: ./etherpad
+      -
+        name: Checkout plugin repository
+        uses: actions/checkout@v3
+        with:
+          path: ./plugin
+      -
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12
+          cache: 'npm'
+          cache-dependency-path: |
+            etherpad/src/package-lock.json
+            etherpad/src/bin/doc/package-lock.json
+            plugin/package-lock.json
+      -
+        name: Prepare Etherpad core
+        run: |
+          cd ./etherpad/src
+          npm ci
+          npm link
+      -
+        name: Prepare plugin
+        run: |
+          cd ./plugin
+          PLUGIN_NAME=$(npx -c 'printf %s\\n "${npm_package_name}"') || exit 1
+          npm ci
+          npm link
+          npm link ep_etherpad-lite
+          cd ../etherpad
+          npm link "${PLUGIN_NAME}"
+          # Rename to match the glob pattern passed to mocha.
+          mv node_modules/"${PLUGIN_NAME}" node_modules/ep_client
+      -
+        name: Remove core tests so only the client is tested
+        run: rm -rf ./etherpad/src/tests/backend/specs
+      -
+        name: Run the backend tests
+        run: cd ./etherpad/src && npm test
