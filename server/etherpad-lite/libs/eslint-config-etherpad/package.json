@@ -1,0 +1,49 @@
+{
+  "name": "eslint-config-etherpad",
+  "version": "3.0.13",
+  "description": "ESLint shareable config used for Etherpad and its plugins",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ether/eslint-config-etherpad.git"
+  },
+  "keywords": [
+    "eslint",
+    "eslintconfig",
+    "etherpad"
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/ether/eslint-config-etherpad/issues"
+  },
+  "homepage": "https://github.com/ether/eslint-config-etherpad#readme",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
+  },
+  "engines": {
+    "node": ">=12.17.0"
+  },
+  "peerDependencies": {
+    "eslint": "^8.14.0",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "@rushstack/eslint-patch": "^1.1.3",
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "eslint-import-resolver-typescript": "^2.7.1",
+    "eslint-plugin-cypress": "^2.12.1",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-mocha": "^10.0.4",
+    "eslint-plugin-n": "^15.2.0",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-you-dont-need-lodash-underscore": "^6.12.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.14.0",
+    "typescript": "^4.6.4"
+  }
+}
