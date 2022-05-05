@@ -8,3 +8,4 @@ static/media/*
 .mypy_cache/
 __pycache__/
 .venv
+.env
