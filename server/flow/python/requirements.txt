@@ -9,7 +9,8 @@ requests
 python-u2flib-server
 Flask
 Flask-WTF
-pymongo
+# pymongo
+pymongo==3.9
 timeago
 bleach
 html2text

@@ -116,7 +116,7 @@ bundle exec jekyll serve
 - Add Deadsnakes PPA: `sudo add-apt-repository ppa:deadsnakes/ppa`
 - Install Python 3: `sudo apt install python3`
 - Allow the process to complete and verify the Python version was installed successfully: `python3 --version`
-- Install the python3-venv virtual environment: `sudo apt install python3-venv`, or `apt-get install python3.9-dev python3.9-venv`
+- Install the python3-venv virtual environment: `sudo apt install python3-venv`, or `sudo apt-get install python3.9-dev python3.9-venv`
 - Install local deps: `pip3 install -e <path>`
 - User level -> Open current user's `~/.bashrc` file `vi ~/.bashrc` and add new alias：`alias python='/usr/bin/python3.9'`
 - Specify pip with python: `python -m pip --version`
