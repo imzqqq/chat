@@ -618,4 +618,7 @@ $ scp root@47.115.52.51:/home/imzqqq/workspace/world.txt /local_path
 $ scp -r /local_folder root@47.115.52.51:/home/imzqqq/workspace/folder
 
 $ jupyter notebook --ip 0.0.0.0 --port 13666 --no-browser --allow-root
+
+# try install this deps when npm install canvas failed
+$ apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 ```
