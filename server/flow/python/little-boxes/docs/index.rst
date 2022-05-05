@@ -6,11 +6,11 @@
 Little Boxes
 ============
 
-.. image:: https://img.shields.io/travis/imzqqq/little-boxes.svg
-  :target: https://travis-ci.org/imzqqq/little-boxes
+.. image:: https://img.shields.io/travis/tsileo/little-boxes.svg
+  :target: https://travis-ci.org/tsileo/little-boxes
 
-.. image:: https://codecov.io/gh/imzqqq/little-boxes/branch/master/graph/badge.svg
-  :target: https://codecov.io/gh/imzqqq/little-boxes
+.. image:: https://codecov.io/gh/tsileo/little-boxes/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/tsileo/little-boxes
 
 .. image:: https://img.shields.io/pypi/v/little-boxes.svg
   :target: https://pypi.org/project/little-boxes
@@ -19,7 +19,7 @@ Little Boxes
   :target: https://pypi.org/project/little-boxes
 
 .. image:: https://img.shields.io/pypi/l/little-boxes.svg
-  :target: https://github.com/imzqqq/little-boxes
+  :target: https://github.com/tsileo/little-boxes
  
 
 Tiny `ActivityPub <https://activitypub.rocks/>`_ framework written in Python, both database and server agnostic.
@@ -44,7 +44,7 @@ Features
 Project using Little Boxes
 --------------------------
 
-* `microblog.pub <http://github.com/imzqqq/microblog.pub>`_
+* `microblog.pub <http://github.com/tsileo/microblog.pub>`_
 
 
 Documentation

@@ -32,7 +32,7 @@ reload-dev:
 .PHONY: microblogpub
 microblogpub:
 	# Update microblog.pub
-	git pull
+	# git pull
 	# Rebuild the Docker image
 	docker build . --no-cache -t microblogpub:latest
 

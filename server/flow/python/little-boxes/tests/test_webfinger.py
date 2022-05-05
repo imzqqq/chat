@@ -37,7 +37,7 @@ _WEBFINGER_RESP = {
 @mock.patch("little_boxes.backend.check_url", return_value=None)
 @httpretty.activate
 def test_webfinger(_, _1):
-    # FIXME(imzqqq): it should try https first
+    # FIXME(tsileo): it should try https first
     httpretty.register_uri(
         httpretty.GET,
         "https://microblog.pub/.well-known/webfinger",

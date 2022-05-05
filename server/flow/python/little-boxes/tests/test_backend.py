@@ -49,7 +49,7 @@ class InMemBackend(Backend):
             if len(funcs) < len(calls[i][1]) - 1:
                 raise ValueError(f"args left unchecked for method {name} at step #{i}")
             for z, f in enumerate(funcs):
-                if len(calls[i][1]) < z + 2:  # XXX(imzqqq): 0 will be self
+                if len(calls[i][1]) < z + 2:  # XXX(tsileo): 0 will be self
                     raise ValueError(f"method {name} has no args at index {z}")
                 try:
                     f(calls[i][1][z + 1])

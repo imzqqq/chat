@@ -15,7 +15,7 @@ NAME = "little_boxes"
 DESCRIPTION = (
     "Tiny ActivityPub framework written in Python, both database and server agnostic."
 )
-URL = "https://github.com/imzqqq/little-boxes"
+URL = "https://github.com/tsileo/little-boxes"
 EMAIL = "t@a4.io"
 AUTHOR = "Thomas Sileo"
 REQUIRES_PYTHON = ">=3.6.0"
@@ -26,7 +26,6 @@ REQUIRED = [
     "requests",
     "markdown",
     "bleach",
-    "pyld",
     "pycryptodome",
     "html2text",
     "mdx_linkify",
@@ -68,8 +67,8 @@ setup(
         # Trove classifiers
         # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
         "Development Status :: 3 - Alpha",
+        "License :: OSI Approved :: ISC License (ISCL)",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",

@@ -84,12 +84,13 @@ The most convenient way to hack on _microblog.pub_ is to run the Python server o
 
 ```shell
 # One-time setup (in a new virtual env)
-$ apt-get install python3-venv
+$ sudo apt-get install python3-venv
+$ sudo apt-get install python3.10-dev python3.10-venv
 $ python3 -m venv ./.env
 $ source ./.env/bin/activate
 $ pip install -r requirements.txt
 # Start MongoDB and poussetaches
-$ make poussetaches
+# $ make poussetaches
 $ env POUSSETACHES_AUTH_KEY="<secret-key>" docker-compose -f docker-compose-dev.yml up -d
 # Run the server locally
 $ FLASK_DEBUG=1 MICROBLOGPUB_DEBUG=1 FLASK_APP=app.py POUSSETACHES_AUTH_KEY="<secret-key>" flask run -p 5005 --with-threads
