@@ -1018,6 +1018,9 @@ class ServerConfig(Config):
         #
         #   webclient: A web client. Requires web_client_location to be set.
         #
+        # Extend the existing `listeners` section. This defines the ports that the
+        # main process will listen on.
+        #
         listeners:
           # TLS-enabled listener: for when matrix traffic is sent directly to Chat server.
           #
@@ -1048,6 +1051,15 @@ class ServerConfig(Config):
           #- port: 9000
           #  bind_addresses: ['::1', '127.0.0.1']
           #  type: manhole
+
+          ### MARK - imzqqq, NOTE: Shared Worker Configuration
+          # The HTTP replication port
+          - port: 9093
+            bind_address: '127.0.0.1'
+            type: http
+            resources:
+            - names: [replication]
+          ### END
 
         # Forward extremities can build up in a room due to networking delays between
         # homeservers. Once this happens in a large room, calculation of the state of

@@ -306,6 +306,13 @@ listeners:
   #  bind_addresses: ['::1', '127.0.0.1']
   #  type: manhole
 
+  # The HTTP replication port
+  - port: 9093
+    bind_address: '127.0.0.1'
+    type: http
+    resources:
+     - names: [replication]
+
 # Forward extremities can build up in a room due to networking delays between
 # homeservers. Once this happens in a large room, calculation of the state of
 # that room can become quite expensive. To mitigate this, once the number of

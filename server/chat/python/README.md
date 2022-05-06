@@ -176,6 +176,9 @@ to install using pip and a virtualenv:
     sudo apt-get install python3-setuptools
     sudo apt-get install libpq-dev python3-dev
 
+    sudo apt install redis-server
+    echo PING | nc -q1 localhost 6379
+
     python3 -m venv ./.env
     source ./.env/bin/activate
 
@@ -316,7 +319,7 @@ the following in the Chat config file:
 
 ```yaml
 presence:
-	enabled: false
+    enabled: false
 ```
 
 ## People can't accept room invitations from me

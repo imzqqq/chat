@@ -62,7 +62,7 @@ wish to use another server for this purpose.
 To suppress this warning and continue using 'matrix.org', admins should set
 'suppress_key_server_warning' to 'true' in homeserver.yaml.
 --------------------------------------------------------------------------------"""
-###
+### END
 
 logger = logging.getLogger(__name__)
 
