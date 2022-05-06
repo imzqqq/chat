@@ -9,3 +9,6 @@ dist/
 .mypy_cache/
 __pycache__/
 docs/_build
+build
+/build
+build/*

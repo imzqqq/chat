@@ -32,8 +32,8 @@ logger = logging.getLogger(__name__)
 
 REQUIREMENTS = [
     ### MARK - imzqqq, NOTE: use local dependency
-    "./canonicaljson",
-    ###
+    # "./canonicaljson",
+    ### END
     "jsonschema>=2.5.1",
     "frozendict>=1",
     "unpaddedbase64>=1.1.0",
@@ -65,6 +65,7 @@ REQUIREMENTS = [
     "attrs>=19.2.0,!=21.1.0",
     "netaddr>=0.7.18",
     "Jinja2>=2.9",
+    "MarkupSafe>=2.0",
     "bleach>=1.4.3",
     "typing-extensions>=3.7.4",
     # We enforce that we have a `cryptography` version that bundles an `openssl`
@@ -75,8 +76,8 @@ REQUIREMENTS = [
 
 CONDITIONAL_REQUIREMENTS = {
     ### MARK - imzqqq, NOTE: use local ladp3
-    "./chat-ldap3": ["chat-ldap3>=0.1"],
-    ###
+    # "./chat-ldap3": ["chat-ldap3>=0.1"],
+    ### END
     "postgres": [
         # we use execute_values with the fetch param, which arrived in psycopg 2.8.
         "psycopg2>=2.8 ; platform_python_implementation != 'PyPy'",

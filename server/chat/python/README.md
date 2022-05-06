@@ -5,7 +5,7 @@
 An ambitious new ecosystem for open federated Instant Messaging and
 VoIP.  The basics you need to know to get up and running are:
 
-The overall architecture is::
+The overall architecture is:
 
       client <----> homeserver <=====================> homeserver <----> client
              https://somewhere.org/chat      https://elsewhere.net/chat
@@ -146,14 +146,14 @@ Users can reset their password through their client. Alternatively, a server adm
 can reset a users password using the `admin API <docs/admin_api/user_admin_api.rst#reset-password>`
 or by directly editing the database as shown below.
 
-First calculate the hash of the new password::
+First calculate the hash of the new password:
 
     $ ~/chat/env/bin/hash_password
     Password:
     Confirm password:
     $2a$12$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-Then update the ``users`` table in the database::
+Then update the ``users`` table in the database:
 
     UPDATE users SET password_hash='$2a$12$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
         WHERE name='@test:test.com';
@@ -161,39 +161,40 @@ Then update the ``users`` table in the database::
 ## Development
 
 Before setting up a development environment for chat, make sure you have the
-system dependencies (such as the python header files) installed - see
+system dependencies (such as the python3 header files) installed - see
 [Installing from source](./docs/setup/installation.md).
 
 The server has a number of external dependencies, that are easiest
-to install using pip and a virtualenv::
+to install using pip and a virtualenv:
 
-    sudo chmod -R 777 nervous/
+    sudo chmod -R 777 chat/
     sudo apt-get update
     sudo apt-get install software-properties-common
     sudo add-apt-repository ppa:deadsnakes/ppa
     sudo apt-get install python3
     sudo apt-get install python3-venv
     sudo apt-get install python3-setuptools
-    sudo apt-get install libpq-dev python-dev python3-dev
-
-    # Optional
-    python -m pip3 install psycopg2-binary
-    python -m pip install -U pip setuptools
+    sudo apt-get install libpq-dev python3-dev
 
     python3 -m venv ./.env
     source ./.env/bin/activate
 
     # Optional
+    python3 -m pip3 install psycopg2-binary
+    python3 -m pip install -U pip setuptools
+    python3 -m pip install --upgrade pip setuptools wheel
+
+    # Optional
     pip3 install ./chat-ldap3
     pip3 install ./canonicaljson
 
-    python -m pip3 install -e ".[all,lint,mypy,test]"
+    python3 -m pip3 install -e ".[all,lint,mypy,test]"
 
 This will run a process of downloading and installing all the needed
 dependencies into a virtual .env. If any dependencies fail to install,
-try installing the failing modules individually::
+try installing the failing modules individually:
 
-    python -m pip3 install -e "module-name"
+    python3 -m pip3 install -e "module-name"
 
 We recommend using the demo which starts 3 federated instances running on ports `8080` - `8082`
 
@@ -201,27 +202,29 @@ We recommend using the demo which starts 3 federated instances running on ports 
 
 (to stop, you can use `./cl/stop.sh`)
 
-If you just want to start a single instance of the app and run it directly::
+If you just want to start a single instance of the app and run it directly:
 
     # Create the homeserver.yaml config once
-    python -m chat.app.homeserver \
+    python3 -m chat.app.homeserver \
       --server-name my.domain.name \
       --config-path homeserver.yaml \
       --generate-config \
       --report-stats=[yes|no]
 
     # Start the app
-    python -m chat.app.homeserver --config-path homeserver.yaml
+    python3 -m chat.app.homeserver --config-path homeserver.yaml
+
+Go to <https://localhost:8080/chat/client/r0/login> and <http://localhost:8080/chat/static/#/> to check if chat server working
 
 ## Running the unit tests
 
 After getting up and running, you may wish to run Chat's unit tests to
-check that everything is installed correctly::
+check that everything is installed correctly:
 
     trial tests
 
 This should end with a 'PASSED' result (note that exact numbers will
-differ)::
+differ):
 
     Ran 1337 tests in 716.064s
 
@@ -295,7 +298,7 @@ improvement in overall memory use, and especially in terms of giving back
 RAM to the OS. To use it, the library must simply be put in the
 LD_PRELOAD environment variable when launching Chat. On Debian, this
 can be done by installing the ``libjemalloc1`` package and adding this
-line to ``/etc/default/chat-server``::
+line to ``/etc/default/chat-server``:
 
     LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.1
 
@@ -321,7 +324,7 @@ presence:
 The typical failure mode here is that you send an invitation to someone
 to join a room or direct chat, but when they go to accept it, they get an
 error (typically along the lines of "Invalid signature"). They might see
-something like the following in their logs::
+something like the following in their logs:
 
     2019-09-11 19:32:04,271 - chat.federation.transport.server - 288 - WARNING - GET-11752 - authenticate_request failed: 401: Invalid signature for server <server> with key ed25519:a_EqML: Unable to verify signature for <server>
 

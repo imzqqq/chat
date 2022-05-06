@@ -136,7 +136,7 @@ Installing prerequisites on Ubuntu or Debian:
 ```sh
 sudo apt install build-essential python3-dev libffi-dev \
                      python3-pip python3-setuptools sqlite3 \
-                     libssl-dev virtualenv libjpeg-dev libxslt1-dev
+                     libssl-dev virtualenv libjpeg-dev libxslt1-dev libxml2-dev
 ```
 
 ##### ArchLinux
@@ -579,9 +579,9 @@ This is critical from a security perspective to stop arbitrary Chat users
 spidering 'internal' URLs on your network. At the very least we recommend that
 your loopback and RFC1918 IP addresses are blacklisted.
 
-This also requires the optional `lxml` python dependency to be  installed. This
-in turn requires the `libxml2` library to be available - on  Debian/Ubuntu this
-means `apt-get install libxml2-dev`, or equivalent for your OS.
+This also requires the optional `lxml` python dependency to be installed. This
+in turn requires the `libxml2` library to be available - on Debian/Ubuntu this
+means `sudo apt-get install libxml2-dev`, or equivalent for your OS.
 
 ### Troubleshooting Installation
 

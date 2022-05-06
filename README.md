@@ -125,6 +125,12 @@ bundle exec jekyll serve
 - `python -m pip install psycopg2-binary`
 - Uninstall python-psycopg2 and its dependencies: `sudo apt-get remove python-psycopg2`, if python throws `pip cannot uninstall <package>: "It is a distutils installed project"` error, then run: `pip install --ignore-installed [package name]==[package version]`
 
+```sh
+pip3 install --upgrade setuptools
+pip3 install --upgrade pip
+pip3 install --upgrade distlib
+```
+
 ### PostgreSQL
 
 - Install Postgres:
