@@ -8,7 +8,7 @@ make: *** No rule to make target 'compile', needed by 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri May  6 07:34:40 2022
+# Make data base, printed on Tue May 10 03:20:49 2022
 
 # Variables
 
@@ -59,7 +59,7 @@ VSCODE_CWD = /home/zq
 # environment
 GOPROXY = https://goproxy.cn,https://gocenter.io,https://goproxy.io,direct
 # environment
-SSH_CONNECTION = 192.168.7.172 38700 192.168.7.166 1320
+SSH_CONNECTION = 192.168.7.172 47710 192.168.7.166 1320
 # environment
 PATH = /home/zq/.vscode-server/bin/57fd6d0195bb9b9d1b49f6da5db789060795de47/bin/remote-cli:/home/zq/.local/bin:/home/zq/gems/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin:/home/zq/go/bin
 # makefile (from 'Makefile', line 6)
@@ -89,7 +89,7 @@ VSCODE_PIPE_LOGGING = true
 # environment
 PWD = /home/zq/workspace/chat
 # environment
-VSCODE_IPC_HOOK_CLI = /run/user/1004/vscode-ipc-c9bbde68-7842-44ac-93af-5b0b759f1a1d.sock
+VSCODE_IPC_HOOK_CLI = /run/user/1004/vscode-ipc-b6e0367f-918e-4dc9-a286-ae2b737502bc.sock
 # environment
 GEM_HOME = /home/zq/gems
 # makefile (from 'Makefile', line 11)
@@ -129,7 +129,7 @@ SHLVL = 3
 # makefile (from 'Makefile', line 3)
 BUILD_DIR = build
 # environment
-XDG_SESSION_ID = 3151
+XDG_SESSION_ID = 3829
 # environment
 USER = zq
 # makefile
@@ -140,8 +140,6 @@ TFLITE_WASM = react/features/stream-effects/virtual-background/vendor/tflite
 %D = $(patsubst %/,%,$(dir $%))
 # default
 MAKE_COMMAND := make
-# environment
-OLDPWD = /home/zq/.vscode-server/bin/57fd6d0195bb9b9d1b49f6da5db789060795de47
 # default
 .VARIABLES := 
 # automatic
@@ -151,13 +149,15 @@ MAKEFLAGS = pqrR
 # environment
 MFLAGS = -pqrR
 # environment
-SSH_CLIENT = 192.168.7.172 38700 1320
+SSH_CLIENT = 192.168.7.172 47710 1320
 # environment
 MAIL = /var/mail/zq
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # environment
 BROWSER = /home/zq/.vscode-server/bin/57fd6d0195bb9b9d1b49f6da5db789060795de47/bin/helpers/browser.sh
+# environment
+S_COLORS = auto
 # environment
 VSCODE_HANDLES_SIGPIPE = true
 # makefile (from 'Makefile', line 18)
@@ -230,7 +230,6 @@ compile:
 
 # Not a target:
 .DEFAULT:
- 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -262,6 +261,6 @@ deploy:
 # strcache performance: lookups = 33 / hit rate = 27%
 # hash-table stats:
 # Load=24/8192=0%, Rehash=0, Collisions=1/33=3%
-# Finished Make data base on Fri May  6 07:34:40 2022
+# Finished Make data base on Tue May 10 03:20:49 2022
 
  
