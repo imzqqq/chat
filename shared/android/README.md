@@ -20,3 +20,7 @@ Features following most important ideas:
 - PagedList.Config -> PagingConfig
 - PagedList.BoundaryCallback -> RemoteMediator
 - cachedIn
+
+## Fixme
+
+- add `ndk.dir=C\:\\Users\\imzqqq\\AppData\\Local\\Android\\Sdk\\ndk\\21.3.6528147` to `local.properties` for a successful compile

@@ -240,15 +240,14 @@ class RoomDetailFragment @Inject constructor(
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val callManager: WebRtcCallManager,
         private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker
-) :
-        VectorBaseFragment<FragmentRoomDetailBinding>(),
-        TimelineEventController.Callback,
-        VectorInviteView.Callback,
-        AttachmentTypeSelectorView.Callback,
-        AttachmentsHelper.Callback,
-        GalleryOrCameraDialogHelper.Listener,
-        CurrentCallsView.Callback {
-
+) : VectorBaseFragment<FragmentRoomDetailBinding>(),
+    TimelineEventController.Callback,
+    VectorInviteView.Callback,
+    AttachmentTypeSelectorView.Callback,
+    AttachmentsHelper.Callback,
+    GalleryOrCameraDialogHelper.Listener,
+    CurrentCallsView.Callback
+{
     companion object {
         /**
          * Sanitize the display name.
@@ -1369,6 +1368,10 @@ class RoomDetailFragment @Inject constructor(
                     attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@RoomDetailFragment)
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton, keyboardStateUtils.isKeyboardShowing)
+
+                /// MARK - imzqqq, TODO:
+
+                /// END
             }
 
             override fun onSendMessage(text: CharSequence) {
