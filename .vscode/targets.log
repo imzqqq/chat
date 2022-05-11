@@ -8,7 +8,7 @@ make: *** No rule to make target 'compile', needed by 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue May 10 03:20:49 2022
+# Make data base, printed on Wed May 11 05:45:21 2022
 
 # Variables
 
@@ -37,7 +37,7 @@ SHELL = /bin/sh
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en","availableLanguages":{}}
 # environment
-_ = /home/zq/.vscode-server/bin/57fd6d0195bb9b9d1b49f6da5db789060795de47/node
+_ = /home/zq/.vscode-server/bin/da15b6fd3ef856477bf6f4fb29ba1b7af717770d/node
 # makefile (from 'Makefile', line 1)
 MAKEFILE_LIST :=  Makefile
 # makefile (from 'Makefile', line 13)
@@ -59,9 +59,10 @@ VSCODE_CWD = /home/zq
 # environment
 GOPROXY = https://goproxy.cn,https://gocenter.io,https://goproxy.io,direct
 # environment
-SSH_CONNECTION = 192.168.7.172 47710 192.168.7.166 1320
+SSH_CONNECTION = 192.168.7.172 48990 192.168.7.166 1320
+ 
 # environment
-PATH = /home/zq/.vscode-server/bin/57fd6d0195bb9b9d1b49f6da5db789060795de47/bin/remote-cli:/home/zq/.local/bin:/home/zq/gems/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin:/home/zq/go/bin
+PATH = /home/zq/.vscode-server/bin/da15b6fd3ef856477bf6f4fb29ba1b7af717770d/bin/remote-cli:/home/zq/.local/bin:/home/zq/gems/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin:/home/zq/go/bin
 # makefile (from 'Makefile', line 6)
 LIBJITSIMEET_DIR = node_modules/lib-jitsi-meet/
 # environment
@@ -89,7 +90,7 @@ VSCODE_PIPE_LOGGING = true
 # environment
 PWD = /home/zq/workspace/chat
 # environment
-VSCODE_IPC_HOOK_CLI = /run/user/1004/vscode-ipc-b6e0367f-918e-4dc9-a286-ae2b737502bc.sock
+VSCODE_IPC_HOOK_CLI = /run/user/1004/vscode-ipc-e68e425f-32fe-48e4-8ea2-7cac46f9cdb9.sock
 # environment
 GEM_HOME = /home/zq/gems
 # makefile (from 'Makefile', line 11)
@@ -129,7 +130,7 @@ SHLVL = 3
 # makefile (from 'Makefile', line 3)
 BUILD_DIR = build
 # environment
-XDG_SESSION_ID = 3829
+XDG_SESSION_ID = 4031
 # environment
 USER = zq
 # makefile
@@ -140,6 +141,8 @@ TFLITE_WASM = react/features/stream-effects/virtual-background/vendor/tflite
 %D = $(patsubst %/,%,$(dir $%))
 # default
 MAKE_COMMAND := make
+# environment
+OLDPWD = /home/zq/.vscode-server/bin/da15b6fd3ef856477bf6f4fb29ba1b7af717770d
 # default
 .VARIABLES := 
 # automatic
@@ -149,13 +152,13 @@ MAKEFLAGS = pqrR
 # environment
 MFLAGS = -pqrR
 # environment
-SSH_CLIENT = 192.168.7.172 47710 1320
+SSH_CLIENT = 192.168.7.172 48990 1320
 # environment
 MAIL = /var/mail/zq
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # environment
-BROWSER = /home/zq/.vscode-server/bin/57fd6d0195bb9b9d1b49f6da5db789060795de47/bin/helpers/browser.sh
+BROWSER = /home/zq/.vscode-server/bin/da15b6fd3ef856477bf6f4fb29ba1b7af717770d/bin/helpers/browser.sh
 # environment
 S_COLORS = auto
 # environment
@@ -190,8 +193,9 @@ MAKE_HOST := x86_64-pc-linux-gnu
 LANG = C
 # environment
 VSCODE_EXTHOST_WILL_SEND_SOCKET = true
+ 
 # variable set hash-table stats:
-# Load=89/1024=9%, Rehash=0, Collisions=12/114=11%
+# Load=90/1024=9%, Rehash=0, Collisions=12/115=10%
 
 # Pattern-specific Variable Values
 
@@ -237,6 +241,7 @@ compile:
 clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
+ 
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 24):
 	rm -fr $(BUILD_DIR)
@@ -261,6 +266,6 @@ deploy:
 # strcache performance: lookups = 33 / hit rate = 27%
 # hash-table stats:
 # Load=24/8192=0%, Rehash=0, Collisions=1/33=3%
-# Finished Make data base on Tue May 10 03:20:49 2022
+# Finished Make data base on Wed May 11 05:45:21 2022
 
  
