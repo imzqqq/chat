@@ -8,15 +8,19 @@ type RoomServer struct {
 	Database DatabaseOptions `yaml:"database"`
 }
 
-func (c *RoomServer) Defaults() {
+func (c *RoomServer) Defaults(generate bool) {
 	c.InternalAPI.Listen = "http://localhost:7770"
 	c.InternalAPI.Connect = "http://localhost:7770"
 	c.Database.Defaults(10)
-	c.Database.ConnectionString = "file:roomserver.db"
+	if generate {
+		c.Database.ConnectionString = "file:roomserver.db"
+	}
 }
 
 func (c *RoomServer) Verify(configErrs *ConfigErrors, isMonolith bool) {
 	checkURL(configErrs, "room_server.internal_api.listen", string(c.InternalAPI.Listen))
 	checkURL(configErrs, "room_server.internal_ap.bind", string(c.InternalAPI.Connect))
-	checkNotEmpty(configErrs, "room_server.database.connection_string", string(c.Database.ConnectionString))
+	if c.Matrix.DatabaseOptions.ConnectionString == "" {
+		checkNotEmpty(configErrs, "room_server.database.connection_string", string(c.Database.ConnectionString))
+	}
 }

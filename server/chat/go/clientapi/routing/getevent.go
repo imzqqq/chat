@@ -31,11 +31,10 @@ type getEventRequest struct {
 	roomID         string
 	eventID        string
 	cfg            *config.ClientAPI
-	federation     *gomatrixserverlib.FederationClient
 	requestedEvent *gomatrixserverlib.Event
 }
 
-// GetEvent implements GET /chat/client/r0/rooms/{roomId}/event/{eventId}
+// GetEvent implements GET /_matrix/client/r0/rooms/{roomId}/event/{eventId}
 // https://matrix.org/docs/spec/client_server/r0.4.0.html#get-matrix-client-r0-rooms-roomid-event-eventid
 func GetEvent(
 	req *http.Request,
@@ -43,8 +42,7 @@ func GetEvent(
 	roomID string,
 	eventID string,
 	cfg *config.ClientAPI,
-	rsAPI api.RoomserverInternalAPI,
-	federation *gomatrixserverlib.FederationClient,
+	rsAPI api.ClientRoomserverAPI,
 ) util.JSONResponse {
 	eventsReq := api.QueryEventsByIDRequest{
 		EventIDs: []string{eventID},
@@ -72,7 +70,6 @@ func GetEvent(
 		roomID:         roomID,
 		eventID:        eventID,
 		cfg:            cfg,
-		federation:     federation,
 		requestedEvent: requestedEvent,
 	}
 

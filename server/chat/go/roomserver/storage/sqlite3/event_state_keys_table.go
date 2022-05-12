@@ -18,6 +18,7 @@ package sqlite3
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"strings"
 
 	"github.com/matrix-org/dendrite/internal"
@@ -39,7 +40,8 @@ const eventStateKeysSchema = `
 // Same as insertEventTypeNIDSQL
 const insertEventStateKeyNIDSQL = `
 	INSERT INTO roomserver_event_state_keys (event_state_key) VALUES ($1)
-	  ON CONFLICT DO NOTHING;
+	  ON CONFLICT DO NOTHING
+	  RETURNING event_state_key_nid;
 `
 
 const selectEventStateKeyNIDSQL = `
@@ -69,12 +71,12 @@ type eventStateKeyStatements struct {
 	bulkSelectEventStateKeyStmt    *sql.Stmt
 }
 
-func createEventStateKeysTable(db *sql.DB) error {
+func CreateEventStateKeysTable(db *sql.DB) error {
 	_, err := db.Exec(eventStateKeysSchema)
 	return err
 }
 
-func prepareEventStateKeysTable(db *sql.DB) (tables.EventStateKeys, error) {
+func PrepareEventStateKeysTable(db *sql.DB) (tables.EventStateKeys, error) {
 	s := &eventStateKeyStatements{
 		db: db,
 	}
@@ -89,17 +91,12 @@ func prepareEventStateKeysTable(db *sql.DB) (tables.EventStateKeys, error) {
 
 func (s *eventStateKeyStatements) InsertEventStateKeyNID(
 	ctx context.Context, txn *sql.Tx, eventStateKey string,
-) (types.EventStateKeyNID, error) {
+) (eventStateKeyNID types.EventStateKeyNID, err error) {
 	insertStmt := sqlutil.TxStmt(txn, s.insertEventStateKeyNIDStmt)
-	res, err := insertStmt.ExecContext(ctx, eventStateKey)
-	if err != nil {
-		return 0, err
+	if err := insertStmt.QueryRowContext(ctx, eventStateKey).Scan(&eventStateKeyNID); err != nil {
+		return 0, fmt.Errorf("resultStmt.QueryRowContext.Scan: %w", err)
 	}
-	eventStateKeyNID, err := res.LastInsertId()
-	if err != nil {
-		return 0, err
-	}
-	return types.EventStateKeyNID(eventStateKeyNID), err
+	return
 }
 
 func (s *eventStateKeyStatements) SelectEventStateKeyNID(
@@ -112,23 +109,28 @@ func (s *eventStateKeyStatements) SelectEventStateKeyNID(
 }
 
 func (s *eventStateKeyStatements) BulkSelectEventStateKeyNID(
-	ctx context.Context, eventStateKeys []string,
+	ctx context.Context, txn *sql.Tx, eventStateKeys []string,
 ) (map[string]types.EventStateKeyNID, error) {
 	iEventStateKeys := make([]interface{}, len(eventStateKeys))
 	for k, v := range eventStateKeys {
 		iEventStateKeys[k] = v
 	}
 	selectOrig := strings.Replace(bulkSelectEventStateKeySQL, "($1)", sqlutil.QueryVariadic(len(eventStateKeys)), 1)
-
-	rows, err := s.db.QueryContext(ctx, selectOrig, iEventStateKeys...)
+	var rows *sql.Rows
+	var err error
+	if txn != nil {
+		rows, err = txn.QueryContext(ctx, selectOrig, iEventStateKeys...)
+	} else {
+		rows, err = s.db.QueryContext(ctx, selectOrig, iEventStateKeys...)
+	}
 	if err != nil {
 		return nil, err
 	}
 	defer internal.CloseAndLogIfError(ctx, rows, "bulkSelectEventStateKeyNID: rows.close() failed")
 	result := make(map[string]types.EventStateKeyNID, len(eventStateKeys))
+	var stateKey string
+	var stateKeyNID int64
 	for rows.Next() {
-		var stateKey string
-		var stateKeyNID int64
 		if err := rows.Scan(&stateKey, &stateKeyNID); err != nil {
 			return nil, err
 		}
@@ -138,23 +140,28 @@ func (s *eventStateKeyStatements) BulkSelectEventStateKeyNID(
 }
 
 func (s *eventStateKeyStatements) BulkSelectEventStateKey(
-	ctx context.Context, eventStateKeyNIDs []types.EventStateKeyNID,
+	ctx context.Context, txn *sql.Tx, eventStateKeyNIDs []types.EventStateKeyNID,
 ) (map[types.EventStateKeyNID]string, error) {
 	iEventStateKeyNIDs := make([]interface{}, len(eventStateKeyNIDs))
 	for k, v := range eventStateKeyNIDs {
 		iEventStateKeyNIDs[k] = v
 	}
 	selectOrig := strings.Replace(bulkSelectEventStateKeyNIDSQL, "($1)", sqlutil.QueryVariadic(len(eventStateKeyNIDs)), 1)
-
-	rows, err := s.db.QueryContext(ctx, selectOrig, iEventStateKeyNIDs...)
+	selectPrep, err := s.db.Prepare(selectOrig)
+	if err != nil {
+		return nil, err
+	}
+	defer internal.CloseAndLogIfError(ctx, selectPrep, "selectPrep.close() failed")
+	stmt := sqlutil.TxStmt(txn, selectPrep)
+	rows, err := stmt.QueryContext(ctx, iEventStateKeyNIDs...)
 	if err != nil {
 		return nil, err
 	}
 	defer internal.CloseAndLogIfError(ctx, rows, "bulkSelectEventStateKey: rows.close() failed")
 	result := make(map[types.EventStateKeyNID]string, len(eventStateKeyNIDs))
+	var stateKey string
+	var stateKeyNID int64
 	for rows.Next() {
-		var stateKey string
-		var stateKeyNID int64
 		if err := rows.Scan(&stateKey, &stateKeyNID); err != nil {
 			return nil, err
 		}

@@ -26,9 +26,9 @@ import (
 	"github.com/matrix-org/util"
 )
 
-// GetAliases implements GET /chat/client/r0/rooms/{roomId}/aliases
+// GetAliases implements GET /_matrix/client/r0/rooms/{roomId}/aliases
 func GetAliases(
-	req *http.Request, rsAPI api.RoomserverInternalAPI, device *userapi.Device, roomID string,
+	req *http.Request, rsAPI api.ClientRoomserverAPI, device *userapi.Device, roomID string,
 ) util.JSONResponse {
 	stateTuple := gomatrixserverlib.StateKeyTuple{
 		EventType: gomatrixserverlib.MRoomHistoryVisibility,

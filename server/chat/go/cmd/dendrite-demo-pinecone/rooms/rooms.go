@@ -1,4 +1,4 @@
-// Copyright 2020 The Matrix.org Foundation C.I.C.
+// Copyright 2022 The Matrix.org Foundation C.I.C.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,7 +19,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/matrix-org/dendrite/federationsender/api"
+	"github.com/matrix-org/dendrite/cmd/dendrite-demo-pinecone/defaults"
+	"github.com/matrix-org/dendrite/federationapi/api"
 	"github.com/matrix-org/gomatrixserverlib"
 	"github.com/matrix-org/util"
 
@@ -30,14 +31,14 @@ import (
 type PineconeRoomProvider struct {
 	r         *pineconeRouter.Router
 	s         *pineconeSessions.Sessions
-	fedSender api.FederationSenderInternalAPI
+	fedSender api.FederationInternalAPI
 	fedClient *gomatrixserverlib.FederationClient
 }
 
 func NewPineconeRoomProvider(
 	r *pineconeRouter.Router,
 	s *pineconeSessions.Sessions,
-	fedSender api.FederationSenderInternalAPI,
+	fedSender api.FederationInternalAPI,
 	fedClient *gomatrixserverlib.FederationClient,
 ) *PineconeRoomProvider {
 	p := &PineconeRoomProvider{
@@ -50,11 +51,12 @@ func NewPineconeRoomProvider(
 }
 
 func (p *PineconeRoomProvider) Rooms() []gomatrixserverlib.PublicRoom {
-	known := p.r.KnownNodes()
-	//known = append(known, p.s.Sessions()...)
-	list := []gomatrixserverlib.ServerName{}
-	for _, k := range known {
-		list = append(list, gomatrixserverlib.ServerName(k.String()))
+	list := map[gomatrixserverlib.ServerName]struct{}{}
+	for k := range defaults.DefaultServerNames {
+		list[k] = struct{}{}
+	}
+	for _, k := range p.r.Peers() {
+		list[gomatrixserverlib.ServerName(k.PublicKey)] = struct{}{}
 	}
 	return bulkFetchPublicRoomsFromServers(context.Background(), p.fedClient, list)
 }
@@ -63,7 +65,7 @@ func (p *PineconeRoomProvider) Rooms() []gomatrixserverlib.PublicRoom {
 // Returns a list of public rooms.
 func bulkFetchPublicRoomsFromServers(
 	ctx context.Context, fedClient *gomatrixserverlib.FederationClient,
-	homeservers []gomatrixserverlib.ServerName,
+	homeservers map[gomatrixserverlib.ServerName]struct{},
 ) (publicRooms []gomatrixserverlib.PublicRoom) {
 	limit := 200
 	// follow pipeline semantics, see https://blog.golang.org/pipelines for more info.
@@ -76,7 +78,7 @@ func bulkFetchPublicRoomsFromServers(
 	wg.Add(len(homeservers))
 	// concurrently query for public rooms
 	reqctx, reqcancel := context.WithTimeout(ctx, time.Second*5)
-	for _, hs := range homeservers {
+	for hs := range homeservers {
 		go func(homeserverDomain gomatrixserverlib.ServerName) {
 			defer wg.Done()
 			util.GetLogger(reqctx).WithField("hs", homeserverDomain).Info("Querying HS for public rooms")

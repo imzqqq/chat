@@ -16,14 +16,16 @@ package postgres
 
 import (
 	"github.com/matrix-org/dendrite/internal/sqlutil"
+	"github.com/matrix-org/dendrite/keyserver/storage/postgres/deltas"
 	"github.com/matrix-org/dendrite/keyserver/storage/shared"
+	"github.com/matrix-org/dendrite/setup/base"
 	"github.com/matrix-org/dendrite/setup/config"
 )
 
 // NewDatabase creates a new sync server database
-func NewDatabase(dbProperties *config.DatabaseOptions) (*shared.Database, error) {
+func NewDatabase(base *base.BaseDendrite, dbProperties *config.DatabaseOptions) (*shared.Database, error) {
 	var err error
-	db, err := sqlutil.Open(dbProperties)
+	db, writer, err := base.DatabaseConnection(dbProperties, sqlutil.NewDummyWriter())
 	if err != nil {
 		return nil, err
 	}
@@ -51,18 +53,24 @@ func NewDatabase(dbProperties *config.DatabaseOptions) (*shared.Database, error)
 	if err != nil {
 		return nil, err
 	}
+	m := sqlutil.NewMigrations()
+	deltas.LoadRefactorKeyChanges(m)
+	deltas.LoadFixCrossSigningSignatureIndexes(m)
+	if err = m.RunDeltas(db, dbProperties); err != nil {
+		return nil, err
+	}
+	if err = kc.Prepare(); err != nil {
+		return nil, err
+	}
 	d := &shared.Database{
 		DB:                    db,
-		Writer:                sqlutil.NewDummyWriter(),
+		Writer:                writer,
 		OneTimeKeysTable:      otk,
 		DeviceKeysTable:       dk,
 		KeyChangesTable:       kc,
 		StaleDeviceListsTable: sdl,
 		CrossSigningKeysTable: csk,
 		CrossSigningSigsTable: css,
-	}
-	if err = d.PartitionOffsetStatements.Prepare(db, d.Writer, "keyserver"); err != nil {
-		return nil, err
 	}
 	return d, nil
 }

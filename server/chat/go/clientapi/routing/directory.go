@@ -20,10 +20,9 @@ import (
 
 	"github.com/matrix-org/dendrite/clientapi/httputil"
 	"github.com/matrix-org/dendrite/clientapi/jsonerror"
-	federationSenderAPI "github.com/matrix-org/dendrite/federationsender/api"
+	federationAPI "github.com/matrix-org/dendrite/federationapi/api"
 	roomserverAPI "github.com/matrix-org/dendrite/roomserver/api"
 	"github.com/matrix-org/dendrite/setup/config"
-	"github.com/matrix-org/dendrite/userapi/api"
 	userapi "github.com/matrix-org/dendrite/userapi/api"
 	"github.com/matrix-org/gomatrixserverlib"
 	"github.com/matrix-org/util"
@@ -47,8 +46,8 @@ func DirectoryRoom(
 	roomAlias string,
 	federation *gomatrixserverlib.FederationClient,
 	cfg *config.ClientAPI,
-	rsAPI roomserverAPI.RoomserverInternalAPI,
-	fedSenderAPI federationSenderAPI.FederationSenderInternalAPI,
+	rsAPI roomserverAPI.ClientRoomserverAPI,
+	fedSenderAPI federationAPI.ClientFederationAPI,
 ) util.JSONResponse {
 	_, domain, err := gomatrixserverlib.SplitID('#', roomAlias)
 	if err != nil {
@@ -97,8 +96,8 @@ func DirectoryRoom(
 			}
 		}
 	} else {
-		joinedHostsReq := federationSenderAPI.QueryJoinedHostServerNamesInRoomRequest{RoomID: res.RoomID}
-		var joinedHostsRes federationSenderAPI.QueryJoinedHostServerNamesInRoomResponse
+		joinedHostsReq := federationAPI.QueryJoinedHostServerNamesInRoomRequest{RoomID: res.RoomID}
+		var joinedHostsRes federationAPI.QueryJoinedHostServerNamesInRoomResponse
 		if err = fedSenderAPI.QueryJoinedHostServerNamesInRoom(req.Context(), &joinedHostsReq, &joinedHostsRes); err != nil {
 			util.GetLogger(req.Context()).WithError(err).Error("fedSenderAPI.QueryJoinedHostServerNamesInRoom failed")
 			return jsonerror.InternalServerError()
@@ -115,10 +114,10 @@ func DirectoryRoom(
 // SetLocalAlias implements PUT /directory/room/{roomAlias}
 func SetLocalAlias(
 	req *http.Request,
-	device *api.Device,
+	device *userapi.Device,
 	alias string,
 	cfg *config.ClientAPI,
-	rsAPI roomserverAPI.RoomserverInternalAPI,
+	rsAPI roomserverAPI.ClientRoomserverAPI,
 ) util.JSONResponse {
 	_, domain, err := gomatrixserverlib.SplitID('#', alias)
 	if err != nil {
@@ -140,11 +139,17 @@ func SetLocalAlias(
 	// TODO: This code should eventually be refactored with:
 	// 1. The new method for checking for things matching an AS's namespace
 	// 2. Using an overall Regex object for all AS's just like we did for usernames
-
+	reqUserID, _, err := gomatrixserverlib.SplitID('@', device.UserID)
+	if err != nil {
+		return util.JSONResponse{
+			Code: http.StatusBadRequest,
+			JSON: jsonerror.BadJSON("User ID must be in the form '@localpart:domain'"),
+		}
+	}
 	for _, appservice := range cfg.Derived.ApplicationServices {
 		// Don't prevent AS from creating aliases in its own namespace
 		// Note that Dendrite uses SenderLocalpart as UserID for AS users
-		if device.UserID != appservice.SenderLocalpart {
+		if reqUserID != appservice.SenderLocalpart {
 			if aliasNamespaces, ok := appservice.NamespaceMap["aliases"]; ok {
 				for _, namespace := range aliasNamespaces {
 					if namespace.Exclusive && namespace.RegexpObject.MatchString(alias) {
@@ -192,9 +197,9 @@ func SetLocalAlias(
 // RemoveLocalAlias implements DELETE /directory/room/{roomAlias}
 func RemoveLocalAlias(
 	req *http.Request,
-	device *api.Device,
+	device *userapi.Device,
 	alias string,
-	rsAPI roomserverAPI.RoomserverInternalAPI,
+	rsAPI roomserverAPI.ClientRoomserverAPI,
 ) util.JSONResponse {
 	queryReq := roomserverAPI.RemoveRoomAliasRequest{
 		Alias:  alias,
@@ -232,7 +237,7 @@ type roomVisibility struct {
 
 // GetVisibility implements GET /directory/list/room/{roomID}
 func GetVisibility(
-	req *http.Request, rsAPI roomserverAPI.RoomserverInternalAPI,
+	req *http.Request, rsAPI roomserverAPI.ClientRoomserverAPI,
 	roomID string,
 ) util.JSONResponse {
 	var res roomserverAPI.QueryPublishedRoomsResponse
@@ -260,7 +265,7 @@ func GetVisibility(
 // SetVisibility implements PUT /directory/list/room/{roomID}
 // TODO: Allow admin users to edit the room visibility
 func SetVisibility(
-	req *http.Request, rsAPI roomserverAPI.RoomserverInternalAPI, dev *userapi.Device,
+	req *http.Request, rsAPI roomserverAPI.ClientRoomserverAPI, dev *userapi.Device,
 	roomID string,
 ) util.JSONResponse {
 	resErr := checkMemberInRoom(req.Context(), rsAPI, dev.UserID, roomID)

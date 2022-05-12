@@ -29,7 +29,6 @@ import (
 	"github.com/matrix-org/dendrite/roomserver/api"
 	"github.com/matrix-org/dendrite/setup/config"
 	userapi "github.com/matrix-org/dendrite/userapi/api"
-	"github.com/matrix-org/dendrite/userapi/storage/accounts"
 	"github.com/matrix-org/gomatrixserverlib"
 )
 
@@ -87,7 +86,7 @@ var (
 func CheckAndProcessInvite(
 	ctx context.Context,
 	device *userapi.Device, body *MembershipRequest, cfg *config.ClientAPI,
-	rsAPI api.RoomserverInternalAPI, db accounts.Database,
+	rsAPI api.ClientRoomserverAPI, db userapi.ClientUserAPI,
 	roomID string,
 	evTime time.Time,
 ) (inviteStoredOnIDServer bool, err error) {
@@ -137,7 +136,7 @@ func CheckAndProcessInvite(
 // Returns an error if a check or a request failed.
 func queryIDServer(
 	ctx context.Context,
-	db accounts.Database, cfg *config.ClientAPI, device *userapi.Device,
+	userAPI userapi.ClientUserAPI, cfg *config.ClientAPI, device *userapi.Device,
 	body *MembershipRequest, roomID string,
 ) (lookupRes *idServerLookupResponse, storeInviteRes *idServerStoreInviteResponse, err error) {
 	if err = isTrusted(body.IDServer, cfg); err != nil {
@@ -153,7 +152,7 @@ func queryIDServer(
 	if lookupRes.MXID == "" {
 		// No Matrix ID matches with the given 3PID, ask the server to store the
 		// invite and return a token
-		storeInviteRes, err = queryIDServerStoreInvite(ctx, db, cfg, device, body, roomID)
+		storeInviteRes, err = queryIDServerStoreInvite(ctx, userAPI, cfg, device, body, roomID)
 		return
 	}
 
@@ -164,7 +163,7 @@ func queryIDServer(
 	if lookupRes.NotBefore > now || now > lookupRes.NotAfter {
 		// If the current timestamp isn't in the time frame in which the association
 		// is known to be valid, re-run the query
-		return queryIDServer(ctx, db, cfg, device, body, roomID)
+		return queryIDServer(ctx, userAPI, cfg, device, body, roomID)
 	}
 
 	// Check the request signatures and send an error if one isn't valid
@@ -175,12 +174,12 @@ func queryIDServer(
 	return
 }
 
-// queryIDServerLookup sends a response to the identity server on /chat/identity/api/v1/lookup
+// queryIDServerLookup sends a response to the identity server on /_matrix/identity/api/v1/lookup
 // and returns the response as a structure.
 // Returns an error if the request failed to send or if the response couldn't be parsed.
 func queryIDServerLookup(ctx context.Context, body *MembershipRequest) (*idServerLookupResponse, error) {
 	address := url.QueryEscape(body.Address)
-	requestURL := fmt.Sprintf("https://%s/chat/identity/api/v1/lookup?medium=%s&address=%s", body.IDServer, body.Medium, address)
+	requestURL := fmt.Sprintf("https://%s/_matrix/identity/api/v1/lookup?medium=%s&address=%s", body.IDServer, body.Medium, address)
 	req, err := http.NewRequest(http.MethodGet, requestURL, nil)
 	if err != nil {
 		return nil, err
@@ -201,12 +200,12 @@ func queryIDServerLookup(ctx context.Context, body *MembershipRequest) (*idServe
 	return &res, err
 }
 
-// queryIDServerStoreInvite sends a response to the identity server on /chat/identity/api/v1/store-invite
+// queryIDServerStoreInvite sends a response to the identity server on /_matrix/identity/api/v1/store-invite
 // and returns the response as a structure.
 // Returns an error if the request failed to send or if the response couldn't be parsed.
 func queryIDServerStoreInvite(
 	ctx context.Context,
-	db accounts.Database, cfg *config.ClientAPI, device *userapi.Device,
+	userAPI userapi.ClientUserAPI, cfg *config.ClientAPI, device *userapi.Device,
 	body *MembershipRequest, roomID string,
 ) (*idServerStoreInviteResponse, error) {
 	// Retrieve the sender's profile to get their display name
@@ -217,10 +216,17 @@ func queryIDServerStoreInvite(
 
 	var profile *authtypes.Profile
 	if serverName == cfg.Matrix.ServerName {
-		profile, err = db.GetProfileByLocalpart(ctx, localpart)
+		res := &userapi.QueryProfileResponse{}
+		err = userAPI.QueryProfile(ctx, &userapi.QueryProfileRequest{UserID: device.UserID}, res)
 		if err != nil {
 			return nil, err
 		}
+		profile = &authtypes.Profile{
+			Localpart:   localpart,
+			DisplayName: res.DisplayName,
+			AvatarURL:   res.AvatarURL,
+		}
+
 	} else {
 		profile = &authtypes.Profile{}
 	}
@@ -240,7 +246,7 @@ func queryIDServerStoreInvite(
 	//      These can be easily retrieved by requesting the public rooms API
 	//      server's database.
 
-	requestURL := fmt.Sprintf("https://%s/chat/identity/api/v1/store-invite", body.IDServer)
+	requestURL := fmt.Sprintf("https://%s/_matrix/identity/api/v1/store-invite", body.IDServer)
 	req, err := http.NewRequest(http.MethodPost, requestURL, strings.NewReader(data.Encode()))
 	if err != nil {
 		return nil, err
@@ -268,7 +274,7 @@ func queryIDServerStoreInvite(
 // Returns an error if the request couldn't be sent, if its body couldn't be parsed
 // or if the key couldn't be decoded from base64.
 func queryIDServerPubKey(ctx context.Context, idServerName string, keyID string) ([]byte, error) {
-	requestURL := fmt.Sprintf("https://%s/chat/identity/api/v1/pubkey/%s", idServerName, keyID)
+	requestURL := fmt.Sprintf("https://%s/_matrix/identity/api/v1/pubkey/%s", idServerName, keyID)
 	req, err := http.NewRequest(http.MethodGet, requestURL, nil)
 	if err != nil {
 		return nil, err
@@ -331,7 +337,7 @@ func emit3PIDInviteEvent(
 	ctx context.Context,
 	body *MembershipRequest, res *idServerStoreInviteResponse,
 	device *userapi.Device, roomID string, cfg *config.ClientAPI,
-	rsAPI api.RoomserverInternalAPI,
+	rsAPI api.ClientRoomserverAPI,
 	evTime time.Time,
 ) error {
 	builder := &gomatrixserverlib.EventBuilder{
@@ -341,7 +347,7 @@ func emit3PIDInviteEvent(
 		StateKey: &res.Token,
 	}
 
-	validityURL := fmt.Sprintf("https://%s/chat/identity/api/v1/pubkey/isvalid", body.IDServer)
+	validityURL := fmt.Sprintf("https://%s/_matrix/identity/api/v1/pubkey/isvalid", body.IDServer)
 	content := gomatrixserverlib.ThirdPartyInviteContent{
 		DisplayName:    res.DisplayName,
 		KeyValidityURL: validityURL,
@@ -366,6 +372,8 @@ func emit3PIDInviteEvent(
 			event.Headered(queryRes.RoomVersion),
 		},
 		cfg.Matrix.ServerName,
+		cfg.Matrix.ServerName,
 		nil,
+		false,
 	)
 }

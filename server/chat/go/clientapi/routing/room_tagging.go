@@ -28,10 +28,10 @@ import (
 	"github.com/matrix-org/util"
 )
 
-// GetTags implements GET /chat/client/r0/user/{userID}/rooms/{roomID}/tags
+// GetTags implements GET /_matrix/client/r0/user/{userID}/rooms/{roomID}/tags
 func GetTags(
 	req *http.Request,
-	userAPI api.UserInternalAPI,
+	userAPI api.ClientUserAPI,
 	device *api.Device,
 	userID string,
 	roomID string,
@@ -57,12 +57,12 @@ func GetTags(
 	}
 }
 
-// PutTag implements PUT /chat/client/r0/user/{userID}/rooms/{roomID}/tags/{tag}
+// PutTag implements PUT /_matrix/client/r0/user/{userID}/rooms/{roomID}/tags/{tag}
 // Put functionality works by getting existing data from the DB (if any), adding
 // the tag to the "map" and saving the new "map" to the DB
 func PutTag(
 	req *http.Request,
-	userAPI api.UserInternalAPI,
+	userAPI api.ClientUserAPI,
 	device *api.Device,
 	userID string,
 	roomID string,
@@ -98,7 +98,7 @@ func PutTag(
 		return jsonerror.InternalServerError()
 	}
 
-	if err = syncProducer.SendData(userID, roomID, "m.tag"); err != nil {
+	if err = syncProducer.SendData(userID, roomID, "m.tag", nil, nil); err != nil {
 		logrus.WithError(err).Error("Failed to send m.tag account data update to syncapi")
 	}
 
@@ -108,12 +108,12 @@ func PutTag(
 	}
 }
 
-// DeleteTag implements DELETE /chat/client/r0/user/{userID}/rooms/{roomID}/tags/{tag}
+// DeleteTag implements DELETE /_matrix/client/r0/user/{userID}/rooms/{roomID}/tags/{tag}
 // Delete functionality works by obtaining the saved tags, removing the intended tag from
 // the "map" and then saving the new "map" in the DB
 func DeleteTag(
 	req *http.Request,
-	userAPI api.UserInternalAPI,
+	userAPI api.ClientUserAPI,
 	device *api.Device,
 	userID string,
 	roomID string,
@@ -151,7 +151,7 @@ func DeleteTag(
 	}
 
 	// TODO: user API should do this since it's account data
-	if err := syncProducer.SendData(userID, roomID, "m.tag"); err != nil {
+	if err := syncProducer.SendData(userID, roomID, "m.tag", nil, nil); err != nil {
 		logrus.WithError(err).Error("Failed to send m.tag account data update to syncapi")
 	}
 
@@ -167,7 +167,7 @@ func obtainSavedTags(
 	req *http.Request,
 	userID string,
 	roomID string,
-	userAPI api.UserInternalAPI,
+	userAPI api.ClientUserAPI,
 ) (tags gomatrix.TagContent, err error) {
 	dataReq := api.QueryAccountDataRequest{
 		UserID:   userID,
@@ -194,7 +194,7 @@ func saveTagData(
 	req *http.Request,
 	userID string,
 	roomID string,
-	userAPI api.UserInternalAPI,
+	userAPI api.ClientUserAPI,
 	Tag gomatrix.TagContent,
 ) error {
 	newTagData, err := json.Marshal(Tag)

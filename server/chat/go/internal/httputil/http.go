@@ -23,6 +23,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/matrix-org/dendrite/userapi/api"
 	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 )
@@ -72,10 +73,13 @@ func PostJSON(
 		var errorBody struct {
 			Message string `json:"message"`
 		}
-		if msgerr := json.NewDecoder(res.Body).Decode(&errorBody); msgerr == nil {
-			return fmt.Errorf("Internal API: %d from %s: %s", res.StatusCode, apiURL, errorBody.Message)
+		if _, ok := response.(*api.PerformKeyBackupResponse); ok { // TODO: remove this, once cross-boundary errors are a thing
+			return nil
 		}
-		return fmt.Errorf("Internal API: %d from %s", res.StatusCode, apiURL)
+		if msgerr := json.NewDecoder(res.Body).Decode(&errorBody); msgerr == nil {
+			return fmt.Errorf("internal API: %d from %s: %s", res.StatusCode, apiURL, errorBody.Message)
+		}
+		return fmt.Errorf("internal API: %d from %s", res.StatusCode, apiURL)
 	}
 	return json.NewDecoder(res.Body).Decode(response)
 }

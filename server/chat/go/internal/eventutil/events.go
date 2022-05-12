@@ -28,7 +28,7 @@ import (
 
 // ErrRoomNoExists is returned when trying to lookup the state of a room that
 // doesn't exist
-var ErrRoomNoExists = errors.New("Room does not exist")
+var ErrRoomNoExists = errors.New("room does not exist")
 
 // QueryAndBuildEvent builds a Matrix event using the event builder and roomserver query
 // API client provided. If also fills roomserver query API response (if provided)
@@ -39,7 +39,7 @@ var ErrRoomNoExists = errors.New("Room does not exist")
 func QueryAndBuildEvent(
 	ctx context.Context,
 	builder *gomatrixserverlib.EventBuilder, cfg *config.Global, evTime time.Time,
-	rsAPI api.RoomserverInternalAPI, queryRes *api.QueryLatestEventsAndStateResponse,
+	rsAPI api.QueryLatestEventsAndStateAPI, queryRes *api.QueryLatestEventsAndStateResponse,
 ) (*gomatrixserverlib.HeaderedEvent, error) {
 	if queryRes == nil {
 		queryRes = &api.QueryLatestEventsAndStateResponse{}
@@ -80,7 +80,7 @@ func BuildEvent(
 func queryRequiredEventsForBuilder(
 	ctx context.Context,
 	builder *gomatrixserverlib.EventBuilder,
-	rsAPI api.RoomserverInternalAPI, queryRes *api.QueryLatestEventsAndStateResponse,
+	rsAPI api.QueryLatestEventsAndStateAPI, queryRes *api.QueryLatestEventsAndStateResponse,
 ) (*gomatrixserverlib.StateNeeded, error) {
 	eventsNeeded, err := gomatrixserverlib.StateNeededForEventBuilder(builder)
 	if err != nil {

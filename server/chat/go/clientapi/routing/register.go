@@ -31,6 +31,13 @@ import (
 
 	"github.com/matrix-org/dendrite/internal/eventutil"
 	"github.com/matrix-org/dendrite/setup/config"
+	"github.com/tidwall/gjson"
+
+	"github.com/matrix-org/gomatrixserverlib"
+	"github.com/matrix-org/gomatrixserverlib/tokens"
+	"github.com/matrix-org/util"
+	"github.com/prometheus/client_golang/prometheus"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/matrix-org/dendrite/clientapi/auth"
 	"github.com/matrix-org/dendrite/clientapi/auth/authtypes"
@@ -38,12 +45,6 @@ import (
 	"github.com/matrix-org/dendrite/clientapi/jsonerror"
 	"github.com/matrix-org/dendrite/clientapi/userutil"
 	userapi "github.com/matrix-org/dendrite/userapi/api"
-	"github.com/matrix-org/dendrite/userapi/storage/accounts"
-	"github.com/matrix-org/gomatrixserverlib"
-	"github.com/matrix-org/gomatrixserverlib/tokens"
-	"github.com/matrix-org/util"
-	"github.com/prometheus/client_golang/prometheus"
-	log "github.com/sirupsen/logrus"
 )
 
 var (
@@ -63,22 +64,26 @@ const (
 	sessionIDLength   = 24
 )
 
-func init() {
-	// Register prometheus metrics. They must be registered to be exposed.
-	prometheus.MustRegister(amtRegUsers)
-}
-
 // sessionsDict keeps track of completed auth stages for each session.
 // It shouldn't be passed by value because it contains a mutex.
 type sessionsDict struct {
-	sync.Mutex
+	sync.RWMutex
 	sessions map[string][]authtypes.LoginType
+	params   map[string]registerRequest
+	timer    map[string]*time.Timer
+	// deleteSessionToDeviceID protects requests to DELETE /devices/{deviceID} from being abused.
+	// If a UIA session is started by trying to delete device1, and then UIA is completed by deleting device2,
+	// the delete request will fail for device2 since the UIA was initiated by trying to delete device1.
+	deleteSessionToDeviceID map[string]string
 }
 
-// GetCompletedStages returns the completed stages for a session.
-func (d *sessionsDict) GetCompletedStages(sessionID string) []authtypes.LoginType {
-	d.Lock()
-	defer d.Unlock()
+// defaultTimeout is the timeout used to clean up sessions
+const defaultTimeOut = time.Minute * 5
+
+// getCompletedStages returns the completed stages for a session.
+func (d *sessionsDict) getCompletedStages(sessionID string) []authtypes.LoginType {
+	d.RLock()
+	defer d.RUnlock()
 
 	if completedStages, ok := d.sessions[sessionID]; ok {
 		return completedStages
@@ -87,28 +92,95 @@ func (d *sessionsDict) GetCompletedStages(sessionID string) []authtypes.LoginTyp
 	return make([]authtypes.LoginType, 0)
 }
 
-func newSessionsDict() *sessionsDict {
-	return &sessionsDict{
-		sessions: make(map[string][]authtypes.LoginType),
+// addParams adds a registerRequest to a sessionID and starts a timer to delete that registerRequest
+func (d *sessionsDict) addParams(sessionID string, r registerRequest) {
+	d.startTimer(defaultTimeOut, sessionID)
+	d.Lock()
+	defer d.Unlock()
+	d.params[sessionID] = r
+}
+
+func (d *sessionsDict) getParams(sessionID string) (registerRequest, bool) {
+	d.RLock()
+	defer d.RUnlock()
+	r, ok := d.params[sessionID]
+	return r, ok
+}
+
+// deleteSession cleans up a given session, either because the registration completed
+// successfully, or because a given timeout (default: 5min) was reached.
+func (d *sessionsDict) deleteSession(sessionID string) {
+	d.Lock()
+	defer d.Unlock()
+	delete(d.params, sessionID)
+	delete(d.sessions, sessionID)
+	delete(d.deleteSessionToDeviceID, sessionID)
+	// stop the timer, e.g. because the registration was completed
+	if t, ok := d.timer[sessionID]; ok {
+		if !t.Stop() {
+			select {
+			case <-t.C:
+			default:
+			}
+		}
+		delete(d.timer, sessionID)
 	}
 }
 
-// AddCompletedSessionStage records that a session has completed an auth stage.
-func AddCompletedSessionStage(sessionID string, stage authtypes.LoginType) {
-	sessions.Lock()
-	defer sessions.Unlock()
+func newSessionsDict() *sessionsDict {
+	return &sessionsDict{
+		sessions:                make(map[string][]authtypes.LoginType),
+		params:                  make(map[string]registerRequest),
+		timer:                   make(map[string]*time.Timer),
+		deleteSessionToDeviceID: make(map[string]string),
+	}
+}
 
-	for _, completedStage := range sessions.sessions[sessionID] {
+func (d *sessionsDict) startTimer(duration time.Duration, sessionID string) {
+	d.Lock()
+	defer d.Unlock()
+	t, ok := d.timer[sessionID]
+	if ok {
+		if !t.Stop() {
+			<-t.C
+		}
+		t.Reset(duration)
+		return
+	}
+	d.timer[sessionID] = time.AfterFunc(duration, func() {
+		d.deleteSession(sessionID)
+	})
+}
+
+// addCompletedSessionStage records that a session has completed an auth stage
+// also starts a timer to delete the session once done.
+func (d *sessionsDict) addCompletedSessionStage(sessionID string, stage authtypes.LoginType) {
+	d.startTimer(defaultTimeOut, sessionID)
+	d.Lock()
+	defer d.Unlock()
+	for _, completedStage := range d.sessions[sessionID] {
 		if completedStage == stage {
 			return
 		}
 	}
-	sessions.sessions[sessionID] = append(sessions.sessions[sessionID], stage)
+	d.sessions[sessionID] = append(sessions.sessions[sessionID], stage)
+}
+
+func (d *sessionsDict) addDeviceToDelete(sessionID, deviceID string) {
+	d.startTimer(defaultTimeOut, sessionID)
+	d.Lock()
+	defer d.Unlock()
+	d.deleteSessionToDeviceID[sessionID] = deviceID
+}
+
+func (d *sessionsDict) getDeviceToDelete(sessionID string) (string, bool) {
+	d.RLock()
+	defer d.RUnlock()
+	deviceID, ok := d.deleteSessionToDeviceID[sessionID]
+	return deviceID, ok
 }
 
 var (
-	// TODO: Remove old sessions. Need to do so on a session-specific timeout.
-	// sessions stores the completed flow stages for all sessions. Referenced using their sessionID.
 	sessions           = newSessionsDict()
 	validUsernameRegex = regexp.MustCompile(`^[0-9a-z_\-=./]+$`)
 )
@@ -166,7 +238,7 @@ func newUserInteractiveResponse(
 	params map[string]interface{},
 ) userInteractiveResponse {
 	return userInteractiveResponse{
-		fs, sessions.GetCompletedStages(sessionID), params, sessionID,
+		fs, sessions.getCompletedStages(sessionID), params, sessionID,
 	}
 }
 
@@ -446,24 +518,38 @@ func validateApplicationService(
 // http://matrix.org/speculator/spec/HEAD/client_server/unstable.html#post-matrix-client-unstable-register
 func Register(
 	req *http.Request,
-	userAPI userapi.UserInternalAPI,
-	accountDB accounts.Database,
+	userAPI userapi.ClientUserAPI,
 	cfg *config.ClientAPI,
 ) util.JSONResponse {
+	defer req.Body.Close() // nolint: errcheck
+	reqBody, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		return util.JSONResponse{
+			Code: http.StatusBadRequest,
+			JSON: jsonerror.NotJSON("Unable to read request body"),
+		}
+	}
+
 	var r registerRequest
-	resErr := httputil.UnmarshalJSONRequest(req, &r)
-	if resErr != nil {
+	sessionID := gjson.GetBytes(reqBody, "auth.session").String()
+	if sessionID == "" {
+		// Generate a new, random session ID
+		sessionID = util.RandomString(sessionIDLength)
+	} else if data, ok := sessions.getParams(sessionID); ok {
+		// Use the parameters from the session as our defaults.
+		// Some of these might end up being overwritten if the
+		// values are specified again in the request body.
+		r.Username = data.Username
+		r.Password = data.Password
+		r.DeviceID = data.DeviceID
+		r.InitialDisplayName = data.InitialDisplayName
+		r.InhibitLogin = data.InhibitLogin
+	}
+	if resErr := httputil.UnmarshalJSON(reqBody, &r); resErr != nil {
 		return *resErr
 	}
 	if req.URL.Query().Get("kind") == "guest" {
 		return handleGuestRegistration(req, r, cfg, userAPI)
-	}
-
-	// Retrieve or generate the sessionID
-	sessionID := r.Auth.Session
-	if sessionID == "" {
-		// Generate a new, random session ID
-		sessionID = util.RandomString(sessionIDLength)
 	}
 
 	// Don't allow numeric usernames less than MAX_INT64.
@@ -475,13 +561,12 @@ func Register(
 	}
 	// Auto generate a numeric username if r.Username is empty
 	if r.Username == "" {
-		id, err := accountDB.GetNewNumericLocalpart(req.Context())
-		if err != nil {
-			util.GetLogger(req.Context()).WithError(err).Error("accountDB.GetNewNumericLocalpart failed")
+		res := &userapi.QueryNumericLocalpartResponse{}
+		if err := userAPI.QueryNumericLocalpart(req.Context(), res); err != nil {
+			util.GetLogger(req.Context()).WithError(err).Error("userAPI.QueryNumericLocalpart failed")
 			return jsonerror.InternalServerError()
 		}
-
-		r.Username = strconv.FormatInt(id, 10)
+		r.Username = strconv.FormatInt(res.ID, 10)
 	}
 
 	// Is this an appservice registration? It will be if the access
@@ -494,7 +579,7 @@ func Register(
 	case r.Type == authtypes.LoginTypeApplicationService && accessTokenErr == nil:
 		// Spec-compliant case (the access_token is specified and the login type
 		// is correctly set, so it's an appservice registration)
-		if resErr = validateApplicationServiceUsername(r.Username); resErr != nil {
+		if resErr := validateApplicationServiceUsername(r.Username); resErr != nil {
 			return *resErr
 		}
 	case accessTokenErr == nil:
@@ -507,11 +592,11 @@ func Register(
 	default:
 		// Spec-compliant case (neither the access_token nor the login type are
 		// specified, so it's a normal user registration)
-		if resErr = validateUsername(r.Username); resErr != nil {
+		if resErr := validateUsername(r.Username); resErr != nil {
 			return *resErr
 		}
 	}
-	if resErr = validatePassword(r.Password); resErr != nil {
+	if resErr := validatePassword(r.Password); resErr != nil {
 		return *resErr
 	}
 
@@ -529,8 +614,15 @@ func handleGuestRegistration(
 	req *http.Request,
 	r registerRequest,
 	cfg *config.ClientAPI,
-	userAPI userapi.UserInternalAPI,
+	userAPI userapi.ClientUserAPI,
 ) util.JSONResponse {
+	if cfg.RegistrationDisabled || cfg.GuestsDisabled {
+		return util.JSONResponse{
+			Code: http.StatusForbidden,
+			JSON: jsonerror.Forbidden("Guest registration is disabled"),
+		}
+	}
+
 	var res userapi.PerformAccountCreationResponse
 	err := userAPI.PerformAccountCreation(req.Context(), &userapi.PerformAccountCreationRequest{
 		AccountType: userapi.AccountTypeGuest,
@@ -587,7 +679,7 @@ func handleRegistrationFlow(
 	r registerRequest,
 	sessionID string,
 	cfg *config.ClientAPI,
-	userAPI userapi.UserInternalAPI,
+	userAPI userapi.ClientUserAPI,
 	accessToken string,
 	accessTokenErr error,
 ) util.JSONResponse {
@@ -637,12 +729,12 @@ func handleRegistrationFlow(
 		}
 
 		// Add Recaptcha to the list of completed registration stages
-		AddCompletedSessionStage(sessionID, authtypes.LoginTypeRecaptcha)
+		sessions.addCompletedSessionStage(sessionID, authtypes.LoginTypeRecaptcha)
 
 	case authtypes.LoginTypeDummy:
 		// there is nothing to do
 		// Add Dummy to the list of completed registration stages
-		AddCompletedSessionStage(sessionID, authtypes.LoginTypeDummy)
+		sessions.addCompletedSessionStage(sessionID, authtypes.LoginTypeDummy)
 
 	case "":
 		// An empty auth type means that we want to fetch the available
@@ -658,7 +750,7 @@ func handleRegistrationFlow(
 	// Check if the user's registration flow has been completed successfully
 	// A response with current registration flow and remaining available methods
 	// will be returned if a flow has not been successfully completed yet
-	return checkAndCompleteFlow(sessions.GetCompletedStages(sessionID),
+	return checkAndCompleteFlow(sessions.getCompletedStages(sessionID),
 		req, r, sessionID, cfg, userAPI)
 }
 
@@ -676,7 +768,7 @@ func handleApplicationServiceRegistration(
 	req *http.Request,
 	r registerRequest,
 	cfg *config.ClientAPI,
-	userAPI userapi.UserInternalAPI,
+	userAPI userapi.ClientUserAPI,
 ) util.JSONResponse {
 	// Check if we previously had issues extracting the access token from the
 	// request.
@@ -700,8 +792,8 @@ func handleApplicationServiceRegistration(
 	// Don't need to worry about appending to registration stages as
 	// application service registration is entirely separate.
 	return completeRegistration(
-		req.Context(), userAPI, r.Username, "", appserviceID, req.RemoteAddr, req.UserAgent(),
-		r.InhibitLogin, r.InitialDisplayName, r.DeviceID,
+		req.Context(), userAPI, r.Username, "", appserviceID, req.RemoteAddr, req.UserAgent(), r.Auth.Session,
+		r.InhibitLogin, r.InitialDisplayName, r.DeviceID, userapi.AccountTypeAppService,
 	)
 }
 
@@ -714,16 +806,16 @@ func checkAndCompleteFlow(
 	r registerRequest,
 	sessionID string,
 	cfg *config.ClientAPI,
-	userAPI userapi.UserInternalAPI,
+	userAPI userapi.ClientUserAPI,
 ) util.JSONResponse {
 	if checkFlowCompleted(flow, cfg.Derived.Registration.Flows) {
 		// This flow was completed, registration can continue
 		return completeRegistration(
-			req.Context(), userAPI, r.Username, r.Password, "", req.RemoteAddr, req.UserAgent(),
-			r.InhibitLogin, r.InitialDisplayName, r.DeviceID,
+			req.Context(), userAPI, r.Username, r.Password, "", req.RemoteAddr, req.UserAgent(), sessionID,
+			r.InhibitLogin, r.InitialDisplayName, r.DeviceID, userapi.AccountTypeUser,
 		)
 	}
-
+	sessions.addParams(sessionID, r)
 	// There are still more stages to complete.
 	// Return the flows and those that have been completed.
 	return util.JSONResponse{
@@ -741,31 +833,38 @@ func checkAndCompleteFlow(
 // not all
 func completeRegistration(
 	ctx context.Context,
-	userAPI userapi.UserInternalAPI,
-	username, password, appserviceID, ipAddr, userAgent string,
+	userAPI userapi.ClientUserAPI,
+	username, password, appserviceID, ipAddr, userAgent, sessionID string,
 	inhibitLogin eventutil.WeakBoolean,
 	displayName, deviceID *string,
+	accType userapi.AccountType,
 ) util.JSONResponse {
+	var registrationOK bool
+	defer func() {
+		if registrationOK {
+			sessions.deleteSession(sessionID)
+		}
+	}()
+
 	if username == "" {
 		return util.JSONResponse{
 			Code: http.StatusBadRequest,
-			JSON: jsonerror.BadJSON("missing username"),
+			JSON: jsonerror.MissingArgument("Missing username"),
 		}
 	}
 	// Blank passwords are only allowed by registered application services
 	if password == "" && appserviceID == "" {
 		return util.JSONResponse{
 			Code: http.StatusBadRequest,
-			JSON: jsonerror.BadJSON("missing password"),
+			JSON: jsonerror.MissingArgument("Missing password"),
 		}
 	}
-
 	var accRes userapi.PerformAccountCreationResponse
 	err := userAPI.PerformAccountCreation(ctx, &userapi.PerformAccountCreationRequest{
 		AppServiceID: appserviceID,
 		Localpart:    username,
 		Password:     password,
-		AccountType:  userapi.AccountTypeUser,
+		AccountType:  accType,
 		OnConflict:   userapi.ConflictAbort,
 	}, &accRes)
 	if err != nil {
@@ -787,6 +886,7 @@ func completeRegistration(
 	// Check whether inhibit_login option is set. If so, don't create an access
 	// token or a device for this user
 	if inhibitLogin {
+		registrationOK = true
 		return util.JSONResponse{
 			Code: http.StatusOK,
 			JSON: registerResponse{
@@ -820,6 +920,7 @@ func completeRegistration(
 		}
 	}
 
+	registrationOK = true
 	return util.JSONResponse{
 		Code: http.StatusOK,
 		JSON: registerResponse{
@@ -891,7 +992,7 @@ type availableResponse struct {
 func RegisterAvailable(
 	req *http.Request,
 	cfg *config.ClientAPI,
-	accountDB accounts.Database,
+	registerAPI userapi.ClientUserAPI,
 ) util.JSONResponse {
 	username := req.URL.Query().Get("username")
 
@@ -913,14 +1014,18 @@ func RegisterAvailable(
 		}
 	}
 
-	availability, availabilityErr := accountDB.CheckAccountAvailability(req.Context(), username)
-	if availabilityErr != nil {
+	res := &userapi.QueryAccountAvailabilityResponse{}
+	err := registerAPI.QueryAccountAvailability(req.Context(), &userapi.QueryAccountAvailabilityRequest{
+		Localpart: username,
+	}, res)
+	if err != nil {
 		return util.JSONResponse{
 			Code: http.StatusInternalServerError,
-			JSON: jsonerror.Unknown("failed to check availability: " + availabilityErr.Error()),
+			JSON: jsonerror.Unknown("failed to check availability:" + err.Error()),
 		}
 	}
-	if !availability {
+
+	if !res.Available {
 		return util.JSONResponse{
 			Code: http.StatusBadRequest,
 			JSON: jsonerror.UserInUse("Desired User ID is already taken."),
@@ -935,7 +1040,7 @@ func RegisterAvailable(
 	}
 }
 
-func handleSharedSecretRegistration(userAPI userapi.UserInternalAPI, sr *SharedSecretRegistration, req *http.Request) util.JSONResponse {
+func handleSharedSecretRegistration(userAPI userapi.ClientUserAPI, sr *SharedSecretRegistration, req *http.Request) util.JSONResponse {
 	ssrr, err := NewSharedSecretRegistrationRequest(req.Body)
 	if err != nil {
 		return util.JSONResponse{
@@ -963,5 +1068,10 @@ func handleSharedSecretRegistration(userAPI userapi.UserInternalAPI, sr *SharedS
 		return *resErr
 	}
 	deviceID := "shared_secret_registration"
-	return completeRegistration(req.Context(), userAPI, ssrr.User, ssrr.Password, "", req.RemoteAddr, req.UserAgent(), false, &ssrr.User, &deviceID)
+
+	accType := userapi.AccountTypeUser
+	if ssrr.Admin {
+		accType = userapi.AccountTypeAdmin
+	}
+	return completeRegistration(req.Context(), userAPI, ssrr.User, ssrr.Password, "", req.RemoteAddr, req.UserAgent(), "", false, &ssrr.User, &deviceID, accType)
 }

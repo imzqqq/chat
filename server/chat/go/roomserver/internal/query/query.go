@@ -63,7 +63,7 @@ func (r *Queryer) QueryStateAfterEvents(
 		return nil
 	}
 
-	roomState := state.NewStateResolution(r.DB, *info)
+	roomState := state.NewStateResolution(r.DB, info)
 	response.RoomExists = true
 	response.RoomVersion = info.RoomVersion
 
@@ -125,38 +125,6 @@ func (r *Queryer) QueryStateAfterEvents(
 	return nil
 }
 
-// QueryMissingAuthPrevEvents implements api.RoomserverInternalAPI
-func (r *Queryer) QueryMissingAuthPrevEvents(
-	ctx context.Context,
-	request *api.QueryMissingAuthPrevEventsRequest,
-	response *api.QueryMissingAuthPrevEventsResponse,
-) error {
-	info, err := r.DB.RoomInfo(ctx, request.RoomID)
-	if err != nil {
-		return err
-	}
-	if info == nil {
-		return errors.New("room doesn't exist")
-	}
-
-	response.RoomExists = !info.IsStub
-	response.RoomVersion = info.RoomVersion
-
-	for _, authEventID := range request.AuthEventIDs {
-		if nids, err := r.DB.EventNIDs(ctx, []string{authEventID}); err != nil || len(nids) == 0 {
-			response.MissingAuthEventIDs = append(response.MissingAuthEventIDs, authEventID)
-		}
-	}
-
-	for _, prevEventID := range request.PrevEventIDs {
-		if state, err := r.DB.StateAtEventIDs(ctx, []string{prevEventID}); err != nil || len(state) == 0 {
-			response.MissingPrevEventIDs = append(response.MissingPrevEventIDs, prevEventID)
-		}
-	}
-
-	return nil
-}
-
 // QueryEventsByID implements api.RoomserverInternalAPI
 func (r *Queryer) QueryEventsByID(
 	ctx context.Context,
@@ -201,8 +169,10 @@ func (r *Queryer) QueryMembershipForUser(
 		return err
 	}
 	if info == nil {
-		return fmt.Errorf("QueryMembershipForUser: unknown room %s", request.RoomID)
+		response.RoomExists = false
+		return nil
 	}
+	response.RoomExists = true
 
 	membershipEventNID, stillInRoom, isRoomforgotten, err := r.DB.GetMembership(ctx, info.RoomNID, request.UserID)
 	if err != nil {
@@ -252,7 +222,7 @@ func (r *Queryer) QueryMembershipsForRoom(
 	if request.Sender == "" {
 		var events []types.Event
 		var eventNIDs []types.EventNID
-		eventNIDs, err = r.DB.GetMembershipEventNIDsForRoom(ctx, info.RoomNID, request.JoinedOnly, false)
+		eventNIDs, err = r.DB.GetMembershipEventNIDsForRoom(ctx, info.RoomNID, request.JoinedOnly, request.LocalOnly)
 		if err != nil {
 			return fmt.Errorf("r.DB.GetMembershipEventNIDsForRoom: %w", err)
 		}
@@ -294,7 +264,7 @@ func (r *Queryer) QueryMembershipsForRoom(
 
 		events, err = r.DB.Events(ctx, eventNIDs)
 	} else {
-		stateEntries, err = helpers.StateBeforeEvent(ctx, r.DB, *info, membershipEventNID)
+		stateEntries, err = helpers.StateBeforeEvent(ctx, r.DB, info, membershipEventNID)
 		if err != nil {
 			logrus.WithField("membership_event_nid", membershipEventNID).WithError(err).Error("failed to load state before event")
 			return err
@@ -377,7 +347,7 @@ func (r *Queryer) QueryServerAllowedToSeeEvent(
 		return fmt.Errorf("QueryServerAllowedToSeeEvent: no room info for room %s", roomID)
 	}
 	response.AllowedToSeeEvent, err = helpers.CheckServerAllowedToSeeEvent(
-		ctx, r.DB, *info, request.EventID, request.ServerName, inRoomRes.IsInRoom,
+		ctx, r.DB, info, request.EventID, request.ServerName, inRoomRes.IsInRoom,
 	)
 	return
 }
@@ -416,7 +386,7 @@ func (r *Queryer) QueryMissingEvents(
 		return fmt.Errorf("missing RoomInfo for room %s", events[0].RoomID())
 	}
 
-	resultNIDs, err := helpers.ScanEventTree(ctx, r.DB, *info, front, visited, request.Limit, request.ServerName)
+	resultNIDs, err := helpers.ScanEventTree(ctx, r.DB, info, front, visited, request.Limit, request.ServerName)
 	if err != nil {
 		return err
 	}
@@ -457,12 +427,27 @@ func (r *Queryer) QueryStateAndAuthChain(
 	response.RoomExists = true
 	response.RoomVersion = info.RoomVersion
 
+	// handle this entirely separately to the other case so we don't have to pull out
+	// the entire current state of the room
+	// TODO: this probably means it should be a different query operation...
+	if request.OnlyFetchAuthChain {
+		var authEvents []*gomatrixserverlib.Event
+		authEvents, err = GetAuthChain(ctx, r.DB.EventsFromIDs, request.AuthEventIDs)
+		if err != nil {
+			return err
+		}
+		for _, event := range authEvents {
+			response.AuthChainEvents = append(response.AuthChainEvents, event.Headered(info.RoomVersion))
+		}
+		return nil
+	}
+
 	var stateEvents []*gomatrixserverlib.Event
-	stateEvents, err = r.loadStateAtEventIDs(ctx, *info, request.PrevEventIDs)
+	stateEvents, rejected, err := r.loadStateAtEventIDs(ctx, info, request.PrevEventIDs)
 	if err != nil {
 		return err
 	}
-
+	response.IsRejected = rejected
 	response.PrevEventsExist = true
 
 	// add the auth event IDs for the current state events too
@@ -497,15 +482,23 @@ func (r *Queryer) QueryStateAndAuthChain(
 	return err
 }
 
-func (r *Queryer) loadStateAtEventIDs(ctx context.Context, roomInfo types.RoomInfo, eventIDs []string) ([]*gomatrixserverlib.Event, error) {
+func (r *Queryer) loadStateAtEventIDs(ctx context.Context, roomInfo *types.RoomInfo, eventIDs []string) ([]*gomatrixserverlib.Event, bool, error) {
 	roomState := state.NewStateResolution(r.DB, roomInfo)
 	prevStates, err := r.DB.StateAtEventIDs(ctx, eventIDs)
 	if err != nil {
 		switch err.(type) {
 		case types.MissingEventError:
-			return nil, nil
+			return nil, false, nil
 		default:
-			return nil, err
+			return nil, false, err
+		}
+	}
+	// Currently only used on /state and /state_ids
+	rejected := false
+	for i := range prevStates {
+		if prevStates[i].IsRejected {
+			rejected = true
+			break
 		}
 	}
 
@@ -514,10 +507,12 @@ func (r *Queryer) loadStateAtEventIDs(ctx context.Context, roomInfo types.RoomIn
 		ctx, prevStates,
 	)
 	if err != nil {
-		return nil, err
+		return nil, rejected, err
 	}
 
-	return helpers.LoadStateEvents(ctx, r.DB, stateEntries)
+	events, err := helpers.LoadStateEvents(ctx, r.DB, stateEntries)
+
+	return events, rejected, err
 }
 
 type eventsFromIDs func(context.Context, []string) ([]types.Event, error)
@@ -627,6 +622,14 @@ func (r *Queryer) QueryPublishedRooms(
 	req *api.QueryPublishedRoomsRequest,
 	res *api.QueryPublishedRoomsResponse,
 ) error {
+	if req.RoomID != "" {
+		visible, err := r.DB.GetPublishedRoom(ctx, req.RoomID)
+		if err == nil && visible {
+			res.RoomIDs = []string{req.RoomID}
+			return nil
+		}
+		return err
+	}
 	rooms, err := r.DB.GetPublishedRooms(ctx)
 	if err != nil {
 		return err
@@ -638,12 +641,25 @@ func (r *Queryer) QueryPublishedRooms(
 func (r *Queryer) QueryCurrentState(ctx context.Context, req *api.QueryCurrentStateRequest, res *api.QueryCurrentStateResponse) error {
 	res.StateEvents = make(map[gomatrixserverlib.StateKeyTuple]*gomatrixserverlib.HeaderedEvent)
 	for _, tuple := range req.StateTuples {
-		ev, err := r.DB.GetStateEvent(ctx, req.RoomID, tuple.EventType, tuple.StateKey)
-		if err != nil {
-			return err
-		}
-		if ev != nil {
-			res.StateEvents[tuple] = ev
+		if tuple.StateKey == "*" && req.AllowWildcards {
+			events, err := r.DB.GetStateEventsWithEventType(ctx, req.RoomID, tuple.EventType)
+			if err != nil {
+				return err
+			}
+			for _, e := range events {
+				res.StateEvents[gomatrixserverlib.StateKeyTuple{
+					EventType: e.Type(),
+					StateKey:  *e.StateKey(),
+				}] = e
+			}
+		} else {
+			ev, err := r.DB.GetStateEvent(ctx, req.RoomID, tuple.EventType, tuple.StateKey)
+			if err != nil {
+				return err
+			}
+			if ev != nil {
+				res.StateEvents[tuple] = ev
+			}
 		}
 	}
 	return nil
@@ -713,7 +729,7 @@ func (r *Queryer) QuerySharedUsers(ctx context.Context, req *api.QuerySharedUser
 	}
 	roomIDs = roomIDs[:j]
 
-	users, err := r.DB.JoinedUsersSetInRooms(ctx, roomIDs)
+	users, err := r.DB.JoinedUsersSetInRooms(ctx, roomIDs, req.OtherUserIDs)
 	if err != nil {
 		return err
 	}

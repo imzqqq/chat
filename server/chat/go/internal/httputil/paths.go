@@ -15,9 +15,12 @@
 package httputil
 
 const (
-	PublicClientPathPrefix     = "/chat/client/"
-	PublicFederationPathPrefix = "/chat/federation/"
-	PublicKeyPathPrefix        = "/chat/key/"
-	PublicMediaPathPrefix      = "/chat/media/"
+	PublicClientPathPrefix     = "/_matrix/client/"
+	PublicFederationPathPrefix = "/_matrix/federation/"
+	PublicKeyPathPrefix        = "/_matrix/key/"
+	PublicMediaPathPrefix      = "/_matrix/media/"
+	PublicWellKnownPrefix      = "/.well-known/matrix/"
 	InternalPathPrefix         = "/api/"
+	DendriteAdminPathPrefix    = "/_dendrite/"
+	SynapseAdminPathPrefix     = "/_synapse/"
 )

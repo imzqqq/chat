@@ -15,50 +15,55 @@
 package clientapi
 
 import (
-	"github.com/gorilla/mux"
 	appserviceAPI "github.com/matrix-org/dendrite/appservice/api"
 	"github.com/matrix-org/dendrite/clientapi/api"
 	"github.com/matrix-org/dendrite/clientapi/producers"
 	"github.com/matrix-org/dendrite/clientapi/routing"
-	eduServerAPI "github.com/matrix-org/dendrite/eduserver/api"
-	federationSenderAPI "github.com/matrix-org/dendrite/federationsender/api"
+	federationAPI "github.com/matrix-org/dendrite/federationapi/api"
 	"github.com/matrix-org/dendrite/internal/transactions"
 	keyserverAPI "github.com/matrix-org/dendrite/keyserver/api"
 	roomserverAPI "github.com/matrix-org/dendrite/roomserver/api"
-	"github.com/matrix-org/dendrite/setup/config"
-	"github.com/matrix-org/dendrite/setup/kafka"
+	"github.com/matrix-org/dendrite/setup/base"
+	"github.com/matrix-org/dendrite/setup/jetstream"
 	userapi "github.com/matrix-org/dendrite/userapi/api"
-	"github.com/matrix-org/dendrite/userapi/storage/accounts"
 	"github.com/matrix-org/gomatrixserverlib"
 )
 
 // AddPublicRoutes sets up and registers HTTP handlers for the ClientAPI component.
 func AddPublicRoutes(
-	router *mux.Router,
-	synapseAdminRouter *mux.Router,
-	cfg *config.ClientAPI,
-	accountsDB accounts.Database,
+	base *base.BaseDendrite,
 	federation *gomatrixserverlib.FederationClient,
-	rsAPI roomserverAPI.RoomserverInternalAPI,
-	eduInputAPI eduServerAPI.EDUServerInputAPI,
-	asAPI appserviceAPI.AppServiceQueryAPI,
+	rsAPI roomserverAPI.ClientRoomserverAPI,
+	asAPI appserviceAPI.AppServiceInternalAPI,
 	transactionsCache *transactions.Cache,
-	fsAPI federationSenderAPI.FederationSenderInternalAPI,
-	userAPI userapi.UserInternalAPI,
-	keyAPI keyserverAPI.KeyInternalAPI,
+	fsAPI federationAPI.ClientFederationAPI,
+	userAPI userapi.ClientUserAPI,
+	userDirectoryProvider userapi.QuerySearchProfilesAPI,
+	keyAPI keyserverAPI.ClientKeyAPI,
 	extRoomsProvider api.ExtraPublicRoomsProvider,
-	mscCfg *config.MSCs,
 ) {
-	_, producer := kafka.SetupConsumerProducer(&cfg.Matrix.Kafka)
+	cfg := &base.Cfg.ClientAPI
+	mscCfg := &base.Cfg.MSCs
+	js, natsClient := base.NATS.Prepare(base.ProcessContext, &cfg.Matrix.JetStream)
 
 	syncProducer := &producers.SyncAPIProducer{
-		Producer: producer,
-		Topic:    cfg.Matrix.Kafka.TopicFor(config.TopicOutputClientData),
+		JetStream:              js,
+		TopicClientData:        cfg.Matrix.JetStream.Prefixed(jetstream.OutputClientData),
+		TopicReceiptEvent:      cfg.Matrix.JetStream.Prefixed(jetstream.OutputReceiptEvent),
+		TopicSendToDeviceEvent: cfg.Matrix.JetStream.Prefixed(jetstream.OutputSendToDeviceEvent),
+		TopicTypingEvent:       cfg.Matrix.JetStream.Prefixed(jetstream.OutputTypingEvent),
+		TopicPresenceEvent:     cfg.Matrix.JetStream.Prefixed(jetstream.OutputPresenceEvent),
+		UserAPI:                userAPI,
+		ServerName:             cfg.Matrix.ServerName,
 	}
 
 	routing.Setup(
-		router, synapseAdminRouter, cfg, eduInputAPI, rsAPI, asAPI,
-		accountsDB, userAPI, federation,
-		syncProducer, transactionsCache, fsAPI, keyAPI, extRoomsProvider, mscCfg,
+		base.PublicClientAPIMux,
+		base.SynapseAdminMux,
+		base.DendriteAdminMux,
+		cfg, rsAPI, asAPI,
+		userAPI, userDirectoryProvider, federation,
+		syncProducer, transactionsCache, fsAPI, keyAPI,
+		extRoomsProvider, mscCfg, natsClient,
 	)
 }

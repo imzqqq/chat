@@ -22,9 +22,8 @@ import (
 
 	"github.com/matrix-org/dendrite/roomserver/internal"
 	"github.com/matrix-org/dendrite/roomserver/storage"
-	"github.com/matrix-org/dendrite/setup"
-	"github.com/matrix-org/dendrite/setup/config"
-	"github.com/matrix-org/dendrite/setup/kafka"
+	"github.com/matrix-org/dendrite/setup/base"
+	"github.com/matrix-org/dendrite/setup/jetstream"
 	"github.com/sirupsen/logrus"
 )
 
@@ -37,25 +36,26 @@ func AddInternalRoutes(router *mux.Router, intAPI api.RoomserverInternalAPI) {
 // NewInternalAPI returns a concerete implementation of the internal API. Callers
 // can call functions directly on the returned API or via an HTTP interface using AddInternalRoutes.
 func NewInternalAPI(
-	base *setup.BaseDendrite,
-	keyRing gomatrixserverlib.JSONVerifier,
+	base *base.BaseDendrite,
 ) api.RoomserverInternalAPI {
 	cfg := &base.Cfg.RoomServer
 
-	_, producer := kafka.SetupConsumerProducer(&cfg.Matrix.Kafka)
-
 	var perspectiveServerNames []gomatrixserverlib.ServerName
-	for _, kp := range base.Cfg.SigningKeyServer.KeyPerspectives {
+	for _, kp := range base.Cfg.FederationAPI.KeyPerspectives {
 		perspectiveServerNames = append(perspectiveServerNames, kp.ServerName)
 	}
 
-	roomserverDB, err := storage.Open(&cfg.Database, base.Caches)
+	roomserverDB, err := storage.Open(base, &cfg.Database, base.Caches)
 	if err != nil {
 		logrus.WithError(err).Panicf("failed to connect to room server db")
 	}
 
+	js, nc := base.NATS.Prepare(base.ProcessContext, &cfg.Matrix.JetStream)
+
 	return internal.NewRoomserverAPI(
-		cfg, roomserverDB, producer, string(cfg.Matrix.Kafka.TopicFor(config.TopicOutputRoomEvent)),
-		base.Caches, keyRing, perspectiveServerNames,
+		base.ProcessContext, cfg, roomserverDB, js, nc,
+		cfg.Matrix.JetStream.Prefixed(jetstream.InputRoomEvent),
+		cfg.Matrix.JetStream.Prefixed(jetstream.OutputRoomEvent),
+		base.Caches, perspectiveServerNames,
 	)
 }

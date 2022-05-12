@@ -14,6 +14,7 @@ func NewInMemoryLRUCache(enablePrometheus bool) (*Caches, error) {
 		RoomVersionCacheName,
 		RoomVersionCacheMutable,
 		RoomVersionCacheMaxEntries,
+		RoomVersionCacheMaxAge,
 		enablePrometheus,
 	)
 	if err != nil {
@@ -23,24 +24,7 @@ func NewInMemoryLRUCache(enablePrometheus bool) (*Caches, error) {
 		ServerKeyCacheName,
 		ServerKeyCacheMutable,
 		ServerKeyCacheMaxEntries,
-		enablePrometheus,
-	)
-	if err != nil {
-		return nil, err
-	}
-	roomServerStateKeyNIDs, err := NewInMemoryLRUCachePartition(
-		RoomServerStateKeyNIDsCacheName,
-		RoomServerStateKeyNIDsCacheMutable,
-		RoomServerStateKeyNIDsCacheMaxEntries,
-		enablePrometheus,
-	)
-	if err != nil {
-		return nil, err
-	}
-	roomServerEventTypeNIDs, err := NewInMemoryLRUCachePartition(
-		RoomServerEventTypeNIDsCacheName,
-		RoomServerEventTypeNIDsCacheMutable,
-		RoomServerEventTypeNIDsCacheMaxEntries,
+		ServerKeyCacheMaxAge,
 		enablePrometheus,
 	)
 	if err != nil {
@@ -50,6 +34,7 @@ func NewInMemoryLRUCache(enablePrometheus bool) (*Caches, error) {
 		RoomServerRoomIDsCacheName,
 		RoomServerRoomIDsCacheMutable,
 		RoomServerRoomIDsCacheMaxEntries,
+		RoomServerRoomIDsCacheMaxAge,
 		enablePrometheus,
 	)
 	if err != nil {
@@ -59,6 +44,7 @@ func NewInMemoryLRUCache(enablePrometheus bool) (*Caches, error) {
 		RoomInfoCacheName,
 		RoomInfoCacheMutable,
 		RoomInfoCacheMaxEntries,
+		RoomInfoCacheMaxAge,
 		enablePrometheus,
 	)
 	if err != nil {
@@ -68,24 +54,46 @@ func NewInMemoryLRUCache(enablePrometheus bool) (*Caches, error) {
 		FederationEventCacheName,
 		FederationEventCacheMutable,
 		FederationEventCacheMaxEntries,
+		FederationEventCacheMaxAge,
 		enablePrometheus,
 	)
 	if err != nil {
 		return nil, err
 	}
+	spaceRooms, err := NewInMemoryLRUCachePartition(
+		SpaceSummaryRoomsCacheName,
+		SpaceSummaryRoomsCacheMutable,
+		SpaceSummaryRoomsCacheMaxEntries,
+		SpaceSummaryRoomsCacheMaxAge,
+		enablePrometheus,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	lazyLoadCache, err := NewInMemoryLRUCachePartition(
+		LazyLoadCacheName,
+		LazyLoadCacheMutable,
+		LazyLoadCacheMaxEntries,
+		LazyLoadCacheMaxAge,
+		enablePrometheus,
+	)
+	if err != nil {
+		return nil, err
+	}
+
 	go cacheCleaner(
-		roomVersions, serverKeys, roomServerStateKeyNIDs,
-		roomServerEventTypeNIDs, roomServerRoomIDs,
-		roomInfos, federationEvents,
+		roomVersions, serverKeys, roomServerRoomIDs,
+		roomInfos, federationEvents, spaceRooms, lazyLoadCache,
 	)
 	return &Caches{
-		RoomVersions:            roomVersions,
-		ServerKeys:              serverKeys,
-		RoomServerStateKeyNIDs:  roomServerStateKeyNIDs,
-		RoomServerEventTypeNIDs: roomServerEventTypeNIDs,
-		RoomServerRoomIDs:       roomServerRoomIDs,
-		RoomInfos:               roomInfos,
-		FederationEvents:        federationEvents,
+		RoomVersions:      roomVersions,
+		ServerKeys:        serverKeys,
+		RoomServerRoomIDs: roomServerRoomIDs,
+		RoomInfos:         roomInfos,
+		FederationEvents:  federationEvents,
+		SpaceSummaryRooms: spaceRooms,
+		LazyLoading:       lazyLoadCache,
 	}, nil
 }
 
@@ -107,15 +115,22 @@ type InMemoryLRUCachePartition struct {
 	name       string
 	mutable    bool
 	maxEntries int
+	maxAge     time.Duration
 	lru        *lru.Cache
 }
 
-func NewInMemoryLRUCachePartition(name string, mutable bool, maxEntries int, enablePrometheus bool) (*InMemoryLRUCachePartition, error) {
+type inMemoryLRUCacheEntry struct {
+	value   interface{}
+	created time.Time
+}
+
+func NewInMemoryLRUCachePartition(name string, mutable bool, maxEntries int, maxAge time.Duration, enablePrometheus bool) (*InMemoryLRUCachePartition, error) {
 	var err error
 	cache := InMemoryLRUCachePartition{
 		name:       name,
 		mutable:    mutable,
 		maxEntries: maxEntries,
+		maxAge:     maxAge,
 	}
 	cache.lru, err = lru.New(maxEntries)
 	if err != nil {
@@ -135,11 +150,16 @@ func NewInMemoryLRUCachePartition(name string, mutable bool, maxEntries int, ena
 
 func (c *InMemoryLRUCachePartition) Set(key string, value interface{}) {
 	if !c.mutable {
-		if peek, ok := c.lru.Peek(key); ok && peek != value {
-			panic(fmt.Sprintf("invalid use of immutable cache tries to mutate existing value of %q", key))
+		if peek, ok := c.lru.Peek(key); ok {
+			if entry, ok := peek.(*inMemoryLRUCacheEntry); ok && entry.value != value {
+				panic(fmt.Sprintf("invalid use of immutable cache tries to mutate existing value of %q", key))
+			}
 		}
 	}
-	c.lru.Add(key, value)
+	c.lru.Add(key, &inMemoryLRUCacheEntry{
+		value:   value,
+		created: time.Now(),
+	})
 }
 
 func (c *InMemoryLRUCachePartition) Unset(key string) {
@@ -150,5 +170,20 @@ func (c *InMemoryLRUCachePartition) Unset(key string) {
 }
 
 func (c *InMemoryLRUCachePartition) Get(key string) (value interface{}, ok bool) {
-	return c.lru.Get(key)
+	v, ok := c.lru.Get(key)
+	if !ok {
+		return nil, false
+	}
+	entry, ok := v.(*inMemoryLRUCacheEntry)
+	switch {
+	case ok && c.maxAge == CacheNoMaxAge:
+		return entry.value, ok // There's no maximum age policy
+	case ok && time.Since(entry.created) < c.maxAge:
+		return entry.value, ok // The value for the key isn't stale
+	default:
+		// Either the key was found and it was stale, or the key
+		// wasn't found at all
+		c.lru.Remove(key)
+		return nil, false
+	}
 }

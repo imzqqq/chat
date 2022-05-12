@@ -76,12 +76,12 @@ type eventStateKeyStatements struct {
 	bulkSelectEventStateKeyStmt    *sql.Stmt
 }
 
-func createEventStateKeysTable(db *sql.DB) error {
+func CreateEventStateKeysTable(db *sql.DB) error {
 	_, err := db.Exec(eventStateKeysSchema)
 	return err
 }
 
-func prepareEventStateKeysTable(db *sql.DB) (tables.EventStateKeys, error) {
+func PrepareEventStateKeysTable(db *sql.DB) (tables.EventStateKeys, error) {
 	s := &eventStateKeyStatements{}
 
 	return s, sqlutil.StatementList{
@@ -111,9 +111,10 @@ func (s *eventStateKeyStatements) SelectEventStateKeyNID(
 }
 
 func (s *eventStateKeyStatements) BulkSelectEventStateKeyNID(
-	ctx context.Context, eventStateKeys []string,
+	ctx context.Context, txn *sql.Tx, eventStateKeys []string,
 ) (map[string]types.EventStateKeyNID, error) {
-	rows, err := s.bulkSelectEventStateKeyNIDStmt.QueryContext(
+	stmt := sqlutil.TxStmt(txn, s.bulkSelectEventStateKeyNIDStmt)
+	rows, err := stmt.QueryContext(
 		ctx, pq.StringArray(eventStateKeys),
 	)
 	if err != nil {
@@ -122,9 +123,9 @@ func (s *eventStateKeyStatements) BulkSelectEventStateKeyNID(
 	defer internal.CloseAndLogIfError(ctx, rows, "bulkSelectEventStateKeyNID: rows.close() failed")
 
 	result := make(map[string]types.EventStateKeyNID, len(eventStateKeys))
+	var stateKey string
+	var stateKeyNID int64
 	for rows.Next() {
-		var stateKey string
-		var stateKeyNID int64
 		if err := rows.Scan(&stateKey, &stateKeyNID); err != nil {
 			return nil, err
 		}
@@ -134,22 +135,23 @@ func (s *eventStateKeyStatements) BulkSelectEventStateKeyNID(
 }
 
 func (s *eventStateKeyStatements) BulkSelectEventStateKey(
-	ctx context.Context, eventStateKeyNIDs []types.EventStateKeyNID,
+	ctx context.Context, txn *sql.Tx, eventStateKeyNIDs []types.EventStateKeyNID,
 ) (map[types.EventStateKeyNID]string, error) {
 	nIDs := make(pq.Int64Array, len(eventStateKeyNIDs))
 	for i := range eventStateKeyNIDs {
 		nIDs[i] = int64(eventStateKeyNIDs[i])
 	}
-	rows, err := s.bulkSelectEventStateKeyStmt.QueryContext(ctx, nIDs)
+	stmt := sqlutil.TxStmt(txn, s.bulkSelectEventStateKeyStmt)
+	rows, err := stmt.QueryContext(ctx, nIDs)
 	if err != nil {
 		return nil, err
 	}
 	defer internal.CloseAndLogIfError(ctx, rows, "bulkSelectEventStateKey: rows.close() failed")
 
 	result := make(map[types.EventStateKeyNID]string, len(eventStateKeyNIDs))
+	var stateKey string
+	var stateKeyNID int64
 	for rows.Next() {
-		var stateKey string
-		var stateKeyNID int64
 		if err := rows.Scan(&stateKey, &stateKeyNID); err != nil {
 			return nil, err
 		}

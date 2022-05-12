@@ -74,11 +74,29 @@ func (t *UserInternalAPITrace) PerformOpenIDTokenCreation(ctx context.Context, r
 	util.GetLogger(ctx).Infof("PerformOpenIDTokenCreation req=%+v res=%+v", js(req), js(res))
 	return err
 }
-func (t *UserInternalAPITrace) PerformKeyBackup(ctx context.Context, req *PerformKeyBackupRequest, res *PerformKeyBackupResponse) {
-	t.Impl.PerformKeyBackup(ctx, req, res)
+func (t *UserInternalAPITrace) PerformKeyBackup(ctx context.Context, req *PerformKeyBackupRequest, res *PerformKeyBackupResponse) error {
+	err := t.Impl.PerformKeyBackup(ctx, req, res)
+	util.GetLogger(ctx).Infof("PerformKeyBackup req=%+v res=%+v", js(req), js(res))
+	return err
+}
+func (t *UserInternalAPITrace) PerformPusherSet(ctx context.Context, req *PerformPusherSetRequest, res *struct{}) error {
+	err := t.Impl.PerformPusherSet(ctx, req, res)
+	util.GetLogger(ctx).Infof("PerformPusherSet req=%+v res=%+v", js(req), js(res))
+	return err
+}
+func (t *UserInternalAPITrace) PerformPusherDeletion(ctx context.Context, req *PerformPusherDeletionRequest, res *struct{}) error {
+	err := t.Impl.PerformPusherDeletion(ctx, req, res)
+	util.GetLogger(ctx).Infof("PerformPusherDeletion req=%+v res=%+v", js(req), js(res))
+	return err
+}
+func (t *UserInternalAPITrace) PerformPushRulesPut(ctx context.Context, req *PerformPushRulesPutRequest, res *struct{}) error {
+	err := t.Impl.PerformPushRulesPut(ctx, req, res)
+	util.GetLogger(ctx).Infof("PerformPushRulesPut req=%+v res=%+v", js(req), js(res))
+	return err
 }
 func (t *UserInternalAPITrace) QueryKeyBackup(ctx context.Context, req *QueryKeyBackupRequest, res *QueryKeyBackupResponse) {
 	t.Impl.QueryKeyBackup(ctx, req, res)
+	util.GetLogger(ctx).Infof("QueryKeyBackup req=%+v res=%+v", js(req), js(res))
 }
 func (t *UserInternalAPITrace) QueryProfile(ctx context.Context, req *QueryProfileRequest, res *QueryProfileResponse) error {
 	err := t.Impl.QueryProfile(ctx, req, res)
@@ -113,6 +131,75 @@ func (t *UserInternalAPITrace) QuerySearchProfiles(ctx context.Context, req *Que
 func (t *UserInternalAPITrace) QueryOpenIDToken(ctx context.Context, req *QueryOpenIDTokenRequest, res *QueryOpenIDTokenResponse) error {
 	err := t.Impl.QueryOpenIDToken(ctx, req, res)
 	util.GetLogger(ctx).Infof("QueryOpenIDToken req=%+v res=%+v", js(req), js(res))
+	return err
+}
+func (t *UserInternalAPITrace) QueryPushers(ctx context.Context, req *QueryPushersRequest, res *QueryPushersResponse) error {
+	err := t.Impl.QueryPushers(ctx, req, res)
+	util.GetLogger(ctx).Infof("QueryPushers req=%+v res=%+v", js(req), js(res))
+	return err
+}
+func (t *UserInternalAPITrace) QueryPushRules(ctx context.Context, req *QueryPushRulesRequest, res *QueryPushRulesResponse) error {
+	err := t.Impl.QueryPushRules(ctx, req, res)
+	util.GetLogger(ctx).Infof("QueryPushRules req=%+v res=%+v", js(req), js(res))
+	return err
+}
+func (t *UserInternalAPITrace) QueryNotifications(ctx context.Context, req *QueryNotificationsRequest, res *QueryNotificationsResponse) error {
+	err := t.Impl.QueryNotifications(ctx, req, res)
+	util.GetLogger(ctx).Infof("QueryNotifications req=%+v res=%+v", js(req), js(res))
+	return err
+}
+
+func (t *UserInternalAPITrace) SetAvatarURL(ctx context.Context, req *PerformSetAvatarURLRequest, res *PerformSetAvatarURLResponse) error {
+	err := t.Impl.SetAvatarURL(ctx, req, res)
+	util.GetLogger(ctx).Infof("SetAvatarURL req=%+v res=%+v", js(req), js(res))
+	return err
+}
+
+func (t *UserInternalAPITrace) QueryNumericLocalpart(ctx context.Context, res *QueryNumericLocalpartResponse) error {
+	err := t.Impl.QueryNumericLocalpart(ctx, res)
+	util.GetLogger(ctx).Infof("QueryNumericLocalpart req= res=%+v", js(res))
+	return err
+}
+
+func (t *UserInternalAPITrace) QueryAccountAvailability(ctx context.Context, req *QueryAccountAvailabilityRequest, res *QueryAccountAvailabilityResponse) error {
+	err := t.Impl.QueryAccountAvailability(ctx, req, res)
+	util.GetLogger(ctx).Infof("QueryAccountAvailability req=%+v res=%+v", js(req), js(res))
+	return err
+}
+
+func (t *UserInternalAPITrace) SetDisplayName(ctx context.Context, req *PerformUpdateDisplayNameRequest, res *struct{}) error {
+	err := t.Impl.SetDisplayName(ctx, req, res)
+	util.GetLogger(ctx).Infof("SetDisplayName req=%+v res=%+v", js(req), js(res))
+	return err
+}
+
+func (t *UserInternalAPITrace) QueryAccountByPassword(ctx context.Context, req *QueryAccountByPasswordRequest, res *QueryAccountByPasswordResponse) error {
+	err := t.Impl.QueryAccountByPassword(ctx, req, res)
+	util.GetLogger(ctx).Infof("QueryAccountByPassword req=%+v res=%+v", js(req), js(res))
+	return err
+}
+
+func (t *UserInternalAPITrace) QueryLocalpartForThreePID(ctx context.Context, req *QueryLocalpartForThreePIDRequest, res *QueryLocalpartForThreePIDResponse) error {
+	err := t.Impl.QueryLocalpartForThreePID(ctx, req, res)
+	util.GetLogger(ctx).Infof("QueryLocalpartForThreePID req=%+v res=%+v", js(req), js(res))
+	return err
+}
+
+func (t *UserInternalAPITrace) QueryThreePIDsForLocalpart(ctx context.Context, req *QueryThreePIDsForLocalpartRequest, res *QueryThreePIDsForLocalpartResponse) error {
+	err := t.Impl.QueryThreePIDsForLocalpart(ctx, req, res)
+	util.GetLogger(ctx).Infof("QueryThreePIDsForLocalpart req=%+v res=%+v", js(req), js(res))
+	return err
+}
+
+func (t *UserInternalAPITrace) PerformForgetThreePID(ctx context.Context, req *PerformForgetThreePIDRequest, res *struct{}) error {
+	err := t.Impl.PerformForgetThreePID(ctx, req, res)
+	util.GetLogger(ctx).Infof("PerformForgetThreePID req=%+v res=%+v", js(req), js(res))
+	return err
+}
+
+func (t *UserInternalAPITrace) PerformSaveThreePIDAssociation(ctx context.Context, req *PerformSaveThreePIDAssociationRequest, res *struct{}) error {
+	err := t.Impl.PerformSaveThreePIDAssociation(ctx, req, res)
+	util.GetLogger(ctx).Infof("PerformSaveThreePIDAssociation req=%+v res=%+v", js(req), js(res))
 	return err
 }
 

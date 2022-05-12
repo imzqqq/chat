@@ -39,6 +39,8 @@ CREATE TABLE IF NOT EXISTS keyserver_one_time_keys (
 	-- Clobber based on 4-uple of user/device/key/algorithm.
     CONSTRAINT keyserver_one_time_keys_unique UNIQUE (user_id, device_id, key_id, algorithm)
 );
+
+CREATE INDEX IF NOT EXISTS keyserver_one_time_keys_idx ON keyserver_one_time_keys (user_id, device_id);
 `
 
 const upsertKeysSQL = "" +
@@ -51,13 +53,18 @@ const selectKeysSQL = "" +
 	"SELECT concat(algorithm, ':', key_id) as algorithmwithid, key_json FROM keyserver_one_time_keys WHERE user_id=$1 AND device_id=$2 AND concat(algorithm, ':', key_id) = ANY($3);"
 
 const selectKeysCountSQL = "" +
-	"SELECT algorithm, COUNT(key_id) FROM keyserver_one_time_keys WHERE user_id=$1 AND device_id=$2 GROUP BY algorithm"
+	"SELECT algorithm, COUNT(key_id) FROM " +
+	" (SELECT algorithm, key_id FROM keyserver_one_time_keys WHERE user_id = $1 AND device_id = $2 LIMIT 100)" +
+	" x GROUP BY algorithm"
 
 const deleteOneTimeKeySQL = "" +
 	"DELETE FROM keyserver_one_time_keys WHERE user_id = $1 AND device_id = $2 AND algorithm = $3 AND key_id = $4"
 
 const selectKeyByAlgorithmSQL = "" +
 	"SELECT key_id, key_json FROM keyserver_one_time_keys WHERE user_id = $1 AND device_id = $2 AND algorithm = $3 LIMIT 1"
+
+const deleteOneTimeKeysSQL = "" +
+	"DELETE FROM keyserver_one_time_keys WHERE user_id = $1 AND device_id = $2"
 
 type oneTimeKeysStatements struct {
 	db                       *sql.DB
@@ -66,6 +73,7 @@ type oneTimeKeysStatements struct {
 	selectKeysCountStmt      *sql.Stmt
 	selectKeyByAlgorithmStmt *sql.Stmt
 	deleteOneTimeKeyStmt     *sql.Stmt
+	deleteOneTimeKeysStmt    *sql.Stmt
 }
 
 func NewPostgresOneTimeKeysTable(db *sql.DB) (tables.OneTimeKeys, error) {
@@ -89,6 +97,9 @@ func NewPostgresOneTimeKeysTable(db *sql.DB) (tables.OneTimeKeys, error) {
 		return nil, err
 	}
 	if s.deleteOneTimeKeyStmt, err = db.Prepare(deleteOneTimeKeySQL); err != nil {
+		return nil, err
+	}
+	if s.deleteOneTimeKeysStmt, err = db.Prepare(deleteOneTimeKeysSQL); err != nil {
 		return nil, err
 	}
 	return s, nil
@@ -186,4 +197,9 @@ func (s *oneTimeKeysStatements) SelectAndDeleteOneTimeKey(
 	return map[string]json.RawMessage{
 		algorithm + ":" + keyID: json.RawMessage(keyJSON),
 	}, err
+}
+
+func (s *oneTimeKeysStatements) DeleteOneTimeKeys(ctx context.Context, txn *sql.Tx, userID, deviceID string) error {
+	_, err := sqlutil.TxStmt(txn, s.deleteOneTimeKeysStmt).ExecContext(ctx, userID, deviceID)
+	return err
 }

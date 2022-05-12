@@ -28,24 +28,39 @@ import (
 const (
 	InputAccountDataPath = "/userapi/inputAccountData"
 
-	PerformDeviceCreationPath      = "/userapi/performDeviceCreation"
-	PerformAccountCreationPath     = "/userapi/performAccountCreation"
-	PerformPasswordUpdatePath      = "/userapi/performPasswordUpdate"
-	PerformDeviceDeletionPath      = "/userapi/performDeviceDeletion"
-	PerformLastSeenUpdatePath      = "/userapi/performLastSeenUpdate"
-	PerformDeviceUpdatePath        = "/userapi/performDeviceUpdate"
-	PerformAccountDeactivationPath = "/userapi/performAccountDeactivation"
-	PerformOpenIDTokenCreationPath = "/userapi/performOpenIDTokenCreation"
-	PerformKeyBackupPath           = "/userapi/performKeyBackup"
+	PerformDeviceCreationPath          = "/userapi/performDeviceCreation"
+	PerformAccountCreationPath         = "/userapi/performAccountCreation"
+	PerformPasswordUpdatePath          = "/userapi/performPasswordUpdate"
+	PerformDeviceDeletionPath          = "/userapi/performDeviceDeletion"
+	PerformLastSeenUpdatePath          = "/userapi/performLastSeenUpdate"
+	PerformDeviceUpdatePath            = "/userapi/performDeviceUpdate"
+	PerformAccountDeactivationPath     = "/userapi/performAccountDeactivation"
+	PerformOpenIDTokenCreationPath     = "/userapi/performOpenIDTokenCreation"
+	PerformKeyBackupPath               = "/userapi/performKeyBackup"
+	PerformPusherSetPath               = "/pushserver/performPusherSet"
+	PerformPusherDeletionPath          = "/pushserver/performPusherDeletion"
+	PerformPushRulesPutPath            = "/pushserver/performPushRulesPut"
+	PerformSetAvatarURLPath            = "/userapi/performSetAvatarURL"
+	PerformSetDisplayNamePath          = "/userapi/performSetDisplayName"
+	PerformForgetThreePIDPath          = "/userapi/performForgetThreePID"
+	PerformSaveThreePIDAssociationPath = "/userapi/performSaveThreePIDAssociation"
 
-	QueryKeyBackupPath      = "/userapi/queryKeyBackup"
-	QueryProfilePath        = "/userapi/queryProfile"
-	QueryAccessTokenPath    = "/userapi/queryAccessToken"
-	QueryDevicesPath        = "/userapi/queryDevices"
-	QueryAccountDataPath    = "/userapi/queryAccountData"
-	QueryDeviceInfosPath    = "/userapi/queryDeviceInfos"
-	QuerySearchProfilesPath = "/userapi/querySearchProfiles"
-	QueryOpenIDTokenPath    = "/userapi/queryOpenIDToken"
+	QueryKeyBackupPath             = "/userapi/queryKeyBackup"
+	QueryProfilePath               = "/userapi/queryProfile"
+	QueryAccessTokenPath           = "/userapi/queryAccessToken"
+	QueryDevicesPath               = "/userapi/queryDevices"
+	QueryAccountDataPath           = "/userapi/queryAccountData"
+	QueryDeviceInfosPath           = "/userapi/queryDeviceInfos"
+	QuerySearchProfilesPath        = "/userapi/querySearchProfiles"
+	QueryOpenIDTokenPath           = "/userapi/queryOpenIDToken"
+	QueryPushersPath               = "/pushserver/queryPushers"
+	QueryPushRulesPath             = "/pushserver/queryPushRules"
+	QueryNotificationsPath         = "/pushserver/queryNotifications"
+	QueryNumericLocalpartPath      = "/userapi/queryNumericLocalpart"
+	QueryAccountAvailabilityPath   = "/userapi/queryAccountAvailability"
+	QueryAccountByPasswordPath     = "/userapi/queryAccountByPassword"
+	QueryLocalpartForThreePIDPath  = "/userapi/queryLocalpartForThreePID"
+	QueryThreePIDsForLocalpartPath = "/userapi/queryThreePIDsForLocalpart"
 )
 
 // NewUserAPIClient creates a UserInternalAPI implemented by talking to a HTTP POST API.
@@ -228,7 +243,7 @@ func (h *httpUserInternalAPI) QueryOpenIDToken(ctx context.Context, req *api.Que
 	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, req, res)
 }
 
-func (h *httpUserInternalAPI) PerformKeyBackup(ctx context.Context, req *api.PerformKeyBackupRequest, res *api.PerformKeyBackupResponse) {
+func (h *httpUserInternalAPI) PerformKeyBackup(ctx context.Context, req *api.PerformKeyBackupRequest, res *api.PerformKeyBackupResponse) error {
 	span, ctx := opentracing.StartSpanFromContext(ctx, "PerformKeyBackup")
 	defer span.Finish()
 
@@ -237,6 +252,7 @@ func (h *httpUserInternalAPI) PerformKeyBackup(ctx context.Context, req *api.Per
 	if err != nil {
 		res.Error = err.Error()
 	}
+	return nil
 }
 func (h *httpUserInternalAPI) QueryKeyBackup(ctx context.Context, req *api.QueryKeyBackupRequest, res *api.QueryKeyBackupResponse) {
 	span, ctx := opentracing.StartSpanFromContext(ctx, "QueryKeyBackup")
@@ -247,4 +263,131 @@ func (h *httpUserInternalAPI) QueryKeyBackup(ctx context.Context, req *api.Query
 	if err != nil {
 		res.Error = err.Error()
 	}
+}
+
+func (h *httpUserInternalAPI) QueryNotifications(ctx context.Context, req *api.QueryNotificationsRequest, res *api.QueryNotificationsResponse) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "QueryNotifications")
+	defer span.Finish()
+
+	return httputil.PostJSON(ctx, span, h.httpClient, h.apiURL+QueryNotificationsPath, req, res)
+}
+
+func (h *httpUserInternalAPI) PerformPusherSet(
+	ctx context.Context,
+	request *api.PerformPusherSetRequest,
+	response *struct{},
+) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "PerformPusherSet")
+	defer span.Finish()
+
+	apiURL := h.apiURL + PerformPusherSetPath
+	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, request, response)
+}
+
+func (h *httpUserInternalAPI) PerformPusherDeletion(ctx context.Context, req *api.PerformPusherDeletionRequest, res *struct{}) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "PerformPusherDeletion")
+	defer span.Finish()
+
+	apiURL := h.apiURL + PerformPusherDeletionPath
+	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, req, res)
+}
+
+func (h *httpUserInternalAPI) QueryPushers(ctx context.Context, req *api.QueryPushersRequest, res *api.QueryPushersResponse) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "QueryPushers")
+	defer span.Finish()
+
+	apiURL := h.apiURL + QueryPushersPath
+	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, req, res)
+}
+
+func (h *httpUserInternalAPI) PerformPushRulesPut(
+	ctx context.Context,
+	request *api.PerformPushRulesPutRequest,
+	response *struct{},
+) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "PerformPushRulesPut")
+	defer span.Finish()
+
+	apiURL := h.apiURL + PerformPushRulesPutPath
+	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, request, response)
+}
+
+func (h *httpUserInternalAPI) QueryPushRules(ctx context.Context, req *api.QueryPushRulesRequest, res *api.QueryPushRulesResponse) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "QueryPushRules")
+	defer span.Finish()
+
+	apiURL := h.apiURL + QueryPushRulesPath
+	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, req, res)
+}
+
+func (h *httpUserInternalAPI) SetAvatarURL(ctx context.Context, req *api.PerformSetAvatarURLRequest, res *api.PerformSetAvatarURLResponse) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, PerformSetAvatarURLPath)
+	defer span.Finish()
+
+	apiURL := h.apiURL + PerformSetAvatarURLPath
+	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, req, res)
+}
+
+func (h *httpUserInternalAPI) QueryNumericLocalpart(ctx context.Context, res *api.QueryNumericLocalpartResponse) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, QueryNumericLocalpartPath)
+	defer span.Finish()
+
+	apiURL := h.apiURL + QueryNumericLocalpartPath
+	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, struct{}{}, res)
+}
+
+func (h *httpUserInternalAPI) QueryAccountAvailability(ctx context.Context, req *api.QueryAccountAvailabilityRequest, res *api.QueryAccountAvailabilityResponse) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, QueryAccountAvailabilityPath)
+	defer span.Finish()
+
+	apiURL := h.apiURL + QueryAccountAvailabilityPath
+	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, req, res)
+}
+
+func (h *httpUserInternalAPI) QueryAccountByPassword(ctx context.Context, req *api.QueryAccountByPasswordRequest, res *api.QueryAccountByPasswordResponse) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, QueryAccountByPasswordPath)
+	defer span.Finish()
+
+	apiURL := h.apiURL + QueryAccountByPasswordPath
+	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, req, res)
+}
+
+func (h *httpUserInternalAPI) SetDisplayName(ctx context.Context, req *api.PerformUpdateDisplayNameRequest, res *struct{}) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, PerformSetDisplayNamePath)
+	defer span.Finish()
+
+	apiURL := h.apiURL + PerformSetDisplayNamePath
+	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, req, res)
+}
+
+func (h *httpUserInternalAPI) QueryLocalpartForThreePID(ctx context.Context, req *api.QueryLocalpartForThreePIDRequest, res *api.QueryLocalpartForThreePIDResponse) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, QueryLocalpartForThreePIDPath)
+	defer span.Finish()
+
+	apiURL := h.apiURL + QueryLocalpartForThreePIDPath
+	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, req, res)
+}
+
+func (h *httpUserInternalAPI) QueryThreePIDsForLocalpart(ctx context.Context, req *api.QueryThreePIDsForLocalpartRequest, res *api.QueryThreePIDsForLocalpartResponse) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, QueryThreePIDsForLocalpartPath)
+	defer span.Finish()
+
+	apiURL := h.apiURL + QueryThreePIDsForLocalpartPath
+	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, req, res)
+}
+
+func (h *httpUserInternalAPI) PerformForgetThreePID(ctx context.Context, req *api.PerformForgetThreePIDRequest, res *struct{}) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, PerformForgetThreePIDPath)
+	defer span.Finish()
+
+	apiURL := h.apiURL + PerformForgetThreePIDPath
+	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, req, res)
+}
+
+func (h *httpUserInternalAPI) PerformSaveThreePIDAssociation(ctx context.Context, req *api.PerformSaveThreePIDAssociationRequest, res *struct{}) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, PerformSaveThreePIDAssociationPath)
+	defer span.Finish()
+
+	apiURL := h.apiURL + PerformSaveThreePIDAssociationPath
+	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, req, res)
 }

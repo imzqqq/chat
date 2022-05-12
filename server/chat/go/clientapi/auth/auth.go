@@ -42,6 +42,7 @@ type DeviceDatabase interface {
 type AccountDatabase interface {
 	// Look up the account matching the given localpart.
 	GetAccountByLocalpart(ctx context.Context, localpart string) (*api.Account, error)
+	GetAccountByPassword(ctx context.Context, localpart, password string) (*api.Account, error)
 }
 
 // VerifyUserFromRequest authenticates the HTTP request,
@@ -50,7 +51,7 @@ type AccountDatabase interface {
 // Note: For an AS user, AS dummy device is returned.
 // On failure returns an JSON error response which can be sent to the client.
 func VerifyUserFromRequest(
-	req *http.Request, userAPI api.UserInternalAPI,
+	req *http.Request, userAPI api.QueryAcccessTokenAPI,
 ) (*api.Device, *util.JSONResponse) {
 	// Try to find the Application Service user
 	token, err := ExtractAccessToken(req)
@@ -70,11 +71,11 @@ func VerifyUserFromRequest(
 		jsonErr := jsonerror.InternalServerError()
 		return nil, &jsonErr
 	}
-	if res.Err != nil {
-		if forbidden, ok := res.Err.(*api.ErrorForbidden); ok {
+	if res.Err != "" {
+		if strings.HasPrefix(strings.ToLower(res.Err), "forbidden:") { // TODO: use actual error and no string comparison
 			return nil, &util.JSONResponse{
 				Code: http.StatusForbidden,
-				JSON: jsonerror.Forbidden(forbidden.Message),
+				JSON: jsonerror.Forbidden(res.Err),
 			}
 		}
 	}

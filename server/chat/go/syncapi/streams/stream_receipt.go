@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 
-	eduAPI "github.com/matrix-org/dendrite/eduserver/api"
 	"github.com/matrix-org/dendrite/syncapi/types"
 	"github.com/matrix-org/gomatrixserverlib"
 )
@@ -53,31 +52,40 @@ func (p *ReceiptStreamProvider) IncrementalSync(
 	}
 
 	// Group receipts by room, so we can create one ClientEvent for every room
-	receiptsByRoom := make(map[string][]eduAPI.OutputReceiptEvent)
+	receiptsByRoom := make(map[string][]types.OutputReceiptEvent)
 	for _, receipt := range receipts {
+		// skip ignored user events
+		if _, ok := req.IgnoredUsers.List[receipt.UserID]; ok {
+			continue
+		}
 		receiptsByRoom[receipt.RoomID] = append(receiptsByRoom[receipt.RoomID], receipt)
 	}
 
 	for roomID, receipts := range receiptsByRoom {
+		// For a complete sync, make sure we're only including this room if
+		// that room was present in the joined rooms.
+		if from == 0 && !req.IsRoomPresent(roomID) {
+			continue
+		}
+
 		jr := *types.NewJoinResponse()
 		if existing, ok := req.Response.Rooms.Join[roomID]; ok {
 			jr = existing
 		}
-		var ok bool
 
 		ev := gomatrixserverlib.ClientEvent{
 			Type:   gomatrixserverlib.MReceipt,
 			RoomID: roomID,
 		}
-		content := make(map[string]eduAPI.ReceiptMRead)
+		content := make(map[string]ReceiptMRead)
 		for _, receipt := range receipts {
-			var read eduAPI.ReceiptMRead
-			if read, ok = content[receipt.EventID]; !ok {
-				read = eduAPI.ReceiptMRead{
-					User: make(map[string]eduAPI.ReceiptTS),
+			read, ok := content[receipt.EventID]
+			if !ok {
+				read = ReceiptMRead{
+					User: make(map[string]ReceiptTS),
 				}
 			}
-			read.User[receipt.UserID] = eduAPI.ReceiptTS{TS: receipt.Timestamp}
+			read.User[receipt.UserID] = ReceiptTS{TS: receipt.Timestamp}
 			content[receipt.EventID] = read
 		}
 		ev.Content, err = json.Marshal(content)
@@ -91,4 +99,12 @@ func (p *ReceiptStreamProvider) IncrementalSync(
 	}
 
 	return lastPos
+}
+
+type ReceiptMRead struct {
+	User map[string]ReceiptTS `json:"m.read"`
+}
+
+type ReceiptTS struct {
+	TS gomatrixserverlib.Timestamp `json:"ts"`
 }

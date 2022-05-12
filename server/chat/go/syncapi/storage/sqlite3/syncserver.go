@@ -19,6 +19,7 @@ import (
 	"database/sql"
 
 	"github.com/matrix-org/dendrite/internal/sqlutil"
+	"github.com/matrix-org/dendrite/setup/base"
 	"github.com/matrix-org/dendrite/setup/config"
 	"github.com/matrix-org/dendrite/syncapi/storage/shared"
 	"github.com/matrix-org/dendrite/syncapi/storage/sqlite3/deltas"
@@ -28,21 +29,19 @@ import (
 // both the database for PDUs and caches for EDUs.
 type SyncServerDatasource struct {
 	shared.Database
-	db     *sql.DB
-	writer sqlutil.Writer
-	sqlutil.PartitionOffsetStatements
-	streamID streamIDStatements
+	db       *sql.DB
+	writer   sqlutil.Writer
+	streamID StreamIDStatements
 }
 
 // NewDatabase creates a new sync server database
 // nolint: gocyclo
-func NewDatabase(dbProperties *config.DatabaseOptions) (*SyncServerDatasource, error) {
+func NewDatabase(base *base.BaseDendrite, dbProperties *config.DatabaseOptions) (*SyncServerDatasource, error) {
 	var d SyncServerDatasource
 	var err error
-	if d.db, err = sqlutil.Open(dbProperties); err != nil {
+	if d.db, d.writer, err = base.DatabaseConnection(dbProperties, sqlutil.NewExclusiveWriter()); err != nil {
 		return nil, err
 	}
-	d.writer = sqlutil.NewExclusiveWriter()
 	if err = d.prepare(dbProperties); err != nil {
 		return nil, err
 	}
@@ -50,10 +49,7 @@ func NewDatabase(dbProperties *config.DatabaseOptions) (*SyncServerDatasource, e
 }
 
 func (d *SyncServerDatasource) prepare(dbProperties *config.DatabaseOptions) (err error) {
-	if err = d.PartitionOffsetStatements.Prepare(d.db, d.writer, "syncapi"); err != nil {
-		return err
-	}
-	if err = d.streamID.prepare(d.db); err != nil {
+	if err = d.streamID.Prepare(d.db); err != nil {
 		return err
 	}
 	accountData, err := NewSqliteAccountDataTable(d.db, &d.streamID)
@@ -100,6 +96,18 @@ func (d *SyncServerDatasource) prepare(dbProperties *config.DatabaseOptions) (er
 	if err != nil {
 		return err
 	}
+	notificationData, err := NewSqliteNotificationDataTable(d.db)
+	if err != nil {
+		return err
+	}
+	ignores, err := NewSqliteIgnoresTable(d.db)
+	if err != nil {
+		return err
+	}
+	presence, err := NewSqlitePresenceTable(d.db, &d.streamID)
+	if err != nil {
+		return err
+	}
 	m := sqlutil.NewMigrations()
 	deltas.LoadFixSequences(m)
 	deltas.LoadRemoveSendToDeviceSentColumn(m)
@@ -120,6 +128,9 @@ func (d *SyncServerDatasource) prepare(dbProperties *config.DatabaseOptions) (er
 		SendToDevice:        sendToDevice,
 		Receipts:            receipts,
 		Memberships:         memberships,
+		NotificationData:    notificationData,
+		Ignores:             ignores,
+		Presence:            presence,
 	}
 	return nil
 }

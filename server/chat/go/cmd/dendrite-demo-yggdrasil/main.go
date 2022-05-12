@@ -21,7 +21,10 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"os"
 	"time"
+
+	"github.com/matrix-org/gomatrixserverlib"
 
 	"github.com/gorilla/mux"
 	"github.com/matrix-org/dendrite/appservice"
@@ -29,20 +32,17 @@ import (
 	"github.com/matrix-org/dendrite/cmd/dendrite-demo-yggdrasil/signing"
 	"github.com/matrix-org/dendrite/cmd/dendrite-demo-yggdrasil/yggconn"
 	"github.com/matrix-org/dendrite/cmd/dendrite-demo-yggdrasil/yggrooms"
-	"github.com/matrix-org/dendrite/eduserver"
-	"github.com/matrix-org/dendrite/eduserver/cache"
-	"github.com/matrix-org/dendrite/federationsender"
-	"github.com/matrix-org/dendrite/federationsender/api"
+	"github.com/matrix-org/dendrite/federationapi"
+	"github.com/matrix-org/dendrite/federationapi/api"
 	"github.com/matrix-org/dendrite/internal"
 	"github.com/matrix-org/dendrite/internal/httputil"
 	"github.com/matrix-org/dendrite/keyserver"
 	"github.com/matrix-org/dendrite/roomserver"
 	"github.com/matrix-org/dendrite/setup"
+	"github.com/matrix-org/dendrite/setup/base"
 	"github.com/matrix-org/dendrite/setup/config"
 	"github.com/matrix-org/dendrite/setup/mscs"
 	"github.com/matrix-org/dendrite/userapi"
-	"github.com/matrix-org/gomatrixserverlib"
-
 	"github.com/sirupsen/logrus"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -62,92 +62,87 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	/*
-		ygg.SetMulticastEnabled(true)
-		if instancePeer != nil && *instancePeer != "" {
-			if err = ygg.SetStaticPeer(*instancePeer); err != nil {
-				logrus.WithError(err).Error("Failed to set static peer")
-			}
-		}
-	*/
 
-	cfg := &config.Dendrite{}
-	cfg.Defaults()
-	cfg.Global.ServerName = gomatrixserverlib.ServerName(ygg.DerivedServerName())
-	cfg.Global.PrivateKey = ygg.PrivateKey()
-	cfg.Global.KeyID = gomatrixserverlib.KeyID(signing.KeyID)
-	cfg.Global.Kafka.UseNaffka = true
-	cfg.UserAPI.AccountDatabase.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-account.db", *instanceName))
-	cfg.UserAPI.DeviceDatabase.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-device.db", *instanceName))
-	cfg.MediaAPI.Database.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-mediaapi.db", *instanceName))
-	cfg.SyncAPI.Database.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-syncapi.db", *instanceName))
-	cfg.RoomServer.Database.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-roomserver.db", *instanceName))
-	cfg.SigningKeyServer.Database.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-signingkeyserver.db", *instanceName))
-	cfg.KeyServer.Database.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-keyserver.db", *instanceName))
-	cfg.FederationSender.Database.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-federationsender.db", *instanceName))
-	cfg.AppServiceAPI.Database.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-appservice.db", *instanceName))
-	cfg.Global.Kafka.Database.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-naffka.db", *instanceName))
-	cfg.MSCs.MSCs = []string{"msc2836"}
-	cfg.MSCs.Database.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-mscs.db", *instanceName))
-	if err = cfg.Derive(); err != nil {
-		panic(err)
+	// iterate through the cli args and check if the config flag was set
+	configFlagSet := false
+	for _, arg := range os.Args {
+		if arg == "--config" || arg == "-config" {
+			configFlagSet = true
+			break
+		}
 	}
 
-	base := setup.NewBaseDendrite(cfg, "Monolith", false)
+	cfg := &config.Dendrite{}
+
+	// use custom config if config flag is set
+	if configFlagSet {
+		cfg = setup.ParseFlags(true)
+	} else {
+		cfg.Defaults(true)
+		cfg.Global.JetStream.StoragePath = config.Path(fmt.Sprintf("%s/", *instanceName))
+		cfg.UserAPI.AccountDatabase.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-account.db", *instanceName))
+		cfg.MediaAPI.Database.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-mediaapi.db", *instanceName))
+		cfg.SyncAPI.Database.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-syncapi.db", *instanceName))
+		cfg.RoomServer.Database.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-roomserver.db", *instanceName))
+		cfg.KeyServer.Database.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-keyserver.db", *instanceName))
+		cfg.FederationAPI.Database.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-federationapi.db", *instanceName))
+		cfg.AppServiceAPI.Database.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-appservice.db", *instanceName))
+		cfg.MSCs.MSCs = []string{"msc2836"}
+		cfg.MSCs.Database.ConnectionString = config.DataSource(fmt.Sprintf("file:%s-mscs.db", *instanceName))
+		cfg.ClientAPI.RegistrationDisabled = false
+		cfg.ClientAPI.OpenRegistrationWithoutVerificationEnabled = true
+		if err = cfg.Derive(); err != nil {
+			panic(err)
+		}
+	}
+
+	// always override ServerName, PrivateKey and KeyID
+	cfg.Global.ServerName = gomatrixserverlib.ServerName(ygg.DerivedServerName())
+	cfg.Global.PrivateKey = ygg.PrivateKey()
+	cfg.Global.KeyID = signing.KeyID
+
+	base := base.NewBaseDendrite(cfg, "Monolith")
 	defer base.Close() // nolint: errcheck
 
-	accountDB := base.CreateAccountsDB()
 	federation := ygg.CreateFederationClient(base)
 
 	serverKeyAPI := &signing.YggdrasilKeys{}
 	keyRing := serverKeyAPI.KeyRing()
 
 	keyAPI := keyserver.NewInternalAPI(base, &base.Cfg.KeyServer, federation)
-	userAPI := userapi.NewInternalAPI(accountDB, &cfg.UserAPI, nil, keyAPI)
-	keyAPI.SetUserAPI(userAPI)
 
 	rsComponent := roomserver.NewInternalAPI(
-		base, keyRing,
+		base,
 	)
 	rsAPI := rsComponent
 
-	eduInputAPI := eduserver.NewInternalAPI(
-		base, cache.New(), userAPI,
-	)
+	userAPI := userapi.NewInternalAPI(base, &cfg.UserAPI, nil, keyAPI, rsAPI, base.PushGatewayHTTPClient())
+	keyAPI.SetUserAPI(userAPI)
 
 	asAPI := appservice.NewInternalAPI(base, userAPI, rsAPI)
 	rsAPI.SetAppserviceAPI(asAPI)
-	fsAPI := federationsender.NewInternalAPI(
-		base, federation, rsAPI, keyRing, true,
+	fsAPI := federationapi.NewInternalAPI(
+		base, federation, rsAPI, base.Caches, keyRing, true,
 	)
 
-	rsComponent.SetFederationSenderAPI(fsAPI)
+	rsComponent.SetFederationAPI(fsAPI, keyRing)
 
 	monolith := setup.Monolith{
 		Config:    base.Cfg,
-		AccountDB: accountDB,
 		Client:    ygg.CreateClient(base),
 		FedClient: federation,
 		KeyRing:   keyRing,
 
-		AppserviceAPI:       asAPI,
-		EDUInternalAPI:      eduInputAPI,
-		FederationSenderAPI: fsAPI,
-		RoomserverAPI:       rsAPI,
-		UserAPI:             userAPI,
-		KeyAPI:              keyAPI,
+		AppserviceAPI: asAPI,
+		FederationAPI: fsAPI,
+		RoomserverAPI: rsAPI,
+		UserAPI:       userAPI,
+		KeyAPI:        keyAPI,
 		ExtPublicRoomsProvider: yggrooms.NewYggdrasilRoomProvider(
 			ygg, fsAPI, federation,
 		),
 	}
-	monolith.AddAllPublicRoutes(
-		base.ProcessContext,
-		base.PublicClientAPIMux,
-		base.PublicFederationAPIMux,
-		base.PublicKeyAPIMux,
-		base.PublicMediaAPIMux,
-		base.SynapseAdminMux,
-	)
+	monolith.AddAllPublicRoutes(base)
 	if err := mscs.Enable(base, &monolith); err != nil {
 		logrus.WithError(err).Fatalf("Failed to enable MSCs")
 	}

@@ -52,6 +52,9 @@ const selectDeviceKeysSQL = "" +
 const selectBatchDeviceKeysSQL = "" +
 	"SELECT device_id, key_json, stream_id, display_name FROM keyserver_device_keys WHERE user_id=$1 AND key_json <> ''"
 
+const selectBatchDeviceKeysWithEmptiesSQL = "" +
+	"SELECT device_id, key_json, stream_id, display_name FROM keyserver_device_keys WHERE user_id=$1"
+
 const selectMaxStreamForUserSQL = "" +
 	"SELECT MAX(stream_id) FROM keyserver_device_keys WHERE user_id=$1"
 
@@ -65,13 +68,14 @@ const deleteAllDeviceKeysSQL = "" +
 	"DELETE FROM keyserver_device_keys WHERE user_id=$1"
 
 type deviceKeysStatements struct {
-	db                         *sql.DB
-	upsertDeviceKeysStmt       *sql.Stmt
-	selectDeviceKeysStmt       *sql.Stmt
-	selectBatchDeviceKeysStmt  *sql.Stmt
-	selectMaxStreamForUserStmt *sql.Stmt
-	deleteDeviceKeysStmt       *sql.Stmt
-	deleteAllDeviceKeysStmt    *sql.Stmt
+	db                                   *sql.DB
+	upsertDeviceKeysStmt                 *sql.Stmt
+	selectDeviceKeysStmt                 *sql.Stmt
+	selectBatchDeviceKeysStmt            *sql.Stmt
+	selectBatchDeviceKeysWithEmptiesStmt *sql.Stmt
+	selectMaxStreamForUserStmt           *sql.Stmt
+	deleteDeviceKeysStmt                 *sql.Stmt
+	deleteAllDeviceKeysStmt              *sql.Stmt
 }
 
 func NewSqliteDeviceKeysTable(db *sql.DB) (tables.DeviceKeys, error) {
@@ -89,6 +93,9 @@ func NewSqliteDeviceKeysTable(db *sql.DB) (tables.DeviceKeys, error) {
 		return nil, err
 	}
 	if s.selectBatchDeviceKeysStmt, err = db.Prepare(selectBatchDeviceKeysSQL); err != nil {
+		return nil, err
+	}
+	if s.selectBatchDeviceKeysWithEmptiesStmt, err = db.Prepare(selectBatchDeviceKeysWithEmptiesSQL); err != nil {
 		return nil, err
 	}
 	if s.selectMaxStreamForUserStmt, err = db.Prepare(selectMaxStreamForUserSQL); err != nil {
@@ -113,12 +120,18 @@ func (s *deviceKeysStatements) DeleteAllDeviceKeys(ctx context.Context, txn *sql
 	return err
 }
 
-func (s *deviceKeysStatements) SelectBatchDeviceKeys(ctx context.Context, userID string, deviceIDs []string) ([]api.DeviceMessage, error) {
+func (s *deviceKeysStatements) SelectBatchDeviceKeys(ctx context.Context, userID string, deviceIDs []string, includeEmpty bool) ([]api.DeviceMessage, error) {
 	deviceIDMap := make(map[string]bool)
 	for _, d := range deviceIDs {
 		deviceIDMap[d] = true
 	}
-	rows, err := s.selectBatchDeviceKeysStmt.QueryContext(ctx, userID)
+	var stmt *sql.Stmt
+	if includeEmpty {
+		stmt = s.selectBatchDeviceKeysWithEmptiesStmt
+	} else {
+		stmt = s.selectBatchDeviceKeysStmt
+	}
+	rows, err := stmt.QueryContext(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -132,7 +145,7 @@ func (s *deviceKeysStatements) SelectBatchDeviceKeys(ctx context.Context, userID
 		dk.Type = api.TypeDeviceKeyUpdate
 		dk.UserID = userID
 		var keyJSON string
-		var streamID int
+		var streamID int64
 		var displayName sql.NullString
 		if err := rows.Scan(&dk.DeviceID, &keyJSON, &streamID, &displayName); err != nil {
 			return nil, err
@@ -153,7 +166,7 @@ func (s *deviceKeysStatements) SelectBatchDeviceKeys(ctx context.Context, userID
 func (s *deviceKeysStatements) SelectDeviceKeysJSON(ctx context.Context, keys []api.DeviceMessage) error {
 	for i, key := range keys {
 		var keyJSONStr string
-		var streamID int
+		var streamID int64
 		var displayName sql.NullString
 		err := s.selectDeviceKeysStmt.QueryRowContext(ctx, key.UserID, key.DeviceID).Scan(&keyJSONStr, &streamID, &displayName)
 		if err != nil && err != sql.ErrNoRows {
@@ -170,15 +183,15 @@ func (s *deviceKeysStatements) SelectDeviceKeysJSON(ctx context.Context, keys []
 	return nil
 }
 
-func (s *deviceKeysStatements) SelectMaxStreamIDForUser(ctx context.Context, txn *sql.Tx, userID string) (streamID int32, err error) {
+func (s *deviceKeysStatements) SelectMaxStreamIDForUser(ctx context.Context, txn *sql.Tx, userID string) (streamID int64, err error) {
 	// nullable if there are no results
-	var nullStream sql.NullInt32
+	var nullStream sql.NullInt64
 	err = sqlutil.TxStmt(txn, s.selectMaxStreamForUserStmt).QueryRowContext(ctx, userID).Scan(&nullStream)
 	if err == sql.ErrNoRows {
 		err = nil
 	}
 	if nullStream.Valid {
-		streamID = nullStream.Int32
+		streamID = nullStream.Int64
 	}
 	return
 }
@@ -191,13 +204,13 @@ func (s *deviceKeysStatements) CountStreamIDsForUser(ctx context.Context, userID
 	}
 	query := strings.Replace(countStreamIDsForUserSQL, "($2)", sqlutil.QueryVariadicOffset(len(streamIDs), 1), 1)
 	// nullable if there are no results
-	var count sql.NullInt32
+	var count sql.NullInt64
 	err := s.db.QueryRowContext(ctx, query, iStreamIDs...).Scan(&count)
 	if err != nil {
 		return 0, err
 	}
 	if count.Valid {
-		return int(count.Int32), nil
+		return int(count.Int64), nil
 	}
 	return 0, nil
 }

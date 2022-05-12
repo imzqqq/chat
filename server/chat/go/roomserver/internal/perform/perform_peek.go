@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"strings"
 
-	fsAPI "github.com/matrix-org/dendrite/federationsender/api"
+	fsAPI "github.com/matrix-org/dendrite/federationapi/api"
 	"github.com/matrix-org/dendrite/roomserver/api"
 	"github.com/matrix-org/dendrite/roomserver/internal/input"
 	"github.com/matrix-org/dendrite/roomserver/storage"
@@ -33,13 +33,13 @@ import (
 type Peeker struct {
 	ServerName gomatrixserverlib.ServerName
 	Cfg        *config.RoomServer
-	FSAPI      fsAPI.FederationSenderInternalAPI
+	FSAPI      fsAPI.RoomserverFederationAPI
 	DB         storage.Database
 
 	Inputer *input.Inputer
 }
 
-// PerformPeek handles peeking into matrix rooms, including over federation by talking to the federationsender.
+// PerformPeek handles peeking into matrix rooms, including over federation by talking to the federationapi.
 func (r *Peeker) PerformPeek(
 	ctx context.Context,
 	req *api.PerformPeekRequest,
@@ -96,7 +96,7 @@ func (r *Peeker) performPeekRoomByAlias(
 	// Get the domain part of the room alias.
 	_, domain, err := gomatrixserverlib.SplitID('#', req.RoomIDOrAlias)
 	if err != nil {
-		return "", fmt.Errorf("Alias %q is not in the correct format", req.RoomIDOrAlias)
+		return "", fmt.Errorf("alias %q is not in the correct format", req.RoomIDOrAlias)
 	}
 	req.ServerNames = append(req.ServerNames, domain)
 
@@ -114,7 +114,7 @@ func (r *Peeker) performPeekRoomByAlias(
 		err = r.FSAPI.PerformDirectoryLookup(ctx, &dirReq, &dirRes)
 		if err != nil {
 			logrus.WithError(err).Errorf("error looking up alias %q", req.RoomIDOrAlias)
-			return "", fmt.Errorf("Looking up alias %q over federation failed: %w", req.RoomIDOrAlias, err)
+			return "", fmt.Errorf("looking up alias %q over federation failed: %w", req.RoomIDOrAlias, err)
 		}
 		roomID = dirRes.RoomID
 		req.ServerNames = append(req.ServerNames, dirRes.ServerNames...)
@@ -122,13 +122,13 @@ func (r *Peeker) performPeekRoomByAlias(
 		// Otherwise, look up if we know this room alias locally.
 		roomID, err = r.DB.GetRoomIDForAlias(ctx, req.RoomIDOrAlias)
 		if err != nil {
-			return "", fmt.Errorf("Lookup room alias %q failed: %w", req.RoomIDOrAlias, err)
+			return "", fmt.Errorf("lookup room alias %q failed: %w", req.RoomIDOrAlias, err)
 		}
 	}
 
 	// If the room ID is empty then we failed to look up the alias.
 	if roomID == "" {
-		return "", fmt.Errorf("Alias %q not found", req.RoomIDOrAlias)
+		return "", fmt.Errorf("alias %q not found", req.RoomIDOrAlias)
 	}
 
 	// If we do, then pluck out the room ID and continue the peek.

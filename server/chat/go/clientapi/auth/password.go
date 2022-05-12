@@ -17,7 +17,10 @@ package auth
 import (
 	"context"
 	"net/http"
+	"strings"
 
+	"github.com/matrix-org/dendrite/clientapi/auth/authtypes"
+	"github.com/matrix-org/dendrite/clientapi/httputil"
 	"github.com/matrix-org/dendrite/clientapi/jsonerror"
 	"github.com/matrix-org/dendrite/clientapi/userutil"
 	"github.com/matrix-org/dendrite/setup/config"
@@ -25,7 +28,7 @@ import (
 	"github.com/matrix-org/util"
 )
 
-type GetAccountByPassword func(ctx context.Context, localpart, password string) (*api.Account, error)
+type GetAccountByPassword func(ctx context.Context, req *api.QueryAccountByPasswordRequest, res *api.QueryAccountByPasswordResponse) error
 
 type PasswordRequest struct {
 	Login
@@ -39,16 +42,26 @@ type LoginTypePassword struct {
 }
 
 func (t *LoginTypePassword) Name() string {
-	return "m.login.password"
+	return authtypes.LoginTypePassword
 }
 
-func (t *LoginTypePassword) Request() interface{} {
-	return &PasswordRequest{}
+func (t *LoginTypePassword) LoginFromJSON(ctx context.Context, reqBytes []byte) (*Login, LoginCleanupFunc, *util.JSONResponse) {
+	var r PasswordRequest
+	if err := httputil.UnmarshalJSON(reqBytes, &r); err != nil {
+		return nil, nil, err
+	}
+
+	login, err := t.Login(ctx, &r)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return login, func(context.Context, *util.JSONResponse) {}, nil
 }
 
 func (t *LoginTypePassword) Login(ctx context.Context, req interface{}) (*Login, *util.JSONResponse) {
 	r := req.(*PasswordRequest)
-	username := r.Username()
+	username := strings.ToLower(r.Username())
 	if username == "" {
 		return nil, &util.JSONResponse{
 			Code: http.StatusUnauthorized,
@@ -62,13 +75,34 @@ func (t *LoginTypePassword) Login(ctx context.Context, req interface{}) (*Login,
 			JSON: jsonerror.InvalidUsername(err.Error()),
 		}
 	}
-	_, err = t.GetAccountByPassword(ctx, localpart, r.Password)
+	// Squash username to all lowercase letters
+	res := &api.QueryAccountByPasswordResponse{}
+	err = t.GetAccountByPassword(ctx, &api.QueryAccountByPasswordRequest{Localpart: strings.ToLower(localpart), PlaintextPassword: r.Password}, res)
 	if err != nil {
+		return nil, &util.JSONResponse{
+			Code: http.StatusInternalServerError,
+			JSON: jsonerror.Unknown("unable to fetch account by password"),
+		}
+	}
+
+	if !res.Exists {
+		err = t.GetAccountByPassword(ctx, &api.QueryAccountByPasswordRequest{
+			Localpart:         localpart,
+			PlaintextPassword: r.Password,
+		}, res)
+		if err != nil {
+			return nil, &util.JSONResponse{
+				Code: http.StatusInternalServerError,
+				JSON: jsonerror.Unknown("unable to fetch account by password"),
+			}
+		}
 		// Technically we could tell them if the user does not exist by checking if err == sql.ErrNoRows
 		// but that would leak the existence of the user.
-		return nil, &util.JSONResponse{
-			Code: http.StatusForbidden,
-			JSON: jsonerror.Forbidden("The username or password was incorrect or the account does not exist."),
+		if !res.Exists {
+			return nil, &util.JSONResponse{
+				Code: http.StatusForbidden,
+				JSON: jsonerror.Forbidden("The username or password was incorrect or the account does not exist."),
+			}
 		}
 	}
 	return &r.Login, nil

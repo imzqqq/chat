@@ -28,14 +28,14 @@ import (
 	"github.com/matrix-org/util"
 )
 
-// InviteV2 implements /chat/federation/v2/invite/{roomID}/{eventID}
+// InviteV2 implements /_matrix/federation/v2/invite/{roomID}/{eventID}
 func InviteV2(
 	httpReq *http.Request,
 	request *gomatrixserverlib.FederationRequest,
 	roomID string,
 	eventID string,
 	cfg *config.FederationAPI,
-	rsAPI api.RoomserverInternalAPI,
+	rsAPI api.FederationRoomserverAPI,
 	keys gomatrixserverlib.JSONVerifier,
 ) util.JSONResponse {
 	inviteReq := gomatrixserverlib.InviteV2Request{}
@@ -65,14 +65,14 @@ func InviteV2(
 	}
 }
 
-// InviteV1 implements /chat/federation/v1/invite/{roomID}/{eventID}
+// InviteV1 implements /_matrix/federation/v1/invite/{roomID}/{eventID}
 func InviteV1(
 	httpReq *http.Request,
 	request *gomatrixserverlib.FederationRequest,
 	roomID string,
 	eventID string,
 	cfg *config.FederationAPI,
-	rsAPI api.RoomserverInternalAPI,
+	rsAPI api.FederationRoomserverAPI,
 	keys gomatrixserverlib.JSONVerifier,
 ) util.JSONResponse {
 	roomVer := gomatrixserverlib.RoomVersionV1
@@ -110,7 +110,7 @@ func processInvite(
 	roomID string,
 	eventID string,
 	cfg *config.FederationAPI,
-	rsAPI api.RoomserverInternalAPI,
+	rsAPI api.FederationRoomserverAPI,
 	keys gomatrixserverlib.JSONVerifier,
 ) util.JSONResponse {
 
@@ -166,31 +166,36 @@ func processInvite(
 	)
 
 	// Add the invite event to the roomserver.
-	err = api.SendInvite(
-		ctx, rsAPI, signedEvent.Headered(roomVer), strippedState, api.DoNotSendToOtherServers, nil,
-	)
-	switch e := err.(type) {
-	case *api.PerformError:
-		return e.JSONResponse()
-	case nil:
-		// Return the signed event to the originating server, it should then tell
-		// the other servers in the room that we have been invited.
-		if isInviteV2 {
-			return util.JSONResponse{
-				Code: http.StatusOK,
-				JSON: gomatrixserverlib.RespInviteV2{Event: &signedEvent},
-			}
-		} else {
-			return util.JSONResponse{
-				Code: http.StatusOK,
-				JSON: gomatrixserverlib.RespInvite{Event: &signedEvent},
-			}
-		}
-	default:
-		util.GetLogger(ctx).WithError(err).Error("api.SendInvite failed")
+	inviteEvent := signedEvent.Headered(roomVer)
+	request := &api.PerformInviteRequest{
+		Event:           inviteEvent,
+		InviteRoomState: strippedState,
+		RoomVersion:     inviteEvent.RoomVersion,
+		SendAsServer:    string(api.DoNotSendToOtherServers),
+		TransactionID:   nil,
+	}
+	response := &api.PerformInviteResponse{}
+	if err := rsAPI.PerformInvite(ctx, request, response); err != nil {
+		util.GetLogger(ctx).WithError(err).Error("PerformInvite failed")
 		return util.JSONResponse{
 			Code: http.StatusInternalServerError,
 			JSON: jsonerror.InternalServerError(),
+		}
+	}
+	if response.Error != nil {
+		return response.Error.JSONResponse()
+	}
+	// Return the signed event to the originating server, it should then tell
+	// the other servers in the room that we have been invited.
+	if isInviteV2 {
+		return util.JSONResponse{
+			Code: http.StatusOK,
+			JSON: gomatrixserverlib.RespInviteV2{Event: signedEvent.JSON()},
+		}
+	} else {
+		return util.JSONResponse{
+			Code: http.StatusOK,
+			JSON: gomatrixserverlib.RespInvite{Event: signedEvent.JSON()},
 		}
 	}
 }

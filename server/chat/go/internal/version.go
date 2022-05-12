@@ -16,9 +16,9 @@ var build string
 
 const (
 	VersionMajor = 0
-	VersionMinor = 5
-	VersionPatch = 0
-	VersionTag   = "rc1" // example: "rc1"
+	VersionMinor = 8
+	VersionPatch = 4
+	VersionTag   = "" // example: "rc1"
 )
 
 func VersionString() string {

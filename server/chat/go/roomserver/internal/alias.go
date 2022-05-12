@@ -16,12 +16,18 @@ package internal
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
-
-	"github.com/matrix-org/dendrite/roomserver/api"
-	"github.com/matrix-org/gomatrixserverlib"
+	"time"
 
 	asAPI "github.com/matrix-org/dendrite/appservice/api"
+	"github.com/matrix-org/dendrite/internal/eventutil"
+	"github.com/matrix-org/dendrite/roomserver/api"
+	"github.com/matrix-org/dendrite/roomserver/internal/helpers"
+	"github.com/matrix-org/gomatrixserverlib"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // RoomserverInternalAPIDatabase has the storage APIs needed to implement the alias API.
@@ -35,9 +41,6 @@ type RoomserverInternalAPIDatabase interface {
 	// Look up all aliases referring to a given room ID.
 	// Returns an error if there was a problem talking to the database.
 	GetAliasesForRoomID(ctx context.Context, roomID string) ([]string, error)
-	// Get the user ID of the creator of an alias.
-	// Returns an error if there was a problem talking to the database.
-	GetCreatorIDForAlias(ctx context.Context, alias string) (string, error)
 	// Remove a given room alias.
 	// Returns an error if there was a problem talking to the database.
 	RemoveRoomAlias(ctx context.Context, alias string) error
@@ -128,22 +131,6 @@ func (r *RoomserverInternalAPI) GetAliasesForRoomID(
 	return nil
 }
 
-// GetCreatorIDForAlias implements alias.RoomserverInternalAPI
-func (r *RoomserverInternalAPI) GetCreatorIDForAlias(
-	ctx context.Context,
-	request *api.GetCreatorIDForAliasRequest,
-	response *api.GetCreatorIDForAliasResponse,
-) error {
-	// Look up the aliases in the database for the given RoomID
-	creatorID, err := r.DB.GetCreatorIDForAlias(ctx, request.Alias)
-	if err != nil {
-		return err
-	}
-
-	response.UserID = creatorID
-	return nil
-}
-
 // RemoveRoomAlias implements alias.RoomserverInternalAPI
 func (r *RoomserverInternalAPI) RemoveRoomAlias(
 	ctx context.Context,
@@ -167,12 +154,15 @@ func (r *RoomserverInternalAPI) RemoveRoomAlias(
 	}
 
 	if creatorID != request.UserID {
-		plEvent, err := r.DB.GetStateEvent(ctx, roomID, gomatrixserverlib.MRoomPowerLevels, "")
+		var plEvent *gomatrixserverlib.HeaderedEvent
+		var pls *gomatrixserverlib.PowerLevelContent
+
+		plEvent, err = r.DB.GetStateEvent(ctx, roomID, gomatrixserverlib.MRoomPowerLevels, "")
 		if err != nil {
 			return fmt.Errorf("r.DB.GetStateEvent: %w", err)
 		}
 
-		pls, err := plEvent.PowerLevels()
+		pls, err = plEvent.PowerLevels()
 		if err != nil {
 			return fmt.Errorf("plEvent.PowerLevels: %w", err)
 		}
@@ -180,6 +170,57 @@ func (r *RoomserverInternalAPI) RemoveRoomAlias(
 		if pls.UserLevel(request.UserID) < pls.EventLevel(gomatrixserverlib.MRoomCanonicalAlias, true) {
 			response.Removed = false
 			return nil
+		}
+	}
+
+	ev, err := r.DB.GetStateEvent(ctx, roomID, gomatrixserverlib.MRoomCanonicalAlias, "")
+	if err != nil && err != sql.ErrNoRows {
+		return err
+	} else if ev != nil {
+		stateAlias := gjson.GetBytes(ev.Content(), "alias").Str
+		// the alias to remove is currently set as the canonical alias, remove it
+		if stateAlias == request.Alias {
+			res, err := sjson.DeleteBytes(ev.Content(), "alias")
+			if err != nil {
+				return err
+			}
+
+			sender := request.UserID
+			if request.UserID != ev.Sender() {
+				sender = ev.Sender()
+			}
+
+			builder := &gomatrixserverlib.EventBuilder{
+				Sender:   sender,
+				RoomID:   ev.RoomID(),
+				Type:     ev.Type(),
+				StateKey: ev.StateKey(),
+				Content:  res,
+			}
+
+			eventsNeeded, err := gomatrixserverlib.StateNeededForEventBuilder(builder)
+			if err != nil {
+				return fmt.Errorf("gomatrixserverlib.StateNeededForEventBuilder: %w", err)
+			}
+			if len(eventsNeeded.Tuples()) == 0 {
+				return errors.New("expecting state tuples for event builder, got none")
+			}
+
+			stateRes := &api.QueryLatestEventsAndStateResponse{}
+			if err = helpers.QueryLatestEventsAndState(ctx, r.DB, &api.QueryLatestEventsAndStateRequest{RoomID: roomID, StateToFetch: eventsNeeded.Tuples()}, stateRes); err != nil {
+				return err
+			}
+
+			newEvent, err := eventutil.BuildEvent(ctx, builder, r.Cfg.Matrix, time.Now(), &eventsNeeded, stateRes)
+			if err != nil {
+				return err
+			}
+
+			err = api.SendEvents(ctx, r.RSAPI, api.KindNew, []*gomatrixserverlib.HeaderedEvent{newEvent}, r.ServerName, r.ServerName, nil, false)
+			if err != nil {
+				return err
+			}
+
 		}
 	}
 

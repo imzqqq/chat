@@ -23,8 +23,9 @@ import (
 	"github.com/matrix-org/dendrite/clientapi/httputil"
 	"github.com/matrix-org/dendrite/clientapi/jsonerror"
 	"github.com/matrix-org/dendrite/clientapi/producers"
-	eduserverAPI "github.com/matrix-org/dendrite/eduserver/api"
+	"github.com/matrix-org/dendrite/internal/eventutil"
 	roomserverAPI "github.com/matrix-org/dendrite/roomserver/api"
+	"github.com/matrix-org/dendrite/syncapi/types"
 	"github.com/matrix-org/dendrite/userapi/api"
 
 	"github.com/matrix-org/util"
@@ -32,7 +33,7 @@ import (
 
 // GetAccountData implements GET /user/{userId}/[rooms/{roomid}/]account_data/{type}
 func GetAccountData(
-	req *http.Request, userAPI api.UserInternalAPI, device *api.Device,
+	req *http.Request, userAPI api.ClientUserAPI, device *api.Device,
 	userID string, roomID string, dataType string,
 ) util.JSONResponse {
 	if userID != device.UserID {
@@ -75,7 +76,7 @@ func GetAccountData(
 
 // SaveAccountData implements PUT /user/{userId}/[rooms/{roomId}/]account_data/{type}
 func SaveAccountData(
-	req *http.Request, userAPI api.UserInternalAPI, device *api.Device,
+	req *http.Request, userAPI api.ClientUserAPI, device *api.Device,
 	userID string, roomID string, dataType string, syncProducer *producers.SyncAPIProducer,
 ) util.JSONResponse {
 	if userID != device.UserID {
@@ -94,10 +95,10 @@ func SaveAccountData(
 		}
 	}
 
-	if dataType == "m.fully_read" {
+	if dataType == "m.fully_read" || dataType == "m.push_rules" {
 		return util.JSONResponse{
 			Code: http.StatusForbidden,
-			JSON: jsonerror.Forbidden("Unable to set read marker"),
+			JSON: jsonerror.Forbidden(fmt.Sprintf("Unable to modify %q using this API", dataType)),
 		}
 	}
 
@@ -126,8 +127,14 @@ func SaveAccountData(
 		return util.ErrorResponse(err)
 	}
 
+	var ignoredUsers *types.IgnoredUsers
+	if dataType == "m.ignored_user_list" {
+		ignoredUsers = &types.IgnoredUsers{}
+		_ = json.Unmarshal(body, ignoredUsers)
+	}
+
 	// TODO: user API should do this since it's account data
-	if err := syncProducer.SendData(userID, roomID, dataType); err != nil {
+	if err := syncProducer.SendData(userID, roomID, dataType, nil, ignoredUsers); err != nil {
 		util.GetLogger(req.Context()).WithError(err).Error("syncProducer.SendData failed")
 		return jsonerror.InternalServerError()
 	}
@@ -138,11 +145,6 @@ func SaveAccountData(
 	}
 }
 
-type readMarkerJSON struct {
-	FullyRead string `json:"m.fully_read"`
-	Read      string `json:"m.read"`
-}
-
 type fullyReadEvent struct {
 	EventID string `json:"event_id"`
 }
@@ -150,7 +152,7 @@ type fullyReadEvent struct {
 // SaveReadMarker implements POST /rooms/{roomId}/read_markers
 func SaveReadMarker(
 	req *http.Request,
-	userAPI api.UserInternalAPI, rsAPI roomserverAPI.RoomserverInternalAPI, eduAPI eduserverAPI.EDUServerInputAPI,
+	userAPI api.ClientUserAPI, rsAPI roomserverAPI.ClientRoomserverAPI,
 	syncProducer *producers.SyncAPIProducer, device *api.Device, roomID string,
 ) util.JSONResponse {
 	// Verify that the user is a member of this room
@@ -159,7 +161,7 @@ func SaveReadMarker(
 		return *resErr
 	}
 
-	var r readMarkerJSON
+	var r eventutil.ReadMarkerJSON
 	resErr = httputil.UnmarshalJSONRequest(req, &r)
 	if resErr != nil {
 		return *resErr
@@ -189,14 +191,14 @@ func SaveReadMarker(
 		return util.ErrorResponse(err)
 	}
 
-	if err := syncProducer.SendData(device.UserID, roomID, "m.fully_read"); err != nil {
+	if err := syncProducer.SendData(device.UserID, roomID, "m.fully_read", &r, nil); err != nil {
 		util.GetLogger(req.Context()).WithError(err).Error("syncProducer.SendData failed")
 		return jsonerror.InternalServerError()
 	}
 
 	// Handle the read receipt that may be included in the read marker
 	if r.Read != "" {
-		return SetReceipt(req, eduAPI, device, roomID, "m.read", r.Read)
+		return SetReceipt(req, syncProducer, device, roomID, "m.read", r.Read)
 	}
 
 	return util.JSONResponse{

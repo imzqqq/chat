@@ -21,6 +21,25 @@ type SyncRequest struct {
 
 	// Updated by the PDU stream.
 	Rooms map[string]string
+	// Updated by the PDU stream.
+	IgnoredUsers IgnoredUsers
+}
+
+func (r *SyncRequest) IsRoomPresent(roomID string) bool {
+	membership, ok := r.Rooms[roomID]
+	if !ok {
+		return false
+	}
+	switch membership {
+	case gomatrixserverlib.Join:
+		return true
+	case gomatrixserverlib.Invite:
+		return true
+	case gomatrixserverlib.Peek:
+		return true
+	default:
+		return false
+	}
 }
 
 type StreamProvider interface {
@@ -41,12 +60,4 @@ type StreamProvider interface {
 
 	// LatestPosition returns the latest stream position for this stream.
 	LatestPosition(ctx context.Context) StreamPosition
-}
-
-type PartitionedStreamProvider interface {
-	Setup()
-	Advance(latest LogPosition)
-	CompleteSync(ctx context.Context, req *SyncRequest) LogPosition
-	IncrementalSync(ctx context.Context, req *SyncRequest, from, to LogPosition) LogPosition
-	LatestPosition(ctx context.Context) LogPosition
 }

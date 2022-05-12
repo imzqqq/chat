@@ -7,10 +7,13 @@ import (
 	"net/http"
 
 	asAPI "github.com/matrix-org/dendrite/appservice/api"
-	fsInputAPI "github.com/matrix-org/dendrite/federationsender/api"
+	fsInputAPI "github.com/matrix-org/dendrite/federationapi/api"
 	"github.com/matrix-org/dendrite/internal/caching"
 	"github.com/matrix-org/dendrite/internal/httputil"
 	"github.com/matrix-org/dendrite/roomserver/api"
+	userapi "github.com/matrix-org/dendrite/userapi/api"
+
+	"github.com/matrix-org/gomatrixserverlib"
 	"github.com/opentracing/opentracing-go"
 )
 
@@ -26,20 +29,21 @@ const (
 	RoomserverInputRoomEventsPath = "/roomserver/inputRoomEvents"
 
 	// Perform operations
-	RoomserverPerformInvitePath      = "/roomserver/performInvite"
-	RoomserverPerformPeekPath        = "/roomserver/performPeek"
-	RoomserverPerformUnpeekPath      = "/roomserver/performUnpeek"
-	RoomserverPerformJoinPath        = "/roomserver/performJoin"
-	RoomserverPerformLeavePath       = "/roomserver/performLeave"
-	RoomserverPerformBackfillPath    = "/roomserver/performBackfill"
-	RoomserverPerformPublishPath     = "/roomserver/performPublish"
-	RoomserverPerformInboundPeekPath = "/roomserver/performInboundPeek"
-	RoomserverPerformForgetPath      = "/roomserver/performForget"
+	RoomserverPerformInvitePath            = "/roomserver/performInvite"
+	RoomserverPerformPeekPath              = "/roomserver/performPeek"
+	RoomserverPerformUnpeekPath            = "/roomserver/performUnpeek"
+	RoomserverPerformRoomUpgradePath       = "/roomserver/performRoomUpgrade"
+	RoomserverPerformJoinPath              = "/roomserver/performJoin"
+	RoomserverPerformLeavePath             = "/roomserver/performLeave"
+	RoomserverPerformBackfillPath          = "/roomserver/performBackfill"
+	RoomserverPerformPublishPath           = "/roomserver/performPublish"
+	RoomserverPerformInboundPeekPath       = "/roomserver/performInboundPeek"
+	RoomserverPerformForgetPath            = "/roomserver/performForget"
+	RoomserverPerformAdminEvacuateRoomPath = "/roomserver/performAdminEvacuateRoom"
 
 	// Query operations
 	RoomserverQueryLatestEventsAndStatePath    = "/roomserver/queryLatestEventsAndState"
 	RoomserverQueryStateAfterEventsPath        = "/roomserver/queryStateAfterEvents"
-	RoomserverQueryMissingAuthPrevEventsPath   = "/roomserver/queryMissingAuthPrevEvents"
 	RoomserverQueryEventsByIDPath              = "/roomserver/queryEventsByID"
 	RoomserverQueryMembershipForUserPath       = "/roomserver/queryMembershipForUser"
 	RoomserverQueryMembershipsForRoomPath      = "/roomserver/queryMembershipsForRoom"
@@ -82,12 +86,16 @@ func NewRoomserverClient(
 	}, nil
 }
 
-// SetFederationSenderInputAPI no-ops in HTTP client mode as there is no chicken/egg scenario
-func (h *httpRoomserverInternalAPI) SetFederationSenderAPI(fsAPI fsInputAPI.FederationSenderInternalAPI) {
+// SetFederationInputAPI no-ops in HTTP client mode as there is no chicken/egg scenario
+func (h *httpRoomserverInternalAPI) SetFederationAPI(fsAPI fsInputAPI.RoomserverFederationAPI, keyRing *gomatrixserverlib.KeyRing) {
 }
 
 // SetAppserviceAPI no-ops in HTTP client mode as there is no chicken/egg scenario
-func (h *httpRoomserverInternalAPI) SetAppserviceAPI(asAPI asAPI.AppServiceQueryAPI) {
+func (h *httpRoomserverInternalAPI) SetAppserviceAPI(asAPI asAPI.AppServiceInternalAPI) {
+}
+
+// SetUserAPI no-ops in HTTP client mode as there is no chicken/egg scenario
+func (h *httpRoomserverInternalAPI) SetUserAPI(userAPI userapi.RoomserverUserAPI) {
 }
 
 // SetRoomAlias implements RoomserverAliasAPI
@@ -126,19 +134,6 @@ func (h *httpRoomserverInternalAPI) GetAliasesForRoomID(
 	defer span.Finish()
 
 	apiURL := h.roomserverURL + RoomserverGetAliasesForRoomIDPath
-	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, request, response)
-}
-
-// GetCreatorIDForAlias implements RoomserverAliasAPI
-func (h *httpRoomserverInternalAPI) GetCreatorIDForAlias(
-	ctx context.Context,
-	request *api.GetCreatorIDForAliasRequest,
-	response *api.GetCreatorIDForAliasResponse,
-) error {
-	span, ctx := opentracing.StartSpanFromContext(ctx, "GetCreatorIDForAlias")
-	defer span.Finish()
-
-	apiURL := h.roomserverURL + RoomserverGetCreatorIDForAliasPath
 	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, request, response)
 }
 
@@ -246,6 +241,23 @@ func (h *httpRoomserverInternalAPI) PerformUnpeek(
 	}
 }
 
+func (h *httpRoomserverInternalAPI) PerformRoomUpgrade(
+	ctx context.Context,
+	request *api.PerformRoomUpgradeRequest,
+	response *api.PerformRoomUpgradeResponse,
+) {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "PerformRoomUpgrade")
+	defer span.Finish()
+
+	apiURL := h.roomserverURL + RoomserverPerformRoomUpgradePath
+	err := httputil.PostJSON(ctx, span, h.httpClient, apiURL, request, response)
+	if err != nil {
+		response.Error = &api.PerformError{
+			Msg: fmt.Sprintf("failed to communicate with roomserver: %s", err),
+		}
+	}
+}
+
 func (h *httpRoomserverInternalAPI) PerformLeave(
 	ctx context.Context,
 	request *api.PerformLeaveRequest,
@@ -267,6 +279,23 @@ func (h *httpRoomserverInternalAPI) PerformPublish(
 	defer span.Finish()
 
 	apiURL := h.roomserverURL + RoomserverPerformPublishPath
+	err := httputil.PostJSON(ctx, span, h.httpClient, apiURL, req, res)
+	if err != nil {
+		res.Error = &api.PerformError{
+			Msg: fmt.Sprintf("failed to communicate with roomserver: %s", err),
+		}
+	}
+}
+
+func (h *httpRoomserverInternalAPI) PerformAdminEvacuateRoom(
+	ctx context.Context,
+	req *api.PerformAdminEvacuateRoomRequest,
+	res *api.PerformAdminEvacuateRoomResponse,
+) {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "PerformAdminEvacuateRoom")
+	defer span.Finish()
+
+	apiURL := h.roomserverURL + RoomserverPerformAdminEvacuateRoomPath
 	err := httputil.PostJSON(ctx, span, h.httpClient, apiURL, req, res)
 	if err != nil {
 		res.Error = &api.PerformError{
@@ -298,19 +327,6 @@ func (h *httpRoomserverInternalAPI) QueryStateAfterEvents(
 	defer span.Finish()
 
 	apiURL := h.roomserverURL + RoomserverQueryStateAfterEventsPath
-	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, request, response)
-}
-
-// QueryStateAfterEvents implements RoomserverQueryAPI
-func (h *httpRoomserverInternalAPI) QueryMissingAuthPrevEvents(
-	ctx context.Context,
-	request *api.QueryMissingAuthPrevEventsRequest,
-	response *api.QueryMissingAuthPrevEventsResponse,
-) error {
-	span, ctx := opentracing.StartSpanFromContext(ctx, "QueryMissingAuthPrevEvents")
-	defer span.Finish()
-
-	apiURL := h.roomserverURL + RoomserverQueryMissingAuthPrevEventsPath
 	return httputil.PostJSON(ctx, span, h.httpClient, apiURL, request, response)
 }
 

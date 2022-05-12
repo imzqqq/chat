@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+//go:build wasm
 // +build wasm
 
 package main
@@ -20,23 +21,19 @@ import (
 	"crypto/ed25519"
 	"encoding/hex"
 	"fmt"
-	"log"
-	"os"
 	"syscall/js"
-	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/matrix-org/dendrite/appservice"
 	"github.com/matrix-org/dendrite/cmd/dendrite-demo-pinecone/conn"
 	"github.com/matrix-org/dendrite/cmd/dendrite-demo-pinecone/rooms"
 	"github.com/matrix-org/dendrite/cmd/dendrite-demo-yggdrasil/signing"
-	"github.com/matrix-org/dendrite/eduserver"
-	"github.com/matrix-org/dendrite/eduserver/cache"
-	"github.com/matrix-org/dendrite/federationsender"
+	"github.com/matrix-org/dendrite/federationapi"
 	"github.com/matrix-org/dendrite/internal/httputil"
 	"github.com/matrix-org/dendrite/keyserver"
 	"github.com/matrix-org/dendrite/roomserver"
 	"github.com/matrix-org/dendrite/setup"
+	"github.com/matrix-org/dendrite/setup/base"
 	"github.com/matrix-org/dendrite/setup/config"
 	"github.com/matrix-org/dendrite/userapi"
 
@@ -46,6 +43,7 @@ import (
 
 	_ "github.com/matrix-org/go-sqlite3-js"
 
+	pineconeConnections "github.com/matrix-org/pinecone/connections"
 	pineconeRouter "github.com/matrix-org/pinecone/router"
 	pineconeSessions "github.com/matrix-org/pinecone/sessions"
 )
@@ -154,83 +152,74 @@ func startup() {
 	sk := generateKey()
 	pk := sk.Public().(ed25519.PublicKey)
 
-	logger := log.New(os.Stdout, "", 0)
-	pRouter := pineconeRouter.NewRouter(logger, "dendrite", sk, pk, nil)
-	pSessions := pineconeSessions.NewSessions(logger, pRouter)
+	pRouter := pineconeRouter.NewRouter(logrus.WithField("pinecone", "router"), sk, false)
+	pSessions := pineconeSessions.NewSessions(logrus.WithField("pinecone", "sessions"), pRouter, []string{"matrix"})
+	pManager := pineconeConnections.NewConnectionManager(pRouter)
+	pManager.AddPeer("wss://pinecone.matrix.org/public")
 
 	cfg := &config.Dendrite{}
-	cfg.Defaults()
+	cfg.Defaults(true)
 	cfg.UserAPI.AccountDatabase.ConnectionString = "file:/idb/dendritejs_account.db"
 	cfg.AppServiceAPI.Database.ConnectionString = "file:/idb/dendritejs_appservice.db"
-	cfg.UserAPI.DeviceDatabase.ConnectionString = "file:/idb/dendritejs_device.db"
-	cfg.FederationSender.Database.ConnectionString = "file:/idb/dendritejs_fedsender.db"
+	cfg.FederationAPI.Database.ConnectionString = "file:/idb/dendritejs_fedsender.db"
 	cfg.MediaAPI.Database.ConnectionString = "file:/idb/dendritejs_mediaapi.db"
 	cfg.RoomServer.Database.ConnectionString = "file:/idb/dendritejs_roomserver.db"
-	cfg.SigningKeyServer.Database.ConnectionString = "file:/idb/dendritejs_signingkeyserver.db"
 	cfg.SyncAPI.Database.ConnectionString = "file:/idb/dendritejs_syncapi.db"
 	cfg.KeyServer.Database.ConnectionString = "file:/idb/dendritejs_e2ekey.db"
-	cfg.Global.Kafka.UseNaffka = true
-	cfg.Global.Kafka.Database.ConnectionString = "file:/idb/dendritejs_naffka.db"
+	cfg.Global.JetStream.StoragePath = "file:/idb/dendritejs/"
 	cfg.Global.TrustedIDServers = []string{}
 	cfg.Global.KeyID = gomatrixserverlib.KeyID(signing.KeyID)
 	cfg.Global.PrivateKey = sk
 	cfg.Global.ServerName = gomatrixserverlib.ServerName(hex.EncodeToString(pk))
+	cfg.ClientAPI.RegistrationDisabled = false
+	cfg.ClientAPI.OpenRegistrationWithoutVerificationEnabled = true
 
 	if err := cfg.Derive(); err != nil {
 		logrus.Fatalf("Failed to derive values from config: %s", err)
 	}
-	base := setup.NewBaseDendrite(cfg, "Monolith", false)
+	base := base.NewBaseDendrite(cfg, "Monolith")
 	defer base.Close() // nolint: errcheck
 
-	accountDB := base.CreateAccountsDB()
 	federation := conn.CreateFederationClient(base, pSessions)
 	keyAPI := keyserver.NewInternalAPI(base, &base.Cfg.KeyServer, federation)
-	userAPI := userapi.NewInternalAPI(accountDB, &cfg.UserAPI, nil, keyAPI)
-	keyAPI.SetUserAPI(userAPI)
 
 	serverKeyAPI := &signing.YggdrasilKeys{}
 	keyRing := serverKeyAPI.KeyRing()
 
-	rsAPI := roomserver.NewInternalAPI(base, keyRing)
-	eduInputAPI := eduserver.NewInternalAPI(base, cache.New(), userAPI)
+	rsAPI := roomserver.NewInternalAPI(base)
+
+	userAPI := userapi.NewInternalAPI(base, &cfg.UserAPI, nil, keyAPI, rsAPI, base.PushGatewayHTTPClient())
+	keyAPI.SetUserAPI(userAPI)
+
 	asQuery := appservice.NewInternalAPI(
 		base, userAPI, rsAPI,
 	)
 	rsAPI.SetAppserviceAPI(asQuery)
-	fedSenderAPI := federationsender.NewInternalAPI(base, federation, rsAPI, keyRing, true)
-	rsAPI.SetFederationSenderAPI(fedSenderAPI)
+	fedSenderAPI := federationapi.NewInternalAPI(base, federation, rsAPI, base.Caches, keyRing, true)
+	rsAPI.SetFederationAPI(fedSenderAPI, keyRing)
 
 	monolith := setup.Monolith{
 		Config:    base.Cfg,
-		AccountDB: accountDB,
 		Client:    conn.CreateClient(base, pSessions),
 		FedClient: federation,
 		KeyRing:   keyRing,
 
-		AppserviceAPI:       asQuery,
-		EDUInternalAPI:      eduInputAPI,
-		FederationSenderAPI: fedSenderAPI,
-		RoomserverAPI:       rsAPI,
-		UserAPI:             userAPI,
-		KeyAPI:              keyAPI,
+		AppserviceAPI: asQuery,
+		FederationAPI: fedSenderAPI,
+		RoomserverAPI: rsAPI,
+		UserAPI:       userAPI,
+		KeyAPI:        keyAPI,
 		//ServerKeyAPI:        serverKeyAPI,
 		ExtPublicRoomsProvider: rooms.NewPineconeRoomProvider(pRouter, pSessions, fedSenderAPI, federation),
 	}
-	monolith.AddAllPublicRoutes(
-		base.ProcessContext,
-		base.PublicClientAPIMux,
-		base.PublicFederationAPIMux,
-		base.PublicKeyAPIMux,
-		base.PublicMediaAPIMux,
-		base.SynapseAdminMux,
-	)
+	monolith.AddAllPublicRoutes(base)
 
 	httpRouter := mux.NewRouter().SkipClean(true).UseEncodedPath()
 	httpRouter.PathPrefix(httputil.InternalPathPrefix).Handler(base.InternalAPIMux)
 	httpRouter.PathPrefix(httputil.PublicClientPathPrefix).Handler(base.PublicClientAPIMux)
 	httpRouter.PathPrefix(httputil.PublicMediaPathPrefix).Handler(base.PublicMediaAPIMux)
 
-	p2pRouter := pSessions.HTTP().Mux()
+	p2pRouter := pSessions.Protocol("matrix").HTTP().Mux()
 	p2pRouter.Handle(httputil.PublicFederationPathPrefix, base.PublicFederationAPIMux)
 	p2pRouter.Handle(httputil.PublicMediaPathPrefix, base.PublicMediaAPIMux)
 
@@ -241,21 +230,5 @@ func startup() {
 			Mux: httpRouter,
 		}
 		s.ListenAndServe("fetch")
-	}()
-
-	// Connect to the static peer
-	go func() {
-		for {
-			if pRouter.PeerCount(pineconeRouter.PeerTypeRemote) == 0 {
-				if err := conn.ConnectToPeer(pRouter, publicPeer); err != nil {
-					logrus.WithError(err).Error("Failed to connect to static peer")
-				}
-			}
-			select {
-			case <-base.ProcessContext.Context().Done():
-				return
-			case <-time.After(time.Second * 5):
-			}
-		}
 	}()
 }

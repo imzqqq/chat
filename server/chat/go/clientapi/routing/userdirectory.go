@@ -16,6 +16,7 @@ package routing
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 
 	"github.com/matrix-org/dendrite/clientapi/auth/authtypes"
@@ -33,12 +34,13 @@ type UserDirectoryResponse struct {
 func SearchUserDirectory(
 	ctx context.Context,
 	device *userapi.Device,
-	userAPI userapi.UserInternalAPI,
-	rsAPI api.RoomserverInternalAPI,
+	userAPI userapi.ClientUserAPI,
+	rsAPI api.ClientRoomserverAPI,
+	provider userapi.QuerySearchProfilesAPI,
 	serverName gomatrixserverlib.ServerName,
 	searchString string,
 	limit int,
-) *util.JSONResponse {
+) util.JSONResponse {
 	if limit < 10 {
 		limit = 10
 	}
@@ -50,15 +52,13 @@ func SearchUserDirectory(
 	}
 
 	// First start searching local users.
-
 	userReq := &userapi.QuerySearchProfilesRequest{
 		SearchString: searchString,
 		Limit:        limit,
 	}
 	userRes := &userapi.QuerySearchProfilesResponse{}
-	if err := userAPI.QuerySearchProfiles(ctx, userReq, userRes); err != nil {
-		errRes := util.ErrorResponse(fmt.Errorf("userAPI.QuerySearchProfiles: %w", err))
-		return &errRes
+	if err := provider.QuerySearchProfiles(ctx, userReq, userRes); err != nil {
+		return util.ErrorResponse(fmt.Errorf("userAPI.QuerySearchProfiles: %w", err))
 	}
 
 	for _, user := range userRes.Profiles {
@@ -67,7 +67,12 @@ func SearchUserDirectory(
 			break
 		}
 
-		userID := fmt.Sprintf("@%s:%s", user.Localpart, serverName)
+		var userID string
+		if user.ServerName != "" {
+			userID = fmt.Sprintf("@%s:%s", user.Localpart, user.ServerName)
+		} else {
+			userID = fmt.Sprintf("@%s:%s", user.Localpart, serverName)
+		}
 		if _, ok := results[userID]; !ok {
 			results[userID] = authtypes.FullyQualifiedProfile{
 				UserID:      userID,
@@ -87,9 +92,8 @@ func SearchUserDirectory(
 			Limit:        limit - len(results),
 		}
 		stateRes := &api.QueryKnownUsersResponse{}
-		if err := rsAPI.QueryKnownUsers(ctx, stateReq, stateRes); err != nil {
-			errRes := util.ErrorResponse(fmt.Errorf("rsAPI.QueryKnownUsers: %w", err))
-			return &errRes
+		if err := rsAPI.QueryKnownUsers(ctx, stateReq, stateRes); err != nil && err != sql.ErrNoRows {
+			return util.ErrorResponse(fmt.Errorf("rsAPI.QueryKnownUsers: %w", err))
 		}
 
 		for _, user := range stateRes.Users {
@@ -108,7 +112,7 @@ func SearchUserDirectory(
 		response.Results = append(response.Results, result)
 	}
 
-	return &util.JSONResponse{
+	return util.JSONResponse{
 		Code: 200,
 		JSON: response,
 	}

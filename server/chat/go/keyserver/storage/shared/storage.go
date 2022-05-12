@@ -36,7 +36,6 @@ type Database struct {
 	StaleDeviceListsTable tables.StaleDeviceLists
 	CrossSigningKeysTable tables.CrossSigningKeys
 	CrossSigningSigsTable tables.CrossSigningSigs
-	sqlutil.PartitionOffsetStatements
 }
 
 func (d *Database) ExistingOneTimeKeys(ctx context.Context, userID, deviceID string, keyIDsWithAlgorithms []string) (map[string]json.RawMessage, error) {
@@ -59,12 +58,8 @@ func (d *Database) DeviceKeysJSON(ctx context.Context, keys []api.DeviceMessage)
 	return d.DeviceKeysTable.SelectDeviceKeysJSON(ctx, keys)
 }
 
-func (d *Database) PrevIDsExists(ctx context.Context, userID string, prevIDs []int) (bool, error) {
-	sids := make([]int64, len(prevIDs))
-	for i := range prevIDs {
-		sids[i] = int64(prevIDs[i])
-	}
-	count, err := d.DeviceKeysTable.CountStreamIDsForUser(ctx, userID, sids)
+func (d *Database) PrevIDsExists(ctx context.Context, userID string, prevIDs []int64) (bool, error) {
+	count, err := d.DeviceKeysTable.CountStreamIDsForUser(ctx, userID, prevIDs)
 	if err != nil {
 		return false, err
 	}
@@ -85,7 +80,7 @@ func (d *Database) StoreRemoteDeviceKeys(ctx context.Context, keys []api.DeviceM
 
 func (d *Database) StoreLocalDeviceKeys(ctx context.Context, keys []api.DeviceMessage) error {
 	// work out the latest stream IDs for each user
-	userIDToStreamID := make(map[string]int)
+	userIDToStreamID := make(map[string]int64)
 	for _, k := range keys {
 		userIDToStreamID[k.UserID] = 0
 	}
@@ -95,7 +90,7 @@ func (d *Database) StoreLocalDeviceKeys(ctx context.Context, keys []api.DeviceMe
 			if err != nil {
 				return err
 			}
-			userIDToStreamID[userID] = int(streamID)
+			userIDToStreamID[userID] = streamID
 		}
 		// set the stream IDs for each key
 		for i := range keys {
@@ -108,8 +103,8 @@ func (d *Database) StoreLocalDeviceKeys(ctx context.Context, keys []api.DeviceMe
 	})
 }
 
-func (d *Database) DeviceKeysForUser(ctx context.Context, userID string, deviceIDs []string) ([]api.DeviceMessage, error) {
-	return d.DeviceKeysTable.SelectBatchDeviceKeys(ctx, userID, deviceIDs)
+func (d *Database) DeviceKeysForUser(ctx context.Context, userID string, deviceIDs []string, includeEmpty bool) ([]api.DeviceMessage, error) {
+	return d.DeviceKeysTable.SelectBatchDeviceKeys(ctx, userID, deviceIDs, includeEmpty)
 }
 
 func (d *Database) ClaimKeys(ctx context.Context, userToDeviceToAlgorithm map[string]map[string]string) ([]api.OneTimeKeys, error) {
@@ -135,14 +130,16 @@ func (d *Database) ClaimKeys(ctx context.Context, userToDeviceToAlgorithm map[st
 	return result, err
 }
 
-func (d *Database) StoreKeyChange(ctx context.Context, partition int32, offset int64, userID string) error {
-	return d.Writer.Do(nil, nil, func(_ *sql.Tx) error {
-		return d.KeyChangesTable.InsertKeyChange(ctx, partition, offset, userID)
+func (d *Database) StoreKeyChange(ctx context.Context, userID string) (id int64, err error) {
+	err = d.Writer.Do(nil, nil, func(_ *sql.Tx) error {
+		id, err = d.KeyChangesTable.InsertKeyChange(ctx, userID)
+		return err
 	})
+	return
 }
 
-func (d *Database) KeyChanges(ctx context.Context, partition int32, fromOffset, toOffset int64) (userIDs []string, latestOffset int64, err error) {
-	return d.KeyChangesTable.SelectKeyChanges(ctx, partition, fromOffset, toOffset)
+func (d *Database) KeyChanges(ctx context.Context, fromOffset, toOffset int64) (userIDs []string, latestOffset int64, err error) {
+	return d.KeyChangesTable.SelectKeyChanges(ctx, fromOffset, toOffset)
 }
 
 // StaleDeviceLists returns a list of user IDs ending with the domains provided who have stale device lists.
@@ -169,6 +166,9 @@ func (d *Database) DeleteDeviceKeys(ctx context.Context, userID string, deviceID
 			if err := d.DeviceKeysTable.DeleteDeviceKeys(ctx, txn, userID, string(deviceID)); err != nil && err != sql.ErrNoRows {
 				return fmt.Errorf("d.DeviceKeysTable.DeleteDeviceKeys: %w", err)
 			}
+			if err := d.OneTimeKeysTable.DeleteOneTimeKeys(ctx, txn, userID, string(deviceID)); err != nil && err != sql.ErrNoRows {
+				return fmt.Errorf("d.OneTimeKeysTable.DeleteOneTimeKeys: %w", err)
+			}
 		}
 		return nil
 	})
@@ -190,7 +190,7 @@ func (d *Database) CrossSigningKeysForUser(ctx context.Context, userID string) (
 				keyID: key,
 			},
 		}
-		sigMap, err := d.CrossSigningSigsTable.SelectCrossSigningSigsForTarget(ctx, nil, userID, keyID)
+		sigMap, err := d.CrossSigningSigsTable.SelectCrossSigningSigsForTarget(ctx, nil, userID, userID, keyID)
 		if err != nil {
 			continue
 		}
@@ -219,8 +219,8 @@ func (d *Database) CrossSigningKeysDataForUser(ctx context.Context, userID strin
 }
 
 // CrossSigningSigsForTarget returns the signatures for a given user's key ID, if any.
-func (d *Database) CrossSigningSigsForTarget(ctx context.Context, targetUserID string, targetKeyID gomatrixserverlib.KeyID) (types.CrossSigningSigMap, error) {
-	return d.CrossSigningSigsTable.SelectCrossSigningSigsForTarget(ctx, nil, targetUserID, targetKeyID)
+func (d *Database) CrossSigningSigsForTarget(ctx context.Context, originUserID, targetUserID string, targetKeyID gomatrixserverlib.KeyID) (types.CrossSigningSigMap, error) {
+	return d.CrossSigningSigsTable.SelectCrossSigningSigsForTarget(ctx, nil, originUserID, targetUserID, targetKeyID)
 }
 
 // StoreCrossSigningKeysForUser stores the latest known cross-signing keys for a user.

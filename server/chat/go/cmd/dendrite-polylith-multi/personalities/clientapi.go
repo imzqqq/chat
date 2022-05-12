@@ -17,25 +17,23 @@ package personalities
 import (
 	"github.com/matrix-org/dendrite/clientapi"
 	"github.com/matrix-org/dendrite/internal/transactions"
-	"github.com/matrix-org/dendrite/setup"
+	basepkg "github.com/matrix-org/dendrite/setup/base"
 	"github.com/matrix-org/dendrite/setup/config"
 )
 
-func ClientAPI(base *setup.BaseDendrite, cfg *config.Dendrite) {
-	accountDB := base.CreateAccountsDB()
+func ClientAPI(base *basepkg.BaseDendrite, cfg *config.Dendrite) {
 	federation := base.CreateFederationClient()
 
 	asQuery := base.AppserviceHTTPClient()
 	rsAPI := base.RoomserverHTTPClient()
-	fsAPI := base.FederationSenderHTTPClient()
-	eduInputAPI := base.EDUServerClient()
+	fsAPI := base.FederationAPIHTTPClient()
 	userAPI := base.UserAPIClient()
 	keyAPI := base.KeyServerHTTPClient()
 
 	clientapi.AddPublicRoutes(
-		base.PublicClientAPIMux, base.SynapseAdminMux, &base.Cfg.ClientAPI, accountDB, federation,
-		rsAPI, eduInputAPI, asQuery, transactions.New(), fsAPI, userAPI, keyAPI, nil,
-		&cfg.MSCs,
+		base, federation, rsAPI, asQuery,
+		transactions.New(), fsAPI, userAPI, userAPI,
+		keyAPI, nil,
 	)
 
 	base.SetupAndServeHTTP(

@@ -50,7 +50,7 @@ type filter struct {
 
 // GetPostPublicRooms implements GET and POST /publicRooms
 func GetPostPublicRooms(
-	req *http.Request, rsAPI roomserverAPI.RoomserverInternalAPI,
+	req *http.Request, rsAPI roomserverAPI.ClientRoomserverAPI,
 	extRoomsProvider api.ExtraPublicRoomsProvider,
 	federation *gomatrixserverlib.FederationClient,
 	cfg *config.ClientAPI,
@@ -63,7 +63,12 @@ func GetPostPublicRooms(
 	serverName := gomatrixserverlib.ServerName(request.Server)
 
 	if serverName != "" && serverName != cfg.Matrix.ServerName {
-		res, err := federation.GetPublicRooms(req.Context(), serverName, int(request.Limit), request.Since, false, "")
+		res, err := federation.GetPublicRoomsFiltered(
+			req.Context(), serverName,
+			int(request.Limit), request.Since,
+			request.Filter.SearchTerms, false,
+			"",
+		)
 		if err != nil {
 			util.GetLogger(req.Context()).WithError(err).Error("failed to get public rooms")
 			return jsonerror.InternalServerError()
@@ -86,7 +91,7 @@ func GetPostPublicRooms(
 }
 
 func publicRooms(
-	ctx context.Context, request PublicRoomReq, rsAPI roomserverAPI.RoomserverInternalAPI, extRoomsProvider api.ExtraPublicRoomsProvider,
+	ctx context.Context, request PublicRoomReq, rsAPI roomserverAPI.ClientRoomserverAPI, extRoomsProvider api.ExtraPublicRoomsProvider,
 ) (*gomatrixserverlib.RespPublicRooms, error) {
 
 	response := gomatrixserverlib.RespPublicRooms{
@@ -224,7 +229,7 @@ func sliceInto(slice []gomatrixserverlib.PublicRoom, since int64, limit int16) (
 }
 
 func refreshPublicRoomCache(
-	ctx context.Context, rsAPI roomserverAPI.RoomserverInternalAPI, extRoomsProvider api.ExtraPublicRoomsProvider,
+	ctx context.Context, rsAPI roomserverAPI.ClientRoomserverAPI, extRoomsProvider api.ExtraPublicRoomsProvider,
 ) []gomatrixserverlib.PublicRoom {
 	cacheMu.Lock()
 	defer cacheMu.Unlock()

@@ -9,7 +9,6 @@ import (
 
 	"github.com/matrix-org/dendrite/internal/caching"
 	"github.com/matrix-org/dendrite/internal/sqlutil"
-	"github.com/matrix-org/dendrite/roomserver/api"
 	"github.com/matrix-org/dendrite/roomserver/storage/tables"
 	"github.com/matrix-org/dendrite/roomserver/types"
 	"github.com/matrix-org/gomatrixserverlib"
@@ -27,24 +26,23 @@ import (
 const redactionsArePermanent = true
 
 type Database struct {
-	DB                         *sql.DB
-	Cache                      caching.RoomServerCaches
-	Writer                     sqlutil.Writer
-	EventsTable                tables.Events
-	EventJSONTable             tables.EventJSON
-	EventTypesTable            tables.EventTypes
-	EventStateKeysTable        tables.EventStateKeys
-	RoomsTable                 tables.Rooms
-	TransactionsTable          tables.Transactions
-	StateSnapshotTable         tables.StateSnapshot
-	StateBlockTable            tables.StateBlock
-	RoomAliasesTable           tables.RoomAliases
-	PrevEventsTable            tables.PreviousEvents
-	InvitesTable               tables.Invites
-	MembershipTable            tables.Membership
-	PublishedTable             tables.Published
-	RedactionsTable            tables.Redactions
-	GetLatestEventsForUpdateFn func(ctx context.Context, roomInfo types.RoomInfo) (*LatestEventsUpdater, error)
+	DB                  *sql.DB
+	Cache               caching.RoomServerCaches
+	Writer              sqlutil.Writer
+	EventsTable         tables.Events
+	EventJSONTable      tables.EventJSON
+	EventTypesTable     tables.EventTypes
+	EventStateKeysTable tables.EventStateKeys
+	RoomsTable          tables.Rooms
+	StateSnapshotTable  tables.StateSnapshot
+	StateBlockTable     tables.StateBlock
+	RoomAliasesTable    tables.RoomAliases
+	PrevEventsTable     tables.PreviousEvents
+	InvitesTable        tables.Invites
+	MembershipTable     tables.Membership
+	PublishedTable      tables.Published
+	RedactionsTable     tables.Redactions
+	GetRoomUpdaterFn    func(ctx context.Context, roomInfo *types.RoomInfo) (*RoomUpdater, error)
 }
 
 func (d *Database) SupportsConcurrentRoomInputs() bool {
@@ -54,24 +52,19 @@ func (d *Database) SupportsConcurrentRoomInputs() bool {
 func (d *Database) EventTypeNIDs(
 	ctx context.Context, eventTypes []string,
 ) (map[string]types.EventTypeNID, error) {
+	return d.eventTypeNIDs(ctx, nil, eventTypes)
+}
+
+func (d *Database) eventTypeNIDs(
+	ctx context.Context, txn *sql.Tx, eventTypes []string,
+) (map[string]types.EventTypeNID, error) {
 	result := make(map[string]types.EventTypeNID)
-	remaining := []string{}
-	for _, eventType := range eventTypes {
-		if nid, ok := d.Cache.GetRoomServerEventTypeNID(eventType); ok {
-			result[eventType] = nid
-		} else {
-			remaining = append(remaining, eventType)
-		}
+	nids, err := d.EventTypesTable.BulkSelectEventTypeNID(ctx, txn, eventTypes)
+	if err != nil {
+		return nil, err
 	}
-	if len(remaining) > 0 {
-		nids, err := d.EventTypesTable.BulkSelectEventTypeNID(ctx, remaining)
-		if err != nil {
-			return nil, err
-		}
-		for eventType, nid := range nids {
-			result[eventType] = nid
-			d.Cache.StoreRoomServerEventTypeNID(eventType, nid)
-		}
+	for eventType, nid := range nids {
+		result[eventType] = nid
 	}
 	return result, nil
 }
@@ -79,30 +72,25 @@ func (d *Database) EventTypeNIDs(
 func (d *Database) EventStateKeys(
 	ctx context.Context, eventStateKeyNIDs []types.EventStateKeyNID,
 ) (map[types.EventStateKeyNID]string, error) {
-	return d.EventStateKeysTable.BulkSelectEventStateKey(ctx, eventStateKeyNIDs)
+	return d.EventStateKeysTable.BulkSelectEventStateKey(ctx, nil, eventStateKeyNIDs)
 }
 
 func (d *Database) EventStateKeyNIDs(
 	ctx context.Context, eventStateKeys []string,
 ) (map[string]types.EventStateKeyNID, error) {
+	return d.eventStateKeyNIDs(ctx, nil, eventStateKeys)
+}
+
+func (d *Database) eventStateKeyNIDs(
+	ctx context.Context, txn *sql.Tx, eventStateKeys []string,
+) (map[string]types.EventStateKeyNID, error) {
 	result := make(map[string]types.EventStateKeyNID)
-	remaining := []string{}
-	for _, eventStateKey := range eventStateKeys {
-		if nid, ok := d.Cache.GetRoomServerStateKeyNID(eventStateKey); ok {
-			result[eventStateKey] = nid
-		} else {
-			remaining = append(remaining, eventStateKey)
-		}
+	nids, err := d.EventStateKeysTable.BulkSelectEventStateKeyNID(ctx, txn, eventStateKeys)
+	if err != nil {
+		return nil, err
 	}
-	if len(remaining) > 0 {
-		nids, err := d.EventStateKeysTable.BulkSelectEventStateKeyNID(ctx, remaining)
-		if err != nil {
-			return nil, err
-		}
-		for eventStateKey, nid := range nids {
-			result[eventStateKey] = nid
-			d.Cache.StoreRoomServerStateKeyNID(eventStateKey, nid)
-		}
+	for eventStateKey, nid := range nids {
+		result[eventStateKey] = nid
 	}
 	return result, nil
 }
@@ -110,7 +98,7 @@ func (d *Database) EventStateKeyNIDs(
 func (d *Database) StateEntriesForEventIDs(
 	ctx context.Context, eventIDs []string,
 ) ([]types.StateEntry, error) {
-	return d.EventsTable.BulkSelectStateEventByID(ctx, eventIDs)
+	return d.EventsTable.BulkSelectStateEventByID(ctx, nil, eventIDs)
 }
 
 func (d *Database) StateEntriesForTuples(
@@ -118,15 +106,23 @@ func (d *Database) StateEntriesForTuples(
 	stateBlockNIDs []types.StateBlockNID,
 	stateKeyTuples []types.StateKeyTuple,
 ) ([]types.StateEntryList, error) {
+	return d.stateEntriesForTuples(ctx, nil, stateBlockNIDs, stateKeyTuples)
+}
+
+func (d *Database) stateEntriesForTuples(
+	ctx context.Context, txn *sql.Tx,
+	stateBlockNIDs []types.StateBlockNID,
+	stateKeyTuples []types.StateKeyTuple,
+) ([]types.StateEntryList, error) {
 	entries, err := d.StateBlockTable.BulkSelectStateBlockEntries(
-		ctx, stateBlockNIDs,
+		ctx, txn, stateBlockNIDs,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("d.StateBlockTable.BulkSelectStateBlockEntries: %w", err)
 	}
 	lists := []types.StateEntryList{}
 	for i, entry := range entries {
-		entries, err := d.EventsTable.BulkSelectStateEventByNID(ctx, entry, stateKeyTuples)
+		entries, err := d.EventsTable.BulkSelectStateEventByNID(ctx, txn, entry, stateKeyTuples)
 		if err != nil {
 			return nil, fmt.Errorf("d.EventsTable.BulkSelectStateEventByNID: %w", err)
 		}
@@ -139,10 +135,14 @@ func (d *Database) StateEntriesForTuples(
 }
 
 func (d *Database) RoomInfo(ctx context.Context, roomID string) (*types.RoomInfo, error) {
+	return d.roomInfo(ctx, nil, roomID)
+}
+
+func (d *Database) roomInfo(ctx context.Context, txn *sql.Tx, roomID string) (*types.RoomInfo, error) {
 	if roomInfo, ok := d.Cache.GetRoomInfo(roomID); ok {
 		return &roomInfo, nil
 	}
-	roomInfo, err := d.RoomsTable.SelectRoomInfo(ctx, roomID)
+	roomInfo, err := d.RoomsTable.SelectRoomInfo(ctx, txn, roomID)
 	if err == nil && roomInfo != nil {
 		d.Cache.StoreRoomServerRoomID(roomInfo.RoomNID, roomID)
 		d.Cache.StoreRoomInfo(roomID, *roomInfo)
@@ -156,26 +156,42 @@ func (d *Database) AddState(
 	stateBlockNIDs []types.StateBlockNID,
 	state []types.StateEntry,
 ) (stateNID types.StateSnapshotNID, err error) {
+	return d.addState(ctx, nil, roomNID, stateBlockNIDs, state)
+}
+
+func (d *Database) addState(
+	ctx context.Context, txn *sql.Tx,
+	roomNID types.RoomNID,
+	stateBlockNIDs []types.StateBlockNID,
+	state []types.StateEntry,
+) (stateNID types.StateSnapshotNID, err error) {
 	if len(stateBlockNIDs) > 0 && len(state) > 0 {
 		// Check to see if the event already appears in any of the existing state
 		// blocks. If it does then we should not add it again, as this will just
 		// result in excess state blocks and snapshots.
 		// TODO: Investigate why this is happening - probably input_events.go!
-		blocks, berr := d.StateBlockTable.BulkSelectStateBlockEntries(ctx, stateBlockNIDs)
+		blocks, berr := d.StateBlockTable.BulkSelectStateBlockEntries(ctx, txn, stateBlockNIDs)
 		if berr != nil {
 			return 0, fmt.Errorf("d.StateBlockTable.BulkSelectStateBlockEntries: %w", berr)
 		}
+		var found bool
 		for i := len(state) - 1; i >= 0; i-- {
+			found = false
 			for _, events := range blocks {
 				for _, event := range events {
 					if state[i].EventNID == event {
-						state = append(state[:i], state[i+1:]...)
+						found = true
+						break
 					}
 				}
 			}
+			if found {
+				state = append(state[:i], state[i+1:]...)
+				i--
+			}
 		}
 	}
-	err = d.Writer.Do(d.DB, nil, func(txn *sql.Tx) error {
+	err = d.Writer.Do(d.DB, txn, func(txn *sql.Tx) error {
 		if len(state) > 0 {
 			// If there's any state left to add then let's add new blocks.
 			var stateBlockNID types.StateBlockNID
@@ -200,7 +216,27 @@ func (d *Database) AddState(
 func (d *Database) EventNIDs(
 	ctx context.Context, eventIDs []string,
 ) (map[string]types.EventNID, error) {
-	return d.EventsTable.BulkSelectEventNID(ctx, eventIDs)
+	return d.eventNIDs(ctx, nil, eventIDs, NoFilter)
+}
+
+type UnsentFilter bool
+
+const (
+	NoFilter         UnsentFilter = false
+	FilterUnsentOnly UnsentFilter = true
+)
+
+func (d *Database) eventNIDs(
+	ctx context.Context, txn *sql.Tx, eventIDs []string, filter UnsentFilter,
+) (map[string]types.EventNID, error) {
+	switch filter {
+	case FilterUnsentOnly:
+		return d.EventsTable.BulkSelectUnsentEventNID(ctx, txn, eventIDs)
+	case NoFilter:
+		return d.EventsTable.BulkSelectEventNID(ctx, txn, eventIDs)
+	default:
+		panic("impossible case")
+	}
 }
 
 func (d *Database) SetState(
@@ -214,24 +250,34 @@ func (d *Database) SetState(
 func (d *Database) StateAtEventIDs(
 	ctx context.Context, eventIDs []string,
 ) ([]types.StateAtEvent, error) {
-	return d.EventsTable.BulkSelectStateAtEventByID(ctx, eventIDs)
+	return d.EventsTable.BulkSelectStateAtEventByID(ctx, nil, eventIDs)
 }
 
 func (d *Database) SnapshotNIDFromEventID(
 	ctx context.Context, eventID string,
 ) (types.StateSnapshotNID, error) {
-	_, stateNID, err := d.EventsTable.SelectEvent(ctx, nil, eventID)
+	return d.snapshotNIDFromEventID(ctx, nil, eventID)
+}
+
+func (d *Database) snapshotNIDFromEventID(
+	ctx context.Context, txn *sql.Tx, eventID string,
+) (types.StateSnapshotNID, error) {
+	_, stateNID, err := d.EventsTable.SelectEvent(ctx, txn, eventID)
 	return stateNID, err
 }
 
 func (d *Database) EventIDs(
 	ctx context.Context, eventNIDs []types.EventNID,
 ) (map[types.EventNID]string, error) {
-	return d.EventsTable.BulkSelectEventID(ctx, eventNIDs)
+	return d.EventsTable.BulkSelectEventID(ctx, nil, eventNIDs)
 }
 
 func (d *Database) EventsFromIDs(ctx context.Context, eventIDs []string) ([]types.Event, error) {
-	nidMap, err := d.EventNIDs(ctx, eventIDs)
+	return d.eventsFromIDs(ctx, nil, eventIDs, NoFilter)
+}
+
+func (d *Database) eventsFromIDs(ctx context.Context, txn *sql.Tx, eventIDs []string, filter UnsentFilter) ([]types.Event, error) {
+	nidMap, err := d.eventNIDs(ctx, txn, eventIDs, filter)
 	if err != nil {
 		return nil, err
 	}
@@ -241,7 +287,7 @@ func (d *Database) EventsFromIDs(ctx context.Context, eventIDs []string) ([]type
 		nids = append(nids, nid)
 	}
 
-	return d.Events(ctx, nids)
+	return d.events(ctx, txn, nids)
 }
 
 func (d *Database) LatestEventIDs(
@@ -266,21 +312,33 @@ func (d *Database) LatestEventIDs(
 func (d *Database) StateBlockNIDs(
 	ctx context.Context, stateNIDs []types.StateSnapshotNID,
 ) ([]types.StateBlockNIDList, error) {
-	return d.StateSnapshotTable.BulkSelectStateBlockNIDs(ctx, stateNIDs)
+	return d.stateBlockNIDs(ctx, nil, stateNIDs)
+}
+
+func (d *Database) stateBlockNIDs(
+	ctx context.Context, txn *sql.Tx, stateNIDs []types.StateSnapshotNID,
+) ([]types.StateBlockNIDList, error) {
+	return d.StateSnapshotTable.BulkSelectStateBlockNIDs(ctx, txn, stateNIDs)
 }
 
 func (d *Database) StateEntries(
 	ctx context.Context, stateBlockNIDs []types.StateBlockNID,
 ) ([]types.StateEntryList, error) {
+	return d.stateEntries(ctx, nil, stateBlockNIDs)
+}
+
+func (d *Database) stateEntries(
+	ctx context.Context, txn *sql.Tx, stateBlockNIDs []types.StateBlockNID,
+) ([]types.StateEntryList, error) {
 	entries, err := d.StateBlockTable.BulkSelectStateBlockEntries(
-		ctx, stateBlockNIDs,
+		ctx, txn, stateBlockNIDs,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("d.StateBlockTable.BulkSelectStateBlockEntries: %w", err)
 	}
 	lists := make([]types.StateEntryList, 0, len(entries))
 	for i, entry := range entries {
-		eventNIDs, err := d.EventsTable.BulkSelectStateEventByNID(ctx, entry, nil)
+		eventNIDs, err := d.EventsTable.BulkSelectStateEventByNID(ctx, txn, entry, nil)
 		if err != nil {
 			return nil, fmt.Errorf("d.EventsTable.BulkSelectStateEventByNID: %w", err)
 		}
@@ -299,17 +357,17 @@ func (d *Database) SetRoomAlias(ctx context.Context, alias string, roomID string
 }
 
 func (d *Database) GetRoomIDForAlias(ctx context.Context, alias string) (string, error) {
-	return d.RoomAliasesTable.SelectRoomIDFromAlias(ctx, alias)
+	return d.RoomAliasesTable.SelectRoomIDFromAlias(ctx, nil, alias)
 }
 
 func (d *Database) GetAliasesForRoomID(ctx context.Context, roomID string) ([]string, error) {
-	return d.RoomAliasesTable.SelectAliasesFromRoomID(ctx, roomID)
+	return d.RoomAliasesTable.SelectAliasesFromRoomID(ctx, nil, roomID)
 }
 
 func (d *Database) GetCreatorIDForAlias(
 	ctx context.Context, alias string,
 ) (string, error) {
-	return d.RoomAliasesTable.SelectCreatorIDFromAlias(ctx, alias)
+	return d.RoomAliasesTable.SelectCreatorIDFromAlias(ctx, nil, alias)
 }
 
 func (d *Database) RemoveRoomAlias(ctx context.Context, alias string) error {
@@ -321,7 +379,7 @@ func (d *Database) RemoveRoomAlias(ctx context.Context, alias string) error {
 func (d *Database) GetMembership(ctx context.Context, roomNID types.RoomNID, requestSenderUserID string) (membershipEventNID types.EventNID, stillInRoom, isRoomforgotten bool, err error) {
 	var requestSenderUserNID types.EventStateKeyNID
 	err = d.Writer.Do(d.DB, nil, func(txn *sql.Tx) error {
-		requestSenderUserNID, err = d.assignStateKeyNID(ctx, txn, requestSenderUserID)
+		requestSenderUserNID, err = d.assignStateKeyNID(ctx, requestSenderUserID)
 		return err
 	})
 	if err != nil {
@@ -330,7 +388,7 @@ func (d *Database) GetMembership(ctx context.Context, roomNID types.RoomNID, req
 
 	senderMembershipEventNID, senderMembership, isRoomforgotten, err :=
 		d.MembershipTable.SelectMembershipFromRoomAndTarget(
-			ctx, roomNID, requestSenderUserNID,
+			ctx, nil, roomNID, requestSenderUserNID,
 		)
 	if err == sql.ErrNoRows {
 		// The user has never been a member of that room
@@ -345,13 +403,19 @@ func (d *Database) GetMembership(ctx context.Context, roomNID types.RoomNID, req
 func (d *Database) GetMembershipEventNIDsForRoom(
 	ctx context.Context, roomNID types.RoomNID, joinOnly bool, localOnly bool,
 ) ([]types.EventNID, error) {
+	return d.getMembershipEventNIDsForRoom(ctx, nil, roomNID, joinOnly, localOnly)
+}
+
+func (d *Database) getMembershipEventNIDsForRoom(
+	ctx context.Context, txn *sql.Tx, roomNID types.RoomNID, joinOnly bool, localOnly bool,
+) ([]types.EventNID, error) {
 	if joinOnly {
 		return d.MembershipTable.SelectMembershipsFromRoomAndMembership(
-			ctx, roomNID, tables.MembershipStateJoin, localOnly,
+			ctx, txn, roomNID, tables.MembershipStateJoin, localOnly,
 		)
 	}
 
-	return d.MembershipTable.SelectMembershipsFromRoom(ctx, roomNID, localOnly)
+	return d.MembershipTable.SelectMembershipsFromRoom(ctx, txn, roomNID, localOnly)
 }
 
 func (d *Database) GetInvitesForUser(
@@ -359,22 +423,28 @@ func (d *Database) GetInvitesForUser(
 	roomNID types.RoomNID,
 	targetUserNID types.EventStateKeyNID,
 ) (senderUserIDs []types.EventStateKeyNID, eventIDs []string, err error) {
-	return d.InvitesTable.SelectInviteActiveForUserInRoom(ctx, targetUserNID, roomNID)
+	return d.InvitesTable.SelectInviteActiveForUserInRoom(ctx, nil, targetUserNID, roomNID)
 }
 
 func (d *Database) Events(
 	ctx context.Context, eventNIDs []types.EventNID,
 ) ([]types.Event, error) {
-	eventJSONs, err := d.EventJSONTable.BulkSelectEventJSON(ctx, eventNIDs)
+	return d.events(ctx, nil, eventNIDs)
+}
+
+func (d *Database) events(
+	ctx context.Context, txn *sql.Tx, eventNIDs []types.EventNID,
+) ([]types.Event, error) {
+	eventJSONs, err := d.EventJSONTable.BulkSelectEventJSON(ctx, txn, eventNIDs)
 	if err != nil {
 		return nil, err
 	}
-	eventIDs, _ := d.EventsTable.BulkSelectEventID(ctx, eventNIDs)
+	eventIDs, _ := d.EventsTable.BulkSelectEventID(ctx, txn, eventNIDs)
 	if err != nil {
 		eventIDs = map[types.EventNID]string{}
 	}
 	var roomNIDs map[types.EventNID]types.RoomNID
-	roomNIDs, err = d.EventsTable.SelectRoomNIDsForEventNIDs(ctx, eventNIDs)
+	roomNIDs, err = d.EventsTable.SelectRoomNIDsForEventNIDs(ctx, txn, eventNIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -393,7 +463,7 @@ func (d *Database) Events(
 		}
 		fetchNIDList = append(fetchNIDList, n)
 	}
-	dbRoomVersions, err := d.RoomsTable.SelectRoomVersionsForRoomNIDs(ctx, fetchNIDList)
+	dbRoomVersions, err := d.RoomsTable.SelectRoomVersionsForRoomNIDs(ctx, txn, fetchNIDList)
 	if err != nil {
 		return nil, err
 	}
@@ -419,17 +489,6 @@ func (d *Database) Events(
 	return results, nil
 }
 
-func (d *Database) GetTransactionEventID(
-	ctx context.Context, transactionID string,
-	sessionID int64, userID string,
-) (string, error) {
-	eventID, err := d.TransactionsTable.SelectTransactionEventID(ctx, transactionID, sessionID, userID)
-	if err == sql.ErrNoRows {
-		return "", nil
-	}
-	return eventID, err
-}
-
 func (d *Database) MembershipUpdater(
 	ctx context.Context, roomID, targetUserID string,
 	targetLocal bool, roomVersion gomatrixserverlib.RoomVersion,
@@ -446,19 +505,19 @@ func (d *Database) MembershipUpdater(
 	return updater, err
 }
 
-func (d *Database) GetLatestEventsForUpdate(
-	ctx context.Context, roomInfo types.RoomInfo,
-) (*LatestEventsUpdater, error) {
-	if d.GetLatestEventsForUpdateFn != nil {
-		return d.GetLatestEventsForUpdateFn(ctx, roomInfo)
+func (d *Database) GetRoomUpdater(
+	ctx context.Context, roomInfo *types.RoomInfo,
+) (*RoomUpdater, error) {
+	if d.GetRoomUpdaterFn != nil {
+		return d.GetRoomUpdaterFn(ctx, roomInfo)
 	}
 	txn, err := d.DB.Begin()
 	if err != nil {
 		return nil, err
 	}
-	var updater *LatestEventsUpdater
+	var updater *RoomUpdater
 	_ = d.Writer.Do(d.DB, txn, func(txn *sql.Tx) error {
-		updater, err = NewLatestEventsUpdater(ctx, d, txn, roomInfo)
+		updater, err = NewRoomUpdater(ctx, d, txn, roomInfo)
 		return err
 	})
 	return updater, err
@@ -466,8 +525,15 @@ func (d *Database) GetLatestEventsForUpdate(
 
 func (d *Database) StoreEvent(
 	ctx context.Context, event *gomatrixserverlib.Event,
-	txnAndSessionID *api.TransactionID, authEventNIDs []types.EventNID, isRejected bool,
-) (types.RoomNID, types.StateAtEvent, *gomatrixserverlib.Event, string, error) {
+	authEventNIDs []types.EventNID, isRejected bool,
+) (types.EventNID, types.RoomNID, types.StateAtEvent, *gomatrixserverlib.Event, string, error) {
+	return d.storeEvent(ctx, nil, event, authEventNIDs, isRejected)
+}
+
+func (d *Database) storeEvent(
+	ctx context.Context, updater *RoomUpdater, event *gomatrixserverlib.Event,
+	authEventNIDs []types.EventNID, isRejected bool,
+) (types.EventNID, types.RoomNID, types.StateAtEvent, *gomatrixserverlib.Event, string, error) {
 	var (
 		roomNID          types.RoomNID
 		eventTypeNID     types.EventTypeNID
@@ -478,17 +544,11 @@ func (d *Database) StoreEvent(
 		redactedEventID  string
 		err              error
 	)
-
-	err = d.Writer.Do(d.DB, nil, func(txn *sql.Tx) error {
-		if txnAndSessionID != nil {
-			if err = d.TransactionsTable.InsertTransaction(
-				ctx, txn, txnAndSessionID.TransactionID,
-				txnAndSessionID.SessionID, event.Sender(), event.EventID(),
-			); err != nil {
-				return fmt.Errorf("d.TransactionsTable.InsertTransaction: %w", err)
-			}
-		}
-
+	var txn *sql.Tx
+	if updater != nil && updater.txn != nil {
+		txn = updater.txn
+	}
+	err = d.Writer.Do(d.DB, txn, func(txn *sql.Tx) error {
 		// TODO: Here we should aim to have two different code paths for new rooms
 		// vs existing ones.
 
@@ -503,11 +563,11 @@ func (d *Database) StoreEvent(
 			return fmt.Errorf("extractRoomVersionFromCreateEvent: %w", err)
 		}
 
-		if roomNID, err = d.assignRoomNID(ctx, txn, event.RoomID(), roomVersion); err != nil {
+		if roomNID, err = d.assignRoomNID(ctx, event.RoomID(), roomVersion); err != nil {
 			return fmt.Errorf("d.assignRoomNID: %w", err)
 		}
 
-		if eventTypeNID, err = d.assignEventTypeNID(ctx, txn, event.Type()); err != nil {
+		if eventTypeNID, err = d.assignEventTypeNID(ctx, event.Type()); err != nil {
 			return fmt.Errorf("d.assignEventTypeNID: %w", err)
 		}
 
@@ -515,7 +575,7 @@ func (d *Database) StoreEvent(
 		// Assigned a numeric ID for the state_key if there is one present.
 		// Otherwise set the numeric ID for the state_key to 0.
 		if eventStateKey != nil {
-			if eventStateKeyNID, err = d.assignStateKeyNID(ctx, txn, *eventStateKey); err != nil {
+			if eventStateKeyNID, err = d.assignStateKeyNID(ctx, *eventStateKey); err != nil {
 				return fmt.Errorf("d.assignStateKeyNID: %w", err)
 			}
 		}
@@ -535,6 +595,8 @@ func (d *Database) StoreEvent(
 			if err == sql.ErrNoRows {
 				// We've already inserted the event so select the numeric event ID
 				eventNID, stateNID, err = d.EventsTable.SelectEvent(ctx, txn, event.EventID())
+			} else if err != nil {
+				return fmt.Errorf("d.EventsTable.InsertEvent: %w", err)
 			}
 			if err != nil {
 				return fmt.Errorf("d.EventsTable.SelectEvent: %w", err)
@@ -553,7 +615,7 @@ func (d *Database) StoreEvent(
 		return nil
 	})
 	if err != nil {
-		return 0, types.StateAtEvent{}, nil, "", fmt.Errorf("d.Writer.Do: %w", err)
+		return 0, 0, types.StateAtEvent{}, nil, "", fmt.Errorf("d.Writer.Do: %w", err)
 	}
 
 	// We should attempt to update the previous events table with any
@@ -561,45 +623,35 @@ func (d *Database) StoreEvent(
 	// events updater because it somewhat works as a mutex, ensuring
 	// that there's a row-level lock on the latest room events (well,
 	// on Postgres at least).
-	var roomInfo *types.RoomInfo
-	var updater *LatestEventsUpdater
 	if prevEvents := event.PrevEvents(); len(prevEvents) > 0 {
-		roomInfo, err = d.RoomInfo(ctx, event.RoomID())
-		if err != nil {
-			return 0, types.StateAtEvent{}, nil, "", fmt.Errorf("d.RoomInfo: %w", err)
-		}
-		if roomInfo == nil && len(prevEvents) > 0 {
-			return 0, types.StateAtEvent{}, nil, "", fmt.Errorf("expected room %q to exist", event.RoomID())
-		}
 		// Create an updater - NB: on sqlite this WILL create a txn as we are directly calling the shared DB form of
 		// GetLatestEventsForUpdate - not via the SQLiteDatabase form which has `nil` txns. This
 		// function only does SELECTs though so the created txn (at this point) is just a read txn like
 		// any other so this is fine. If we ever update GetLatestEventsForUpdate or NewLatestEventsUpdater
 		// to do writes however then this will need to go inside `Writer.Do`.
-		updater, err = d.GetLatestEventsForUpdate(ctx, *roomInfo)
-		if err != nil {
-			return 0, types.StateAtEvent{}, nil, "", fmt.Errorf("NewLatestEventsUpdater: %w", err)
-		}
-		// Ensure that we atomically store prev events AND commit them. If we don't wrap StorePreviousEvents
-		// and EndTransaction in a writer then it's possible for a new write txn to be made between the two
-		// function calls which will then fail with 'database is locked'. This new write txn would HAVE to be
-		// something like SetRoomAlias/RemoveRoomAlias as normal input events are already done sequentially due to
-		// SupportsConcurrentRoomInputs() == false on sqlite, though this does not apply to setting room aliases
-		// as they don't go via InputRoomEvents
-		err = d.Writer.Do(d.DB, updater.txn, func(txn *sql.Tx) error {
-			if err = updater.StorePreviousEvents(eventNID, prevEvents); err != nil {
-				return fmt.Errorf("updater.StorePreviousEvents: %w", err)
+		succeeded := false
+		if updater == nil {
+			var roomInfo *types.RoomInfo
+			roomInfo, err = d.RoomInfo(ctx, event.RoomID())
+			if err != nil {
+				return 0, 0, types.StateAtEvent{}, nil, "", fmt.Errorf("d.RoomInfo: %w", err)
 			}
-			succeeded := true
-			err = sqlutil.EndTransaction(updater, &succeeded)
-			return err
-		})
-		if err != nil {
-			return 0, types.StateAtEvent{}, nil, "", err
+			if roomInfo == nil && len(prevEvents) > 0 {
+				return 0, 0, types.StateAtEvent{}, nil, "", fmt.Errorf("expected room %q to exist", event.RoomID())
+			}
+			updater, err = d.GetRoomUpdater(ctx, roomInfo)
+			if err != nil {
+				return 0, 0, types.StateAtEvent{}, nil, "", fmt.Errorf("GetRoomUpdater: %w", err)
+			}
+			defer sqlutil.EndTransactionWithCheck(updater, &succeeded, &err)
 		}
+		if err = updater.StorePreviousEvents(eventNID, prevEvents); err != nil {
+			return 0, 0, types.StateAtEvent{}, nil, "", fmt.Errorf("updater.StorePreviousEvents: %w", err)
+		}
+		succeeded = true
 	}
 
-	return roomNID, types.StateAtEvent{
+	return eventNID, roomNID, types.StateAtEvent{
 		BeforeStateSnapshotNID: stateNID,
 		StateEntry: types.StateEntry{
 			StateKeyTuple: types.StateKeyTuple{
@@ -617,70 +669,84 @@ func (d *Database) PublishRoom(ctx context.Context, roomID string, publish bool)
 	})
 }
 
+func (d *Database) GetPublishedRoom(ctx context.Context, roomID string) (bool, error) {
+	return d.PublishedTable.SelectPublishedFromRoomID(ctx, nil, roomID)
+}
+
 func (d *Database) GetPublishedRooms(ctx context.Context) ([]string, error) {
-	return d.PublishedTable.SelectAllPublishedRooms(ctx, true)
+	return d.PublishedTable.SelectAllPublishedRooms(ctx, nil, true)
+}
+
+func (d *Database) MissingAuthPrevEvents(
+	ctx context.Context, e *gomatrixserverlib.Event,
+) (missingAuth, missingPrev []string, err error) {
+	authEventNIDs, err := d.EventNIDs(ctx, e.AuthEventIDs())
+	if err != nil {
+		return nil, nil, fmt.Errorf("d.EventNIDs: %w", err)
+	}
+	for _, authEventID := range e.AuthEventIDs() {
+		if _, ok := authEventNIDs[authEventID]; !ok {
+			missingAuth = append(missingAuth, authEventID)
+		}
+	}
+
+	for _, prevEventID := range e.PrevEventIDs() {
+		state, err := d.StateAtEventIDs(ctx, []string{prevEventID})
+		if err != nil || len(state) == 0 || (!state[0].IsCreate() && state[0].BeforeStateSnapshotNID == 0) {
+			missingPrev = append(missingPrev, prevEventID)
+		}
+	}
+
+	return
 }
 
 func (d *Database) assignRoomNID(
-	ctx context.Context, txn *sql.Tx,
-	roomID string, roomVersion gomatrixserverlib.RoomVersion,
+	ctx context.Context, roomID string, roomVersion gomatrixserverlib.RoomVersion,
 ) (types.RoomNID, error) {
 	if roomInfo, ok := d.Cache.GetRoomInfo(roomID); ok {
 		return roomInfo.RoomNID, nil
 	}
 	// Check if we already have a numeric ID in the database.
-	roomNID, err := d.RoomsTable.SelectRoomNID(ctx, txn, roomID)
+	roomNID, err := d.RoomsTable.SelectRoomNID(ctx, nil, roomID)
 	if err == sql.ErrNoRows {
 		// We don't have a numeric ID so insert one into the database.
-		roomNID, err = d.RoomsTable.InsertRoomNID(ctx, txn, roomID, roomVersion)
+		roomNID, err = d.RoomsTable.InsertRoomNID(ctx, nil, roomID, roomVersion)
 		if err == sql.ErrNoRows {
 			// We raced with another insert so run the select again.
-			roomNID, err = d.RoomsTable.SelectRoomNID(ctx, txn, roomID)
+			roomNID, err = d.RoomsTable.SelectRoomNID(ctx, nil, roomID)
 		}
 	}
 	return roomNID, err
 }
 
 func (d *Database) assignEventTypeNID(
-	ctx context.Context, txn *sql.Tx, eventType string,
+	ctx context.Context, eventType string,
 ) (types.EventTypeNID, error) {
-	if eventTypeNID, ok := d.Cache.GetRoomServerEventTypeNID(eventType); ok {
-		return eventTypeNID, nil
-	}
 	// Check if we already have a numeric ID in the database.
-	eventTypeNID, err := d.EventTypesTable.SelectEventTypeNID(ctx, txn, eventType)
+	eventTypeNID, err := d.EventTypesTable.SelectEventTypeNID(ctx, nil, eventType)
 	if err == sql.ErrNoRows {
 		// We don't have a numeric ID so insert one into the database.
-		eventTypeNID, err = d.EventTypesTable.InsertEventTypeNID(ctx, txn, eventType)
+		eventTypeNID, err = d.EventTypesTable.InsertEventTypeNID(ctx, nil, eventType)
 		if err == sql.ErrNoRows {
 			// We raced with another insert so run the select again.
-			eventTypeNID, err = d.EventTypesTable.SelectEventTypeNID(ctx, txn, eventType)
+			eventTypeNID, err = d.EventTypesTable.SelectEventTypeNID(ctx, nil, eventType)
 		}
-	}
-	if err == nil {
-		d.Cache.StoreRoomServerEventTypeNID(eventType, eventTypeNID)
 	}
 	return eventTypeNID, err
 }
 
 func (d *Database) assignStateKeyNID(
-	ctx context.Context, txn *sql.Tx, eventStateKey string,
+	ctx context.Context, eventStateKey string,
 ) (types.EventStateKeyNID, error) {
-	if eventStateKeyNID, ok := d.Cache.GetRoomServerStateKeyNID(eventStateKey); ok {
-		return eventStateKeyNID, nil
-	}
 	// Check if we already have a numeric ID in the database.
-	eventStateKeyNID, err := d.EventStateKeysTable.SelectEventStateKeyNID(ctx, txn, eventStateKey)
+	eventStateKeyNID, err := d.EventStateKeysTable.SelectEventStateKeyNID(ctx, nil, eventStateKey)
 	if err == sql.ErrNoRows {
 		// We don't have a numeric ID so insert one into the database.
-		eventStateKeyNID, err = d.EventStateKeysTable.InsertEventStateKeyNID(ctx, txn, eventStateKey)
+		eventStateKeyNID, err = d.EventStateKeysTable.InsertEventStateKeyNID(ctx, nil, eventStateKey)
 		if err == sql.ErrNoRows {
 			// We raced with another insert so run the select again.
-			eventStateKeyNID, err = d.EventStateKeysTable.SelectEventStateKeyNID(ctx, txn, eventStateKey)
+			eventStateKeyNID, err = d.EventStateKeysTable.SelectEventStateKeyNID(ctx, nil, eventStateKey)
 		}
-	}
-	if err == nil {
-		d.Cache.StoreRoomServerStateKeyNID(eventStateKey, eventStateKeyNID)
 	}
 	return eventStateKeyNID, err
 }
@@ -857,8 +923,12 @@ func (d *Database) GetStateEvent(ctx context.Context, roomID, evType, stateKey s
 	if err != nil {
 		return nil, err
 	}
-	if roomInfo == nil || roomInfo.IsStub {
+	if roomInfo == nil {
 		return nil, fmt.Errorf("room %s doesn't exist", roomID)
+	}
+	// e.g invited rooms
+	if roomInfo.IsStub {
+		return nil, nil
 	}
 	eventTypeNID, err := d.EventTypesTable.SelectEventTypeNID(ctx, nil, evType)
 	if err == sql.ErrNoRows {
@@ -886,14 +956,14 @@ func (d *Database) GetStateEvent(ctx context.Context, roomID, evType, stateKey s
 			eventNIDs = append(eventNIDs, e.EventNID)
 		}
 	}
-	eventIDs, _ := d.EventsTable.BulkSelectEventID(ctx, eventNIDs)
+	eventIDs, _ := d.EventsTable.BulkSelectEventID(ctx, nil, eventNIDs)
 	if err != nil {
 		eventIDs = map[types.EventNID]string{}
 	}
 	// return the event requested
 	for _, e := range entries {
 		if e.EventTypeNID == eventTypeNID && e.EventStateKeyNID == stateKeyNID {
-			data, err := d.EventJSONTable.BulkSelectEventJSON(ctx, []types.EventNID{e.EventNID})
+			data, err := d.EventJSONTable.BulkSelectEventJSON(ctx, nil, []types.EventNID{e.EventNID})
 			if err != nil {
 				return nil, err
 			}
@@ -909,6 +979,62 @@ func (d *Database) GetStateEvent(ctx context.Context, roomID, evType, stateKey s
 	}
 
 	return nil, nil
+}
+
+// Same as GetStateEvent but returns all matching state events with this event type. Returns no error
+// if there are no events with this event type.
+func (d *Database) GetStateEventsWithEventType(ctx context.Context, roomID, evType string) ([]*gomatrixserverlib.HeaderedEvent, error) {
+	roomInfo, err := d.RoomInfo(ctx, roomID)
+	if err != nil {
+		return nil, err
+	}
+	if roomInfo == nil {
+		return nil, fmt.Errorf("room %s doesn't exist", roomID)
+	}
+	// e.g invited rooms
+	if roomInfo.IsStub {
+		return nil, nil
+	}
+	eventTypeNID, err := d.EventTypesTable.SelectEventTypeNID(ctx, nil, evType)
+	if err == sql.ErrNoRows {
+		// No rooms have an event of this type, otherwise we'd have an event type NID
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	entries, err := d.loadStateAtSnapshot(ctx, roomInfo.StateSnapshotNID)
+	if err != nil {
+		return nil, err
+	}
+	var eventNIDs []types.EventNID
+	for _, e := range entries {
+		if e.EventTypeNID == eventTypeNID {
+			eventNIDs = append(eventNIDs, e.EventNID)
+		}
+	}
+	eventIDs, _ := d.EventsTable.BulkSelectEventID(ctx, nil, eventNIDs)
+	if err != nil {
+		eventIDs = map[types.EventNID]string{}
+	}
+	// return the events requested
+	eventPairs, err := d.EventJSONTable.BulkSelectEventJSON(ctx, nil, eventNIDs)
+	if err != nil {
+		return nil, err
+	}
+	if len(eventPairs) == 0 {
+		return nil, nil
+	}
+	var result []*gomatrixserverlib.HeaderedEvent
+	for _, pair := range eventPairs {
+		ev, err := gomatrixserverlib.NewEventFromTrustedJSONWithEventID(eventIDs[pair.EventNID], pair.EventJSON, false, roomInfo.RoomVersion)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, ev.Headered(roomInfo.RoomVersion))
+	}
+
+	return result, nil
 }
 
 // GetRoomsByMembership returns a list of room IDs matching the provided membership and user ID (as state_key).
@@ -933,11 +1059,11 @@ func (d *Database) GetRoomsByMembership(ctx context.Context, userID, membership 
 		}
 		return nil, fmt.Errorf("GetRoomsByMembership: cannot map user ID to state key NID: %w", err)
 	}
-	roomNIDs, err := d.MembershipTable.SelectRoomsWithMembership(ctx, stateKeyNID, membershipState)
+	roomNIDs, err := d.MembershipTable.SelectRoomsWithMembership(ctx, nil, stateKeyNID, membershipState)
 	if err != nil {
 		return nil, fmt.Errorf("GetRoomsByMembership: failed to SelectRoomsWithMembership: %w", err)
 	}
-	roomIDs, err := d.RoomsTable.BulkSelectRoomIDs(ctx, roomNIDs)
+	roomIDs, err := d.RoomsTable.BulkSelectRoomIDs(ctx, nil, roomNIDs)
 	if err != nil {
 		return nil, fmt.Errorf("GetRoomsByMembership: failed to lookup room nids: %w", err)
 	}
@@ -956,7 +1082,7 @@ func (d *Database) GetBulkStateContent(ctx context.Context, roomIDs []string, tu
 	}
 	// we don't bother failing the request if we get asked for event types we don't know about, as all that would result in is no matches which
 	// isn't a failure.
-	eventTypeNIDMap, err := d.EventTypesTable.BulkSelectEventTypeNID(ctx, eventTypes)
+	eventTypeNIDMap, err := d.EventTypesTable.BulkSelectEventTypeNID(ctx, nil, eventTypes)
 	if err != nil {
 		return nil, fmt.Errorf("GetBulkStateContent: failed to map event type nids: %w", err)
 	}
@@ -976,7 +1102,7 @@ func (d *Database) GetBulkStateContent(ctx context.Context, roomIDs []string, tu
 
 	}
 
-	eventStateKeyNIDMap, err := d.EventStateKeysTable.BulkSelectEventStateKeyNID(ctx, eventStateKeys)
+	eventStateKeyNIDMap, err := d.EventStateKeysTable.BulkSelectEventStateKeyNID(ctx, nil, eventStateKeys)
 	if err != nil {
 		return nil, fmt.Errorf("GetBulkStateContent: failed to map state key nids: %w", err)
 	}
@@ -1010,11 +1136,11 @@ func (d *Database) GetBulkStateContent(ctx context.Context, roomIDs []string, tu
 			}
 		}
 	}
-	eventIDs, _ := d.EventsTable.BulkSelectEventID(ctx, eventNIDs)
+	eventIDs, _ := d.EventsTable.BulkSelectEventID(ctx, nil, eventNIDs)
 	if err != nil {
 		eventIDs = map[types.EventNID]string{}
 	}
-	events, err := d.EventJSONTable.BulkSelectEventJSON(ctx, eventNIDs)
+	events, err := d.EventJSONTable.BulkSelectEventJSON(ctx, nil, eventNIDs)
 	if err != nil {
 		return nil, fmt.Errorf("GetBulkStateContent: failed to load event JSON for event nids: %w", err)
 	}
@@ -1036,13 +1162,23 @@ func (d *Database) GetBulkStateContent(ctx context.Context, roomIDs []string, tu
 	return result, nil
 }
 
-// JoinedUsersSetInRooms returns all joined users in the rooms given, along with the count of how many times they appear.
-func (d *Database) JoinedUsersSetInRooms(ctx context.Context, roomIDs []string) (map[string]int, error) {
-	roomNIDs, err := d.RoomsTable.BulkSelectRoomNIDs(ctx, roomIDs)
+// JoinedUsersSetInRooms returns a map of how many times the given users appear in the specified rooms.
+func (d *Database) JoinedUsersSetInRooms(ctx context.Context, roomIDs, userIDs []string) (map[string]int, error) {
+	roomNIDs, err := d.RoomsTable.BulkSelectRoomNIDs(ctx, nil, roomIDs)
 	if err != nil {
 		return nil, err
 	}
-	userNIDToCount, err := d.MembershipTable.SelectJoinedUsersSetForRooms(ctx, roomNIDs)
+	userNIDsMap, err := d.EventStateKeysTable.BulkSelectEventStateKeyNID(ctx, nil, userIDs)
+	if err != nil {
+		return nil, err
+	}
+	userNIDs := make([]types.EventStateKeyNID, 0, len(userNIDsMap))
+	nidToUserID := make(map[types.EventStateKeyNID]string, len(userNIDsMap))
+	for id, nid := range userNIDsMap {
+		userNIDs = append(userNIDs, nid)
+		nidToUserID[nid] = id
+	}
+	userNIDToCount, err := d.MembershipTable.SelectJoinedUsersSetForRooms(ctx, nil, roomNIDs, userNIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -1051,13 +1187,6 @@ func (d *Database) JoinedUsersSetInRooms(ctx context.Context, roomIDs []string) 
 	for nid := range userNIDToCount {
 		stateKeyNIDs[i] = nid
 		i++
-	}
-	nidToUserID, err := d.EventStateKeysTable.BulkSelectEventStateKey(ctx, stateKeyNIDs)
-	if err != nil {
-		return nil, err
-	}
-	if len(nidToUserID) != len(userNIDToCount) {
-		return nil, fmt.Errorf("found %d users but only have state key nids for %d of them", len(userNIDToCount), len(nidToUserID))
 	}
 	result := make(map[string]int, len(userNIDToCount))
 	for nid, count := range userNIDToCount {
@@ -1068,12 +1197,12 @@ func (d *Database) JoinedUsersSetInRooms(ctx context.Context, roomIDs []string) 
 
 // GetLocalServerInRoom returns true if we think we're in a given room or false otherwise.
 func (d *Database) GetLocalServerInRoom(ctx context.Context, roomNID types.RoomNID) (bool, error) {
-	return d.MembershipTable.SelectLocalServerInRoom(ctx, roomNID)
+	return d.MembershipTable.SelectLocalServerInRoom(ctx, nil, roomNID)
 }
 
 // GetServerInRoom returns true if we think a server is in a given room or false otherwise.
 func (d *Database) GetServerInRoom(ctx context.Context, roomNID types.RoomNID, serverName gomatrixserverlib.ServerName) (bool, error) {
-	return d.MembershipTable.SelectServerInRoom(ctx, roomNID, serverName)
+	return d.MembershipTable.SelectServerInRoom(ctx, nil, roomNID, serverName)
 }
 
 // GetKnownUsers searches all users that userID knows about.
@@ -1082,17 +1211,17 @@ func (d *Database) GetKnownUsers(ctx context.Context, userID, searchString strin
 	if err != nil {
 		return nil, err
 	}
-	return d.MembershipTable.SelectKnownUsers(ctx, stateKeyNID, searchString, limit)
+	return d.MembershipTable.SelectKnownUsers(ctx, nil, stateKeyNID, searchString, limit)
 }
 
 // GetKnownRooms returns a list of all rooms we know about.
 func (d *Database) GetKnownRooms(ctx context.Context) ([]string, error) {
-	return d.RoomsTable.SelectRoomIDs(ctx)
+	return d.RoomsTable.SelectRoomIDs(ctx, nil)
 }
 
 // ForgetRoom sets a users room to forgotten
 func (d *Database) ForgetRoom(ctx context.Context, userID, roomID string, forget bool) error {
-	roomNIDs, err := d.RoomsTable.BulkSelectRoomNIDs(ctx, []string{roomID})
+	roomNIDs, err := d.RoomsTable.BulkSelectRoomNIDs(ctx, nil, []string{roomID})
 	if err != nil {
 		return err
 	}
@@ -1136,7 +1265,7 @@ func (d *Database) loadStateAtSnapshot(
 		if !ok {
 			// This should only get hit if the database is corrupt.
 			// It should be impossible for an event to reference a NID that doesn't exist
-			panic(fmt.Errorf("Corrupt DB: Missing state block numeric ID %d", stateBlockNID))
+			panic(fmt.Errorf("corrupt DB: Missing state block numeric ID %d", stateBlockNID))
 		}
 		fullState = append(fullState, entries...)
 	}

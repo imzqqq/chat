@@ -60,7 +60,7 @@ func CreateSession(
 	}
 
 	// Create a session on the ID server
-	postURL := fmt.Sprintf("https://%s/chat/identity/api/v1/validate/email/requestToken", req.IDServer)
+	postURL := fmt.Sprintf("https://%s/_matrix/identity/api/v1/validate/email/requestToken", req.IDServer)
 
 	data := url.Values{}
 	data.Add("client_secret", req.Secret)
@@ -81,7 +81,7 @@ func CreateSession(
 
 	// Error if the status isn't OK
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("Could not create a session on the server %s", req.IDServer)
+		return "", fmt.Errorf("could not create a session on the server %s", req.IDServer)
 	}
 
 	// Extract the SID from the response and return it
@@ -107,7 +107,7 @@ func CheckAssociation(
 		return false, "", "", err
 	}
 
-	requestURL := fmt.Sprintf("https://%s/chat/identity/api/v1/3pid/getValidated3pid?sid=%s&client_secret=%s", creds.IDServer, creds.SID, creds.Secret)
+	requestURL := fmt.Sprintf("https://%s/_matrix/identity/api/v1/3pid/getValidated3pid?sid=%s&client_secret=%s", creds.IDServer, creds.SID, creds.Secret)
 	req, err := http.NewRequest(http.MethodGet, requestURL, nil)
 	if err != nil {
 		return false, "", "", err
@@ -147,7 +147,7 @@ func PublishAssociation(creds Credentials, userID string, cfg *config.ClientAPI)
 		return err
 	}
 
-	postURL := fmt.Sprintf("https://%s/chat/identity/api/v1/3pid/bind", creds.IDServer)
+	postURL := fmt.Sprintf("https://%s/_matrix/identity/api/v1/3pid/bind", creds.IDServer)
 
 	data := url.Values{}
 	data.Add("sid", creds.SID)
@@ -168,7 +168,7 @@ func PublishAssociation(creds Credentials, userID string, cfg *config.ClientAPI)
 
 	// Error if the status isn't OK
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("Could not publish the association on the server %s", creds.IDServer)
+		return fmt.Errorf("could not publish the association on the server %s", creds.IDServer)
 	}
 
 	return nil

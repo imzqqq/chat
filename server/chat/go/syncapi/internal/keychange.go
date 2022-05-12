@@ -18,9 +18,8 @@ import (
 	"context"
 	"strings"
 
-	"github.com/Shopify/sarama"
-	"github.com/matrix-org/dendrite/keyserver/api"
 	keyapi "github.com/matrix-org/dendrite/keyserver/api"
+	keytypes "github.com/matrix-org/dendrite/keyserver/types"
 	roomserverAPI "github.com/matrix-org/dendrite/roomserver/api"
 	"github.com/matrix-org/dendrite/syncapi/types"
 	"github.com/matrix-org/gomatrixserverlib"
@@ -30,9 +29,9 @@ import (
 const DeviceListLogName = "dl"
 
 // DeviceOTKCounts adds one-time key counts to the /sync response
-func DeviceOTKCounts(ctx context.Context, keyAPI keyapi.KeyInternalAPI, userID, deviceID string, res *types.Response) error {
-	var queryRes api.QueryOneTimeKeysResponse
-	keyAPI.QueryOneTimeKeys(ctx, &api.QueryOneTimeKeysRequest{
+func DeviceOTKCounts(ctx context.Context, keyAPI keyapi.SyncKeyAPI, userID, deviceID string, res *types.Response) error {
+	var queryRes keyapi.QueryOneTimeKeysResponse
+	keyAPI.QueryOneTimeKeys(ctx, &keyapi.QueryOneTimeKeysRequest{
 		UserID:   userID,
 		DeviceID: deviceID,
 	}, &queryRes)
@@ -47,9 +46,9 @@ func DeviceOTKCounts(ctx context.Context, keyAPI keyapi.KeyInternalAPI, userID, 
 // was filled in, else false if there are no new device list changes because there is nothing to catch up on. The response MUST
 // be already filled in with join/leave information.
 func DeviceListCatchup(
-	ctx context.Context, keyAPI keyapi.KeyInternalAPI, rsAPI roomserverAPI.RoomserverInternalAPI,
-	userID string, res *types.Response, from, to types.LogPosition,
-) (newPos types.LogPosition, hasNew bool, err error) {
+	ctx context.Context, keyAPI keyapi.SyncKeyAPI, rsAPI roomserverAPI.SyncRoomserverAPI,
+	userID string, res *types.Response, from, to types.StreamPosition,
+) (newPos types.StreamPosition, hasNew bool, err error) {
 
 	// Track users who we didn't track before but now do by virtue of sharing a room with them, or not.
 	newlyJoinedRooms := joinedRooms(res, userID)
@@ -65,39 +64,39 @@ func DeviceListCatchup(
 	}
 
 	// now also track users who we already share rooms with but who have updated their devices between the two tokens
-
-	var partition int32
-	var offset int64
-	partition = -1
-	offset = sarama.OffsetOldest
-	// Extract partition/offset from sync token
-	// TODO: In a world where keyserver is sharded there will be multiple partitions and hence multiple QueryKeyChanges to make.
-	if !from.IsEmpty() {
-		partition = from.Partition
-		offset = from.Offset
+	offset := keytypes.OffsetOldest
+	toOffset := keytypes.OffsetNewest
+	if to > 0 && to > from {
+		toOffset = int64(to)
 	}
-	var toOffset int64
-	toOffset = sarama.OffsetNewest
-	if toLog := to; toLog.Partition == partition && toLog.Offset > 0 {
-		toOffset = toLog.Offset
+	if from > 0 {
+		offset = int64(from)
 	}
-	var queryRes api.QueryKeyChangesResponse
-	keyAPI.QueryKeyChanges(ctx, &api.QueryKeyChangesRequest{
-		Partition: partition,
-		Offset:    offset,
-		ToOffset:  toOffset,
+	var queryRes keyapi.QueryKeyChangesResponse
+	keyAPI.QueryKeyChanges(ctx, &keyapi.QueryKeyChangesRequest{
+		Offset:   offset,
+		ToOffset: toOffset,
 	}, &queryRes)
 	if queryRes.Error != nil {
 		// don't fail the catchup because we may have got useful information by tracking membership
 		util.GetLogger(ctx).WithError(queryRes.Error).Error("QueryKeyChanges failed")
 		return to, hasNew, nil
 	}
-	// QueryKeyChanges gets ALL users who have changed keys, we want the ones who share rooms with the user.
+
+	// Work out which user IDs we care about — that includes those in the original request,
+	// the response from QueryKeyChanges (which includes ALL users who have changed keys)
+	// as well as every user who has a join or leave event in the current sync response. We
+	// will request information about which rooms these users are joined to, so that we can
+	// see if we still share any rooms with them.
+	joinUserIDs, leaveUserIDs := membershipEvents(res)
+	queryRes.UserIDs = append(queryRes.UserIDs, joinUserIDs...)
+	queryRes.UserIDs = append(queryRes.UserIDs, leaveUserIDs...)
+	queryRes.UserIDs = util.UniqueStrings(queryRes.UserIDs)
 	var sharedUsersMap map[string]int
 	sharedUsersMap, queryRes.UserIDs = filterSharedUsers(ctx, rsAPI, userID, queryRes.UserIDs)
 	util.GetLogger(ctx).Debugf(
-		"QueryKeyChanges request p=%d,off=%d,to=%d response p=%d off=%d uids=%v",
-		partition, offset, toOffset, queryRes.Partition, queryRes.Offset, queryRes.UserIDs,
+		"QueryKeyChanges request off=%d,to=%d response off=%d uids=%v",
+		offset, toOffset, queryRes.Offset, queryRes.UserIDs,
 	)
 	userSet := make(map[string]bool)
 	for _, userID := range res.DeviceLists.Changed {
@@ -110,9 +109,8 @@ func DeviceListCatchup(
 			userSet[userID] = true
 		}
 	}
-	// if the response has any join/leave events, add them now.
+	// Finally, add in users who have joined or left.
 	// TODO: This is sub-optimal because we will add users to `changed` even if we already shared a room with them.
-	joinUserIDs, leaveUserIDs := membershipEvents(res)
 	for _, userID := range joinUserIDs {
 		if !userSet[userID] {
 			res.DeviceLists.Changed = append(res.DeviceLists.Changed, userID)
@@ -126,18 +124,13 @@ func DeviceListCatchup(
 			res.DeviceLists.Left = append(res.DeviceLists.Left, userID)
 		}
 	}
-	// set the new token
-	to = types.LogPosition{
-		Partition: queryRes.Partition,
-		Offset:    queryRes.Offset,
-	}
 
-	return to, hasNew, nil
+	return types.StreamPosition(queryRes.Offset), hasNew, nil
 }
 
 // TrackChangedUsers calculates the values of device_lists.changed|left in the /sync response.
 func TrackChangedUsers(
-	ctx context.Context, rsAPI roomserverAPI.RoomserverInternalAPI, userID string, newlyJoinedRooms, newlyLeftRooms []string,
+	ctx context.Context, rsAPI roomserverAPI.SyncRoomserverAPI, userID string, newlyJoinedRooms, newlyLeftRooms []string,
 ) (changed, left []string, err error) {
 	// process leaves first, then joins afterwards so if we join/leave/join/leave we err on the side of including users.
 
@@ -223,12 +216,13 @@ func TrackChangedUsers(
 }
 
 func filterSharedUsers(
-	ctx context.Context, rsAPI roomserverAPI.RoomserverInternalAPI, userID string, usersWithChangedKeys []string,
+	ctx context.Context, rsAPI roomserverAPI.SyncRoomserverAPI, userID string, usersWithChangedKeys []string,
 ) (map[string]int, []string) {
 	var result []string
 	var sharedUsersRes roomserverAPI.QuerySharedUsersResponse
 	err := rsAPI.QuerySharedUsers(ctx, &roomserverAPI.QuerySharedUsersRequest{
-		UserID: userID,
+		UserID:       userID,
+		OtherUserIDs: usersWithChangedKeys,
 	}, &sharedUsersRes)
 	if err != nil {
 		// default to all users so we do needless queries rather than miss some important device update
@@ -296,6 +290,8 @@ func membershipEvents(res *types.Response) (joinUserIDs, leaveUserIDs []string) 
 		for _, ev := range room.Timeline.Events {
 			if ev.Type == gomatrixserverlib.MRoomMember && ev.StateKey != nil {
 				if strings.Contains(string(ev.Content), `"join"`) {
+					joinUserIDs = append(joinUserIDs, *ev.StateKey)
+				} else if strings.Contains(string(ev.Content), `"invite"`) {
 					joinUserIDs = append(joinUserIDs, *ev.StateKey)
 				} else if strings.Contains(string(ev.Content), `"leave"`) {
 					leaveUserIDs = append(leaveUserIDs, *ev.StateKey)

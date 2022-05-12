@@ -20,6 +20,7 @@ import (
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/pem"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"math/big"
@@ -50,7 +51,7 @@ const (
 // Generates new matrix and TLS keys for the server.
 func MakeConfig(configDir, kafkaURI, database, host string, startPort int) (*config.Dendrite, int, error) {
 	var cfg config.Dendrite
-	cfg.Defaults()
+	cfg.Defaults(true)
 
 	port := startPort
 	assignAddress := func() config.HTTPAddress {
@@ -77,45 +78,35 @@ func MakeConfig(configDir, kafkaURI, database, host string, startPort int) (*con
 	cfg.Global.ServerName = gomatrixserverlib.ServerName(assignAddress())
 	cfg.Global.PrivateKeyPath = config.Path(serverKeyPath)
 
-	cfg.FederationAPI.FederationCertificatePaths = []config.Path{config.Path(tlsCertPath)}
-
 	cfg.MediaAPI.BasePath = config.Path(mediaBasePath)
 
-	cfg.Global.Kafka.Addresses = []string{kafkaURI}
+	cfg.Global.JetStream.Addresses = []string{kafkaURI}
 
 	// TODO: Use different databases for the different schemas.
 	// Using the same database for every schema currently works because
 	// the table names are globally unique. But we might not want to
 	// rely on that in the future.
 	cfg.AppServiceAPI.Database.ConnectionString = config.DataSource(database)
-	cfg.FederationSender.Database.ConnectionString = config.DataSource(database)
+	cfg.FederationAPI.Database.ConnectionString = config.DataSource(database)
 	cfg.KeyServer.Database.ConnectionString = config.DataSource(database)
 	cfg.MediaAPI.Database.ConnectionString = config.DataSource(database)
 	cfg.RoomServer.Database.ConnectionString = config.DataSource(database)
-	cfg.SigningKeyServer.Database.ConnectionString = config.DataSource(database)
 	cfg.SyncAPI.Database.ConnectionString = config.DataSource(database)
 	cfg.UserAPI.AccountDatabase.ConnectionString = config.DataSource(database)
-	cfg.UserAPI.DeviceDatabase.ConnectionString = config.DataSource(database)
 
 	cfg.AppServiceAPI.InternalAPI.Listen = assignAddress()
-	cfg.EDUServer.InternalAPI.Listen = assignAddress()
 	cfg.FederationAPI.InternalAPI.Listen = assignAddress()
-	cfg.FederationSender.InternalAPI.Listen = assignAddress()
 	cfg.KeyServer.InternalAPI.Listen = assignAddress()
 	cfg.MediaAPI.InternalAPI.Listen = assignAddress()
 	cfg.RoomServer.InternalAPI.Listen = assignAddress()
-	cfg.SigningKeyServer.InternalAPI.Listen = assignAddress()
 	cfg.SyncAPI.InternalAPI.Listen = assignAddress()
 	cfg.UserAPI.InternalAPI.Listen = assignAddress()
 
 	cfg.AppServiceAPI.InternalAPI.Connect = cfg.AppServiceAPI.InternalAPI.Listen
-	cfg.EDUServer.InternalAPI.Connect = cfg.EDUServer.InternalAPI.Listen
 	cfg.FederationAPI.InternalAPI.Connect = cfg.FederationAPI.InternalAPI.Listen
-	cfg.FederationSender.InternalAPI.Connect = cfg.FederationSender.InternalAPI.Listen
 	cfg.KeyServer.InternalAPI.Connect = cfg.KeyServer.InternalAPI.Listen
 	cfg.MediaAPI.InternalAPI.Connect = cfg.MediaAPI.InternalAPI.Listen
 	cfg.RoomServer.InternalAPI.Connect = cfg.RoomServer.InternalAPI.Listen
-	cfg.SigningKeyServer.InternalAPI.Connect = cfg.SigningKeyServer.InternalAPI.Listen
 	cfg.SyncAPI.InternalAPI.Connect = cfg.SyncAPI.InternalAPI.Listen
 	cfg.UserAPI.InternalAPI.Connect = cfg.UserAPI.InternalAPI.Listen
 
@@ -163,11 +154,10 @@ func NewMatrixKey(matrixKeyPath string) (err error) {
 
 const certificateDuration = time.Hour * 24 * 365 * 10
 
-// NewTLSKey generates a new RSA TLS key and certificate and writes it to a file.
-func NewTLSKey(tlsKeyPath, tlsCertPath string) error {
+func generateTLSTemplate(dnsNames []string) (*rsa.PrivateKey, *x509.Certificate, error) {
 	priv, err := rsa.GenerateKey(rand.Reader, 4096)
 	if err != nil {
-		return err
+		return nil, nil, err
 	}
 
 	notBefore := time.Now()
@@ -175,7 +165,7 @@ func NewTLSKey(tlsKeyPath, tlsCertPath string) error {
 	serialNumberLimit := new(big.Int).Lsh(big.NewInt(1), 128)
 	serialNumber, err := rand.Int(rand.Reader, serialNumberLimit)
 	if err != nil {
-		return err
+		return nil, nil, err
 	}
 
 	template := x509.Certificate{
@@ -185,20 +175,21 @@ func NewTLSKey(tlsKeyPath, tlsCertPath string) error {
 		KeyUsage:              x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature,
 		ExtKeyUsage:           []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth},
 		BasicConstraintsValid: true,
+		DNSNames:              dnsNames,
 	}
-	derBytes, err := x509.CreateCertificate(rand.Reader, &template, &template, &priv.PublicKey, priv)
-	if err != nil {
-		return err
-	}
+	return priv, &template, nil
+}
+
+func writeCertificate(tlsCertPath string, derBytes []byte) error {
 	certOut, err := os.Create(tlsCertPath)
 	if err != nil {
 		return err
 	}
 	defer certOut.Close() // nolint: errcheck
-	if err = pem.Encode(certOut, &pem.Block{Type: "CERTIFICATE", Bytes: derBytes}); err != nil {
-		return err
-	}
+	return pem.Encode(certOut, &pem.Block{Type: "CERTIFICATE", Bytes: derBytes})
+}
 
+func writePrivateKey(tlsKeyPath string, priv *rsa.PrivateKey) error {
 	keyOut, err := os.OpenFile(tlsKeyPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 	if err != nil {
 		return err
@@ -209,4 +200,74 @@ func NewTLSKey(tlsKeyPath, tlsCertPath string) error {
 		Bytes: x509.MarshalPKCS1PrivateKey(priv),
 	})
 	return err
+}
+
+// NewTLSKey generates a new RSA TLS key and certificate and writes it to a file.
+func NewTLSKey(tlsKeyPath, tlsCertPath string) error {
+	priv, template, err := generateTLSTemplate(nil)
+	if err != nil {
+		return err
+	}
+
+	// Self-signed certificate: template == parent
+	derBytes, err := x509.CreateCertificate(rand.Reader, template, template, &priv.PublicKey, priv)
+	if err != nil {
+		return err
+	}
+
+	if err = writeCertificate(tlsCertPath, derBytes); err != nil {
+		return err
+	}
+	return writePrivateKey(tlsKeyPath, priv)
+}
+
+func NewTLSKeyWithAuthority(serverName, tlsKeyPath, tlsCertPath, authorityKeyPath, authorityCertPath string) error {
+	priv, template, err := generateTLSTemplate([]string{serverName})
+	if err != nil {
+		return err
+	}
+
+	// load the authority key
+	dat, err := ioutil.ReadFile(authorityKeyPath)
+	if err != nil {
+		return err
+	}
+	block, _ := pem.Decode([]byte(dat))
+	if block == nil || block.Type != "RSA PRIVATE KEY" {
+		return errors.New("authority .key is not a valid pem encoded rsa private key")
+	}
+	authorityPriv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	if err != nil {
+		return err
+	}
+
+	// load the authority certificate
+	dat, err = ioutil.ReadFile(authorityCertPath)
+	if err != nil {
+		return err
+	}
+	block, _ = pem.Decode([]byte(dat))
+	if block == nil || block.Type != "CERTIFICATE" {
+		return errors.New("authority .crt is not a valid pem encoded x509 cert")
+	}
+	var caCerts []*x509.Certificate
+	caCerts, err = x509.ParseCertificates(block.Bytes)
+	if err != nil {
+		return err
+	}
+	if len(caCerts) != 1 {
+		return errors.New("authority .crt contains none or more than one cert")
+	}
+	authorityCert := caCerts[0]
+
+	// Sign the new certificate using the authority's key/cert
+	derBytes, err := x509.CreateCertificate(rand.Reader, template, authorityCert, &priv.PublicKey, authorityPriv)
+	if err != nil {
+		return err
+	}
+
+	if err = writeCertificate(tlsCertPath, derBytes); err != nil {
+		return err
+	}
+	return writePrivateKey(tlsKeyPath, priv)
 }

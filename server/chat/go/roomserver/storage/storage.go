@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+//go:build !wasm
 // +build !wasm
 
 package storage
@@ -22,16 +23,17 @@ import (
 	"github.com/matrix-org/dendrite/internal/caching"
 	"github.com/matrix-org/dendrite/roomserver/storage/postgres"
 	"github.com/matrix-org/dendrite/roomserver/storage/sqlite3"
+	"github.com/matrix-org/dendrite/setup/base"
 	"github.com/matrix-org/dendrite/setup/config"
 )
 
 // Open opens a database connection.
-func Open(dbProperties *config.DatabaseOptions, cache caching.RoomServerCaches) (Database, error) {
+func Open(base *base.BaseDendrite, dbProperties *config.DatabaseOptions, cache caching.RoomServerCaches) (Database, error) {
 	switch {
 	case dbProperties.ConnectionString.IsSQLite():
-		return sqlite3.Open(dbProperties, cache)
+		return sqlite3.Open(base, dbProperties, cache)
 	case dbProperties.ConnectionString.IsPostgres():
-		return postgres.Open(dbProperties, cache)
+		return postgres.Open(base, dbProperties, cache)
 	default:
 		return nil, fmt.Errorf("unexpected database type")
 	}

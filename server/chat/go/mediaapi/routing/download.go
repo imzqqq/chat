@@ -157,7 +157,7 @@ func (r *downloadRequest) jsonErrorResponse(w http.ResponseWriter, res util.JSON
 
 	// Set status code and write the body
 	w.WriteHeader(res.Code)
-	r.Logger.WithField("code", res.Code).Infof("Responding (%d bytes)", len(resBytes))
+	r.Logger.WithField("code", res.Code).Tracef("Responding (%d bytes)", len(resBytes))
 
 	// we don't really care that much if we fail to write the error response
 	w.Write(resBytes) // nolint: errcheck
@@ -293,11 +293,11 @@ func (r *downloadRequest) respondFromLocalFile(
 				"Base64Hash":    r.MediaMetadata.Base64Hash,
 				"FileSizeBytes": r.MediaMetadata.FileSizeBytes,
 				"ContentType":   r.MediaMetadata.ContentType,
-			}).Info("No good thumbnail found. Responding with original file.")
+			}).Trace("No good thumbnail found. Responding with original file.")
 			responseFile = file
 			responseMetadata = r.MediaMetadata
 		} else {
-			r.Logger.Info("Responding with thumbnail")
+			r.Logger.Trace("Responding with thumbnail")
 			responseFile = thumbFile
 			responseMetadata = thumbMetadata.MediaMetadata
 		}
@@ -307,7 +307,7 @@ func (r *downloadRequest) respondFromLocalFile(
 			"Base64Hash":    r.MediaMetadata.Base64Hash,
 			"FileSizeBytes": r.MediaMetadata.FileSizeBytes,
 			"ContentType":   r.MediaMetadata.ContentType,
-		}).Info("Responding with file")
+		}).Trace("Responding with file")
 		responseFile = file
 		responseMetadata = r.MediaMetadata
 		if err := r.addDownloadFilenameToHeaders(w, responseMetadata); err != nil {
@@ -436,7 +436,7 @@ func (r *downloadRequest) getThumbnailFile(
 				"Width":        thumbnailSize.Width,
 				"Height":       thumbnailSize.Height,
 				"ResizeMethod": thumbnailSize.ResizeMethod,
-			}).Info("Pre-generating thumbnail for immediate response.")
+			}).Debug("Pre-generating thumbnail for immediate response.")
 			thumbnail, err = r.generateThumbnail(
 				ctx, filePath, *thumbnailSize, activeThumbnailGeneration,
 				maxThumbnailGenerators, db,
@@ -551,12 +551,13 @@ func (r *downloadRequest) getRemoteFile(
 			// If we do not have a record, we need to fetch the remote file first and then respond from the local file
 			err := r.fetchRemoteFileAndStoreMetadata(
 				ctx, client,
-				cfg.AbsBasePath, *cfg.MaxFileSizeBytes, db,
+				cfg.AbsBasePath, cfg.MaxFileSizeBytes, db,
 				cfg.ThumbnailSizes, activeThumbnailGeneration,
 				cfg.MaxThumbnailGenerators,
 			)
 			if err != nil {
-				return fmt.Errorf("r.fetchRemoteFileAndStoreMetadata: %w", err)
+				r.Logger.WithError(err).Errorf("r.fetchRemoteFileAndStoreMetadata: failed to fetch remote file")
+				return err
 			}
 		} else {
 			// If we have a record, we can respond from the local file
@@ -574,7 +575,7 @@ func (r *downloadRequest) getMediaMetadataFromActiveRequest(activeRemoteRequests
 	defer activeRemoteRequests.Unlock()
 
 	if activeRemoteRequestResult, ok := activeRemoteRequests.MXCToResult[mxcURL]; ok {
-		r.Logger.Info("Waiting for another goroutine to fetch the remote file.")
+		r.Logger.Trace("Waiting for another goroutine to fetch the remote file.")
 
 		// NOTE: Wait unlocks and locks again internally. There is still a deferred Unlock() that will unlock this.
 		activeRemoteRequestResult.Cond.Wait()
@@ -604,7 +605,7 @@ func (r *downloadRequest) broadcastMediaMetadata(activeRemoteRequests *types.Act
 	defer activeRemoteRequests.Unlock()
 	mxcURL := "mxc://" + string(r.MediaMetadata.Origin) + "/" + string(r.MediaMetadata.MediaID)
 	if activeRemoteRequestResult, ok := activeRemoteRequests.MXCToResult[mxcURL]; ok {
-		r.Logger.Info("Signalling other goroutines waiting for this goroutine to fetch the file.")
+		r.Logger.Trace("Signalling other goroutines waiting for this goroutine to fetch the file.")
 		activeRemoteRequestResult.MediaMetadata = r.MediaMetadata
 		activeRemoteRequestResult.Error = err
 		activeRemoteRequestResult.Cond.Broadcast()
@@ -635,7 +636,7 @@ func (r *downloadRequest) fetchRemoteFileAndStoreMetadata(
 		"UploadName":    r.MediaMetadata.UploadName,
 		"FileSizeBytes": r.MediaMetadata.FileSizeBytes,
 		"ContentType":   r.MediaMetadata.ContentType,
-	}).Info("Storing file metadata to media repository database")
+	}).Debug("Storing file metadata to media repository database")
 
 	// FIXME: timeout db request
 	if err := db.StoreMediaMetadata(ctx, r.MediaMetadata); err != nil {
@@ -669,7 +670,7 @@ func (r *downloadRequest) fetchRemoteFileAndStoreMetadata(
 		"Base64Hash":    r.MediaMetadata.Base64Hash,
 		"FileSizeBytes": r.MediaMetadata.FileSizeBytes,
 		"ContentType":   r.MediaMetadata.ContentType,
-	}).Infof("Remote file cached")
+	}).Debug("Remote file cached")
 
 	return nil
 }
@@ -717,16 +718,15 @@ func (r *downloadRequest) fetchRemoteFile(
 	absBasePath config.Path,
 	maxFileSizeBytes config.FileSizeBytes,
 ) (types.Path, bool, error) {
-	r.Logger.Info("Fetching remote file")
+	r.Logger.Debug("Fetching remote file")
 
 	// create request for remote file
-	resp, err := r.createRemoteRequest(ctx, client)
-	if err != nil {
-		return "", false, err
-	}
-	if resp == nil {
-		// Remote file not found
-		return "", false, nil
+	resp, err := client.CreateMediaDownloadRequest(ctx, r.MediaMetadata.Origin, string(r.MediaMetadata.MediaID))
+	if err != nil || (resp != nil && resp.StatusCode != http.StatusOK) {
+		if resp != nil && resp.StatusCode == http.StatusNotFound {
+			return "", false, fmt.Errorf("File with media ID %q does not exist on %s", r.MediaMetadata.MediaID, r.MediaMetadata.Origin)
+		}
+		return "", false, fmt.Errorf("file with media ID %q could not be downloaded from %s", r.MediaMetadata.MediaID, r.MediaMetadata.Origin)
 	}
 	defer resp.Body.Close() // nolint: errcheck
 
@@ -737,7 +737,7 @@ func (r *downloadRequest) fetchRemoteFile(
 		return "", false, parseErr
 	}
 
-	if contentLength > int64(maxFileSizeBytes) {
+	if maxFileSizeBytes > 0 && contentLength > int64(maxFileSizeBytes) {
 		// TODO: Bubble up this as a 413
 		return "", false, fmt.Errorf("remote file is too large (%v > %v bytes)", contentLength, maxFileSizeBytes)
 	}
@@ -762,7 +762,7 @@ func (r *downloadRequest) fetchRemoteFile(
 		}
 	}
 
-	r.Logger.Info("Transferring remote file")
+	r.Logger.Trace("Transferring remote file")
 
 	// The file data is hashed but is NOT used as the MediaID, unlike in Upload. The hash is useful as a
 	// method of deduplicating files to save storage, as well as a way to conduct
@@ -776,7 +776,7 @@ func (r *downloadRequest) fetchRemoteFile(
 		return "", false, errors.New("file could not be downloaded from remote server")
 	}
 
-	r.Logger.Info("Remote file transferred")
+	r.Logger.Trace("Remote file transferred")
 
 	// It's possible the bytesWritten to the temporary file is different to the reported Content-Length from the remote
 	// request's response. bytesWritten is therefore used as it is what would be sent to clients when reading from the local
@@ -790,30 +790,9 @@ func (r *downloadRequest) fetchRemoteFile(
 		return "", false, fmt.Errorf("fileutils.MoveFileWithHashCheck: %w", err)
 	}
 	if duplicate {
-		r.Logger.WithField("dst", finalPath).Info("File was stored previously - discarding duplicate")
+		r.Logger.WithField("dst", finalPath).Trace("File was stored previously - discarding duplicate")
 		// Continue on to store the metadata in the database
 	}
 
 	return types.Path(finalPath), duplicate, nil
-}
-
-func (r *downloadRequest) createRemoteRequest(
-	ctx context.Context, matrixClient *gomatrixserverlib.Client,
-) (*http.Response, error) {
-	resp, err := matrixClient.CreateMediaDownloadRequest(ctx, r.MediaMetadata.Origin, string(r.MediaMetadata.MediaID))
-	if err != nil {
-		return nil, fmt.Errorf("file with media ID %q could not be downloaded from %q", r.MediaMetadata.MediaID, r.MediaMetadata.Origin)
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		if resp.StatusCode == http.StatusNotFound {
-			return nil, nil
-		}
-		r.Logger.WithFields(log.Fields{
-			"StatusCode": resp.StatusCode,
-		}).Warn("Received error response")
-		return nil, fmt.Errorf("file with media ID %q could not be downloaded from %q", r.MediaMetadata.MediaID, r.MediaMetadata.Origin)
-	}
-
-	return resp, nil
 }

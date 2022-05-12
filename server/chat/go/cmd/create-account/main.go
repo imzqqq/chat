@@ -21,14 +21,13 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"regexp"
 	"strings"
-	"syscall"
 
 	"github.com/matrix-org/dendrite/setup"
-	"github.com/matrix-org/dendrite/setup/config"
-	"github.com/matrix-org/dendrite/userapi/storage/accounts"
+	"github.com/matrix-org/dendrite/userapi/api"
+	"github.com/matrix-org/dendrite/userapi/storage"
 	"github.com/sirupsen/logrus"
-	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/term"
 )
 
@@ -43,27 +42,32 @@ Example:
 	# use password from file
   	%s --config dendrite.yaml -username alice -passwordfile my.pass
 	# ask user to provide password
-	%s --config dendrite.yaml -username alice -ask-pass
+	%s --config dendrite.yaml -username alice
 	# read password from stdin
 	%s --config dendrite.yaml -username alice -passwordstdin < my.pass
 	cat my.pass | %s --config dendrite.yaml -username alice -passwordstdin
+	# reset password for a user, can be used with a combination above to read the password
+	%s --config dendrite.yaml -reset-password -username alice -password foobarbaz
 
 Arguments:
 
 `
 
 var (
-	username = flag.String("username", "", "The username of the account to register (specify the localpart only, e.g. 'alice' for '@alice:domain.com')")
-	password = flag.String("password", "", "The password to associate with the account (optional, account will be password-less if not specified)")
-	pwdFile  = flag.String("passwordfile", "", "The file to use for the password (e.g. for automated account creation)")
-	pwdStdin = flag.Bool("passwordstdin", false, "Reads the password from stdin")
-	askPass  = flag.Bool("ask-pass", false, "Ask for the password to use")
+	username           = flag.String("username", "", "The username of the account to register (specify the localpart only, e.g. 'alice' for '@alice:domain.com')")
+	password           = flag.String("password", "", "The password to associate with the account")
+	pwdFile            = flag.String("passwordfile", "", "The file to use for the password (e.g. for automated account creation)")
+	pwdStdin           = flag.Bool("passwordstdin", false, "Reads the password from stdin")
+	pwdLess            = flag.Bool("passwordless", false, "Create a passwordless account, e.g. if only an accesstoken is required")
+	isAdmin            = flag.Bool("admin", false, "Create an admin account")
+	resetPassword      = flag.Bool("reset-password", false, "Resets the password for the given username")
+	validUsernameRegex = regexp.MustCompile(`^[0-9a-z_\-=./]+$`)
 )
 
 func main() {
 	name := os.Args[0]
 	flag.Usage = func() {
-		_, _ = fmt.Fprintf(os.Stderr, usage, name, name, name, name, name, name)
+		_, _ = fmt.Fprintf(os.Stderr, usage, name, name, name, name, name, name, name)
 		flag.PrintDefaults()
 	}
 	cfg := setup.ParseFlags(true)
@@ -73,16 +77,69 @@ func main() {
 		os.Exit(1)
 	}
 
-	pass := getPassword(password, pwdFile, pwdStdin, askPass, os.Stdin)
-
-	accountDB, err := accounts.NewDatabase(&config.DatabaseOptions{
-		ConnectionString: cfg.UserAPI.AccountDatabase.ConnectionString,
-	}, cfg.Global.ServerName, bcrypt.DefaultCost, cfg.UserAPI.OpenIDTokenLifetimeMS)
-	if err != nil {
-		logrus.Fatalln("Failed to connect to the database:", err.Error())
+	if *pwdLess && *resetPassword {
+		logrus.Fatalf("Can not reset to an empty password, unable to login afterwards.")
 	}
 
-	_, err = accountDB.CreateAccount(context.Background(), *username, pass, "")
+	if !validUsernameRegex.MatchString(*username) {
+		logrus.Warn("Username can only contain characters a-z, 0-9, or '_-./='")
+		os.Exit(1)
+	}
+
+	if len(fmt.Sprintf("@%s:%s", *username, cfg.Global.ServerName)) > 255 {
+		logrus.Fatalf("Username can not be longer than 255 characters: %s", fmt.Sprintf("@%s:%s", *username, cfg.Global.ServerName))
+	}
+
+	var pass string
+	var err error
+	if !*pwdLess {
+		pass, err = getPassword(*password, *pwdFile, *pwdStdin, os.Stdin)
+		if err != nil {
+			logrus.Fatalln(err)
+		}
+	}
+
+	accountDB, err := storage.NewUserAPIDatabase(
+		nil,
+		&cfg.UserAPI.AccountDatabase,
+		cfg.Global.ServerName,
+		cfg.UserAPI.BCryptCost,
+		cfg.UserAPI.OpenIDTokenLifetimeMS,
+		0, // TODO
+		cfg.Global.ServerNotices.LocalPart,
+	)
+	if err != nil {
+		logrus.WithError(err).Fatalln("Failed to connect to the database")
+	}
+
+	accType := api.AccountTypeUser
+	if *isAdmin {
+		accType = api.AccountTypeAdmin
+	}
+
+	available, err := accountDB.CheckAccountAvailability(context.Background(), *username)
+	if err != nil {
+		logrus.Fatalln("Unable check username existence.")
+	}
+	if *resetPassword {
+		if available {
+			logrus.Fatalln("Username could not be found.")
+		}
+		err = accountDB.SetPassword(context.Background(), *username, pass)
+		if err != nil {
+			logrus.Fatalf("Failed to update password for user %s: %s", *username, err.Error())
+		}
+		if _, err = accountDB.RemoveAllDevices(context.Background(), *username, ""); err != nil {
+			logrus.Fatalf("Failed to remove all devices: %s", err.Error())
+		}
+		logrus.Infof("Updated password for user %s and invalidated all logins\n", *username)
+		return
+	}
+	if !available {
+		logrus.Fatalln("Username is already in use.")
+	}
+
+	_, err = accountDB.CreateAccount(context.Background(), *username, pass, "", accType)
 	if err != nil {
 		logrus.Fatalln("Failed to create the account:", err.Error())
 	}
@@ -90,53 +147,44 @@ func main() {
 	logrus.Infoln("Created account", *username)
 }
 
-func getPassword(password, pwdFile *string, pwdStdin, askPass *bool, r io.Reader) string {
-	// no password option set, use empty password
-	if password == nil && pwdFile == nil && pwdStdin == nil && askPass == nil {
-		return ""
-	}
-	// password defined as parameter
-	if password != nil && *password != "" {
-		return *password
-	}
-
+func getPassword(password, pwdFile string, pwdStdin bool, r io.Reader) (string, error) {
 	// read password from file
-	if pwdFile != nil && *pwdFile != "" {
-		pw, err := ioutil.ReadFile(*pwdFile)
+	if pwdFile != "" {
+		pw, err := ioutil.ReadFile(pwdFile)
 		if err != nil {
-			logrus.Fatalln("Unable to read password from file:", err)
+			return "", fmt.Errorf("Unable to read password from file: %v", err)
 		}
-		return strings.TrimSpace(string(pw))
+		return strings.TrimSpace(string(pw)), nil
 	}
 
 	// read password from stdin
-	if pwdStdin != nil && *pwdStdin {
+	if pwdStdin {
 		data, err := ioutil.ReadAll(r)
 		if err != nil {
-			logrus.Fatalln("Unable to read password from stdin:", err)
+			return "", fmt.Errorf("Unable to read password from stdin: %v", err)
 		}
-		return strings.TrimSpace(string(data))
+		return strings.TrimSpace(string(data)), nil
 	}
 
-	// ask the user to provide the password
-	if *askPass {
+	// If no parameter was set, ask the user to provide the password
+	if password == "" {
 		fmt.Print("Enter Password: ")
-		bytePassword, err := term.ReadPassword(syscall.Stdin)
+		bytePassword, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
-			logrus.Fatalln("Unable to read password:", err)
+			return "", fmt.Errorf("Unable to read password: %v", err)
 		}
 		fmt.Println()
 		fmt.Print("Confirm Password: ")
-		bytePassword2, err := term.ReadPassword(syscall.Stdin)
+		bytePassword2, err := term.ReadPassword(int(os.Stdin.Fd()))
 		if err != nil {
-			logrus.Fatalln("Unable to read password:", err)
+			return "", fmt.Errorf("Unable to read password: %v", err)
 		}
 		fmt.Println()
 		if strings.TrimSpace(string(bytePassword)) != strings.TrimSpace(string(bytePassword2)) {
-			logrus.Fatalln("Entered passwords don't match")
+			return "", fmt.Errorf("Entered passwords don't match")
 		}
-		return strings.TrimSpace(string(bytePassword))
+		return strings.TrimSpace(string(bytePassword)), nil
 	}
 
-	return ""
+	return password, nil
 }

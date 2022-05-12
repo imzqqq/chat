@@ -23,7 +23,7 @@ type MediaAPI struct {
 	// The maximum file size in bytes that is allowed to be stored on this server.
 	// Note: if max_file_size_bytes is set to 0, the size is unlimited.
 	// Note: if max_file_size_bytes is not set, it will default to 10485760 (10MB)
-	MaxFileSizeBytes *FileSizeBytes `yaml:"max_file_size_bytes,omitempty"`
+	MaxFileSizeBytes FileSizeBytes `yaml:"max_file_size_bytes,omitempty"`
 
 	// Whether to dynamically generate thumbnails on-the-fly if the requested resolution is not already generated
 	DynamicThumbnails bool `yaml:"dynamic_thumbnails"`
@@ -38,16 +38,18 @@ type MediaAPI struct {
 // DefaultMaxFileSizeBytes defines the default file size allowed in transfers
 var DefaultMaxFileSizeBytes = FileSizeBytes(10485760)
 
-func (c *MediaAPI) Defaults() {
+func (c *MediaAPI) Defaults(generate bool) {
 	c.InternalAPI.Listen = "http://localhost:7774"
 	c.InternalAPI.Connect = "http://localhost:7774"
 	c.ExternalAPI.Listen = "http://[::]:8074"
 	c.Database.Defaults(5)
-	c.Database.ConnectionString = "file:mediaapi.db"
+	if generate {
+		c.Database.ConnectionString = "file:mediaapi.db"
+		c.BasePath = "./media_store"
+	}
 
-	c.MaxFileSizeBytes = &DefaultMaxFileSizeBytes
+	c.MaxFileSizeBytes = DefaultMaxFileSizeBytes
 	c.MaxThumbnailGenerators = 10
-	c.BasePath = "./media_store"
 }
 
 func (c *MediaAPI) Verify(configErrs *ConfigErrors, isMonolith bool) {
@@ -56,10 +58,12 @@ func (c *MediaAPI) Verify(configErrs *ConfigErrors, isMonolith bool) {
 	if !isMonolith {
 		checkURL(configErrs, "media_api.external_api.listen", string(c.ExternalAPI.Listen))
 	}
-	checkNotEmpty(configErrs, "media_api.database.connection_string", string(c.Database.ConnectionString))
+	if c.Matrix.DatabaseOptions.ConnectionString == "" {
+		checkNotEmpty(configErrs, "media_api.database.connection_string", string(c.Database.ConnectionString))
+	}
 
 	checkNotEmpty(configErrs, "media_api.base_path", string(c.BasePath))
-	checkPositive(configErrs, "media_api.max_file_size_bytes", int64(*c.MaxFileSizeBytes))
+	checkPositive(configErrs, "media_api.max_file_size_bytes", int64(c.MaxFileSizeBytes))
 	checkPositive(configErrs, "media_api.max_thumbnail_generators", int64(c.MaxThumbnailGenerators))
 
 	for i, size := range c.ThumbnailSizes {

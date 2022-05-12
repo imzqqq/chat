@@ -18,6 +18,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/matrix-org/dendrite/internal/caching"
 	"github.com/matrix-org/dendrite/internal/httputil"
 	"github.com/matrix-org/dendrite/roomserver/api"
 	"github.com/matrix-org/dendrite/setup/config"
@@ -35,26 +36,27 @@ import (
 // nolint: gocyclo
 func Setup(
 	csMux *mux.Router, srp *sync.RequestPool, syncDB storage.Database,
-	userAPI userapi.UserInternalAPI, federation *gomatrixserverlib.FederationClient,
-	rsAPI api.RoomserverInternalAPI,
+	userAPI userapi.SyncUserAPI,
+	rsAPI api.SyncRoomserverAPI,
 	cfg *config.SyncAPI,
+	lazyLoadCache caching.LazyLoadCache,
 ) {
-	r0mux := csMux.PathPrefix("/r0").Subrouter()
+	v3mux := csMux.PathPrefix("/{apiversion:(?:r0|v3)}/").Subrouter()
 
 	// TODO: Add AS support for all handlers below.
-	r0mux.Handle("/sync", httputil.MakeAuthAPI("sync", userAPI, func(req *http.Request, device *userapi.Device) util.JSONResponse {
+	v3mux.Handle("/sync", httputil.MakeAuthAPI("sync", userAPI, func(req *http.Request, device *userapi.Device) util.JSONResponse {
 		return srp.OnIncomingSyncRequest(req, device)
 	})).Methods(http.MethodGet, http.MethodOptions)
 
-	r0mux.Handle("/rooms/{roomID}/messages", httputil.MakeAuthAPI("room_messages", userAPI, func(req *http.Request, device *userapi.Device) util.JSONResponse {
+	v3mux.Handle("/rooms/{roomID}/messages", httputil.MakeAuthAPI("room_messages", userAPI, func(req *http.Request, device *userapi.Device) util.JSONResponse {
 		vars, err := httputil.URLDecodeMapValues(mux.Vars(req))
 		if err != nil {
 			return util.ErrorResponse(err)
 		}
-		return OnIncomingMessagesRequest(req, syncDB, vars["roomID"], device, federation, rsAPI, cfg, srp)
+		return OnIncomingMessagesRequest(req, syncDB, vars["roomID"], device, rsAPI, cfg, srp, lazyLoadCache)
 	})).Methods(http.MethodGet, http.MethodOptions)
 
-	r0mux.Handle("/user/{userId}/filter",
+	v3mux.Handle("/user/{userId}/filter",
 		httputil.MakeAuthAPI("put_filter", userAPI, func(req *http.Request, device *userapi.Device) util.JSONResponse {
 			vars, err := httputil.URLDecodeMapValues(mux.Vars(req))
 			if err != nil {
@@ -64,7 +66,7 @@ func Setup(
 		}),
 	).Methods(http.MethodPost, http.MethodOptions)
 
-	r0mux.Handle("/user/{userId}/filter/{filterId}",
+	v3mux.Handle("/user/{userId}/filter/{filterId}",
 		httputil.MakeAuthAPI("get_filter", userAPI, func(req *http.Request, device *userapi.Device) util.JSONResponse {
 			vars, err := httputil.URLDecodeMapValues(mux.Vars(req))
 			if err != nil {
@@ -74,7 +76,23 @@ func Setup(
 		}),
 	).Methods(http.MethodGet, http.MethodOptions)
 
-	r0mux.Handle("/keys/changes", httputil.MakeAuthAPI("keys_changes", userAPI, func(req *http.Request, device *userapi.Device) util.JSONResponse {
+	v3mux.Handle("/keys/changes", httputil.MakeAuthAPI("keys_changes", userAPI, func(req *http.Request, device *userapi.Device) util.JSONResponse {
 		return srp.OnIncomingKeyChangeRequest(req, device)
 	})).Methods(http.MethodGet, http.MethodOptions)
+
+	v3mux.Handle("/rooms/{roomId}/context/{eventId}",
+		httputil.MakeAuthAPI(gomatrixserverlib.Join, userAPI, func(req *http.Request, device *userapi.Device) util.JSONResponse {
+			vars, err := httputil.URLDecodeMapValues(mux.Vars(req))
+			if err != nil {
+				return util.ErrorResponse(err)
+			}
+
+			return Context(
+				req, device,
+				rsAPI, syncDB,
+				vars["roomId"], vars["eventId"],
+				lazyLoadCache,
+			)
+		}),
+	).Methods(http.MethodGet, http.MethodOptions)
 }

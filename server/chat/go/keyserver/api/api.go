@@ -15,33 +15,57 @@
 package api
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"strings"
 	"time"
 
-	eduapi "github.com/matrix-org/dendrite/eduserver/api"
 	"github.com/matrix-org/dendrite/keyserver/types"
 	userapi "github.com/matrix-org/dendrite/userapi/api"
 	"github.com/matrix-org/gomatrixserverlib"
 )
 
 type KeyInternalAPI interface {
+	SyncKeyAPI
+	ClientKeyAPI
+	FederationKeyAPI
+	UserKeyAPI
+
 	// SetUserAPI assigns a user API to query when extracting device names.
-	SetUserAPI(i userapi.UserInternalAPI)
-	// InputDeviceListUpdate from a federated server EDU
-	InputDeviceListUpdate(ctx context.Context, req *InputDeviceListUpdateRequest, res *InputDeviceListUpdateResponse)
+	SetUserAPI(i userapi.KeyserverUserAPI)
+}
+
+// API functions required by the clientapi
+type ClientKeyAPI interface {
+	QueryKeys(ctx context.Context, req *QueryKeysRequest, res *QueryKeysResponse)
 	PerformUploadKeys(ctx context.Context, req *PerformUploadKeysRequest, res *PerformUploadKeysResponse)
-	// PerformClaimKeys claims one-time keys for use in pre-key messages
-	PerformClaimKeys(ctx context.Context, req *PerformClaimKeysRequest, res *PerformClaimKeysResponse)
-	PerformDeleteKeys(ctx context.Context, req *PerformDeleteKeysRequest, res *PerformDeleteKeysResponse)
 	PerformUploadDeviceKeys(ctx context.Context, req *PerformUploadDeviceKeysRequest, res *PerformUploadDeviceKeysResponse)
 	PerformUploadDeviceSignatures(ctx context.Context, req *PerformUploadDeviceSignaturesRequest, res *PerformUploadDeviceSignaturesResponse)
-	QueryKeys(ctx context.Context, req *QueryKeysRequest, res *QueryKeysResponse)
+	// PerformClaimKeys claims one-time keys for use in pre-key messages
+	PerformClaimKeys(ctx context.Context, req *PerformClaimKeysRequest, res *PerformClaimKeysResponse)
+}
+
+// API functions required by the userapi
+type UserKeyAPI interface {
+	PerformUploadKeys(ctx context.Context, req *PerformUploadKeysRequest, res *PerformUploadKeysResponse)
+	PerformDeleteKeys(ctx context.Context, req *PerformDeleteKeysRequest, res *PerformDeleteKeysResponse)
+}
+
+// API functions required by the syncapi
+type SyncKeyAPI interface {
 	QueryKeyChanges(ctx context.Context, req *QueryKeyChangesRequest, res *QueryKeyChangesResponse)
 	QueryOneTimeKeys(ctx context.Context, req *QueryOneTimeKeysRequest, res *QueryOneTimeKeysResponse)
-	QueryDeviceMessages(ctx context.Context, req *QueryDeviceMessagesRequest, res *QueryDeviceMessagesResponse)
+}
+
+type FederationKeyAPI interface {
+	QueryKeys(ctx context.Context, req *QueryKeysRequest, res *QueryKeysResponse)
 	QuerySignatures(ctx context.Context, req *QuerySignaturesRequest, res *QuerySignaturesResponse)
+	QueryDeviceMessages(ctx context.Context, req *QueryDeviceMessagesRequest, res *QueryDeviceMessagesResponse)
+	// InputDeviceListUpdate from a federated server EDU
+	InputDeviceListUpdate(ctx context.Context, req *InputDeviceListUpdateRequest, res *InputDeviceListUpdateResponse)
+	PerformUploadDeviceKeys(ctx context.Context, req *PerformUploadDeviceKeysRequest, res *PerformUploadDeviceKeysResponse)
+	PerformClaimKeys(ctx context.Context, req *PerformClaimKeysRequest, res *PerformClaimKeysResponse)
 }
 
 // KeyError is returned if there was a problem performing/querying the server
@@ -65,11 +89,43 @@ const (
 
 // DeviceMessage represents the message produced into Kafka by the key server.
 type DeviceMessage struct {
-	Type                                DeviceMessageType `json:"Type,omitempty"`
-	*DeviceKeys                         `json:"DeviceKeys,omitempty"`
-	*eduapi.OutputCrossSigningKeyUpdate `json:"CrossSigningKeyUpdate,omitempty"`
+	Type                         DeviceMessageType `json:"Type,omitempty"`
+	*DeviceKeys                  `json:"DeviceKeys,omitempty"`
+	*OutputCrossSigningKeyUpdate `json:"CrossSigningKeyUpdate,omitempty"`
 	// A monotonically increasing number which represents device changes for this user.
-	StreamID int
+	StreamID       int64
+	DeviceChangeID int64
+}
+
+// OutputCrossSigningKeyUpdate is an entry in the signing key update output kafka log
+type OutputCrossSigningKeyUpdate struct {
+	CrossSigningKeyUpdate `json:"signing_keys"`
+}
+
+type CrossSigningKeyUpdate struct {
+	MasterKey      *gomatrixserverlib.CrossSigningKey `json:"master_key,omitempty"`
+	SelfSigningKey *gomatrixserverlib.CrossSigningKey `json:"self_signing_key,omitempty"`
+	UserID         string                             `json:"user_id"`
+}
+
+// DeviceKeysEqual returns true if the device keys updates contain the
+// same display name and key JSON. This will return false if either of
+// the updates is not a device keys update, or if the user ID/device ID
+// differ between the two.
+func (m1 *DeviceMessage) DeviceKeysEqual(m2 *DeviceMessage) bool {
+	if m1.DeviceKeys == nil || m2.DeviceKeys == nil {
+		return false
+	}
+	if m1.UserID != m2.UserID || m1.DeviceID != m2.DeviceID {
+		return false
+	}
+	if m1.DisplayName != m2.DisplayName {
+		return false // different display names
+	}
+	if len(m1.KeyJSON) == 0 || len(m2.KeyJSON) == 0 {
+		return false // either is empty
+	}
+	return bytes.Equal(m1.KeyJSON, m2.KeyJSON)
 }
 
 // DeviceKeys represents a set of device keys for a single device
@@ -86,7 +142,7 @@ type DeviceKeys struct {
 }
 
 // WithStreamID returns a copy of this device message with the given stream ID
-func (k *DeviceKeys) WithStreamID(streamID int) DeviceMessage {
+func (k *DeviceKeys) WithStreamID(streamID int64) DeviceMessage {
 	return DeviceMessage{
 		DeviceKeys: k,
 		StreamID:   streamID,
@@ -224,20 +280,16 @@ type QueryKeysResponse struct {
 }
 
 type QueryKeyChangesRequest struct {
-	// The partition which had key events sent to
-	Partition int32
 	// The offset of the last received key event, or sarama.OffsetOldest if this is from the beginning
 	Offset int64
 	// The inclusive offset where to track key changes up to. Messages with this offset are included in the response.
-	// Use sarama.OffsetNewest if the offset is unknown (then check the response Offset to avoid racing).
+	// Use types.OffsetNewest if the offset is unknown (then check the response Offset to avoid racing).
 	ToOffset int64
 }
 
 type QueryKeyChangesResponse struct {
 	// The set of users who have had their keys change.
 	UserIDs []string
-	// The partition being served - useful if the partition is unknown at request time
-	Partition int32
 	// The latest offset represented in this response.
 	Offset int64
 	// Set if there was a problem handling the request.
@@ -263,7 +315,7 @@ type QueryDeviceMessagesRequest struct {
 
 type QueryDeviceMessagesResponse struct {
 	// The latest stream ID
-	StreamID int
+	StreamID int64
 	Devices  []DeviceMessage
 	Error    *KeyError
 }

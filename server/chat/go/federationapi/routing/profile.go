@@ -26,10 +26,10 @@ import (
 	"github.com/matrix-org/util"
 )
 
-// GetProfile implements GET /chat/federation/v1/query/profile
+// GetProfile implements GET /_matrix/federation/v1/query/profile
 func GetProfile(
 	httpReq *http.Request,
-	userAPI userapi.UserInternalAPI,
+	userAPI userapi.FederationUserAPI,
 	cfg *config.FederationAPI,
 ) util.JSONResponse {
 	userID, field := httpReq.FormValue("user_id"), httpReq.FormValue("field")

@@ -23,9 +23,9 @@ import (
 	"github.com/matrix-org/dendrite/clientapi/httputil"
 	"github.com/matrix-org/dendrite/clientapi/jsonerror"
 	"github.com/matrix-org/dendrite/userapi/api"
-	userapi "github.com/matrix-org/dendrite/userapi/api"
 	"github.com/matrix-org/gomatrixserverlib"
 	"github.com/matrix-org/util"
+	"github.com/tidwall/gjson"
 )
 
 // https://matrix.org/docs/spec/client_server/r0.6.1#get-matrix-client-r0-devices
@@ -50,18 +50,18 @@ type devicesDeleteJSON struct {
 
 // GetDeviceByID handles /devices/{deviceID}
 func GetDeviceByID(
-	req *http.Request, userAPI userapi.UserInternalAPI, device *api.Device,
+	req *http.Request, userAPI api.ClientUserAPI, device *api.Device,
 	deviceID string,
 ) util.JSONResponse {
-	var queryRes userapi.QueryDevicesResponse
-	err := userAPI.QueryDevices(req.Context(), &userapi.QueryDevicesRequest{
+	var queryRes api.QueryDevicesResponse
+	err := userAPI.QueryDevices(req.Context(), &api.QueryDevicesRequest{
 		UserID: device.UserID,
 	}, &queryRes)
 	if err != nil {
 		util.GetLogger(req.Context()).WithError(err).Error("QueryDevices failed")
 		return jsonerror.InternalServerError()
 	}
-	var targetDevice *userapi.Device
+	var targetDevice *api.Device
 	for _, device := range queryRes.Devices {
 		if device.ID == deviceID {
 			targetDevice = &device
@@ -88,10 +88,10 @@ func GetDeviceByID(
 
 // GetDevicesByLocalpart handles /devices
 func GetDevicesByLocalpart(
-	req *http.Request, userAPI userapi.UserInternalAPI, device *api.Device,
+	req *http.Request, userAPI api.ClientUserAPI, device *api.Device,
 ) util.JSONResponse {
-	var queryRes userapi.QueryDevicesResponse
-	err := userAPI.QueryDevices(req.Context(), &userapi.QueryDevicesRequest{
+	var queryRes api.QueryDevicesResponse
+	err := userAPI.QueryDevices(req.Context(), &api.QueryDevicesRequest{
 		UserID: device.UserID,
 	}, &queryRes)
 	if err != nil {
@@ -118,7 +118,7 @@ func GetDevicesByLocalpart(
 
 // UpdateDeviceByID handles PUT on /devices/{deviceID}
 func UpdateDeviceByID(
-	req *http.Request, userAPI api.UserInternalAPI, device *api.Device,
+	req *http.Request, userAPI api.ClientUserAPI, device *api.Device,
 	deviceID string,
 ) util.JSONResponse {
 
@@ -161,9 +161,18 @@ func UpdateDeviceByID(
 
 // DeleteDeviceById handles DELETE requests to /devices/{deviceId}
 func DeleteDeviceById(
-	req *http.Request, userInteractiveAuth *auth.UserInteractive, userAPI api.UserInternalAPI, device *api.Device,
+	req *http.Request, userInteractiveAuth *auth.UserInteractive, userAPI api.ClientUserAPI, device *api.Device,
 	deviceID string,
 ) util.JSONResponse {
+	var (
+		deleteOK  bool
+		sessionID string
+	)
+	defer func() {
+		if deleteOK {
+			sessions.deleteSession(sessionID)
+		}
+	}()
 	ctx := req.Context()
 	defer req.Body.Close() // nolint:errcheck
 	bodyBytes, err := ioutil.ReadAll(req.Body)
@@ -173,8 +182,29 @@ func DeleteDeviceById(
 			JSON: jsonerror.BadJSON("The request body could not be read: " + err.Error()),
 		}
 	}
+
+	// check that we know this session, and it matches with the device to delete
+	s := gjson.GetBytes(bodyBytes, "auth.session").Str
+	if dev, ok := sessions.getDeviceToDelete(s); ok {
+		if dev != deviceID {
+			return util.JSONResponse{
+				Code: http.StatusForbidden,
+				JSON: jsonerror.Forbidden("session & device mismatch"),
+			}
+		}
+	}
+
+	if s != "" {
+		sessionID = s
+	}
+
 	login, errRes := userInteractiveAuth.Verify(ctx, bodyBytes, device)
 	if errRes != nil {
+		switch data := errRes.JSON.(type) {
+		case auth.Challenge:
+			sessions.addDeviceToDelete(data.Session, deviceID)
+		default:
+		}
 		return *errRes
 	}
 
@@ -202,6 +232,8 @@ func DeleteDeviceById(
 		return jsonerror.InternalServerError()
 	}
 
+	deleteOK = true
+
 	return util.JSONResponse{
 		Code: http.StatusOK,
 		JSON: struct{}{},
@@ -210,7 +242,7 @@ func DeleteDeviceById(
 
 // DeleteDevices handles POST requests to /delete_devices
 func DeleteDevices(
-	req *http.Request, userAPI api.UserInternalAPI, device *api.Device,
+	req *http.Request, userAPI api.ClientUserAPI, device *api.Device,
 ) util.JSONResponse {
 	ctx := req.Context()
 	payload := devicesDeleteJSON{}

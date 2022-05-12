@@ -28,7 +28,7 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-// GetFilter implements GET /chat/client/r0/user/{userId}/filter/{filterId}
+// GetFilter implements GET /_matrix/client/r0/user/{userId}/filter/{filterId}
 func GetFilter(
 	req *http.Request, device *api.Device, syncDB storage.Database, userID string, filterID string,
 ) util.JSONResponse {
@@ -44,8 +44,8 @@ func GetFilter(
 		return jsonerror.InternalServerError()
 	}
 
-	filter, err := syncDB.GetFilter(req.Context(), localpart, filterID)
-	if err != nil {
+	filter := gomatrixserverlib.DefaultFilter()
+	if err := syncDB.GetFilter(req.Context(), &filter, localpart, filterID); err != nil {
 		//TODO better error handling. This error message is *probably* right,
 		// but if there are obscure db errors, this will also be returned,
 		// even though it is not correct.
@@ -65,7 +65,7 @@ type filterResponse struct {
 	FilterID string `json:"filter_id"`
 }
 
-//PutFilter implements POST /chat/client/r0/user/{userId}/filter
+//PutFilter implements POST /_matrix/client/r0/user/{userId}/filter
 func PutFilter(
 	req *http.Request, device *api.Device, syncDB storage.Database, userID string,
 ) util.JSONResponse {

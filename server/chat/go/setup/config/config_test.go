@@ -33,12 +33,13 @@ func TestLoadConfigRelative(t *testing.T) {
 }
 
 const testConfig = `
-version: 1
+version: 2
 global:
   server_name: localhost
   private_key: matrix_key.pem
   key_id: ed25519:auto
   key_validity_period: 168h0m0s
+  well_known_server_name: "localhost:443"
   trusted_third_party_id_servers:
   - matrix.org
   - vector.im
@@ -57,6 +58,11 @@ global:
     basic_auth:
       username: metrics
       password: metrics
+  server_notices:
+    local_part: "_server"
+    display_name: "Server alerts"
+    avatar: ""
+    room_name: "Server Alerts"	
 app_service_api:
   internal_api:
     listen: http://localhost:7777
@@ -95,33 +101,12 @@ current_state_server:
     max_open_conns: 100
     max_idle_conns: 2
     conn_max_lifetime: -1
-edu_server:
-  internal_api:
-    listen: http://localhost:7778
-    connect: http://localhost:7778
 federation_api:
   internal_api:
     listen: http://localhost:7772
     connect: http://localhost:7772
   external_api:
     listen: http://[::]:8072
-  federation_certificates: []
-federation_sender:
-  internal_api:
-    listen: http://localhost:7775
-    connect: http://localhost:7775
-  database:
-    connection_string: file:federationsender.db
-    max_open_conns: 100
-    max_idle_conns: 2
-    conn_max_lifetime: -1
-  send_max_retries: 16
-  disable_tls_validation: false
-  proxy_outbound:
-    enabled: false
-    protocol: http
-    host: localhost
-    port: 8080
 key_server:
   internal_api:
     listen: http://localhost:7779
@@ -199,8 +184,8 @@ user_api:
     max_open_conns: 100
     max_idle_conns: 2
     conn_max_lifetime: -1
-  device_database:
-    connection_string: file:userapi_devices.db
+  pusher_database:
+    connection_string: file:pushserver.db
     max_open_conns: 100
     max_idle_conns: 2
     conn_max_lifetime: -1

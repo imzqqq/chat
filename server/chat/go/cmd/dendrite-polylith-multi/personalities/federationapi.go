@@ -16,25 +16,25 @@ package personalities
 
 import (
 	"github.com/matrix-org/dendrite/federationapi"
-	"github.com/matrix-org/dendrite/setup"
+	basepkg "github.com/matrix-org/dendrite/setup/base"
 	"github.com/matrix-org/dendrite/setup/config"
 )
 
-func FederationAPI(base *setup.BaseDendrite, cfg *config.Dendrite) {
+func FederationAPI(base *basepkg.BaseDendrite, cfg *config.Dendrite) {
 	userAPI := base.UserAPIClient()
 	federation := base.CreateFederationClient()
-	serverKeyAPI := base.SigningKeyServerHTTPClient()
-	keyRing := serverKeyAPI.KeyRing()
-	fsAPI := base.FederationSenderHTTPClient()
 	rsAPI := base.RoomserverHTTPClient()
 	keyAPI := base.KeyServerHTTPClient()
+	fsAPI := federationapi.NewInternalAPI(base, federation, rsAPI, base.Caches, nil, true)
+	keyRing := fsAPI.KeyRing()
 
 	federationapi.AddPublicRoutes(
-		base.PublicFederationAPIMux, base.PublicKeyAPIMux,
-		&base.Cfg.FederationAPI, userAPI, federation, keyRing,
-		rsAPI, fsAPI, base.EDUServerClient(), keyAPI,
-		&base.Cfg.MSCs, nil,
+		base,
+		userAPI, federation, keyRing,
+		rsAPI, fsAPI, keyAPI, nil,
 	)
+
+	federationapi.AddInternalRoutes(base.InternalAPIMux, fsAPI)
 
 	base.SetupAndServeHTTP(
 		base.Cfg.FederationAPI.InternalAPI.Listen,

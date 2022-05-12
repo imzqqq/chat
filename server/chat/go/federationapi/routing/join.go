@@ -34,7 +34,7 @@ func MakeJoin(
 	httpReq *http.Request,
 	request *gomatrixserverlib.FederationRequest,
 	cfg *config.FederationAPI,
-	rsAPI api.RoomserverInternalAPI,
+	rsAPI api.FederationRoomserverAPI,
 	roomID, userID string,
 	remoteVersions []gomatrixserverlib.RoomVersion,
 ) util.JSONResponse {
@@ -165,7 +165,7 @@ func SendJoin(
 	httpReq *http.Request,
 	request *gomatrixserverlib.FederationRequest,
 	cfg *config.FederationAPI,
-	rsAPI api.RoomserverInternalAPI,
+	rsAPI api.FederationRoomserverAPI,
 	keys gomatrixserverlib.JSONVerifier,
 	roomID, eventID string,
 ) util.JSONResponse {
@@ -192,6 +192,12 @@ func SendJoin(
 		return util.JSONResponse{
 			Code: http.StatusBadRequest,
 			JSON: jsonerror.BadJSON("No state key was provided in the join event."),
+		}
+	}
+	if !event.StateKeyEquals(event.Sender()) {
+		return util.JSONResponse{
+			Code: http.StatusBadRequest,
+			JSON: jsonerror.BadJSON("Event state key must match the event sender."),
 		}
 	}
 
@@ -318,7 +324,6 @@ func SendJoin(
 				{
 					Kind:          api.KindNew,
 					Event:         event.Headered(stateAndAuthChainResponse.RoomVersion),
-					AuthEventIDs:  event.AuthEventIDs(),
 					SendAsServer:  string(cfg.Matrix.ServerName),
 					TransactionID: nil,
 				},
@@ -346,8 +351,8 @@ func SendJoin(
 	return util.JSONResponse{
 		Code: http.StatusOK,
 		JSON: gomatrixserverlib.RespSendJoin{
-			StateEvents: gomatrixserverlib.UnwrapEventHeaders(stateAndAuthChainResponse.StateEvents),
-			AuthEvents:  gomatrixserverlib.UnwrapEventHeaders(stateAndAuthChainResponse.AuthChainEvents),
+			StateEvents: gomatrixserverlib.NewEventJSONsFromHeaderedEvents(stateAndAuthChainResponse.StateEvents),
+			AuthEvents:  gomatrixserverlib.NewEventJSONsFromHeaderedEvents(stateAndAuthChainResponse.AuthChainEvents),
 			Origin:      cfg.Matrix.ServerName,
 		},
 	}

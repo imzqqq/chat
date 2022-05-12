@@ -81,12 +81,12 @@ type inviteStatements struct {
 	updateInviteRetiredStmt             *sql.Stmt
 }
 
-func createInvitesTable(db *sql.DB) error {
+func CreateInvitesTable(db *sql.DB) error {
 	_, err := db.Exec(inviteSchema)
 	return err
 }
 
-func prepareInvitesTable(db *sql.DB) (tables.Invites, error) {
+func PrepareInvitesTable(db *sql.DB) (tables.Invites, error) {
 	s := &inviteStatements{}
 
 	return s, sqlutil.StatementList{
@@ -97,8 +97,8 @@ func prepareInvitesTable(db *sql.DB) (tables.Invites, error) {
 }
 
 func (s *inviteStatements) InsertInviteEvent(
-	ctx context.Context,
-	txn *sql.Tx, inviteEventID string, roomNID types.RoomNID,
+	ctx context.Context, txn *sql.Tx,
+	inviteEventID string, roomNID types.RoomNID,
 	targetUserNID, senderUserNID types.EventStateKeyNID,
 	inviteEventJSON []byte,
 ) (bool, error) {
@@ -116,8 +116,8 @@ func (s *inviteStatements) InsertInviteEvent(
 }
 
 func (s *inviteStatements) UpdateInviteRetired(
-	ctx context.Context,
-	txn *sql.Tx, roomNID types.RoomNID, targetUserNID types.EventStateKeyNID,
+	ctx context.Context, txn *sql.Tx,
+	roomNID types.RoomNID, targetUserNID types.EventStateKeyNID,
 ) ([]string, error) {
 	stmt := sqlutil.TxStmt(txn, s.updateInviteRetiredStmt)
 	rows, err := stmt.QueryContext(ctx, roomNID, targetUserNID)
@@ -127,8 +127,8 @@ func (s *inviteStatements) UpdateInviteRetired(
 	defer internal.CloseAndLogIfError(ctx, rows, "updateInviteRetired: rows.close() failed")
 
 	var eventIDs []string
+	var inviteEventID string
 	for rows.Next() {
-		var inviteEventID string
 		if err = rows.Scan(&inviteEventID); err != nil {
 			return nil, err
 		}
@@ -139,10 +139,11 @@ func (s *inviteStatements) UpdateInviteRetired(
 
 // SelectInviteActiveForUserInRoom returns a list of sender state key NIDs
 func (s *inviteStatements) SelectInviteActiveForUserInRoom(
-	ctx context.Context,
+	ctx context.Context, txn *sql.Tx,
 	targetUserNID types.EventStateKeyNID, roomNID types.RoomNID,
 ) ([]types.EventStateKeyNID, []string, error) {
-	rows, err := s.selectInviteActiveForUserInRoomStmt.QueryContext(
+	stmt := sqlutil.TxStmt(txn, s.selectInviteActiveForUserInRoomStmt)
+	rows, err := stmt.QueryContext(
 		ctx, targetUserNID, roomNID,
 	)
 	if err != nil {
@@ -151,9 +152,9 @@ func (s *inviteStatements) SelectInviteActiveForUserInRoom(
 	defer internal.CloseAndLogIfError(ctx, rows, "selectInviteActiveForUserInRoom: rows.close() failed")
 	var result []types.EventStateKeyNID
 	var eventIDs []string
+	var inviteEventID string
+	var senderUserNID int64
 	for rows.Next() {
-		var inviteEventID string
-		var senderUserNID int64
 		if err := rows.Scan(&inviteEventID, &senderUserNID); err != nil {
 			return nil, nil, err
 		}

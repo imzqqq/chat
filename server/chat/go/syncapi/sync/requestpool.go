@@ -17,6 +17,8 @@
 package sync
 
 import (
+	"context"
+	"database/sql"
 	"net"
 	"net/http"
 	"strings"
@@ -33,40 +35,57 @@ import (
 	"github.com/matrix-org/dendrite/syncapi/streams"
 	"github.com/matrix-org/dendrite/syncapi/types"
 	userapi "github.com/matrix-org/dendrite/userapi/api"
+	"github.com/matrix-org/gomatrixserverlib"
 	"github.com/matrix-org/util"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/sirupsen/logrus"
 )
 
 // RequestPool manages HTTP long-poll connections for /sync
 type RequestPool struct {
 	db       storage.Database
 	cfg      *config.SyncAPI
-	userAPI  userapi.UserInternalAPI
-	keyAPI   keyapi.KeyInternalAPI
-	rsAPI    roomserverAPI.RoomserverInternalAPI
-	lastseen sync.Map
+	userAPI  userapi.SyncUserAPI
+	keyAPI   keyapi.SyncKeyAPI
+	rsAPI    roomserverAPI.SyncRoomserverAPI
+	lastseen *sync.Map
+	presence *sync.Map
 	streams  *streams.Streams
 	Notifier *notifier.Notifier
+	producer PresencePublisher
+}
+
+type PresencePublisher interface {
+	SendPresence(userID string, presence types.Presence, statusMsg *string) error
 }
 
 // NewRequestPool makes a new RequestPool
 func NewRequestPool(
 	db storage.Database, cfg *config.SyncAPI,
-	userAPI userapi.UserInternalAPI, keyAPI keyapi.KeyInternalAPI,
-	rsAPI roomserverAPI.RoomserverInternalAPI,
+	userAPI userapi.SyncUserAPI, keyAPI keyapi.SyncKeyAPI,
+	rsAPI roomserverAPI.SyncRoomserverAPI,
 	streams *streams.Streams, notifier *notifier.Notifier,
+	producer PresencePublisher, enableMetrics bool,
 ) *RequestPool {
+	if enableMetrics {
+		prometheus.MustRegister(
+			activeSyncRequests, waitingSyncRequests,
+		)
+	}
 	rp := &RequestPool{
 		db:       db,
 		cfg:      cfg,
 		userAPI:  userAPI,
 		keyAPI:   keyAPI,
 		rsAPI:    rsAPI,
-		lastseen: sync.Map{},
+		lastseen: &sync.Map{},
+		presence: &sync.Map{},
 		streams:  streams,
 		Notifier: notifier,
+		producer: producer,
 	}
 	go rp.cleanLastSeen()
+	go rp.cleanPresence(db, time.Minute*5)
 	return rp
 }
 
@@ -77,6 +96,69 @@ func (rp *RequestPool) cleanLastSeen() {
 			return true
 		})
 		time.Sleep(time.Minute)
+	}
+}
+
+func (rp *RequestPool) cleanPresence(db storage.Presence, cleanupTime time.Duration) {
+	if !rp.cfg.Matrix.Presence.EnableOutbound {
+		return
+	}
+	for {
+		rp.presence.Range(func(key interface{}, v interface{}) bool {
+			p := v.(types.PresenceInternal)
+			if time.Since(p.LastActiveTS.Time()) > cleanupTime {
+				rp.updatePresence(db, types.PresenceUnavailable.String(), p.UserID)
+				rp.presence.Delete(key)
+			}
+			return true
+		})
+		time.Sleep(cleanupTime)
+	}
+}
+
+// updatePresence sends presence updates to the SyncAPI and FederationAPI
+func (rp *RequestPool) updatePresence(db storage.Presence, presence string, userID string) {
+	if !rp.cfg.Matrix.Presence.EnableOutbound {
+		return
+	}
+	if presence == "" {
+		presence = types.PresenceOnline.String()
+	}
+
+	presenceID, ok := types.PresenceFromString(presence)
+	if !ok { // this should almost never happen
+		return
+	}
+
+	newPresence := types.PresenceInternal{
+		Presence:     presenceID,
+		UserID:       userID,
+		LastActiveTS: gomatrixserverlib.AsTimestamp(time.Now()),
+	}
+
+	// ensure we also send the current status_msg to federated servers and not nil
+	dbPresence, err := db.GetPresence(context.Background(), userID)
+	if err != nil && err != sql.ErrNoRows {
+		return
+	}
+	if dbPresence != nil {
+		newPresence.ClientFields = dbPresence.ClientFields
+	}
+	newPresence.ClientFields.Presence = presenceID.String()
+
+	defer rp.presence.Store(userID, newPresence)
+	// avoid spamming presence updates when syncing
+	existingPresence, ok := rp.presence.LoadOrStore(userID, newPresence)
+	if ok {
+		p := existingPresence.(types.PresenceInternal)
+		if p.ClientFields.Presence == newPresence.ClientFields.Presence {
+			return
+		}
+	}
+
+	if err := rp.producer.SendPresence(userID, presenceID, newPresence.ClientFields.StatusMsg); err != nil {
+		logrus.WithError(err).Error("Unable to publish presence message from sync")
+		return
 	}
 }
 
@@ -102,17 +184,12 @@ func (rp *RequestPool) updateLastSeen(req *http.Request, device *userapi.Device)
 		UserID:     device.UserID,
 		DeviceID:   device.ID,
 		RemoteAddr: remoteAddr,
+		UserAgent:  req.UserAgent(),
 	}
 	lsres := &userapi.PerformLastSeenUpdateResponse{}
 	go rp.userAPI.PerformLastSeenUpdate(req.Context(), lsreq, lsres) // nolint:errcheck
 
 	rp.lastseen.Store(device.UserID+device.ID, time.Now())
-}
-
-func init() {
-	prometheus.MustRegister(
-		activeSyncRequests, waitingSyncRequests,
-	)
 }
 
 var activeSyncRequests = prometheus.NewGauge(
@@ -140,6 +217,12 @@ func (rp *RequestPool) OnIncomingSyncRequest(req *http.Request, device *userapi.
 	// Extract values from request
 	syncReq, err := newSyncRequest(req, *device, rp.db)
 	if err != nil {
+		if err == types.ErrMalformedSyncToken {
+			return util.JSONResponse{
+				Code: http.StatusBadRequest,
+				JSON: jsonerror.InvalidArgumentValue(err.Error()),
+			}
+		}
 		return util.JSONResponse{
 			Code: http.StatusBadRequest,
 			JSON: jsonerror.Unknown(err.Error()),
@@ -150,6 +233,7 @@ func (rp *RequestPool) OnIncomingSyncRequest(req *http.Request, device *userapi.
 	defer activeSyncRequests.Dec()
 
 	rp.updateLastSeen(req, device)
+	rp.updatePresence(rp.db, req.FormValue("set_presence"), device.UserID)
 
 	waitingSyncRequests.Inc()
 	defer waitingSyncRequests.Dec()
@@ -164,7 +248,15 @@ func (rp *RequestPool) OnIncomingSyncRequest(req *http.Request, device *userapi.
 		defer userStreamListener.Close()
 
 		giveup := func() util.JSONResponse {
+			syncReq.Log.Debugln("Responding to sync since client gave up or timeout was reached")
 			syncReq.Response.NextBatch = syncReq.Since
+			// We should always try to include OTKs in sync responses, otherwise clients might upload keys
+			// even if that's not required. See also:
+			// https://github.com/matrix-org/synapse/blob/29f06704b8871a44926f7c99e73cf4a978fb8e81/synapse/rest/client/sync.py#L276-L281
+			err = internal.DeviceOTKCounts(syncReq.Context, rp.keyAPI, syncReq.Device.UserID, syncReq.Device.ID, syncReq.Response)
+			if err != nil {
+				syncReq.Log.WithError(err).Error("failed to get OTK counts")
+			}
 			return util.JSONResponse{
 				Code: http.StatusOK,
 				JSON: syncReq.Response,
@@ -183,7 +275,7 @@ func (rp *RequestPool) OnIncomingSyncRequest(req *http.Request, device *userapi.
 			currentPos.ApplyUpdates(userStreamListener.GetSyncPosition())
 		}
 	} else {
-		syncReq.Log.Debugln("Responding to sync immediately")
+		syncReq.Log.WithField("currentPos", currentPos).Debugln("Responding to sync immediately")
 	}
 
 	if syncReq.Since.IsEmpty() {
@@ -207,7 +299,13 @@ func (rp *RequestPool) OnIncomingSyncRequest(req *http.Request, device *userapi.
 			AccountDataPosition: rp.streams.AccountDataStreamProvider.CompleteSync(
 				syncReq.Context, syncReq,
 			),
+			NotificationDataPosition: rp.streams.NotificationDataStreamProvider.CompleteSync(
+				syncReq.Context, syncReq,
+			),
 			DeviceListPosition: rp.streams.DeviceListStreamProvider.CompleteSync(
+				syncReq.Context, syncReq,
+			),
+			PresencePosition: rp.streams.PresenceStreamProvider.CompleteSync(
 				syncReq.Context, syncReq,
 			),
 		}
@@ -238,9 +336,17 @@ func (rp *RequestPool) OnIncomingSyncRequest(req *http.Request, device *userapi.
 				syncReq.Context, syncReq,
 				syncReq.Since.AccountDataPosition, currentPos.AccountDataPosition,
 			),
+			NotificationDataPosition: rp.streams.NotificationDataStreamProvider.IncrementalSync(
+				syncReq.Context, syncReq,
+				syncReq.Since.NotificationDataPosition, currentPos.NotificationDataPosition,
+			),
 			DeviceListPosition: rp.streams.DeviceListStreamProvider.IncrementalSync(
 				syncReq.Context, syncReq,
 				syncReq.Since.DeviceListPosition, currentPos.DeviceListPosition,
+			),
+			PresencePosition: rp.streams.PresenceStreamProvider.IncrementalSync(
+				syncReq.Context, syncReq,
+				syncReq.Since.PresencePosition, currentPos.PresencePosition,
 			),
 		}
 	}

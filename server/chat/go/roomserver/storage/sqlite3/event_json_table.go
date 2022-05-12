@@ -52,12 +52,12 @@ type eventJSONStatements struct {
 	bulkSelectEventJSONStmt *sql.Stmt
 }
 
-func createEventJSONTable(db *sql.DB) error {
+func CreateEventJSONTable(db *sql.DB) error {
 	_, err := db.Exec(eventJSONSchema)
 	return err
 }
 
-func prepareEventJSONTable(db *sql.DB) (tables.EventJSON, error) {
+func PrepareEventJSONTable(db *sql.DB) (tables.EventJSON, error) {
 	s := &eventJSONStatements{
 		db: db,
 	}
@@ -76,15 +76,20 @@ func (s *eventJSONStatements) InsertEventJSON(
 }
 
 func (s *eventJSONStatements) BulkSelectEventJSON(
-	ctx context.Context, eventNIDs []types.EventNID,
+	ctx context.Context, txn *sql.Tx, eventNIDs []types.EventNID,
 ) ([]tables.EventJSONPair, error) {
 	iEventNIDs := make([]interface{}, len(eventNIDs))
 	for k, v := range eventNIDs {
 		iEventNIDs[k] = v
 	}
 	selectOrig := strings.Replace(bulkSelectEventJSONSQL, "($1)", sqlutil.QueryVariadic(len(iEventNIDs)), 1)
-
-	rows, err := s.db.QueryContext(ctx, selectOrig, iEventNIDs...)
+	var rows *sql.Rows
+	var err error
+	if txn != nil {
+		rows, err = txn.QueryContext(ctx, selectOrig, iEventNIDs...)
+	} else {
+		rows, err = s.db.QueryContext(ctx, selectOrig, iEventNIDs...)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -96,9 +101,9 @@ func (s *eventJSONStatements) BulkSelectEventJSON(
 	// We might get fewer results than NIDs so we adjust the length of the slice before returning it.
 	results := make([]tables.EventJSONPair, len(eventNIDs))
 	i := 0
+	var eventNID int64
 	for ; rows.Next(); i++ {
 		result := &results[i]
-		var eventNID int64
 		if err := rows.Scan(&eventNID, &result.EventJSON); err != nil {
 			return nil, err
 		}

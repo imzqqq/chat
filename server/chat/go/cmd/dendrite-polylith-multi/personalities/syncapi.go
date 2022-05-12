@@ -15,22 +15,20 @@
 package personalities
 
 import (
-	"github.com/matrix-org/dendrite/setup"
+	basepkg "github.com/matrix-org/dendrite/setup/base"
 	"github.com/matrix-org/dendrite/setup/config"
 	"github.com/matrix-org/dendrite/syncapi"
 )
 
-func SyncAPI(base *setup.BaseDendrite, cfg *config.Dendrite) {
+func SyncAPI(base *basepkg.BaseDendrite, cfg *config.Dendrite) {
 	userAPI := base.UserAPIClient()
-	federation := base.CreateFederationClient()
 
 	rsAPI := base.RoomserverHTTPClient()
 
 	syncapi.AddPublicRoutes(
-		base.ProcessContext,
-		base.PublicClientAPIMux, userAPI, rsAPI,
+		base,
+		userAPI, rsAPI,
 		base.KeyServerHTTPClient(),
-		federation, &cfg.SyncAPI,
 	)
 
 	base.SetupAndServeHTTP(

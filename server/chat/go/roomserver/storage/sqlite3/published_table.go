@@ -49,12 +49,12 @@ type publishedStatements struct {
 	selectPublishedStmt    *sql.Stmt
 }
 
-func createPublishedTable(db *sql.DB) error {
+func CreatePublishedTable(db *sql.DB) error {
 	_, err := db.Exec(publishedSchema)
 	return err
 }
 
-func preparePublishedTable(db *sql.DB) (tables.Published, error) {
+func PreparePublishedTable(db *sql.DB) (tables.Published, error) {
 	s := &publishedStatements{
 		db: db,
 	}
@@ -75,9 +75,10 @@ func (s *publishedStatements) UpsertRoomPublished(
 }
 
 func (s *publishedStatements) SelectPublishedFromRoomID(
-	ctx context.Context, roomID string,
+	ctx context.Context, txn *sql.Tx, roomID string,
 ) (published bool, err error) {
-	err = s.selectPublishedStmt.QueryRowContext(ctx, roomID).Scan(&published)
+	stmt := sqlutil.TxStmt(txn, s.selectPublishedStmt)
+	err = stmt.QueryRowContext(ctx, roomID).Scan(&published)
 	if err == sql.ErrNoRows {
 		return false, nil
 	}
@@ -85,17 +86,18 @@ func (s *publishedStatements) SelectPublishedFromRoomID(
 }
 
 func (s *publishedStatements) SelectAllPublishedRooms(
-	ctx context.Context, published bool,
+	ctx context.Context, txn *sql.Tx, published bool,
 ) ([]string, error) {
-	rows, err := s.selectAllPublishedStmt.QueryContext(ctx, published)
+	stmt := sqlutil.TxStmt(txn, s.selectAllPublishedStmt)
+	rows, err := stmt.QueryContext(ctx, published)
 	if err != nil {
 		return nil, err
 	}
 	defer internal.CloseAndLogIfError(ctx, rows, "selectAllPublishedStmt: rows.close() failed")
 
 	var roomIDs []string
+	var roomID string
 	for rows.Next() {
-		var roomID string
 		if err = rows.Scan(&roomID); err != nil {
 			return nil, err
 		}

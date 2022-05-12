@@ -55,11 +55,12 @@ func (r *Inputer) updateLatestEvents(
 	transactionID *api.TransactionID,
 	rewritesState bool,
 ) (err error) {
-	updater, err := r.DB.GetLatestEventsForUpdate(ctx, *roomInfo)
+	var succeeded bool
+	updater, err := r.DB.GetRoomUpdater(ctx, roomInfo)
 	if err != nil {
-		return fmt.Errorf("r.DB.GetLatestEventsForUpdate: %w", err)
+		return fmt.Errorf("r.DB.GetRoomUpdater: %w", err)
 	}
-	succeeded := false
+
 	defer sqlutil.EndTransactionWithCheck(updater, &succeeded, &err)
 
 	u := latestEventsUpdater{
@@ -89,7 +90,7 @@ func (r *Inputer) updateLatestEvents(
 type latestEventsUpdater struct {
 	ctx           context.Context
 	api           *Inputer
-	updater       *shared.LatestEventsUpdater
+	updater       *shared.RoomUpdater
 	roomInfo      *types.RoomInfo
 	stateAtEvent  types.StateAtEvent
 	event         *gomatrixserverlib.Event
@@ -199,7 +200,7 @@ func (u *latestEventsUpdater) doUpdateLatestEvents() error {
 
 func (u *latestEventsUpdater) latestState() error {
 	var err error
-	roomState := state.NewStateResolution(u.api.DB, *u.roomInfo)
+	roomState := state.NewStateResolution(u.updater, u.roomInfo)
 
 	// Work out if the state at the extremities has actually changed
 	// or not. If they haven't then we won't bother doing all of the
@@ -315,40 +316,30 @@ func (u *latestEventsUpdater) calculateLatest(
 	// Then let's see if any of the existing forward extremities now
 	// have entries in the previous events table. If they do then we
 	// will no longer include them as forward extremities.
-	existingPrevs := make(map[string]struct{})
-	for _, l := range existingRefs {
+	for k, l := range existingRefs {
 		referenced, err := u.updater.IsReferenced(l.EventReference)
 		if err != nil {
 			return false, fmt.Errorf("u.updater.IsReferenced: %w", err)
 		} else if referenced {
-			existingPrevs[l.EventID] = struct{}{}
+			delete(existingRefs, k)
 		}
 	}
 
-	// Include our new event in the extremities.
-	newLatest := []types.StateAtEventAndReference{newStateAndRef}
+	// Start off with our new unreferenced event. We're reusing the backing
+	// array here rather than allocating a new one.
+	u.latest = append(u.latest[:0], newStateAndRef)
 
-	// Then run through and see if the other extremities are still valid.
-	// If our new event references them then they are no longer good
-	// candidates.
+	// If our new event references any of the existing forward extremities
+	// then they are no longer forward extremities, so remove them.
 	for _, prevEventID := range newEvent.PrevEventIDs() {
-		delete(existingRefs, prevEventID)
-	}
-
-	// Ensure that we don't add any candidate forward extremities from
-	// the old set that are, themselves, referenced by the old set of
-	// forward extremities. This shouldn't happen but guards against
-	// the possibility anyway.
-	for prevEventID := range existingPrevs {
 		delete(existingRefs, prevEventID)
 	}
 
 	// Then re-add any old extremities that are still valid after all.
 	for _, old := range existingRefs {
-		newLatest = append(newLatest, *old)
+		u.latest = append(u.latest, *old)
 	}
 
-	u.latest = newLatest
 	return true, nil
 }
 
@@ -364,6 +355,7 @@ func (u *latestEventsUpdater) makeOutputNewRoomEvent() (*api.OutputEvent, error)
 		LastSentEventID: u.lastEventIDSent,
 		LatestEventIDs:  latestEventIDs,
 		TransactionID:   u.transactionID,
+		SendAsServer:    u.sendAsServer,
 	}
 
 	eventIDMap, err := u.stateEventMap()
@@ -383,51 +375,17 @@ func (u *latestEventsUpdater) makeOutputNewRoomEvent() (*api.OutputEvent, error)
 		ore.StateBeforeAddsEventIDs = append(ore.StateBeforeAddsEventIDs, eventIDMap[entry.EventNID])
 	}
 
-	ore.SendAsServer = u.sendAsServer
-
-	// include extra state events if they were added as nearly every downstream component will care about it
-	// and we'd rather not have them all hit QueryEventsByID at the same time!
-	if len(ore.AddsStateEventIDs) > 0 {
-		var err error
-		if ore.AddStateEvents, err = u.extraEventsForIDs(u.roomInfo.RoomVersion, ore.AddsStateEventIDs); err != nil {
-			return nil, fmt.Errorf("failed to load add_state_events from db: %w", err)
-		}
-	}
-
 	return &api.OutputEvent{
 		Type:         api.OutputTypeNewRoomEvent,
 		NewRoomEvent: &ore,
 	}, nil
 }
 
-// extraEventsForIDs returns the full events for the event IDs given, but does not include the current event being
-// updated.
-func (u *latestEventsUpdater) extraEventsForIDs(roomVersion gomatrixserverlib.RoomVersion, eventIDs []string) ([]*gomatrixserverlib.HeaderedEvent, error) {
-	var extraEventIDs []string
-	for _, e := range eventIDs {
-		if e == u.event.EventID() {
-			continue
-		}
-		extraEventIDs = append(extraEventIDs, e)
-	}
-	if len(extraEventIDs) == 0 {
-		return nil, nil
-	}
-	extraEvents, err := u.api.DB.EventsFromIDs(u.ctx, extraEventIDs)
-	if err != nil {
-		return nil, err
-	}
-	var h []*gomatrixserverlib.HeaderedEvent
-	for _, e := range extraEvents {
-		h = append(h, e.Headered(roomVersion))
-	}
-	return h, nil
-}
-
 // retrieve an event nid -> event ID map for all events that need updating
 func (u *latestEventsUpdater) stateEventMap() (map[types.EventNID]string, error) {
-	var stateEventNIDs []types.EventNID
-	var allStateEntries []types.StateEntry
+	cap := len(u.added) + len(u.removed) + len(u.stateBeforeEventRemoves) + len(u.stateBeforeEventAdds)
+	stateEventNIDs := make(types.EventNIDs, 0, cap)
+	allStateEntries := make([]types.StateEntry, 0, cap)
 	allStateEntries = append(allStateEntries, u.added...)
 	allStateEntries = append(allStateEntries, u.removed...)
 	allStateEntries = append(allStateEntries, u.stateBeforeEventRemoves...)
@@ -435,12 +393,6 @@ func (u *latestEventsUpdater) stateEventMap() (map[types.EventNID]string, error)
 	for _, entry := range allStateEntries {
 		stateEventNIDs = append(stateEventNIDs, entry.EventNID)
 	}
-	stateEventNIDs = stateEventNIDs[:util.SortAndUnique(eventNIDSorter(stateEventNIDs))]
-	return u.api.DB.EventIDs(u.ctx, stateEventNIDs)
+	stateEventNIDs = stateEventNIDs[:util.SortAndUnique(stateEventNIDs)]
+	return u.updater.EventIDs(u.ctx, stateEventNIDs)
 }
-
-type eventNIDSorter []types.EventNID
-
-func (s eventNIDSorter) Len() int           { return len(s) }
-func (s eventNIDSorter) Less(i, j int) bool { return s[i] < s[j] }
-func (s eventNIDSorter) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }

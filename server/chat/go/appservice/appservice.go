@@ -22,6 +22,8 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
+
 	appserviceAPI "github.com/matrix-org/dendrite/appservice/api"
 	"github.com/matrix-org/dendrite/appservice/consumers"
 	"github.com/matrix-org/dendrite/appservice/inthttp"
@@ -30,25 +32,23 @@ import (
 	"github.com/matrix-org/dendrite/appservice/types"
 	"github.com/matrix-org/dendrite/appservice/workers"
 	roomserverAPI "github.com/matrix-org/dendrite/roomserver/api"
-	"github.com/matrix-org/dendrite/setup"
+	"github.com/matrix-org/dendrite/setup/base"
 	"github.com/matrix-org/dendrite/setup/config"
-	"github.com/matrix-org/dendrite/setup/kafka"
 	userapi "github.com/matrix-org/dendrite/userapi/api"
-	"github.com/sirupsen/logrus"
 )
 
 // AddInternalRoutes registers HTTP handlers for internal API calls
-func AddInternalRoutes(router *mux.Router, queryAPI appserviceAPI.AppServiceQueryAPI) {
+func AddInternalRoutes(router *mux.Router, queryAPI appserviceAPI.AppServiceInternalAPI) {
 	inthttp.AddRoutes(queryAPI, router)
 }
 
 // NewInternalAPI returns a concerete implementation of the internal API. Callers
 // can call functions directly on the returned API or via an HTTP interface using AddInternalRoutes.
 func NewInternalAPI(
-	base *setup.BaseDendrite,
+	base *base.BaseDendrite,
 	userAPI userapi.UserInternalAPI,
 	rsAPI roomserverAPI.RoomserverInternalAPI,
-) appserviceAPI.AppServiceQueryAPI {
+) appserviceAPI.AppServiceInternalAPI {
 	client := &http.Client{
 		Timeout: time.Second * 30,
 		Transport: &http.Transport{
@@ -56,12 +56,13 @@ func NewInternalAPI(
 			TLSClientConfig: &tls.Config{
 				InsecureSkipVerify: base.Cfg.AppServiceAPI.DisableTLSValidation,
 			},
+			Proxy: http.ProxyFromEnvironment,
 		},
 	}
-	consumer, _ := kafka.SetupConsumerProducer(&base.Cfg.Global.Kafka)
+	js, _ := base.NATS.Prepare(base.ProcessContext, &base.Cfg.Global.JetStream)
 
 	// Create a connection to the appservice postgres DB
-	appserviceDB, err := storage.NewDatabase(&base.Cfg.AppServiceAPI.Database)
+	appserviceDB, err := storage.NewDatabase(base, &base.Cfg.AppServiceAPI.Database)
 	if err != nil {
 		logrus.WithError(err).Panicf("failed to connect to appservice db")
 	}
@@ -97,7 +98,7 @@ func NewInternalAPI(
 	// We can't add ASes at runtime so this is safe to do.
 	if len(workerStates) > 0 {
 		consumer := consumers.NewOutputRoomEventConsumer(
-			base.ProcessContext, base.Cfg, consumer, appserviceDB,
+			base.ProcessContext, base.Cfg, js, appserviceDB,
 			rsAPI, workerStates,
 		)
 		if err := consumer.Start(); err != nil {
@@ -116,12 +117,12 @@ func NewInternalAPI(
 // `sender_localpart` field of each application service if it doesn't
 // exist already
 func generateAppServiceAccount(
-	userAPI userapi.UserInternalAPI,
+	userAPI userapi.AppserviceUserAPI,
 	as config.ApplicationService,
 ) error {
 	var accRes userapi.PerformAccountCreationResponse
 	err := userAPI.PerformAccountCreation(context.Background(), &userapi.PerformAccountCreationRequest{
-		AccountType:  userapi.AccountTypeUser,
+		AccountType:  userapi.AccountTypeAppService,
 		Localpart:    as.SenderLocalpart,
 		AppServiceID: as.ID,
 		OnConflict:   userapi.ConflictUpdate,
@@ -131,10 +132,11 @@ func generateAppServiceAccount(
 	}
 	var devRes userapi.PerformDeviceCreationResponse
 	err = userAPI.PerformDeviceCreation(context.Background(), &userapi.PerformDeviceCreationRequest{
-		Localpart:         as.SenderLocalpart,
-		AccessToken:       as.ASToken,
-		DeviceID:          &as.SenderLocalpart,
-		DeviceDisplayName: &as.SenderLocalpart,
+		Localpart:          as.SenderLocalpart,
+		AccessToken:        as.ASToken,
+		DeviceID:           &as.SenderLocalpart,
+		DeviceDisplayName:  &as.SenderLocalpart,
+		NoDeviceListUpdate: true,
 	}, &devRes)
 	return err
 }

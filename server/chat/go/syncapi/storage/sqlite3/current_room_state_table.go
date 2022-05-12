@@ -60,18 +60,25 @@ const upsertRoomStateSQL = "" +
 const deleteRoomStateByEventIDSQL = "" +
 	"DELETE FROM syncapi_current_room_state WHERE event_id = $1"
 
-const DeleteRoomStateForRoomSQL = "" +
-	"DELETE FROM syncapi_current_room_state WHERE event_id = $1"
+const deleteRoomStateForRoomSQL = "" +
+	"DELETE FROM syncapi_current_room_state WHERE room_id = $1"
 
 const selectRoomIDsWithMembershipSQL = "" +
 	"SELECT DISTINCT room_id FROM syncapi_current_room_state WHERE type = 'm.room.member' AND state_key = $1 AND membership = $2"
 
+const selectRoomIDsWithAnyMembershipSQL = "" +
+	"SELECT DISTINCT room_id, membership FROM syncapi_current_room_state WHERE type = 'm.room.member' AND state_key = $1"
+
 const selectCurrentStateSQL = "" +
 	"SELECT event_id, headered_event_json FROM syncapi_current_room_state WHERE room_id = $1"
-	// WHEN, ORDER BY and LIMIT will be added by prepareWithFilter
+
+// WHEN, ORDER BY and LIMIT will be added by prepareWithFilter
 
 const selectJoinedUsersSQL = "" +
 	"SELECT room_id, state_key FROM syncapi_current_room_state WHERE type = 'm.room.member' AND membership = 'join'"
+
+const selectJoinedUsersInRoomSQL = "" +
+	"SELECT room_id, state_key FROM syncapi_current_room_state WHERE type = 'm.room.member' AND membership = 'join' AND room_id IN ($1)"
 
 const selectStateEventSQL = "" +
 	"SELECT headered_event_json FROM syncapi_current_room_state WHERE room_id = $1 AND type = $2 AND state_key = $3"
@@ -85,17 +92,19 @@ const selectEventsWithEventIDsSQL = "" +
 	" FROM syncapi_current_room_state WHERE event_id IN ($1)"
 
 type currentRoomStateStatements struct {
-	db                              *sql.DB
-	streamIDStatements              *streamIDStatements
-	upsertRoomStateStmt             *sql.Stmt
-	deleteRoomStateByEventIDStmt    *sql.Stmt
-	DeleteRoomStateForRoomStmt      *sql.Stmt
-	selectRoomIDsWithMembershipStmt *sql.Stmt
-	selectJoinedUsersStmt           *sql.Stmt
-	selectStateEventStmt            *sql.Stmt
+	db                                 *sql.DB
+	streamIDStatements                 *StreamIDStatements
+	upsertRoomStateStmt                *sql.Stmt
+	deleteRoomStateByEventIDStmt       *sql.Stmt
+	deleteRoomStateForRoomStmt         *sql.Stmt
+	selectRoomIDsWithMembershipStmt    *sql.Stmt
+	selectRoomIDsWithAnyMembershipStmt *sql.Stmt
+	selectJoinedUsersStmt              *sql.Stmt
+	//selectJoinedUsersInRoomStmt        *sql.Stmt - prepared at runtime due to variadic
+	selectStateEventStmt *sql.Stmt
 }
 
-func NewSqliteCurrentRoomStateTable(db *sql.DB, streamID *streamIDStatements) (tables.CurrentRoomState, error) {
+func NewSqliteCurrentRoomStateTable(db *sql.DB, streamID *StreamIDStatements) (tables.CurrentRoomState, error) {
 	s := &currentRoomStateStatements{
 		db:                 db,
 		streamIDStatements: streamID,
@@ -110,22 +119,28 @@ func NewSqliteCurrentRoomStateTable(db *sql.DB, streamID *streamIDStatements) (t
 	if s.deleteRoomStateByEventIDStmt, err = db.Prepare(deleteRoomStateByEventIDSQL); err != nil {
 		return nil, err
 	}
-	if s.DeleteRoomStateForRoomStmt, err = db.Prepare(DeleteRoomStateForRoomSQL); err != nil {
+	if s.deleteRoomStateForRoomStmt, err = db.Prepare(deleteRoomStateForRoomSQL); err != nil {
 		return nil, err
 	}
 	if s.selectRoomIDsWithMembershipStmt, err = db.Prepare(selectRoomIDsWithMembershipSQL); err != nil {
 		return nil, err
 	}
+	if s.selectRoomIDsWithAnyMembershipStmt, err = db.Prepare(selectRoomIDsWithAnyMembershipSQL); err != nil {
+		return nil, err
+	}
 	if s.selectJoinedUsersStmt, err = db.Prepare(selectJoinedUsersSQL); err != nil {
 		return nil, err
 	}
+	//if s.selectJoinedUsersInRoomStmt, err = db.Prepare(selectJoinedUsersInRoomSQL); err != nil {
+	//	return nil, err
+	//}
 	if s.selectStateEventStmt, err = db.Prepare(selectStateEventSQL); err != nil {
 		return nil, err
 	}
 	return s, nil
 }
 
-// JoinedMemberLists returns a map of room ID to a list of joined user IDs.
+// SelectJoinedUsers returns a map of room ID to a list of joined user IDs.
 func (s *currentRoomStateStatements) SelectJoinedUsers(
 	ctx context.Context,
 ) (map[string][]string, error) {
@@ -136,9 +151,9 @@ func (s *currentRoomStateStatements) SelectJoinedUsers(
 	defer internal.CloseAndLogIfError(ctx, rows, "selectJoinedUsers: rows.close() failed")
 
 	result := make(map[string][]string)
+	var roomID string
+	var userID string
 	for rows.Next() {
-		var roomID string
-		var userID string
 		if err := rows.Scan(&roomID, &userID); err != nil {
 			return nil, err
 		}
@@ -147,6 +162,40 @@ func (s *currentRoomStateStatements) SelectJoinedUsers(
 		result[roomID] = users
 	}
 	return result, nil
+}
+
+// SelectJoinedUsersInRoom returns a map of room ID to a list of joined user IDs for a given room.
+func (s *currentRoomStateStatements) SelectJoinedUsersInRoom(
+	ctx context.Context, roomIDs []string,
+) (map[string][]string, error) {
+	query := strings.Replace(selectJoinedUsersInRoomSQL, "($1)", sqlutil.QueryVariadic(len(roomIDs)), 1)
+	params := make([]interface{}, 0, len(roomIDs))
+	for _, roomID := range roomIDs {
+		params = append(params, roomID)
+	}
+	stmt, err := s.db.Prepare(query)
+	if err != nil {
+		return nil, fmt.Errorf("SelectJoinedUsersInRoom s.db.Prepare: %w", err)
+	}
+	defer internal.CloseAndLogIfError(ctx, stmt, "SelectJoinedUsersInRoom: stmt.close() failed")
+
+	rows, err := stmt.QueryContext(ctx, params...)
+	if err != nil {
+		return nil, err
+	}
+	defer internal.CloseAndLogIfError(ctx, rows, "SelectJoinedUsersInRoom: rows.close() failed")
+
+	result := make(map[string][]string)
+	var userID, roomID string
+	for rows.Next() {
+		if err := rows.Scan(&roomID, &userID); err != nil {
+			return nil, err
+		}
+		users := result[roomID]
+		users = append(users, userID)
+		result[roomID] = users
+	}
+	return result, rows.Err()
 }
 
 // SelectRoomIDsWithMembership returns the list of room IDs which have the given user in the given membership state.
@@ -174,6 +223,31 @@ func (s *currentRoomStateStatements) SelectRoomIDsWithMembership(
 	return result, nil
 }
 
+// SelectRoomIDsWithAnyMembership returns a map of all memberships for the given user.
+func (s *currentRoomStateStatements) SelectRoomIDsWithAnyMembership(
+	ctx context.Context,
+	txn *sql.Tx,
+	userID string,
+) (map[string]string, error) {
+	stmt := sqlutil.TxStmt(txn, s.selectRoomIDsWithAnyMembershipStmt)
+	rows, err := stmt.QueryContext(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer internal.CloseAndLogIfError(ctx, rows, "selectRoomIDsWithAnyMembership: rows.close() failed")
+
+	result := map[string]string{}
+	for rows.Next() {
+		var roomID string
+		var membership string
+		if err := rows.Scan(&roomID, &membership); err != nil {
+			return nil, err
+		}
+		result[roomID] = membership
+	}
+	return result, rows.Err()
+}
+
 // CurrentState returns all the current state events for the given room.
 func (s *currentRoomStateStatements) SelectCurrentState(
 	ctx context.Context, txn *sql.Tx, roomID string,
@@ -187,7 +261,7 @@ func (s *currentRoomStateStatements) SelectCurrentState(
 		},
 		stateFilter.Senders, stateFilter.NotSenders,
 		stateFilter.Types, stateFilter.NotTypes,
-		excludeEventIDs, stateFilter.Limit, FilterOrderNone,
+		excludeEventIDs, stateFilter.ContainsURL, stateFilter.Limit, FilterOrderNone,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("s.prepareWithFilters: %w", err)
@@ -213,7 +287,7 @@ func (s *currentRoomStateStatements) DeleteRoomStateByEventID(
 func (s *currentRoomStateStatements) DeleteRoomStateForRoom(
 	ctx context.Context, txn *sql.Tx, roomID string,
 ) error {
-	stmt := sqlutil.TxStmt(txn, s.DeleteRoomStateForRoomStmt)
+	stmt := sqlutil.TxStmt(txn, s.deleteRoomStateForRoomStmt)
 	_, err := stmt.ExecContext(ctx, roomID)
 	return err
 }

@@ -19,13 +19,29 @@ package api
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 
 	"github.com/matrix-org/dendrite/clientapi/auth/authtypes"
-	"github.com/matrix-org/dendrite/userapi/storage/accounts"
+	userapi "github.com/matrix-org/dendrite/userapi/api"
 	"github.com/matrix-org/gomatrixserverlib"
 )
+
+// AppServiceInternalAPI is used to query user and room alias data from application
+// services
+type AppServiceInternalAPI interface {
+	// Check whether a room alias exists within any application service namespaces
+	RoomAliasExists(
+		ctx context.Context,
+		req *RoomAliasExistsRequest,
+		resp *RoomAliasExistsResponse,
+	) error
+	// Check whether a user ID exists within any application service namespaces
+	UserIDExists(
+		ctx context.Context,
+		req *UserIDExistsRequest,
+		resp *UserIDExistsResponse,
+	) error
+}
 
 // RoomAliasExistsRequest is a request to an application service
 // about whether a room alias exists
@@ -61,31 +77,14 @@ type UserIDExistsResponse struct {
 	UserIDExists bool `json:"exists"`
 }
 
-// AppServiceQueryAPI is used to query user and room alias data from application
-// services
-type AppServiceQueryAPI interface {
-	// Check whether a room alias exists within any application service namespaces
-	RoomAliasExists(
-		ctx context.Context,
-		req *RoomAliasExistsRequest,
-		resp *RoomAliasExistsResponse,
-	) error
-	// Check whether a user ID exists within any application service namespaces
-	UserIDExists(
-		ctx context.Context,
-		req *UserIDExistsRequest,
-		resp *UserIDExistsResponse,
-	) error
-}
-
 // RetrieveUserProfile is a wrapper that queries both the local database and
 // application services for a given user's profile
 // TODO: Remove this, it's called from federationapi and clientapi but is a pure function
 func RetrieveUserProfile(
 	ctx context.Context,
 	userID string,
-	asAPI AppServiceQueryAPI,
-	accountDB accounts.Database,
+	asAPI AppServiceInternalAPI,
+	profileAPI userapi.ClientUserAPI,
 ) (*authtypes.Profile, error) {
 	localpart, _, err := gomatrixserverlib.SplitID('@', userID)
 	if err != nil {
@@ -93,10 +92,17 @@ func RetrieveUserProfile(
 	}
 
 	// Try to query the user from the local database
-	profile, err := accountDB.GetProfileByLocalpart(ctx, localpart)
-	if err != nil && err != sql.ErrNoRows {
+	res := &userapi.QueryProfileResponse{}
+	err = profileAPI.QueryProfile(ctx, &userapi.QueryProfileRequest{UserID: userID}, res)
+	if err != nil {
 		return nil, err
-	} else if profile != nil {
+	}
+	profile := &authtypes.Profile{
+		Localpart:   localpart,
+		DisplayName: res.DisplayName,
+		AvatarURL:   res.AvatarURL,
+	}
+	if res.UserExists {
 		return profile, nil
 	}
 
@@ -113,11 +119,15 @@ func RetrieveUserProfile(
 	}
 
 	// Try to query the user from the local database again
-	profile, err = accountDB.GetProfileByLocalpart(ctx, localpart)
+	err = profileAPI.QueryProfile(ctx, &userapi.QueryProfileRequest{UserID: userID}, res)
 	if err != nil {
 		return nil, err
 	}
 
 	// profile should not be nil at this point
-	return profile, nil
+	return &authtypes.Profile{
+		Localpart:   localpart,
+		DisplayName: res.DisplayName,
+		AvatarURL:   res.AvatarURL,
+	}, nil
 }

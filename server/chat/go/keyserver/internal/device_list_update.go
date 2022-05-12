@@ -22,7 +22,7 @@ import (
 	"sync"
 	"time"
 
-	fedsenderapi "github.com/matrix-org/dendrite/federationsender/api"
+	fedsenderapi "github.com/matrix-org/dendrite/federationapi/api"
 	"github.com/matrix-org/dendrite/keyserver/api"
 	"github.com/matrix-org/gomatrixserverlib"
 	"github.com/matrix-org/util"
@@ -109,7 +109,7 @@ type DeviceListUpdaterDatabase interface {
 	StoreRemoteDeviceKeys(ctx context.Context, keys []api.DeviceMessage, clearUserIDs []string) error
 
 	// PrevIDsExists returns true if all prev IDs exist for this user.
-	PrevIDsExists(ctx context.Context, userID string, prevIDs []int) (bool, error)
+	PrevIDsExists(ctx context.Context, userID string, prevIDs []int64) (bool, error)
 
 	// DeviceKeysJSON populates the KeyJSON for the given keys. If any proided `keys` have a `KeyJSON` or `StreamID` already then it will be replaced.
 	DeviceKeysJSON(ctx context.Context, keys []api.DeviceMessage) error
@@ -157,8 +157,15 @@ func (u *DeviceListUpdater) Start() error {
 	if err != nil {
 		return err
 	}
+	offset, step := time.Second*10, time.Second
+	if max := len(staleLists); max > 120 {
+		step = (time.Second * 120) / time.Duration(max)
+	}
 	for _, userID := range staleLists {
-		u.notifyWorkers(userID)
+		time.AfterFunc(offset, func() {
+			u.notifyWorkers(userID)
+		})
+		offset += step
 	}
 	return nil
 }
@@ -224,7 +231,7 @@ func (u *DeviceListUpdater) update(ctx context.Context, event gomatrixserverlib.
 	}).Info("DeviceListUpdater.Update")
 
 	// if we haven't missed anything update the database and notify users
-	if exists {
+	if exists || event.Deleted {
 		k := event.Keys
 		if event.Deleted {
 			k = nil
@@ -241,14 +248,33 @@ func (u *DeviceListUpdater) update(ctx context.Context, event gomatrixserverlib.
 				StreamID: event.StreamID,
 			},
 		}
+
+		// DeviceKeysJSON will side-effect modify this, so it needs
+		// to be a copy, not sharing any pointers with the above.
+		deviceKeysCopy := *keys[0].DeviceKeys
+		deviceKeysCopy.KeyJSON = nil
+		existingKeys := []api.DeviceMessage{
+			{
+				Type:       keys[0].Type,
+				DeviceKeys: &deviceKeysCopy,
+				StreamID:   keys[0].StreamID,
+			},
+		}
+
+		// fetch what keys we had already and only emit changes
+		if err = u.db.DeviceKeysJSON(ctx, existingKeys); err != nil {
+			// non-fatal, log and continue
+			util.GetLogger(ctx).WithError(err).WithField("user_id", event.UserID).Errorf(
+				"failed to query device keys json for calculating diffs",
+			)
+		}
+
 		err = u.db.StoreRemoteDeviceKeys(ctx, keys, nil)
 		if err != nil {
 			return false, fmt.Errorf("failed to store remote device keys for %s (%s): %w", event.UserID, event.DeviceID, err)
 		}
-		// ALWAYS emit key changes when we've been poked over federation even if there's no change
-		// just in case this poke is important for something.
-		err = u.producer.ProduceKeyChanges(keys)
-		if err != nil {
+
+		if err = emitDeviceKeyChanges(u.producer, existingKeys, keys, false); err != nil {
 			return false, fmt.Errorf("failed to produce device key changes for %s (%s): %w", event.UserID, event.DeviceID, err)
 		}
 		return false, nil
@@ -367,10 +393,13 @@ func (u *DeviceListUpdater) processServer(serverName gomatrixserverlib.ServerNam
 					waitTime = fcerr.RetryAfter
 				} else if fcerr.Blacklisted {
 					waitTime = time.Hour * 8
+				} else {
+					// For all other errors (DNS resolution, network etc.) wait 1 hour.
+					waitTime = time.Hour
 				}
 			} else {
 				waitTime = time.Hour
-				logger.WithError(err).Warn("GetUserDevices returned unknown error type")
+				logger.WithError(err).WithField("user_id", userID).Warn("GetUserDevices returned unknown error type")
 			}
 			continue
 		}
@@ -451,7 +480,7 @@ func (u *DeviceListUpdater) updateDeviceList(res *gomatrixserverlib.RespUserDevi
 	if err != nil {
 		return fmt.Errorf("failed to mark device list as fresh: %w", err)
 	}
-	err = emitDeviceKeyChanges(u.producer, existingKeys, keys)
+	err = emitDeviceKeyChanges(u.producer, existingKeys, keys, false)
 	if err != nil {
 		return fmt.Errorf("failed to emit key changes for fresh device list: %w", err)
 	}

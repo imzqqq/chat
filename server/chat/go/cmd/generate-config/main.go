@@ -5,16 +5,34 @@ import (
 	"fmt"
 
 	"github.com/matrix-org/dendrite/setup/config"
+	"github.com/matrix-org/gomatrixserverlib"
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/yaml.v2"
 )
 
 func main() {
 	defaultsForCI := flag.Bool("ci", false, "sane defaults for CI testing")
+	serverName := flag.String("server", "", "The domain name of the server if not 'localhost'")
+	dbURI := flag.String("db", "", "The DB URI to use for all components if not SQLite files")
 	flag.Parse()
 
-	cfg := &config.Dendrite{}
-	cfg.Defaults()
+	cfg := &config.Dendrite{
+		Version: config.Version,
+	}
+	cfg.Defaults(true)
+	if *serverName != "" {
+		cfg.Global.ServerName = gomatrixserverlib.ServerName(*serverName)
+	}
+	if *dbURI != "" {
+		cfg.AppServiceAPI.Database.ConnectionString = config.DataSource(*dbURI)
+		cfg.FederationAPI.Database.ConnectionString = config.DataSource(*dbURI)
+		cfg.KeyServer.Database.ConnectionString = config.DataSource(*dbURI)
+		cfg.MSCs.Database.ConnectionString = config.DataSource(*dbURI)
+		cfg.MediaAPI.Database.ConnectionString = config.DataSource(*dbURI)
+		cfg.RoomServer.Database.ConnectionString = config.DataSource(*dbURI)
+		cfg.SyncAPI.Database.ConnectionString = config.DataSource(*dbURI)
+		cfg.UserAPI.AccountDatabase.ConnectionString = config.DataSource(*dbURI)
+	}
 	cfg.Global.TrustedIDServers = []string{
 		"matrix.org",
 		"vector.im",
@@ -28,7 +46,7 @@ func main() {
 			},
 		},
 	}
-	cfg.SigningKeyServer.KeyPerspectives = config.KeyPerspectives{
+	cfg.FederationAPI.KeyPerspectives = config.KeyPerspectives{
 		{
 			ServerName: "matrix.org",
 			Keys: []config.KeyPerspectiveTrustKey{
@@ -64,12 +82,21 @@ func main() {
 	if *defaultsForCI {
 		cfg.AppServiceAPI.DisableTLSValidation = true
 		cfg.ClientAPI.RateLimiting.Enabled = false
-		cfg.FederationSender.DisableTLSValidation = true
+		cfg.FederationAPI.DisableTLSValidation = false
+		// don't hit matrix.org when running tests!!!
+		cfg.FederationAPI.KeyPerspectives = config.KeyPerspectives{}
 		cfg.MSCs.MSCs = []string{"msc2836", "msc2946", "msc2444", "msc2753"}
 		cfg.Logging[0].Level = "trace"
-		// don't hit matrix.org when running tests!!!
-		cfg.SigningKeyServer.KeyPerspectives = config.KeyPerspectives{}
+		cfg.Logging[0].Type = "std"
 		cfg.UserAPI.BCryptCost = bcrypt.MinCost
+		cfg.Global.JetStream.InMemory = true
+		cfg.ClientAPI.RegistrationDisabled = false
+		cfg.ClientAPI.OpenRegistrationWithoutVerificationEnabled = true
+		cfg.ClientAPI.RegistrationSharedSecret = "complement"
+		cfg.Global.Presence = config.PresenceOptions{
+			EnableInbound:  true,
+			EnableOutbound: true,
+		}
 	}
 
 	j, err := yaml.Marshal(cfg)

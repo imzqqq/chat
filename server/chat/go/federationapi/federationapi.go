@@ -16,36 +16,155 @@ package federationapi
 
 import (
 	"github.com/gorilla/mux"
-	eduserverAPI "github.com/matrix-org/dendrite/eduserver/api"
+	"github.com/matrix-org/dendrite/federationapi/api"
 	federationAPI "github.com/matrix-org/dendrite/federationapi/api"
-	federationSenderAPI "github.com/matrix-org/dendrite/federationsender/api"
+	"github.com/matrix-org/dendrite/federationapi/consumers"
+	"github.com/matrix-org/dendrite/federationapi/internal"
+	"github.com/matrix-org/dendrite/federationapi/inthttp"
+	"github.com/matrix-org/dendrite/federationapi/producers"
+	"github.com/matrix-org/dendrite/federationapi/queue"
+	"github.com/matrix-org/dendrite/federationapi/statistics"
+	"github.com/matrix-org/dendrite/federationapi/storage"
+	"github.com/matrix-org/dendrite/internal/caching"
 	keyserverAPI "github.com/matrix-org/dendrite/keyserver/api"
 	roomserverAPI "github.com/matrix-org/dendrite/roomserver/api"
-	"github.com/matrix-org/dendrite/setup/config"
+	"github.com/matrix-org/dendrite/setup/base"
+	"github.com/matrix-org/dendrite/setup/jetstream"
 	userapi "github.com/matrix-org/dendrite/userapi/api"
+	"github.com/sirupsen/logrus"
 
 	"github.com/matrix-org/dendrite/federationapi/routing"
 	"github.com/matrix-org/gomatrixserverlib"
 )
 
+// AddInternalRoutes registers HTTP handlers for the internal API. Invokes functions
+// on the given input API.
+func AddInternalRoutes(router *mux.Router, intAPI api.FederationInternalAPI) {
+	inthttp.AddRoutes(intAPI, router)
+}
+
 // AddPublicRoutes sets up and registers HTTP handlers on the base API muxes for the FederationAPI component.
 func AddPublicRoutes(
-	fedRouter, keyRouter *mux.Router,
-	cfg *config.FederationAPI,
+	base *base.BaseDendrite,
 	userAPI userapi.UserInternalAPI,
 	federation *gomatrixserverlib.FederationClient,
 	keyRing gomatrixserverlib.JSONVerifier,
-	rsAPI roomserverAPI.RoomserverInternalAPI,
-	federationSenderAPI federationSenderAPI.FederationSenderInternalAPI,
-	eduAPI eduserverAPI.EDUServerInputAPI,
-	keyAPI keyserverAPI.KeyInternalAPI,
-	mscCfg *config.MSCs,
+	rsAPI roomserverAPI.FederationRoomserverAPI,
+	fedAPI federationAPI.FederationInternalAPI,
+	keyAPI keyserverAPI.FederationKeyAPI,
 	servers federationAPI.ServersInRoomProvider,
 ) {
+	cfg := &base.Cfg.FederationAPI
+	mscCfg := &base.Cfg.MSCs
+	js, _ := base.NATS.Prepare(base.ProcessContext, &cfg.Matrix.JetStream)
+	producer := &producers.SyncAPIProducer{
+		JetStream:              js,
+		TopicReceiptEvent:      cfg.Matrix.JetStream.Prefixed(jetstream.OutputReceiptEvent),
+		TopicSendToDeviceEvent: cfg.Matrix.JetStream.Prefixed(jetstream.OutputSendToDeviceEvent),
+		TopicTypingEvent:       cfg.Matrix.JetStream.Prefixed(jetstream.OutputTypingEvent),
+		TopicPresenceEvent:     cfg.Matrix.JetStream.Prefixed(jetstream.OutputPresenceEvent),
+		ServerName:             cfg.Matrix.ServerName,
+		UserAPI:                userAPI,
+	}
+
+	// the federationapi component is a bit unique in that it attaches public routes AND serves
+	// internal APIs (because it used to be 2 components: the 2nd being fedsender). As a result,
+	// the constructor shape is a bit wonky in that it is not valid to AddPublicRoutes without a
+	// concrete impl of FederationInternalAPI as the public routes and the internal API _should_
+	// be the same thing now.
+	f, ok := fedAPI.(*internal.FederationInternalAPI)
+	if !ok {
+		panic("federationapi.AddPublicRoutes called with a FederationInternalAPI impl which was not " +
+			"FederationInternalAPI. This is a programming error.")
+	}
+
 	routing.Setup(
-		fedRouter, keyRouter, cfg, rsAPI,
-		eduAPI, federationSenderAPI, keyRing,
+		base.PublicFederationAPIMux,
+		base.PublicKeyAPIMux,
+		base.PublicWellKnownAPIMux,
+		cfg,
+		rsAPI, f, keyRing,
 		federation, userAPI, keyAPI, mscCfg,
-		servers,
+		servers, producer,
 	)
+}
+
+// NewInternalAPI returns a concerete implementation of the internal API. Callers
+// can call functions directly on the returned API or via an HTTP interface using AddInternalRoutes.
+func NewInternalAPI(
+	base *base.BaseDendrite,
+	federation *gomatrixserverlib.FederationClient,
+	rsAPI roomserverAPI.RoomserverInternalAPI,
+	caches *caching.Caches,
+	keyRing *gomatrixserverlib.KeyRing,
+	resetBlacklist bool,
+) api.FederationInternalAPI {
+	cfg := &base.Cfg.FederationAPI
+
+	federationDB, err := storage.NewDatabase(base, &cfg.Database, base.Caches, base.Cfg.Global.ServerName)
+	if err != nil {
+		logrus.WithError(err).Panic("failed to connect to federation sender db")
+	}
+
+	if resetBlacklist {
+		_ = federationDB.RemoveAllServersFromBlacklist()
+	}
+
+	stats := &statistics.Statistics{
+		DB:                     federationDB,
+		FailuresUntilBlacklist: cfg.FederationMaxRetries,
+	}
+
+	js, _ := base.NATS.Prepare(base.ProcessContext, &cfg.Matrix.JetStream)
+
+	queues := queue.NewOutgoingQueues(
+		federationDB, base.ProcessContext,
+		cfg.Matrix.DisableFederation,
+		cfg.Matrix.ServerName, federation, rsAPI, stats,
+		&queue.SigningInfo{
+			KeyID:      cfg.Matrix.KeyID,
+			PrivateKey: cfg.Matrix.PrivateKey,
+			ServerName: cfg.Matrix.ServerName,
+		},
+	)
+
+	rsConsumer := consumers.NewOutputRoomEventConsumer(
+		base.ProcessContext, cfg, js, queues,
+		federationDB, rsAPI,
+	)
+	if err = rsConsumer.Start(); err != nil {
+		logrus.WithError(err).Panic("failed to start room server consumer")
+	}
+	tsConsumer := consumers.NewOutputSendToDeviceConsumer(
+		base.ProcessContext, cfg, js, queues, federationDB,
+	)
+	if err = tsConsumer.Start(); err != nil {
+		logrus.WithError(err).Panic("failed to start send-to-device consumer")
+	}
+	receiptConsumer := consumers.NewOutputReceiptConsumer(
+		base.ProcessContext, cfg, js, queues, federationDB,
+	)
+	if err = receiptConsumer.Start(); err != nil {
+		logrus.WithError(err).Panic("failed to start receipt consumer")
+	}
+	typingConsumer := consumers.NewOutputTypingConsumer(
+		base.ProcessContext, cfg, js, queues, federationDB,
+	)
+	if err = typingConsumer.Start(); err != nil {
+		logrus.WithError(err).Panic("failed to start typing consumer")
+	}
+	keyConsumer := consumers.NewKeyChangeConsumer(
+		base.ProcessContext, &base.Cfg.KeyServer, js, queues, federationDB, rsAPI,
+	)
+	if err = keyConsumer.Start(); err != nil {
+		logrus.WithError(err).Panic("failed to start key server consumer")
+	}
+
+	presenceConsumer := consumers.NewOutputPresenceConsumer(
+		base.ProcessContext, cfg, js, queues, federationDB,
+	)
+	if err = presenceConsumer.Start(); err != nil {
+		logrus.WithError(err).Panic("failed to start presence consumer")
+	}
+	return internal.NewFederationInternalAPI(federationDB, cfg, rsAPI, federation, stats, caches, queues, keyRing)
 }

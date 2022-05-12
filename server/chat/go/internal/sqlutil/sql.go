@@ -25,7 +25,7 @@ import (
 )
 
 // ErrUserExists is returned if a username already exists in the database.
-var ErrUserExists = errors.New("Username already exists")
+var ErrUserExists = errors.New("username already exists")
 
 // A Transaction is something that can be committed or rolledback.
 type Transaction interface {
@@ -163,6 +163,7 @@ type StatementList []struct {
 func (s StatementList) Prepare(db *sql.DB) (err error) {
 	for _, statement := range s {
 		if *statement.Statement, err = db.Prepare(statement.SQL); err != nil {
+			err = fmt.Errorf("Error %q while preparing statement: %s", err, statement.SQL)
 			return
 		}
 	}

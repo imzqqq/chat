@@ -107,7 +107,8 @@ func mustEqualPositions(t *testing.T, got, want types.StreamingToken) {
 
 // Test that the current position is returned if a request is already behind.
 func TestImmediateNotification(t *testing.T) {
-	n := NewNotifier(syncPositionBefore)
+	n := NewNotifier()
+	n.SetCurrentPosition(syncPositionBefore)
 	pos, err := waitForEvents(n, newTestSyncRequest(alice, aliceDev, syncPositionVeryOld))
 	if err != nil {
 		t.Fatalf("TestImmediateNotification error: %s", err)
@@ -117,7 +118,8 @@ func TestImmediateNotification(t *testing.T) {
 
 // Test that new events to a joined room unblocks the request.
 func TestNewEventAndJoinedToRoom(t *testing.T) {
-	n := NewNotifier(syncPositionBefore)
+	n := NewNotifier()
+	n.SetCurrentPosition(syncPositionBefore)
 	n.setUsersJoinedToRooms(map[string][]string{
 		roomID: {alice, bob},
 	})
@@ -127,7 +129,7 @@ func TestNewEventAndJoinedToRoom(t *testing.T) {
 	go func() {
 		pos, err := waitForEvents(n, newTestSyncRequest(bob, bobDev, syncPositionBefore))
 		if err != nil {
-			t.Errorf("TestNewEventAndJoinedToRoom error: %w", err)
+			t.Errorf("TestNewEventAndJoinedToRoom error: %s", err)
 		}
 		mustEqualPositions(t, pos, syncPositionAfter)
 		wg.Done()
@@ -142,7 +144,8 @@ func TestNewEventAndJoinedToRoom(t *testing.T) {
 }
 
 func TestCorrectStream(t *testing.T) {
-	n := NewNotifier(syncPositionBefore)
+	n := NewNotifier()
+	n.SetCurrentPosition(syncPositionBefore)
 	stream := lockedFetchUserStream(n, bob, bobDev)
 	if stream.UserID != bob {
 		t.Fatalf("expected user %q, got %q", bob, stream.UserID)
@@ -153,7 +156,8 @@ func TestCorrectStream(t *testing.T) {
 }
 
 func TestCorrectStreamWakeup(t *testing.T) {
-	n := NewNotifier(syncPositionBefore)
+	n := NewNotifier()
+	n.SetCurrentPosition(syncPositionBefore)
 	awoken := make(chan string)
 
 	streamone := lockedFetchUserStream(n, alice, "one")
@@ -161,9 +165,9 @@ func TestCorrectStreamWakeup(t *testing.T) {
 
 	go func() {
 		select {
-		case <-streamone.signalChannel:
+		case <-streamone.ch():
 			awoken <- "one"
-		case <-streamtwo.signalChannel:
+		case <-streamtwo.ch():
 			awoken <- "two"
 		}
 	}()
@@ -171,7 +175,7 @@ func TestCorrectStreamWakeup(t *testing.T) {
 	time.Sleep(1 * time.Second)
 
 	wake := "two"
-	n.wakeupUserDevice(alice, []string{wake}, syncPositionAfter)
+	n._wakeupUserDevice(alice, []string{wake}, syncPositionAfter)
 
 	if result := <-awoken; result != wake {
 		t.Fatalf("expected to wake %q, got %q", wake, result)
@@ -180,7 +184,8 @@ func TestCorrectStreamWakeup(t *testing.T) {
 
 // Test that an invite unblocks the request
 func TestNewInviteEventForUser(t *testing.T) {
-	n := NewNotifier(syncPositionBefore)
+	n := NewNotifier()
+	n.SetCurrentPosition(syncPositionBefore)
 	n.setUsersJoinedToRooms(map[string][]string{
 		roomID: {alice, bob},
 	})
@@ -190,7 +195,7 @@ func TestNewInviteEventForUser(t *testing.T) {
 	go func() {
 		pos, err := waitForEvents(n, newTestSyncRequest(bob, bobDev, syncPositionBefore))
 		if err != nil {
-			t.Errorf("TestNewInviteEventForUser error: %w", err)
+			t.Errorf("TestNewInviteEventForUser error: %s", err)
 		}
 		mustEqualPositions(t, pos, syncPositionAfter)
 		wg.Done()
@@ -219,7 +224,7 @@ func TestEDUWakeup(t *testing.T) {
 	go func() {
 		pos, err := waitForEvents(n, newTestSyncRequest(bob, bobDev, syncPositionAfter))
 		if err != nil {
-			t.Errorf("TestNewInviteEventForUser error: %w", err)
+			t.Errorf("TestNewInviteEventForUser error: %v", err)
 		}
 		mustEqualPositions(t, pos, syncPositionNewEDU)
 		wg.Done()
@@ -236,7 +241,8 @@ func TestEDUWakeup(t *testing.T) {
 
 // Test that all blocked requests get woken up on a new event.
 func TestMultipleRequestWakeup(t *testing.T) {
-	n := NewNotifier(syncPositionBefore)
+	n := NewNotifier()
+	n.SetCurrentPosition(syncPositionBefore)
 	n.setUsersJoinedToRooms(map[string][]string{
 		roomID: {alice, bob},
 	})
@@ -246,7 +252,7 @@ func TestMultipleRequestWakeup(t *testing.T) {
 	poll := func() {
 		pos, err := waitForEvents(n, newTestSyncRequest(bob, bobDev, syncPositionBefore))
 		if err != nil {
-			t.Errorf("TestMultipleRequestWakeup error: %w", err)
+			t.Errorf("TestMultipleRequestWakeup error: %s", err)
 		}
 		mustEqualPositions(t, pos, syncPositionAfter)
 		wg.Done()
@@ -272,7 +278,8 @@ func TestMultipleRequestWakeup(t *testing.T) {
 func TestNewEventAndWasPreviouslyJoinedToRoom(t *testing.T) {
 	// listen as bob. Make bob leave room. Make alice send event to room.
 	// Make sure alice gets woken up only and not bob as well.
-	n := NewNotifier(syncPositionBefore)
+	n := NewNotifier()
+	n.SetCurrentPosition(syncPositionBefore)
 	n.setUsersJoinedToRooms(map[string][]string{
 		roomID: {alice, bob},
 	})
@@ -284,7 +291,7 @@ func TestNewEventAndWasPreviouslyJoinedToRoom(t *testing.T) {
 	go func() {
 		pos, err := waitForEvents(n, newTestSyncRequest(bob, bobDev, syncPositionBefore))
 		if err != nil {
-			t.Errorf("TestNewEventAndWasPreviouslyJoinedToRoom error: %w", err)
+			t.Errorf("TestNewEventAndWasPreviouslyJoinedToRoom error: %s", err)
 		}
 		mustEqualPositions(t, pos, syncPositionAfter)
 		leaveWG.Done()
@@ -301,7 +308,7 @@ func TestNewEventAndWasPreviouslyJoinedToRoom(t *testing.T) {
 	go func() {
 		pos, err := waitForEvents(n, newTestSyncRequest(alice, aliceDev, syncPositionAfter))
 		if err != nil {
-			t.Errorf("TestNewEventAndWasPreviouslyJoinedToRoom error: %w", err)
+			t.Errorf("TestNewEventAndWasPreviouslyJoinedToRoom error: %s", err)
 		}
 		mustEqualPositions(t, pos, syncPositionAfter2)
 		aliceWG.Done()
@@ -352,10 +359,10 @@ func waitForBlocking(s *UserDeviceStream, numBlocking uint) {
 // lockedFetchUserStream invokes Notifier.fetchUserStream, respecting Notifier.streamLock.
 // A new stream is made if it doesn't exist already.
 func lockedFetchUserStream(n *Notifier, userID, deviceID string) *UserDeviceStream {
-	n.streamLock.Lock()
-	defer n.streamLock.Unlock()
+	n.lock.Lock()
+	defer n.lock.Unlock()
 
-	return n.fetchUserDeviceStream(userID, deviceID, true)
+	return n._fetchUserDeviceStream(userID, deviceID, true)
 }
 
 func newTestSyncRequest(userID, deviceID string, since types.StreamingToken) types.SyncRequest {

@@ -26,7 +26,7 @@ import (
 func LeaveRoomByID(
 	req *http.Request,
 	device *api.Device,
-	rsAPI roomserverAPI.RoomserverInternalAPI,
+	rsAPI roomserverAPI.ClientRoomserverAPI,
 	roomID string,
 ) util.JSONResponse {
 	// Prepare to ask the roomserver to perform the room join.
@@ -38,6 +38,12 @@ func LeaveRoomByID(
 
 	// Ask the roomserver to perform the leave.
 	if err := rsAPI.PerformLeave(req.Context(), &leaveReq, &leaveRes); err != nil {
+		if leaveRes.Code != 0 {
+			return util.JSONResponse{
+				Code: leaveRes.Code,
+				JSON: jsonerror.LeaveServerNoticeError(),
+			}
+		}
 		return util.JSONResponse{
 			Code: http.StatusBadRequest,
 			JSON: jsonerror.Unknown(err.Error()),

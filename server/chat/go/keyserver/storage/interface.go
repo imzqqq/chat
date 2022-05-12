@@ -18,15 +18,12 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/matrix-org/dendrite/internal"
 	"github.com/matrix-org/dendrite/keyserver/api"
 	"github.com/matrix-org/dendrite/keyserver/types"
 	"github.com/matrix-org/gomatrixserverlib"
 )
 
 type Database interface {
-	internal.PartitionStorer
-
 	// ExistingOneTimeKeys returns a map of keyIDWithAlgorithm to key JSON for the given parameters. If no keys exist with this combination
 	// of user/device/key/algorithm 4-uple then it is omitted from the map. Returns an error when failing to communicate with the database.
 	ExistingOneTimeKeys(ctx context.Context, userID, deviceID string, keyIDsWithAlgorithms []string) (map[string]json.RawMessage, error)
@@ -52,11 +49,11 @@ type Database interface {
 	StoreRemoteDeviceKeys(ctx context.Context, keys []api.DeviceMessage, clearUserIDs []string) error
 
 	// PrevIDsExists returns true if all prev IDs exist for this user.
-	PrevIDsExists(ctx context.Context, userID string, prevIDs []int) (bool, error)
+	PrevIDsExists(ctx context.Context, userID string, prevIDs []int64) (bool, error)
 
 	// DeviceKeysForUser returns the device keys for the device IDs given. If the length of deviceIDs is 0, all devices are selected.
 	// If there are some missing keys, they are omitted from the returned slice. There is no ordering on the returned slice.
-	DeviceKeysForUser(ctx context.Context, userID string, deviceIDs []string) ([]api.DeviceMessage, error)
+	DeviceKeysForUser(ctx context.Context, userID string, deviceIDs []string, includeEmpty bool) ([]api.DeviceMessage, error)
 
 	// DeleteDeviceKeys removes the device keys for a given user/device, and any accompanying
 	// cross-signing signatures relating to that device.
@@ -66,14 +63,14 @@ type Database interface {
 	// cannot be claimed or if none exist for this (user, device, algorithm), instead it is omitted from the returned slice.
 	ClaimKeys(ctx context.Context, userToDeviceToAlgorithm map[string]map[string]string) ([]api.OneTimeKeys, error)
 
-	// StoreKeyChange stores key change metadata after the change has been sent to Kafka. `userID` is the the user who has changed
-	// their keys in some way.
-	StoreKeyChange(ctx context.Context, partition int32, offset int64, userID string) error
+	// StoreKeyChange stores key change metadata and returns the device change ID which represents the position in the /sync stream for this device change.
+	// `userID` is the the user who has changed their keys in some way.
+	StoreKeyChange(ctx context.Context, userID string) (int64, error)
 
 	// KeyChanges returns a list of user IDs who have modified their keys from the offset given (exclusive) to the offset given (inclusive).
-	// A to offset of sarama.OffsetNewest means no upper limit.
+	// A to offset of types.OffsetNewest means no upper limit.
 	// Returns the offset of the latest key change.
-	KeyChanges(ctx context.Context, partition int32, fromOffset, toOffset int64) (userIDs []string, latestOffset int64, err error)
+	KeyChanges(ctx context.Context, fromOffset, toOffset int64) (userIDs []string, latestOffset int64, err error)
 
 	// StaleDeviceLists returns a list of user IDs ending with the domains provided who have stale device lists.
 	// If no domains are given, all user IDs with stale device lists are returned.
@@ -84,7 +81,7 @@ type Database interface {
 
 	CrossSigningKeysForUser(ctx context.Context, userID string) (map[gomatrixserverlib.CrossSigningKeyPurpose]gomatrixserverlib.CrossSigningKey, error)
 	CrossSigningKeysDataForUser(ctx context.Context, userID string) (types.CrossSigningKeyMap, error)
-	CrossSigningSigsForTarget(ctx context.Context, targetUserID string, targetKeyID gomatrixserverlib.KeyID) (types.CrossSigningSigMap, error)
+	CrossSigningSigsForTarget(ctx context.Context, originUserID, targetUserID string, targetKeyID gomatrixserverlib.KeyID) (types.CrossSigningSigMap, error)
 
 	StoreCrossSigningKeysForUser(ctx context.Context, userID string, keyMap types.CrossSigningKeyMap) error
 	StoreCrossSigningSigsForTarget(ctx context.Context, originUserID string, originKeyID gomatrixserverlib.KeyID, targetUserID string, targetKeyID gomatrixserverlib.KeyID, signature gomatrixserverlib.Base64Bytes) error

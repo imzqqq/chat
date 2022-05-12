@@ -22,7 +22,6 @@ import (
 	"sort"
 	"time"
 
-	"github.com/matrix-org/dendrite/roomserver/storage"
 	"github.com/matrix-org/util"
 	"github.com/prometheus/client_golang/prometheus"
 
@@ -30,13 +29,25 @@ import (
 	"github.com/matrix-org/gomatrixserverlib"
 )
 
+type StateResolutionStorage interface {
+	EventTypeNIDs(ctx context.Context, eventTypes []string) (map[string]types.EventTypeNID, error)
+	EventStateKeyNIDs(ctx context.Context, eventStateKeys []string) (map[string]types.EventStateKeyNID, error)
+	StateBlockNIDs(ctx context.Context, stateNIDs []types.StateSnapshotNID) ([]types.StateBlockNIDList, error)
+	StateEntries(ctx context.Context, stateBlockNIDs []types.StateBlockNID) ([]types.StateEntryList, error)
+	SnapshotNIDFromEventID(ctx context.Context, eventID string) (types.StateSnapshotNID, error)
+	StateEntriesForTuples(ctx context.Context, stateBlockNIDs []types.StateBlockNID, stateKeyTuples []types.StateKeyTuple) ([]types.StateEntryList, error)
+	StateAtEventIDs(ctx context.Context, eventIDs []string) ([]types.StateAtEvent, error)
+	AddState(ctx context.Context, roomNID types.RoomNID, stateBlockNIDs []types.StateBlockNID, state []types.StateEntry) (types.StateSnapshotNID, error)
+	Events(ctx context.Context, eventNIDs []types.EventNID) ([]types.Event, error)
+}
+
 type StateResolution struct {
-	db       storage.Database
-	roomInfo types.RoomInfo
+	db       StateResolutionStorage
+	roomInfo *types.RoomInfo
 	events   map[types.EventNID]*gomatrixserverlib.Event
 }
 
-func NewStateResolution(db storage.Database, roomInfo types.RoomInfo) StateResolution {
+func NewStateResolution(db StateResolutionStorage, roomInfo *types.RoomInfo) StateResolution {
 	return StateResolution{
 		db:       db,
 		roomInfo: roomInfo,
@@ -71,7 +82,7 @@ func (v *StateResolution) LoadStateAtSnapshot(
 		if !ok {
 			// This should only get hit if the database is corrupt.
 			// It should be impossible for an event to reference a NID that doesn't exist
-			panic(fmt.Errorf("Corrupt DB: Missing state block numeric ID %d", stateBlockNID))
+			panic(fmt.Errorf("corrupt DB: Missing state block numeric ID %d", stateBlockNID))
 		}
 		fullState = append(fullState, entries...)
 	}
@@ -146,7 +157,7 @@ func (v *StateResolution) LoadCombinedStateAfterEvents(
 		if !ok {
 			// This should only get hit if the database is corrupt.
 			// It should be impossible for an event to reference a NID that doesn't exist
-			panic(fmt.Errorf("Corrupt DB: Missing state snapshot numeric ID %d", prevState.BeforeStateSnapshotNID))
+			panic(fmt.Errorf("corrupt DB: Missing state snapshot numeric ID %d", prevState.BeforeStateSnapshotNID))
 		}
 
 		// Combine all the state entries for this snapshot.
@@ -157,7 +168,7 @@ func (v *StateResolution) LoadCombinedStateAfterEvents(
 			if !ok {
 				// This should only get hit if the database is corrupt.
 				// It should be impossible for an event to reference a NID that doesn't exist
-				panic(fmt.Errorf("Corrupt DB: Missing state block numeric ID %d", stateBlockNID))
+				panic(fmt.Errorf("corrupt DB: Missing state block numeric ID %d", stateBlockNID))
 			}
 			fullState = append(fullState, entries...)
 		}
@@ -757,7 +768,7 @@ func (v *StateResolution) resolveConflictsV1(
 	for _, resolvedEvent := range resolvedEvents {
 		entry, ok := eventIDMap[resolvedEvent.EventID()]
 		if !ok {
-			panic(fmt.Errorf("Missing state entry for event ID %q", resolvedEvent.EventID()))
+			panic(fmt.Errorf("missing state entry for event ID %q", resolvedEvent.EventID()))
 		}
 		notConflicted = append(notConflicted, entry)
 	}
@@ -778,7 +789,8 @@ func (v *StateResolution) resolveConflictsV2(
 	ctx context.Context,
 	notConflicted, conflicted []types.StateEntry,
 ) ([]types.StateEntry, error) {
-	eventIDMap := make(map[string]types.StateEntry)
+	estimate := len(conflicted) + len(notConflicted)
+	eventIDMap := make(map[string]types.StateEntry, estimate)
 
 	// Load the conflicted events
 	conflictedEvents, conflictedEventMap, err := v.loadStateEvents(ctx, conflicted)
@@ -800,18 +812,21 @@ func (v *StateResolution) resolveConflictsV2(
 
 	// For each conflicted event, we will add a new set of auth events. Auth
 	// events may be duplicated across these sets but that's OK.
-	authSets := make(map[string][]*gomatrixserverlib.Event)
-	var authEvents []*gomatrixserverlib.Event
-	var authDifference []*gomatrixserverlib.Event
+	authSets := make(map[string][]*gomatrixserverlib.Event, len(conflicted))
+	authEvents := make([]*gomatrixserverlib.Event, 0, estimate*3)
+	gotAuthEvents := make(map[string]struct{}, estimate*3)
+	authDifference := make([]*gomatrixserverlib.Event, 0, estimate)
 
 	// For each conflicted event, let's try and get the needed auth events.
+	neededStateKeys := make([]string, 16)
+	authEntries := make([]types.StateEntry, 16)
 	for _, conflictedEvent := range conflictedEvents {
 		// Work out which auth events we need to load.
 		key := conflictedEvent.EventID()
 		needed := gomatrixserverlib.StateNeededForAuth([]*gomatrixserverlib.Event{conflictedEvent})
 
 		// Find the numeric IDs for the necessary state keys.
-		var neededStateKeys []string
+		neededStateKeys = neededStateKeys[:0]
 		neededStateKeys = append(neededStateKeys, needed.Member...)
 		neededStateKeys = append(neededStateKeys, needed.ThirdPartyInvite...)
 		stateKeyNIDMap, err := v.db.EventStateKeyNIDs(ctx, neededStateKeys)
@@ -821,7 +836,7 @@ func (v *StateResolution) resolveConflictsV2(
 
 		// Load the necessary auth events.
 		tuplesNeeded := v.stateKeyTuplesNeeded(stateKeyNIDMap, needed)
-		var authEntries []types.StateEntry
+		authEntries = authEntries[:0]
 		for _, tuple := range tuplesNeeded {
 			if eventNID, ok := stateEntryMap(notConflicted).lookup(tuple); ok {
 				authEntries = append(authEntries, types.StateEntry{
@@ -836,8 +851,21 @@ func (v *StateResolution) resolveConflictsV2(
 		if err != nil {
 			return nil, err
 		}
-		authEvents = append(authEvents, authSets[key]...)
+
+		// Only add auth events into the authEvents slice once, otherwise the
+		// check for the auth difference can become expensive and produce
+		// duplicate entries, which just waste memory and CPU time.
+		for _, event := range authSets[key] {
+			if _, ok := gotAuthEvents[event.EventID()]; !ok {
+				authEvents = append(authEvents, event)
+				gotAuthEvents[event.EventID()] = struct{}{}
+			}
+		}
 	}
+
+	// Kill the reference to this so that the GC may pick it up, since we no
+	// longer need this after this point.
+	gotAuthEvents = nil // nolint:ineffassign
 
 	// This function helps us to work out whether an event exists in one of the
 	// auth sets.
@@ -852,11 +880,12 @@ func (v *StateResolution) resolveConflictsV2(
 
 	// This function works out if an event exists in all of the auth sets.
 	isInAllAuthLists := func(event *gomatrixserverlib.Event) bool {
-		found := true
 		for k := range authSets {
-			found = found && isInAuthList(k, event)
+			if !isInAuthList(k, event) {
+				return false
+			}
 		}
-		return found
+		return true
 	}
 
 	// Look through all of the auth events that we've been given and work out if
@@ -880,7 +909,7 @@ func (v *StateResolution) resolveConflictsV2(
 	for _, resolvedEvent := range resolvedEvents {
 		entry, ok := eventIDMap[resolvedEvent.EventID()]
 		if !ok {
-			panic(fmt.Errorf("Missing state entry for event ID %q", resolvedEvent.EventID()))
+			panic(fmt.Errorf("missing state entry for event ID %q", resolvedEvent.EventID()))
 		}
 		notConflicted = append(notConflicted, entry)
 	}
@@ -958,7 +987,7 @@ func (v *StateResolution) loadStateEvents(
 	for _, entry := range eventEntries {
 		event, ok := eventMap(events).lookup(entry.EventNID)
 		if !ok {
-			panic(fmt.Errorf("Corrupt DB: Missing event numeric ID %d", entry.EventNID))
+			panic(fmt.Errorf("corrupt DB: Missing event numeric ID %d", entry.EventNID))
 		}
 		result = append(result, event.Event)
 		eventIDMap[event.Event.EventID()] = entry

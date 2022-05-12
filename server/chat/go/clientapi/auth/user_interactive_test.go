@@ -24,12 +24,24 @@ var (
 	}
 )
 
-func getAccountByPassword(ctx context.Context, localpart, plaintextPassword string) (*api.Account, error) {
-	acc, ok := lookup[localpart+" "+plaintextPassword]
+type fakeAccountDatabase struct{}
+
+func (d *fakeAccountDatabase) PerformPasswordUpdate(ctx context.Context, req *api.PerformPasswordUpdateRequest, res *api.PerformPasswordUpdateResponse) error {
+	return nil
+}
+
+func (d *fakeAccountDatabase) PerformAccountDeactivation(ctx context.Context, req *api.PerformAccountDeactivationRequest, res *api.PerformAccountDeactivationResponse) error {
+	return nil
+}
+
+func (d *fakeAccountDatabase) QueryAccountByPassword(ctx context.Context, req *api.QueryAccountByPasswordRequest, res *api.QueryAccountByPasswordResponse) error {
+	acc, ok := lookup[req.Localpart+" "+req.PlaintextPassword]
 	if !ok {
-		return nil, fmt.Errorf("unknown user/password")
+		return fmt.Errorf("unknown user/password")
 	}
-	return acc, nil
+	res.Account = acc
+	res.Exists = true
+	return nil
 }
 
 func setup() *UserInteractive {
@@ -38,7 +50,7 @@ func setup() *UserInteractive {
 			ServerName: serverName,
 		},
 	}
-	return NewUserInteractive(getAccountByPassword, cfg)
+	return NewUserInteractive(&fakeAccountDatabase{}, cfg)
 }
 
 func TestUserInteractiveChallenge(t *testing.T) {

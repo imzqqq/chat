@@ -9,10 +9,9 @@ import (
 	"github.com/matrix-org/dendrite/clientapi/jsonerror"
 	"github.com/matrix-org/dendrite/setup/config"
 	"github.com/matrix-org/dendrite/userapi/api"
-	userapi "github.com/matrix-org/dendrite/userapi/api"
-	"github.com/matrix-org/dendrite/userapi/storage/accounts"
 	"github.com/matrix-org/gomatrixserverlib"
 	"github.com/matrix-org/util"
+	"github.com/sirupsen/logrus"
 )
 
 type newPasswordRequest struct {
@@ -29,14 +28,18 @@ type newPasswordAuth struct {
 
 func Password(
 	req *http.Request,
-	userAPI userapi.UserInternalAPI,
-	accountDB accounts.Database,
+	userAPI api.ClientUserAPI,
 	device *api.Device,
 	cfg *config.ClientAPI,
 ) util.JSONResponse {
 	// Check that the existing password is right.
 	var r newPasswordRequest
 	r.LogoutDevices = true
+
+	logrus.WithFields(logrus.Fields{
+		"sessionId": device.SessionID,
+		"userId":    device.UserID,
+	}).Debug("Changing password")
 
 	// Unmarshal the request.
 	resErr := httputil.UnmarshalJSONRequest(req, &r)
@@ -69,13 +72,13 @@ func Password(
 
 	// Check if the existing password is correct.
 	typePassword := auth.LoginTypePassword{
-		GetAccountByPassword: accountDB.GetAccountByPassword,
+		GetAccountByPassword: userAPI.QueryAccountByPassword,
 		Config:               cfg,
 	}
 	if _, authErr := typePassword.Login(req.Context(), &r.Auth.PasswordRequest); authErr != nil {
 		return *authErr
 	}
-	AddCompletedSessionStage(sessionID, authtypes.LoginTypePassword)
+	sessions.addCompletedSessionStage(sessionID, authtypes.LoginTypePassword)
 
 	// Check the new password strength.
 	if resErr = validatePassword(r.NewPassword); resErr != nil {
@@ -90,11 +93,11 @@ func Password(
 	}
 
 	// Ask the user API to perform the password change.
-	passwordReq := &userapi.PerformPasswordUpdateRequest{
+	passwordReq := &api.PerformPasswordUpdateRequest{
 		Localpart: localpart,
 		Password:  r.NewPassword,
 	}
-	passwordRes := &userapi.PerformPasswordUpdateResponse{}
+	passwordRes := &api.PerformPasswordUpdateResponse{}
 	if err := userAPI.PerformPasswordUpdate(req.Context(), passwordReq, passwordRes); err != nil {
 		util.GetLogger(req.Context()).WithError(err).Error("PerformPasswordUpdate failed")
 		return jsonerror.InternalServerError()
@@ -107,14 +110,23 @@ func Password(
 	// If the request asks us to log out all other devices then
 	// ask the user API to do that.
 	if r.LogoutDevices {
-		logoutReq := &userapi.PerformDeviceDeletionRequest{
+		logoutReq := &api.PerformDeviceDeletionRequest{
 			UserID:         device.UserID,
 			DeviceIDs:      nil,
 			ExceptDeviceID: device.ID,
 		}
-		logoutRes := &userapi.PerformDeviceDeletionResponse{}
+		logoutRes := &api.PerformDeviceDeletionResponse{}
 		if err := userAPI.PerformDeviceDeletion(req.Context(), logoutReq, logoutRes); err != nil {
 			util.GetLogger(req.Context()).WithError(err).Error("PerformDeviceDeletion failed")
+			return jsonerror.InternalServerError()
+		}
+
+		pushersReq := &api.PerformPusherDeletionRequest{
+			Localpart: localpart,
+			SessionID: device.SessionID,
+		}
+		if err := userAPI.PerformPusherDeletion(req.Context(), pushersReq, &struct{}{}); err != nil {
+			util.GetLogger(req.Context()).WithError(err).Error("PerformPusherDeletion failed")
 			return jsonerror.InternalServerError()
 		}
 	}

@@ -22,7 +22,6 @@ import (
 	"fmt"
 	"strings"
 
-	eduserverAPI "github.com/matrix-org/dendrite/eduserver/api"
 	"github.com/matrix-org/dendrite/keyserver/api"
 	"github.com/matrix-org/dendrite/keyserver/types"
 	"github.com/matrix-org/gomatrixserverlib"
@@ -166,26 +165,53 @@ func (a *KeyInternalAPI) PerformUploadDeviceKeys(ctx context.Context, req *api.P
 	}
 
 	// We can't have a self-signing or user-signing key without a master
-	// key, so make sure we have one of those.
-	if !hasMasterKey {
-		existingKeys, err := a.DB.CrossSigningKeysDataForUser(ctx, req.UserID)
-		if err != nil {
-			res.Error = &api.KeyError{
-				Err: "Retrieving cross-signing keys from database failed: " + err.Error(),
-			}
-			return
+	// key, so make sure we have one of those. We will also only actually do
+	// something if any of the specified keys in the request are different
+	// to what we've got in the database, to avoid generating key change
+	// notifications unnecessarily.
+	existingKeys, err := a.DB.CrossSigningKeysDataForUser(ctx, req.UserID)
+	if err != nil {
+		res.Error = &api.KeyError{
+			Err: "Retrieving cross-signing keys from database failed: " + err.Error(),
 		}
-
-		_, hasMasterKey = existingKeys[gomatrixserverlib.CrossSigningKeyPurposeMaster]
+		return
 	}
 
 	// If we still can't find a master key for the user then stop the upload.
 	// This satisfies the "Fails to upload self-signing key without master key" test.
 	if !hasMasterKey {
-		res.Error = &api.KeyError{
-			Err:            "No master key was found",
-			IsMissingParam: true,
+		if _, hasMasterKey = existingKeys[gomatrixserverlib.CrossSigningKeyPurposeMaster]; !hasMasterKey {
+			res.Error = &api.KeyError{
+				Err:            "No master key was found",
+				IsMissingParam: true,
+			}
+			return
 		}
+	}
+
+	// Check if anything actually changed compared to what we have in the database.
+	changed := false
+	for _, purpose := range []gomatrixserverlib.CrossSigningKeyPurpose{
+		gomatrixserverlib.CrossSigningKeyPurposeMaster,
+		gomatrixserverlib.CrossSigningKeyPurposeSelfSigning,
+		gomatrixserverlib.CrossSigningKeyPurposeUserSigning,
+	} {
+		old, gotOld := existingKeys[purpose]
+		new, gotNew := toStore[purpose]
+		if gotOld != gotNew {
+			// A new key purpose has been specified that we didn't know before,
+			// or one has been removed.
+			changed = true
+			break
+		}
+		if !bytes.Equal(old, new) {
+			// One of the existing keys for a purpose we already knew about has
+			// changed.
+			changed = true
+			break
+		}
+	}
+	if !changed {
 		return
 	}
 
@@ -219,25 +245,23 @@ func (a *KeyInternalAPI) PerformUploadDeviceKeys(ctx context.Context, req *api.P
 	}
 
 	// Finally, generate a notification that we updated the keys.
-	if _, host, err := gomatrixserverlib.SplitID('@', req.UserID); err == nil && host == a.ThisServer {
-		update := eduserverAPI.CrossSigningKeyUpdate{
-			UserID: req.UserID,
+	update := api.CrossSigningKeyUpdate{
+		UserID: req.UserID,
+	}
+	if mk, ok := byPurpose[gomatrixserverlib.CrossSigningKeyPurposeMaster]; ok {
+		update.MasterKey = &mk
+	}
+	if ssk, ok := byPurpose[gomatrixserverlib.CrossSigningKeyPurposeSelfSigning]; ok {
+		update.SelfSigningKey = &ssk
+	}
+	if update.MasterKey == nil && update.SelfSigningKey == nil {
+		return
+	}
+	if err := a.Producer.ProduceSigningKeyUpdate(update); err != nil {
+		res.Error = &api.KeyError{
+			Err: fmt.Sprintf("a.Producer.ProduceSigningKeyUpdate: %s", err),
 		}
-		if mk, ok := byPurpose[gomatrixserverlib.CrossSigningKeyPurposeMaster]; ok {
-			update.MasterKey = &mk
-		}
-		if ssk, ok := byPurpose[gomatrixserverlib.CrossSigningKeyPurposeSelfSigning]; ok {
-			update.SelfSigningKey = &ssk
-		}
-		if update.MasterKey == nil && update.SelfSigningKey == nil {
-			return
-		}
-		if err := a.Producer.ProduceSigningKeyUpdate(update); err != nil {
-			res.Error = &api.KeyError{
-				Err: fmt.Sprintf("a.Producer.ProduceSigningKeyUpdate: %s", err),
-			}
-			return
-		}
+		return
 	}
 }
 
@@ -310,16 +334,18 @@ func (a *KeyInternalAPI) PerformUploadDeviceSignatures(ctx context.Context, req 
 
 	// Finally, generate a notification that we updated the signatures.
 	for userID := range req.Signatures {
-		if _, host, err := gomatrixserverlib.SplitID('@', userID); err == nil && host == a.ThisServer {
-			update := eduserverAPI.CrossSigningKeyUpdate{
-				UserID: userID,
+		masterKey := queryRes.MasterKeys[userID]
+		selfSigningKey := queryRes.SelfSigningKeys[userID]
+		update := api.CrossSigningKeyUpdate{
+			UserID:         userID,
+			MasterKey:      &masterKey,
+			SelfSigningKey: &selfSigningKey,
+		}
+		if err := a.Producer.ProduceSigningKeyUpdate(update); err != nil {
+			res.Error = &api.KeyError{
+				Err: fmt.Sprintf("a.Producer.ProduceSigningKeyUpdate: %s", err),
 			}
-			if err := a.Producer.ProduceSigningKeyUpdate(update); err != nil {
-				res.Error = &api.KeyError{
-					Err: fmt.Sprintf("a.Producer.ProduceSigningKeyUpdate: %s", err),
-				}
-				return
-			}
+			return
 		}
 	}
 }
@@ -336,6 +362,13 @@ func (a *KeyInternalAPI) processSelfSignatures(
 		for targetKeyID, signature := range forTargetUserID {
 			switch sig := signature.CrossSigningBody.(type) {
 			case *gomatrixserverlib.CrossSigningKey:
+				for keyID := range sig.Keys {
+					split := strings.SplitN(string(keyID), ":", 2)
+					if len(split) > 1 && gomatrixserverlib.KeyID(split[1]) == targetKeyID {
+						targetKeyID = keyID // contains the ed25519: or other scheme
+						break
+					}
+				}
 				for originUserID, forOriginUserID := range sig.Signatures {
 					for originKeyID, originSig := range forOriginUserID {
 						if err := a.DB.StoreCrossSigningSigsForTarget(
@@ -429,10 +462,10 @@ func (a *KeyInternalAPI) processOtherSignatures(
 func (a *KeyInternalAPI) crossSigningKeysFromDatabase(
 	ctx context.Context, req *api.QueryKeysRequest, res *api.QueryKeysResponse,
 ) {
-	for userID := range req.UserToDevices {
-		keys, err := a.DB.CrossSigningKeysForUser(ctx, userID)
+	for targetUserID := range req.UserToDevices {
+		keys, err := a.DB.CrossSigningKeysForUser(ctx, targetUserID)
 		if err != nil {
-			logrus.WithError(err).Errorf("Failed to get cross-signing keys for user %q", userID)
+			logrus.WithError(err).Errorf("Failed to get cross-signing keys for user %q", targetUserID)
 			continue
 		}
 
@@ -443,9 +476,9 @@ func (a *KeyInternalAPI) crossSigningKeysFromDatabase(
 				break
 			}
 
-			sigMap, err := a.DB.CrossSigningSigsForTarget(ctx, userID, keyID)
+			sigMap, err := a.DB.CrossSigningSigsForTarget(ctx, req.UserID, targetUserID, keyID)
 			if err != nil && err != sql.ErrNoRows {
-				logrus.WithError(err).Errorf("Failed to get cross-signing signatures for user %q key %q", userID, keyID)
+				logrus.WithError(err).Errorf("Failed to get cross-signing signatures for user %q key %q", targetUserID, keyID)
 				continue
 			}
 
@@ -465,7 +498,7 @@ func (a *KeyInternalAPI) crossSigningKeysFromDatabase(
 					case req.UserID != "" && originUserID == req.UserID:
 						// Include signatures that we created
 						appendSignature(originUserID, originKeyID, signature)
-					case originUserID == userID:
+					case originUserID == targetUserID:
 						// Include signatures that were created by the person whose key
 						// we are processing
 						appendSignature(originUserID, originKeyID, signature)
@@ -475,13 +508,13 @@ func (a *KeyInternalAPI) crossSigningKeysFromDatabase(
 
 			switch keyType {
 			case gomatrixserverlib.CrossSigningKeyPurposeMaster:
-				res.MasterKeys[userID] = key
+				res.MasterKeys[targetUserID] = key
 
 			case gomatrixserverlib.CrossSigningKeyPurposeSelfSigning:
-				res.SelfSigningKeys[userID] = key
+				res.SelfSigningKeys[targetUserID] = key
 
 			case gomatrixserverlib.CrossSigningKeyPurposeUserSigning:
-				res.UserSigningKeys[userID] = key
+				res.UserSigningKeys[targetUserID] = key
 			}
 		}
 	}
@@ -520,7 +553,8 @@ func (a *KeyInternalAPI) QuerySignatures(ctx context.Context, req *api.QuerySign
 		}
 
 		for _, targetKeyID := range forTargetUser {
-			sigMap, err := a.DB.CrossSigningSigsForTarget(ctx, targetUserID, targetKeyID)
+			// Get own signatures only.
+			sigMap, err := a.DB.CrossSigningSigsForTarget(ctx, targetUserID, targetUserID, targetKeyID)
 			if err != nil && err != sql.ErrNoRows {
 				res.Error = &api.KeyError{
 					Err: fmt.Sprintf("a.DB.CrossSigningSigsForTarget: %s", err),

@@ -13,9 +13,11 @@ type MSCs struct {
 	Database DatabaseOptions `yaml:"database"`
 }
 
-func (c *MSCs) Defaults() {
+func (c *MSCs) Defaults(generate bool) {
 	c.Database.Defaults(5)
-	c.Database.ConnectionString = "file:mscs.db"
+	if generate {
+		c.Database.ConnectionString = "file:mscs.db"
+	}
 }
 
 // Enabled returns true if the given msc is enabled. Should in the form 'msc12345'.
@@ -29,5 +31,7 @@ func (c *MSCs) Enabled(msc string) bool {
 }
 
 func (c *MSCs) Verify(configErrs *ConfigErrors, isMonolith bool) {
-	checkNotEmpty(configErrs, "mscs.database.connection_string", string(c.Database.ConnectionString))
+	if c.Matrix.DatabaseOptions.ConnectionString == "" {
+		checkNotEmpty(configErrs, "mscs.database.connection_string", string(c.Database.ConnectionString))
+	}
 }

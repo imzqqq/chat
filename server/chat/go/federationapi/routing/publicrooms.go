@@ -23,7 +23,7 @@ type filter struct {
 }
 
 // GetPostPublicRooms implements GET and POST /publicRooms
-func GetPostPublicRooms(req *http.Request, rsAPI roomserverAPI.RoomserverInternalAPI) util.JSONResponse {
+func GetPostPublicRooms(req *http.Request, rsAPI roomserverAPI.FederationRoomserverAPI) util.JSONResponse {
 	var request PublicRoomReq
 	if fillErr := fillPublicRoomsReq(req, &request); fillErr != nil {
 		return *fillErr
@@ -42,7 +42,7 @@ func GetPostPublicRooms(req *http.Request, rsAPI roomserverAPI.RoomserverInterna
 }
 
 func publicRooms(
-	ctx context.Context, request PublicRoomReq, rsAPI roomserverAPI.RoomserverInternalAPI,
+	ctx context.Context, request PublicRoomReq, rsAPI roomserverAPI.FederationRoomserverAPI,
 ) (*gomatrixserverlib.RespPublicRooms, error) {
 
 	var response gomatrixserverlib.RespPublicRooms
@@ -111,7 +111,7 @@ func fillPublicRoomsReq(httpReq *http.Request, request *PublicRoomReq) *util.JSO
 }
 
 // due to lots of switches
-func fillInRooms(ctx context.Context, roomIDs []string, rsAPI roomserverAPI.RoomserverInternalAPI) ([]gomatrixserverlib.PublicRoom, error) {
+func fillInRooms(ctx context.Context, roomIDs []string, rsAPI roomserverAPI.FederationRoomserverAPI) ([]gomatrixserverlib.PublicRoom, error) {
 	avatarTuple := gomatrixserverlib.StateKeyTuple{EventType: "m.room.avatar", StateKey: ""}
 	nameTuple := gomatrixserverlib.StateKeyTuple{EventType: "m.room.name", StateKey: ""}
 	canonicalTuple := gomatrixserverlib.StateKeyTuple{EventType: gomatrixserverlib.MRoomCanonicalAlias, StateKey: ""}
@@ -133,8 +133,6 @@ func fillInRooms(ctx context.Context, roomIDs []string, rsAPI roomserverAPI.Room
 		util.GetLogger(ctx).WithError(err).Error("QueryBulkStateContent failed")
 		return nil, err
 	}
-	util.GetLogger(ctx).Infof("room IDs: %+v", roomIDs)
-	util.GetLogger(ctx).Infof("State res: %+v", stateRes.Rooms)
 	chunk := make([]gomatrixserverlib.PublicRoom, len(roomIDs))
 	i := 0
 	for roomID, data := range stateRes.Rooms {
@@ -156,7 +154,9 @@ func fillInRooms(ctx context.Context, roomIDs []string, rsAPI roomserverAPI.Room
 			case topicTuple:
 				pub.Topic = contentVal
 			case canonicalTuple:
-				pub.CanonicalAlias = contentVal
+				if _, _, err := gomatrixserverlib.SplitID('#', contentVal); err == nil {
+					pub.CanonicalAlias = contentVal
+				}
 			case visibilityTuple:
 				pub.WorldReadable = contentVal == "world_readable"
 			// need both of these to determine whether guests can join

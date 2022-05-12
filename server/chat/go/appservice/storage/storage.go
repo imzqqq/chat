@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+//go:build !wasm
 // +build !wasm
 
 package storage
@@ -21,17 +22,18 @@ import (
 
 	"github.com/matrix-org/dendrite/appservice/storage/postgres"
 	"github.com/matrix-org/dendrite/appservice/storage/sqlite3"
+	"github.com/matrix-org/dendrite/setup/base"
 	"github.com/matrix-org/dendrite/setup/config"
 )
 
 // NewDatabase opens a new Postgres or Sqlite database (based on dataSourceName scheme)
 // and sets DB connection parameters
-func NewDatabase(dbProperties *config.DatabaseOptions) (Database, error) {
+func NewDatabase(base *base.BaseDendrite, dbProperties *config.DatabaseOptions) (Database, error) {
 	switch {
 	case dbProperties.ConnectionString.IsSQLite():
-		return sqlite3.NewDatabase(dbProperties)
+		return sqlite3.NewDatabase(base, dbProperties)
 	case dbProperties.ConnectionString.IsPostgres():
-		return postgres.NewDatabase(dbProperties)
+		return postgres.NewDatabase(base, dbProperties)
 	default:
 		return nil, fmt.Errorf("unexpected database type")
 	}

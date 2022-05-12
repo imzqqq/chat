@@ -78,7 +78,7 @@ Room creation reports m.room.member to myself
 Outbound federation rejects send_join responses with no m.room.create event
 Outbound federation rejects m.room.create events with an unknown room version
 Invited user can see room metadata
-# Blacklisted because these tests call /r0/events which we don't implement
+# Blacklisted because these tests call /v3/events which we don't implement
 # New room members see their own join event
 # Existing members see new members' join events
 setting 'm.room.power_levels' respects room powerlevel
@@ -136,7 +136,6 @@ query for user with no keys returns empty key dict
 Can claim one time key using POST
 Can claim remote one time key using POST
 Local device key changes appear in v2 /sync
-Local device key changes appear in /keys/changes
 New users appear in /keys/changes
 Local delete device changes appear in v2 /sync
 Local new device changes appear in v2 /sync
@@ -155,7 +154,7 @@ Can add account data
 Can add account data to room
 Can get account data without syncing
 Can get room account data without syncing
-#Latest account data appears in v2 /sync
+Latest account data appears in v2 /sync
 New account data appears in incremental v2 /sync
 Checking local federation server
 Inbound federation can query profile data
@@ -240,7 +239,6 @@ Inbound federation can query room alias directory
 Outbound federation can query v2 /send_join
 Inbound federation can receive v2 /send_join
 Message history can be paginated
-Getting messages going forward is limited for a departed room (SPEC-216)
 Backfill works correctly with history visibility set to joined
 Guest user cannot call /events globally
 Guest users can join guest_access rooms
@@ -258,7 +256,7 @@ Guest non-joined users cannot send messages to guest_access rooms if not joined
 Real non-joined users cannot room initalSync for non-world_readable rooms
 Push rules come down in an initial /sync
 Regular users can add and delete aliases in the default room configuration
-GET /r0/capabilities is not public
+GET /v3/capabilities is not public
 GET /joined_rooms lists newly-created room
 /joined_rooms returns only joined rooms
 Message history can be paginated over federation
@@ -286,8 +284,6 @@ local user can join room with version 4
 remote user can join room with version 3
 remote user can join room with version 4
 Remote user can backfill in a room with version 4
-# We don't support ignores yet, so ignore this for now - ha ha.
-# Ignore invite in incremental sync
 Outbound federation can send invites via v2 API
 User can invite local user to room with version 3
 User can invite local user to room with version 4
@@ -316,10 +312,10 @@ Inbound federation can return events
 Inbound federation can return missing events for world_readable visibility
 Inbound federation can return missing events for invite visibility
 Inbound federation can get public room list
-POST /rooms/:room_id/redact/:event_id as power user redacts message
-POST /rooms/:room_id/redact/:event_id as original message sender redacts message
-POST /rooms/:room_id/redact/:event_id as random user does not redact message
-POST /redact disallows redaction of event in different room
+PUT /rooms/:room_id/redact/:event_id/:txn_id as power user redacts message
+PUT /rooms/:room_id/redact/:event_id/:txn_id as original message sender redacts message
+PUT /rooms/:room_id/redact/:event_id/:txn_id as random user does not redact message
+PUT /redact disallows redaction of event in different room
 An event which redacts itself should be ignored
 A pair of events which redact each other should be ignored
 Redaction of a redaction redacts the redaction reason
@@ -340,17 +336,17 @@ Existing members see new members' join events
 Inbound federation can receive events
 Inbound federation can receive redacted events
 Can logout current device
-Can send a message directly to a device using PUT /sendToDevice 
-Can recv a device message using /sync 
-Can recv device messages until they are acknowledged 
-Device messages with the same txn_id are deduplicated 
-Device messages wake up /sync 
-Can recv device messages over federation 
-Device messages over federation wake up /sync 
-Can send messages with a wildcard device id 
-Can send messages with a wildcard device id to two devices 
-Wildcard device messages wake up /sync 
-Wildcard device messages over federation wake up /sync 
+Can send a message directly to a device using PUT /sendToDevice
+Can recv a device message using /sync
+Can recv device messages until they are acknowledged
+Device messages with the same txn_id are deduplicated
+Device messages wake up /sync
+Can recv device messages over federation
+Device messages over federation wake up /sync
+Can send messages with a wildcard device id
+Can send messages with a wildcard device id to two devices
+Wildcard device messages wake up /sync
+Wildcard device messages over federation wake up /sync
 Can send a to-device message to two users which both receive it using /sync
 User can create and send/receive messages in a room with version 6
 local user can join room with version 6
@@ -367,8 +363,8 @@ Outbound federation will ignore a missing event with bad JSON for room version 6
 Server correctly handles transactions that break edu limits
 Server rejects invalid JSON in a version 6 room
 Can download without a file name over federation
-POST /media/r0/upload can create an upload
-GET /media/r0/download can fetch the value again
+POST /media/v3/upload can create an upload
+GET /media/v3/download can fetch the value again
 Remote users can join room by alias
 Alias creators can delete alias with no ops
 Alias creators can delete canonical alias with no ops
@@ -478,7 +474,7 @@ Federation key API can act as a notary server via a GET request
 Inbound /make_join rejects attempts to join rooms where all users have left
 Inbound federation rejects invites which include invalid JSON for room version 6
 Inbound federation rejects invite rejections which include invalid JSON for room version 6
-GET /capabilities is present and well formed for registered user 
+GET /capabilities is present and well formed for registered user
 m.room.history_visibility == "joined" allows/forbids appropriately for Guest users
 m.room.history_visibility == "joined" allows/forbids appropriately for Real users
 POST rejects invalid utf-8 in JSON
@@ -516,16 +512,15 @@ AS can create a user with inhibit_login
 AS can set avatar for ghosted users
 AS can set displayname for ghosted users
 Ghost user must register before joining room
-Inviting an AS-hosted user asks the AS server
 Can generate a openid access_token that can be exchanged for information about a user
 Invalid openid access tokens are rejected
 Requests to userinfo without access tokens are rejected
 'ban' event respects room powerlevel
 Non-present room members cannot ban others
-POST /_chat/admin/v1/register with shared secret
-POST /_chat/admin/v1/register admin with shared secret
-POST /_chat/admin/v1/register with shared secret downcases capitals
-POST /_chat/admin/v1/register with shared secret disallows symbols
+POST /_synapse/admin/v1/register with shared secret
+POST /_synapse/admin/v1/register admin with shared secret
+POST /_synapse/admin/v1/register with shared secret downcases capitals
+POST /_synapse/admin/v1/register with shared secret disallows symbols
 Membership event with an invalid displayname in the send_join response should not cause room join to fail
 Inbound federation rejects incorrectly-signed invite rejections
 Inbound federation can receive invite rejections
@@ -556,3 +551,168 @@ Fails to upload self-signing key without master key
 can fetch self-signing keys over federation
 Changing master key notifies local users
 Changing user-signing key notifies local users
+Inbound federation correctly handles soft failed events as extremities
+Can read configuration endpoint
+User can create and send/receive messages in a room with version 7
+local user can join room with version 7
+User can invite local user to room with version 7
+remote user can join room with version 7
+User can invite remote user to room with version 7
+Remote user can backfill in a room with version 7
+Can reject invites over federation for rooms with version 7
+Can receive redactions from regular users over federation in room version 7
+Federation publicRoom Name/topic keys are correct
+Remote invited user can see room metadata
+Can re-join room if re-invited
+A prev_batch token from incremental sync can be used in the v1 messages API
+Inbound federation rejects invites which are not signed by the sender
+Invited user can reject invite over federation several times
+Test that we can be reinvited to a room we created
+User can create and send/receive messages in a room with version 8
+local user can join room with version 8
+User can invite local user to room with version 8
+remote user can join room with version 8
+User can invite remote user to room with version 8
+Remote user can backfill in a room with version 8
+Can reject invites over federation for rooms with version 8
+Can receive redactions from regular users over federation in room version 8
+User can create and send/receive messages in a room with version 9
+local user can join room with version 9
+User can invite local user to room with version 9
+remote user can join room with version 9
+User can invite remote user to room with version 9
+Remote user can backfill in a room with version 9
+Can reject invites over federation for rooms with version 9
+Can receive redactions from regular users over federation in room version 9
+Pushers created with a different access token are deleted on password change
+Pushers created with a the same access token are not deleted on password change
+Can fetch a user's pushers
+Can add global push rule for room
+Can add global push rule for sender
+Can add global push rule for content
+Can add global push rule for override
+Can add global push rule for underride
+Can add global push rule for content
+New rules appear before old rules by default
+Can add global push rule before an existing rule
+Can add global push rule after an existing rule
+Can delete a push rule
+Can disable a push rule
+Adding the same push rule twice is idempotent
+Can change the actions of default rules
+Can change the actions of a user specified rule
+Adding a push rule wakes up an incremental /sync
+Disabling a push rule wakes up an incremental /sync
+Enabling a push rule wakes up an incremental /sync
+Setting actions for a push rule wakes up an incremental /sync
+Can enable/disable default rules
+Trying to add push rule with missing template fails with 400
+Trying to add push rule with missing rule_id fails with 400
+Trying to add push rule with empty rule_id fails with 400
+Trying to add push rule with invalid template fails with 400
+Trying to add push rule with rule_id with slashes fails with 400
+Trying to add push rule with override rule without conditions fails with 400
+Trying to add push rule with underride rule without conditions fails with 400
+Trying to add push rule with condition without kind fails with 400
+Trying to add push rule with content rule without pattern fails with 400
+Trying to add push rule with no actions fails with 400
+Trying to add push rule with invalid action fails with 400
+Trying to add push rule with invalid attr fails with 400
+Trying to add push rule with invalid value for enabled fails with 400
+Trying to get push rules with no trailing slash fails with 400
+Trying to get push rules with scope without trailing slash fails with 400
+Trying to get push rules with template without tailing slash fails with 400
+Trying to get push rules with unknown scope fails with 400
+Trying to get push rules with unknown template fails with 400
+Trying to get push rules with unknown attribute fails with 400
+Getting push rules doesn't corrupt the cache SYN-390
+Test that a message is pushed
+Invites are pushed
+Rooms with names are correctly named in pushes
+Rooms with canonical alias are correctly named in pushed
+Rooms with many users are correctly pushed
+Don't get pushed for rooms you've muted
+Rejected events are not pushed
+Test that rejected pushers are removed.
+Trying to add push rule with no scope fails with 400
+Trying to add push rule with invalid scope fails with 400
+Forward extremities remain so even after the next events are populated as outliers
+If a device list update goes missing, the server resyncs on the next one
+uploading self-signing key notifies over federation
+uploading signed devices gets propagated over federation
+Device list doesn't change if remote server is down
+/context/ on joined room works
+/context/ on non world readable room does not work
+/context/ returns correct number of events
+GET /rooms/:room_id/messages lazy loads members correctly
+Can query remote device keys using POST after notification
+Device deletion propagates over federation
+Get left notifs in sync and /keys/changes when other user leaves
+Remote banned user is kicked and may not rejoin until unbanned
+registration remembers parameters
+registration accepts non-ascii passwords
+registration with inhibit_login inhibits login
+The operation must be consistent through an interactive authentication session
+Multiple calls to /sync should not cause 500 errors
+Canonical alias can be set
+Canonical alias can include alt_aliases
+Can delete canonical alias
+AS can make room aliases
+/context/ with lazy_load_members filter works
+/upgrade creates a new room
+/upgrade should preserve room visibility for public rooms
+/upgrade should preserve room visibility for private rooms
+/upgrade copies the power levels to the new room
+/upgrade preserves the power level of the upgrading user in old and new rooms
+/upgrade copies important state to the new room
+/upgrade copies ban events to the new room
+local user has push rules copied to upgraded room
+remote user has push rules copied to upgraded room
+/upgrade moves aliases to the new room
+/upgrade preserves room federation ability
+/upgrade restricts power levels in the old room
+/upgrade restricts power levels in the old room when the old PLs are unusual
+/upgrade to an unknown version is rejected
+/upgrade is rejected if the user can't send state events
+/upgrade of a bogus room fails gracefully
+Cannot send tombstone event that points to the same room
+Room summary counts change when membership changes
+GET /presence/:user_id/status fetches initial status
+PUT /presence/:user_id/status updates my presence
+Presence change reports an event to myself
+Existing members see new members' presence
+Get presence for newly joined members in incremental sync
+User sees their own presence in a sync
+User sees updates to presence from other users in the incremental sync.
+Presence changes are reported to local room members
+Presence changes are also reported to remote room members
+Presence changes to UNAVAILABLE are reported to local room members
+Presence changes to UNAVAILABLE are reported to remote room members
+New federated private chats get full presence information (SYN-115)
+/upgrade copies >100 power levels to the new room
+Room state after a rejected message event is the same as before
+Room state after a rejected state event is the same as before
+Ignore user in existing room
+Ignore invite in full sync
+Ignore invite in incremental sync
+A filtered timeline reaches its limit
+A change to displayname should not result in a full state sync
+Can fetch images in room
+The only membership state included in an initial sync is for all the senders in the timeline
+The only membership state included in an incremental sync is for senders in the timeline
+Old members are included in gappy incr LL sync if they start speaking
+We do send redundant membership state across incremental syncs if asked
+Rejecting invite over federation doesn't break incremental /sync
+Gapped incremental syncs include all state changes
+Old leaves are present in gapped incremental syncs
+Leaves are present in non-gapped incremental syncs
+Members from the gap are included in gappy incr LL sync
+Presence can be set from sync
+/state returns M_NOT_FOUND for a rejected message event
+/state_ids returns M_NOT_FOUND for a rejected message event
+/state returns M_NOT_FOUND for a rejected state event
+/state_ids returns M_NOT_FOUND for a rejected state event
+PUT /rooms/:room_id/redact/:event_id/:txn_id is idempotent
+Unnamed room comes with a name summary
+Named room comes with just joined member count summary
+Room summary only has 5 heroes

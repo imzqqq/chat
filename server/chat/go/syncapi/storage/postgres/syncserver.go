@@ -21,6 +21,7 @@ import (
 	// Import the postgres database driver.
 	_ "github.com/lib/pq"
 	"github.com/matrix-org/dendrite/internal/sqlutil"
+	"github.com/matrix-org/dendrite/setup/base"
 	"github.com/matrix-org/dendrite/setup/config"
 	"github.com/matrix-org/dendrite/syncapi/storage/postgres/deltas"
 	"github.com/matrix-org/dendrite/syncapi/storage/shared"
@@ -32,18 +33,13 @@ type SyncServerDatasource struct {
 	shared.Database
 	db     *sql.DB
 	writer sqlutil.Writer
-	sqlutil.PartitionOffsetStatements
 }
 
 // NewDatabase creates a new sync server database
-func NewDatabase(dbProperties *config.DatabaseOptions) (*SyncServerDatasource, error) {
+func NewDatabase(base *base.BaseDendrite, dbProperties *config.DatabaseOptions) (*SyncServerDatasource, error) {
 	var d SyncServerDatasource
 	var err error
-	if d.db, err = sqlutil.Open(dbProperties); err != nil {
-		return nil, err
-	}
-	d.writer = sqlutil.NewDummyWriter()
-	if err = d.PartitionOffsetStatements.Prepare(d.db, d.writer, "syncapi"); err != nil {
+	if d.db, d.writer, err = base.DatabaseConnection(dbProperties, sqlutil.NewDummyWriter()); err != nil {
 		return nil, err
 	}
 	accountData, err := NewPostgresAccountDataTable(d.db)
@@ -90,6 +86,18 @@ func NewDatabase(dbProperties *config.DatabaseOptions) (*SyncServerDatasource, e
 	if err != nil {
 		return nil, err
 	}
+	notificationData, err := NewPostgresNotificationDataTable(d.db)
+	if err != nil {
+		return nil, err
+	}
+	ignores, err := NewPostgresIgnoresTable(d.db)
+	if err != nil {
+		return nil, err
+	}
+	presence, err := NewPostgresPresenceTable(d.db)
+	if err != nil {
+		return nil, err
+	}
 	m := sqlutil.NewMigrations()
 	deltas.LoadFixSequences(m)
 	deltas.LoadRemoveSendToDeviceSentColumn(m)
@@ -110,6 +118,9 @@ func NewDatabase(dbProperties *config.DatabaseOptions) (*SyncServerDatasource, e
 		SendToDevice:        sendToDevice,
 		Receipts:            receipts,
 		Memberships:         memberships,
+		NotificationData:    notificationData,
+		Ignores:             ignores,
+		Presence:            presence,
 	}
 	return &d, nil
 }

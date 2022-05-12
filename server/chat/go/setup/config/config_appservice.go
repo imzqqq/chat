@@ -40,17 +40,21 @@ type AppServiceAPI struct {
 	ConfigFiles []string `yaml:"config_files"`
 }
 
-func (c *AppServiceAPI) Defaults() {
+func (c *AppServiceAPI) Defaults(generate bool) {
 	c.InternalAPI.Listen = "http://localhost:7777"
 	c.InternalAPI.Connect = "http://localhost:7777"
 	c.Database.Defaults(5)
-	c.Database.ConnectionString = "file:appservice.db"
+	if generate {
+		c.Database.ConnectionString = "file:appservice.db"
+	}
 }
 
 func (c *AppServiceAPI) Verify(configErrs *ConfigErrors, isMonolith bool) {
 	checkURL(configErrs, "app_service_api.internal_api.listen", string(c.InternalAPI.Listen))
 	checkURL(configErrs, "app_service_api.internal_api.bind", string(c.InternalAPI.Connect))
-	checkNotEmpty(configErrs, "app_service_api.database.connection_string", string(c.Database.ConnectionString))
+	if c.Matrix.DatabaseOptions.ConnectionString == "" {
+		checkNotEmpty(configErrs, "app_service_api.database.connection_string", string(c.Database.ConnectionString))
+	}
 }
 
 // ApplicationServiceNamespace is the namespace that a specific application
@@ -207,13 +211,14 @@ func setupRegexps(asAPI *AppServiceAPI, derived *Derived) (err error) {
 	for _, appservice := range derived.ApplicationServices {
 		// The sender_localpart can be considered an exclusive regex for a single user, so let's do that
 		// to simplify the code
-		var senderUserIDSlice = []string{fmt.Sprintf("@%s:%s", appservice.SenderLocalpart, asAPI.Matrix.ServerName)}
-		usersSlice, found := appservice.NamespaceMap["users"]
+		users, found := appservice.NamespaceMap["users"]
 		if !found {
-			usersSlice = []ApplicationServiceNamespace{}
-			appservice.NamespaceMap["users"] = usersSlice
+			users = []ApplicationServiceNamespace{}
 		}
-		appendExclusiveNamespaceRegexs(&senderUserIDSlice, usersSlice)
+		appservice.NamespaceMap["users"] = append(users, ApplicationServiceNamespace{
+			Exclusive: true,
+			Regex:     regexp.QuoteMeta(fmt.Sprintf("@%s:%s", appservice.SenderLocalpart, asAPI.Matrix.ServerName)),
+		})
 
 		for key, namespaceSlice := range appservice.NamespaceMap {
 			switch key {

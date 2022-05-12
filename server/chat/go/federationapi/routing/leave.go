@@ -30,7 +30,7 @@ func MakeLeave(
 	httpReq *http.Request,
 	request *gomatrixserverlib.FederationRequest,
 	cfg *config.FederationAPI,
-	rsAPI api.RoomserverInternalAPI,
+	rsAPI api.FederationRoomserverAPI,
 	roomID, userID string,
 ) util.JSONResponse {
 	_, domain, err := gomatrixserverlib.SplitID('@', userID)
@@ -122,7 +122,7 @@ func SendLeave(
 	httpReq *http.Request,
 	request *gomatrixserverlib.FederationRequest,
 	cfg *config.FederationAPI,
-	rsAPI api.RoomserverInternalAPI,
+	rsAPI api.FederationRoomserverAPI,
 	keys gomatrixserverlib.JSONVerifier,
 	roomID, eventID string,
 ) util.JSONResponse {
@@ -175,10 +175,16 @@ func SendLeave(
 		}
 	}
 
-	if event.StateKey() == nil {
+	if event.StateKey() == nil || event.StateKeyEquals("") {
 		return util.JSONResponse{
 			Code: http.StatusBadRequest,
-			JSON: jsonerror.InvalidArgumentValue("missing state_key"),
+			JSON: jsonerror.BadJSON("No state key was provided in the leave event."),
+		}
+	}
+	if !event.StateKeyEquals(event.Sender()) {
+		return util.JSONResponse{
+			Code: http.StatusBadRequest,
+			JSON: jsonerror.BadJSON("Event state key must match the event sender."),
 		}
 	}
 
@@ -269,7 +275,6 @@ func SendLeave(
 			{
 				Kind:          api.KindNew,
 				Event:         event.Headered(verRes.RoomVersion),
-				AuthEventIDs:  event.AuthEventIDs(),
 				SendAsServer:  string(cfg.Matrix.ServerName),
 				TransactionID: nil,
 			},

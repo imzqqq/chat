@@ -106,17 +106,19 @@ func (s *stateSnapshotStatements) InsertState(
 }
 
 func (s *stateSnapshotStatements) BulkSelectStateBlockNIDs(
-	ctx context.Context, stateNIDs []types.StateSnapshotNID,
+	ctx context.Context, txn *sql.Tx, stateNIDs []types.StateSnapshotNID,
 ) ([]types.StateBlockNIDList, error) {
 	nids := make([]interface{}, len(stateNIDs))
 	for k, v := range stateNIDs {
 		nids[k] = v
 	}
 	selectOrig := strings.Replace(bulkSelectStateBlockNIDsSQL, "($1)", sqlutil.QueryVariadic(len(nids)), 1)
-	selectStmt, err := s.db.Prepare(selectOrig)
+	selectPrep, err := s.db.Prepare(selectOrig)
 	if err != nil {
 		return nil, err
 	}
+	defer selectPrep.Close() // nolint:errcheck
+	selectStmt := sqlutil.TxStmt(txn, selectPrep)
 
 	rows, err := selectStmt.QueryContext(ctx, nids...)
 	if err != nil {
@@ -136,7 +138,7 @@ func (s *stateSnapshotStatements) BulkSelectStateBlockNIDs(
 		}
 	}
 	if i != len(stateNIDs) {
-		return nil, fmt.Errorf("storage: state NIDs missing from the database (%d != %d)", i, len(stateNIDs))
+		return nil, types.MissingStateError(fmt.Sprintf("storage: state NIDs missing from the database (%d != %d)", i, len(stateNIDs)))
 	}
 	return results, nil
 }

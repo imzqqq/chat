@@ -14,6 +14,8 @@
 
 package api
 
+import "regexp"
+
 // SetRoomAliasRequest is a request to SetRoomAlias
 type SetRoomAliasRequest struct {
 	// ID of the user setting the alias
@@ -57,18 +59,6 @@ type GetAliasesForRoomIDResponse struct {
 	Aliases []string `json:"aliases"`
 }
 
-// GetCreatorIDForAliasRequest is a request to GetCreatorIDForAlias
-type GetCreatorIDForAliasRequest struct {
-	// The alias we want to find the creator of
-	Alias string `json:"alias"`
-}
-
-// GetCreatorIDForAliasResponse is a response to GetCreatorIDForAlias
-type GetCreatorIDForAliasResponse struct {
-	// The user ID of the alias creator
-	UserID string `json:"user_id"`
-}
-
 // RemoveRoomAliasRequest is a request to RemoveRoomAlias
 type RemoveRoomAliasRequest struct {
 	// ID of the user removing the alias
@@ -83,4 +73,20 @@ type RemoveRoomAliasResponse struct {
 	Found bool `json:"found"`
 	// Did we remove it?
 	Removed bool `json:"removed"`
+}
+
+type AliasEvent struct {
+	Alias      string   `json:"alias"`
+	AltAliases []string `json:"alt_aliases"`
+}
+
+var validateAliasRegex = regexp.MustCompile("^#.*:.+$")
+
+func (a AliasEvent) Valid() bool {
+	for _, alias := range a.AltAliases {
+		if !validateAliasRegex.MatchString(alias) {
+			return false
+		}
+	}
+	return a.Alias == "" || validateAliasRegex.MatchString(a.Alias)
 }

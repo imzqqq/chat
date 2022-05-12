@@ -16,24 +16,29 @@ package perform
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strings"
 
-	fsAPI "github.com/matrix-org/dendrite/federationsender/api"
+	"github.com/matrix-org/gomatrix"
+	"github.com/matrix-org/gomatrixserverlib"
+	"github.com/matrix-org/util"
+	"github.com/sirupsen/logrus"
+
+	fsAPI "github.com/matrix-org/dendrite/federationapi/api"
 	"github.com/matrix-org/dendrite/roomserver/api"
 	"github.com/matrix-org/dendrite/roomserver/internal/helpers"
 	"github.com/matrix-org/dendrite/roomserver/internal/input"
 	"github.com/matrix-org/dendrite/roomserver/storage"
 	"github.com/matrix-org/dendrite/setup/config"
-	"github.com/matrix-org/gomatrixserverlib"
-	"github.com/matrix-org/util"
+	userapi "github.com/matrix-org/dendrite/userapi/api"
 )
 
 type Leaver struct {
-	Cfg   *config.RoomServer
-	DB    storage.Database
-	FSAPI fsAPI.FederationSenderInternalAPI
-
+	Cfg     *config.RoomServer
+	DB      storage.Database
+	FSAPI   fsAPI.RoomserverFederationAPI
+	UserAPI userapi.RoomserverUserAPI
 	Inputer *input.Inputer
 }
 
@@ -45,15 +50,26 @@ func (r *Leaver) PerformLeave(
 ) ([]api.OutputEvent, error) {
 	_, domain, err := gomatrixserverlib.SplitID('@', req.UserID)
 	if err != nil {
-		return nil, fmt.Errorf("Supplied user ID %q in incorrect format", req.UserID)
+		return nil, fmt.Errorf("supplied user ID %q in incorrect format", req.UserID)
 	}
 	if domain != r.Cfg.Matrix.ServerName {
-		return nil, fmt.Errorf("User %q does not belong to this homeserver", req.UserID)
+		return nil, fmt.Errorf("user %q does not belong to this homeserver", req.UserID)
 	}
+	logger := logrus.WithContext(ctx).WithFields(logrus.Fields{
+		"room_id": req.RoomID,
+		"user_id": req.UserID,
+	})
+	logger.Info("User requested to leave join")
 	if strings.HasPrefix(req.RoomID, "!") {
-		return r.performLeaveRoomByID(ctx, req, res)
+		output, err := r.performLeaveRoomByID(context.Background(), req, res)
+		if err != nil {
+			logger.WithError(err).Error("Failed to leave room")
+		} else {
+			logger.Info("User left room successfully")
+		}
+		return output, err
 	}
-	return nil, fmt.Errorf("Room ID %q is invalid", req.RoomID)
+	return nil, fmt.Errorf("room ID %q is invalid", req.RoomID)
 }
 
 func (r *Leaver) performLeaveRoomByID(
@@ -68,10 +84,35 @@ func (r *Leaver) performLeaveRoomByID(
 		var host gomatrixserverlib.ServerName
 		_, host, err = gomatrixserverlib.SplitID('@', senderUser)
 		if err != nil {
-			return nil, fmt.Errorf("Sender %q is invalid", senderUser)
+			return nil, fmt.Errorf("sender %q is invalid", senderUser)
 		}
 		if host != r.Cfg.Matrix.ServerName {
 			return r.performFederatedRejectInvite(ctx, req, res, senderUser, eventID)
+		}
+		// check that this is not a "server notice room"
+		accData := &userapi.QueryAccountDataResponse{}
+		if err = r.UserAPI.QueryAccountData(ctx, &userapi.QueryAccountDataRequest{
+			UserID:   req.UserID,
+			RoomID:   req.RoomID,
+			DataType: "m.tag",
+		}, accData); err != nil {
+			return nil, fmt.Errorf("unable to query account data: %w", err)
+		}
+
+		if roomData, ok := accData.RoomAccountData[req.RoomID]; ok {
+			tagData, ok := roomData["m.tag"]
+			if ok {
+				tags := gomatrix.TagContent{}
+				if err = json.Unmarshal(tagData, &tags); err != nil {
+					return nil, fmt.Errorf("unable to unmarshal tag content")
+				}
+				if _, ok = tags.Tags["m.server_notice"]; ok {
+					// mimic the returned values from Synapse
+					res.Message = "You cannot reject this invite"
+					res.Code = 403
+					return nil, fmt.Errorf("You cannot reject this invite")
+				}
+			}
 		}
 	}
 
@@ -91,19 +132,19 @@ func (r *Leaver) performLeaveRoomByID(
 		return nil, err
 	}
 	if !latestRes.RoomExists {
-		return nil, fmt.Errorf("Room %q does not exist", req.RoomID)
+		return nil, fmt.Errorf("room %q does not exist", req.RoomID)
 	}
 
 	// Now let's see if the user is in the room.
 	if len(latestRes.StateEvents) == 0 {
-		return nil, fmt.Errorf("User %q is not a member of room %q", req.UserID, req.RoomID)
+		return nil, fmt.Errorf("user %q is not a member of room %q", req.UserID, req.RoomID)
 	}
 	membership, err := latestRes.StateEvents[0].Membership()
 	if err != nil {
-		return nil, fmt.Errorf("Error getting membership: %w", err)
+		return nil, fmt.Errorf("error getting membership: %w", err)
 	}
 	if membership != gomatrixserverlib.Join && membership != gomatrixserverlib.Invite {
-		return nil, fmt.Errorf("User %q is not joined to the room (membership is %q)", req.UserID, membership)
+		return nil, fmt.Errorf("user %q is not joined to the room (membership is %q)", req.UserID, membership)
 	}
 
 	// Prepare the template for the leave event.
@@ -139,7 +180,7 @@ func (r *Leaver) performLeaveRoomByID(
 			{
 				Kind:         api.KindNew,
 				Event:        event.Headered(buildRes.RoomVersion),
-				AuthEventIDs: event.AuthEventIDs(),
+				Origin:       event.Origin(),
 				SendAsServer: string(r.Cfg.Matrix.ServerName),
 			},
 		},
@@ -161,7 +202,7 @@ func (r *Leaver) performFederatedRejectInvite(
 ) ([]api.OutputEvent, error) {
 	_, domain, err := gomatrixserverlib.SplitID('@', senderUser)
 	if err != nil {
-		return nil, fmt.Errorf("User ID %q invalid: %w", senderUser, err)
+		return nil, fmt.Errorf("user ID %q invalid: %w", senderUser, err)
 	}
 
 	// Ask the federation sender to perform a federated leave for us.
@@ -171,10 +212,32 @@ func (r *Leaver) performFederatedRejectInvite(
 		ServerNames: []gomatrixserverlib.ServerName{domain},
 	}
 	leaveRes := fsAPI.PerformLeaveResponse{}
-	if err := r.FSAPI.PerformLeave(ctx, &leaveReq, &leaveRes); err != nil {
+	if err = r.FSAPI.PerformLeave(ctx, &leaveReq, &leaveRes); err != nil {
 		// failures in PerformLeave should NEVER stop us from telling other components like the
 		// sync API that the invite was withdrawn. Otherwise we can end up with stuck invites.
 		util.GetLogger(ctx).WithError(err).Errorf("failed to PerformLeave, still retiring invite event")
+	}
+
+	info, err := r.DB.RoomInfo(ctx, req.RoomID)
+	if err != nil {
+		util.GetLogger(ctx).WithError(err).Errorf("failed to get RoomInfo, still retiring invite event")
+	}
+
+	updater, err := r.DB.MembershipUpdater(ctx, req.RoomID, req.UserID, true, info.RoomVersion)
+	if err != nil {
+		util.GetLogger(ctx).WithError(err).Errorf("failed to get MembershipUpdater, still retiring invite event")
+	}
+	if updater != nil {
+		if _, err = updater.SetToLeave(req.UserID, eventID); err != nil {
+			util.GetLogger(ctx).WithError(err).Errorf("failed to set membership to leave, still retiring invite event")
+			if err = updater.Rollback(); err != nil {
+				util.GetLogger(ctx).WithError(err).Errorf("failed to rollback membership leave, still retiring invite event")
+			}
+		} else {
+			if err = updater.Commit(); err != nil {
+				util.GetLogger(ctx).WithError(err).Errorf("failed to commit membership update, still retiring invite event")
+			}
+		}
 	}
 
 	// Withdraw the invite, so that the sync API etc are

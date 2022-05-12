@@ -48,7 +48,7 @@ const HEAD = "HEAD"
 // due to the error:
 //   When using COPY with more than one source file, the destination must be a directory and end with a /
 // We need to run a postgres anyway, so use the dockerfile associated with Complement instead.
-const Dockerfile = `FROM golang:1.13-stretch as build
+const Dockerfile = `FROM golang:1.16-stretch as build
 RUN apt-get update && apt-get install -y postgresql
 WORKDIR /build
 
@@ -83,7 +83,8 @@ do \n\
 done \n\
  \n\
 sed -i "s/server_name: localhost/server_name: ${SERVER_NAME}/g" dendrite.yaml \n\
-./dendrite-monolith-server --tls-cert server.crt --tls-key server.key --config dendrite.yaml \n\
+PARAMS="--tls-cert server.crt --tls-key server.key --config dendrite.yaml" \n\
+./dendrite-monolith-server --really-enable-open-registration ${PARAMS} || ./dendrite-monolith-server ${PARAMS} \n\
 ' > run_dendrite.sh && chmod +x run_dendrite.sh
 
 ENV SERVER_NAME=localhost
@@ -148,7 +149,7 @@ func buildDendrite(httpClient *http.Client, dockerClient *client.Client, tmpDir,
 		// add top level Dockerfile
 		err = ioutil.WriteFile(path.Join(*flagHead, "Dockerfile"), []byte(Dockerfile), os.ModePerm)
 		if err != nil {
-			return "", fmt.Errorf("Custom HEAD: failed to inject /Dockerfile: %w", err)
+			return "", fmt.Errorf("custom HEAD: failed to inject /Dockerfile: %w", err)
 		}
 		// now tarball it
 		var buffer bytes.Buffer
@@ -189,7 +190,9 @@ func buildDendrite(httpClient *http.Client, dockerClient *client.Client, tmpDir,
 		if err := decoder.Decode(&dl); err != nil {
 			return "", fmt.Errorf("failed to decode build image output line: %w", err)
 		}
-		log.Printf("%s: %s", branchOrTagName, dl.Stream)
+		if len(strings.TrimSpace(dl.Stream)) > 0 {
+			log.Printf("%s: %s", branchOrTagName, dl.Stream)
+		}
 		if dl.Aux != nil {
 			imgID, ok := dl.Aux["ID"]
 			if ok {
@@ -354,7 +357,7 @@ func runImage(dockerClient *client.Client, volumeName, version, imageID string) 
 		return "", "", fmt.Errorf("port 8008 not exposed - exposed ports: %v", inspect.NetworkSettings.Ports)
 	}
 	baseURL := fmt.Sprintf("http://%s:%s", *flagDockerHost, csapiPortInfo[0].HostPort)
-	versionsURL := fmt.Sprintf("%s/chat/client/versions", baseURL)
+	versionsURL := fmt.Sprintf("%s/_matrix/client/versions", baseURL)
 	// hit /versions to check it is up
 	var lastErr error
 	for i := 0; i < 500; i++ {
@@ -425,8 +428,10 @@ func cleanup(dockerClient *client.Client) {
 	// ignore all errors, we are just cleaning up and don't want to fail just because we fail to cleanup
 	containers, _ := dockerClient.ContainerList(context.Background(), types.ContainerListOptions{
 		Filters: label(dendriteUpgradeTestLabel),
+		All:     true,
 	})
 	for _, c := range containers {
+		log.Printf("Removing container: %v %v\n", c.ID, c.Names)
 		s := time.Second
 		_ = dockerClient.ContainerStop(context.Background(), c.ID, &s)
 		_ = dockerClient.ContainerRemove(context.Background(), c.ID, types.ContainerRemoveOptions{

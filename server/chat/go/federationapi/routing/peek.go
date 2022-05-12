@@ -29,11 +29,11 @@ func Peek(
 	httpReq *http.Request,
 	request *gomatrixserverlib.FederationRequest,
 	cfg *config.FederationAPI,
-	rsAPI api.RoomserverInternalAPI,
+	rsAPI api.FederationRoomserverAPI,
 	roomID, peekID string,
 	remoteVersions []gomatrixserverlib.RoomVersion,
 ) util.JSONResponse {
-	// TODO: check if we're just refreshing an existing peek by querying the federationsender
+	// TODO: check if we're just refreshing an existing peek by querying the federationapi
 
 	verReq := api.QueryRoomVersionForRoomRequest{RoomID: roomID}
 	verRes := api.QueryRoomVersionForRoomResponse{}
@@ -88,8 +88,8 @@ func Peek(
 	}
 
 	respPeek := gomatrixserverlib.RespPeek{
-		StateEvents:     gomatrixserverlib.UnwrapEventHeaders(response.StateEvents),
-		AuthEvents:      gomatrixserverlib.UnwrapEventHeaders(response.AuthChainEvents),
+		StateEvents:     gomatrixserverlib.NewEventJSONsFromHeaderedEvents(response.StateEvents),
+		AuthEvents:      gomatrixserverlib.NewEventJSONsFromHeaderedEvents(response.AuthChainEvents),
 		RoomVersion:     response.RoomVersion,
 		LatestEvent:     response.LatestEvent.Unwrap(),
 		RenewalInterval: renewalInterval,

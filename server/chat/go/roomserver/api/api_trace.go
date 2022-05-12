@@ -5,9 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 
-	asAPI "github.com/matrix-org/dendrite/appservice/api"
-	fsAPI "github.com/matrix-org/dendrite/federationsender/api"
+	"github.com/matrix-org/gomatrixserverlib"
 	"github.com/matrix-org/util"
+
+	asAPI "github.com/matrix-org/dendrite/appservice/api"
+	fsAPI "github.com/matrix-org/dendrite/federationapi/api"
+	userapi "github.com/matrix-org/dendrite/userapi/api"
 )
 
 // RoomserverInternalAPITrace wraps a RoomserverInternalAPI and logs the
@@ -16,12 +19,16 @@ type RoomserverInternalAPITrace struct {
 	Impl RoomserverInternalAPI
 }
 
-func (t *RoomserverInternalAPITrace) SetFederationSenderAPI(fsAPI fsAPI.FederationSenderInternalAPI) {
-	t.Impl.SetFederationSenderAPI(fsAPI)
+func (t *RoomserverInternalAPITrace) SetFederationAPI(fsAPI fsAPI.RoomserverFederationAPI, keyRing *gomatrixserverlib.KeyRing) {
+	t.Impl.SetFederationAPI(fsAPI, keyRing)
 }
 
-func (t *RoomserverInternalAPITrace) SetAppserviceAPI(asAPI asAPI.AppServiceQueryAPI) {
+func (t *RoomserverInternalAPITrace) SetAppserviceAPI(asAPI asAPI.AppServiceInternalAPI) {
 	t.Impl.SetAppserviceAPI(asAPI)
+}
+
+func (t *RoomserverInternalAPITrace) SetUserAPI(userAPI userapi.RoomserverUserAPI) {
+	t.Impl.SetUserAPI(userAPI)
 }
 
 func (t *RoomserverInternalAPITrace) InputRoomEvents(
@@ -60,6 +67,15 @@ func (t *RoomserverInternalAPITrace) PerformUnpeek(
 	util.GetLogger(ctx).Infof("PerformUnpeek req=%+v res=%+v", js(req), js(res))
 }
 
+func (t *RoomserverInternalAPITrace) PerformRoomUpgrade(
+	ctx context.Context,
+	req *PerformRoomUpgradeRequest,
+	res *PerformRoomUpgradeResponse,
+) {
+	t.Impl.PerformRoomUpgrade(ctx, req, res)
+	util.GetLogger(ctx).Infof("PerformRoomUpgrade req=%+v res=%+v", js(req), js(res))
+}
+
 func (t *RoomserverInternalAPITrace) PerformJoin(
 	ctx context.Context,
 	req *PerformJoinRequest,
@@ -86,6 +102,15 @@ func (t *RoomserverInternalAPITrace) PerformPublish(
 ) {
 	t.Impl.PerformPublish(ctx, req, res)
 	util.GetLogger(ctx).Infof("PerformPublish req=%+v res=%+v", js(req), js(res))
+}
+
+func (t *RoomserverInternalAPITrace) PerformAdminEvacuateRoom(
+	ctx context.Context,
+	req *PerformAdminEvacuateRoomRequest,
+	res *PerformAdminEvacuateRoomResponse,
+) {
+	t.Impl.PerformAdminEvacuateRoom(ctx, req, res)
+	util.GetLogger(ctx).Infof("PerformAdminEvacuateRoom req=%+v res=%+v", js(req), js(res))
 }
 
 func (t *RoomserverInternalAPITrace) PerformInboundPeek(
@@ -125,16 +150,6 @@ func (t *RoomserverInternalAPITrace) QueryStateAfterEvents(
 ) error {
 	err := t.Impl.QueryStateAfterEvents(ctx, req, res)
 	util.GetLogger(ctx).WithError(err).Infof("QueryStateAfterEvents req=%+v res=%+v", js(req), js(res))
-	return err
-}
-
-func (t *RoomserverInternalAPITrace) QueryMissingAuthPrevEvents(
-	ctx context.Context,
-	req *QueryMissingAuthPrevEventsRequest,
-	res *QueryMissingAuthPrevEventsResponse,
-) error {
-	err := t.Impl.QueryMissingAuthPrevEvents(ctx, req, res)
-	util.GetLogger(ctx).WithError(err).Infof("QueryMissingAuthPrevEvents req=%+v res=%+v", js(req), js(res))
 	return err
 }
 
@@ -275,16 +290,6 @@ func (t *RoomserverInternalAPITrace) GetAliasesForRoomID(
 ) error {
 	err := t.Impl.GetAliasesForRoomID(ctx, req, res)
 	util.GetLogger(ctx).WithError(err).Infof("GetAliasesForRoomID req=%+v res=%+v", js(req), js(res))
-	return err
-}
-
-func (t *RoomserverInternalAPITrace) GetCreatorIDForAlias(
-	ctx context.Context,
-	req *GetCreatorIDForAliasRequest,
-	res *GetCreatorIDForAliasResponse,
-) error {
-	err := t.Impl.GetCreatorIDForAlias(ctx, req, res)
-	util.GetLogger(ctx).WithError(err).Infof("GetCreatorIDForAlias req=%+v res=%+v", js(req), js(res))
 	return err
 }
 

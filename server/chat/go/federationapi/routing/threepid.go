@@ -53,12 +53,12 @@ var (
 	errNotInRoom    = errors.New("the server isn't currently in the room")
 )
 
-// CreateInvitesFrom3PIDInvites implements POST /chat/federation/v1/3pid/onbind
+// CreateInvitesFrom3PIDInvites implements POST /_matrix/federation/v1/3pid/onbind
 func CreateInvitesFrom3PIDInvites(
-	req *http.Request, rsAPI api.RoomserverInternalAPI,
+	req *http.Request, rsAPI api.FederationRoomserverAPI,
 	cfg *config.FederationAPI,
 	federation *gomatrixserverlib.FederationClient,
-	userAPI userapi.UserInternalAPI,
+	userAPI userapi.FederationUserAPI,
 ) util.JSONResponse {
 	var body invites
 	if reqErr := httputil.UnmarshalJSONRequest(req, &body); reqErr != nil {
@@ -89,7 +89,7 @@ func CreateInvitesFrom3PIDInvites(
 	}
 
 	// Send all the events
-	if err := api.SendEvents(req.Context(), rsAPI, api.KindNew, evs, cfg.Matrix.ServerName, nil); err != nil {
+	if err := api.SendEvents(req.Context(), rsAPI, api.KindNew, evs, "TODO", cfg.Matrix.ServerName, nil, false); err != nil {
 		util.GetLogger(req.Context()).WithError(err).Error("SendEvents failed")
 		return jsonerror.InternalServerError()
 	}
@@ -100,12 +100,12 @@ func CreateInvitesFrom3PIDInvites(
 	}
 }
 
-// ExchangeThirdPartyInvite implements PUT /chat/federation/v1/exchange_third_party_invite/{roomID}
+// ExchangeThirdPartyInvite implements PUT /_matrix/federation/v1/exchange_third_party_invite/{roomID}
 func ExchangeThirdPartyInvite(
 	httpReq *http.Request,
 	request *gomatrixserverlib.FederationRequest,
 	roomID string,
-	rsAPI api.RoomserverInternalAPI,
+	rsAPI api.FederationRoomserverAPI,
 	cfg *config.FederationAPI,
 	federation *gomatrixserverlib.FederationClient,
 ) util.JSONResponse {
@@ -170,16 +170,23 @@ func ExchangeThirdPartyInvite(
 		util.GetLogger(httpReq.Context()).WithError(err).Error("federation.SendInvite failed")
 		return jsonerror.InternalServerError()
 	}
+	inviteEvent, err := signedEvent.Event.UntrustedEvent(verRes.RoomVersion)
+	if err != nil {
+		util.GetLogger(httpReq.Context()).WithError(err).Error("federation.SendInvite failed")
+		return jsonerror.InternalServerError()
+	}
 
 	// Send the event to the roomserver
 	if err = api.SendEvents(
 		httpReq.Context(), rsAPI,
 		api.KindNew,
 		[]*gomatrixserverlib.HeaderedEvent{
-			signedEvent.Event.Headered(verRes.RoomVersion),
+			inviteEvent.Headered(verRes.RoomVersion),
 		},
+		request.Origin(),
 		cfg.Matrix.ServerName,
 		nil,
+		false,
 	); err != nil {
 		util.GetLogger(httpReq.Context()).WithError(err).Error("SendEvents failed")
 		return jsonerror.InternalServerError()
@@ -196,10 +203,10 @@ func ExchangeThirdPartyInvite(
 // Returns an error if there was a problem building the event or fetching the
 // necessary data to do so.
 func createInviteFrom3PIDInvite(
-	ctx context.Context, rsAPI api.RoomserverInternalAPI,
+	ctx context.Context, rsAPI api.FederationRoomserverAPI,
 	cfg *config.FederationAPI,
 	inv invite, federation *gomatrixserverlib.FederationClient,
-	userAPI userapi.UserInternalAPI,
+	userAPI userapi.FederationUserAPI,
 ) (*gomatrixserverlib.Event, error) {
 	verReq := api.QueryRoomVersionForRoomRequest{RoomID: inv.RoomID}
 	verRes := api.QueryRoomVersionForRoomResponse{}
@@ -263,7 +270,7 @@ func createInviteFrom3PIDInvite(
 // Returns an error if something failed during the process.
 func buildMembershipEvent(
 	ctx context.Context,
-	builder *gomatrixserverlib.EventBuilder, rsAPI api.RoomserverInternalAPI,
+	builder *gomatrixserverlib.EventBuilder, rsAPI api.FederationRoomserverAPI,
 	cfg *config.FederationAPI,
 ) (*gomatrixserverlib.Event, error) {
 	eventsNeeded, err := gomatrixserverlib.StateNeededForEventBuilder(builder)

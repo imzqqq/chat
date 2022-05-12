@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/matrix-org/dendrite/internal"
 	"github.com/matrix-org/dendrite/internal/sqlutil"
 	"github.com/matrix-org/dendrite/syncapi/storage/tables"
 	"github.com/matrix-org/dendrite/syncapi/types"
@@ -57,15 +58,19 @@ const upsertMembershipSQL = "" +
 	" ON CONFLICT (room_id, user_id, membership)" +
 	" DO UPDATE SET event_id = $4, stream_pos = $5, topological_pos = $6"
 
-const selectMembershipSQL = "" +
-	"SELECT event_id, stream_pos, topological_pos FROM syncapi_memberships" +
-	" WHERE room_id = $1 AND user_id = $2 AND membership IN ($3)" +
-	" ORDER BY stream_pos DESC" +
-	" LIMIT 1"
+const selectMembershipCountSQL = "" +
+	"SELECT COUNT(*) FROM (" +
+	" SELECT * FROM syncapi_memberships WHERE room_id = $1 AND stream_pos <= $2 GROUP BY user_id HAVING(max(stream_pos))" +
+	") t WHERE t.membership = $3"
+
+const selectHeroesSQL = "" +
+	"SELECT DISTINCT user_id FROM syncapi_memberships WHERE room_id = $1 AND user_id != $2 AND membership IN ($3) LIMIT 5"
 
 type membershipsStatements struct {
-	db                   *sql.DB
-	upsertMembershipStmt *sql.Stmt
+	db                        *sql.DB
+	upsertMembershipStmt      *sql.Stmt
+	selectMembershipCountStmt *sql.Stmt
+	//selectHeroesStmt          *sql.Stmt - prepared at runtime due to variadic
 }
 
 func NewSqliteMembershipsTable(db *sql.DB) (tables.Memberships, error) {
@@ -76,10 +81,11 @@ func NewSqliteMembershipsTable(db *sql.DB) (tables.Memberships, error) {
 	if err != nil {
 		return nil, err
 	}
-	if s.upsertMembershipStmt, err = db.Prepare(upsertMembershipSQL); err != nil {
-		return nil, err
-	}
-	return s, nil
+	return s, sqlutil.StatementList{
+		{&s.upsertMembershipStmt, upsertMembershipSQL},
+		{&s.selectMembershipCountStmt, selectMembershipCountSQL},
+		// {&s.selectHeroesStmt, selectHeroesSQL}, - prepared at runtime due to variadic
+	}.Prepare(db)
 }
 
 func (s *membershipsStatements) UpsertMembership(
@@ -102,18 +108,43 @@ func (s *membershipsStatements) UpsertMembership(
 	return err
 }
 
-func (s *membershipsStatements) SelectMembership(
-	ctx context.Context, txn *sql.Tx, roomID, userID, memberships []string,
-) (eventID string, streamPos, topologyPos types.StreamPosition, err error) {
-	params := []interface{}{roomID, userID}
+func (s *membershipsStatements) SelectMembershipCount(
+	ctx context.Context, txn *sql.Tx, roomID, membership string, pos types.StreamPosition,
+) (count int, err error) {
+	stmt := sqlutil.TxStmt(txn, s.selectMembershipCountStmt)
+	err = stmt.QueryRowContext(ctx, roomID, pos, membership).Scan(&count)
+	return
+}
+
+func (s *membershipsStatements) SelectHeroes(
+	ctx context.Context, txn *sql.Tx, roomID, userID string, memberships []string,
+) (heroes []string, err error) {
+	stmtSQL := strings.Replace(selectHeroesSQL, "($3)", sqlutil.QueryVariadicOffset(len(memberships), 2), 1)
+	stmt, err := s.db.PrepareContext(ctx, stmtSQL)
+	if err != nil {
+		return
+	}
+	defer internal.CloseAndLogIfError(ctx, stmt, "SelectHeroes: stmt.close() failed")
+	params := []interface{}{
+		roomID, userID,
+	}
 	for _, membership := range memberships {
 		params = append(params, membership)
 	}
-	orig := strings.Replace(selectMembershipSQL, "($3)", sqlutil.QueryVariadicOffset(len(memberships), 2), 1)
-	stmt, err := s.db.Prepare(orig)
+
+	stmt = sqlutil.TxStmt(txn, stmt)
+	var rows *sql.Rows
+	rows, err = stmt.QueryContext(ctx, params...)
 	if err != nil {
-		return "", 0, 0, err
+		return
 	}
-	err = sqlutil.TxStmt(txn, stmt).QueryRowContext(ctx, params...).Scan(&eventID, &streamPos, &topologyPos)
-	return
+	defer internal.CloseAndLogIfError(ctx, rows, "SelectHeroes: rows.close() failed")
+	var hero string
+	for rows.Next() {
+		if err = rows.Scan(&hero); err != nil {
+			return
+		}
+		heroes = append(heroes, hero)
+	}
+	return heroes, rows.Err()
 }

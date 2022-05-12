@@ -15,9 +15,17 @@
 package routing
 
 import (
+	"context"
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/matrix-org/gomatrixserverlib"
+	"github.com/matrix-org/util"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/sirupsen/logrus"
 
 	"github.com/matrix-org/dendrite/clientapi/httputil"
 	"github.com/matrix-org/dendrite/clientapi/jsonerror"
@@ -26,10 +34,6 @@ import (
 	"github.com/matrix-org/dendrite/roomserver/api"
 	"github.com/matrix-org/dendrite/setup/config"
 	userapi "github.com/matrix-org/dendrite/userapi/api"
-	"github.com/matrix-org/gomatrixserverlib"
-	"github.com/matrix-org/util"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/sirupsen/logrus"
 )
 
 // http://matrix.org/docs/spec/client_server/r0.2.0.html#put-matrix-client-r0-rooms-roomid-send-eventtype-txnid
@@ -41,10 +45,6 @@ type sendEventResponse struct {
 var (
 	userRoomSendMutexes sync.Map // (roomID+userID) -> mutex. mutexes to ensure correct ordering of sendEvents
 )
-
-func init() {
-	prometheus.MustRegister(sendEventDuration)
-}
 
 var sendEventDuration = prometheus.NewHistogramVec(
 	prometheus.HistogramOpts{
@@ -70,7 +70,7 @@ func SendEvent(
 	device *userapi.Device,
 	roomID, eventType string, txnID, stateKey *string,
 	cfg *config.ClientAPI,
-	rsAPI api.RoomserverInternalAPI,
+	rsAPI api.ClientRoomserverAPI,
 	txnCache *transactions.Cache,
 ) util.JSONResponse {
 	verReq := api.QueryRoomVersionForRoomRequest{RoomID: roomID}
@@ -97,11 +97,60 @@ func SendEvent(
 	defer mutex.(*sync.Mutex).Unlock()
 
 	startedGeneratingEvent := time.Now()
-	e, resErr := generateSendEvent(req, device, roomID, eventType, stateKey, cfg, rsAPI)
+
+	var r map[string]interface{} // must be a JSON object
+	resErr := httputil.UnmarshalJSONRequest(req, &r)
+	if resErr != nil {
+		return *resErr
+	}
+
+	evTime, err := httputil.ParseTSParam(req)
+	if err != nil {
+		return util.JSONResponse{
+			Code: http.StatusBadRequest,
+			JSON: jsonerror.InvalidArgumentValue(err.Error()),
+		}
+	}
+
+	e, resErr := generateSendEvent(req.Context(), r, device, roomID, eventType, stateKey, cfg, rsAPI, evTime)
 	if resErr != nil {
 		return *resErr
 	}
 	timeToGenerateEvent := time.Since(startedGeneratingEvent)
+
+	// validate that the aliases exists
+	if eventType == gomatrixserverlib.MRoomCanonicalAlias && stateKey != nil && *stateKey == "" {
+		aliasReq := api.AliasEvent{}
+		if err = json.Unmarshal(e.Content(), &aliasReq); err != nil {
+			return util.ErrorResponse(fmt.Errorf("unable to parse alias event: %w", err))
+		}
+		if !aliasReq.Valid() {
+			return util.JSONResponse{
+				Code: http.StatusBadRequest,
+				JSON: jsonerror.InvalidParam("Request contains invalid aliases."),
+			}
+		}
+		aliasRes := &api.GetAliasesForRoomIDResponse{}
+		if err = rsAPI.GetAliasesForRoomID(req.Context(), &api.GetAliasesForRoomIDRequest{RoomID: roomID}, aliasRes); err != nil {
+			return jsonerror.InternalServerError()
+		}
+		var found int
+		requestAliases := append(aliasReq.AltAliases, aliasReq.Alias)
+		for _, alias := range aliasRes.Aliases {
+			for _, altAlias := range requestAliases {
+				if altAlias == alias {
+					found++
+				}
+			}
+		}
+		// check that we found at least the same amount of existing aliases as are in the request
+		if aliasReq.Alias != "" && found < len(requestAliases) {
+			return util.JSONResponse{
+				Code: http.StatusBadRequest,
+				JSON: jsonerror.BadAlias("No matching alias found."),
+			}
+		}
+	}
 
 	var txnAndSessionID *api.TransactionID
 	if txnID != nil {
@@ -121,7 +170,9 @@ func SendEvent(
 			e.Headered(verRes.RoomVersion),
 		},
 		cfg.Matrix.ServerName,
+		cfg.Matrix.ServerName,
 		txnAndSessionID,
+		false,
 	); err != nil {
 		util.GetLogger(req.Context()).WithError(err).Error("SendEvents failed")
 		return jsonerror.InternalServerError()
@@ -151,27 +202,16 @@ func SendEvent(
 }
 
 func generateSendEvent(
-	req *http.Request,
+	ctx context.Context,
+	r map[string]interface{},
 	device *userapi.Device,
 	roomID, eventType string, stateKey *string,
 	cfg *config.ClientAPI,
-	rsAPI api.RoomserverInternalAPI,
+	rsAPI api.ClientRoomserverAPI,
+	evTime time.Time,
 ) (*gomatrixserverlib.Event, *util.JSONResponse) {
 	// parse the incoming http request
 	userID := device.UserID
-	var r map[string]interface{} // must be a JSON object
-	resErr := httputil.UnmarshalJSONRequest(req, &r)
-	if resErr != nil {
-		return nil, resErr
-	}
-
-	evTime, err := httputil.ParseTSParam(req)
-	if err != nil {
-		return nil, &util.JSONResponse{
-			Code: http.StatusBadRequest,
-			JSON: jsonerror.InvalidArgumentValue(err.Error()),
-		}
-	}
 
 	// create the new event and set all the fields we can
 	builder := gomatrixserverlib.EventBuilder{
@@ -180,15 +220,15 @@ func generateSendEvent(
 		Type:     eventType,
 		StateKey: stateKey,
 	}
-	err = builder.SetContent(r)
+	err := builder.SetContent(r)
 	if err != nil {
-		util.GetLogger(req.Context()).WithError(err).Error("builder.SetContent failed")
+		util.GetLogger(ctx).WithError(err).Error("builder.SetContent failed")
 		resErr := jsonerror.InternalServerError()
 		return nil, &resErr
 	}
 
 	var queryRes api.QueryLatestEventsAndStateResponse
-	e, err := eventutil.QueryAndBuildEvent(req.Context(), &builder, cfg.Matrix, evTime, rsAPI, &queryRes)
+	e, err := eventutil.QueryAndBuildEvent(ctx, &builder, cfg.Matrix, evTime, rsAPI, &queryRes)
 	if err == eventutil.ErrRoomNoExists {
 		return nil, &util.JSONResponse{
 			Code: http.StatusNotFound,
@@ -211,7 +251,7 @@ func generateSendEvent(
 			JSON: jsonerror.BadJSON(e.Error()),
 		}
 	} else if err != nil {
-		util.GetLogger(req.Context()).WithError(err).Error("eventutil.BuildEvent failed")
+		util.GetLogger(ctx).WithError(err).Error("eventutil.BuildEvent failed")
 		resErr := jsonerror.InternalServerError()
 		return nil, &resErr
 	}
@@ -228,5 +268,24 @@ func generateSendEvent(
 			JSON: jsonerror.Forbidden(err.Error()), // TODO: Is this error string comprehensible to the client?
 		}
 	}
+
+	// User should not be able to send a tombstone event to the same room.
+	if e.Type() == "m.room.tombstone" {
+		content := make(map[string]interface{})
+		if err = json.Unmarshal(e.Content(), &content); err != nil {
+			util.GetLogger(ctx).WithError(err).Error("Cannot unmarshal the event content.")
+			return nil, &util.JSONResponse{
+				Code: http.StatusBadRequest,
+				JSON: jsonerror.BadJSON("Cannot unmarshal the event content."),
+			}
+		}
+		if content["replacement_room"] == e.RoomID() {
+			return nil, &util.JSONResponse{
+				Code: http.StatusBadRequest,
+				JSON: jsonerror.InvalidParam("Cannot send tombstone event that points to the same room."),
+			}
+		}
+	}
+
 	return e.Event, nil
 }

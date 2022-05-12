@@ -56,7 +56,7 @@ func CheckForSoftFail(
 
 		// Then get the state entries for the current state snapshot.
 		// We'll use this to check if the event is allowed right now.
-		roomState := state.NewStateResolution(db, *roomInfo)
+		roomState := state.NewStateResolution(db, roomInfo)
 		authStateEntries, err = roomState.LoadStateAtSnapshot(ctx, roomInfo.StateSnapshotNID)
 		if err != nil {
 			return true, fmt.Errorf("roomState.LoadStateAtSnapshot: %w", err)
@@ -193,7 +193,7 @@ func (ae *authEvents) lookupEvent(typeNID types.EventTypeNID, stateKey string) *
 // loadAuthEvents loads the events needed for authentication from the supplied room state.
 func loadAuthEvents(
 	ctx context.Context,
-	db storage.Database,
+	db state.StateResolutionStorage,
 	needed gomatrixserverlib.StateNeeded,
 	state []types.StateEntry,
 ) (result authEvents, err error) {

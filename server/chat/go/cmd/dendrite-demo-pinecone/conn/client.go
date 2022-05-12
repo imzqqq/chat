@@ -1,3 +1,17 @@
+// Copyright 2022 The Matrix.org Foundation C.I.C.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package conn
 
 import (
@@ -7,7 +21,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/matrix-org/dendrite/setup"
+	"github.com/matrix-org/dendrite/setup/base"
 	"github.com/matrix-org/gomatrixserverlib"
 	"nhooyr.io/websocket"
 
@@ -34,7 +48,12 @@ func ConnectToPeer(pRouter *pineconeRouter.Router, peer string) error {
 	if parent == nil {
 		return fmt.Errorf("failed to wrap connection")
 	}
-	_, err := pRouter.AuthenticatedConnect(parent, "static", pineconeRouter.PeerTypeRemote)
+	_, err := pRouter.Connect(
+		parent,
+		pineconeRouter.ConnectionZone("static"),
+		pineconeRouter.ConnectionPeerType(pineconeRouter.PeerTypeRemote),
+		pineconeRouter.ConnectionURI(peer),
+	)
 	return err
 }
 
@@ -48,21 +67,22 @@ func (y *RoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
 }
 
 func createTransport(s *pineconeSessions.Sessions) *http.Transport {
+	proto := s.Protocol("matrix")
 	tr := &http.Transport{
 		DisableKeepAlives: false,
-		Dial:              s.Dial,
-		DialContext:       s.DialContext,
-		DialTLS:           s.DialTLS,
-		DialTLSContext:    s.DialTLSContext,
+		Dial:              proto.Dial,
+		DialContext:       proto.DialContext,
+		DialTLS:           proto.DialTLS,
+		DialTLSContext:    proto.DialTLSContext,
 	}
 	tr.RegisterProtocol(
 		"matrix", &RoundTripper{
 			inner: &http.Transport{
 				DisableKeepAlives: false,
-				Dial:              s.Dial,
-				DialContext:       s.DialContext,
-				DialTLS:           s.DialTLS,
-				DialTLSContext:    s.DialTLSContext,
+				Dial:              proto.Dial,
+				DialContext:       proto.DialContext,
+				DialTLS:           proto.DialTLS,
+				DialTLSContext:    proto.DialTLSContext,
 			},
 		},
 	)
@@ -70,7 +90,7 @@ func createTransport(s *pineconeSessions.Sessions) *http.Transport {
 }
 
 func CreateClient(
-	base *setup.BaseDendrite, s *pineconeSessions.Sessions,
+	base *base.BaseDendrite, s *pineconeSessions.Sessions,
 ) *gomatrixserverlib.Client {
 	return gomatrixserverlib.NewClient(
 		gomatrixserverlib.WithTransport(createTransport(s)),
@@ -78,7 +98,7 @@ func CreateClient(
 }
 
 func CreateFederationClient(
-	base *setup.BaseDendrite, s *pineconeSessions.Sessions,
+	base *base.BaseDendrite, s *pineconeSessions.Sessions,
 ) *gomatrixserverlib.FederationClient {
 	return gomatrixserverlib.NewFederationClient(
 		base.Cfg.Global.ServerName,

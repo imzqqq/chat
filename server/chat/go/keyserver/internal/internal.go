@@ -22,7 +22,7 @@ import (
 	"sync"
 	"time"
 
-	fedsenderapi "github.com/matrix-org/dendrite/federationsender/api"
+	fedsenderapi "github.com/matrix-org/dendrite/federationapi/api"
 	"github.com/matrix-org/dendrite/keyserver/api"
 	"github.com/matrix-org/dendrite/keyserver/producers"
 	"github.com/matrix-org/dendrite/keyserver/storage"
@@ -38,12 +38,12 @@ type KeyInternalAPI struct {
 	DB         storage.Database
 	ThisServer gomatrixserverlib.ServerName
 	FedClient  fedsenderapi.FederationClient
-	UserAPI    userapi.UserInternalAPI
+	UserAPI    userapi.KeyserverUserAPI
 	Producer   *producers.KeyChange
 	Updater    *DeviceListUpdater
 }
 
-func (a *KeyInternalAPI) SetUserAPI(i userapi.UserInternalAPI) {
+func (a *KeyInternalAPI) SetUserAPI(i userapi.KeyserverUserAPI) {
 	a.UserAPI = i
 }
 
@@ -59,24 +59,24 @@ func (a *KeyInternalAPI) InputDeviceListUpdate(
 }
 
 func (a *KeyInternalAPI) QueryKeyChanges(ctx context.Context, req *api.QueryKeyChangesRequest, res *api.QueryKeyChangesResponse) {
-	if req.Partition < 0 {
-		req.Partition = a.Producer.DefaultPartition()
-	}
-	userIDs, latest, err := a.DB.KeyChanges(ctx, req.Partition, req.Offset, req.ToOffset)
+	userIDs, latest, err := a.DB.KeyChanges(ctx, req.Offset, req.ToOffset)
 	if err != nil {
 		res.Error = &api.KeyError{
 			Err: err.Error(),
 		}
 	}
 	res.Offset = latest
-	res.Partition = req.Partition
 	res.UserIDs = userIDs
 }
 
 func (a *KeyInternalAPI) PerformUploadKeys(ctx context.Context, req *api.PerformUploadKeysRequest, res *api.PerformUploadKeysResponse) {
 	res.KeyErrors = make(map[string]map[string]*api.KeyError)
-	a.uploadLocalDeviceKeys(ctx, req, res)
-	a.uploadOneTimeKeys(ctx, req, res)
+	if len(req.DeviceKeys) > 0 {
+		a.uploadLocalDeviceKeys(ctx, req, res)
+	}
+	if len(req.OneTimeKeys) > 0 {
+		a.uploadOneTimeKeys(ctx, req, res)
+	}
 }
 
 func (a *KeyInternalAPI) PerformClaimKeys(ctx context.Context, req *api.PerformClaimKeysRequest, res *api.PerformClaimKeysResponse) {
@@ -202,14 +202,14 @@ func (a *KeyInternalAPI) QueryOneTimeKeys(ctx context.Context, req *api.QueryOne
 }
 
 func (a *KeyInternalAPI) QueryDeviceMessages(ctx context.Context, req *api.QueryDeviceMessagesRequest, res *api.QueryDeviceMessagesResponse) {
-	msgs, err := a.DB.DeviceKeysForUser(ctx, req.UserID, nil)
+	msgs, err := a.DB.DeviceKeysForUser(ctx, req.UserID, nil, false)
 	if err != nil {
 		res.Error = &api.KeyError{
 			Err: fmt.Sprintf("failed to query DB for device keys: %s", err),
 		}
 		return
 	}
-	maxStreamID := 0
+	maxStreamID := int64(0)
 	for _, m := range msgs {
 		if m.StreamID > maxStreamID {
 			maxStreamID = m.StreamID
@@ -227,6 +227,7 @@ func (a *KeyInternalAPI) QueryDeviceMessages(ctx context.Context, req *api.Query
 	res.StreamID = maxStreamID
 }
 
+// nolint:gocyclo
 func (a *KeyInternalAPI) QueryKeys(ctx context.Context, req *api.QueryKeysRequest, res *api.QueryKeysResponse) {
 	res.DeviceKeys = make(map[string]map[string]json.RawMessage)
 	res.MasterKeys = make(map[string]gomatrixserverlib.CrossSigningKey)
@@ -248,7 +249,7 @@ func (a *KeyInternalAPI) QueryKeys(ctx context.Context, req *api.QueryKeysReques
 		domain := string(serverName)
 		// query local devices
 		if serverName == a.ThisServer {
-			deviceKeys, err := a.DB.DeviceKeysForUser(ctx, userID, deviceIDs)
+			deviceKeys, err := a.DB.DeviceKeysForUser(ctx, userID, deviceIDs, false)
 			if err != nil {
 				res.Error = &api.KeyError{
 					Err: fmt.Sprintf("failed to query local device keys: %s", err),
@@ -316,9 +317,34 @@ func (a *KeyInternalAPI) QueryKeys(ctx context.Context, req *api.QueryKeysReques
 	// Finally, append signatures that we know about
 	// TODO: This is horrible because we need to round-trip the signature from
 	// JSON, add the signatures and marshal it again, for some reason?
-	for userID, forUserID := range res.DeviceKeys {
-		for keyID, key := range forUserID {
-			sigMap, err := a.DB.CrossSigningSigsForTarget(ctx, userID, gomatrixserverlib.KeyID(keyID))
+
+	for targetUserID, masterKey := range res.MasterKeys {
+		if masterKey.Signatures == nil {
+			masterKey.Signatures = map[string]map[gomatrixserverlib.KeyID]gomatrixserverlib.Base64Bytes{}
+		}
+		for targetKeyID := range masterKey.Keys {
+			sigMap, err := a.DB.CrossSigningSigsForTarget(ctx, req.UserID, targetUserID, targetKeyID)
+			if err != nil {
+				logrus.WithError(err).Errorf("a.DB.CrossSigningSigsForTarget failed")
+				continue
+			}
+			if len(sigMap) == 0 {
+				continue
+			}
+			for sourceUserID, forSourceUser := range sigMap {
+				for sourceKeyID, sourceSig := range forSourceUser {
+					if _, ok := masterKey.Signatures[sourceUserID]; !ok {
+						masterKey.Signatures[sourceUserID] = map[gomatrixserverlib.KeyID]gomatrixserverlib.Base64Bytes{}
+					}
+					masterKey.Signatures[sourceUserID][sourceKeyID] = sourceSig
+				}
+			}
+		}
+	}
+
+	for targetUserID, forUserID := range res.DeviceKeys {
+		for targetKeyID, key := range forUserID {
+			sigMap, err := a.DB.CrossSigningSigsForTarget(ctx, req.UserID, targetUserID, gomatrixserverlib.KeyID(targetKeyID))
 			if err != nil {
 				logrus.WithError(err).Errorf("a.DB.CrossSigningSigsForTarget failed")
 				continue
@@ -330,13 +356,19 @@ func (a *KeyInternalAPI) QueryKeys(ctx context.Context, req *api.QueryKeysReques
 			if err = json.Unmarshal(key, &deviceKey); err != nil {
 				continue
 			}
+			if deviceKey.Signatures == nil {
+				deviceKey.Signatures = map[string]map[gomatrixserverlib.KeyID]gomatrixserverlib.Base64Bytes{}
+			}
 			for sourceUserID, forSourceUser := range sigMap {
 				for sourceKeyID, sourceSig := range forSourceUser {
+					if _, ok := deviceKey.Signatures[sourceUserID]; !ok {
+						deviceKey.Signatures[sourceUserID] = map[gomatrixserverlib.KeyID]gomatrixserverlib.Base64Bytes{}
+					}
 					deviceKey.Signatures[sourceUserID][sourceKeyID] = sourceSig
 				}
 			}
 			if js, err := json.Marshal(deviceKey); err == nil {
-				res.DeviceKeys[userID][keyID] = js
+				res.DeviceKeys[targetUserID][targetKeyID] = js
 			}
 		}
 	}
@@ -451,7 +483,6 @@ func (a *KeyInternalAPI) queryRemoteKeysOnServer(
 	for userID, deviceIDs := range devKeys {
 		if len(deviceIDs) == 0 {
 			userIDsForAllDevices[userID] = struct{}{}
-			delete(devKeys, userID)
 		}
 	}
 	// for cross-signing keys, it's probably easier just to hit /keys/query if we aren't already doing
@@ -512,6 +543,11 @@ func (a *KeyInternalAPI) queryRemoteKeysOnServer(
 		// drop the error as it's already a failure at this point
 		_ = a.populateResponseWithDeviceKeysFromDatabase(ctx, res, userID, dkeys)
 	}
+
+	// Sytest expects no failures, if we still could retrieve keys, e.g. from local cache
+	if len(res.DeviceKeys) > 0 {
+		delete(res.Failures, serverName)
+	}
 	respMu.Unlock()
 
 }
@@ -519,7 +555,7 @@ func (a *KeyInternalAPI) queryRemoteKeysOnServer(
 func (a *KeyInternalAPI) populateResponseWithDeviceKeysFromDatabase(
 	ctx context.Context, res *api.QueryKeysResponse, userID string, deviceIDs []string,
 ) error {
-	keys, err := a.DB.DeviceKeysForUser(ctx, userID, deviceIDs)
+	keys, err := a.DB.DeviceKeysForUser(ctx, userID, deviceIDs, false)
 	// if we can't query the db or there are fewer keys than requested, fetch from remote.
 	if err != nil {
 		return fmt.Errorf("DeviceKeysForUser %s %v failed: %w", userID, deviceIDs, err)
@@ -548,65 +584,114 @@ func (a *KeyInternalAPI) populateResponseWithDeviceKeysFromDatabase(
 }
 
 func (a *KeyInternalAPI) uploadLocalDeviceKeys(ctx context.Context, req *api.PerformUploadKeysRequest, res *api.PerformUploadKeysResponse) {
-	var keysToStore []api.DeviceMessage
-	// assert that the user ID / device ID are not lying for each key
-	for _, key := range req.DeviceKeys {
-		_, serverName, err := gomatrixserverlib.SplitID('@', key.UserID)
-		if err != nil {
-			continue // ignore invalid users
+	// get a list of devices from the user API that actually exist, as
+	// we won't store keys for devices that don't exist
+	uapidevices := &userapi.QueryDevicesResponse{}
+	if err := a.UserAPI.QueryDevices(ctx, &userapi.QueryDevicesRequest{UserID: req.UserID}, uapidevices); err != nil {
+		res.Error = &api.KeyError{
+			Err: err.Error(),
 		}
-		if serverName != a.ThisServer {
-			continue // ignore remote users
+		return
+	}
+	if !uapidevices.UserExists {
+		res.Error = &api.KeyError{
+			Err: fmt.Sprintf("user %q does not exist", req.UserID),
 		}
-		if len(key.KeyJSON) == 0 {
-			keysToStore = append(keysToStore, key.WithStreamID(0))
-			continue // deleted keys don't need sanity checking
-		}
-		gotUserID := gjson.GetBytes(key.KeyJSON, "user_id").Str
-		gotDeviceID := gjson.GetBytes(key.KeyJSON, "device_id").Str
-		if gotUserID == key.UserID && gotDeviceID == key.DeviceID {
-			keysToStore = append(keysToStore, key.WithStreamID(0))
-			continue
-		}
-
-		res.KeyError(key.UserID, key.DeviceID, &api.KeyError{
-			Err: fmt.Sprintf(
-				"user_id or device_id mismatch: users: %s - %s, devices: %s - %s",
-				gotUserID, key.UserID, gotDeviceID, key.DeviceID,
-			),
-		})
+		return
+	}
+	existingDeviceMap := make(map[string]struct{}, len(uapidevices.Devices))
+	for _, key := range uapidevices.Devices {
+		existingDeviceMap[key.ID] = struct{}{}
 	}
 
-	// get existing device keys so we can check for changes
-	existingKeys := make([]api.DeviceMessage, len(keysToStore))
-	for i := range keysToStore {
-		existingKeys[i] = api.DeviceMessage{
-			Type: api.TypeDeviceKeyUpdate,
-			DeviceKeys: &api.DeviceKeys{
-				UserID:   keysToStore[i].UserID,
-				DeviceID: keysToStore[i].DeviceID,
-			},
-		}
-	}
-	if err := a.DB.DeviceKeysJSON(ctx, existingKeys); err != nil {
+	// Get all of the user existing device keys so we can check for changes.
+	existingKeys, err := a.DB.DeviceKeysForUser(ctx, req.UserID, nil, true)
+	if err != nil {
 		res.Error = &api.KeyError{
 			Err: fmt.Sprintf("failed to query existing device keys: %s", err.Error()),
 		}
 		return
 	}
-	if req.OnlyDisplayNameUpdates {
-		// add the display name field from keysToStore into existingKeys
-		keysToStore = appendDisplayNames(existingKeys, keysToStore)
+
+	// Work out whether we have device keys in the keyserver for devices that
+	// no longer exist in the user API. This is mostly an exercise to ensure
+	// that we keep some integrity between the two.
+	var toClean []gomatrixserverlib.KeyID
+	for _, k := range existingKeys {
+		if _, ok := existingDeviceMap[k.DeviceID]; !ok {
+			toClean = append(toClean, gomatrixserverlib.KeyID(k.DeviceID))
+		}
 	}
+
+	if len(toClean) > 0 {
+		if err = a.DB.DeleteDeviceKeys(ctx, req.UserID, toClean); err != nil {
+			logrus.WithField("user_id", req.UserID).WithError(err).Errorf("Failed to clean up %d stale keyserver device key entries", len(toClean))
+		} else {
+			logrus.WithField("user_id", req.UserID).Debugf("Cleaned up %d stale keyserver device key entries", len(toClean))
+		}
+	}
+
+	var keysToStore []api.DeviceMessage
+
+	if req.OnlyDisplayNameUpdates {
+		for _, existingKey := range existingKeys {
+			for _, newKey := range req.DeviceKeys {
+				switch {
+				case existingKey.UserID != newKey.UserID:
+					continue
+				case existingKey.DeviceID != newKey.DeviceID:
+					continue
+				case existingKey.DisplayName != newKey.DisplayName:
+					existingKey.DisplayName = newKey.DisplayName
+				}
+			}
+			keysToStore = append(keysToStore, existingKey)
+		}
+	} else {
+		// assert that the user ID / device ID are not lying for each key
+		for _, key := range req.DeviceKeys {
+			var serverName gomatrixserverlib.ServerName
+			_, serverName, err = gomatrixserverlib.SplitID('@', key.UserID)
+			if err != nil {
+				continue // ignore invalid users
+			}
+			if serverName != a.ThisServer {
+				continue // ignore remote users
+			}
+			if len(key.KeyJSON) == 0 {
+				keysToStore = append(keysToStore, key.WithStreamID(0))
+				continue // deleted keys don't need sanity checking
+			}
+			// check that the device in question actually exists in the user
+			// API before we try and store a key for it
+			if _, ok := existingDeviceMap[key.DeviceID]; !ok {
+				continue
+			}
+			gotUserID := gjson.GetBytes(key.KeyJSON, "user_id").Str
+			gotDeviceID := gjson.GetBytes(key.KeyJSON, "device_id").Str
+			if gotUserID == key.UserID && gotDeviceID == key.DeviceID {
+				keysToStore = append(keysToStore, key.WithStreamID(0))
+				continue
+			}
+
+			res.KeyError(key.UserID, key.DeviceID, &api.KeyError{
+				Err: fmt.Sprintf(
+					"user_id or device_id mismatch: users: %s - %s, devices: %s - %s",
+					gotUserID, key.UserID, gotDeviceID, key.DeviceID,
+				),
+			})
+		}
+	}
+
 	// store the device keys and emit changes
-	err := a.DB.StoreLocalDeviceKeys(ctx, keysToStore)
+	err = a.DB.StoreLocalDeviceKeys(ctx, keysToStore)
 	if err != nil {
 		res.Error = &api.KeyError{
 			Err: fmt.Sprintf("failed to store device keys: %s", err.Error()),
 		}
 		return
 	}
-	err = emitDeviceKeyChanges(a.Producer, existingKeys, keysToStore)
+	err = emitDeviceKeyChanges(a.Producer, existingKeys, keysToStore, req.OnlyDisplayNameUpdates)
 	if err != nil {
 		util.GetLogger(ctx).Errorf("Failed to emitDeviceKeyChanges: %s", err)
 	}
@@ -668,7 +753,11 @@ func (a *KeyInternalAPI) uploadOneTimeKeys(ctx context.Context, req *api.Perform
 
 }
 
-func emitDeviceKeyChanges(producer KeyChangeProducer, existing, new []api.DeviceMessage) error {
+func emitDeviceKeyChanges(producer KeyChangeProducer, existing, new []api.DeviceMessage, onlyUpdateDisplayName bool) error {
+	// if we only want to update the display names, we can skip the checks below
+	if onlyUpdateDisplayName {
+		return producer.ProduceKeyChanges(new)
+	}
 	// find keys in new that are not in existing
 	var keysAdded []api.DeviceMessage
 	for _, newKey := range new {
@@ -676,7 +765,7 @@ func emitDeviceKeyChanges(producer KeyChangeProducer, existing, new []api.Device
 		for _, existingKey := range existing {
 			// Do not treat the absence of keys as equal, or else we will not emit key changes
 			// when users delete devices which never had a key to begin with as both KeyJSONs are nil.
-			if bytes.Equal(existingKey.KeyJSON, newKey.KeyJSON) && len(existingKey.KeyJSON) > 0 {
+			if existingKey.DeviceKeysEqual(&newKey) {
 				exists = true
 				break
 			}
@@ -686,17 +775,4 @@ func emitDeviceKeyChanges(producer KeyChangeProducer, existing, new []api.Device
 		}
 	}
 	return producer.ProduceKeyChanges(keysAdded)
-}
-
-func appendDisplayNames(existing, new []api.DeviceMessage) []api.DeviceMessage {
-	for i, existingDevice := range existing {
-		for _, newDevice := range new {
-			if existingDevice.DeviceID != newDevice.DeviceID {
-				continue
-			}
-			existingDevice.DisplayName = newDevice.DisplayName
-			existing[i] = existingDevice
-		}
-	}
-	return existing
 }

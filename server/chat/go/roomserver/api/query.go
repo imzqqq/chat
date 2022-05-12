@@ -83,27 +83,6 @@ type QueryStateAfterEventsResponse struct {
 	StateEvents []*gomatrixserverlib.HeaderedEvent `json:"state_events"`
 }
 
-type QueryMissingAuthPrevEventsRequest struct {
-	// The room ID to query the state in.
-	RoomID string `json:"room_id"`
-	// The list of auth events to check the existence of.
-	AuthEventIDs []string `json:"auth_event_ids"`
-	// The list of previous events to check the existence of.
-	PrevEventIDs []string `json:"prev_event_ids"`
-}
-
-type QueryMissingAuthPrevEventsResponse struct {
-	// Does the room exist on this roomserver?
-	// If the room doesn't exist all other fields will be empty.
-	RoomExists bool `json:"room_exists"`
-	// The room version of the room.
-	RoomVersion gomatrixserverlib.RoomVersion `json:"room_version"`
-	// The event IDs of the auth events that we don't know locally.
-	MissingAuthEventIDs []string `json:"missing_auth_event_ids"`
-	// The event IDs of the previous events that we don't know locally.
-	MissingPrevEventIDs []string `json:"missing_prev_event_ids"`
-}
-
 // QueryEventsByIDRequest is a request to QueryEventsByID
 type QueryEventsByIDRequest struct {
 	// The event IDs to look up.
@@ -143,12 +122,15 @@ type QueryMembershipForUserResponse struct {
 	Membership string `json:"membership"`
 	// True if the user asked to forget this room.
 	IsRoomForgotten bool `json:"is_room_forgotten"`
+	RoomExists      bool `json:"room_exists"`
 }
 
 // QueryMembershipsForRoomRequest is a request to QueryMembershipsForRoom
 type QueryMembershipsForRoomRequest struct {
 	// If true, only returns the membership events of "join" membership
 	JoinedOnly bool `json:"joined_only"`
+	// If true, only returns the membership events of local users
+	LocalOnly bool `json:"local_only"`
 	// ID of the room to fetch memberships from
 	RoomID string `json:"room_id"`
 	// Optional - ID of the user sending the request, for checking if the
@@ -226,6 +208,10 @@ type QueryStateAndAuthChainRequest struct {
 	PrevEventIDs []string `json:"prev_event_ids"`
 	// The list of auth events for the event. Used to calculate the auth chain
 	AuthEventIDs []string `json:"auth_event_ids"`
+	// If true, the auth chain events for the auth event IDs given will be fetched only. Prev event IDs are ignored.
+	// If false, state and auth chain events for the prev event IDs and entire current state will be included.
+	// TODO: not a great API shape. It serves 2 main uses: false=>response for send_join, true=>response for /event_auth
+	OnlyFetchAuthChain bool `json:"only_fetch_auth_chain"`
 	// Should state resolution be ran on the result events?
 	// TODO: check call sites and remove if we always want to do state res
 	ResolveState bool `json:"resolve_state"`
@@ -245,6 +231,8 @@ type QueryStateAndAuthChainResponse struct {
 	// The lists will be in an arbitrary order.
 	StateEvents     []*gomatrixserverlib.HeaderedEvent `json:"state_events"`
 	AuthChainEvents []*gomatrixserverlib.HeaderedEvent `json:"auth_chain_events"`
+	// True if the queried event was rejected earlier.
+	IsRejected bool `json:"is_rejected"`
 }
 
 // QueryRoomVersionCapabilitiesRequest asks for the default room version
@@ -286,6 +274,7 @@ type QueryAuthChainResponse struct {
 
 type QuerySharedUsersRequest struct {
 	UserID         string
+	OtherUserIDs   []string
 	ExcludeRoomIDs []string
 	IncludeRoomIDs []string
 }
@@ -329,7 +318,10 @@ type QueryBulkStateContentResponse struct {
 }
 
 type QueryCurrentStateRequest struct {
-	RoomID      string
+	RoomID         string
+	AllowWildcards bool
+	// State key tuples. If a state_key has '*' and AllowWidlcards is true, returns all matching
+	// state events with that event type.
 	StateTuples []gomatrixserverlib.StateKeyTuple
 }
 

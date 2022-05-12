@@ -220,7 +220,6 @@ func UpStateBlocksRefactor(tx *sql.Tx) error {
 			index := stateSnapshotData{snapshot.StateSnapshotNID, snapshot.RoomNID}
 			newsnapshots[index] = append(newsnapshots[index], blocknid)
 		}
-
 		for snapshotdata, newblocks := range newsnapshots {
 			var newblocksarray pq.Int64Array
 			for _, b := range newblocks {
@@ -229,11 +228,11 @@ func UpStateBlocksRefactor(tx *sql.Tx) error {
 
 			var newNID types.StateSnapshotNID
 			err = tx.QueryRow(`
-				INSERT INTO roomserver_state_snapshots (state_snapshot_hash, room_nid, state_block_nids)
-					VALUES ($1, $2, $3)
-					ON CONFLICT (state_snapshot_hash) DO UPDATE SET room_nid=$2
-					RETURNING state_snapshot_nid
-			`, newblocks.Hash(), snapshotdata.RoomNID, newblocksarray).Scan(&newNID)
+					INSERT INTO roomserver_state_snapshots (state_snapshot_hash, room_nid, state_block_nids)
+						VALUES ($1, $2, $3)
+						ON CONFLICT (state_snapshot_hash) DO UPDATE SET room_nid=$2
+						RETURNING state_snapshot_nid
+				`, newblocks.Hash(), snapshotdata.RoomNID, newblocksarray).Scan(&newNID)
 			if err != nil {
 				return fmt.Errorf("tx.QueryRow.Scan (insert new snapshot): %w", err)
 			}
@@ -252,16 +251,43 @@ func UpStateBlocksRefactor(tx *sql.Tx) error {
 	// If we do, this is a problem if Dendrite tries to load the snapshot as it will not exist
 	// in roomserver_state_snapshots
 	var count int64
+
 	if err = tx.QueryRow(`SELECT COUNT(*) FROM roomserver_events WHERE state_snapshot_nid < $1 AND state_snapshot_nid != 0`, maxsnapshotid).Scan(&count); err != nil {
 		return fmt.Errorf("assertion query failed: %s", err)
 	}
 	if count > 0 {
-		return fmt.Errorf("%d events exist in roomserver_events which have not been converted to a new state_snapshot_nid; this is a bug, please report", count)
+		var res sql.Result
+		var c int64
+		res, err = tx.Exec(`UPDATE roomserver_events SET state_snapshot_nid = 0 WHERE state_snapshot_nid < $1 AND state_snapshot_nid != 0`, maxsnapshotid)
+		if err != nil && err != sql.ErrNoRows {
+			return fmt.Errorf("failed to reset invalid state snapshots: %w", err)
+		}
+		if c, err = res.RowsAffected(); err != nil {
+			return fmt.Errorf("failed to get row count for invalid state snapshots updated: %w", err)
+		} else if c != count {
+			return fmt.Errorf("expected to reset %d event(s) but only updated %d event(s)", count, c)
+		}
 	}
 	if err = tx.QueryRow(`SELECT COUNT(*) FROM roomserver_rooms WHERE state_snapshot_nid < $1 AND state_snapshot_nid != 0`, maxsnapshotid).Scan(&count); err != nil {
 		return fmt.Errorf("assertion query failed: %s", err)
 	}
 	if count > 0 {
+		var debugRoomID string
+		var debugSnapNID, debugLastEventNID int64
+		err = tx.QueryRow(
+			`SELECT room_id, state_snapshot_nid, last_event_sent_nid FROM roomserver_rooms WHERE state_snapshot_nid < $1 AND state_snapshot_nid != 0`, maxsnapshotid,
+		).Scan(&debugRoomID, &debugSnapNID, &debugLastEventNID)
+		if err != nil {
+			logrus.Errorf("cannot extract debug info: %v", err)
+		} else {
+			logrus.Errorf(
+				"Affected row: room_id=%v snapshot=%v last_sent=%v",
+				debugRoomID, debugSnapNID, debugLastEventNID,
+			)
+			logrus.Errorf("To fix this manually, run this query first then retry the migration: "+
+				"UPDATE roomserver_rooms SET state_snapshot_nid=0 WHERE room_id='%v'", debugRoomID)
+			logrus.Errorf("Running this UPDATE will cause the room in question to become unavailable on this server. Leave and re-join the room afterwards.")
+		}
 		return fmt.Errorf("%d rooms exist in roomserver_rooms which have not been converted to a new state_snapshot_nid; this is a bug, please report", count)
 	}
 
