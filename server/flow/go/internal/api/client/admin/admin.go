@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -22,7 +22,6 @@ import (
 	"net/http"
 
 	"github.com/superseriousbusiness/gotosocial/internal/api"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/processing"
 	"github.com/superseriousbusiness/gotosocial/internal/router"
 )
@@ -36,6 +35,12 @@ const (
 	DomainBlocksPath = BasePath + "/domain_blocks"
 	// DomainBlocksPathWithID is used for interacting with a single domain block.
 	DomainBlocksPathWithID = DomainBlocksPath + "/:" + IDKey
+	// AccountsPath is used for listing + acting on accounts.
+	AccountsPath = BasePath + "/accounts"
+	// AccountsPathWithID is used for interacting with a single account.
+	AccountsPathWithID = AccountsPath + "/:" + IDKey
+	// AccountsActionPath is used for taking action on a single account.
+	AccountsActionPath = AccountsPathWithID + "/action"
 
 	// ExportQueryKey is for requesting a public export of some data.
 	ExportQueryKey = "export"
@@ -47,24 +52,23 @@ const (
 
 // Module implements the ClientAPIModule interface for admin-related actions (reports, emojis, etc)
 type Module struct {
-	config    *config.Config
 	processor processing.Processor
 }
 
 // New returns a new admin module
-func New(config *config.Config, processor processing.Processor) api.ClientModule {
+func New(processor processing.Processor) api.ClientModule {
 	return &Module{
-		config:    config,
 		processor: processor,
 	}
 }
 
 // Route attaches all routes from this module to the given router
 func (m *Module) Route(r router.Router) error {
-	r.AttachHandler(http.MethodPost, EmojiPath, m.emojiCreatePOSTHandler)
+	r.AttachHandler(http.MethodPost, EmojiPath, m.EmojiCreatePOSTHandler)
 	r.AttachHandler(http.MethodPost, DomainBlocksPath, m.DomainBlocksPOSTHandler)
 	r.AttachHandler(http.MethodGet, DomainBlocksPath, m.DomainBlocksGETHandler)
 	r.AttachHandler(http.MethodGet, DomainBlocksPathWithID, m.DomainBlockGETHandler)
 	r.AttachHandler(http.MethodDelete, DomainBlocksPathWithID, m.DomainBlockDELETEHandler)
+	r.AttachHandler(http.MethodPost, AccountsActionPath, m.AccountActionPOSTHandler)
 	return nil
 }

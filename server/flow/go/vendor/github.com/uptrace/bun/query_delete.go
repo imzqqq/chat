@@ -15,6 +15,8 @@ type DeleteQuery struct {
 	returningQuery
 }
 
+var _ Query = (*DeleteQuery)(nil)
+
 func NewDeleteQuery(db *DB) *DeleteQuery {
 	q := &DeleteQuery{
 		whereBaseQuery: whereBaseQuery{
@@ -60,7 +62,7 @@ func (q *DeleteQuery) TableExpr(query string, args ...interface{}) *DeleteQuery 
 }
 
 func (q *DeleteQuery) ModelTableExpr(query string, args ...interface{}) *DeleteQuery {
-	q.modelTable = schema.SafeQuery(query, args)
+	q.modelTableName = schema.SafeQuery(query, args)
 	return q
 }
 
@@ -134,6 +136,10 @@ func (q *DeleteQuery) Operation() string {
 }
 
 func (q *DeleteQuery) AppendQuery(fmter schema.Formatter, b []byte) (_ []byte, err error) {
+	if q.err != nil {
+		return nil, q.err
+	}
+
 	fmter = formatterWithModel(fmter, q)
 
 	if q.isSoftDelete() {
@@ -184,7 +190,8 @@ func (q *DeleteQuery) AppendQuery(fmter schema.Formatter, b []byte) (_ []byte, e
 		return nil, err
 	}
 
-	if len(q.returning) > 0 {
+	if q.hasFeature(feature.Returning) && q.hasReturning() {
+		b = append(b, " RETURNING "...)
 		b, err = q.appendReturning(fmter, b)
 		if err != nil {
 			return nil, err
@@ -278,4 +285,49 @@ func (q *DeleteQuery) afterDeleteHook(ctx context.Context) error {
 		}
 	}
 	return nil
+}
+
+//------------------------------------------------------------------------------
+type deleteQueryBuilder struct {
+	*DeleteQuery
+}
+
+func (q *deleteQueryBuilder) WhereGroup(sep string, fn func(QueryBuilder) QueryBuilder) QueryBuilder {
+	q.DeleteQuery = q.DeleteQuery.WhereGroup(sep, func(qs *DeleteQuery) *DeleteQuery {
+		return fn(q).(*deleteQueryBuilder).DeleteQuery
+	})
+	return q
+}
+
+func (q *deleteQueryBuilder) Where(query string, args ...interface{}) QueryBuilder {
+	q.DeleteQuery.Where(query, args...)
+	return q
+}
+
+func (q *deleteQueryBuilder) WhereOr(query string, args ...interface{}) QueryBuilder {
+	q.DeleteQuery.WhereOr(query, args...)
+	return q
+}
+
+func (q *deleteQueryBuilder) WhereDeleted() QueryBuilder {
+	q.DeleteQuery.WhereDeleted()
+	return q
+}
+
+func (q *deleteQueryBuilder) WhereAllWithDeleted() QueryBuilder {
+	q.DeleteQuery.WhereAllWithDeleted()
+	return q
+}
+
+func (q *deleteQueryBuilder) WherePK(cols ...string) QueryBuilder {
+	q.DeleteQuery.WherePK(cols...)
+	return q
+}
+
+func (q *deleteQueryBuilder) Unwrap() interface{} {
+	return q.DeleteQuery
+}
+
+func (q *DeleteQuery) Query() QueryBuilder {
+	return &deleteQueryBuilder{q}
 }

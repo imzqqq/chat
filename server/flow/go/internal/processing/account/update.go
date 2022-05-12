@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -19,16 +19,17 @@
 package account
 
 import (
-	"bytes"
 	"context"
-	"errors"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"io"
 	"mime/multipart"
 
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
+
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	apimodel "github.com/superseriousbusiness/gotosocial/internal/api/model"
+	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/media"
 	"github.com/superseriousbusiness/gotosocial/internal/messages"
@@ -59,10 +60,17 @@ func (p *processor) Update(ctx context.Context, account *gtsmodel.Account, form 
 		if err := validate.Note(*form.Note); err != nil {
 			return nil, err
 		}
+
+		// Set the raw note before processing
+		account.NoteRaw = *form.Note
+
+		// Process note to generate a valid HTML representation
 		note, err := p.processNote(ctx, *form.Note, account.ID)
 		if err != nil {
 			return nil, err
 		}
+
+		// Set updated HTML-ified note
 		account.Note = note
 	}
 
@@ -116,12 +124,12 @@ func (p *processor) Update(ctx context.Context, account *gtsmodel.Account, form 
 		return nil, fmt.Errorf("could not update account %s: %s", account.ID, err)
 	}
 
-	p.fromClientAPI <- messages.FromClientAPI{
+	p.clientWorker.Queue(messages.FromClientAPI{
 		APObjectType:   ap.ObjectProfile,
 		APActivityType: ap.ActivityUpdate,
 		GTSModel:       updatedAccount,
 		OriginAccount:  updatedAccount,
-	}
+	})
 
 	acctSensitive, err := p.tc.AccountToAPIAccountSensitive(ctx, updatedAccount)
 	if err != nil {
@@ -134,66 +142,57 @@ func (p *processor) Update(ctx context.Context, account *gtsmodel.Account, form 
 // parsing and checking the image, and doing the necessary updates in the database for this to become
 // the account's new avatar image.
 func (p *processor) UpdateAvatar(ctx context.Context, avatar *multipart.FileHeader, accountID string) (*gtsmodel.MediaAttachment, error) {
-	var err error
-	if int(avatar.Size) > p.config.MediaConfig.MaxImageSize {
-		err = fmt.Errorf("avatar with size %d exceeded max image size of %d bytes", avatar.Size, p.config.MediaConfig.MaxImageSize)
-		return nil, err
-	}
-	f, err := avatar.Open()
-	if err != nil {
-		return nil, fmt.Errorf("could not read provided avatar: %s", err)
+	maxImageSize := viper.GetInt(config.Keys.MediaImageMaxSize)
+	if int(avatar.Size) > maxImageSize {
+		return nil, fmt.Errorf("UpdateAvatar: avatar with size %d exceeded max image size of %d bytes", avatar.Size, maxImageSize)
 	}
 
-	// extract the bytes
-	buf := new(bytes.Buffer)
-	size, err := io.Copy(buf, f)
-	if err != nil {
-		return nil, fmt.Errorf("could not read provided avatar: %s", err)
-	}
-	if size == 0 {
-		return nil, errors.New("could not read provided avatar: size 0 bytes")
+	dataFunc := func(innerCtx context.Context) (io.Reader, int, error) {
+		f, err := avatar.Open()
+		return f, int(avatar.Size), err
 	}
 
-	// do the setting
-	avatarInfo, err := p.mediaHandler.ProcessHeaderOrAvatar(ctx, buf.Bytes(), accountID, media.Avatar, "")
-	if err != nil {
-		return nil, fmt.Errorf("error processing avatar: %s", err)
+	isAvatar := true
+	ai := &media.AdditionalMediaInfo{
+		Avatar: &isAvatar,
 	}
 
-	return avatarInfo, f.Close()
+	processingMedia, err := p.mediaManager.ProcessMedia(ctx, dataFunc, nil, accountID, ai)
+	if err != nil {
+		return nil, fmt.Errorf("UpdateAvatar: error processing avatar: %s", err)
+	}
+
+	return processingMedia.LoadAttachment(ctx)
 }
 
 // UpdateHeader does the dirty work of checking the header part of an account update form,
 // parsing and checking the image, and doing the necessary updates in the database for this to become
 // the account's new header image.
 func (p *processor) UpdateHeader(ctx context.Context, header *multipart.FileHeader, accountID string) (*gtsmodel.MediaAttachment, error) {
-	var err error
-	if int(header.Size) > p.config.MediaConfig.MaxImageSize {
-		err = fmt.Errorf("header with size %d exceeded max image size of %d bytes", header.Size, p.config.MediaConfig.MaxImageSize)
-		return nil, err
-	}
-	f, err := header.Open()
-	if err != nil {
-		return nil, fmt.Errorf("could not read provided header: %s", err)
+	maxImageSize := viper.GetInt(config.Keys.MediaImageMaxSize)
+	if int(header.Size) > maxImageSize {
+		return nil, fmt.Errorf("UpdateHeader: header with size %d exceeded max image size of %d bytes", header.Size, maxImageSize)
 	}
 
-	// extract the bytes
-	buf := new(bytes.Buffer)
-	size, err := io.Copy(buf, f)
-	if err != nil {
-		return nil, fmt.Errorf("could not read provided header: %s", err)
-	}
-	if size == 0 {
-		return nil, errors.New("could not read provided header: size 0 bytes")
+	dataFunc := func(innerCtx context.Context) (io.Reader, int, error) {
+		f, err := header.Open()
+		return f, int(header.Size), err
 	}
 
-	// do the setting
-	headerInfo, err := p.mediaHandler.ProcessHeaderOrAvatar(ctx, buf.Bytes(), accountID, media.Header, "")
-	if err != nil {
-		return nil, fmt.Errorf("error processing header: %s", err)
+	isHeader := true
+	ai := &media.AdditionalMediaInfo{
+		Header: &isHeader,
 	}
 
-	return headerInfo, f.Close()
+	processingMedia, err := p.mediaManager.ProcessMedia(ctx, dataFunc, nil, accountID, ai)
+	if err != nil {
+		return nil, fmt.Errorf("UpdateHeader: error processing header: %s", err)
+	}
+	if err != nil {
+		return nil, fmt.Errorf("UpdateHeader: error processing header: %s", err)
+	}
+
+	return processingMedia.LoadAttachment(ctx)
 }
 
 func (p *processor) processNote(ctx context.Context, note string, accountID string) (string, error) {
@@ -207,10 +206,14 @@ func (p *processor) processNote(ctx context.Context, note string, accountID stri
 		return "", err
 	}
 
-	mentionStrings := util.DeriveMentionsFromText(note)
-	mentions, err := p.db.MentionStringsToMentions(ctx, mentionStrings, accountID, "")
-	if err != nil {
-		return "", err
+	mentionStrings := util.DeriveMentionNamesFromText(note)
+	mentions := []*gtsmodel.Mention{}
+	for _, mentionString := range mentionStrings {
+		mention, err := p.parseMention(ctx, mentionString, accountID, "")
+		if err != nil {
+			continue
+		}
+		mentions = append(mentions, mention)
 	}
 
 	// TODO: support emojis in account notes

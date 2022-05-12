@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -20,16 +20,54 @@ package testrig
 
 import (
 	"context"
+	"fmt"
+	"os"
+	"path/filepath"
+	"runtime"
 
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
+	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/router"
 )
 
 // NewTestRouter returns a Router suitable for testing
+//
+// If the environment variable GTS_WEB_TEMPLATE_BASE_DIR set, it will take that
+// value as the template base directory instead.
 func NewTestRouter(db db.DB) router.Router {
-	r, err := router.New(context.Background(), NewTestConfig(), db)
+	if alternativeTemplateBaseDir := os.Getenv("GTS_WEB_TEMPLATE_BASE_DIR"); alternativeTemplateBaseDir != "" {
+		viper.Set(config.Keys.WebTemplateBaseDir, alternativeTemplateBaseDir)
+	}
+
+	r, err := router.New(context.Background(), db)
 	if err != nil {
 		panic(err)
 	}
 	return r
+}
+
+// ConfigureTemplatesWithGin will panic on any errors related to template loading during tests
+func ConfigureTemplatesWithGin(engine *gin.Engine) {
+	router.LoadTemplateFunctions(engine)
+
+	templateBaseDir := viper.GetString(config.Keys.WebTemplateBaseDir)
+
+	if !filepath.IsAbs(templateBaseDir) {
+		// https://stackoverflow.com/questions/31873396/is-it-possible-to-get-the-current-root-of-package-structure-as-a-string-in-golan
+		_, runtimeCallerLocation, _, _ := runtime.Caller(0)
+		projectRoot, err := filepath.Abs(filepath.Join(filepath.Dir(runtimeCallerLocation), "../"))
+		if err != nil {
+			panic(err)
+		}
+
+		templateBaseDir = filepath.Join(projectRoot, templateBaseDir)
+	}
+
+	if _, err := os.Stat(filepath.Join(templateBaseDir, "index.tmpl")); err != nil {
+		panic(fmt.Errorf("%s doesn't seem to contain the templates; index.tmpl is missing: %w", templateBaseDir, err))
+	}
+
+	engine.LoadHTMLGlob(filepath.Join(templateBaseDir, "*"))
 }

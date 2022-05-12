@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -23,6 +23,9 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
+	"github.com/superseriousbusiness/gotosocial/internal/processing"
+	"github.com/superseriousbusiness/gotosocial/internal/timeline"
+	"github.com/superseriousbusiness/gotosocial/internal/visibility"
 	"github.com/superseriousbusiness/gotosocial/testrig"
 )
 
@@ -36,14 +39,21 @@ func (suite *ManagerTestSuite) SetupSuite() {
 }
 
 func (suite *ManagerTestSuite) SetupTest() {
-	suite.config = testrig.NewTestConfig()
-	suite.db = testrig.NewTestDB()
 	testrig.InitTestLog()
+	testrig.InitTestConfig()
+
+	suite.db = testrig.NewTestDB()
 	suite.tc = testrig.NewTestTypeConverter(suite.db)
+	suite.filter = visibility.NewFilter(suite.db)
 
 	testrig.StandardDBSetup(suite.db, nil)
 
-	manager := testrig.NewTestTimelineManager(suite.db)
+	manager := timeline.NewManager(
+		processing.StatusGrabFunction(suite.db),
+		processing.StatusFilterFunction(suite.db, suite.filter),
+		processing.StatusPrepareFunction(suite.db, suite.tc),
+		processing.StatusSkipInsertFunction(),
+	)
 	suite.manager = manager
 }
 
@@ -67,9 +77,9 @@ func (suite *ManagerTestSuite) TestManagerIntegration() {
 	err = suite.manager.PrepareXFromTop(context.Background(), testAccount.ID, 20)
 	suite.NoError(err)
 
-	// local_account_1 can see 13 statuses out of the testrig statuses in its home timeline
+	// local_account_1 can see 15 statuses out of the testrig statuses in its home timeline
 	indexedLen = suite.manager.GetIndexedLength(context.Background(), testAccount.ID)
-	suite.Equal(13, indexedLen)
+	suite.Equal(15, indexedLen)
 
 	// oldest should now be set
 	oldestIndexed, err = suite.manager.GetOldestIndexedID(context.Background(), testAccount.ID)
@@ -77,17 +87,17 @@ func (suite *ManagerTestSuite) TestManagerIntegration() {
 	suite.Equal("01F8MH75CBF9JFX4ZAD54N0W0R", oldestIndexed)
 
 	// get hometimeline
-	statuses, err := suite.manager.HomeTimeline(context.Background(), testAccount.ID, "", "", "", 20, false)
+	statuses, err := suite.manager.GetTimeline(context.Background(), testAccount.ID, "", "", "", 20, false)
 	suite.NoError(err)
-	suite.Len(statuses, 13)
+	suite.Len(statuses, 15)
 
 	// now wipe the last status from all timelines, as though it had been deleted by the owner
-	err = suite.manager.WipeStatusFromAllTimelines(context.Background(), "01F8MH75CBF9JFX4ZAD54N0W0R")
+	err = suite.manager.WipeItemFromAllTimelines(context.Background(), "01F8MH75CBF9JFX4ZAD54N0W0R")
 	suite.NoError(err)
 
 	// timeline should be shorter
 	indexedLen = suite.manager.GetIndexedLength(context.Background(), testAccount.ID)
-	suite.Equal(12, indexedLen)
+	suite.Equal(14, indexedLen)
 
 	// oldest should now be different
 	oldestIndexed, err = suite.manager.GetOldestIndexedID(context.Background(), testAccount.ID)
@@ -101,7 +111,7 @@ func (suite *ManagerTestSuite) TestManagerIntegration() {
 
 	// timeline should be shorter
 	indexedLen = suite.manager.GetIndexedLength(context.Background(), testAccount.ID)
-	suite.Equal(11, indexedLen)
+	suite.Equal(13, indexedLen)
 
 	// oldest should now be different
 	oldestIndexed, err = suite.manager.GetOldestIndexedID(context.Background(), testAccount.ID)
@@ -109,7 +119,7 @@ func (suite *ManagerTestSuite) TestManagerIntegration() {
 	suite.Equal("01F8MHAAY43M6RJ473VQFCVH37", oldestIndexed)
 
 	// now remove all entries by local_account_2 from the timeline
-	err = suite.manager.WipeStatusesFromAccountID(context.Background(), testAccount.ID, suite.testAccounts["local_account_2"].ID)
+	err = suite.manager.WipeItemsFromAccountID(context.Background(), testAccount.ID, suite.testAccounts["local_account_2"].ID)
 	suite.NoError(err)
 
 	// timeline should be shorter

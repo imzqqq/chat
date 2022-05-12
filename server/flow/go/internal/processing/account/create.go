@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -23,9 +23,11 @@ import (
 	"fmt"
 
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	apimodel "github.com/superseriousbusiness/gotosocial/internal/api/model"
+	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/messages"
 	"github.com/superseriousbusiness/gotosocial/internal/text"
@@ -51,14 +53,18 @@ func (p *processor) Create(ctx context.Context, applicationToken oauth2.TokenInf
 		return nil, fmt.Errorf("username %s in use", form.Username)
 	}
 
+	keys := config.Keys
+	reasonRequired := viper.GetBool(keys.AccountsReasonRequired)
+	approvalRequired := viper.GetBool(keys.AccountsApprovalRequired)
+
 	// don't store a reason if we don't require one
 	reason := form.Reason
-	if !p.config.AccountsConfig.ReasonRequired {
+	if !reasonRequired {
 		reason = ""
 	}
 
 	l.Trace("creating new username and account")
-	user, err := p.db.NewSignup(ctx, form.Username, text.RemoveHTML(reason), p.config.AccountsConfig.RequireApproval, form.Email, form.Password, form.IP, form.Locale, application.ID, false, false)
+	user, err := p.db.NewSignup(ctx, form.Username, text.RemoveHTML(reason), approvalRequired, form.Email, form.Password, form.IP, form.Locale, application.ID, false, false)
 	if err != nil {
 		return nil, fmt.Errorf("error creating new signup in the database: %s", err)
 	}
@@ -79,12 +85,12 @@ func (p *processor) Create(ctx context.Context, applicationToken oauth2.TokenInf
 
 	// there are side effects for creating a new account (sending confirmation emails etc)
 	// so pass a message to the processor so that it can do it asynchronously
-	p.fromClientAPI <- messages.FromClientAPI{
+	p.clientWorker.Queue(messages.FromClientAPI{
 		APObjectType:   ap.ObjectProfile,
 		APActivityType: ap.ActivityCreate,
 		GTSModel:       user.Account,
 		OriginAccount:  user.Account,
-	}
+	})
 
 	return &apimodel.Token{
 		AccessToken: accessToken.GetAccess(),

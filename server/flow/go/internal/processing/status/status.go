@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -22,7 +22,6 @@ import (
 	"context"
 
 	apimodel "github.com/superseriousbusiness/gotosocial/internal/api/model"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtserror"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
@@ -30,6 +29,7 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/text"
 	"github.com/superseriousbusiness/gotosocial/internal/typeutils"
 	"github.com/superseriousbusiness/gotosocial/internal/visibility"
+	"github.com/superseriousbusiness/gotosocial/internal/worker"
 )
 
 // Processor wraps a bunch of functions for processing statuses.
@@ -70,22 +70,22 @@ type Processor interface {
 }
 
 type processor struct {
-	tc            typeutils.TypeConverter
-	config        *config.Config
-	db            db.DB
-	filter        visibility.Filter
-	formatter     text.Formatter
-	fromClientAPI chan messages.FromClientAPI
+	tc           typeutils.TypeConverter
+	db           db.DB
+	filter       visibility.Filter
+	formatter    text.Formatter
+	clientWorker *worker.Worker[messages.FromClientAPI]
+	parseMention gtsmodel.ParseMentionFunc
 }
 
 // New returns a new status processor.
-func New(db db.DB, tc typeutils.TypeConverter, config *config.Config, fromClientAPI chan messages.FromClientAPI) Processor {
+func New(db db.DB, tc typeutils.TypeConverter, clientWorker *worker.Worker[messages.FromClientAPI], parseMention gtsmodel.ParseMentionFunc) Processor {
 	return &processor{
-		tc:            tc,
-		config:        config,
-		db:            db,
-		filter:        visibility.NewFilter(db),
-		formatter:     text.NewFormatter(config, db),
-		fromClientAPI: fromClientAPI,
+		tc:           tc,
+		db:           db,
+		filter:       visibility.NewFilter(db),
+		formatter:    text.NewFormatter(db),
+		clientWorker: clientWorker,
+		parseMention: parseMention,
 	}
 }

@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -20,18 +20,18 @@ package timeline_test
 
 import (
 	"github.com/stretchr/testify/suite"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/timeline"
 	"github.com/superseriousbusiness/gotosocial/internal/typeutils"
+	"github.com/superseriousbusiness/gotosocial/internal/visibility"
 )
 
 type TimelineStandardTestSuite struct {
 	suite.Suite
-	config *config.Config
 	db     db.DB
 	tc     typeutils.TypeConverter
+	filter visibility.Filter
 
 	testAccounts map[string]*gtsmodel.Account
 	testStatuses map[string]*gtsmodel.Status

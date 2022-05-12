@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -21,12 +21,8 @@ package federation
 import (
 	"context"
 	"net/http"
-
-	"github.com/superseriousbusiness/gotosocial/internal/util"
 )
 
 func (p *processor) PostInbox(ctx context.Context, w http.ResponseWriter, r *http.Request) (bool, error) {
-	// pass the fromFederator channel through to postInbox, since it'll be needed later
-	contextWithChannel := context.WithValue(ctx, util.APFromFederatorChanKey, p.fromFederator)
-	return p.federator.FederatingActor().PostInbox(contextWithChannel, w, r)
+	return p.federator.FederatingActor().PostInbox(ctx, w, r)
 }

@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -25,5 +25,5 @@ import (
 
 // NewTestTypeConverter returned a type converter with the given db and the default test config
 func NewTestTypeConverter(db db.DB) typeutils.TypeConverter {
-	return typeutils.NewConverter(NewTestConfig(), db)
+	return typeutils.NewConverter(db)
 }

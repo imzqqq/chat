@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -27,6 +27,7 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/id"
+	"github.com/superseriousbusiness/gotosocial/internal/stream"
 )
 
 func (p *processor) notifyStatus(ctx context.Context, status *gtsmodel.Status) error {
@@ -328,6 +329,8 @@ func (p *processor) notifyAnnounce(ctx context.Context, status *gtsmodel.Status)
 	return nil
 }
 
+// timelineStatus processes the given new status and inserts it into
+// the HOME timelines of accounts that follow the status author.
 func (p *processor) timelineStatus(ctx context.Context, status *gtsmodel.Status) error {
 	// make sure the author account is pinned onto the status
 	if status.Account == nil {
@@ -362,28 +365,31 @@ func (p *processor) timelineStatus(ctx context.Context, status *gtsmodel.Status)
 
 	// read any errors that come in from the async functions
 	errs := []string{}
-	go func() {
+	go func(errs []string) {
 		for range errors {
-			e := <-errors
-			if e != nil {
+			if e := <-errors; e != nil {
 				errs = append(errs, e.Error())
 			}
 		}
-	}()
+	}(errs)
 
 	// wait til all functions have returned and then close the error channel
 	wg.Wait()
 	close(errors)
 
 	if len(errs) != 0 {
-		// we have some errors
+		// we have at least one error
 		return fmt.Errorf("timelineStatus: one or more errors timelining statuses: %s", strings.Join(errs, ";"))
 	}
 
-	// no errors, nice
 	return nil
 }
 
+// timelineStatusForAccount puts the given status in the HOME timeline
+// of the account with given accountID, if it's hometimelineable.
+//
+// If the status was inserted into the home timeline of the given account,
+// it will also be streamed via websockets to the user.
 func (p *processor) timelineStatusForAccount(ctx context.Context, status *gtsmodel.Status, accountID string, errors chan error, wg *sync.WaitGroup) {
 	defer wg.Done()
 
@@ -406,36 +412,30 @@ func (p *processor) timelineStatusForAccount(ctx context.Context, status *gtsmod
 	}
 
 	// stick the status in the timeline for the account and then immediately prepare it so they can see it right away
-	inserted, err := p.timelineManager.IngestAndPrepare(ctx, status, timelineAccount.ID)
+	inserted, err := p.statusTimelines.IngestAndPrepare(ctx, status, timelineAccount.ID)
 	if err != nil {
 		errors <- fmt.Errorf("timelineStatusForAccount: error ingesting status %s: %s", status.ID, err)
 		return
 	}
 
-	// the status was inserted to stream it to the user
+	// the status was inserted so stream it to the user
 	if inserted {
 		apiStatus, err := p.tc.StatusToAPIStatus(ctx, status, timelineAccount)
 		if err != nil {
 			errors <- fmt.Errorf("timelineStatusForAccount: error converting status %s to frontend representation: %s", status.ID, err)
-		} else {
-			if err := p.streamingProcessor.StreamUpdateToAccount(apiStatus, timelineAccount); err != nil {
-				errors <- fmt.Errorf("timelineStatusForAccount: error streaming status %s: %s", status.ID, err)
-			}
+			return
 		}
-	}
 
-	apiStatus, err := p.tc.StatusToAPIStatus(ctx, status, timelineAccount)
-	if err != nil {
-		errors <- fmt.Errorf("timelineStatusForAccount: error converting status %s to frontend representation: %s", status.ID, err)
-	} else {
-		if err := p.streamingProcessor.StreamUpdateToAccount(apiStatus, timelineAccount); err != nil {
+		if err := p.streamingProcessor.StreamUpdateToAccount(apiStatus, timelineAccount, stream.TimelineHome); err != nil {
 			errors <- fmt.Errorf("timelineStatusForAccount: error streaming status %s: %s", status.ID, err)
 		}
 	}
 }
 
+// deleteStatusFromTimelines completely removes the given status from all timelines.
+// It will also stream deletion of the status to all open streams.
 func (p *processor) deleteStatusFromTimelines(ctx context.Context, status *gtsmodel.Status) error {
-	if err := p.timelineManager.WipeStatusFromAllTimelines(ctx, status.ID); err != nil {
+	if err := p.statusTimelines.WipeItemFromAllTimelines(ctx, status.ID); err != nil {
 		return err
 	}
 

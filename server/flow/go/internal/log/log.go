@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -20,26 +20,27 @@ package log
 
 import (
 	"bytes"
+	"io"
+	"log/syslog"
 	"os"
 
 	"github.com/sirupsen/logrus"
+	lSyslog "github.com/sirupsen/logrus/hooks/syslog"
+	"github.com/spf13/viper"
+	"github.com/superseriousbusiness/gotosocial/internal/config"
 )
 
-// Initialize initializes the global Logrus logger to the specified level
-// It also sets the output to log.outputSplitter,
+// Initialize initializes the global Logrus logger, reading the desired
+// log level from the viper store, or using a default if the level
+// has not been set in viper.
+//
+// It also sets the output to log.SplitErrOutputs(...)
 // so you get error logs on stderr and normal logs on stdout.
-func Initialize(level string) error {
-	logrus.SetOutput(&outputSplitter{})
-
-	logLevel, err := logrus.ParseLevel(level)
-	if err != nil {
-		return err
-	}
-	logrus.SetLevel(logLevel)
-
-	if logLevel == logrus.TraceLevel {
-		logrus.SetReportCaller(true)
-	}
+//
+// If syslog settings are also in viper, then Syslog will be initialized as well.
+func Initialize() error {
+	out := SplitErrOutputs(os.Stdout, os.Stderr)
+	logrus.SetOutput(out)
 
 	logrus.SetFormatter(&logrus.TextFormatter{
 		DisableColors: true,
@@ -47,17 +48,64 @@ func Initialize(level string) error {
 		FullTimestamp: true,
 	})
 
+	keys := config.Keys
+
+	// check if a desired log level has been set
+	logLevel := viper.GetString(keys.LogLevel)
+	if logLevel != "" {
+		level, err := logrus.ParseLevel(logLevel)
+		if err != nil {
+			return err
+		}
+		logrus.SetLevel(level)
+
+		if level == logrus.TraceLevel {
+			logrus.SetReportCaller(true)
+		}
+	}
+
+	// check if syslog has been enabled, and configure it if so
+	if syslogEnabled := viper.GetBool(keys.SyslogEnabled); syslogEnabled {
+		protocol := viper.GetString(keys.SyslogProtocol)
+		address := viper.GetString(keys.SyslogAddress)
+
+		hook, err := lSyslog.NewSyslogHook(protocol, address, syslog.LOG_INFO, "")
+		if err != nil {
+			return err
+		}
+
+		logrus.AddHook(&trimHook{hook})
+	}
+
 	return nil
 }
 
-// outputSplitter implements the io.Writer interface for use with Logrus, and simply
-// splits logs between stdout and stderr depending on their severity.
-// See: https://github.com/sirupsen/logrus/issues/403#issuecomment-346437512
-type outputSplitter struct{}
-
-func (splitter *outputSplitter) Write(p []byte) (n int, err error) {
-	if bytes.Contains(p, []byte("level=error")) {
-		return os.Stderr.Write(p)
+// SplitErrOutputs returns an OutputSplitFunc that splits output to either one of
+// two given outputs depending on whether the level is "error","fatal","panic".
+func SplitErrOutputs(out, err io.Writer) OutputSplitFunc {
+	return func(lvl []byte) io.Writer {
+		switch string(lvl) /* convert to str for compare is no-alloc */ {
+		case "error", "fatal", "panic":
+			return err
+		default:
+			return out
+		}
 	}
-	return os.Stdout.Write(p)
+}
+
+// OutputSplitFunc implements the io.Writer interface for use with Logrus, and simply
+// splits logs between stdout and stderr depending on their severity.
+type OutputSplitFunc func(lvl []byte) io.Writer
+
+var levelBytes = []byte("level=")
+
+func (fn OutputSplitFunc) Write(b []byte) (int, error) {
+	var lvl []byte
+	if i := bytes.Index(b, levelBytes); i >= 0 {
+		blvl := b[i+len(levelBytes):]
+		if i := bytes.IndexByte(blvl, ' '); i >= 0 {
+			lvl = blvl[:i]
+		}
+	}
+	return fn(lvl).Write(b)
 }

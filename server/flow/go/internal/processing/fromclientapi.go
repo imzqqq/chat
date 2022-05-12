@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -24,6 +24,7 @@ import (
 	"fmt"
 	"net/url"
 
+	"github.com/superseriousbusiness/activity/pub"
 	"github.com/superseriousbusiness/activity/streams"
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
@@ -64,15 +65,13 @@ func (p *processor) ProcessFromClientAPI(ctx context.Context, clientMsg messages
 		}
 	case ap.ActivityAccept:
 		// ACCEPT
-		switch clientMsg.APObjectType {
-		case ap.ActivityFollow:
+		if clientMsg.APObjectType == ap.ActivityFollow {
 			// ACCEPT FOLLOW
 			return p.processAcceptFollowFromClientAPI(ctx, clientMsg)
 		}
 	case ap.ActivityReject:
 		// REJECT
-		switch clientMsg.APObjectType {
-		case ap.ActivityFollow:
+		if clientMsg.APObjectType == ap.ActivityFollow {
 			// REJECT FOLLOW (request)
 			return p.processRejectFollowFromClientAPI(ctx, clientMsg)
 		}
@@ -194,10 +193,10 @@ func (p *processor) processCreateBlockFromClientAPI(ctx context.Context, clientM
 	}
 
 	// remove any of the blocking account's statuses from the blocked account's timeline, and vice versa
-	if err := p.timelineManager.WipeStatusesFromAccountID(ctx, block.AccountID, block.TargetAccountID); err != nil {
+	if err := p.statusTimelines.WipeItemsFromAccountID(ctx, block.AccountID, block.TargetAccountID); err != nil {
 		return err
 	}
-	if err := p.timelineManager.WipeStatusesFromAccountID(ctx, block.TargetAccountID, block.AccountID); err != nil {
+	if err := p.statusTimelines.WipeItemsFromAccountID(ctx, block.TargetAccountID, block.AccountID); err != nil {
 		return err
 	}
 
@@ -322,10 +321,68 @@ func (p *processor) processDeleteAccountFromClientAPI(ctx context.Context, clien
 		// origin is whichever account caused this message
 		origin = clientMsg.OriginAccount.ID
 	}
+
+	if err := p.federateAccountDelete(ctx, clientMsg.TargetAccount); err != nil {
+		return err
+	}
+
 	return p.accountProcessor.Delete(ctx, clientMsg.TargetAccount, origin)
 }
 
 // TODO: move all the below functions into federation.Federator
+
+func (p *processor) federateAccountDelete(ctx context.Context, account *gtsmodel.Account) error {
+	// do nothing if this isn't our account
+	if account.Domain != "" {
+		return nil
+	}
+
+	outboxIRI, err := url.Parse(account.OutboxURI)
+	if err != nil {
+		return fmt.Errorf("federateAccountDelete: error parsing outboxURI %s: %s", account.OutboxURI, err)
+	}
+
+	actorIRI, err := url.Parse(account.URI)
+	if err != nil {
+		return fmt.Errorf("federateAccountDelete: error parsing actorIRI %s: %s", account.URI, err)
+	}
+
+	followersIRI, err := url.Parse(account.FollowersURI)
+	if err != nil {
+		return fmt.Errorf("federateAccountDelete: error parsing followersIRI %s: %s", account.FollowersURI, err)
+	}
+
+	publicIRI, err := url.Parse(pub.PublicActivityPubIRI)
+	if err != nil {
+		return fmt.Errorf("federateAccountDelete: error parsing url %s: %s", pub.PublicActivityPubIRI, err)
+	}
+
+	// create a delete and set the appropriate actor on it
+	delete := streams.NewActivityStreamsDelete()
+
+	// set the actor for the delete; no matter who deleted it we should use the account owner for this
+	deleteActor := streams.NewActivityStreamsActorProperty()
+	deleteActor.AppendIRI(actorIRI)
+	delete.SetActivityStreamsActor(deleteActor)
+
+	// Set the account IRI as the 'object' property.
+	deleteObject := streams.NewActivityStreamsObjectProperty()
+	deleteObject.AppendIRI(actorIRI)
+	delete.SetActivityStreamsObject(deleteObject)
+
+	// send to followers...
+	deleteTo := streams.NewActivityStreamsToProperty()
+	deleteTo.AppendIRI(followersIRI)
+	delete.SetActivityStreamsTo(deleteTo)
+
+	// ... and CC to public
+	deleteCC := streams.NewActivityStreamsCcProperty()
+	deleteCC.AppendIRI(publicIRI)
+	delete.SetActivityStreamsCc(deleteCC)
+
+	_, err = p.federator.FederatingActor().Send(ctx, outboxIRI, delete)
+	return err
+}
 
 func (p *processor) federateStatus(ctx context.Context, status *gtsmodel.Status) error {
 	// do nothing if the status shouldn't be federated

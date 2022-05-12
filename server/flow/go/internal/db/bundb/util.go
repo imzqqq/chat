@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -34,6 +34,20 @@ func whereEmptyOrNull(column string) func(*bun.SelectQuery) *bun.SelectQuery {
 		return q.
 			WhereOr("? IS NULL", bun.Ident(column)).
 			WhereOr("? = ''", bun.Ident(column))
+	}
+}
+
+// whereNotEmptyAndNotNull is a convenience function to return a bun WhereGroup that specifies
+// that the given column should be NEITHER an empty string NOR null.
+//
+// Use it as follows:
+//
+//   q = q.WhereGroup(" AND ", whereNotEmptyAndNotNull("whatever_column"))
+func whereNotEmptyAndNotNull(column string) func(*bun.SelectQuery) *bun.SelectQuery {
+	return func(q *bun.SelectQuery) *bun.SelectQuery {
+		return q.
+			Where("? IS NOT NULL", bun.Ident(column)).
+			Where("? != ''", bun.Ident(column))
 	}
 }
 

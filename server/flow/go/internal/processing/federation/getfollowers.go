@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -20,7 +20,6 @@ package federation
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/url"
 
@@ -36,12 +35,12 @@ func (p *processor) GetFollowers(ctx context.Context, requestedUsername string, 
 	}
 
 	// authenticate the request
-	requestingAccountURI, authenticated, err := p.federator.AuthenticateFederatedRequest(ctx, requestedUsername)
-	if err != nil || !authenticated {
-		return nil, gtserror.NewErrorNotAuthorized(errors.New("not authorized"), "not authorized")
+	requestingAccountURI, errWithCode := p.federator.AuthenticateFederatedRequest(ctx, requestedUsername)
+	if errWithCode != nil {
+		return nil, errWithCode
 	}
 
-	requestingAccount, _, err := p.federator.GetRemoteAccount(ctx, requestedUsername, requestingAccountURI, false)
+	requestingAccount, err := p.federator.GetRemoteAccount(ctx, requestedUsername, requestingAccountURI, false, false)
 	if err != nil {
 		return nil, gtserror.NewErrorNotAuthorized(err)
 	}

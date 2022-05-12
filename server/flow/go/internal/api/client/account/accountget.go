@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -22,6 +22,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+	"github.com/superseriousbusiness/gotosocial/internal/api"
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
 )
 
@@ -64,15 +66,21 @@ func (m *Module) AccountGETHandler(c *gin.Context) {
 		return
 	}
 
+	if _, err := api.NegotiateAccept(c, api.JSONAcceptHeaders...); err != nil {
+		c.JSON(http.StatusNotAcceptable, gin.H{"error": err.Error()})
+		return
+	}
+
 	targetAcctID := c.Param(IDKey)
 	if targetAcctID == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "no account id specified"})
 		return
 	}
 
-	acctInfo, err := m.processor.AccountGet(c.Request.Context(), authed, targetAcctID)
+	acctInfo, errWithCode := m.processor.AccountGet(c.Request.Context(), authed, targetAcctID)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
+		logrus.Debug(errWithCode.Error())
+		c.JSON(errWithCode.Code(), gin.H{"error": errWithCode.Safe()})
 		return
 	}
 

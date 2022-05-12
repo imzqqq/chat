@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -23,10 +23,10 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/sirupsen/logrus"
 	apimodel "github.com/superseriousbusiness/gotosocial/internal/api/model"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
-	"github.com/superseriousbusiness/gotosocial/internal/id"
 	"github.com/superseriousbusiness/gotosocial/internal/text"
 	"github.com/superseriousbusiness/gotosocial/internal/util"
 )
@@ -38,14 +38,15 @@ func (p *processor) ProcessVisibility(ctx context.Context, form *apimodel.Advanc
 	replyable := true
 	likeable := true
 
-	var vis gtsmodel.Visibility
 	// If visibility isn't set on the form, then just take the account default.
 	// If that's also not set, take the default for the whole instance.
-	if form.Visibility != "" {
+	var vis gtsmodel.Visibility
+	switch {
+	case form.Visibility != "":
 		vis = p.tc.APIVisToVis(form.Visibility)
-	} else if accountDefaultVis != "" {
+	case accountDefaultVis != "":
 		vis = accountDefaultVis
-	} else {
+	default:
 		vis = gtsmodel.VisibilityDefault
 	}
 
@@ -191,27 +192,30 @@ func (p *processor) ProcessLanguage(ctx context.Context, form *apimodel.Advanced
 }
 
 func (p *processor) ProcessMentions(ctx context.Context, form *apimodel.AdvancedStatusCreateForm, accountID string, status *gtsmodel.Status) error {
-	menchies := []string{}
-	gtsMenchies, err := p.db.MentionStringsToMentions(ctx, util.DeriveMentionsFromText(form.Status), accountID, status.ID)
-	if err != nil {
-		return fmt.Errorf("error generating mentions from status: %s", err)
-	}
-	for _, menchie := range gtsMenchies {
-		menchieID, err := id.NewRandomULID()
-		if err != nil {
-			return err
-		}
-		menchie.ID = menchieID
+	mentionedAccountNames := util.DeriveMentionNamesFromText(form.Status)
+	mentions := []*gtsmodel.Mention{}
+	mentionIDs := []string{}
 
-		if err := p.db.Put(ctx, menchie); err != nil {
-			return fmt.Errorf("error putting mentions in db: %s", err)
+	for _, mentionedAccountName := range mentionedAccountNames {
+		gtsMention, err := p.parseMention(ctx, mentionedAccountName, accountID, status.ID)
+		if err != nil {
+			logrus.Errorf("ProcessMentions: error parsing mention %s from status: %s", mentionedAccountName, err)
+			continue
 		}
-		menchies = append(menchies, menchie.ID)
+
+		if err := p.db.Put(ctx, gtsMention); err != nil {
+			logrus.Errorf("ProcessMentions: error putting mention in db: %s", err)
+		}
+
+		mentions = append(mentions, gtsMention)
+		mentionIDs = append(mentionIDs, gtsMention.ID)
 	}
+
 	// add full populated gts menchies to the status for passing them around conveniently
-	status.Mentions = gtsMenchies
+	status.Mentions = mentions
 	// add just the ids of the mentioned accounts to the status for putting in the db
-	status.MentionIDs = menchies
+	status.MentionIDs = mentionIDs
+
 	return nil
 }
 
@@ -222,8 +226,11 @@ func (p *processor) ProcessTags(ctx context.Context, form *apimodel.AdvancedStat
 		return fmt.Errorf("error generating hashtags from status: %s", err)
 	}
 	for _, tag := range gtsTags {
-		if err := p.db.Put(ctx, tag); err != nil && err != db.ErrAlreadyExists {
-			return fmt.Errorf("error putting tags in db: %s", err)
+		if err := p.db.Put(ctx, tag); err != nil {
+			var alreadyExistsError *db.ErrAlreadyExists
+			if !errors.As(err, &alreadyExistsError) {
+				return fmt.Errorf("error putting tags in db: %s", err)
+			}
 		}
 		tags = append(tags, tag.ID)
 	}
@@ -235,11 +242,11 @@ func (p *processor) ProcessTags(ctx context.Context, form *apimodel.AdvancedStat
 }
 
 func (p *processor) ProcessEmojis(ctx context.Context, form *apimodel.AdvancedStatusCreateForm, accountID string, status *gtsmodel.Status) error {
-	emojis := []string{}
 	gtsEmojis, err := p.db.EmojiStringsToEmojis(ctx, util.DeriveEmojisFromText(form.Status))
 	if err != nil {
 		return fmt.Errorf("error generating emojis from status: %s", err)
 	}
+	emojis := make([]string, 0, len(gtsEmojis))
 	for _, e := range gtsEmojis {
 		emojis = append(emojis, e.ID)
 	}

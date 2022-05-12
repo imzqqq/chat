@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -38,6 +38,6 @@ func (p *processor) MediaUpdate(ctx context.Context, authed *oauth.Auth, mediaAt
 	return p.mediaProcessor.Update(ctx, authed.Account, mediaAttachmentID, form)
 }
 
-func (p *processor) FileGet(ctx context.Context, authed *oauth.Auth, form *apimodel.GetContentRequestForm) (*apimodel.Content, error) {
+func (p *processor) FileGet(ctx context.Context, authed *oauth.Auth, form *apimodel.GetContentRequestForm) (*apimodel.Content, gtserror.WithCode) {
 	return p.mediaProcessor.GetFile(ctx, authed.Account, form)
 }

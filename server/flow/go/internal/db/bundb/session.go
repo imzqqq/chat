@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -23,15 +23,13 @@ import (
 	"crypto/rand"
 	"errors"
 
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/id"
 )
 
 type sessionDB struct {
-	config *config.Config
-	conn   *DBConn
+	conn *DBConn
 }
 
 func (s *sessionDB) GetSession(ctx context.Context) (*gtsmodel.RouterSession, db.Error) {
@@ -47,7 +45,7 @@ func (s *sessionDB) GetSession(ctx context.Context) (*gtsmodel.RouterSession, db
 		return nil, s.conn.ProcessError(err)
 	}
 
-	if len(rss) <= 0 {
+	if len(rss) == 0 {
 		// no session created yet, so make one
 		return s.createSession(ctx)
 	}

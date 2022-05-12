@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -30,7 +30,7 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/id"
 	"github.com/superseriousbusiness/gotosocial/internal/messages"
-	"github.com/superseriousbusiness/gotosocial/internal/util"
+	"github.com/superseriousbusiness/gotosocial/internal/uris"
 )
 
 func (p *processor) Fave(ctx context.Context, requestingAccount *gtsmodel.Account, targetStatusID string) (*apimodel.Status, gtserror.WithCode) {
@@ -76,7 +76,7 @@ func (p *processor) Fave(ctx context.Context, requestingAccount *gtsmodel.Accoun
 			TargetAccount:   targetStatus.Account,
 			StatusID:        targetStatus.ID,
 			Status:          targetStatus,
-			URI:             util.GenerateURIForLike(requestingAccount.Username, p.config.Protocol, p.config.Host, thisFaveID),
+			URI:             uris.GenerateURIForLike(requestingAccount.Username, thisFaveID),
 		}
 
 		if err := p.db.Put(ctx, gtsFave); err != nil {
@@ -84,13 +84,13 @@ func (p *processor) Fave(ctx context.Context, requestingAccount *gtsmodel.Accoun
 		}
 
 		// send it back to the processor for async processing
-		p.fromClientAPI <- messages.FromClientAPI{
+		p.clientWorker.Queue(messages.FromClientAPI{
 			APObjectType:   ap.ActivityLike,
 			APActivityType: ap.ActivityCreate,
 			GTSModel:       gtsFave,
 			OriginAccount:  requestingAccount,
 			TargetAccount:  targetStatus.Account,
-		}
+		})
 	}
 
 	// return the apidon representation of the target status

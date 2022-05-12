@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -35,11 +35,10 @@ func (suite *AccountTestSuite) TestDereferenceGroup() {
 	fetchingAccount := suite.testAccounts["local_account_1"]
 
 	groupURL := testrig.URLMustParse("https://unknown-instance.com/groups/some_group")
-	group, new, err := suite.dereferencer.GetRemoteAccount(context.Background(), fetchingAccount.Username, groupURL, false)
+	group, err := suite.dereferencer.GetRemoteAccount(context.Background(), fetchingAccount.Username, groupURL, false, false)
 	suite.NoError(err)
 	suite.NotNil(group)
 	suite.NotNil(group)
-	suite.True(new)
 
 	// group values should be set
 	suite.Equal("https://unknown-instance.com/groups/some_group", group.URI)

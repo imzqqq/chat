@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/ReneKroon/ttlcache"
+	"github.com/sirupsen/logrus"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 )
 
@@ -26,7 +27,10 @@ func NewAccountCache() *AccountCache {
 
 	// Set callback to purge lookup maps on expiration
 	c.cache.SetExpirationCallback(func(key string, value interface{}) {
-		account := value.(*gtsmodel.Account)
+		account, ok := value.(*gtsmodel.Account)
+		if !ok {
+			logrus.Panicf("AccountCache could not assert entry with key %s to *gtsmodel.Account", key)
+		}
 
 		c.mutex.Lock()
 		delete(c.urls, account.URL)
@@ -87,7 +91,13 @@ func (c *AccountCache) getByID(id string) (*gtsmodel.Account, bool) {
 	if !ok {
 		return nil, false
 	}
-	return copyAccount(v.(*gtsmodel.Account)), true
+
+	a, ok := v.(*gtsmodel.Account)
+	if !ok {
+		panic("account cache entry was not an account")
+	}
+
+	return copyAccount(a), true
 }
 
 // Put places a account in the cache, ensuring that the object place is a copy for thread-safety
@@ -124,6 +134,7 @@ func copyAccount(account *gtsmodel.Account) *gtsmodel.Account {
 		DisplayName:             account.DisplayName,
 		Fields:                  account.Fields,
 		Note:                    account.Note,
+		NoteRaw:                 account.NoteRaw,
 		Memorial:                account.Memorial,
 		MovedToAccountID:        account.MovedToAccountID,
 		CreatedAt:               account.CreatedAt,

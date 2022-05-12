@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -20,14 +20,13 @@ package federation
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/url"
 
 	"github.com/superseriousbusiness/activity/streams"
 	"github.com/superseriousbusiness/activity/streams/vocab"
 	"github.com/superseriousbusiness/gotosocial/internal/gtserror"
-	"github.com/superseriousbusiness/gotosocial/internal/util"
+	"github.com/superseriousbusiness/gotosocial/internal/uris"
 )
 
 func (p *processor) GetUser(ctx context.Context, requestedUsername string, requestURL *url.URL) (interface{}, gtserror.WithCode) {
@@ -38,22 +37,22 @@ func (p *processor) GetUser(ctx context.Context, requestedUsername string, reque
 	}
 
 	var requestedPerson vocab.ActivityStreamsPerson
-	if util.IsPublicKeyPath(requestURL) {
+	if uris.IsPublicKeyPath(requestURL) {
 		// if it's a public key path, we don't need to authenticate but we'll only serve the bare minimum user profile needed for the public key
 		requestedPerson, err = p.tc.AccountToASMinimal(ctx, requestedAccount)
 		if err != nil {
 			return nil, gtserror.NewErrorInternalError(err)
 		}
-	} else if util.IsUserPath(requestURL) {
-		// if it's a user path, we want to fully authenticate the request before we serve any data, and then we can serve a more complete profile
-		requestingAccountURI, authenticated, err := p.federator.AuthenticateFederatedRequest(ctx, requestedUsername)
-		if err != nil || !authenticated {
-			return nil, gtserror.NewErrorNotAuthorized(errors.New("not authorized"), "not authorized")
+	} else {
+		// if it's any other path, we want to fully authenticate the request before we serve any data, and then we can serve a more complete profile
+		requestingAccountURI, errWithCode := p.federator.AuthenticateFederatedRequest(ctx, requestedUsername)
+		if errWithCode != nil {
+			return nil, errWithCode
 		}
 
 		// if we're not already handshaking/dereferencing a remote account, dereference it now
 		if !p.federator.Handshaking(ctx, requestedUsername, requestingAccountURI) {
-			requestingAccount, _, err := p.federator.GetRemoteAccount(ctx, requestedUsername, requestingAccountURI, false)
+			requestingAccount, err := p.federator.GetRemoteAccount(ctx, requestedUsername, requestingAccountURI, false, false)
 			if err != nil {
 				return nil, gtserror.NewErrorNotAuthorized(err)
 			}
@@ -72,8 +71,6 @@ func (p *processor) GetUser(ctx context.Context, requestedUsername string, reque
 		if err != nil {
 			return nil, gtserror.NewErrorInternalError(err)
 		}
-	} else {
-		return nil, gtserror.NewErrorBadRequest(fmt.Errorf("path was not public key path or user path"))
 	}
 
 	data, err := streams.Serialize(requestedPerson)

@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -248,7 +248,10 @@ func ExtractSummary(i WithSummary) (string, error) {
 	}
 
 	for iter := summaryProp.Begin(); iter != summaryProp.End(); iter = iter.Next() {
-		if iter.IsXMLSchemaString() && iter.GetXMLSchemaString() != "" {
+		switch {
+		case iter.IsIRI():
+			return iter.GetIRI().String(), nil
+		case iter.IsXMLSchemaString():
 			return iter.GetXMLSchemaString(), nil
 		}
 	}
@@ -336,7 +339,7 @@ func ExtractPublicKeyForOwner(i WithPublicKey, forOwner *url.URL) (*rsa.PublicKe
 func ExtractContent(i WithContent) (string, error) {
 	contentProperty := i.GetActivityStreamsContent()
 	if contentProperty == nil {
-		return "", errors.New("content property was nil")
+		return "", nil
 	}
 	for iter := contentProperty.Begin(); iter != contentProperty.End(); iter = iter.Next() {
 		if iter.IsXMLSchemaString() && iter.GetXMLSchemaString() != "" {
@@ -395,20 +398,20 @@ func ExtractAttachment(i Attachmentable) (*gtsmodel.MediaAttachment, error) {
 		attachment.Description = name
 	}
 
+	attachment.Blurhash = ExtractBlurhash(i)
+
 	attachment.Processing = gtsmodel.ProcessingStatusReceived
 
 	return attachment, nil
 }
 
-// func extractBlurhash(i withBlurhash) (string, error) {
-// 	if i.GetTootBlurhashProperty() == nil {
-// 		return "", errors.New("blurhash property was nil")
-// 	}
-// 	if i.GetTootBlurhashProperty().Get() == "" {
-// 		return "", errors.New("empty blurhash string")
-// 	}
-// 	return i.GetTootBlurhashProperty().Get(), nil
-// }
+// ExtractBlurhash extracts the blurhash value (if present) from a WithBlurhash interface.
+func ExtractBlurhash(i WithBlurhash) string {
+	if i.GetTootBlurhash() == nil {
+		return ""
+	}
+	return i.GetTootBlurhash().Get()
+}
 
 // ExtractHashtags returns a slice of tags on the interface.
 func ExtractHashtags(i WithTag) ([]*gtsmodel.Tag, error) {

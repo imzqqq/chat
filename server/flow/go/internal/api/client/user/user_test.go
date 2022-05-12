@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -22,25 +22,27 @@ import (
 	"codeberg.org/gruf/go-store/kv"
 	"github.com/stretchr/testify/suite"
 	"github.com/superseriousbusiness/gotosocial/internal/api/client/user"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/email"
 	"github.com/superseriousbusiness/gotosocial/internal/federation"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
+	"github.com/superseriousbusiness/gotosocial/internal/media"
+	"github.com/superseriousbusiness/gotosocial/internal/messages"
 	"github.com/superseriousbusiness/gotosocial/internal/processing"
 	"github.com/superseriousbusiness/gotosocial/internal/typeutils"
+	"github.com/superseriousbusiness/gotosocial/internal/worker"
 	"github.com/superseriousbusiness/gotosocial/testrig"
 )
 
 type UserStandardTestSuite struct {
 	suite.Suite
-	config      *config.Config
-	db          db.DB
-	tc          typeutils.TypeConverter
-	federator   federation.Federator
-	emailSender email.Sender
-	processor   processing.Processor
-	storage     *kv.KVStore
+	db           db.DB
+	tc           typeutils.TypeConverter
+	mediaManager media.Manager
+	federator    federation.Federator
+	emailSender  email.Sender
+	processor    processing.Processor
+	storage      *kv.KVStore
 
 	testTokens       map[string]*gtsmodel.Token
 	testClients      map[string]*gtsmodel.Client
@@ -54,21 +56,24 @@ type UserStandardTestSuite struct {
 }
 
 func (suite *UserStandardTestSuite) SetupTest() {
+	testrig.InitTestLog()
+	testrig.InitTestConfig()
+	fedWorker := worker.New[messages.FromFederator](-1, -1)
+	clientWorker := worker.New[messages.FromClientAPI](-1, -1)
 	suite.testTokens = testrig.NewTestTokens()
 	suite.testClients = testrig.NewTestClients()
 	suite.testApplications = testrig.NewTestApplications()
 	suite.testUsers = testrig.NewTestUsers()
 	suite.testAccounts = testrig.NewTestAccounts()
-	suite.config = testrig.NewTestConfig()
 	suite.db = testrig.NewTestDB()
 	suite.storage = testrig.NewTestStorage()
-	testrig.InitTestLog()
 	suite.tc = testrig.NewTestTypeConverter(suite.db)
-	suite.federator = testrig.NewTestFederator(suite.db, testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil), suite.db), suite.storage)
+	suite.mediaManager = testrig.NewTestMediaManager(suite.db, suite.storage)
+	suite.federator = testrig.NewTestFederator(suite.db, testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil), suite.db, fedWorker), suite.storage, suite.mediaManager, fedWorker)
 	suite.sentEmails = make(map[string]string)
 	suite.emailSender = testrig.NewEmailSender("../../../../web/template/", suite.sentEmails)
-	suite.processor = testrig.NewTestProcessor(suite.db, suite.storage, suite.federator, suite.emailSender)
-	suite.userModule = user.New(suite.config, suite.processor).(*user.Module)
+	suite.processor = testrig.NewTestProcessor(suite.db, suite.storage, suite.federator, suite.emailSender, suite.mediaManager, clientWorker, fedWorker)
+	suite.userModule = user.New(suite.processor).(*user.Module)
 	testrig.StandardDBSetup(suite.db, suite.testAccounts)
 	testrig.StandardStorageSetup(suite.storage, "../../../../testrig/media")
 }

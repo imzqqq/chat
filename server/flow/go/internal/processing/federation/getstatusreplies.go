@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -20,7 +20,6 @@ package federation
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/url"
 
@@ -38,12 +37,12 @@ func (p *processor) GetStatusReplies(ctx context.Context, requestedUsername stri
 	}
 
 	// authenticate the request
-	requestingAccountURI, authenticated, err := p.federator.AuthenticateFederatedRequest(ctx, requestedUsername)
-	if err != nil || !authenticated {
-		return nil, gtserror.NewErrorNotAuthorized(errors.New("not authorized"), "not authorized")
+	requestingAccountURI, errWithCode := p.federator.AuthenticateFederatedRequest(ctx, requestedUsername)
+	if errWithCode != nil {
+		return nil, errWithCode
 	}
 
-	requestingAccount, _, err := p.federator.GetRemoteAccount(ctx, requestedUsername, requestingAccountURI, false)
+	requestingAccount, err := p.federator.GetRemoteAccount(ctx, requestedUsername, requestingAccountURI, false, false)
 	if err != nil {
 		return nil, gtserror.NewErrorNotAuthorized(err)
 	}
@@ -82,10 +81,9 @@ func (p *processor) GetStatusReplies(ctx context.Context, requestedUsername stri
 	// 1. we're asked for the whole collection and not a page -- we can just return the collection, with no items, but a link to 'first' page.
 	// 2. we're asked for a page but only_other_accounts has not been set in the query -- so we should just return the first page of the collection, with no items.
 	// 3. we're asked for a page, and only_other_accounts has been set, and min_id has optionally been set -- so we need to return some actual items!
-
-	if !page {
+	switch {
+	case !page:
 		// scenario 1
-
 		// get the collection
 		collection, err := p.tc.StatusToASRepliesCollection(ctx, s, onlyOtherAccounts)
 		if err != nil {
@@ -96,9 +94,8 @@ func (p *processor) GetStatusReplies(ctx context.Context, requestedUsername stri
 		if err != nil {
 			return nil, gtserror.NewErrorInternalError(err)
 		}
-	} else if page && requestURL.Query().Get("only_other_accounts") == "" {
+	case page && requestURL.Query().Get("only_other_accounts") == "":
 		// scenario 2
-
 		// get the collection
 		collection, err := p.tc.StatusToASRepliesCollection(ctx, s, onlyOtherAccounts)
 		if err != nil {
@@ -109,7 +106,7 @@ func (p *processor) GetStatusReplies(ctx context.Context, requestedUsername stri
 		if err != nil {
 			return nil, gtserror.NewErrorInternalError(err)
 		}
-	} else {
+	default:
 		// scenario 3
 		// get immediate children
 		replies, err := p.db.GetStatusChildren(ctx, s, true, minID)

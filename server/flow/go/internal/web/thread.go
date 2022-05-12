@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -19,17 +19,16 @@
 package web
 
 import (
-	"github.com/sirupsen/logrus"
 	"net/http"
+	"strings"
+
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 
 	"github.com/gin-gonic/gin"
+	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
 )
-
-type statusLink struct {
-	User string `uri:"user" binding:"required"`
-	ID   string `uri:"id"   binding:"required"`
-}
 
 func (m *Module) threadTemplateHandler(c *gin.Context) {
 	l := logrus.WithField("func", "threadTemplateGET")
@@ -37,10 +36,17 @@ func (m *Module) threadTemplateHandler(c *gin.Context) {
 
 	ctx := c.Request.Context()
 
-	var uriParts statusLink
+	// usernames on our instance will always be lowercase
+	username := strings.ToLower(c.Param(usernameKey))
+	if username == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "no account username specified"})
+		return
+	}
 
-	if err := c.ShouldBindUri(&uriParts); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "status not found"})
+	// status ids will always be uppercase
+	statusID := strings.ToUpper(c.Param(statusIDKey))
+	if statusID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "no status id specified"})
 		return
 	}
 
@@ -51,25 +57,26 @@ func (m *Module) threadTemplateHandler(c *gin.Context) {
 		return
 	}
 
-	instance, err := m.processor.InstanceGet(ctx, m.config.Host)
+	host := viper.GetString(config.Keys.Host)
+	instance, err := m.processor.InstanceGet(ctx, host)
 	if err != nil {
 		l.Debugf("error getting instance from processor: %s", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
 		return
 	}
 
-	status, err := m.processor.StatusGet(ctx, authed, uriParts.ID)
+	status, err := m.processor.StatusGet(ctx, authed, statusID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "status not found"})
 		return
 	}
 
-	if uriParts.User[:1] != "@" || uriParts.User[1:] != status.Account.Username {
+	if !strings.EqualFold(username, status.Account.Username) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "status not found"})
 		return
 	}
 
-	context, err := m.processor.StatusGetContext(ctx, authed, uriParts.ID)
+	context, err := m.processor.StatusGetContext(ctx, authed, statusID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "status not found"})
 		return

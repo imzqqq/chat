@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -61,9 +61,9 @@ func (f *federatingDB) Create(ctx context.Context, asType vocab.Type) error {
 		l.Debug("entering Create")
 	}
 
-	receivingAccount, requestingAccount, fromFederatorChan := extractFromCtx(ctx)
-	if receivingAccount == nil || fromFederatorChan == nil {
-		// If the receiving account or federator channel wasn't set on the context, that means this request didn't pass
+	receivingAccount, requestingAccount := extractFromCtx(ctx)
+	if receivingAccount == nil {
+		// If the receiving account wasn't set on the context, that means this request didn't pass
 		// through the API, but came from inside GtS as the result of another activity on this instance. That being so,
 		// we can safely just ignore this activity, since we know we've already processed it elsewhere.
 		return nil
@@ -72,16 +72,16 @@ func (f *federatingDB) Create(ctx context.Context, asType vocab.Type) error {
 	switch asType.GetTypeName() {
 	case ap.ActivityBlock:
 		// BLOCK SOMETHING
-		return f.activityBlock(ctx, asType, receivingAccount, requestingAccount, fromFederatorChan)
+		return f.activityBlock(ctx, asType, receivingAccount, requestingAccount)
 	case ap.ActivityCreate:
 		// CREATE SOMETHING
-		return f.activityCreate(ctx, asType, receivingAccount, requestingAccount, fromFederatorChan)
+		return f.activityCreate(ctx, asType, receivingAccount, requestingAccount)
 	case ap.ActivityFollow:
 		// FOLLOW SOMETHING
-		return f.activityFollow(ctx, asType, receivingAccount, requestingAccount, fromFederatorChan)
+		return f.activityFollow(ctx, asType, receivingAccount, requestingAccount)
 	case ap.ActivityLike:
 		// LIKE SOMETHING
-		return f.activityLike(ctx, asType, receivingAccount, requestingAccount, fromFederatorChan)
+		return f.activityLike(ctx, asType, receivingAccount, requestingAccount)
 	}
 	return nil
 }
@@ -90,7 +90,7 @@ func (f *federatingDB) Create(ctx context.Context, asType vocab.Type) error {
 	BLOCK HANDLERS
 */
 
-func (f *federatingDB) activityBlock(ctx context.Context, asType vocab.Type, receiving *gtsmodel.Account, requestingAccount *gtsmodel.Account, fromFederatorChan chan messages.FromFederator) error {
+func (f *federatingDB) activityBlock(ctx context.Context, asType vocab.Type, receiving *gtsmodel.Account, requestingAccount *gtsmodel.Account) error {
 	blockable, ok := asType.(vocab.ActivityStreamsBlock)
 	if !ok {
 		return errors.New("activityBlock: could not convert type to block")
@@ -111,12 +111,12 @@ func (f *federatingDB) activityBlock(ctx context.Context, asType vocab.Type, rec
 		return fmt.Errorf("activityBlock: database error inserting block: %s", err)
 	}
 
-	fromFederatorChan <- messages.FromFederator{
+	f.fedWorker.Queue(messages.FromFederator{
 		APObjectType:     ap.ActivityBlock,
 		APActivityType:   ap.ActivityCreate,
 		GTSModel:         block,
 		ReceivingAccount: receiving,
-	}
+	})
 	return nil
 }
 
@@ -124,7 +124,7 @@ func (f *federatingDB) activityBlock(ctx context.Context, asType vocab.Type, rec
 	CREATE HANDLERS
 */
 
-func (f *federatingDB) activityCreate(ctx context.Context, asType vocab.Type, receivingAccount *gtsmodel.Account, requestingAccount *gtsmodel.Account, fromFederatorChan chan messages.FromFederator) error {
+func (f *federatingDB) activityCreate(ctx context.Context, asType vocab.Type, receivingAccount *gtsmodel.Account, requestingAccount *gtsmodel.Account) error {
 	create, ok := asType.(vocab.ActivityStreamsCreate)
 	if !ok {
 		return errors.New("activityCreate: could not convert type to create")
@@ -152,7 +152,7 @@ func (f *federatingDB) activityCreate(ctx context.Context, asType vocab.Type, re
 		switch asObjectTypeName {
 		case ap.ObjectNote:
 			// CREATE A NOTE
-			if err := f.createNote(ctx, objectIter.GetActivityStreamsNote(), receivingAccount, requestingAccount, fromFederatorChan); err != nil {
+			if err := f.createNote(ctx, objectIter.GetActivityStreamsNote(), receivingAccount, requestingAccount); err != nil {
 				errs = append(errs, err.Error())
 			}
 		default:
@@ -168,7 +168,7 @@ func (f *federatingDB) activityCreate(ctx context.Context, asType vocab.Type, re
 }
 
 // createNote handles a Create activity with a Note type.
-func (f *federatingDB) createNote(ctx context.Context, note vocab.ActivityStreamsNote, receivingAccount *gtsmodel.Account, requestingAccount *gtsmodel.Account, fromFederatorChan chan messages.FromFederator) error {
+func (f *federatingDB) createNote(ctx context.Context, note vocab.ActivityStreamsNote, receivingAccount *gtsmodel.Account, requestingAccount *gtsmodel.Account) error {
 	l := logrus.WithFields(logrus.Fields{
 		"func":              "createNote",
 		"receivingAccount":  receivingAccount.URI,
@@ -206,13 +206,13 @@ func (f *federatingDB) createNote(ctx context.Context, note vocab.ActivityStream
 			return nil
 		}
 		// pass the note iri into the processor and have it do the dereferencing instead of doing it here
-		fromFederatorChan <- messages.FromFederator{
+		f.fedWorker.Queue(messages.FromFederator{
 			APObjectType:     ap.ObjectNote,
 			APActivityType:   ap.ActivityCreate,
 			APIri:            id.GetIRI(),
 			GTSModel:         nil,
 			ReceivingAccount: receivingAccount,
-		}
+		})
 		return nil
 	}
 
@@ -231,7 +231,8 @@ func (f *federatingDB) createNote(ctx context.Context, note vocab.ActivityStream
 	status.ID = statusID
 
 	if err := f.db.PutStatus(ctx, status); err != nil {
-		if err == db.ErrAlreadyExists {
+		var alreadyExistsError *db.ErrAlreadyExists
+		if errors.As(err, &alreadyExistsError) {
 			// the status already exists in the database, which means we've already handled everything else,
 			// so we can just return nil here and be done with it.
 			return nil
@@ -240,12 +241,12 @@ func (f *federatingDB) createNote(ctx context.Context, note vocab.ActivityStream
 		return fmt.Errorf("createNote: database error inserting status: %s", err)
 	}
 
-	fromFederatorChan <- messages.FromFederator{
+	f.fedWorker.Queue(messages.FromFederator{
 		APObjectType:     ap.ObjectNote,
 		APActivityType:   ap.ActivityCreate,
 		GTSModel:         status,
 		ReceivingAccount: receivingAccount,
-	}
+	})
 
 	return nil
 }
@@ -254,7 +255,7 @@ func (f *federatingDB) createNote(ctx context.Context, note vocab.ActivityStream
 	FOLLOW HANDLERS
 */
 
-func (f *federatingDB) activityFollow(ctx context.Context, asType vocab.Type, receivingAccount *gtsmodel.Account, requestingAccount *gtsmodel.Account, fromFederatorChan chan messages.FromFederator) error {
+func (f *federatingDB) activityFollow(ctx context.Context, asType vocab.Type, receivingAccount *gtsmodel.Account, requestingAccount *gtsmodel.Account) error {
 	follow, ok := asType.(vocab.ActivityStreamsFollow)
 	if !ok {
 		return errors.New("activityFollow: could not convert type to follow")
@@ -275,12 +276,12 @@ func (f *federatingDB) activityFollow(ctx context.Context, asType vocab.Type, re
 		return fmt.Errorf("activityFollow: database error inserting follow request: %s", err)
 	}
 
-	fromFederatorChan <- messages.FromFederator{
+	f.fedWorker.Queue(messages.FromFederator{
 		APObjectType:     ap.ActivityFollow,
 		APActivityType:   ap.ActivityCreate,
 		GTSModel:         followRequest,
 		ReceivingAccount: receivingAccount,
-	}
+	})
 
 	return nil
 }
@@ -289,7 +290,7 @@ func (f *federatingDB) activityFollow(ctx context.Context, asType vocab.Type, re
 	LIKE HANDLERS
 */
 
-func (f *federatingDB) activityLike(ctx context.Context, asType vocab.Type, receivingAccount *gtsmodel.Account, requestingAccount *gtsmodel.Account, fromFederatorChan chan messages.FromFederator) error {
+func (f *federatingDB) activityLike(ctx context.Context, asType vocab.Type, receivingAccount *gtsmodel.Account, requestingAccount *gtsmodel.Account) error {
 	like, ok := asType.(vocab.ActivityStreamsLike)
 	if !ok {
 		return errors.New("activityLike: could not convert type to like")
@@ -310,12 +311,12 @@ func (f *federatingDB) activityLike(ctx context.Context, asType vocab.Type, rece
 		return fmt.Errorf("activityLike: database error inserting fave: %s", err)
 	}
 
-	fromFederatorChan <- messages.FromFederator{
+	f.fedWorker.Queue(messages.FromFederator{
 		APObjectType:     ap.ActivityLike,
 		APActivityType:   ap.ActivityCreate,
 		GTSModel:         fave,
 		ReceivingAccount: receivingAccount,
-	}
+	})
 
 	return nil
 }

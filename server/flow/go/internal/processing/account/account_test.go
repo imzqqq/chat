@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -19,10 +19,11 @@
 package account_test
 
 import (
+	"context"
+
 	"codeberg.org/gruf/go-store/kv"
 	"github.com/stretchr/testify/suite"
 	"github.com/superseriousbusiness/activity/pub"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/email"
 	"github.com/superseriousbusiness/gotosocial/internal/federation"
@@ -30,20 +31,21 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/media"
 	"github.com/superseriousbusiness/gotosocial/internal/messages"
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
+	"github.com/superseriousbusiness/gotosocial/internal/processing"
 	"github.com/superseriousbusiness/gotosocial/internal/processing/account"
 	"github.com/superseriousbusiness/gotosocial/internal/transport"
 	"github.com/superseriousbusiness/gotosocial/internal/typeutils"
+	"github.com/superseriousbusiness/gotosocial/internal/worker"
 	"github.com/superseriousbusiness/gotosocial/testrig"
 )
 
 type AccountStandardTestSuite struct {
 	// standard suite interfaces
 	suite.Suite
-	config              *config.Config
 	db                  db.DB
 	tc                  typeutils.TypeConverter
 	storage             *kv.KVStore
-	mediaHandler        media.Handler
+	mediaManager        media.Manager
 	oauthServer         oauth.Server
 	fromClientAPIChan   chan messages.FromClientAPI
 	httpClient          pub.HttpClient
@@ -76,20 +78,31 @@ func (suite *AccountStandardTestSuite) SetupSuite() {
 }
 
 func (suite *AccountStandardTestSuite) SetupTest() {
-	suite.config = testrig.NewTestConfig()
-	suite.db = testrig.NewTestDB()
 	testrig.InitTestLog()
+	testrig.InitTestConfig()
+
+	fedWorker := worker.New[messages.FromFederator](-1, -1)
+	clientWorker := worker.New[messages.FromClientAPI](-1, -1)
+	clientWorker.SetProcessor(func(_ context.Context, msg messages.FromClientAPI) error {
+		suite.fromClientAPIChan <- msg
+		return nil
+	})
+
+	_ = fedWorker.Start()
+	_ = clientWorker.Start()
+
+	suite.db = testrig.NewTestDB()
 	suite.tc = testrig.NewTestTypeConverter(suite.db)
 	suite.storage = testrig.NewTestStorage()
-	suite.mediaHandler = testrig.NewTestMediaHandler(suite.db, suite.storage)
+	suite.mediaManager = testrig.NewTestMediaManager(suite.db, suite.storage)
 	suite.oauthServer = testrig.NewTestOauthServer(suite.db)
 	suite.fromClientAPIChan = make(chan messages.FromClientAPI, 100)
 	suite.httpClient = testrig.NewMockHTTPClient(nil)
-	suite.transportController = testrig.NewTestTransportController(suite.httpClient, suite.db)
-	suite.federator = testrig.NewTestFederator(suite.db, suite.transportController, suite.storage)
+	suite.transportController = testrig.NewTestTransportController(suite.httpClient, suite.db, fedWorker)
+	suite.federator = testrig.NewTestFederator(suite.db, suite.transportController, suite.storage, suite.mediaManager, fedWorker)
 	suite.sentEmails = make(map[string]string)
 	suite.emailSender = testrig.NewEmailSender("../../../web/template/", suite.sentEmails)
-	suite.accountProcessor = account.New(suite.db, suite.tc, suite.mediaHandler, suite.oauthServer, suite.fromClientAPIChan, suite.federator, suite.config)
+	suite.accountProcessor = account.New(suite.db, suite.tc, suite.mediaManager, suite.oauthServer, clientWorker, suite.federator, processing.GetParseMentionFunc(suite.db, suite.federator))
 	testrig.StandardDBSetup(suite.db, nil)
 	testrig.StandardStorageSetup(suite.storage, "../../../testrig/media")
 }

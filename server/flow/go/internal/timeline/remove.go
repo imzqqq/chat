@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -38,40 +38,40 @@ func (t *timeline) Remove(ctx context.Context, statusID string) (int, error) {
 
 	// remove entr(ies) from the post index
 	removeIndexes := []*list.Element{}
-	if t.postIndex != nil && t.postIndex.data != nil {
-		for e := t.postIndex.data.Front(); e != nil; e = e.Next() {
-			entry, ok := e.Value.(*postIndexEntry)
+	if t.itemIndex != nil && t.itemIndex.data != nil {
+		for e := t.itemIndex.data.Front(); e != nil; e = e.Next() {
+			entry, ok := e.Value.(*itemIndexEntry)
 			if !ok {
 				return removed, errors.New("Remove: could not parse e as a postIndexEntry")
 			}
-			if entry.statusID == statusID {
+			if entry.itemID == statusID {
 				l.Debug("found status in postIndex")
 				removeIndexes = append(removeIndexes, e)
 			}
 		}
 	}
 	for _, e := range removeIndexes {
-		t.postIndex.data.Remove(e)
-		removed = removed + 1
+		t.itemIndex.data.Remove(e)
+		removed++
 	}
 
 	// remove entr(ies) from prepared posts
 	removePrepared := []*list.Element{}
-	if t.preparedPosts != nil && t.preparedPosts.data != nil {
-		for e := t.preparedPosts.data.Front(); e != nil; e = e.Next() {
-			entry, ok := e.Value.(*preparedPostsEntry)
+	if t.preparedItems != nil && t.preparedItems.data != nil {
+		for e := t.preparedItems.data.Front(); e != nil; e = e.Next() {
+			entry, ok := e.Value.(*preparedItemsEntry)
 			if !ok {
 				return removed, errors.New("Remove: could not parse e as a preparedPostsEntry")
 			}
-			if entry.statusID == statusID {
+			if entry.itemID == statusID {
 				l.Debug("found status in preparedPosts")
 				removePrepared = append(removePrepared, e)
 			}
 		}
 	}
 	for _, e := range removePrepared {
-		t.preparedPosts.data.Remove(e)
-		removed = removed + 1
+		t.preparedItems.data.Remove(e)
+		removed++
 	}
 
 	l.Debugf("removed %d entries", removed)
@@ -90,9 +90,9 @@ func (t *timeline) RemoveAllBy(ctx context.Context, accountID string) (int, erro
 
 	// remove entr(ies) from the post index
 	removeIndexes := []*list.Element{}
-	if t.postIndex != nil && t.postIndex.data != nil {
-		for e := t.postIndex.data.Front(); e != nil; e = e.Next() {
-			entry, ok := e.Value.(*postIndexEntry)
+	if t.itemIndex != nil && t.itemIndex.data != nil {
+		for e := t.itemIndex.data.Front(); e != nil; e = e.Next() {
+			entry, ok := e.Value.(*itemIndexEntry)
 			if !ok {
 				return removed, errors.New("Remove: could not parse e as a postIndexEntry")
 			}
@@ -103,15 +103,15 @@ func (t *timeline) RemoveAllBy(ctx context.Context, accountID string) (int, erro
 		}
 	}
 	for _, e := range removeIndexes {
-		t.postIndex.data.Remove(e)
-		removed = removed + 1
+		t.itemIndex.data.Remove(e)
+		removed++
 	}
 
 	// remove entr(ies) from prepared posts
 	removePrepared := []*list.Element{}
-	if t.preparedPosts != nil && t.preparedPosts.data != nil {
-		for e := t.preparedPosts.data.Front(); e != nil; e = e.Next() {
-			entry, ok := e.Value.(*preparedPostsEntry)
+	if t.preparedItems != nil && t.preparedItems.data != nil {
+		for e := t.preparedItems.data.Front(); e != nil; e = e.Next() {
+			entry, ok := e.Value.(*preparedItemsEntry)
 			if !ok {
 				return removed, errors.New("Remove: could not parse e as a preparedPostsEntry")
 			}
@@ -122,8 +122,8 @@ func (t *timeline) RemoveAllBy(ctx context.Context, accountID string) (int, erro
 		}
 	}
 	for _, e := range removePrepared {
-		t.preparedPosts.data.Remove(e)
-		removed = removed + 1
+		t.preparedItems.data.Remove(e)
+		removed++
 	}
 
 	l.Debugf("removed %d entries", removed)

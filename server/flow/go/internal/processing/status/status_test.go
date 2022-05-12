@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -19,22 +19,30 @@
 package status_test
 
 import (
+	"codeberg.org/gruf/go-store/kv"
 	"github.com/stretchr/testify/suite"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
+	"github.com/superseriousbusiness/gotosocial/internal/federation"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
+	"github.com/superseriousbusiness/gotosocial/internal/media"
 	"github.com/superseriousbusiness/gotosocial/internal/messages"
+	"github.com/superseriousbusiness/gotosocial/internal/processing"
 	"github.com/superseriousbusiness/gotosocial/internal/processing/status"
+	"github.com/superseriousbusiness/gotosocial/internal/transport"
 	"github.com/superseriousbusiness/gotosocial/internal/typeutils"
+	"github.com/superseriousbusiness/gotosocial/internal/worker"
+	"github.com/superseriousbusiness/gotosocial/testrig"
 )
 
-// nolint
 type StatusStandardTestSuite struct {
 	suite.Suite
-	config            *config.Config
-	db                db.DB
-	typeConverter     typeutils.TypeConverter
-	fromClientAPIChan chan messages.FromClientAPI
+	db            db.DB
+	typeConverter typeutils.TypeConverter
+	tc            transport.Controller
+	storage       *kv.KVStore
+	mediaManager  media.Manager
+	federator     federation.Federator
+	clientWorker  *worker.Worker[messages.FromClientAPI]
 
 	// standard suite models
 	testTokens       map[string]*gtsmodel.Token
@@ -49,4 +57,40 @@ type StatusStandardTestSuite struct {
 
 	// module being tested
 	status status.Processor
+}
+
+func (suite *StatusStandardTestSuite) SetupSuite() {
+	suite.testTokens = testrig.NewTestTokens()
+	suite.testClients = testrig.NewTestClients()
+	suite.testApplications = testrig.NewTestApplications()
+	suite.testUsers = testrig.NewTestUsers()
+	suite.testAccounts = testrig.NewTestAccounts()
+	suite.testAttachments = testrig.NewTestAttachments()
+	suite.testStatuses = testrig.NewTestStatuses()
+	suite.testTags = testrig.NewTestTags()
+	suite.testMentions = testrig.NewTestMentions()
+}
+
+func (suite *StatusStandardTestSuite) SetupTest() {
+	testrig.InitTestConfig()
+	testrig.InitTestLog()
+
+	fedWorker := worker.New[messages.FromFederator](-1, -1)
+
+	suite.db = testrig.NewTestDB()
+	suite.typeConverter = testrig.NewTestTypeConverter(suite.db)
+	suite.clientWorker = worker.New[messages.FromClientAPI](-1, -1)
+	suite.tc = testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil), suite.db, fedWorker)
+	suite.storage = testrig.NewTestStorage()
+	suite.mediaManager = testrig.NewTestMediaManager(suite.db, suite.storage)
+	suite.federator = testrig.NewTestFederator(suite.db, suite.tc, suite.storage, suite.mediaManager, fedWorker)
+	suite.status = status.New(suite.db, suite.typeConverter, suite.clientWorker, processing.GetParseMentionFunc(suite.db, suite.federator))
+
+	testrig.StandardDBSetup(suite.db, suite.testAccounts)
+	testrig.StandardStorageSetup(suite.storage, "../../../testrig/media")
+}
+
+func (suite *StatusStandardTestSuite) TearDownTest() {
+	testrig.StandardDBTeardown(suite.db)
+	testrig.StandardStorageTeardown(suite.storage)
 }

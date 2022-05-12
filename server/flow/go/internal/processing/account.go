@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -30,16 +30,24 @@ func (p *processor) AccountCreate(ctx context.Context, authed *oauth.Auth, form 
 	return p.accountProcessor.Create(ctx, authed.Token, authed.Application, form)
 }
 
-func (p *processor) AccountGet(ctx context.Context, authed *oauth.Auth, targetAccountID string) (*apimodel.Account, error) {
+func (p *processor) AccountDeleteLocal(ctx context.Context, authed *oauth.Auth, form *apimodel.AccountDeleteRequest) gtserror.WithCode {
+	return p.accountProcessor.DeleteLocal(ctx, authed.Account, form)
+}
+
+func (p *processor) AccountGet(ctx context.Context, authed *oauth.Auth, targetAccountID string) (*apimodel.Account, gtserror.WithCode) {
 	return p.accountProcessor.Get(ctx, authed.Account, targetAccountID)
+}
+
+func (p *processor) AccountGetLocalByUsername(ctx context.Context, authed *oauth.Auth, username string) (*apimodel.Account, gtserror.WithCode) {
+	return p.accountProcessor.GetLocalByUsername(ctx, authed.Account, username)
 }
 
 func (p *processor) AccountUpdate(ctx context.Context, authed *oauth.Auth, form *apimodel.UpdateCredentialsRequest) (*apimodel.Account, error) {
 	return p.accountProcessor.Update(ctx, authed.Account, form)
 }
 
-func (p *processor) AccountStatusesGet(ctx context.Context, authed *oauth.Auth, targetAccountID string, limit int, excludeReplies bool, maxID string, minID string, pinnedOnly bool, mediaOnly bool, publicOnly bool) ([]apimodel.Status, gtserror.WithCode) {
-	return p.accountProcessor.StatusesGet(ctx, authed.Account, targetAccountID, limit, excludeReplies, maxID, minID, pinnedOnly, mediaOnly, publicOnly)
+func (p *processor) AccountStatusesGet(ctx context.Context, authed *oauth.Auth, targetAccountID string, limit int, excludeReplies bool, excludeReblogs bool, maxID string, minID string, pinnedOnly bool, mediaOnly bool, publicOnly bool) ([]apimodel.Status, gtserror.WithCode) {
+	return p.accountProcessor.StatusesGet(ctx, authed.Account, targetAccountID, limit, excludeReplies, excludeReblogs, maxID, minID, pinnedOnly, mediaOnly, publicOnly)
 }
 
 func (p *processor) AccountFollowersGet(ctx context.Context, authed *oauth.Auth, targetAccountID string) ([]apimodel.Account, gtserror.WithCode) {

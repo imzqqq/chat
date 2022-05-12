@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -59,5 +59,10 @@ func processValidationError(err error) error {
 		panic(ive)
 	}
 
-	return err.(validator.ValidationErrors)
+	valErr, ok := err.(validator.ValidationErrors)
+	if !ok {
+		panic("*validator.InvalidValidationError could not be coerced to validator.ValidationErrors")
+	}
+
+	return valErr
 }

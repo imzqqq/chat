@@ -1,9 +1,10 @@
 package kv
 
 import (
+	"errors"
 	"io"
 
-	"codeberg.org/gruf/go-errors"
+	"codeberg.org/gruf/go-mutexes"
 )
 
 var ErrStateClosed = errors.New("store/kv: state closed")
@@ -15,6 +16,7 @@ var ErrStateClosed = errors.New("store/kv: state closed")
 // then the state has zero guarantees
 type StateRO struct {
 	store *KVStore
+	state *mutexes.LockState
 }
 
 func (st *StateRO) Get(key string) ([]byte, error) {
@@ -24,7 +26,7 @@ func (st *StateRO) Get(key string) ([]byte, error) {
 	}
 
 	// Pass request to store
-	return st.store.get(key)
+	return st.store.get(st.state.RLock, key)
 }
 
 func (st *StateRO) GetStream(key string) (io.ReadCloser, error) {
@@ -34,7 +36,7 @@ func (st *StateRO) GetStream(key string) (io.ReadCloser, error) {
 	}
 
 	// Pass request to store
-	return st.store.getStream(key)
+	return st.store.getStream(st.state.RLock, key)
 }
 
 func (st *StateRO) Has(key string) (bool, error) {
@@ -44,10 +46,11 @@ func (st *StateRO) Has(key string) (bool, error) {
 	}
 
 	// Pass request to store
-	return st.store.has(key)
+	return st.store.has(st.state.RLock, key)
 }
 
-func (st *StateRO) close() {
+func (st *StateRO) Release() {
+	st.state.UnlockMap()
 	st.store = nil
 }
 
@@ -58,6 +61,7 @@ func (st *StateRO) close() {
 // then the state has zero guarantees
 type StateRW struct {
 	store *KVStore
+	state *mutexes.LockState
 }
 
 func (st *StateRW) Get(key string) ([]byte, error) {
@@ -67,7 +71,7 @@ func (st *StateRW) Get(key string) ([]byte, error) {
 	}
 
 	// Pass request to store
-	return st.store.get(key)
+	return st.store.get(st.state.RLock, key)
 }
 
 func (st *StateRW) GetStream(key string) (io.ReadCloser, error) {
@@ -77,7 +81,7 @@ func (st *StateRW) GetStream(key string) (io.ReadCloser, error) {
 	}
 
 	// Pass request to store
-	return st.store.getStream(key)
+	return st.store.getStream(st.state.RLock, key)
 }
 
 func (st *StateRW) Put(key string, value []byte) error {
@@ -87,7 +91,7 @@ func (st *StateRW) Put(key string, value []byte) error {
 	}
 
 	// Pass request to store
-	return st.store.put(key, value)
+	return st.store.put(st.state.Lock, key, value)
 }
 
 func (st *StateRW) PutStream(key string, r io.Reader) error {
@@ -97,7 +101,7 @@ func (st *StateRW) PutStream(key string, r io.Reader) error {
 	}
 
 	// Pass request to store
-	return st.store.putStream(key, r)
+	return st.store.putStream(st.state.Lock, key, r)
 }
 
 func (st *StateRW) Has(key string) (bool, error) {
@@ -107,7 +111,7 @@ func (st *StateRW) Has(key string) (bool, error) {
 	}
 
 	// Pass request to store
-	return st.store.has(key)
+	return st.store.has(st.state.RLock, key)
 }
 
 func (st *StateRW) Delete(key string) error {
@@ -117,9 +121,10 @@ func (st *StateRW) Delete(key string) error {
 	}
 
 	// Pass request to store
-	return st.store.delete(key)
+	return st.store.delete(st.state.Lock, key)
 }
 
-func (st *StateRW) close() {
+func (st *StateRW) Release() {
+	st.state.UnlockMap()
 	st.store = nil
 }

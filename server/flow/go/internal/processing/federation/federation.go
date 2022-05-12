@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -24,11 +24,9 @@ import (
 	"net/url"
 
 	apimodel "github.com/superseriousbusiness/gotosocial/internal/api/model"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/federation"
 	"github.com/superseriousbusiness/gotosocial/internal/gtserror"
-	"github.com/superseriousbusiness/gotosocial/internal/messages"
 	"github.com/superseriousbusiness/gotosocial/internal/typeutils"
 	"github.com/superseriousbusiness/gotosocial/internal/visibility"
 )
@@ -82,22 +80,18 @@ type Processor interface {
 }
 
 type processor struct {
-	db            db.DB
-	config        *config.Config
-	federator     federation.Federator
-	tc            typeutils.TypeConverter
-	filter        visibility.Filter
-	fromFederator chan messages.FromFederator
+	db        db.DB
+	federator federation.Federator
+	tc        typeutils.TypeConverter
+	filter    visibility.Filter
 }
 
 // New returns a new federation processor.
-func New(db db.DB, tc typeutils.TypeConverter, config *config.Config, federator federation.Federator, fromFederator chan messages.FromFederator) Processor {
+func New(db db.DB, tc typeutils.TypeConverter, federator federation.Federator) Processor {
 	return &processor{
-		db:            db,
-		config:        config,
-		federator:     federator,
-		tc:            tc,
-		filter:        visibility.NewFilter(db),
-		fromFederator: fromFederator,
+		db:        db,
+		federator: federator,
+		tc:        tc,
+		filter:    visibility.NewFilter(db),
 	}
 }

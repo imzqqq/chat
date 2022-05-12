@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -26,14 +26,15 @@ import (
 	"net/url"
 
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"github.com/superseriousbusiness/activity/streams"
 	"github.com/superseriousbusiness/activity/streams/vocab"
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
+	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/id"
-	"github.com/superseriousbusiness/gotosocial/internal/messages"
-	"github.com/superseriousbusiness/gotosocial/internal/util"
+	"github.com/superseriousbusiness/gotosocial/internal/uris"
 )
 
 func sameActor(activityActor vocab.ActivityStreamsActorProperty, followActor vocab.ActivityStreamsActorProperty) bool {
@@ -104,7 +105,7 @@ func (f *federatingDB) NewID(ctx context.Context, t vocab.Type) (idURL *url.URL,
 						if err != nil {
 							return nil, err
 						}
-						return url.Parse(util.GenerateURIForFollow(actorAccount.Username, f.config.Protocol, f.config.Host, newID))
+						return url.Parse(uris.GenerateURIForFollow(actorAccount.Username, newID))
 					}
 				}
 			}
@@ -207,7 +208,10 @@ func (f *federatingDB) NewID(ctx context.Context, t vocab.Type) (idURL *url.URL,
 	if err != nil {
 		return nil, err
 	}
-	return url.Parse(fmt.Sprintf("%s://%s/%s", f.config.Protocol, f.config.Host, newID))
+
+	protocol := viper.GetString(config.Keys.Protocol)
+	host := viper.GetString(config.Keys.Host)
+	return url.Parse(fmt.Sprintf("%s://%s/%s", protocol, host, newID))
 }
 
 // ActorForOutbox fetches the actor's IRI for the given outbox IRI.
@@ -236,7 +240,7 @@ func (f *federatingDB) ActorForInbox(ctx context.Context, inboxIRI *url.URL) (ac
 func (f *federatingDB) getAccountForIRI(ctx context.Context, iri *url.URL) (account *gtsmodel.Account, err error) {
 	acct := &gtsmodel.Account{}
 
-	if util.IsInboxPath(iri) {
+	if uris.IsInboxPath(iri) {
 		if err := f.db.GetWhere(ctx, []db.Where{{Key: "inbox_uri", Value: iri.String()}}, acct); err != nil {
 			if err == db.ErrNoEntries {
 				return nil, fmt.Errorf("no actor found that corresponds to inbox %s", iri.String())
@@ -246,7 +250,7 @@ func (f *federatingDB) getAccountForIRI(ctx context.Context, iri *url.URL) (acco
 		return acct, nil
 	}
 
-	if util.IsOutboxPath(iri) {
+	if uris.IsOutboxPath(iri) {
 		if err := f.db.GetWhere(ctx, []db.Where{{Key: "outbox_uri", Value: iri.String()}}, acct); err != nil {
 			if err == db.ErrNoEntries {
 				return nil, fmt.Errorf("no actor found that corresponds to outbox %s", iri.String())
@@ -256,7 +260,7 @@ func (f *federatingDB) getAccountForIRI(ctx context.Context, iri *url.URL) (acco
 		return acct, nil
 	}
 
-	if util.IsUserPath(iri) {
+	if uris.IsUserPath(iri) {
 		if err := f.db.GetWhere(ctx, []db.Where{{Key: "uri", Value: iri.String()}}, acct); err != nil {
 			if err == db.ErrNoEntries {
 				return nil, fmt.Errorf("no actor found that corresponds to uri %s", iri.String())
@@ -266,7 +270,7 @@ func (f *federatingDB) getAccountForIRI(ctx context.Context, iri *url.URL) (acco
 		return acct, nil
 	}
 
-	if util.IsFollowersPath(iri) {
+	if uris.IsFollowersPath(iri) {
 		if err := f.db.GetWhere(ctx, []db.Where{{Key: "followers_uri", Value: iri.String()}}, acct); err != nil {
 			if err == db.ErrNoEntries {
 				return nil, fmt.Errorf("no actor found that corresponds to followers_uri %s", iri.String())
@@ -276,7 +280,7 @@ func (f *federatingDB) getAccountForIRI(ctx context.Context, iri *url.URL) (acco
 		return acct, nil
 	}
 
-	if util.IsFollowingPath(iri) {
+	if uris.IsFollowingPath(iri) {
 		if err := f.db.GetWhere(ctx, []db.Where{{Key: "following_uri", Value: iri.String()}}, acct); err != nil {
 			if err == db.ErrNoEntries {
 				return nil, fmt.Errorf("no actor found that corresponds to following_uri %s", iri.String())
@@ -305,20 +309,23 @@ func (f *federatingDB) collectIRIs(ctx context.Context, iris []*url.URL) (vocab.
 //   - The requesting account that posted to the inbox.
 //   - A channel that messages for the processor can be placed into.
 // If a value is not present, nil will be returned for it. It's up to the caller to check this and respond appropriately.
-func extractFromCtx(ctx context.Context) (receivingAccount, requestingAccount *gtsmodel.Account, fromFederatorChan chan messages.FromFederator) {
-	receivingAccountI := ctx.Value(util.APReceivingAccount)
+func extractFromCtx(ctx context.Context) (receivingAccount, requestingAccount *gtsmodel.Account) {
+	receivingAccountI := ctx.Value(ap.ContextReceivingAccount)
 	if receivingAccountI != nil {
-		receivingAccount = receivingAccountI.(*gtsmodel.Account)
+		var ok bool
+		receivingAccount, ok = receivingAccountI.(*gtsmodel.Account)
+		if !ok {
+			logrus.Panicf("extractFromCtx: context entry with key %s could not be asserted to *gtsmodel.Account", ap.ContextReceivingAccount)
+		}
 	}
 
-	requestingAcctI := ctx.Value(util.APRequestingAccount)
+	requestingAcctI := ctx.Value(ap.ContextRequestingAccount)
 	if requestingAcctI != nil {
-		requestingAccount = requestingAcctI.(*gtsmodel.Account)
-	}
-
-	fromFederatorChanI := ctx.Value(util.APFromFederatorChanKey)
-	if fromFederatorChanI != nil {
-		fromFederatorChan = fromFederatorChanI.(chan messages.FromFederator)
+		var ok bool
+		requestingAccount, ok = requestingAcctI.(*gtsmodel.Account)
+		if !ok {
+			logrus.Panicf("extractFromCtx: context entry with key %s could not be asserted to *gtsmodel.Account", ap.ContextRequestingAccount)
+		}
 	}
 
 	return

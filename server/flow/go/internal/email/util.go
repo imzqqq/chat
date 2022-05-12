@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -19,38 +19,55 @@
 package email
 
 import (
+	"errors"
 	"fmt"
-	"html/template"
 	"os"
 	"path/filepath"
-)
-
-const (
-	mime = `MIME-version: 1.0;
-Content-Type: text/html;`
+	"strings"
+	"text/template"
 )
 
 func loadTemplates(templateBaseDir string) (*template.Template, error) {
-	cwd, err := os.Getwd()
-	if err != nil {
-		return nil, fmt.Errorf("error getting current working directory: %s", err)
+	if !filepath.IsAbs(templateBaseDir) {
+		cwd, err := os.Getwd()
+		if err != nil {
+			return nil, fmt.Errorf("error getting current working directory: %s", err)
+		}
+		templateBaseDir = filepath.Join(cwd, templateBaseDir)
 	}
 
 	// look for all templates that start with 'email_'
-	tmPath := filepath.Join(cwd, fmt.Sprintf("%semail_*", templateBaseDir))
-	return template.ParseGlob(tmPath)
+	return template.ParseGlob(filepath.Join(templateBaseDir, "email_*"))
 }
 
-func assembleMessage(mailSubject string, mailBody string, mailTo string, mailFrom string) []byte {
-	from := fmt.Sprintf("From: GoToSocial <%s>", mailFrom)
-	to := fmt.Sprintf("To: %s", mailTo)
+// https://datatracker.ietf.org/doc/html/rfc2822
+// I did not read the RFC, I just copy and pasted from
+// https://pkg.go.dev/net/smtp#SendMail
+// and it did seem to work.
+func assembleMessage(mailSubject string, mailBody string, mailTo string, mailFrom string) ([]byte, error) {
+
+	if strings.Contains(mailSubject, "\r") || strings.Contains(mailSubject, "\n") {
+		return nil, errors.New("email subject must not contain newline characters")
+	}
+
+	if strings.Contains(mailFrom, "\r") || strings.Contains(mailFrom, "\n") {
+		return nil, errors.New("email from address must not contain newline characters")
+	}
+
+	if strings.Contains(mailTo, "\r") || strings.Contains(mailTo, "\n") {
+		return nil, errors.New("email to address must not contain newline characters")
+	}
+
+	// normalize the message body to use CRLF line endings
+	mailBody = strings.ReplaceAll(mailBody, "\r\n", "\n")
+	mailBody = strings.ReplaceAll(mailBody, "\n", "\r\n")
 
 	msg := []byte(
-		mailSubject + "\r\n" +
-			from + "\r\n" +
-			to + "\r\n" +
-			mime + "\r\n" +
-			mailBody + "\r\n")
+		"To: " + mailTo + "\r\n" +
+			"Subject: " + mailSubject + "\r\n" +
+			"\r\n" +
+			mailBody + "\r\n",
+	)
 
-	return msg
+	return msg, nil
 }

@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -52,7 +52,7 @@ type Account interface {
 	// then all statuses will be returned. If limit is set to 0, the size of the returned slice will not be limited. This can
 	// be very memory intensive so you probably shouldn't do this!
 	// In case of no entries, a 'no entries' error will be returned
-	GetAccountStatuses(ctx context.Context, accountID string, limit int, excludeReplies bool, maxID string, minID string, pinnedOnly bool, mediaOnly bool, publicOnly bool) ([]*gtsmodel.Status, Error)
+	GetAccountStatuses(ctx context.Context, accountID string, limit int, excludeReplies bool, excludeReblogs bool, maxID string, minID string, pinnedOnly bool, mediaOnly bool, publicOnly bool) ([]*gtsmodel.Status, Error)
 
 	GetAccountBlocks(ctx context.Context, accountID string, maxID string, sinceID string, limit int) ([]*gtsmodel.Account, string, string, Error)
 

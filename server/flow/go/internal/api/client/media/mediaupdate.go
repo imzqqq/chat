@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -21,10 +21,13 @@ package media
 import (
 	"errors"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"net/http"
 
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
+
 	"github.com/gin-gonic/gin"
+	"github.com/superseriousbusiness/gotosocial/internal/api"
 	"github.com/superseriousbusiness/gotosocial/internal/api/model"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
@@ -100,6 +103,11 @@ func (m *Module) MediaPUTHandler(c *gin.Context) {
 		return
 	}
 
+	if _, err := api.NegotiateAccept(c, api.JSONAcceptHeaders...); err != nil {
+		c.JSON(http.StatusNotAcceptable, gin.H{"error": err.Error()})
+		return
+	}
+
 	attachmentID := c.Param(IDKey)
 	if attachmentID == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "no attachment ID given in request"})
@@ -117,7 +125,7 @@ func (m *Module) MediaPUTHandler(c *gin.Context) {
 
 	// Give the fields on the request form a first pass to make sure the request is superficially valid.
 	l.Tracef("validating form %+v", form)
-	if err := validateUpdateMedia(&form, m.config.MediaConfig); err != nil {
+	if err := validateUpdateMedia(&form); err != nil {
 		l.Debugf("error validating form: %s", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -132,11 +140,14 @@ func (m *Module) MediaPUTHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, attachment)
 }
 
-func validateUpdateMedia(form *model.AttachmentUpdateRequest, config *config.MediaConfig) error {
+func validateUpdateMedia(form *model.AttachmentUpdateRequest) error {
+	keys := config.Keys
+	minDescriptionChars := viper.GetInt(keys.MediaDescriptionMinChars)
+	maxDescriptionChars := viper.GetInt(keys.MediaDescriptionMaxChars)
 
 	if form.Description != nil {
-		if len(*form.Description) < config.MinDescriptionChars || len(*form.Description) > config.MaxDescriptionChars {
-			return fmt.Errorf("image description length must be between %d and %d characters (inclusive), but provided image description was %d chars", config.MinDescriptionChars, config.MaxDescriptionChars, len(*form.Description))
+		if len(*form.Description) < minDescriptionChars || len(*form.Description) > maxDescriptionChars {
+			return fmt.Errorf("image description length must be between %d and %d characters (inclusive), but provided image description was %d chars", minDescriptionChars, maxDescriptionChars, len(*form.Description))
 		}
 	}
 

@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -20,16 +20,20 @@ package email
 
 import (
 	"bytes"
-	"html/template"
+	"text/template"
 
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
+	"github.com/superseriousbusiness/gotosocial/internal/config"
 )
 
 // NewNoopSender returns a no-op email sender that will just execute the given sendCallback
 // every time it would otherwise send an email to the given toAddress with the given message value.
 //
 // Passing a nil function is also acceptable, in which case the send functions will just return nil.
-func NewNoopSender(templateBaseDir string, sendCallback func(toAddress string, message string)) (Sender, error) {
+func NewNoopSender(sendCallback func(toAddress string, message string)) (Sender, error) {
+	templateBaseDir := viper.GetString(config.Keys.WebTemplateBaseDir)
+
 	t, err := loadTemplates(templateBaseDir)
 	if err != nil {
 		return nil, err
@@ -53,7 +57,10 @@ func (s *noopSender) SendConfirmEmail(toAddress string, data ConfirmData) error 
 	}
 	confirmBody := buf.String()
 
-	msg := assembleMessage(confirmSubject, confirmBody, toAddress, "test@example.org")
+	msg, err := assembleMessage(confirmSubject, confirmBody, toAddress, "test@example.org")
+	if err != nil {
+		return err
+	}
 
 	logrus.Tracef("NOT SENDING confirmation email to %s with contents: %s", toAddress, msg)
 
@@ -70,7 +77,10 @@ func (s *noopSender) SendResetEmail(toAddress string, data ResetData) error {
 	}
 	resetBody := buf.String()
 
-	msg := assembleMessage(resetSubject, resetBody, toAddress, "test@example.org")
+	msg, err := assembleMessage(resetSubject, resetBody, toAddress, "test@example.org")
+	if err != nil {
+		return err
+	}
 
 	logrus.Tracef("NOT SENDING reset email to %s with contents: %s", toAddress, msg)
 

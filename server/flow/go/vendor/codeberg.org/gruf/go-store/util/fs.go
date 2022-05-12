@@ -3,21 +3,9 @@ package util
 import (
 	"io/fs"
 	"os"
-	"strings"
-	"syscall"
 
 	"codeberg.org/gruf/go-fastpath"
 )
-
-var dotdot = "../"
-
-// CountDotdots returns the number of "dot-dots" (../) in a cleaned filesystem path
-func CountDotdots(path string) int {
-	if !strings.HasSuffix(path, dotdot) {
-		return 0
-	}
-	return strings.Count(path, dotdot)
-}
 
 // WalkDir traverses the dir tree of the supplied path, performing the supplied walkFn on each entry
 func WalkDir(pb *fastpath.Builder, path string, walkFn func(string, fs.DirEntry)) error {
@@ -91,15 +79,4 @@ func cleanDirs(pb *fastpath.Builder, path string) error {
 		}
 	}
 	return nil
-}
-
-// RetryOnEINTR is a low-level filesystem function for retrying syscalls on O_EINTR received
-func RetryOnEINTR(do func() error) error {
-	for {
-		err := do()
-		if err == syscall.EINTR {
-			continue
-		}
-		return err
-	}
 }

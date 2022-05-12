@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -25,7 +25,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/superseriousbusiness/gotosocial/internal/text"
-	"github.com/superseriousbusiness/gotosocial/testrig"
 )
 
 const text1 = `
@@ -70,38 +69,13 @@ type LinkTestSuite struct {
 	TextStandardTestSuite
 }
 
-func (suite *LinkTestSuite) SetupSuite() {
-	suite.testTokens = testrig.NewTestTokens()
-	suite.testClients = testrig.NewTestClients()
-	suite.testApplications = testrig.NewTestApplications()
-	suite.testUsers = testrig.NewTestUsers()
-	suite.testAccounts = testrig.NewTestAccounts()
-	suite.testAttachments = testrig.NewTestAttachments()
-	suite.testStatuses = testrig.NewTestStatuses()
-	suite.testTags = testrig.NewTestTags()
-}
-
-func (suite *LinkTestSuite) SetupTest() {
-	suite.config = testrig.NewTestConfig()
-	suite.db = testrig.NewTestDB()
-	suite.formatter = text.NewFormatter(suite.config, suite.db)
-
-	testrig.StandardDBSetup(suite.db, nil)
-}
-
-func (suite *LinkTestSuite) TearDownTest() {
-	testrig.StandardDBTeardown(suite.db)
-}
-
 func (suite *LinkTestSuite) TestParseSimple() {
 	f := suite.formatter.FromPlain(context.Background(), simple, nil, nil)
 	assert.Equal(suite.T(), simpleExpected, f)
 }
 
 func (suite *LinkTestSuite) TestParseURLsFromText1() {
-	urls, err := text.FindLinks(text1)
-
-	assert.NoError(suite.T(), err)
+	urls := text.FindLinks(text1)
 
 	assert.Equal(suite.T(), "https://example.org/link/to/something#fragment", urls[0].String())
 	assert.Equal(suite.T(), "http://test.example.org?q=bahhhhhhhhhhhh", urls[1].String())
@@ -110,16 +84,14 @@ func (suite *LinkTestSuite) TestParseURLsFromText1() {
 }
 
 func (suite *LinkTestSuite) TestParseURLsFromText2() {
-	urls, err := text.FindLinks(text2)
-	assert.NoError(suite.T(), err)
+	urls := text.FindLinks(text2)
 
 	// assert length 1 because the found links will be deduplicated
 	assert.Len(suite.T(), urls, 1)
 }
 
 func (suite *LinkTestSuite) TestParseURLsFromText3() {
-	urls, err := text.FindLinks(text3)
-	assert.NoError(suite.T(), err)
+	urls := text.FindLinks(text3)
 
 	// assert length 0 because `mailto:` isn't accepted
 	assert.Len(suite.T(), urls, 0)
@@ -136,7 +108,7 @@ Here's link number two: <a href="http://test.example.org?q=bahhhhhhhhhhhh" rel="
 
 really.cool.website <-- this one shouldn't be parsed as a link because it doesn't contain the scheme
 
-<a href="https://example.orghttps://google.com" rel="noopener">example.orghttps//google.com</a> <-- this shouldn't work either, but it does?! OK
+<a href="https://example.orghttps://google.com" rel="noopener">example.orghttps://google.com</a> <-- this shouldn't work either, but it does?! OK
 `, replaced)
 }
 

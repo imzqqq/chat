@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -26,6 +26,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"github.com/superseriousbusiness/gotosocial/internal/api"
 )
 
 // OutboxGETHandler swagger:operation GET /users/{username}/outbox s2sOutboxGet
@@ -90,9 +91,8 @@ func (m *Module) OutboxGETHandler(c *gin.Context) {
 		return
 	}
 
-	page := false
-	pageString := c.Query(PageKey)
-	if pageString != "" {
+	var page bool
+	if pageString := c.Query(PageKey); pageString != "" {
 		i, err := strconv.ParseBool(pageString)
 		if err != nil {
 			l.Debugf("error parsing page string: %s", err)
@@ -114,9 +114,9 @@ func (m *Module) OutboxGETHandler(c *gin.Context) {
 		maxID = maxIDString
 	}
 
-	format, err := negotiateFormat(c)
+	format, err := api.NegotiateAccept(c, api.ActivityPubAcceptHeaders...)
 	if err != nil {
-		c.JSON(http.StatusNotAcceptable, gin.H{"error": fmt.Sprintf("could not negotiate format with given Accept header(s): %s", err)})
+		c.JSON(http.StatusNotAcceptable, gin.H{"error": err.Error()})
 		return
 	}
 	l.Tracef("negotiated format: %s", format)

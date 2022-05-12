@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -19,38 +19,75 @@
 package main
 
 import (
-	"os"
+	"fmt"
+	"runtime/debug"
 
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
+	"github.com/superseriousbusiness/gotosocial/cmd/gotosocial/flag"
 	_ "github.com/superseriousbusiness/gotosocial/docs"
-	"github.com/urfave/cli/v2"
+	"github.com/superseriousbusiness/gotosocial/internal/config"
 )
 
-// Version is the software version of GtS being used
+// Version is the version of GoToSocial being used.
+// It's injected into the binary by the build script.
 var Version string
-
-// Commit is the git commit of GtS being used
-var Commit string
 
 //go:generate swagger generate spec
 func main() {
-	var v string
-	if Commit == "" {
-		v = Version
-	} else {
-		v = Version + " " + Commit[:7]
+	buildInfo, ok := debug.ReadBuildInfo()
+	if !ok {
+		panic("could not read buildinfo")
 	}
 
-	app := &cli.App{
-		Version:  v,
-		Usage:    "a fediverse social media server",
-		Flags:    getFlags(),
-		Commands: getCommands(),
+	goVersion := buildInfo.GoVersion
+	var commit string
+	var time string
+	for _, s := range buildInfo.Settings {
+		if s.Key == "vcs.revision" {
+			commit = s.Value[:7]
+		}
+		if s.Key == "vcs.time" {
+			time = s.Value
+		}
 	}
 
-	err := app.Run(os.Args)
-	if err != nil {
-		logrus.Fatal(err)
+	var versionString string
+	if Version != "" {
+		versionString = fmt.Sprintf("%s %s %s [%s]", Version, commit, time, goVersion)
+	}
+
+	// override software version in viper store
+	viper.Set(config.Keys.SoftwareVersion, versionString)
+
+	// instantiate the root command
+	rootCmd := &cobra.Command{
+		Use:           "gotosocial",
+		Short:         "GoToSocial - a fediverse social media server",
+		Long:          "GoToSocial - a fediverse social media server\n\nFor help, see: https://docs.gotosocial.org.\n\nCode: https://github.com/superseriousbusiness/gotosocial",
+		Version:       versionString,
+		SilenceErrors: true,
+		SilenceUsage:  true,
+	}
+
+	// attach global flags to the root command so that they can be accessed from any subcommand
+	flag.Global(rootCmd, config.Defaults)
+
+	// bind the config-path flag to viper early so that we can call it in the pre-run of following commands
+	if err := viper.BindPFlag(config.Keys.ConfigPath, rootCmd.PersistentFlags().Lookup(config.Keys.ConfigPath)); err != nil {
+		logrus.Fatalf("error attaching config flag: %s", err)
+	}
+
+	// add subcommands
+	rootCmd.AddCommand(serverCommands())
+	rootCmd.AddCommand(testrigCommands())
+	rootCmd.AddCommand(debugCommands())
+	rootCmd.AddCommand(adminCommands())
+
+	// run
+	if err := rootCmd.Execute(); err != nil {
+		logrus.Fatalf("error executing command: %s", err)
 	}
 }

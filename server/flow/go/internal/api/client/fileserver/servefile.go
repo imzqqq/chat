@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -19,11 +19,12 @@
 package fileserver
 
 import (
-	"bytes"
+	"io"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"github.com/superseriousbusiness/gotosocial/internal/api"
 	"github.com/superseriousbusiness/gotosocial/internal/api/model"
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
 )
@@ -78,26 +79,35 @@ func (m *FileServer) ServeFile(c *gin.Context) {
 		return
 	}
 
-	content, err := m.processor.FileGet(c.Request.Context(), authed, &model.GetContentRequestForm{
+	content, errWithCode := m.processor.FileGet(c.Request.Context(), authed, &model.GetContentRequestForm{
 		AccountID: accountID,
 		MediaType: mediaType,
 		MediaSize: mediaSize,
 		FileName:  fileName,
 	})
-	if err != nil {
-		l.Debug(err)
-		c.String(http.StatusNotFound, "404 page not found")
+	if errWithCode != nil {
+		l.Errorf(errWithCode.Error())
+		c.JSON(errWithCode.Code(), gin.H{"error": errWithCode.Safe()})
 		return
 	}
 
-	// TODO: do proper content negotiation here -- if the requester only accepts text/html we should try to serve them *something*
+	defer func() {
+		// if the content is a ReadCloser, close it when we're done
+		if closer, ok := content.Content.(io.ReadCloser); ok {
+			if err := closer.Close(); err != nil {
+				l.Errorf("error closing readcloser: %s", err)
+			}
+		}
+	}()
+
+	// TODO: if the requester only accepts text/html we should try to serve them *something*.
 	// This is mostly needed because when sharing a link to a gts-hosted file on something like mastodon, the masto servers will
 	// attempt to look up the content to provide a preview of the link, and they ask for text/html.
-	if c.NegotiateFormat(content.ContentType) == "" {
-		l.Debugf("couldn't negotiate content for Accept headers %+v: we have content type %s", c.Request.Header.Get("Accepted"), content.ContentType)
-		c.AbortWithStatus(http.StatusNotAcceptable)
+	format, err := api.NegotiateAccept(c, api.Offer(content.ContentType))
+	if errWithCode != nil {
+		c.JSON(http.StatusNotAcceptable, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.DataFromReader(http.StatusOK, content.ContentLength, content.ContentType, bytes.NewReader(content.Content), nil)
+	c.DataFromReader(http.StatusOK, content.ContentLength, format, content.Content, nil)
 }

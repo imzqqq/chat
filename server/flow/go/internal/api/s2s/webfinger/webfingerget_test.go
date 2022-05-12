@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -27,10 +27,14 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/superseriousbusiness/gotosocial/internal/api/s2s/webfinger"
+	"github.com/superseriousbusiness/gotosocial/internal/config"
+	"github.com/superseriousbusiness/gotosocial/internal/messages"
 	"github.com/superseriousbusiness/gotosocial/internal/processing"
+	"github.com/superseriousbusiness/gotosocial/internal/worker"
 	"github.com/superseriousbusiness/gotosocial/testrig"
 )
 
@@ -42,11 +46,13 @@ func (suite *WebfingerGetTestSuite) TestFingerUser() {
 	targetAccount := suite.testAccounts["local_account_1"]
 
 	// setup request
-	requestPath := fmt.Sprintf("/%s?resource=acct:%s@%s", webfinger.WebfingerBasePath, targetAccount.Username, suite.config.Host)
+	host := viper.GetString(config.Keys.Host)
+	requestPath := fmt.Sprintf("/%s?resource=acct:%s@%s", webfinger.WebfingerBasePath, targetAccount.Username, host)
 
 	recorder := httptest.NewRecorder()
 	ctx, _ := gin.CreateTestContext(recorder)
 	ctx.Request = httptest.NewRequest(http.MethodGet, requestPath, nil) // the endpoint we're hitting
+	ctx.Request.Header.Set("accept", "application/json")
 
 	// trigger the function being tested
 	suite.webfingerModule.WebfingerGETRequest(ctx)
@@ -63,10 +69,12 @@ func (suite *WebfingerGetTestSuite) TestFingerUser() {
 }
 
 func (suite *WebfingerGetTestSuite) TestFingerUserWithDifferentAccountDomainByHost() {
-	suite.config.Host = "gts.example.org"
-	suite.config.AccountDomain = "example.org"
-	suite.processor = processing.NewProcessor(suite.config, suite.tc, suite.federator, testrig.NewTestOauthServer(suite.db), testrig.NewTestMediaHandler(suite.db, suite.storage), suite.storage, testrig.NewTestTimelineManager(suite.db), suite.db, suite.emailSender)
-	suite.webfingerModule = webfinger.New(suite.config, suite.processor).(*webfinger.Module)
+	viper.Set(config.Keys.Host, "gts.example.org")
+	viper.Set(config.Keys.AccountDomain, "example.org")
+	clientWorker := worker.New[messages.FromClientAPI](-1, -1)
+	fedWorker := worker.New[messages.FromFederator](-1, -1)
+	suite.processor = processing.NewProcessor(suite.tc, suite.federator, testrig.NewTestOauthServer(suite.db), testrig.NewTestMediaManager(suite.db, suite.storage), suite.storage, suite.db, suite.emailSender, clientWorker, fedWorker)
+	suite.webfingerModule = webfinger.New(suite.processor).(*webfinger.Module)
 
 	targetAccount := accountDomainAccount()
 	if err := suite.db.Put(context.Background(), targetAccount); err != nil {
@@ -74,11 +82,13 @@ func (suite *WebfingerGetTestSuite) TestFingerUserWithDifferentAccountDomainByHo
 	}
 
 	// setup request
-	requestPath := fmt.Sprintf("/%s?resource=acct:%s@%s", webfinger.WebfingerBasePath, targetAccount.Username, suite.config.Host)
+	host := viper.GetString(config.Keys.Host)
+	requestPath := fmt.Sprintf("/%s?resource=acct:%s@%s", webfinger.WebfingerBasePath, targetAccount.Username, host)
 
 	recorder := httptest.NewRecorder()
 	ctx, _ := gin.CreateTestContext(recorder)
 	ctx.Request = httptest.NewRequest(http.MethodGet, requestPath, nil) // the endpoint we're hitting
+	ctx.Request.Header.Set("accept", "application/json")
 
 	// trigger the function being tested
 	suite.webfingerModule.WebfingerGETRequest(ctx)
@@ -95,10 +105,12 @@ func (suite *WebfingerGetTestSuite) TestFingerUserWithDifferentAccountDomainByHo
 }
 
 func (suite *WebfingerGetTestSuite) TestFingerUserWithDifferentAccountDomainByAccountDomain() {
-	suite.config.Host = "gts.example.org"
-	suite.config.AccountDomain = "example.org"
-	suite.processor = processing.NewProcessor(suite.config, suite.tc, suite.federator, testrig.NewTestOauthServer(suite.db), testrig.NewTestMediaHandler(suite.db, suite.storage), suite.storage, testrig.NewTestTimelineManager(suite.db), suite.db, suite.emailSender)
-	suite.webfingerModule = webfinger.New(suite.config, suite.processor).(*webfinger.Module)
+	viper.Set(config.Keys.Host, "gts.example.org")
+	viper.Set(config.Keys.AccountDomain, "example.org")
+	clientWorker := worker.New[messages.FromClientAPI](-1, -1)
+	fedWorker := worker.New[messages.FromFederator](-1, -1)
+	suite.processor = processing.NewProcessor(suite.tc, suite.federator, testrig.NewTestOauthServer(suite.db), testrig.NewTestMediaManager(suite.db, suite.storage), suite.storage, suite.db, suite.emailSender, clientWorker, fedWorker)
+	suite.webfingerModule = webfinger.New(suite.processor).(*webfinger.Module)
 
 	targetAccount := accountDomainAccount()
 	if err := suite.db.Put(context.Background(), targetAccount); err != nil {
@@ -106,11 +118,13 @@ func (suite *WebfingerGetTestSuite) TestFingerUserWithDifferentAccountDomainByAc
 	}
 
 	// setup request
-	requestPath := fmt.Sprintf("/%s?resource=acct:%s@%s", webfinger.WebfingerBasePath, targetAccount.Username, suite.config.AccountDomain)
+	accountDomain := viper.GetString(config.Keys.AccountDomain)
+	requestPath := fmt.Sprintf("/%s?resource=acct:%s@%s", webfinger.WebfingerBasePath, targetAccount.Username, accountDomain)
 
 	recorder := httptest.NewRecorder()
 	ctx, _ := gin.CreateTestContext(recorder)
 	ctx.Request = httptest.NewRequest(http.MethodGet, requestPath, nil) // the endpoint we're hitting
+	ctx.Request.Header.Set("accept", "application/json")
 
 	// trigger the function being tested
 	suite.webfingerModule.WebfingerGETRequest(ctx)
@@ -130,11 +144,13 @@ func (suite *WebfingerGetTestSuite) TestFingerUserWithoutAcct() {
 	targetAccount := suite.testAccounts["local_account_1"]
 
 	// setup request -- leave out the 'acct:' prefix, which is prettymuch what pixelfed currently does
-	requestPath := fmt.Sprintf("/%s?resource=%s@%s", webfinger.WebfingerBasePath, targetAccount.Username, suite.config.Host)
+	host := viper.GetString(config.Keys.Host)
+	requestPath := fmt.Sprintf("/%s?resource=%s@%s", webfinger.WebfingerBasePath, targetAccount.Username, host)
 
 	recorder := httptest.NewRecorder()
 	ctx, _ := gin.CreateTestContext(recorder)
 	ctx.Request = httptest.NewRequest(http.MethodGet, requestPath, nil) // the endpoint we're hitting
+	ctx.Request.Header.Set("accept", "application/json")
 
 	// trigger the function being tested
 	suite.webfingerModule.WebfingerGETRequest(ctx)

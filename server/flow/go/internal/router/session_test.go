@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -16,70 +16,79 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package router
+package router_test
 
 import (
 	"testing"
 
+	"github.com/spf13/viper"
 	"github.com/stretchr/testify/suite"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
+	"github.com/superseriousbusiness/gotosocial/internal/router"
+	"github.com/superseriousbusiness/gotosocial/testrig"
 )
 
 type SessionTestSuite struct {
 	suite.Suite
 }
 
-func (suite *SessionTestSuite) TestDeriveSessionNameLocalhostWithPort() {
-	cfg := &config.Config{
-		Protocol: "http",
-		Host:     "localhost:8080",
-	}
+func (suite *SessionTestSuite) SetupTest() {
+	testrig.InitTestConfig()
+}
 
-	sessionName, err := sessionName(cfg)
+func (suite *SessionTestSuite) TestDeriveSessionNameLocalhostWithPort() {
+	viper.Set(config.Keys.Protocol, "http")
+	viper.Set(config.Keys.Host, "localhost:8080")
+
+	sessionName, err := router.SessionName()
 	suite.NoError(err)
 	suite.Equal("gotosocial-localhost", sessionName)
 }
 
 func (suite *SessionTestSuite) TestDeriveSessionNameLocalhost() {
-	cfg := &config.Config{
-		Protocol: "http",
-		Host:     "localhost",
-	}
+	viper.Set(config.Keys.Protocol, "http")
+	viper.Set(config.Keys.Host, "localhost")
 
-	sessionName, err := sessionName(cfg)
+	sessionName, err := router.SessionName()
 	suite.NoError(err)
 	suite.Equal("gotosocial-localhost", sessionName)
 }
 
 func (suite *SessionTestSuite) TestDeriveSessionNoProtocol() {
-	cfg := &config.Config{
-		Host: "localhost",
-	}
+	viper.Set(config.Keys.Protocol, "")
+	viper.Set(config.Keys.Host, "localhost")
 
-	sessionName, err := sessionName(cfg)
+	sessionName, err := router.SessionName()
 	suite.EqualError(err, "parse \"://localhost\": missing protocol scheme")
 	suite.Equal("", sessionName)
 }
 
 func (suite *SessionTestSuite) TestDeriveSessionNoHost() {
-	cfg := &config.Config{
-		Protocol: "https",
-	}
+	viper.Set(config.Keys.Protocol, "https")
+	viper.Set(config.Keys.Host, "")
+	viper.Set(config.Keys.Port, 0)
 
-	sessionName, err := sessionName(cfg)
+	sessionName, err := router.SessionName()
 	suite.EqualError(err, "could not derive hostname without port from https://")
 	suite.Equal("", sessionName)
 }
 
 func (suite *SessionTestSuite) TestDeriveSessionOK() {
-	cfg := &config.Config{
-		Protocol: "https",
-		Host:     "example.org",
-	}
+	viper.Set(config.Keys.Protocol, "https")
+	viper.Set(config.Keys.Host, "example.org")
 
-	sessionName, err := sessionName(cfg)
+	sessionName, err := router.SessionName()
 	suite.NoError(err)
 	suite.Equal("gotosocial-example.org", sessionName)
+}
+
+func (suite *SessionTestSuite) TestDeriveSessionIDNOK() {
+	viper.Set(config.Keys.Protocol, "https")
+	viper.Set(config.Keys.Host, "fóid.org")
+
+	sessionName, err := router.SessionName()
+	suite.NoError(err)
+	suite.Equal("gotosocial-xn--fid-gna.org", sessionName)
 }
 
 func TestSessionTestSuite(t *testing.T) {

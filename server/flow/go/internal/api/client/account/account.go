@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/superseriousbusiness/gotosocial/internal/api"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/processing"
 
 	"github.com/superseriousbusiness/gotosocial/internal/router"
@@ -35,6 +34,8 @@ const (
 	LimitKey = "limit"
 	// ExcludeRepliesKey is for specifying whether to exclude replies in a list of returned statuses by an account.
 	ExcludeRepliesKey = "exclude_replies"
+	// ExcludeReblogsKey is for specifying whether to exclude reblogs in a list of returned statuses by an account.
+	ExcludeReblogsKey = "exclude_reblogs"
 	// PinnedKey is for specifying whether to include pinned statuses in a list of returned statuses by an account.
 	PinnedKey = "pinned"
 	// MaxIDKey is for specifying the maximum ID of the status to retrieve.
@@ -72,18 +73,18 @@ const (
 	BlockPath = BasePathWithID + "/block"
 	// UnblockPath is for removing a block of an account
 	UnblockPath = BasePathWithID + "/unblock"
+	// DeleteAccountPath is for deleting one's account via the API
+	DeleteAccountPath = BasePath + "/delete"
 )
 
 // Module implements the ClientAPIModule interface for account-related actions
 type Module struct {
-	config    *config.Config
 	processor processing.Processor
 }
 
 // New returns a new account module
-func New(config *config.Config, processor processing.Processor) api.ClientModule {
+func New(processor processing.Processor) api.ClientModule {
 	return &Module{
-		config:    config,
 		processor: processor,
 	}
 }
@@ -92,6 +93,9 @@ func New(config *config.Config, processor processing.Processor) api.ClientModule
 func (m *Module) Route(r router.Router) error {
 	// create account
 	r.AttachHandler(http.MethodPost, BasePath, m.AccountCreatePOSTHandler)
+
+	// delete account
+	r.AttachHandler(http.MethodPost, DeleteAccountPath, m.AccountDeletePOSTHandler)
 
 	// get account
 	r.AttachHandler(http.MethodGet, BasePathWithID, m.muxHandler)

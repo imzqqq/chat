@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -24,6 +24,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"github.com/superseriousbusiness/gotosocial/internal/api"
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
 )
 
@@ -41,6 +42,11 @@ func (m *Module) NotificationsGETHandler(c *gin.Context) {
 	if err != nil {
 		l.Errorf("error authing status faved by request: %s", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "not authed"})
+		return
+	}
+
+	if _, err := api.NegotiateAccept(c, api.JSONAcceptHeaders...); err != nil {
+		c.JSON(http.StatusNotAcceptable, gin.H{"error": err.Error()})
 		return
 	}
 

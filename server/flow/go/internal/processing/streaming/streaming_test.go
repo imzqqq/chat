@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -38,11 +38,13 @@ type StreamingTestSuite struct {
 }
 
 func (suite *StreamingTestSuite) SetupTest() {
+	testrig.InitTestLog()
+	testrig.InitTestConfig()
+
 	suite.testAccounts = testrig.NewTestAccounts()
 	suite.testTokens = testrig.NewTestTokens()
 	suite.db = testrig.NewTestDB()
 	suite.oauthServer = testrig.NewTestOauthServer(suite.db)
-	testrig.InitTestLog()
 	suite.streamingProcessor = streaming.New(suite.db, suite.oauthServer)
 
 	testrig.StandardDBSetup(suite.db, suite.testAccounts)

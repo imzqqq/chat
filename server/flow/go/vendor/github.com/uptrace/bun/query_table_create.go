@@ -24,6 +24,8 @@ type CreateTableQuery struct {
 	tablespace  schema.QueryWithArgs
 }
 
+var _ Query = (*CreateTableQuery)(nil)
+
 func NewCreateTableQuery(db *DB) *CreateTableQuery {
 	q := &CreateTableQuery{
 		baseQuery: baseQuery{
@@ -59,7 +61,7 @@ func (q *CreateTableQuery) TableExpr(query string, args ...interface{}) *CreateT
 }
 
 func (q *CreateTableQuery) ModelTableExpr(query string, args ...interface{}) *CreateTableQuery {
-	q.modelTable = schema.SafeQuery(query, args)
+	q.modelTableName = schema.SafeQuery(query, args)
 	return q
 }
 
@@ -90,6 +92,33 @@ func (q *CreateTableQuery) ForeignKey(query string, args ...interface{}) *Create
 	return q
 }
 
+func (q *CreateTableQuery) PartitionBy(query string, args ...interface{}) *CreateTableQuery {
+	q.partitionBy = schema.SafeQuery(query, args)
+	return q
+}
+
+func (q *CreateTableQuery) TableSpace(tablespace string) *CreateTableQuery {
+	q.tablespace = schema.UnsafeIdent(tablespace)
+	return q
+}
+
+func (q *CreateTableQuery) WithForeignKeys() *CreateTableQuery {
+	for _, relation := range q.tableModel.Table().Relations {
+		if relation.Type == schema.ManyToManyRelation ||
+		    relation.Type == schema.HasManyRelation {
+			continue
+		}		
+		q = q.ForeignKey("(?) REFERENCES ? (?)",
+			Safe(appendColumns(nil, "", relation.BaseFields)),
+			relation.JoinTable.SQLName,
+			Safe(appendColumns(nil, "", relation.JoinFields)),
+		)
+	}
+	return q
+}
+
+//------------------------------------------------------------------------------
+
 func (q *CreateTableQuery) Operation() string {
 	return "CREATE TABLE"
 }
@@ -107,7 +136,7 @@ func (q *CreateTableQuery) AppendQuery(fmter schema.Formatter, b []byte) (_ []by
 		b = append(b, "TEMP "...)
 	}
 	b = append(b, "TABLE "...)
-	if q.ifNotExists {
+	if q.ifNotExists && fmter.Dialect().Features().Has(feature.TableNotExists) {
 		b = append(b, "IF NOT EXISTS "...)
 	}
 	b, err = q.appendFirstTable(fmter, b)
@@ -128,8 +157,13 @@ func (q *CreateTableQuery) AppendQuery(fmter schema.Formatter, b []byte) (_ []by
 		if field.NotNull {
 			b = append(b, " NOT NULL"...)
 		}
-		if fmter.Dialect().Features().Has(feature.AutoIncrement) && field.AutoIncrement {
-			b = append(b, " AUTO_INCREMENT"...)
+		if field.AutoIncrement {
+			switch {
+			case fmter.Dialect().Features().Has(feature.AutoIncrement):
+				b = append(b, " AUTO_INCREMENT"...)
+			case fmter.Dialect().Features().Has(feature.Identity):
+				b = append(b, " IDENTITY"...)
+			}
 		}
 		if field.SQLDefault != "" {
 			b = append(b, " DEFAULT "...)

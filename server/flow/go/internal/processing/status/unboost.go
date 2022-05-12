@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -91,13 +91,13 @@ func (p *processor) Unboost(ctx context.Context, requestingAccount *gtsmodel.Acc
 		gtsBoost.BoostOf.Account = targetStatus.Account
 
 		// send it back to the processor for async processing
-		p.fromClientAPI <- messages.FromClientAPI{
+		p.clientWorker.Queue(messages.FromClientAPI{
 			APObjectType:   ap.ActivityAnnounce,
 			APActivityType: ap.ActivityUndo,
 			GTSModel:       gtsBoost,
 			OriginAccount:  requestingAccount,
 			TargetAccount:  targetStatus.Account,
-		}
+		})
 	}
 
 	apiStatus, err := p.tc.StatusToAPIStatus(ctx, targetStatus, requestingAccount)

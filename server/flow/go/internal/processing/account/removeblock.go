@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -54,13 +54,13 @@ func (p *processor) BlockRemove(ctx context.Context, requestingAccount *gtsmodel
 
 	// block status changed so send the UNDO activity to the channel for async processing
 	if blockChanged {
-		p.fromClientAPI <- messages.FromClientAPI{
+		p.clientWorker.Queue(messages.FromClientAPI{
 			APObjectType:   ap.ActivityBlock,
 			APActivityType: ap.ActivityUndo,
 			GTSModel:       block,
 			OriginAccount:  requestingAccount,
 			TargetAccount:  targetAccount,
-		}
+		})
 	}
 
 	// return whatever relationship results from all this

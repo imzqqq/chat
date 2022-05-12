@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -94,6 +94,36 @@ type Status struct {
 	// so the user may redraft from the source text without the client having to reverse-engineer
 	// the original text from the HTML content.
 	Text string `json:"text"`
+}
+
+/*
+** The below functions are added onto the API model status so that it satisfies
+** the Preparable interface in internal/timeline.
+ */
+
+func (s *Status) GetID() string {
+	return s.ID
+}
+
+func (s *Status) GetAccountID() string {
+	if s.Account != nil {
+		return s.Account.ID
+	}
+	return ""
+}
+
+func (s *Status) GetBoostOfID() string {
+	if s.Reblog != nil {
+		return s.Reblog.ID
+	}
+	return ""
+}
+
+func (s *Status) GetBoostOfAccountID() string {
+	if s.Reblog != nil && s.Reblog.Account != nil {
+		return s.Reblog.Account.ID
+	}
+	return ""
 }
 
 // StatusReblogged represents a reblogged status.

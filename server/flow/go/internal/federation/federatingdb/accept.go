@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -29,7 +29,7 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/messages"
-	"github.com/superseriousbusiness/gotosocial/internal/util"
+	"github.com/superseriousbusiness/gotosocial/internal/uris"
 )
 
 func (f *federatingDB) Accept(ctx context.Context, accept vocab.ActivityStreamsAccept) error {
@@ -48,9 +48,9 @@ func (f *federatingDB) Accept(ctx context.Context, accept vocab.ActivityStreamsA
 		l.Debug("entering Accept")
 	}
 
-	receivingAccount, _, fromFederatorChan := extractFromCtx(ctx)
-	if receivingAccount == nil || fromFederatorChan == nil {
-		// If the receiving account or federator channel wasn't set on the context, that means this request didn't pass
+	receivingAccount, _ := extractFromCtx(ctx)
+	if receivingAccount == nil {
+		// If the receiving account  wasn't set on the context, that means this request didn't pass
 		// through the API, but came from inside GtS as the result of another activity on this instance. That being so,
 		// we can safely just ignore this activity, since we know we've already processed it elsewhere.
 		return nil
@@ -66,7 +66,7 @@ func (f *federatingDB) Accept(ctx context.Context, accept vocab.ActivityStreamsA
 		if iter.IsIRI() {
 			// we have just the URI of whatever is being accepted, so we need to find out what it is
 			acceptedObjectIRI := iter.GetIRI()
-			if util.IsFollowPath(acceptedObjectIRI) {
+			if uris.IsFollowPath(acceptedObjectIRI) {
 				// ACCEPT FOLLOW
 				gtsFollowRequest := &gtsmodel.FollowRequest{}
 				if err := f.db.GetWhere(ctx, []db.Where{{Key: "uri", Value: acceptedObjectIRI.String()}}, gtsFollowRequest); err != nil {
@@ -82,12 +82,12 @@ func (f *federatingDB) Accept(ctx context.Context, accept vocab.ActivityStreamsA
 					return err
 				}
 
-				fromFederatorChan <- messages.FromFederator{
+				f.fedWorker.Queue(messages.FromFederator{
 					APObjectType:     ap.ActivityFollow,
 					APActivityType:   ap.ActivityAccept,
 					GTSModel:         follow,
 					ReceivingAccount: receivingAccount,
-				}
+				})
 
 				return nil
 			}
@@ -97,9 +97,7 @@ func (f *federatingDB) Accept(ctx context.Context, accept vocab.ActivityStreamsA
 		if iter.GetType() == nil {
 			continue
 		}
-		switch iter.GetType().GetTypeName() {
-		// we have the whole object so we can figure out what we're accepting
-		case ap.ActivityFollow:
+		if iter.GetType().GetTypeName() == ap.ActivityFollow {
 			// ACCEPT FOLLOW
 			asFollow, ok := iter.GetType().(vocab.ActivityStreamsFollow)
 			if !ok {
@@ -119,12 +117,12 @@ func (f *federatingDB) Accept(ctx context.Context, accept vocab.ActivityStreamsA
 				return err
 			}
 
-			fromFederatorChan <- messages.FromFederator{
+			f.fedWorker.Queue(messages.FromFederator{
 				APObjectType:     ap.ActivityFollow,
 				APActivityType:   ap.ActivityAccept,
 				GTSModel:         follow,
 				ReceivingAccount: receivingAccount,
-			}
+			})
 
 			return nil
 		}

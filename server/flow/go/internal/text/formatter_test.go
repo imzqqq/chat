@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -20,18 +20,16 @@ package text_test
 
 import (
 	"github.com/stretchr/testify/suite"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/text"
+	"github.com/superseriousbusiness/gotosocial/testrig"
 )
 
-// nolint
 type TextStandardTestSuite struct {
 	// standard suite interfaces
 	suite.Suite
-	config *config.Config
-	db     db.DB
+	db db.DB
 
 	// standard suite models
 	testTokens       map[string]*gtsmodel.Token
@@ -46,4 +44,30 @@ type TextStandardTestSuite struct {
 
 	// module being tested
 	formatter text.Formatter
+}
+
+func (suite *TextStandardTestSuite) SetupSuite() {
+	suite.testTokens = testrig.NewTestTokens()
+	suite.testClients = testrig.NewTestClients()
+	suite.testApplications = testrig.NewTestApplications()
+	suite.testUsers = testrig.NewTestUsers()
+	suite.testAccounts = testrig.NewTestAccounts()
+	suite.testAttachments = testrig.NewTestAttachments()
+	suite.testStatuses = testrig.NewTestStatuses()
+	suite.testTags = testrig.NewTestTags()
+	suite.testMentions = testrig.NewTestMentions()
+}
+
+func (suite *TextStandardTestSuite) SetupTest() {
+	testrig.InitTestLog()
+	testrig.InitTestConfig()
+
+	suite.db = testrig.NewTestDB()
+	suite.formatter = text.NewFormatter(suite.db)
+
+	testrig.StandardDBSetup(suite.db, nil)
+}
+
+func (suite *TextStandardTestSuite) TearDownTest() {
+	testrig.StandardDBTeardown(suite.db)
 }

@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -64,6 +64,27 @@ type Status struct {
 	Boostable                bool               `validate:"-" bun:",notnull"`                                                                          // This status can be boosted/reblogged
 	Replyable                bool               `validate:"-" bun:",notnull"`                                                                          // This status can be replied to
 	Likeable                 bool               `validate:"-" bun:",notnull"`                                                                          // This status can be liked/faved
+}
+
+/*
+	The below functions are added onto the gtsmodel status so that it satisfies
+	the Timelineable interface in internal/timeline.
+*/
+
+func (s *Status) GetID() string {
+	return s.ID
+}
+
+func (s *Status) GetAccountID() string {
+	return s.AccountID
+}
+
+func (s *Status) GetBoostOfID() string {
+	return s.BoostOfID
+}
+
+func (s *Status) GetBoostOfAccountID() string {
+	return s.BoostOfAccountID
 }
 
 // StatusToTag is an intermediate struct to facilitate the many2many relationship between a status and one or more tags.

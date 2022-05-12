@@ -1,7 +1,7 @@
 site_name: GoToSocial Documentation
 theme: readthedocs
 repo_url: https://github.com/superseriousbusiness/gotosocial
-copyright: GoToSocial is licensed under the GNU AGPL v3 LICENSE. Copyright (C) 2021 the GoToSocial Authors.
+copyright: GoToSocial is licensed under the GNU AGPL v3 LICENSE. Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 plugins:
   - render_swagger
 
@@ -10,3 +10,42 @@ extra_javascript:
 
 extra_css:
   - assets/css/swagger-ui.css
+
+nav:
+  - "Home": "index.md"
+  - "Installation Guide":
+    - "installation_guide/index.md"
+    - "installation_guide/binary.md"
+    - "installation_guide/docker.md"
+    - "installation_guide/nginx.md"
+    - "installation_guide/apache-httpd.md"
+    - "installation_guide/third_party.md"
+    - "installation_guide/websocket.md"
+  - "Configuration":
+    - "configuration/index.md"
+    - "configuration/general.md"
+    - "configuration/database.md"
+    - "configuration/web.md"
+    - "configuration/accounts.md"
+    - "configuration/media.md"
+    - "configuration/storage.md"
+    - "configuration/statuses.md"
+    - "configuration/letsencrypt.md"
+    - "configuration/oidc.md"
+    - "configuration/smtp.md"
+    - "configuration/syslog.md"
+  - "Admin":
+    - "admin/admin_panel.md"
+    - "admin/cli.md"
+    - "admin/backup_and_restore.md"
+  - "User Guide":
+    - "user_guide/posts.md"
+    - "user_guide/password_management.md"
+  - "Federation":
+    - "federation/index.md"
+    - "federation/glossary.md"
+    - "federation/security.md"
+    - "federation/behaviors/outbox.md"
+    - "federation/behaviors/conversation_threads.md"
+  - "API Documentation":
+    - "api/swagger.md"

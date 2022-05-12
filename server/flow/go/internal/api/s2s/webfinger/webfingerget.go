@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -26,25 +26,49 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"github.com/superseriousbusiness/gotosocial/internal/util"
+	"github.com/spf13/viper"
+	"github.com/superseriousbusiness/gotosocial/internal/ap"
+	"github.com/superseriousbusiness/gotosocial/internal/config"
 )
 
-// WebfingerGETRequest handles requests to, for example, https://example.org/.well-known/webfinger?resource=acct:some_user@example.org
+// WebfingerGETRequest swagger:operation GET /.well-known/webfinger webfingerGet
+//
+// Handles webfinger account lookup requests.
+//
+// For example, a GET to `https://goblin.technology/.well-known/webfinger?resource=acct:tobi@goblin.technology` would return:
+//
+// ```
+//  {"subject":"acct:tobi@goblin.technology","aliases":["https://goblin.technology/users/tobi","https://goblin.technology/@tobi"],"links":[{"rel":"http://webfinger.net/rel/profile-page","type":"text/html","href":"https://goblin.technology/@tobi"},{"rel":"self","type":"application/activity+json","href":"https://goblin.technology/users/tobi"}]}
+// ```
+//
+// See: https://webfinger.net/
+//
+// ---
+// tags:
+// - webfinger
+//
+// produces:
+// - application/json
+//
+// responses:
+//   '200':
+//     schema:
+//       "$ref": "#/definitions/wellKnownResponse"
 func (m *Module) WebfingerGETRequest(c *gin.Context) {
 	l := logrus.WithFields(logrus.Fields{
 		"func":       "WebfingerGETRequest",
 		"user-agent": c.Request.UserAgent(),
 	})
 
-	q, set := c.GetQuery("resource")
-	if !set || q == "" {
+	resourceQuery, set := c.GetQuery("resource")
+	if !set || resourceQuery == "" {
 		l.Debug("aborting request because no resource was set in query")
 		c.JSON(http.StatusBadRequest, gin.H{"error": "no 'resource' in request query"})
 		return
 	}
 
 	// remove the acct: prefix if it's present
-	trimAcct := strings.TrimPrefix(q, "acct:")
+	trimAcct := strings.TrimPrefix(resourceQuery, "acct:")
 	// remove the first @ in @whatever@example.org if it's present
 	namestring := strings.TrimPrefix(trimAcct, "@")
 
@@ -59,24 +83,27 @@ func (m *Module) WebfingerGETRequest(c *gin.Context) {
 	}
 
 	username := strings.ToLower(usernameAndAccountDomain[0])
-	accountDomain := strings.ToLower(usernameAndAccountDomain[1])
-	if username == "" || accountDomain == "" {
+	requestedAccountDomain := strings.ToLower(usernameAndAccountDomain[1])
+	if username == "" || requestedAccountDomain == "" {
 		l.Debug("aborting request because username or domain was empty")
 		c.JSON(http.StatusBadRequest, gin.H{"error": "bad request"})
 		return
 	}
 
-	if accountDomain != m.config.AccountDomain && accountDomain != m.config.Host {
-		l.Debugf("aborting request because accountDomain %s does not belong to this instance", accountDomain)
-		c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("accountDomain %s does not belong to this instance", accountDomain)})
+	accountDomain := viper.GetString(config.Keys.AccountDomain)
+	host := viper.GetString(config.Keys.Host)
+
+	if requestedAccountDomain != accountDomain && requestedAccountDomain != host {
+		l.Debugf("aborting request because accountDomain %s does not belong to this instance", requestedAccountDomain)
+		c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("accountDomain %s does not belong to this instance", requestedAccountDomain)})
 		return
 	}
 
 	// transfer the signature verifier from the gin context to the request context
 	ctx := c.Request.Context()
-	verifier, signed := c.Get(string(util.APRequestingPublicKeyVerifier))
+	verifier, signed := c.Get(string(ap.ContextRequestingPublicKeyVerifier))
 	if signed {
-		ctx = context.WithValue(ctx, util.APRequestingPublicKeyVerifier, verifier)
+		ctx = context.WithValue(ctx, ap.ContextRequestingPublicKeyVerifier, verifier)
 	}
 
 	resp, err := m.processor.GetWebfingerAccount(ctx, username)

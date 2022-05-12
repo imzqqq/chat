@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -29,17 +29,17 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/superseriousbusiness/activity/streams"
 	"github.com/superseriousbusiness/activity/streams/vocab"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/federation/dereferencing"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
+	"github.com/superseriousbusiness/gotosocial/internal/messages"
 	"github.com/superseriousbusiness/gotosocial/internal/transport"
+	"github.com/superseriousbusiness/gotosocial/internal/worker"
 	"github.com/superseriousbusiness/gotosocial/testrig"
 )
 
 type DereferencerStandardTestSuite struct {
 	suite.Suite
-	config  *config.Config
 	db      db.DB
 	storage *kv.KVStore
 
@@ -52,20 +52,19 @@ type DereferencerStandardTestSuite struct {
 	dereferencer dereferencing.Dereferencer
 }
 
-func (suite *DereferencerStandardTestSuite) SetupSuite() {
+func (suite *DereferencerStandardTestSuite) SetupTest() {
+	testrig.InitTestConfig()
+	testrig.InitTestLog()
+
 	suite.testAccounts = testrig.NewTestAccounts()
 	suite.testRemoteStatuses = testrig.NewTestFediStatuses()
 	suite.testRemotePeople = testrig.NewTestFediPeople()
 	suite.testRemoteGroups = testrig.NewTestFediGroups()
 	suite.testRemoteAttachments = testrig.NewTestFediAttachments("../../../testrig/media")
-}
 
-func (suite *DereferencerStandardTestSuite) SetupTest() {
-	suite.config = testrig.NewTestConfig()
 	suite.db = testrig.NewTestDB()
-	testrig.InitTestLog()
 	suite.storage = testrig.NewTestStorage()
-	suite.dereferencer = dereferencing.NewDereferencer(suite.config, suite.db, testrig.NewTestTypeConverter(suite.db), suite.mockTransportController(), testrig.NewTestMediaHandler(suite.db, suite.storage))
+	suite.dereferencer = dereferencing.NewDereferencer(suite.db, testrig.NewTestTypeConverter(suite.db), suite.mockTransportController(), testrig.NewTestMediaManager(suite.db, suite.storage))
 	testrig.StandardDBSetup(suite.db, nil)
 }
 
@@ -151,6 +150,7 @@ func (suite *DereferencerStandardTestSuite) mockTransportController() transport.
 
 		return response, nil
 	}
+	fedWorker := worker.New[messages.FromFederator](-1, -1)
 	mockClient := testrig.NewMockHTTPClient(do)
-	return testrig.NewTestTransportController(mockClient, suite.db)
+	return testrig.NewTestTransportController(mockClient, suite.db, fedWorker)
 }

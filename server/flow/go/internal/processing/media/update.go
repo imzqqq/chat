@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -45,7 +45,7 @@ func (p *processor) Update(ctx context.Context, account *gtsmodel.Account, media
 	}
 
 	if form.Description != nil {
-		attachment.Description = text.RemoveHTML(*form.Description)
+		attachment.Description = text.SanitizeCaption(*form.Description)
 		if err := p.db.UpdateByPrimaryKey(ctx, attachment); err != nil {
 			return nil, gtserror.NewErrorInternalError(fmt.Errorf("database error updating description: %s", err))
 		}

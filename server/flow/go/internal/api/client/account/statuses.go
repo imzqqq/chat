@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -19,11 +19,13 @@
 package account
 
 import (
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"strconv"
 
+	"github.com/sirupsen/logrus"
+
 	"github.com/gin-gonic/gin"
+	"github.com/superseriousbusiness/gotosocial/internal/api"
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
 )
 
@@ -58,6 +60,12 @@ import (
 //   default: false
 //   in: query
 //   required: false
+// - name: exclude_reblogs
+//   type: boolean
+//   description: Exclude statuses that are a reblog/boost of another status.
+//   default: false
+//   in: query
+//   required: false
 // - name: max_id
 //   type: string
 //   description: |-
@@ -73,7 +81,7 @@ import (
 //   required: false
 // - name: pinned_only
 //   type: boolean
-//   description: Show only pinned statuses. In other words,e xclude statuses that are not pinned to the given account ID.
+//   description: Show only pinned statuses. In other words, exclude statuses that are not pinned to the given account ID.
 //   default: false
 //   in: query
 //   required: false
@@ -118,6 +126,11 @@ func (m *Module) AccountStatusesGETHandler(c *gin.Context) {
 		return
 	}
 
+	if _, err := api.NegotiateAccept(c, api.JSONAcceptHeaders...); err != nil {
+		c.JSON(http.StatusNotAcceptable, gin.H{"error": err.Error()})
+		return
+	}
+
 	targetAcctID := c.Param(IDKey)
 	if targetAcctID == "" {
 		l.Debug("no account id specified in query")
@@ -142,11 +155,23 @@ func (m *Module) AccountStatusesGETHandler(c *gin.Context) {
 	if excludeRepliesString != "" {
 		i, err := strconv.ParseBool(excludeRepliesString)
 		if err != nil {
-			l.Debugf("error parsing replies string: %s", err)
+			l.Debugf("error parsing exclude replies string: %s", err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": "couldn't parse exclude replies query param"})
 			return
 		}
 		excludeReplies = i
+	}
+
+	excludeReblogs := false
+	excludeReblogsString := c.Query(ExcludeReblogsKey)
+	if excludeReblogsString != "" {
+		i, err := strconv.ParseBool(excludeReblogsString)
+		if err != nil {
+			l.Debugf("error parsing exclude reblogs string: %s", err)
+			c.JSON(http.StatusBadRequest, gin.H{"error": "couldn't parse exclude reblogs query param"})
+			return
+		}
+		excludeReblogs = i
 	}
 
 	maxID := ""
@@ -187,17 +212,17 @@ func (m *Module) AccountStatusesGETHandler(c *gin.Context) {
 
 	publicOnly := false
 	publicOnlyString := c.Query(OnlyPublicKey)
-	if mediaOnlyString != "" {
+	if publicOnlyString != "" {
 		i, err := strconv.ParseBool(publicOnlyString)
 		if err != nil {
 			l.Debugf("error parsing public only string: %s", err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": "couldn't parse public only query param"})
 			return
 		}
-		mediaOnly = i
+		publicOnly = i
 	}
 
-	statuses, errWithCode := m.processor.AccountStatusesGet(c.Request.Context(), authed, targetAcctID, limit, excludeReplies, maxID, minID, pinnedOnly, mediaOnly, publicOnly)
+	statuses, errWithCode := m.processor.AccountStatusesGet(c.Request.Context(), authed, targetAcctID, limit, excludeReplies, excludeReblogs, maxID, minID, pinnedOnly, mediaOnly, publicOnly)
 	if errWithCode != nil {
 		l.Debugf("error from processor account statuses get: %s", errWithCode)
 		c.JSON(errWithCode.Code(), gin.H{"error": errWithCode.Safe()})

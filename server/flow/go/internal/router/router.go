@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -24,14 +24,16 @@ import (
 	"net/http"
 	"time"
 
+	"codeberg.org/gruf/go-debug"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"golang.org/x/crypto/acme/autocert"
 )
 
-var (
+const (
 	readTimeout       = 60 * time.Second
 	writeTimeout      = 30 * time.Second
 	idleTimeout       = 30 * time.Second
@@ -46,7 +48,7 @@ type Router interface {
 	AttachMiddleware(handler gin.HandlerFunc)
 	// Attach 404 NoRoute handler
 	AttachNoRouteHandler(handler gin.HandlerFunc)
-	// Add Gin StaticFile handler
+	// Add Gin StaticFS handler
 	AttachStaticFS(relativePath string, fs http.FileSystem)
 	// Start the router
 	Start()
@@ -58,39 +60,79 @@ type Router interface {
 type router struct {
 	engine      *gin.Engine
 	srv         *http.Server
-	config      *config.Config
 	certManager *autocert.Manager
 }
 
-// Add Gin StaticFile handler
+// Add Gin StaticFS handler
 func (r *router) AttachStaticFS(relativePath string, fs http.FileSystem) {
 	r.engine.StaticFS(relativePath, fs)
 }
 
 // Start starts the router nicely. It will serve two handlers if letsencrypt is enabled, and only the web/API handler if letsencrypt is not enabled.
 func (r *router) Start() {
-	if r.config.LetsEncryptConfig.Enabled {
-		// serve the http handler on the selected letsencrypt port, for receiving letsencrypt requests and solving their devious riddles
+	var (
+		keys = config.Keys
+
+		// listen is the server start function, by
+		// default pointing to regular HTTP listener,
+		// but updated to TLS if LetsEncrypt is enabled.
+		listen = r.srv.ListenAndServe
+	)
+
+	if viper.GetBool(keys.LetsEncryptEnabled) {
+		// LetsEncrypt support is enabled
+
+		// Prepare an HTTPS-redirect handler for LetsEncrypt fallback
+		redirect := http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+			target := "https://" + r.Host + r.URL.Path
+			if len(r.URL.RawQuery) > 0 {
+				target += "?" + r.URL.RawQuery
+			}
+			http.Redirect(rw, r, target, http.StatusTemporaryRedirect)
+		})
+
+		// Clone HTTP server but with autocert handler
+		srv := r.srv
+		srv.Handler = r.certManager.HTTPHandler(redirect)
+
+		// Start the LetsEncrypt autocert manager HTTP server.
 		go func() {
-			if err := http.ListenAndServe(fmt.Sprintf(":%d", r.config.LetsEncryptConfig.Port), r.certManager.HTTPHandler(http.HandlerFunc(httpsRedirect))); err != nil && err != http.ErrServerClosed {
-				logrus.Fatalf("listen: %s", err)
+			addr := fmt.Sprintf("%s:%d",
+				viper.GetString(keys.BindAddress),
+				viper.GetInt(keys.LetsEncryptPort),
+			)
+
+			logrus.Infof("letsencrypt listening on %s", addr)
+
+			if err := srv.ListenAndServe(); err != nil &&
+				err != http.ErrServerClosed {
+				logrus.Fatalf("letsencrypt: listen: %s", err)
 			}
 		}()
 
-		// and serve the actual TLS handler
-		go func() {
-			if err := r.srv.ListenAndServeTLS("", ""); err != nil && err != http.ErrServerClosed {
-				logrus.Fatalf("listen: %s", err)
-			}
-		}()
-	} else {
-		// no tls required
-		go func() {
-			if err := r.srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-				logrus.Fatalf("listen: %s", err)
-			}
-		}()
+		// TLS is enabled, update the listen function
+		listen = func() error { return r.srv.ListenAndServeTLS("", "") }
 	}
+
+	// Pass the server handler through a debug pprof middleware handler.
+	// For standard production builds this will be a no-op, but when the
+	// "debug" or "debugenv" build-tag is set pprof stats will be served
+	// at the standard "/debug/pprof" URL.
+	r.srv.Handler = debug.WithPprof(r.srv.Handler)
+	if debug.DEBUG() {
+		// Profiling requires timeouts longer than 30s, so reset these.
+		logrus.Warn("resetting http.Server{} timeout to support profiling")
+		r.srv.ReadTimeout = 0
+		r.srv.WriteTimeout = 0
+	}
+
+	// Start the main listener.
+	go func() {
+		logrus.Infof("listening on %s", r.srv.Addr)
+		if err := listen(); err != nil && err != http.ErrServerClosed {
+			logrus.Fatalf("listen: %s", err)
+		}
+	}()
 }
 
 // Stop shuts down the router nicely
@@ -102,7 +144,9 @@ func (r *router) Stop(ctx context.Context) error {
 //
 // The given DB is only used in the New function for parsing config values, and is not otherwise
 // pinned to the router.
-func New(ctx context.Context, cfg *config.Config, db db.DB) (Router, error) {
+func New(ctx context.Context, db db.DB) (Router, error) {
+	keys := config.Keys
+
 	gin.SetMode(gin.ReleaseMode)
 
 	// create the actual engine here -- this is the core request routing handler for gts
@@ -115,31 +159,40 @@ func New(ctx context.Context, cfg *config.Config, db db.DB) (Router, error) {
 	engine.MaxMultipartMemory = 8 << 20
 
 	// set up IP forwarding via x-forward-* headers.
-	if err := engine.SetTrustedProxies(cfg.TrustedProxies); err != nil {
+	trustedProxies := viper.GetStringSlice(keys.TrustedProxies)
+	if err := engine.SetTrustedProxies(trustedProxies); err != nil {
 		return nil, err
 	}
 
 	// enable cors on the engine
-	if err := useCors(cfg, engine); err != nil {
+	if err := useCors(engine); err != nil {
 		return nil, err
 	}
 
-	// set template functions
-	loadTemplateFunctions(engine)
-
-	// load templates onto the engine
-	if err := loadTemplates(cfg, engine); err != nil {
+	// enable gzip compression on the engine
+	if err := useGzip(engine); err != nil {
 		return nil, err
 	}
 
 	// enable session store middleware on the engine
-	if err := useSession(ctx, cfg, db, engine); err != nil {
+	if err := useSession(ctx, db, engine); err != nil {
+		return nil, err
+	}
+
+	// set template functions
+	LoadTemplateFunctions(engine)
+
+	// load templates onto the engine
+	if err := loadTemplates(engine); err != nil {
 		return nil, err
 	}
 
 	// create the http server here, passing the gin engine as handler
+	bindAddress := viper.GetString(keys.BindAddress)
+	port := viper.GetInt(keys.Port)
+	listen := fmt.Sprintf("%s:%d", bindAddress, port)
 	s := &http.Server{
-		Addr:              fmt.Sprintf(":%d", cfg.Port),
+		Addr:              listen,
 		Handler:           engine,
 		ReadTimeout:       readTimeout,
 		WriteTimeout:      writeTimeout,
@@ -149,15 +202,19 @@ func New(ctx context.Context, cfg *config.Config, db db.DB) (Router, error) {
 
 	// We need to spawn the underlying server slightly differently depending on whether lets encrypt is enabled or not.
 	// In either case, the gin engine will still be used for routing requests.
+	leEnabled := viper.GetBool(keys.LetsEncryptEnabled)
 
 	var m *autocert.Manager
-	if cfg.LetsEncryptConfig.Enabled {
+	if leEnabled {
 		// le IS enabled, so roll up an autocert manager for handling letsencrypt requests
+		host := viper.GetString(keys.Host)
+		leCertDir := viper.GetString(keys.LetsEncryptCertDir)
+		leEmailAddress := viper.GetString(keys.LetsEncryptEmailAddress)
 		m = &autocert.Manager{
 			Prompt:     autocert.AcceptTOS,
-			HostPolicy: autocert.HostWhitelist(cfg.Host),
-			Cache:      autocert.DirCache(cfg.LetsEncryptConfig.CertDir),
-			Email:      cfg.LetsEncryptConfig.EmailAddress,
+			HostPolicy: autocert.HostWhitelist(host),
+			Cache:      autocert.DirCache(leCertDir),
+			Email:      leEmailAddress,
 		}
 		s.TLSConfig = m.TLSConfig()
 	}
@@ -165,17 +222,6 @@ func New(ctx context.Context, cfg *config.Config, db db.DB) (Router, error) {
 	return &router{
 		engine:      engine,
 		srv:         s,
-		config:      cfg,
 		certManager: m,
 	}, nil
-}
-
-func httpsRedirect(w http.ResponseWriter, req *http.Request) {
-	target := "https://" + req.Host + req.URL.Path
-
-	if len(req.URL.RawQuery) > 0 {
-		target += "?" + req.URL.RawQuery
-	}
-
-	http.Redirect(w, req, target, http.StatusTemporaryRedirect)
 }

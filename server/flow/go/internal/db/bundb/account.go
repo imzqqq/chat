@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -22,8 +22,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
+	"github.com/spf13/viper"
 	"github.com/superseriousbusiness/gotosocial/internal/cache"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
@@ -32,9 +34,8 @@ import (
 )
 
 type accountDB struct {
-	config *config.Config
-	conn   *DBConn
-	cache  *cache.AccountCache
+	conn  *DBConn
+	cache *cache.AccountCache
 }
 
 func (a *accountDB) newAccountQ(account *gtsmodel.Account) *bun.SelectQuery {
@@ -127,18 +128,18 @@ func (a *accountDB) GetInstanceAccount(ctx context.Context, domain string) (*gts
 
 	q := a.newAccountQ(account)
 
-	if domain == "" {
+	if domain != "" {
 		q = q.
 			Where("account.username = ?", domain).
 			Where("account.domain = ?", domain)
 	} else {
+		host := viper.GetString(config.Keys.Host)
 		q = q.
-			Where("account.username = ?", domain).
+			Where("account.username = ?", host).
 			WhereGroup(" AND ", whereEmptyOrNull("domain"))
 	}
 
-	err := q.Scan(ctx)
-	if err != nil {
+	if err := q.Scan(ctx); err != nil {
 		return nil, a.conn.ProcessError(err)
 	}
 	return account, nil
@@ -155,8 +156,7 @@ func (a *accountDB) GetAccountLastPosted(ctx context.Context, accountID string) 
 		Where("account_id = ?", accountID).
 		Column("created_at")
 
-	err := q.Scan(ctx)
-	if err != nil {
+	if err := q.Scan(ctx); err != nil {
 		return time.Time{}, a.conn.ProcessError(err)
 	}
 	return status.CreatedAt, nil
@@ -168,11 +168,12 @@ func (a *accountDB) SetAccountHeaderOrAvatar(ctx context.Context, mediaAttachmen
 	}
 
 	var headerOrAVI string
-	if mediaAttachment.Avatar {
+	switch {
+	case mediaAttachment.Avatar:
 		headerOrAVI = "avatar"
-	} else if mediaAttachment.Header {
+	case mediaAttachment.Header:
 		headerOrAVI = "header"
-	} else {
+	default:
 		return errors.New("given media attachment was neither a header nor an avatar")
 	}
 
@@ -199,11 +200,10 @@ func (a *accountDB) GetLocalAccountByUsername(ctx context.Context, username stri
 	account := new(gtsmodel.Account)
 
 	q := a.newAccountQ(account).
-		Where("username = ?", username).
+		Where("username = ?", strings.ToLower(username)). // usernames on our instance will always be lowercase
 		WhereGroup(" AND ", whereEmptyOrNull("domain"))
 
-	err := q.Scan(ctx)
-	if err != nil {
+	if err := q.Scan(ctx); err != nil {
 		return nil, a.conn.ProcessError(err)
 	}
 	return account, nil
@@ -231,7 +231,7 @@ func (a *accountDB) CountAccountStatuses(ctx context.Context, accountID string) 
 		Count(ctx)
 }
 
-func (a *accountDB) GetAccountStatuses(ctx context.Context, accountID string, limit int, excludeReplies bool, maxID string, minID string, pinnedOnly bool, mediaOnly bool, publicOnly bool) ([]*gtsmodel.Status, db.Error) {
+func (a *accountDB) GetAccountStatuses(ctx context.Context, accountID string, limit int, excludeReplies bool, excludeReblogs bool, maxID string, minID string, pinnedOnly bool, mediaOnly bool, publicOnly bool) ([]*gtsmodel.Status, db.Error) {
 	statuses := []*gtsmodel.Status{}
 
 	q := a.conn.
@@ -251,6 +251,10 @@ func (a *accountDB) GetAccountStatuses(ctx context.Context, accountID string, li
 		q = q.WhereGroup(" AND ", whereEmptyOrNull("in_reply_to_id"))
 	}
 
+	if excludeReblogs {
+		q = q.WhereGroup(" AND ", whereEmptyOrNull("boost_of_id"))
+	}
+
 	if maxID != "" {
 		q = q.Where("id < ?", maxID)
 	}
@@ -264,10 +268,16 @@ func (a *accountDB) GetAccountStatuses(ctx context.Context, accountID string, li
 	}
 
 	if mediaOnly {
+		// attachments are stored as a json object;
+		// this implementation differs between sqlite and postgres,
+		// so we have to be very thorough to cover all eventualities
 		q = q.WhereGroup(" AND ", func(q *bun.SelectQuery) *bun.SelectQuery {
 			return q.
-				WhereOr("? IS NOT NULL", bun.Ident("attachments")).
-				WhereOr("attachments != '{}'")
+				Where("? IS NOT NULL", bun.Ident("attachments")).
+				Where("? != ''", bun.Ident("attachments")).
+				Where("? != 'null'", bun.Ident("attachments")).
+				Where("? != '{}'", bun.Ident("attachments")).
+				Where("? != '[]'", bun.Ident("attachments"))
 		})
 	}
 
@@ -308,8 +318,7 @@ func (a *accountDB) GetAccountBlocks(ctx context.Context, accountID string, maxI
 		fq = fq.Limit(limit)
 	}
 
-	err := fq.Scan(ctx)
-	if err != nil {
+	if err := fq.Scan(ctx); err != nil {
 		return nil, "", "", a.conn.ProcessError(err)
 	}
 

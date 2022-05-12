@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -22,10 +22,13 @@ import (
 	"codeberg.org/gruf/go-store/kv"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/federation"
+	"github.com/superseriousbusiness/gotosocial/internal/media"
+	"github.com/superseriousbusiness/gotosocial/internal/messages"
 	"github.com/superseriousbusiness/gotosocial/internal/transport"
+	"github.com/superseriousbusiness/gotosocial/internal/worker"
 )
 
 // NewTestFederator returns a federator with the given database and (mock!!) transport controller.
-func NewTestFederator(db db.DB, tc transport.Controller, storage *kv.KVStore) federation.Federator {
-	return federation.NewFederator(db, NewTestFederatingDB(db), tc, NewTestConfig(), NewTestTypeConverter(db), NewTestMediaHandler(db, storage))
+func NewTestFederator(db db.DB, tc transport.Controller, storage *kv.KVStore, mediaManager media.Manager, fedWorker *worker.Worker[messages.FromFederator]) federation.Federator {
+	return federation.NewFederator(db, NewTestFederatingDB(db, fedWorker), tc, NewTestTypeConverter(db), mediaManager)
 }

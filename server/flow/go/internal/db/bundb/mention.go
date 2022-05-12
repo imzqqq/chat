@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -22,16 +22,14 @@ import (
 	"context"
 
 	"github.com/ReneKroon/ttlcache"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/uptrace/bun"
 )
 
 type mentionDB struct {
-	config *config.Config
-	conn   *DBConn
-	cache  *ttlcache.Cache
+	conn  *DBConn
+	cache *ttlcache.Cache
 }
 
 func (m *mentionDB) newMentionQ(i interface{}) *bun.SelectQuery {
@@ -48,7 +46,13 @@ func (m *mentionDB) getMentionCached(id string) (*gtsmodel.Mention, bool) {
 	if !ok {
 		return nil, false
 	}
-	return v.(*gtsmodel.Mention), true
+
+	mention, ok := v.(*gtsmodel.Mention)
+	if !ok {
+		panic("mention cache entry was not a mention")
+	}
+
+	return mention, true
 }
 
 func (m *mentionDB) putMentionCache(mention *gtsmodel.Mention) {
@@ -61,8 +65,7 @@ func (m *mentionDB) getMentionDB(ctx context.Context, id string) (*gtsmodel.Ment
 	q := m.newMentionQ(mention).
 		Where("mention.id = ?", id)
 
-	err := q.Scan(ctx)
-	if err != nil {
+	if err := q.Scan(ctx); err != nil {
 		return nil, m.conn.ProcessError(err)
 	}
 

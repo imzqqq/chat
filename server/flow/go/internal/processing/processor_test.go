@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -29,31 +29,31 @@ import (
 	"codeberg.org/gruf/go-store/kv"
 	"github.com/stretchr/testify/suite"
 	"github.com/superseriousbusiness/activity/streams"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/email"
 	"github.com/superseriousbusiness/gotosocial/internal/federation"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/media"
+	"github.com/superseriousbusiness/gotosocial/internal/messages"
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
 	"github.com/superseriousbusiness/gotosocial/internal/processing"
 	"github.com/superseriousbusiness/gotosocial/internal/timeline"
 	"github.com/superseriousbusiness/gotosocial/internal/transport"
 	"github.com/superseriousbusiness/gotosocial/internal/typeutils"
+	"github.com/superseriousbusiness/gotosocial/internal/worker"
 	"github.com/superseriousbusiness/gotosocial/testrig"
 )
 
 type ProcessingStandardTestSuite struct {
 	// standard suite interfaces
 	suite.Suite
-	config              *config.Config
 	db                  db.DB
 	storage             *kv.KVStore
+	mediaManager        media.Manager
 	typeconverter       typeutils.TypeConverter
 	transportController transport.Controller
 	federator           federation.Federator
 	oauthServer         oauth.Server
-	mediaHandler        media.Handler
 	timelineManager     timeline.Manager
 	emailSender         email.Sender
 
@@ -93,14 +93,15 @@ func (suite *ProcessingStandardTestSuite) SetupSuite() {
 			Account:     suite.testAccounts["local_account_1"],
 		},
 	}
-	suite.testActivities = testrig.NewTestActivities(suite.testAccounts)
 	suite.testBlocks = testrig.NewTestBlocks()
 }
 
 func (suite *ProcessingStandardTestSuite) SetupTest() {
+	testrig.InitTestConfig()
 	testrig.InitTestLog()
-	suite.config = testrig.NewTestConfig()
+
 	suite.db = testrig.NewTestDB()
+	suite.testActivities = testrig.NewTestActivities(suite.testAccounts)
 	suite.storage = testrig.NewTestStorage()
 	suite.typeconverter = testrig.NewTestTypeConverter(suite.db)
 
@@ -216,18 +217,20 @@ func (suite *ProcessingStandardTestSuite) SetupTest() {
 		}, nil
 	})
 
-	suite.transportController = testrig.NewTestTransportController(httpClient, suite.db)
-	suite.federator = testrig.NewTestFederator(suite.db, suite.transportController, suite.storage)
+	clientWorker := worker.New[messages.FromClientAPI](-1, -1)
+	fedWorker := worker.New[messages.FromFederator](-1, -1)
+
+	suite.transportController = testrig.NewTestTransportController(httpClient, suite.db, fedWorker)
+	suite.mediaManager = testrig.NewTestMediaManager(suite.db, suite.storage)
+	suite.federator = testrig.NewTestFederator(suite.db, suite.transportController, suite.storage, suite.mediaManager, fedWorker)
 	suite.oauthServer = testrig.NewTestOauthServer(suite.db)
-	suite.mediaHandler = testrig.NewTestMediaHandler(suite.db, suite.storage)
-	suite.timelineManager = testrig.NewTestTimelineManager(suite.db)
 	suite.emailSender = testrig.NewEmailSender("../../web/template/", nil)
 
-	suite.processor = processing.NewProcessor(suite.config, suite.typeconverter, suite.federator, suite.oauthServer, suite.mediaHandler, suite.storage, suite.timelineManager, suite.db, suite.emailSender)
+	suite.processor = processing.NewProcessor(suite.typeconverter, suite.federator, suite.oauthServer, suite.mediaManager, suite.storage, suite.db, suite.emailSender, clientWorker, fedWorker)
 
 	testrig.StandardDBSetup(suite.db, suite.testAccounts)
 	testrig.StandardStorageSetup(suite.storage, "../../testrig/media")
-	if err := suite.processor.Start(context.Background()); err != nil {
+	if err := suite.processor.Start(); err != nil {
 		panic(err)
 	}
 }

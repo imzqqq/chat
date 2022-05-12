@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -25,9 +25,12 @@ import (
 	"fmt"
 	"net/url"
 
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"github.com/superseriousbusiness/activity/pub"
 	"github.com/superseriousbusiness/activity/streams"
 	"github.com/superseriousbusiness/activity/streams/vocab"
+	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/gtserror"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 )
@@ -213,62 +216,68 @@ func (c *converter) AccountToAS(ctx context.Context, a *gtsmodel.Account) (vocab
 	// Used as profile avatar.
 	if a.AvatarMediaAttachmentID != "" {
 		if a.AvatarMediaAttachment == nil {
-			avatar := &gtsmodel.MediaAttachment{}
-			if err := c.db.GetByID(ctx, a.AvatarMediaAttachmentID, avatar); err != nil {
+			avatar, err := c.db.GetAttachmentByID(ctx, a.AvatarMediaAttachmentID)
+			if err == nil {
+				a.AvatarMediaAttachment = avatar
+			} else {
+				logrus.Errorf("AccountToAS: error getting Avatar with id %s: %s", a.AvatarMediaAttachmentID, err)
+			}
+		}
+
+		if a.AvatarMediaAttachment != nil {
+			iconProperty := streams.NewActivityStreamsIconProperty()
+
+			iconImage := streams.NewActivityStreamsImage()
+
+			mediaType := streams.NewActivityStreamsMediaTypeProperty()
+			mediaType.Set(a.AvatarMediaAttachment.File.ContentType)
+			iconImage.SetActivityStreamsMediaType(mediaType)
+
+			avatarURLProperty := streams.NewActivityStreamsUrlProperty()
+			avatarURL, err := url.Parse(a.AvatarMediaAttachment.URL)
+			if err != nil {
 				return nil, err
 			}
-			a.AvatarMediaAttachment = avatar
+			avatarURLProperty.AppendIRI(avatarURL)
+			iconImage.SetActivityStreamsUrl(avatarURLProperty)
+
+			iconProperty.AppendActivityStreamsImage(iconImage)
+			person.SetActivityStreamsIcon(iconProperty)
 		}
-
-		iconProperty := streams.NewActivityStreamsIconProperty()
-
-		iconImage := streams.NewActivityStreamsImage()
-
-		mediaType := streams.NewActivityStreamsMediaTypeProperty()
-		mediaType.Set(a.AvatarMediaAttachment.File.ContentType)
-		iconImage.SetActivityStreamsMediaType(mediaType)
-
-		avatarURLProperty := streams.NewActivityStreamsUrlProperty()
-		avatarURL, err := url.Parse(a.AvatarMediaAttachment.URL)
-		if err != nil {
-			return nil, err
-		}
-		avatarURLProperty.AppendIRI(avatarURL)
-		iconImage.SetActivityStreamsUrl(avatarURLProperty)
-
-		iconProperty.AppendActivityStreamsImage(iconImage)
-		person.SetActivityStreamsIcon(iconProperty)
 	}
 
 	// image
 	// Used as profile header.
 	if a.HeaderMediaAttachmentID != "" {
 		if a.HeaderMediaAttachment == nil {
-			header := &gtsmodel.MediaAttachment{}
-			if err := c.db.GetByID(ctx, a.HeaderMediaAttachmentID, header); err != nil {
+			header, err := c.db.GetAttachmentByID(ctx, a.HeaderMediaAttachmentID)
+			if err == nil {
+				a.HeaderMediaAttachment = header
+			} else {
+				logrus.Errorf("AccountToAS: error getting Header with id %s: %s", a.HeaderMediaAttachmentID, err)
+			}
+		}
+
+		if a.HeaderMediaAttachment != nil {
+			headerProperty := streams.NewActivityStreamsImageProperty()
+
+			headerImage := streams.NewActivityStreamsImage()
+
+			mediaType := streams.NewActivityStreamsMediaTypeProperty()
+			mediaType.Set(a.HeaderMediaAttachment.File.ContentType)
+			headerImage.SetActivityStreamsMediaType(mediaType)
+
+			headerURLProperty := streams.NewActivityStreamsUrlProperty()
+			headerURL, err := url.Parse(a.HeaderMediaAttachment.URL)
+			if err != nil {
 				return nil, err
 			}
-			a.HeaderMediaAttachment = header
+			headerURLProperty.AppendIRI(headerURL)
+			headerImage.SetActivityStreamsUrl(headerURLProperty)
+
+			headerProperty.AppendActivityStreamsImage(headerImage)
+			person.SetActivityStreamsImage(headerProperty)
 		}
-
-		headerProperty := streams.NewActivityStreamsImageProperty()
-
-		headerImage := streams.NewActivityStreamsImage()
-
-		mediaType := streams.NewActivityStreamsMediaTypeProperty()
-		mediaType.Set(a.HeaderMediaAttachment.File.ContentType)
-		headerImage.SetActivityStreamsMediaType(mediaType)
-
-		headerURLProperty := streams.NewActivityStreamsUrlProperty()
-		headerURL, err := url.Parse(a.HeaderMediaAttachment.URL)
-		if err != nil {
-			return nil, err
-		}
-		headerURLProperty.AppendIRI(headerURL)
-		headerImage.SetActivityStreamsUrl(headerURLProperty)
-
-		headerProperty.AppendActivityStreamsImage(headerImage)
-		person.SetActivityStreamsImage(headerProperty)
 	}
 
 	return person, nil
@@ -464,9 +473,9 @@ func (c *converter) StatusToAS(ctx context.Context, s *gtsmodel.Status) (vocab.A
 	case gtsmodel.VisibilityDirect:
 		// if DIRECT, then only mentioned users should be added to TO, and nothing to CC
 		for _, m := range s.Mentions {
-			iri, err := url.Parse(m.OriginAccount.URI)
+			iri, err := url.Parse(m.TargetAccount.URI)
 			if err != nil {
-				return nil, fmt.Errorf("StatusToAS: error parsing uri %s: %s", m.OriginAccount.URI, err)
+				return nil, fmt.Errorf("StatusToAS: error parsing uri %s: %s", m.TargetAccount.URI, err)
 			}
 			toProp.AppendIRI(iri)
 		}
@@ -476,9 +485,9 @@ func (c *converter) StatusToAS(ctx context.Context, s *gtsmodel.Status) (vocab.A
 		// if FOLLOWERS ONLY then we want to add followers to TO, and mentions to CC
 		toProp.AppendIRI(authorFollowersURI)
 		for _, m := range s.Mentions {
-			iri, err := url.Parse(m.OriginAccount.URI)
+			iri, err := url.Parse(m.TargetAccount.URI)
 			if err != nil {
-				return nil, fmt.Errorf("StatusToAS: error parsing uri %s: %s", m.OriginAccount.URI, err)
+				return nil, fmt.Errorf("StatusToAS: error parsing uri %s: %s", m.TargetAccount.URI, err)
 			}
 			ccProp.AppendIRI(iri)
 		}
@@ -487,9 +496,9 @@ func (c *converter) StatusToAS(ctx context.Context, s *gtsmodel.Status) (vocab.A
 		toProp.AppendIRI(authorFollowersURI)
 		ccProp.AppendIRI(publicURI)
 		for _, m := range s.Mentions {
-			iri, err := url.Parse(m.OriginAccount.URI)
+			iri, err := url.Parse(m.TargetAccount.URI)
 			if err != nil {
-				return nil, fmt.Errorf("StatusToAS: error parsing uri %s: %s", m.OriginAccount.URI, err)
+				return nil, fmt.Errorf("StatusToAS: error parsing uri %s: %s", m.TargetAccount.URI, err)
 			}
 			ccProp.AppendIRI(iri)
 		}
@@ -498,9 +507,9 @@ func (c *converter) StatusToAS(ctx context.Context, s *gtsmodel.Status) (vocab.A
 		toProp.AppendIRI(publicURI)
 		ccProp.AppendIRI(authorFollowersURI)
 		for _, m := range s.Mentions {
-			iri, err := url.Parse(m.OriginAccount.URI)
+			iri, err := url.Parse(m.TargetAccount.URI)
 			if err != nil {
-				return nil, fmt.Errorf("StatusToAS: error parsing uri %s: %s", m.OriginAccount.URI, err)
+				return nil, fmt.Errorf("StatusToAS: error parsing uri %s: %s", m.TargetAccount.URI, err)
 			}
 			ccProp.AppendIRI(iri)
 		}
@@ -620,7 +629,11 @@ func (c *converter) MentionToAS(ctx context.Context, m *gtsmodel.Mention) (vocab
 	// name -- this should be the namestring of the mentioned user, something like @whatever@example.org
 	var domain string
 	if m.TargetAccount.Domain == "" {
-		domain = c.config.AccountDomain
+		accountDomain := viper.GetString(config.Keys.AccountDomain)
+		if accountDomain == "" {
+			accountDomain = viper.GetString(config.Keys.Host)
+		}
+		domain = accountDomain
 	} else {
 		domain = m.TargetAccount.Domain
 	}

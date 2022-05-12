@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -23,10 +23,13 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/email"
 	"github.com/superseriousbusiness/gotosocial/internal/federation"
+	"github.com/superseriousbusiness/gotosocial/internal/media"
+	"github.com/superseriousbusiness/gotosocial/internal/messages"
 	"github.com/superseriousbusiness/gotosocial/internal/processing"
+	"github.com/superseriousbusiness/gotosocial/internal/worker"
 )
 
 // NewTestProcessor returns a Processor suitable for testing purposes
-func NewTestProcessor(db db.DB, storage *kv.KVStore, federator federation.Federator, emailSender email.Sender) processing.Processor {
-	return processing.NewProcessor(NewTestConfig(), NewTestTypeConverter(db), federator, NewTestOauthServer(db), NewTestMediaHandler(db, storage), storage, NewTestTimelineManager(db), db, emailSender)
+func NewTestProcessor(db db.DB, storage *kv.KVStore, federator federation.Federator, emailSender email.Sender, mediaManager media.Manager, clientWorker *worker.Worker[messages.FromClientAPI], fedWorker *worker.Worker[messages.FromFederator]) processing.Processor {
+	return processing.NewProcessor(NewTestTypeConverter(db), federator, NewTestOauthServer(db), mediaManager, storage, db, emailSender, clientWorker, fedWorker)
 }

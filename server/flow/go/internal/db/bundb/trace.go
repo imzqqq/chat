@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -20,7 +20,6 @@ package bundb
 
 import (
 	"context"
-	"database/sql"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -48,13 +47,14 @@ func (q *debugQueryHook) AfterQuery(_ context.Context, event *bun.QueryEvent) {
 		"operation": event.Operation(),
 	})
 
-	if event.Err != nil && event.Err != sql.ErrNoRows {
-		// if there's an error the it'll be handled in the application logic,
-		// but we can still debug log it here alongside the query
-		l = l.WithField("query", event.Query)
-		l.Debug(event.Err)
+	if dur > 1*time.Second {
+		l.Warnf("SLOW DATABASE QUERY [%s] %s", dur, event.Query)
 		return
 	}
 
-	l.Tracef("[%s] %s", dur, event.Operation())
+	if logrus.GetLevel() == logrus.TraceLevel {
+		l.Tracef("[%s] %s", dur, event.Query)
+	} else {
+		l.Debugf("[%s] %s", dur, event.Operation())
+	}
 }

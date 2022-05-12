@@ -1,4 +1,12 @@
-# Devops <!-- omit in toc -->
+# Contributing <!-- omit in toc -->
+
+Hey! Welcome to the CONTRIBUTING.md for GoToSocial :) Thanks for taking a look, that kicks ass.
+
+This document will expand as the project expands, so for now this is basically a stub.
+
+Contributions are welcome at this point, since the API is fairly stable now and the structure is somewhat coherent.
+
+Check the [issues](https://github.com/superseriousbusiness/gotosocial/issues) to see if there's anything you fancy jumping in on.
 
 ## Table Of Contents  <!-- omit in toc -->
 
@@ -13,7 +21,10 @@
     - [SQLite](#sqlite)
     - [Postgres](#postgres)
     - [Both](#both)
-- [Linting](#linting)
+  - [CLI Tests](#cli-tests)
+- [Project Structure](#project-structure)
+- [Style](#style)
+- [Linting and Formatting](#linting-and-formatting)
 - [Updating Swagger docs](#updating-swagger-docs)
 - [CI/CD configuration](#cicd-configuration)
 - [Building releases and Docker containers](#building-releases-and-docker-containers)
@@ -21,11 +32,27 @@
   - [Manually](#manually)
 - [Financial Compensation](#financial-compensation)
 
+## Communications
+
+Before starting on something, please comment on an issue to say that you're working on it, and/or drop into the GoToSocial Matrix room [here](https://matrix.to/#/#gotosocial:superseriousbusiness.org).
+
+This is the recommended way of keeping in touch with other developers, asking direct questions about code, and letting everyone know what you're up to.
+
+## Code of Conduct
+
+In lieu of a fuller code of conduct, here are a few ground rules.
+
+1. We *DO NOT ACCEPT* PRs from right-wingers, Nazis, transphobes, homophobes, racists, harassers, abusers, white-supremacists, misogynists, tech-bros of questionable ethics. If that's you, politely fuck off somewhere else.
+2. Any PR that moves GoToSocial in the direction of surveillance capitalism or other bad fediverse behavior will be rejected.
+3. Don't spam the general chat too hard.
+
 ## Setting up your development environment
 
-To get started, you first need to have Go installed. GtS is currently using Go 1.17, so you should take that too. See [here](https://golang.org/doc/install).
+To get started, you first need to have Go installed. GtS is currently using Go 1.18, so you should take that too. See [here](https://golang.org/doc/install).
 
-You can try building the project: `./scripts/build.sh`. This will build the `gotosocial` binary.
+Once you've got go installed, clone this repository into your Go path. Normally, this should be `~/go/src/github.com/superseriousbusiness/gotosocial`.
+
+Once that's done, you can try building the project: `./scripts/build.sh`. This will build the `gotosocial` binary.
 
 If there are no errors, great, you're good to go!
 
@@ -134,7 +161,7 @@ There are a few different ways of running tests. Each requires the use of the `-
 If you want to run tests as quickly as possible, using an SQLite in-memory database, use:
 
 ```bash
-GTS_DB_TYPE="sqlite" GTS_DB_ADDRESS=":memory:" go test -p 1 ./...
+GTS_DB_TYPE="sqlite" GTS_DB_ADDRESS=":memory:" go test ./...
 ```
 
 #### Postgres
@@ -155,33 +182,54 @@ Finally, to run tests against both database types one after the other, use:
 ./scripts/test.sh
 ```
 
-## Linting
+### CLI Tests
 
-We use [golangci-lint](https://golangci-lint.run/) for linting. To run this locally, first install the linter following the instructions [here](https://golangci-lint.run/usage/install/#local-installation).
+In [./test/cliparsing.sh](./test/cliparsing.sh) there are a bunch of tests for making sure that CLI flags, config, and environment variables get parsed as expected.
+
+Although these tests *are* part of the CI/CD testing process, you probably won't need to worry too much about running them yourself. That is, unless you're messing about with code inside the `main` package in `cmd/gotosocial`, or inside the `config` package in `internal/config`.
+
+## Project Structure
+
+For project structure, GoToSocial follows a standard and widely-accepted project layout [defined here](https://github.com/golang-standards/project-layout). As the author writes:
+
+> This is a basic layout for Go application projects. It's not an official standard defined by the core Go dev team; however, it is a set of common historical and emerging project layout patterns in the Go ecosystem.
+
+Most of the crucial business logic of the application is found inside the various packages and subpackages of the `internal` directory.
+
+Where possible, we prefer more files and packages of shorter length that very clearly pertain to definable chunks of application logic, rather than fewer but longer files: if one `.go` file is pushing 1,000 lines of code, it's probably too long.
+
+## Style
+
+It is a good idea to read the short official [Effective Go](https://golang.org/doc/effective_go) page before submitting code: this document is the foundation of many a style guide, for good reason, and GoToSocial more or less follows its advice.
+
+Another useful style guide that we try to follow: [this one](https://github.com/bahlo/go-styleguide).
+
+In addition, here are some specific highlights from Uber's Go style guide which agree with what we try to do in GtS:
+
+- [Group Similar Declarations](https://github.com/uber-go/guide/blob/master/style.md#group-similar-declarations).
+- [Reduce Nesting](https://github.com/uber-go/guide/blob/master/style.md#reduce-nesting).
+- [Unnecessary Else](https://github.com/uber-go/guide/blob/master/style.md#unnecessary-else).
+- [Local Variable Declarations](https://github.com/uber-go/guide/blob/master/style.md#local-variable-declarations).
+- [Reduce Scope of Variables](https://github.com/uber-go/guide/blob/master/style.md#reduce-scope-of-variables).
+- [Initializing Structs](https://github.com/uber-go/guide/blob/master/style.md#initializing-structs).
+
+## Linting and Formatting
+
+Before you submit any code, make sure to run `go fmt ./...` to update whitespace and other opinionated formatting.
+
+We use [golangci-lint](https://golangci-lint.run/) for linting, which allows us to catch style inconsistencies and potential bugs or security issues, using static code analysis.
+
+If you make a PR that doesn't pass the linter, it will be rejected. As such, it's good practice to run the linter locally before pushing or opening a PR.
+
+To do this, first install the linter following the instructions [here](https://golangci-lint.run/usage/install/#local-installation).
 
 Then, you can run the linter with:
 
 ```bash
-golangci-lint run --tests=false
+golangci-lint run
 ```
 
-Note that this linter also runs as a job on the Github repo, so if you make a PR that doesn't pass the linter, it will be rejected. As such, it's good practice to run the linter locally before pushing or opening a PR.
-
-Another useful linter is [golint](https://pkg.go.dev/github.com/360EntSecGroup-Skylar/goreporter/linters/golint), which catches some style issues that golangci-lint does not.
-
-To install golint, run:
-
-```bash
-go get -u github.com/golang/lint/golint
-```
-
-To run the linter, use:
-
-```bash
-golint ./internal/...
-```
-
-Then make sure to run `go fmt ./...` to update whitespace and other opinionated formatting.
+If there's no output, great! It passed :)
 
 ## Updating Swagger docs
 

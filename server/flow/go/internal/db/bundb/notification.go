@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -22,16 +22,14 @@ import (
 	"context"
 
 	"github.com/ReneKroon/ttlcache"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/uptrace/bun"
 )
 
 type notificationDB struct {
-	config *config.Config
-	conn   *DBConn
-	cache  *ttlcache.Cache
+	conn  *DBConn
+	cache *ttlcache.Cache
 }
 
 func (n *notificationDB) newNotificationQ(i interface{}) *bun.SelectQuery {
@@ -68,9 +66,7 @@ func (n *notificationDB) GetNotifications(ctx context.Context, accountID string,
 	q := n.conn.
 		NewSelect().
 		Model(&notifications).
-		Column("id").
-		Where("target_account_id = ?", accountID).
-		Order("id DESC")
+		Column("id")
 
 	if maxID != "" {
 		q = q.Where("id < ?", maxID)
@@ -79,6 +75,10 @@ func (n *notificationDB) GetNotifications(ctx context.Context, accountID string,
 	if sinceID != "" {
 		q = q.Where("id > ?", sinceID)
 	}
+
+	q = q.
+		Where("target_account_id = ?", accountID).
+		Order("id DESC")
 
 	if limit != 0 {
 		q = q.Limit(limit)
@@ -114,7 +114,13 @@ func (n *notificationDB) getNotificationCache(id string) (*gtsmodel.Notification
 	if !ok {
 		return nil, false
 	}
-	return v.(*gtsmodel.Notification), true
+
+	notif, ok := v.(*gtsmodel.Notification)
+	if !ok {
+		panic("notification cache entry was not a notification")
+	}
+
+	return notif, true
 }
 
 func (n *notificationDB) putNotificationCache(notif *gtsmodel.Notification) {
@@ -122,11 +128,9 @@ func (n *notificationDB) putNotificationCache(notif *gtsmodel.Notification) {
 }
 
 func (n *notificationDB) getNotificationDB(ctx context.Context, id string, dst *gtsmodel.Notification) error {
-	q := n.newNotificationQ(dst).
-		Where("notification.id = ?", id)
+	q := n.newNotificationQ(dst).WherePK()
 
-	err := q.Scan(ctx)
-	if err != nil {
+	if err := q.Scan(ctx); err != nil {
 		return n.conn.ProcessError(err)
 	}
 

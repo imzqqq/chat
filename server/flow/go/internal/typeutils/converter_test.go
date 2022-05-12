@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -21,7 +21,6 @@ package typeutils_test
 import (
 	"github.com/stretchr/testify/suite"
 	"github.com/superseriousbusiness/activity/streams/vocab"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/typeutils"
@@ -320,11 +319,58 @@ const (
 		  "url": "https://files.mastodon.social/accounts/headers/000/000/001/original/c91b871f294ea63e.png"
 		}
 	  }`
+	publicStatusActivityJson = `
+	{
+		"@context": [
+		  "https://www.w3.org/ns/activitystreams",
+		  {
+			"ostatus": "http://ostatus.org#",
+			"atomUri": "ostatus:atomUri",
+			"inReplyToAtomUri": "ostatus:inReplyToAtomUri",
+			"conversation": "ostatus:conversation",
+			"sensitive": "as:sensitive",
+			"toot": "http://joinmastodon.org/ns#",
+			"votersCount": "toot:votersCount"
+		  }
+		],
+		"id": "http://fossbros-anonymous.io/users/foss_satan/statuses/108138763199405167",
+		"type": "Note",
+		"summary": "reading: Punishment and Reward in the Corporate University",
+		"inReplyTo": "http://fossbros-anonymous.io/users/foss_satan/statuses/108138729399508469",
+		"published": "2022-04-15T23:49:37Z",
+		"url": "http://fossbros-anonymous.io/@foss_satan/108138763199405167",
+		"attributedTo": "http://fossbros-anonymous.io/users/foss_satan",
+		"to": [
+		  "https://www.w3.org/ns/activitystreams#Public"
+		],
+		"cc": [
+		  "http://fossbros-anonymous.io/users/foss_satan/followers"
+		],
+		"sensitive": true,
+		"atomUri": "http://fossbros-anonymous.io/users/foss_satan/statuses/108138763199405167",
+		"inReplyToAtomUri": "http://fossbros-anonymous.io/users/foss_satan/statuses/108138729399508469",
+		"content": "<p>&gt; So we have to examine critical thinking as a signifier, dynamic and ambiguous.  It has a normative definition, a tacit definition, and an ideal definition.  One of the hallmarks of graduate training is learning to comprehend those definitions and applying the correct one as needed for professional success.</p>",
+		"contentMap": {
+		  "en": "<p>&gt; So we have to examine critical thinking as a signifier, dynamic and ambiguous.  It has a normative definition, a tacit definition, and an ideal definition.  One of the hallmarks of graduate training is learning to comprehend those definitions and applying the correct one as needed for professional success.</p>"
+		},
+		"attachment": [],
+		"tag": [],
+		"replies": {
+		  "id": "http://fossbros-anonymous.io/users/foss_satan/statuses/108138763199405167/replies",
+		  "type": "Collection",
+		  "first": {
+			"type": "CollectionPage",
+			"next": "http://fossbros-anonymous.io/users/foss_satan/statuses/108138763199405167/replies?only_other_accounts=true&page=true",
+			"partOf": "http://fossbros-anonymous.io/users/foss_satan/statuses/108138763199405167/replies",
+			"items": []
+		  }
+		}
+	  }	  
+	`
 )
 
 type TypeUtilsTestSuite struct {
 	suite.Suite
-	config       *config.Config
 	db           db.DB
 	testAccounts map[string]*gtsmodel.Account
 	testStatuses map[string]*gtsmodel.Status
@@ -334,13 +380,14 @@ type TypeUtilsTestSuite struct {
 }
 
 func (suite *TypeUtilsTestSuite) SetupSuite() {
-	suite.config = testrig.NewTestConfig()
-	suite.db = testrig.NewTestDB()
 	testrig.InitTestLog()
+	testrig.InitTestConfig()
+
+	suite.db = testrig.NewTestDB()
 	suite.testAccounts = testrig.NewTestAccounts()
 	suite.testStatuses = testrig.NewTestStatuses()
 	suite.testPeople = testrig.NewTestFediPeople()
-	suite.typeconverter = typeutils.NewConverter(suite.config, suite.db)
+	suite.typeconverter = typeutils.NewConverter(suite.db)
 }
 
 func (suite *TypeUtilsTestSuite) SetupTest() {

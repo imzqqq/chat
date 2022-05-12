@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -21,10 +21,13 @@ package media
 import (
 	"errors"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"net/http"
 
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
+
 	"github.com/gin-gonic/gin"
+	"github.com/superseriousbusiness/gotosocial/internal/api"
 	"github.com/superseriousbusiness/gotosocial/internal/api/model"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
@@ -91,6 +94,11 @@ func (m *Module) MediaCreatePOSTHandler(c *gin.Context) {
 		return
 	}
 
+	if _, err := api.NegotiateAccept(c, api.JSONAcceptHeaders...); err != nil {
+		c.JSON(http.StatusNotAcceptable, gin.H{"error": err.Error()})
+		return
+	}
+
 	// extract the media create form from the request context
 	l.Tracef("parsing request form: %s", c.Request.Form)
 	form := &model.AttachmentRequest{}
@@ -102,7 +110,7 @@ func (m *Module) MediaCreatePOSTHandler(c *gin.Context) {
 
 	// Give the fields on the request form a first pass to make sure the request is superficially valid.
 	l.Tracef("validating form %+v", form)
-	if err := validateCreateMedia(form, m.config.MediaConfig); err != nil {
+	if err := validateCreateMedia(form); err != nil {
 		l.Debugf("error validating form: %s", err)
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 		return
@@ -119,27 +127,31 @@ func (m *Module) MediaCreatePOSTHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, apiAttachment)
 }
 
-func validateCreateMedia(form *model.AttachmentRequest, config *config.MediaConfig) error {
+func validateCreateMedia(form *model.AttachmentRequest) error {
 	// check there actually is a file attached and it's not size 0
 	if form.File == nil {
 		return errors.New("no attachment given")
 	}
 
+	keys := config.Keys
+	maxVideoSize := viper.GetInt(keys.MediaVideoMaxSize)
+	maxImageSize := viper.GetInt(keys.MediaImageMaxSize)
+	minDescriptionChars := viper.GetInt(keys.MediaDescriptionMinChars)
+	maxDescriptionChars := viper.GetInt(keys.MediaDescriptionMaxChars)
+
 	// a very superficial check to see if no size limits are exceeded
 	// we still don't actually know which media types we're dealing with but the other handlers will go into more detail there
-	maxSize := config.MaxVideoSize
-	if config.MaxImageSize > maxSize {
-		maxSize = config.MaxImageSize
+	maxSize := maxVideoSize
+	if maxImageSize > maxSize {
+		maxSize = maxImageSize
 	}
 	if form.File.Size > int64(maxSize) {
 		return fmt.Errorf("file size limit exceeded: limit is %d bytes but attachment was %d bytes", maxSize, form.File.Size)
 	}
 
-	if len(form.Description) < config.MinDescriptionChars || len(form.Description) > config.MaxDescriptionChars {
-		return fmt.Errorf("image description length must be between %d and %d characters (inclusive), but provided image description was %d chars", config.MinDescriptionChars, config.MaxDescriptionChars, len(form.Description))
+	if len(form.Description) > maxDescriptionChars {
+		return fmt.Errorf("image description length must be between %d and %d characters (inclusive), but provided image description was %d chars", minDescriptionChars, maxDescriptionChars, len(form.Description))
 	}
-
-	// TODO: validate focus here
 
 	return nil
 }

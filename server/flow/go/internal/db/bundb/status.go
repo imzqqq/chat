@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -23,17 +23,16 @@ import (
 	"context"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"github.com/superseriousbusiness/gotosocial/internal/cache"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/uptrace/bun"
 )
 
 type statusDB struct {
-	config *config.Config
-	conn   *DBConn
-	cache  *cache.StatusCache
+	conn  *DBConn
+	cache *cache.StatusCache
 
 	// TODO: keep method definitions in same place but instead have receiver
 	//       all point to one single "db" type, so they can all share methods
@@ -83,7 +82,7 @@ func (s *statusDB) GetStatusByURI(ctx context.Context, uri string) (*gtsmodel.St
 			return s.cache.GetByURI(uri)
 		},
 		func(status *gtsmodel.Status) error {
-			return s.newStatusQ(status).Where("LOWER(status.uri) = LOWER(?)", uri).Scan(ctx)
+			return s.newStatusQ(status).Where("status.uri = ?", uri).Scan(ctx)
 		},
 	)
 }
@@ -95,7 +94,7 @@ func (s *statusDB) GetStatusByURL(ctx context.Context, url string) (*gtsmodel.St
 			return s.cache.GetByURL(url)
 		},
 		func(status *gtsmodel.Status) error {
-			return s.newStatusQ(status).Where("LOWER(status.url) = LOWER(?)", url).Scan(ctx)
+			return s.newStatusQ(status).Where("status.url = ?", url).Scan(ctx)
 		},
 	)
 }
@@ -206,7 +205,11 @@ func (s *statusDB) GetStatusChildren(ctx context.Context, status *gtsmodel.Statu
 	children := []*gtsmodel.Status{}
 	for e := foundStatuses.Front(); e != nil; e = e.Next() {
 		// only append children, not the overall parent status
-		entry := e.Value.(*gtsmodel.Status)
+		entry, ok := e.Value.(*gtsmodel.Status)
+		if !ok {
+			logrus.Panic("GetStatusChildren: found status could not be asserted to *gtsmodel.Status")
+		}
+
 		if entry.ID != status.ID {
 			children = append(children, entry)
 		}
@@ -233,7 +236,11 @@ func (s *statusDB) statusChildren(ctx context.Context, status *gtsmodel.Status, 
 	for _, child := range immediateChildren {
 	insertLoop:
 		for e := foundStatuses.Front(); e != nil; e = e.Next() {
-			entry := e.Value.(*gtsmodel.Status)
+			entry, ok := e.Value.(*gtsmodel.Status)
+			if !ok {
+				logrus.Panic("statusChildren: found status could not be asserted to *gtsmodel.Status")
+			}
+
 			if child.InReplyToAccountID != "" && entry.ID == child.InReplyToID {
 				foundStatuses.InsertAfter(child, e)
 				break insertLoop
@@ -306,8 +313,7 @@ func (s *statusDB) GetStatusFaves(ctx context.Context, status *gtsmodel.Status) 
 	q := s.newFaveQ(&faves).
 		Where("status_id = ?", status.ID)
 
-	err := q.Scan(ctx)
-	if err != nil {
+	if err := q.Scan(ctx); err != nil {
 		return nil, s.conn.ProcessError(err)
 	}
 	return faves, nil
@@ -319,8 +325,7 @@ func (s *statusDB) GetStatusReblogs(ctx context.Context, status *gtsmodel.Status
 	q := s.newStatusQ(&reblogs).
 		Where("boost_of_id = ?", status.ID)
 
-	err := q.Scan(ctx)
-	if err != nil {
+	if err := q.Scan(ctx); err != nil {
 		return nil, s.conn.ProcessError(err)
 	}
 	return reblogs, nil

@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -30,19 +30,19 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/id"
-	"github.com/superseriousbusiness/gotosocial/internal/util"
+	"github.com/superseriousbusiness/gotosocial/internal/uris"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type adminDB struct {
-	config *config.Config
-	conn   *DBConn
+	conn *DBConn
 }
 
 func (a *adminDB) IsUsernameAvailable(ctx context.Context, username string) (bool, db.Error) {
@@ -94,37 +94,38 @@ func (a *adminDB) NewSignup(ctx context.Context, username string, reason string,
 
 	// if something went wrong while creating a user, we might already have an account, so check here first...
 	acct := &gtsmodel.Account{}
-	err = a.conn.NewSelect().
+	q := a.conn.NewSelect().
 		Model(acct).
 		Where("username = ?", username).
-		WhereGroup(" AND ", whereEmptyOrNull("domain")).
-		Scan(ctx)
-	if err != nil {
-		// we just don't have an account yet create one
-		newAccountURIs := util.GenerateURIsForAccount(username, a.config.Protocol, a.config.Host)
-		newAccountID, err := id.NewRandomULID()
+		WhereGroup(" AND ", whereEmptyOrNull("domain"))
+
+	if err := q.Scan(ctx); err != nil {
+		// we just don't have an account yet so create one before we proceed
+		accountURIs := uris.GenerateURIsForAccount(username)
+		accountID, err := id.NewRandomULID()
 		if err != nil {
 			return nil, err
 		}
 
 		acct = &gtsmodel.Account{
-			ID:                    newAccountID,
+			ID:                    accountID,
 			Username:              username,
 			DisplayName:           username,
 			Reason:                reason,
 			Privacy:               gtsmodel.VisibilityDefault,
-			URL:                   newAccountURIs.UserURL,
+			URL:                   accountURIs.UserURL,
 			PrivateKey:            key,
 			PublicKey:             &key.PublicKey,
-			PublicKeyURI:          newAccountURIs.PublicKeyURI,
+			PublicKeyURI:          accountURIs.PublicKeyURI,
 			ActorType:             ap.ActorPerson,
-			URI:                   newAccountURIs.UserURI,
-			InboxURI:              newAccountURIs.InboxURI,
-			OutboxURI:             newAccountURIs.OutboxURI,
-			FollowersURI:          newAccountURIs.FollowersURI,
-			FollowingURI:          newAccountURIs.FollowingURI,
-			FeaturedCollectionURI: newAccountURIs.CollectionURI,
+			URI:                   accountURIs.UserURI,
+			InboxURI:              accountURIs.InboxURI,
+			OutboxURI:             accountURIs.OutboxURI,
+			FollowersURI:          accountURIs.FollowersURI,
+			FollowingURI:          accountURIs.FollowingURI,
+			FeaturedCollectionURI: accountURIs.CollectionURI,
 		}
+
 		if _, err = a.conn.
 			NewInsert().
 			Model(acct).
@@ -158,6 +159,7 @@ func (a *adminDB) NewSignup(ctx context.Context, username string, reason string,
 	if emailVerified {
 		u.ConfirmedAt = time.Now()
 		u.Email = email
+		u.UnconfirmedEmail = ""
 	}
 
 	if admin {
@@ -176,20 +178,21 @@ func (a *adminDB) NewSignup(ctx context.Context, username string, reason string,
 }
 
 func (a *adminDB) CreateInstanceAccount(ctx context.Context) db.Error {
-	username := a.config.Host
+	username := viper.GetString(config.Keys.Host)
 
-	// check if instance account already exists
-	existsQ := a.conn.
+	q := a.conn.
 		NewSelect().
 		Model(&gtsmodel.Account{}).
 		Where("username = ?", username).
 		WhereGroup(" AND ", whereEmptyOrNull("domain"))
-	count, err := existsQ.Count(ctx)
-	if err != nil && count == 1 {
+
+	exists, err := a.conn.Exists(ctx, q)
+	if err != nil {
+		return err
+	}
+	if exists {
 		logrus.Infof("instance account %s already exists", username)
 		return nil
-	} else if err != sql.ErrNoRows {
-		return a.conn.ProcessError(err)
 	}
 
 	key, err := rsa.GenerateKey(rand.Reader, 2048)
@@ -203,10 +206,10 @@ func (a *adminDB) CreateInstanceAccount(ctx context.Context) db.Error {
 		return err
 	}
 
-	newAccountURIs := util.GenerateURIsForAccount(username, a.config.Protocol, a.config.Host)
+	newAccountURIs := uris.GenerateURIsForAccount(username)
 	acct := &gtsmodel.Account{
 		ID:                    aID,
-		Username:              a.config.Host,
+		Username:              username,
 		DisplayName:           username,
 		URL:                   newAccountURIs.UserURL,
 		PrivateKey:            key,
@@ -234,13 +237,14 @@ func (a *adminDB) CreateInstanceAccount(ctx context.Context) db.Error {
 }
 
 func (a *adminDB) CreateInstanceInstance(ctx context.Context) db.Error {
-	domain := a.config.Host
+	protocol := viper.GetString(config.Keys.Protocol)
+	host := viper.GetString(config.Keys.Host)
 
 	// check if instance entry already exists
 	q := a.conn.
 		NewSelect().
 		Model(&gtsmodel.Instance{}).
-		Where("domain = ?", domain)
+		Where("domain = ?", host)
 
 	exists, err := a.conn.Exists(ctx, q)
 	if err != nil {
@@ -258,9 +262,9 @@ func (a *adminDB) CreateInstanceInstance(ctx context.Context) db.Error {
 
 	i := &gtsmodel.Instance{
 		ID:     iID,
-		Domain: domain,
-		Title:  domain,
-		URI:    fmt.Sprintf("%s://%s", a.config.Protocol, a.config.Host),
+		Domain: host,
+		Title:  host,
+		URI:    fmt.Sprintf("%s://%s", protocol, host),
 	}
 
 	insertQ := a.conn.
@@ -272,6 +276,6 @@ func (a *adminDB) CreateInstanceInstance(ctx context.Context) db.Error {
 		return a.conn.ProcessError(err)
 	}
 
-	logrus.Infof("created instance instance %s with id %s", domain, i.ID)
+	logrus.Infof("created instance instance %s with id %s", host, i.ID)
 	return nil
 }

@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -21,14 +21,16 @@ package auth
 import (
 	"errors"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"net/url"
 	"strings"
 
+	"github.com/sirupsen/logrus"
+
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/superseriousbusiness/gotosocial/internal/api"
 	"github.com/superseriousbusiness/gotosocial/internal/api/model"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
@@ -41,6 +43,11 @@ func (m *Module) AuthorizeGETHandler(c *gin.Context) {
 	l := logrus.WithField("func", "AuthorizeGETHandler")
 	s := sessions.Default(c)
 
+	if _, err := api.NegotiateAccept(c, api.HTMLAcceptHeaders...); err != nil {
+		c.HTML(http.StatusNotAcceptable, "error.tmpl", gin.H{"error": err.Error()})
+		return
+	}
+
 	// UserID will be set in the session by AuthorizePOSTHandler if the caller has already gone through the authentication flow
 	// If it's not set, then we don't know yet who the user is, so we need to redirect them to the sign in page.
 	userID, ok := s.Get(sessionUserID).(string)
@@ -50,7 +57,7 @@ func (m *Module) AuthorizeGETHandler(c *gin.Context) {
 		if err := c.Bind(form); err != nil {
 			l.Debugf("invalid auth form: %s", err)
 			m.clearSession(s)
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.HTML(http.StatusBadRequest, "error.tmpl", gin.H{"error": err.Error()})
 			return
 		}
 		l.Debugf("parsed auth form: %+v", form)
@@ -58,7 +65,7 @@ func (m *Module) AuthorizeGETHandler(c *gin.Context) {
 		if err := extractAuthForm(s, form); err != nil {
 			l.Debugf(fmt.Sprintf("error parsing form at /oauth/authorize: %s", err))
 			m.clearSession(s)
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.HTML(http.StatusBadRequest, "error.tmpl", gin.H{"error": err.Error()})
 			return
 		}
 		c.Redirect(http.StatusSeeOther, AuthSignInPath)
@@ -68,28 +75,33 @@ func (m *Module) AuthorizeGETHandler(c *gin.Context) {
 	// We can use the client_id on the session to retrieve info about the app associated with the client_id
 	clientID, ok := s.Get(sessionClientID).(string)
 	if !ok || clientID == "" {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "no client_id found in session"})
+		c.HTML(http.StatusInternalServerError, "error.tmpl", gin.H{"error": "no client_id found in session"})
 		return
 	}
 	app := &gtsmodel.Application{}
 	if err := m.db.GetWhere(c.Request.Context(), []db.Where{{Key: sessionClientID, Value: clientID}}, app); err != nil {
 		m.clearSession(s)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("no application found for client id %s", clientID)})
+		c.HTML(http.StatusInternalServerError, "error.tmpl", gin.H{
+			"error": fmt.Sprintf("no application found for client id %s", clientID),
+		})
 		return
 	}
 
-	// we can also use the userid of the user to fetch their username from the db to greet them nicely <3
+	// redirect the user if they have not confirmed their email yet, thier account has not been approved yet,
+	// or thier account has been disabled.
 	user := &gtsmodel.User{}
 	if err := m.db.GetByID(c.Request.Context(), userID, user); err != nil {
 		m.clearSession(s)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.HTML(http.StatusInternalServerError, "error.tmpl", gin.H{"error": err.Error()})
 		return
 	}
-
 	acct, err := m.db.GetAccountByID(c.Request.Context(), user.AccountID)
 	if err != nil {
 		m.clearSession(s)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.HTML(http.StatusInternalServerError, "error.tmpl", gin.H{"error": err.Error()})
+		return
+	}
+	if !ensureUserIsAuthorizedOrRedirect(c, user, acct) {
 		return
 	}
 
@@ -97,13 +109,13 @@ func (m *Module) AuthorizeGETHandler(c *gin.Context) {
 	redirect, ok := s.Get(sessionRedirectURI).(string)
 	if !ok || redirect == "" {
 		m.clearSession(s)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "no redirect_uri found in session"})
+		c.HTML(http.StatusInternalServerError, "error.tmpl", gin.H{"error": "no redirect_uri found in session"})
 		return
 	}
 	scope, ok := s.Get(sessionScope).(string)
 	if !ok || scope == "" {
 		m.clearSession(s)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "no scope found in session"})
+		c.HTML(http.StatusInternalServerError, "error.tmpl", gin.H{"error": "no scope found in session"})
 		return
 	}
 
@@ -163,10 +175,28 @@ func (m *Module) AuthorizePOSTHandler(c *gin.Context) {
 		errs = append(errs, "session missing userid")
 	}
 
+	// redirect the user if they have not confirmed their email yet, thier account has not been approved yet,
+	// or thier account has been disabled.
+	user := &gtsmodel.User{}
+	if err := m.db.GetByID(c.Request.Context(), userID, user); err != nil {
+		m.clearSession(s)
+		c.HTML(http.StatusInternalServerError, "error.tmpl", gin.H{"error": err.Error()})
+		return
+	}
+	acct, err := m.db.GetAccountByID(c.Request.Context(), user.AccountID)
+	if err != nil {
+		m.clearSession(s)
+		c.HTML(http.StatusInternalServerError, "error.tmpl", gin.H{"error": err.Error()})
+		return
+	}
+	if !ensureUserIsAuthorizedOrRedirect(c, user, acct) {
+		return
+	}
+
 	m.clearSession(s)
 
 	if len(errs) != 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": strings.Join(errs, ": ")})
+		c.HTML(http.StatusBadRequest, "error.tmpl", gin.H{"error": strings.Join(errs, ": ")})
 		return
 	}
 
@@ -183,7 +213,7 @@ func (m *Module) AuthorizePOSTHandler(c *gin.Context) {
 
 	// and proceed with authorization using the oauth2 library
 	if err := m.server.HandleAuthorizeRequest(c.Writer, c.Request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.HTML(http.StatusBadRequest, "error.tmpl", gin.H{"error": err.Error()})
 	}
 }
 
@@ -208,4 +238,28 @@ func extractAuthForm(s sessions.Session, form *model.OAuthAuthorize) error {
 	s.Set(sessionScope, form.Scope)
 	s.Set(sessionState, uuid.NewString())
 	return s.Save()
+}
+
+func ensureUserIsAuthorizedOrRedirect(ctx *gin.Context, user *gtsmodel.User, account *gtsmodel.Account) bool {
+	if user.ConfirmedAt.IsZero() {
+		ctx.Redirect(http.StatusSeeOther, CheckYourEmailPath)
+		return false
+	}
+
+	if !user.Approved {
+		ctx.Redirect(http.StatusSeeOther, WaitForApprovalPath)
+		return false
+	}
+
+	if user.Disabled {
+		ctx.Redirect(http.StatusSeeOther, AccountDisabledPath)
+		return false
+	}
+
+	if !account.SuspendedAt.IsZero() {
+		ctx.Redirect(http.StatusSeeOther, AccountDisabledPath)
+		return false
+	}
+
+	return true
 }

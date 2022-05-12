@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -26,12 +26,8 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 )
 
-func (f *federator) GetRemoteAccount(ctx context.Context, username string, remoteAccountID *url.URL, refresh bool) (*gtsmodel.Account, bool, error) {
-	return f.dereferencer.GetRemoteAccount(ctx, username, remoteAccountID, refresh)
-}
-
-func (f *federator) EnrichRemoteAccount(ctx context.Context, username string, account *gtsmodel.Account) (*gtsmodel.Account, error) {
-	return f.dereferencer.EnrichRemoteAccount(ctx, username, account)
+func (f *federator) GetRemoteAccount(ctx context.Context, username string, remoteAccountID *url.URL, blocking bool, refresh bool) (*gtsmodel.Account, error) {
+	return f.dereferencer.GetRemoteAccount(ctx, username, remoteAccountID, blocking, refresh)
 }
 
 func (f *federator) GetRemoteStatus(ctx context.Context, username string, remoteStatusID *url.URL, refresh, includeParent bool) (*gtsmodel.Status, ap.Statusable, bool, error) {

@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -21,11 +21,14 @@ package typeutils
 import (
 	"context"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"strings"
 	"time"
 
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
+
 	"github.com/superseriousbusiness/gotosocial/internal/api/model"
+	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 )
@@ -55,7 +58,7 @@ func (c *converter) AccountToAPIAccountSensitive(ctx context.Context, a *gtsmode
 		Privacy:             c.VisToAPIVis(ctx, a.Privacy),
 		Sensitive:           a.Sensitive,
 		Language:            a.Language,
-		Note:                a.Note,
+		Note:                a.NoteRaw,
 		Fields:              apiAccount.Fields,
 		FollowRequestsCount: frc,
 	}
@@ -93,35 +96,40 @@ func (c *converter) AccountToAPIAccountPublic(ctx context.Context, a *gtsmodel.A
 		lastStatusAt = lastPosted.Format(time.RFC3339)
 	}
 
-	// build the avatar and header URLs
+	// set account avatar fields if available
 	var aviURL string
 	var aviURLStatic string
 	if a.AvatarMediaAttachmentID != "" {
-		// make sure avi is pinned to this account
 		if a.AvatarMediaAttachment == nil {
 			avi, err := c.db.GetAttachmentByID(ctx, a.AvatarMediaAttachmentID)
-			if err != nil {
-				return nil, fmt.Errorf("error retrieving avatar: %s", err)
+			if err == nil {
+				a.AvatarMediaAttachment = avi
+			} else {
+				logrus.Errorf("AccountToAPIAccountPublic: error getting Avatar with id %s: %s", a.AvatarMediaAttachmentID, err)
 			}
-			a.AvatarMediaAttachment = avi
 		}
-		aviURL = a.AvatarMediaAttachment.URL
-		aviURLStatic = a.AvatarMediaAttachment.Thumbnail.URL
+		if a.AvatarMediaAttachment != nil {
+			aviURL = a.AvatarMediaAttachment.URL
+			aviURLStatic = a.AvatarMediaAttachment.Thumbnail.URL
+		}
 	}
 
+	// set account header fields if available
 	var headerURL string
 	var headerURLStatic string
 	if a.HeaderMediaAttachmentID != "" {
-		// make sure header is pinned to this account
 		if a.HeaderMediaAttachment == nil {
 			avi, err := c.db.GetAttachmentByID(ctx, a.HeaderMediaAttachmentID)
-			if err != nil {
-				return nil, fmt.Errorf("error retrieving avatar: %s", err)
+			if err == nil {
+				a.HeaderMediaAttachment = avi
+			} else {
+				logrus.Errorf("AccountToAPIAccountPublic: error getting Header with id %s: %s", a.HeaderMediaAttachmentID, err)
 			}
-			a.HeaderMediaAttachment = avi
 		}
-		headerURL = a.HeaderMediaAttachment.URL
-		headerURLStatic = a.HeaderMediaAttachment.Thumbnail.URL
+		if a.HeaderMediaAttachment != nil {
+			headerURL = a.HeaderMediaAttachment.URL
+			headerURLStatic = a.HeaderMediaAttachment.Thumbnail.URL
+		}
 	}
 
 	// get the fields set on this account
@@ -567,34 +575,32 @@ func (c *converter) InstanceToAPIInstance(ctx context.Context, i *gtsmodel.Insta
 	}
 
 	// if the requested instance is *this* instance, we can add some extra information
-	if i.Domain == c.config.Host {
-		userCountKey := "user_count"
-		statusCountKey := "status_count"
-		domainCountKey := "domain_count"
-
-		userCount, err := c.db.CountInstanceUsers(ctx, c.config.Host)
+	keys := config.Keys
+	host := viper.GetString(keys.Host)
+	if i.Domain == host {
+		userCount, err := c.db.CountInstanceUsers(ctx, host)
 		if err == nil {
-			mi.Stats[userCountKey] = userCount
+			mi.Stats["user_count"] = userCount
 		}
 
-		statusCount, err := c.db.CountInstanceStatuses(ctx, c.config.Host)
+		statusCount, err := c.db.CountInstanceStatuses(ctx, host)
 		if err == nil {
-			mi.Stats[statusCountKey] = statusCount
+			mi.Stats["status_count"] = statusCount
 		}
 
-		domainCount, err := c.db.CountInstanceDomains(ctx, c.config.Host)
+		domainCount, err := c.db.CountInstanceDomains(ctx, host)
 		if err == nil {
-			mi.Stats[domainCountKey] = domainCount
+			mi.Stats["domain_count"] = domainCount
 		}
 
-		mi.Registrations = c.config.AccountsConfig.OpenRegistration
-		mi.ApprovalRequired = c.config.AccountsConfig.RequireApproval
+		mi.Registrations = viper.GetBool(keys.AccountsRegistrationOpen)
+		mi.ApprovalRequired = viper.GetBool(keys.AccountsApprovalRequired)
 		mi.InvitesEnabled = false // TODO
-		mi.MaxTootChars = uint(c.config.StatusesConfig.MaxChars)
+		mi.MaxTootChars = uint(viper.GetInt(keys.StatusesMaxChars))
 		mi.URLS = &model.InstanceURLs{
-			StreamingAPI: fmt.Sprintf("wss://%s", c.config.Host),
+			StreamingAPI: fmt.Sprintf("wss://%s", host),
 		}
-		mi.Version = c.config.SoftwareVersion
+		mi.Version = viper.GetString(keys.SoftwareVersion)
 	}
 
 	// get the instance account if it exists and just skip if it doesn't
@@ -697,7 +703,6 @@ func (c *converter) NotificationToAPINotification(ctx context.Context, n *gtsmod
 }
 
 func (c *converter) DomainBlockToAPIDomainBlock(ctx context.Context, b *gtsmodel.DomainBlock, export bool) (*model.DomainBlock, error) {
-
 	domainBlock := &model.DomainBlock{
 		Domain:        b.Domain,
 		PublicComment: b.PublicComment,

@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -78,4 +78,16 @@ type AdminReportInfo struct {
 	ActionTakenByAccount string `json:"action_taken_by_account"`
 	// Statuses attached to the report, for context.
 	Statuses []Status `json:"statuses"`
+}
+
+// AdminAccountActionRequest models the admin view of an account's details.
+//
+// swagger:ignore
+type AdminAccountActionRequest struct {
+	// Type of the account action. One of disable, silence, suspend.
+	Type string `form:"type" json:"type" xml:"type"`
+	// Text describing why an action was taken.
+	Text string `form:"text" json:"text" xml:"text"`
+	// ID of the account to be acted on.
+	TargetAccountID string `form:"-" json:"-" xml:"-"`
 }

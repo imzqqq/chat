@@ -24,6 +24,8 @@ type InsertQuery struct {
 	replace bool
 }
 
+var _ Query = (*InsertQuery)(nil)
+
 func NewInsertQuery(db *DB) *InsertQuery {
 	q := &InsertQuery{
 		whereBaseQuery: whereBaseQuery{
@@ -71,7 +73,7 @@ func (q *InsertQuery) TableExpr(query string, args ...interface{}) *InsertQuery 
 }
 
 func (q *InsertQuery) ModelTableExpr(query string, args ...interface{}) *InsertQuery {
-	q.modelTable = schema.SafeQuery(query, args)
+	q.modelTableName = schema.SafeQuery(query, args)
 	return q
 }
 
@@ -124,22 +126,22 @@ func (q *InsertQuery) Returning(query string, args ...interface{}) *InsertQuery 
 	return q
 }
 
-func (q *InsertQuery) hasReturning() bool {
-	if !q.db.features.Has(feature.Returning) {
-		return false
-	}
-	return q.returningQuery.hasReturning()
-}
-
 //------------------------------------------------------------------------------
 
-// Ignore generates an `INSERT IGNORE INTO` query (MySQL).
+// Ignore generates different queries depending on the DBMS:
+//   - On MySQL, it generates `INSERT IGNORE INTO`.
+//   - On PostgreSQL, it generates `ON CONFLICT DO NOTHING`.
 func (q *InsertQuery) Ignore() *InsertQuery {
-	q.ignore = true
+	if q.db.fmter.HasFeature(feature.InsertOnConflict) {
+		return q.On("CONFLICT DO NOTHING")
+	}
+	if q.db.fmter.HasFeature(feature.InsertIgnore) {
+		q.ignore = true
+	}
 	return q
 }
 
-// Replaces generates a `REPLACE INTO` query (MySQL).
+// Replaces generates a `REPLACE INTO` query (MySQL and MariaDB).
 func (q *InsertQuery) Replace() *InsertQuery {
 	q.replace = true
 	return q
@@ -152,6 +154,10 @@ func (q *InsertQuery) Operation() string {
 }
 
 func (q *InsertQuery) AppendQuery(fmter schema.Formatter, b []byte) (_ []byte, err error) {
+	if q.err != nil {
+		return nil, q.err
+	}
+
 	fmter = formatterWithModel(fmter, q)
 
 	b, err = q.appendWith(fmter, b)
@@ -188,7 +194,8 @@ func (q *InsertQuery) AppendQuery(fmter schema.Formatter, b []byte) (_ []byte, e
 		return nil, err
 	}
 
-	if q.hasReturning() {
+	if q.hasFeature(feature.InsertReturning) && q.hasReturning() {
+		b = append(b, " RETURNING "...)
 		b, err = q.appendReturning(fmter, b)
 		if err != nil {
 			return nil, err
@@ -209,6 +216,14 @@ func (q *InsertQuery) appendColumnsValues(
 				return nil, err
 			}
 			b = append(b, ")"...)
+		}
+
+		if q.hasFeature(feature.Output) && q.hasReturning() {
+			b = append(b, " OUTPUT "...)
+			b, err = q.appendOutput(fmter, b)
+			if err != nil {
+				return nil, err
+			}
 		}
 
 		b = append(b, " SELECT "...)
@@ -242,6 +257,7 @@ func (q *InsertQuery) appendColumnsValues(
 		return nil, errNilModel
 	}
 
+	// Build fields to populate RETURNING clause.
 	fields, err := q.getFields()
 	if err != nil {
 		return nil, err
@@ -249,7 +265,17 @@ func (q *InsertQuery) appendColumnsValues(
 
 	b = append(b, " ("...)
 	b = q.appendFields(fmter, b, fields)
-	b = append(b, ") VALUES ("...)
+	b = append(b, ")"...)
+
+	if q.hasFeature(feature.Output) && q.hasReturning() {
+		b = append(b, " OUTPUT "...)
+		b, err = q.appendOutput(fmter, b)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	b = append(b, " VALUES ("...)
 
 	switch model := q.tableModel.(type) {
 	case *structTableModel:
@@ -293,7 +319,7 @@ func (q *InsertQuery) appendStructValues(
 		switch {
 		case isTemplate:
 			b = append(b, '?')
-		case f.NullZero && f.HasZeroValue(strct):
+		case (f.IsPtr && f.HasNilValue(strct)) || (f.NullZero && f.HasZeroValue(strct)):
 			if q.db.features.Has(feature.DefaultPlaceholder) {
 				b = append(b, "DEFAULT"...)
 			} else if f.SQLDefault != "" {
@@ -340,22 +366,13 @@ func (q *InsertQuery) appendSliceValues(
 		}
 	}
 
-	for i, v := range q.extraValues {
-		if i > 0 || len(fields) > 0 {
-			b = append(b, ", "...)
-		}
-
-		b, err = v.value.AppendQuery(fmter, b)
-		if err != nil {
-			return nil, err
-		}
-	}
-
 	return b, nil
 }
 
 func (q *InsertQuery) getFields() ([]*schema.Field, error) {
-	if q.db.features.Has(feature.DefaultPlaceholder) || len(q.columns) > 0 {
+	hasIdentity := q.db.features.Has(feature.Identity)
+
+	if len(q.columns) > 0 || q.db.features.Has(feature.DefaultPlaceholder) && !hasIdentity {
 		return q.baseQuery.getFields()
 	}
 
@@ -369,14 +386,22 @@ func (q *InsertQuery) getFields() ([]*schema.Field, error) {
 			return nil, fmt.Errorf("bun: Insert(empty %T)", model.slice.Type())
 		}
 		strct = indirect(model.slice.Index(0))
+	default:
+		return nil, errNilModel
 	}
 
 	fields := make([]*schema.Field, 0, len(q.table.Fields))
 
 	for _, f := range q.table.Fields {
-		if f.NotNull && f.NullZero && f.SQLDefault == "" && f.HasZeroValue(strct) {
+		if hasIdentity && f.AutoIncrement {
 			q.addReturningField(f)
 			continue
+		}
+		if f.NotNull && f.SQLDefault == "" {
+			if (f.IsPtr && f.HasNilValue(strct)) || (f.NullZero && f.HasZeroValue(strct)) {
+				q.addReturningField(f)
+				continue
+			}
 		}
 		fields = append(fields, f)
 	}
@@ -421,7 +446,7 @@ func (q *InsertQuery) appendOn(fmter schema.Formatter, b []byte) (_ []byte, err 
 	}
 
 	if len(q.set) > 0 {
-		if fmter.HasFeature(feature.OnDuplicateKey) {
+		if fmter.HasFeature(feature.InsertOnDuplicateKey) {
 			b = append(b, ' ')
 		} else {
 			b = append(b, " SET "...)
@@ -526,7 +551,8 @@ func (q *InsertQuery) Exec(ctx context.Context, dest ...interface{}) (sql.Result
 	query := internal.String(queryBytes)
 	var res sql.Result
 
-	if hasDest := len(dest) > 0; hasDest || q.hasReturning() {
+	if hasDest := len(dest) > 0; hasDest ||
+		(q.hasReturning() && q.hasFeature(feature.InsertReturning|feature.Output)) {
 		model, err := q.getModel(dest)
 		if err != nil {
 			return nil, err
@@ -575,7 +601,11 @@ func (q *InsertQuery) afterInsertHook(ctx context.Context) error {
 }
 
 func (q *InsertQuery) tryLastInsertID(res sql.Result, dest []interface{}) error {
-	if q.db.features.Has(feature.Returning) || q.table == nil || len(q.table.PKs) != 1 {
+	if q.db.features.Has(feature.Returning) ||
+		q.db.features.Has(feature.Output) ||
+		q.table == nil ||
+		len(q.table.PKs) != 1 ||
+		!q.table.PKs[0].AutoIncrement {
 		return nil
 	}
 

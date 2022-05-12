@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -22,26 +22,45 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/url"
 
 	apimodel "github.com/superseriousbusiness/gotosocial/internal/api/model"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
+	"github.com/superseriousbusiness/gotosocial/internal/gtserror"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 )
 
-func (p *processor) Get(ctx context.Context, requestingAccount *gtsmodel.Account, targetAccountID string) (*apimodel.Account, error) {
+func (p *processor) Get(ctx context.Context, requestingAccount *gtsmodel.Account, targetAccountID string) (*apimodel.Account, gtserror.WithCode) {
 	targetAccount, err := p.db.GetAccountByID(ctx, targetAccountID)
 	if err != nil {
 		if err == db.ErrNoEntries {
-			return nil, errors.New("account not found")
+			return nil, gtserror.NewErrorNotFound(errors.New("account not found"))
 		}
-		return nil, fmt.Errorf("db error: %s", err)
+		return nil, gtserror.NewErrorInternalError(fmt.Errorf("db error: %s", err))
 	}
 
+	return p.getAccountFor(ctx, requestingAccount, targetAccount)
+}
+
+func (p *processor) GetLocalByUsername(ctx context.Context, requestingAccount *gtsmodel.Account, username string) (*apimodel.Account, gtserror.WithCode) {
+	targetAccount, err := p.db.GetLocalAccountByUsername(ctx, username)
+	if err != nil {
+		if err == db.ErrNoEntries {
+			return nil, gtserror.NewErrorNotFound(errors.New("account not found"))
+		}
+		return nil, gtserror.NewErrorInternalError(fmt.Errorf("db error: %s", err))
+	}
+
+	return p.getAccountFor(ctx, requestingAccount, targetAccount)
+}
+
+func (p *processor) getAccountFor(ctx context.Context, requestingAccount *gtsmodel.Account, targetAccount *gtsmodel.Account) (*apimodel.Account, gtserror.WithCode) {
 	var blocked bool
+	var err error
 	if requestingAccount != nil {
-		blocked, err = p.db.IsBlocked(ctx, requestingAccount.ID, targetAccountID, true)
+		blocked, err = p.db.IsBlocked(ctx, requestingAccount.ID, targetAccount.ID, true)
 		if err != nil {
-			return nil, fmt.Errorf("error checking account block: %s", err)
+			return nil, gtserror.NewErrorInternalError(fmt.Errorf("error checking account block: %s", err))
 		}
 	}
 
@@ -49,14 +68,19 @@ func (p *processor) Get(ctx context.Context, requestingAccount *gtsmodel.Account
 	if blocked {
 		apiAccount, err = p.tc.AccountToAPIAccountBlocked(ctx, targetAccount)
 		if err != nil {
-			return nil, fmt.Errorf("error converting account: %s", err)
+			return nil, gtserror.NewErrorInternalError(fmt.Errorf("error converting account: %s", err))
 		}
 		return apiAccount, nil
 	}
 
 	// last-minute check to make sure we have remote account header/avi cached
 	if targetAccount.Domain != "" {
-		a, err := p.federator.EnrichRemoteAccount(ctx, requestingAccount.Username, targetAccount)
+		targetAccountURI, err := url.Parse(targetAccount.URI)
+		if err != nil {
+			return nil, gtserror.NewErrorInternalError(fmt.Errorf("error parsing url %s: %s", targetAccount.URI, err))
+		}
+
+		a, err := p.federator.GetRemoteAccount(ctx, requestingAccount.Username, targetAccountURI, true, false)
 		if err == nil {
 			targetAccount = a
 		}
@@ -68,7 +92,7 @@ func (p *processor) Get(ctx context.Context, requestingAccount *gtsmodel.Account
 		apiAccount, err = p.tc.AccountToAPIAccountPublic(ctx, targetAccount)
 	}
 	if err != nil {
-		return nil, fmt.Errorf("error converting account: %s", err)
+		return nil, gtserror.NewErrorInternalError(fmt.Errorf("error converting account: %s", err))
 	}
 	return apiAccount, nil
 }

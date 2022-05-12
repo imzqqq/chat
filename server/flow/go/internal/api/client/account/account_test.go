@@ -8,6 +8,7 @@ import (
 
 	"codeberg.org/gruf/go-store/kv"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"github.com/stretchr/testify/suite"
 	"github.com/superseriousbusiness/gotosocial/internal/api/client/account"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
@@ -15,23 +16,24 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/email"
 	"github.com/superseriousbusiness/gotosocial/internal/federation"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
+	"github.com/superseriousbusiness/gotosocial/internal/media"
+	"github.com/superseriousbusiness/gotosocial/internal/messages"
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
 	"github.com/superseriousbusiness/gotosocial/internal/processing"
-	"github.com/superseriousbusiness/gotosocial/internal/typeutils"
+	"github.com/superseriousbusiness/gotosocial/internal/worker"
 	"github.com/superseriousbusiness/gotosocial/testrig"
 )
 
 type AccountStandardTestSuite struct {
 	// standard suite interfaces
 	suite.Suite
-	config      *config.Config
-	db          db.DB
-	tc          typeutils.TypeConverter
-	storage     *kv.KVStore
-	federator   federation.Federator
-	processor   processing.Processor
-	emailSender email.Sender
-	sentEmails  map[string]string
+	db           db.DB
+	storage      *kv.KVStore
+	mediaManager media.Manager
+	federator    federation.Federator
+	processor    processing.Processor
+	emailSender  email.Sender
+	sentEmails   map[string]string
 
 	// standard suite models
 	testTokens       map[string]*gtsmodel.Token
@@ -57,15 +59,20 @@ func (suite *AccountStandardTestSuite) SetupSuite() {
 }
 
 func (suite *AccountStandardTestSuite) SetupTest() {
-	suite.config = testrig.NewTestConfig()
+	testrig.InitTestConfig()
+	testrig.InitTestLog()
+
+	fedWorker := worker.New[messages.FromFederator](-1, -1)
+	clientWorker := worker.New[messages.FromClientAPI](-1, -1)
+
 	suite.db = testrig.NewTestDB()
 	suite.storage = testrig.NewTestStorage()
-	testrig.InitTestLog()
-	suite.federator = testrig.NewTestFederator(suite.db, testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil), suite.db), suite.storage)
+	suite.mediaManager = testrig.NewTestMediaManager(suite.db, suite.storage)
+	suite.federator = testrig.NewTestFederator(suite.db, testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil), suite.db, fedWorker), suite.storage, suite.mediaManager, fedWorker)
 	suite.sentEmails = make(map[string]string)
 	suite.emailSender = testrig.NewEmailSender("../../../../web/template/", suite.sentEmails)
-	suite.processor = testrig.NewTestProcessor(suite.db, suite.storage, suite.federator, suite.emailSender)
-	suite.accountModule = account.New(suite.config, suite.processor).(*account.Module)
+	suite.processor = testrig.NewTestProcessor(suite.db, suite.storage, suite.federator, suite.emailSender, suite.mediaManager, clientWorker, fedWorker)
+	suite.accountModule = account.New(suite.processor).(*account.Module)
 	testrig.StandardDBSetup(suite.db, nil)
 	testrig.StandardStorageSetup(suite.storage, "../../../../testrig/media")
 }
@@ -83,7 +90,10 @@ func (suite *AccountStandardTestSuite) newContext(recorder *httptest.ResponseRec
 	ctx.Set(oauth.SessionAuthorizedApplication, suite.testApplications["application_1"])
 	ctx.Set(oauth.SessionAuthorizedUser, suite.testUsers["local_account_1"])
 
-	baseURI := fmt.Sprintf("%s://%s", suite.config.Protocol, suite.config.Host)
+	protocol := viper.GetString(config.Keys.Protocol)
+	host := viper.GetString(config.Keys.Host)
+
+	baseURI := fmt.Sprintf("%s://%s", protocol, host)
 	requestURI := fmt.Sprintf("%s/%s", baseURI, requestPath)
 
 	ctx.Request = httptest.NewRequest(http.MethodPatch, requestURI, bytes.NewReader(requestBody)) // the endpoint we're hitting
@@ -91,6 +101,8 @@ func (suite *AccountStandardTestSuite) newContext(recorder *httptest.ResponseRec
 	if bodyContentType != "" {
 		ctx.Request.Header.Set("Content-Type", bodyContentType)
 	}
+
+	ctx.Request.Header.Set("accept", "application/json")
 
 	return ctx
 }

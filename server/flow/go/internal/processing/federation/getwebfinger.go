@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -22,7 +22,9 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/spf13/viper"
 	apimodel "github.com/superseriousbusiness/gotosocial/internal/api/model"
+	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/gtserror"
 )
 
@@ -41,9 +43,14 @@ func (p *processor) GetWebfingerAccount(ctx context.Context, requestedUsername s
 		return nil, gtserror.NewErrorNotFound(fmt.Errorf("database error getting account with username %s: %s", requestedUsername, err))
 	}
 
+	accountDomain := viper.GetString(config.Keys.AccountDomain)
+	if accountDomain == "" {
+		accountDomain = viper.GetString(config.Keys.Host)
+	}
+
 	// return the webfinger representation
 	return &apimodel.WellKnownResponse{
-		Subject: fmt.Sprintf("%s:%s@%s", webfingerAccount, requestedAccount.Username, p.config.AccountDomain),
+		Subject: fmt.Sprintf("%s:%s@%s", webfingerAccount, requestedAccount.Username, accountDomain),
 		Aliases: []string{
 			requestedAccount.URI,
 			requestedAccount.URL,

@@ -203,34 +203,10 @@ func (t *Table) fieldByGoName(name string) *Field {
 func (t *Table) initFields() {
 	t.Fields = make([]*Field, 0, t.Type.NumField())
 	t.FieldMap = make(map[string]*Field, t.Type.NumField())
-	t.addFields(t.Type, nil)
-
-	if len(t.PKs) == 0 {
-		for _, name := range []string{"id", "uuid", "pk_" + t.ModelName} {
-			if field, ok := t.FieldMap[name]; ok {
-				field.markAsPK()
-				t.PKs = []*Field{field}
-				t.DataFields = removeField(t.DataFields, field)
-				break
-			}
-		}
-	}
-
-	if len(t.PKs) == 1 {
-		pk := t.PKs[0]
-		if pk.SQLDefault != "" {
-			return
-		}
-
-		switch pk.IndirectType.Kind() {
-		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
-			reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-			pk.AutoIncrement = true
-		}
-	}
+	t.addFields(t.Type, "", nil)
 }
 
-func (t *Table) addFields(typ reflect.Type, baseIndex []int) {
+func (t *Table) addFields(typ reflect.Type, prefix string, index []int) {
 	for i := 0; i < typ.NumField(); i++ {
 		f := typ.Field(i)
 		unexported := f.PkgPath != ""
@@ -242,10 +218,6 @@ func (t *Table) addFields(typ reflect.Type, baseIndex []int) {
 			continue
 		}
 
-		// Make a copy so the slice is not shared between fields.
-		index := make([]int, len(baseIndex))
-		copy(index, baseIndex)
-
 		if f.Anonymous {
 			if f.Name == "BaseModel" && f.Type == baseModelType {
 				if len(index) == 0 {
@@ -254,27 +226,28 @@ func (t *Table) addFields(typ reflect.Type, baseIndex []int) {
 				continue
 			}
 
+			// If field is an embedded struct, add each field of the embedded struct.
 			fieldType := indirectType(f.Type)
-			if fieldType.Kind() != reflect.Struct {
+			if fieldType.Kind() == reflect.Struct {
+				t.addFields(fieldType, "", withIndex(index, f.Index))
+
+				tag := tagparser.Parse(f.Tag.Get("bun"))
+				if tag.HasOption("inherit") || tag.HasOption("extend") {
+					embeddedTable := t.dialect.Tables().Ref(fieldType)
+					t.TypeName = embeddedTable.TypeName
+					t.SQLName = embeddedTable.SQLName
+					t.SQLNameForSelects = embeddedTable.SQLNameForSelects
+					t.Alias = embeddedTable.Alias
+					t.SQLAlias = embeddedTable.SQLAlias
+					t.ModelName = embeddedTable.ModelName
+				}
 				continue
 			}
-			t.addFields(fieldType, append(index, f.Index...))
-
-			tag := tagparser.Parse(f.Tag.Get("bun"))
-			if _, inherit := tag.Options["inherit"]; inherit {
-				embeddedTable := t.dialect.Tables().Ref(fieldType)
-				t.TypeName = embeddedTable.TypeName
-				t.SQLName = embeddedTable.SQLName
-				t.SQLNameForSelects = embeddedTable.SQLNameForSelects
-				t.Alias = embeddedTable.Alias
-				t.SQLAlias = embeddedTable.SQLAlias
-				t.ModelName = embeddedTable.ModelName
-			}
-
-			continue
 		}
 
-		if field := t.newField(f, index); field != nil {
+		// If field is not a struct, add it.
+		// This will also add any embedded non-struct type as a field.
+		if field := t.newField(f, prefix, index); field != nil {
 			t.addField(field)
 		}
 	}
@@ -285,8 +258,8 @@ func (t *Table) processBaseModelField(f reflect.StructField) {
 
 	if isKnownTableOption(tag.Name) {
 		internal.Warn.Printf(
-			"%s.%s tag name %q is also an option name; is it a mistake?",
-			t.TypeName, f.Name, tag.Name,
+			"%s.%s tag name %q is also an option name, is it a mistake? Try table:%s.",
+			t.TypeName, f.Name, tag.Name, tag.Name,
 		)
 	}
 
@@ -300,6 +273,10 @@ func (t *Table) processBaseModelField(f reflect.StructField) {
 		t.setName(tag.Name)
 	}
 
+	if s, ok := tag.Option("table"); ok {
+		t.setName(s)
+	}
+
 	if s, ok := tag.Option("select"); ok {
 		t.SQLNameForSelects = t.quoteTableName(s)
 	}
@@ -311,19 +288,33 @@ func (t *Table) processBaseModelField(f reflect.StructField) {
 }
 
 //nolint
-func (t *Table) newField(f reflect.StructField, index []int) *Field {
+func (t *Table) newField(f reflect.StructField, prefix string, index []int) *Field {
 	tag := tagparser.Parse(f.Tag.Get("bun"))
+
+	if prefix, ok := tag.Option("embed"); ok {
+		fieldType := indirectType(f.Type)
+		if fieldType.Kind() != reflect.Struct {
+			panic(fmt.Errorf("bun: embed %s.%s: got %s, wanted reflect.Struct",
+				t.TypeName, f.Name, fieldType.Kind()))
+		}
+		t.addFields(fieldType, prefix, withIndex(index, f.Index))
+		return nil
+	}
 
 	sqlName := internal.Underscore(f.Name)
 	if tag.Name != "" && tag.Name != sqlName {
 		if isKnownFieldOption(tag.Name) {
 			internal.Warn.Printf(
-				"%s.%s tag name %q is also an option name; is it a mistake?",
-				t.TypeName, f.Name, tag.Name,
+				"%s.%s tag name %q is also an option name, is it a mistake? Try column:%s.",
+				t.TypeName, f.Name, tag.Name, tag.Name,
 			)
 		}
 		sqlName = tag.Name
 	}
+	if s, ok := tag.Option("column"); ok {
+		sqlName = s
+	}
+	sqlName = prefix + sqlName
 
 	for name := range tag.Options {
 		if !isKnownFieldOption(name) {
@@ -331,7 +322,7 @@ func (t *Table) newField(f reflect.StructField, index []int) *Field {
 		}
 	}
 
-	index = append(index, f.Index...)
+	index = withIndex(index, f.Index)
 	if field := t.fieldWithLock(sqlName); field != nil {
 		if indexEqual(field.Index, index) {
 			return field
@@ -341,6 +332,7 @@ func (t *Table) newField(f reflect.StructField, index []int) *Field {
 
 	field := &Field{
 		StructField: f,
+		IsPtr:       f.Type.Kind() == reflect.Ptr,
 
 		Tag:          tag,
 		IndirectType: indirectType(f.Type),
@@ -353,9 +345,13 @@ func (t *Table) newField(f reflect.StructField, index []int) *Field {
 
 	field.NotNull = tag.HasOption("notnull")
 	field.NullZero = tag.HasOption("nullzero")
-	field.AutoIncrement = tag.HasOption("autoincrement")
 	if tag.HasOption("pk") {
-		field.markAsPK()
+		field.IsPK = true
+		field.NotNull = true
+	}
+	if tag.HasOption("autoincrement") {
+		field.AutoIncrement = true
+		field.NullZero = true
 	}
 
 	if v, ok := tag.Options["unique"]; ok {
@@ -401,20 +397,8 @@ func (t *Table) newField(f reflect.StructField, index []int) *Field {
 	}
 
 	if _, ok := tag.Options["soft_delete"]; ok {
-		field.NullZero = true
 		t.SoftDeleteField = field
 		t.UpdateSoftDeleteField = softDeleteFieldUpdater(field)
-	}
-
-	// Check this in the end to undo NullZero.
-	if tag.HasOption("allowzero") {
-		if tag.HasOption("nullzero") {
-			internal.Warn.Printf(
-				"%s.%s: nullzero and allowzero options are mutually exclusive",
-				t.TypeName, f.Name,
-			)
-		}
-		field.NullZero = false
 	}
 
 	return field
@@ -637,7 +621,7 @@ func (t *Table) hasManyRelation(field *Field) *Relation {
 				rel.BaseFields = append(rel.BaseFields, f)
 			} else {
 				panic(fmt.Errorf(
-					"bun: %s has-one %s: %s must have column %s",
+					"bun: %s has-many %s: %s must have column %s",
 					t.TypeName, field.GoName, t.TypeName, baseColumn,
 				))
 			}
@@ -646,7 +630,7 @@ func (t *Table) hasManyRelation(field *Field) *Relation {
 				rel.JoinFields = append(rel.JoinFields, f)
 			} else {
 				panic(fmt.Errorf(
-					"bun: %s has-one %s: %s must have column %s",
+					"bun: %s has-many %s: %s must have column %s",
 					t.TypeName, field.GoName, t.TypeName, baseColumn,
 				))
 			}
@@ -787,7 +771,7 @@ func (t *Table) inlineFields(field *Field, seen map[reflect.Type]struct{}) {
 		f.GoName = field.GoName + "_" + f.GoName
 		f.Name = field.Name + "__" + f.Name
 		f.SQLName = t.quoteIdent(f.Name)
-		f.Index = appendNew(field.Index, f.Index...)
+		f.Index = withIndex(field.Index, f.Index)
 
 		t.fieldsMapMu.Lock()
 		if _, ok := t.FieldMap[f.Name]; !ok {
@@ -826,7 +810,7 @@ func (t *Table) AppendNamedArg(
 	fmter Formatter, b []byte, name string, strct reflect.Value,
 ) ([]byte, bool) {
 	if field, ok := t.FieldMap[name]; ok {
-		return fmter.appendArg(b, field.Value(strct).Interface()), true
+		return field.AppendValue(fmter, b, strct), true
 	}
 	return b, false
 }
@@ -845,16 +829,9 @@ func (t *Table) quoteIdent(s string) Safe {
 	return Safe(NewFormatter(t.dialect).AppendIdent(nil, s))
 }
 
-func appendNew(dst []int, src ...int) []int {
-	cp := make([]int, len(dst)+len(src))
-	copy(cp, dst)
-	copy(cp[len(dst):], src)
-	return cp
-}
-
 func isKnownTableOption(name string) bool {
 	switch name {
-	case "alias", "select":
+	case "table", "alias", "select":
 		return true
 	}
 	return false
@@ -862,7 +839,8 @@ func isKnownTableOption(name string) bool {
 
 func isKnownFieldOption(name string) bool {
 	switch name {
-	case "alias",
+	case "column",
+		"alias",
 		"type",
 		"array",
 		"hstore",
@@ -871,7 +849,6 @@ func isKnownFieldOption(name string) bool {
 		"msgpack",
 		"notnull",
 		"nullzero",
-		"allowzero",
 		"default",
 		"unique",
 		"soft_delete",
@@ -981,4 +958,11 @@ func softDeleteFieldUpdaterFallback(field *Field) func(fv reflect.Value, tm time
 	return func(fv reflect.Value, tm time.Time) error {
 		return field.ScanWithCheck(fv, tm)
 	}
+}
+
+func withIndex(a, b []int) []int {
+	dest := make([]int, 0, len(a)+len(b))
+	dest = append(dest, a...)
+	dest = append(dest, b...)
+	return dest
 }

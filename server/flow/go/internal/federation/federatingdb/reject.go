@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -28,7 +28,7 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
-	"github.com/superseriousbusiness/gotosocial/internal/util"
+	"github.com/superseriousbusiness/gotosocial/internal/uris"
 )
 
 func (f *federatingDB) Reject(ctx context.Context, reject vocab.ActivityStreamsReject) error {
@@ -47,8 +47,8 @@ func (f *federatingDB) Reject(ctx context.Context, reject vocab.ActivityStreamsR
 		l.Debug("entering Reject")
 	}
 
-	receivingAccount, _, fromFederatorChan := extractFromCtx(ctx)
-	if receivingAccount == nil || fromFederatorChan == nil {
+	receivingAccount, _ := extractFromCtx(ctx)
+	if receivingAccount == nil {
 		// If the receiving account or federator channel wasn't set on the context, that means this request didn't pass
 		// through the API, but came from inside GtS as the result of another activity on this instance. That being so,
 		// we can safely just ignore this activity, since we know we've already processed it elsewhere.
@@ -65,7 +65,7 @@ func (f *federatingDB) Reject(ctx context.Context, reject vocab.ActivityStreamsR
 		if iter.IsIRI() {
 			// we have just the URI of whatever is being rejected, so we need to find out what it is
 			rejectedObjectIRI := iter.GetIRI()
-			if util.IsFollowPath(rejectedObjectIRI) {
+			if uris.IsFollowPath(rejectedObjectIRI) {
 				// REJECT FOLLOW
 				gtsFollowRequest := &gtsmodel.FollowRequest{}
 				if err := f.db.GetWhere(ctx, []db.Where{{Key: "uri", Value: rejectedObjectIRI.String()}}, gtsFollowRequest); err != nil {
@@ -90,9 +90,8 @@ func (f *federatingDB) Reject(ctx context.Context, reject vocab.ActivityStreamsR
 			continue
 		}
 
-		switch iter.GetType().GetTypeName() {
-		// we have the whole object so we can figure out what we're rejecting
-		case ap.ActivityFollow:
+		if iter.GetType().GetTypeName() == ap.ActivityFollow {
+			// we have the whole object so we can figure out what we're rejecting
 			// REJECT FOLLOW
 			asFollow, ok := iter.GetType().(vocab.ActivityStreamsFollow)
 			if !ok {

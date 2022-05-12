@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -182,7 +182,7 @@ func (m *Module) parseUserFromClaims(ctx context.Context, claims *oidc.Claims, i
 	//
 	// note that for the first iteration, iString is still "" when the check is made, so our first choice
 	// is still the raw username with no integer stuck on the end
-	for i := 1; !found; i = i + 1 {
+	for i := 1; !found; i++ {
 		usernameAvailable, err := m.db.IsUsernameAvailable(ctx, username+iString)
 		if err != nil {
 			return nil, err
@@ -190,7 +190,7 @@ func (m *Module) parseUserFromClaims(ctx context.Context, claims *oidc.Claims, i
 		if usernameAvailable {
 			// no error so we've found a username that works
 			found = true
-			username = username + iString
+			username += iString
 			continue
 		}
 		iString = strconv.Itoa(i)
@@ -204,18 +204,27 @@ func (m *Module) parseUserFromClaims(ctx context.Context, claims *oidc.Claims, i
 		}
 	}
 
-	// we still need to set *a* password even if it's not a password the user will end up using, so set something random
-	// in this case, we'll just set two uuids on top of each other, which should be long + random enough to baffle any attempts to crack.
+	// We still need to set *a* password even if it's not a password the user will end up using, so set something random.
+	// We'll just set two uuids on top of each other, which should be long + random enough to baffle any attempts to crack.
 	//
-	// if the user ever wants to log in using gts password rather than oidc flow, they'll have to request a password reset, which is fine
+	// If the user ever wants to log in using gts password rather than oidc flow, they'll have to request a password reset, which is fine
 	password := uuid.NewString() + uuid.NewString()
 
+	// Since this user is created via oidc, which has been set up by the admin, we can assume that the account is already
+	// implicitly approved, and that the email address has already been verified: otherwise, we end up in situations where
+	// the admin first approves the user in OIDC, and then has to approve them again in GoToSocial, which doesn't make sense.
+	//
+	// In other words, if a user logs in via OIDC, they should be able to use their account straight away.
+	//
+	// See: https://github.com/superseriousbusiness/gotosocial/issues/357
+	requireApproval := false
+	emailVerified := true
+
 	// create the user! this will also create an account and store it in the database so we don't need to do that here
-	user, err = m.db.NewSignup(ctx, username, "", m.config.AccountsConfig.RequireApproval, claims.Email, password, ip, "", appID, claims.EmailVerified, admin)
+	user, err = m.db.NewSignup(ctx, username, "", requireApproval, claims.Email, password, ip, "", appID, emailVerified, admin)
 	if err != nil {
 		return nil, fmt.Errorf("error creating user: %s", err)
 	}
 
 	return user, nil
-
 }

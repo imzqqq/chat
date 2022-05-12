@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -27,11 +27,11 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/stream"
 )
 
-func (p *processor) StreamUpdateToAccount(s *apimodel.Status, account *gtsmodel.Account) error {
+func (p *processor) StreamUpdateToAccount(s *apimodel.Status, account *gtsmodel.Account, timeline string) error {
 	bytes, err := json.Marshal(s)
 	if err != nil {
 		return fmt.Errorf("error marshalling status to json: %s", err)
 	}
 
-	return p.streamToAccount(string(bytes), stream.EventTypeUpdate, account.ID)
+	return p.streamToAccount(string(bytes), stream.EventTypeUpdate, []string{timeline}, account.ID)
 }

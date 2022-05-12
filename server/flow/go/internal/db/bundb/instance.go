@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -20,7 +20,9 @@ package bundb
 
 import (
 	"context"
+
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 
 	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
@@ -29,8 +31,7 @@ import (
 )
 
 type instanceDB struct {
-	config *config.Config
-	conn   *DBConn
+	conn *DBConn
 }
 
 func (i *instanceDB) CountInstanceUsers(ctx context.Context, domain string) (int, db.Error) {
@@ -40,7 +41,8 @@ func (i *instanceDB) CountInstanceUsers(ctx context.Context, domain string) (int
 		Where("username != ?", domain).
 		Where("? IS NULL", bun.Ident("suspended_at"))
 
-	if domain == i.config.Host {
+	host := viper.GetString(config.Keys.Host)
+	if domain == host {
 		// if the domain is *this* domain, just count where the domain field is null
 		q = q.WhereGroup(" AND ", whereEmptyOrNull("domain"))
 	} else {
@@ -59,7 +61,8 @@ func (i *instanceDB) CountInstanceStatuses(ctx context.Context, domain string) (
 		NewSelect().
 		Model(&[]*gtsmodel.Status{})
 
-	if domain == i.config.Host {
+	host := viper.GetString(config.Keys.Host)
+	if domain == host {
 		// if the domain is *this* domain, just count where local is true
 		q = q.Where("local = ?", true)
 	} else {
@@ -80,7 +83,8 @@ func (i *instanceDB) CountInstanceDomains(ctx context.Context, domain string) (i
 		NewSelect().
 		Model(&[]*gtsmodel.Instance{})
 
-	if domain == i.config.Host {
+	host := viper.GetString(config.Keys.Host)
+	if domain == host {
 		// if the domain is *this* domain, just count other instances it knows about
 		// exclude domains that are blocked
 		q = q.
@@ -116,9 +120,13 @@ func (i *instanceDB) GetInstanceAccounts(ctx context.Context, domain string, max
 		q = q.Limit(limit)
 	}
 
-	err := q.Scan(ctx)
-	if err != nil {
+	if err := q.Scan(ctx); err != nil {
 		return nil, i.conn.ProcessError(err)
 	}
+
+	if len(accounts) == 0 {
+		return nil, db.ErrNoEntries
+	}
+
 	return accounts, nil
 }

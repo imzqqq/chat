@@ -16,7 +16,10 @@ type ValuesQuery struct {
 	withOrder bool
 }
 
-var _ schema.NamedArgAppender = (*ValuesQuery)(nil)
+var (
+	_ Query                   = (*ValuesQuery)(nil)
+	_ schema.NamedArgAppender = (*ValuesQuery)(nil)
+)
 
 func NewValuesQuery(db *DB, model interface{}) *ValuesQuery {
 	q := &ValuesQuery{
@@ -31,6 +34,13 @@ func NewValuesQuery(db *DB, model interface{}) *ValuesQuery {
 
 func (q *ValuesQuery) Conn(db IConn) *ValuesQuery {
 	q.setConn(db)
+	return q
+}
+
+func (q *ValuesQuery) Column(columns ...string) *ValuesQuery {
+	for _, column := range columns {
+		q.addColumn(schema.UnsafeIdent(column))
+	}
 	return q
 }
 
@@ -95,7 +105,7 @@ func (q *ValuesQuery) AppendColumns(fmter schema.Formatter, b []byte) (_ []byte,
 }
 
 func (q *ValuesQuery) Operation() string {
-	return "SELECT"
+	return "VALUES"
 }
 
 func (q *ValuesQuery) AppendQuery(fmter schema.Formatter, b []byte) (_ []byte, err error) {

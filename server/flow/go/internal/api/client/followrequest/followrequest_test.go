@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -25,6 +25,7 @@ import (
 
 	"codeberg.org/gruf/go-store/kv"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"github.com/stretchr/testify/suite"
 	"github.com/superseriousbusiness/gotosocial/internal/api/client/followrequest"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
@@ -32,19 +33,22 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/email"
 	"github.com/superseriousbusiness/gotosocial/internal/federation"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
+	"github.com/superseriousbusiness/gotosocial/internal/media"
+	"github.com/superseriousbusiness/gotosocial/internal/messages"
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
 	"github.com/superseriousbusiness/gotosocial/internal/processing"
+	"github.com/superseriousbusiness/gotosocial/internal/worker"
 	"github.com/superseriousbusiness/gotosocial/testrig"
 )
 
 type FollowRequestStandardTestSuite struct {
 	suite.Suite
-	config      *config.Config
-	db          db.DB
-	storage     *kv.KVStore
-	federator   federation.Federator
-	processor   processing.Processor
-	emailSender email.Sender
+	db           db.DB
+	storage      *kv.KVStore
+	mediaManager media.Manager
+	federator    federation.Federator
+	processor    processing.Processor
+	emailSender  email.Sender
 
 	// standard suite models
 	testTokens       map[string]*gtsmodel.Token
@@ -70,14 +74,19 @@ func (suite *FollowRequestStandardTestSuite) SetupSuite() {
 }
 
 func (suite *FollowRequestStandardTestSuite) SetupTest() {
+	testrig.InitTestConfig()
 	testrig.InitTestLog()
-	suite.config = testrig.NewTestConfig()
+
+	fedWorker := worker.New[messages.FromFederator](-1, -1)
+	clientWorker := worker.New[messages.FromClientAPI](-1, -1)
+
 	suite.db = testrig.NewTestDB()
 	suite.storage = testrig.NewTestStorage()
-	suite.federator = testrig.NewTestFederator(suite.db, testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil), suite.db), suite.storage)
+	suite.mediaManager = testrig.NewTestMediaManager(suite.db, suite.storage)
+	suite.federator = testrig.NewTestFederator(suite.db, testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil), suite.db, fedWorker), suite.storage, suite.mediaManager, fedWorker)
 	suite.emailSender = testrig.NewEmailSender("../../../../web/template/", nil)
-	suite.processor = testrig.NewTestProcessor(suite.db, suite.storage, suite.federator, suite.emailSender)
-	suite.followRequestModule = followrequest.New(suite.config, suite.processor).(*followrequest.Module)
+	suite.processor = testrig.NewTestProcessor(suite.db, suite.storage, suite.federator, suite.emailSender, suite.mediaManager, clientWorker, fedWorker)
+	suite.followRequestModule = followrequest.New(suite.processor).(*followrequest.Module)
 	testrig.StandardDBSetup(suite.db, nil)
 	testrig.StandardStorageSetup(suite.storage, "../../../../testrig/media")
 }
@@ -95,7 +104,10 @@ func (suite *FollowRequestStandardTestSuite) newContext(recorder *httptest.Respo
 	ctx.Set(oauth.SessionAuthorizedApplication, suite.testApplications["application_1"])
 	ctx.Set(oauth.SessionAuthorizedUser, suite.testUsers["local_account_1"])
 
-	baseURI := fmt.Sprintf("%s://%s", suite.config.Protocol, suite.config.Host)
+	protocol := viper.GetString(config.Keys.Protocol)
+	host := viper.GetString(config.Keys.Host)
+
+	baseURI := fmt.Sprintf("%s://%s", protocol, host)
 	requestURI := fmt.Sprintf("%s/%s", baseURI, requestPath)
 
 	ctx.Request = httptest.NewRequest(requestMethod, requestURI, bytes.NewReader(requestBody)) // the endpoint we're hitting
@@ -103,6 +115,7 @@ func (suite *FollowRequestStandardTestSuite) newContext(recorder *httptest.Respo
 	if bodyContentType != "" {
 		ctx.Request.Header.Set("Content-Type", bodyContentType)
 	}
+	ctx.Request.Header.Set("accept", "application/json")
 
 	return ctx
 }

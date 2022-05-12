@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -30,11 +30,11 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/stream"
 )
 
-func (p *processor) OpenStreamForAccount(ctx context.Context, account *gtsmodel.Account, streamType string) (*stream.Stream, gtserror.WithCode) {
+func (p *processor) OpenStreamForAccount(ctx context.Context, account *gtsmodel.Account, streamTimeline string) (*stream.Stream, gtserror.WithCode) {
 	l := logrus.WithFields(logrus.Fields{
 		"func":       "OpenStreamForAccount",
 		"account":    account.ID,
-		"streamType": streamType,
+		"streamType": streamTimeline,
 	})
 	l.Debug("received open stream request")
 
@@ -46,7 +46,7 @@ func (p *processor) OpenStreamForAccount(ctx context.Context, account *gtsmodel.
 
 	thisStream := &stream.Stream{
 		ID:        streamID,
-		Type:      streamType,
+		Timeline:  streamTimeline,
 		Messages:  make(chan *stream.Message, 100),
 		Hangup:    make(chan interface{}, 1),
 		Connected: true,

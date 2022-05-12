@@ -5,10 +5,12 @@ import (
 	"io/fs"
 	"os"
 	"path"
+	_path "path"
+	"strings"
 	"syscall"
 
 	"codeberg.org/gruf/go-bytes"
-	"codeberg.org/gruf/go-pools"
+	"codeberg.org/gruf/go-fastcopy"
 	"codeberg.org/gruf/go-store/util"
 )
 
@@ -30,6 +32,11 @@ type DiskConfig struct {
 
 	// Overwrite allows overwriting values of stored keys in the storage
 	Overwrite bool
+
+	// LockFile allows specifying the filesystem path to use for the lockfile,
+	// providing only a filename it will store the lockfile within provided store
+	// path and nest the store under `path/store` to prevent access to lockfile
+	LockFile string
 
 	// Compression is the Compressor to use when reading / writing files, default is no compression
 	Compression Compressor
@@ -57,38 +64,55 @@ func getDiskConfig(cfg *DiskConfig) DiskConfig {
 		cfg.WriteBufSize = DefaultDiskConfig.WriteBufSize
 	}
 
+	// Assume empty lockfile path == use default
+	if len(cfg.LockFile) < 1 {
+		cfg.LockFile = LockFile
+	}
+
 	// Return owned config copy
 	return DiskConfig{
 		Transform:    cfg.Transform,
 		WriteBufSize: cfg.WriteBufSize,
 		Overwrite:    cfg.Overwrite,
+		LockFile:     cfg.LockFile,
 		Compression:  cfg.Compression,
 	}
 }
 
 // DiskStorage is a Storage implementation that stores directly to a filesystem
 type DiskStorage struct {
-	path   string           // path is the root path of this store
-	dots   int              // dots is the "dotdot" count for the root store path
-	bufp   pools.BufferPool // bufp is the buffer pool for this DiskStorage
-	config DiskConfig       // cfg is the supplied configuration for this store
+	path   string            // path is the root path of this store
+	cppool fastcopy.CopyPool // cppool is the prepared io copier with buffer pool
+	config DiskConfig        // cfg is the supplied configuration for this store
+	lock   *Lock             // lock is the opened lockfile for this storage instance
 }
 
 // OpenFile opens a DiskStorage instance for given folder path and configuration
 func OpenFile(path string, cfg *DiskConfig) (*DiskStorage, error) {
+	// Get checked config
+	config := getDiskConfig(cfg)
+
 	// Acquire path builder
 	pb := util.GetPathBuilder()
 	defer util.PutPathBuilder(pb)
 
-	// Clean provided path, ensure ends in '/' (should
-	// be dir, this helps with file path trimming later)
-	path = pb.Clean(path) + "/"
+	// Clean provided store path, ensure
+	// ends in '/' to help later path trimming
+	storePath := pb.Clean(path) + "/"
 
-	// Get checked config
-	config := getDiskConfig(cfg)
+	// Clean provided lockfile path
+	lockfile := pb.Clean(config.LockFile)
+
+	// Check if lockfile is an *actual* path or just filename
+	if lockDir, _ := _path.Split(lockfile); len(lockDir) < 1 {
+		// Lockfile is a filename, store must be nested under
+		// $storePath/store to prevent access to the lockfile
+		storePath += "store/"
+		lockfile = pb.Join(path, lockfile)
+	}
 
 	// Attempt to open dir path
-	file, err := os.OpenFile(path, defaultFileROFlags, defaultDirPerms)
+	file, err := os.OpenFile(storePath, defaultFileROFlags, defaultDirPerms)
 	if err != nil {
 		// If not a not-exist error, return
 		if !os.IsNotExist(err) {
@@ -96,13 +120,13 @@ func OpenFile(path string, cfg *DiskConfig) (*DiskStorage, error) {
 		}
 
 		// Attempt to make store path dirs
-		err = os.MkdirAll(path, defaultDirPerms)
+		err = os.MkdirAll(storePath, defaultDirPerms)
 		if err != nil {
 			return nil, err
 		}
 
 		// Reopen dir now it's been created
-		file, err = os.OpenFile(path, defaultFileROFlags, defaultDirPerms)
+		file, err = os.OpenFile(storePath, defaultFileROFlags, defaultDirPerms)
 		if err != nil {
 			return nil, err
 		}
@@ -117,17 +141,32 @@ func OpenFile(path string, cfg *DiskConfig) (*DiskStorage, error) {
 		return nil, errPathIsFile
 	}
 
-	// Return new DiskStorage
-	return &DiskStorage{
-		path:   path,
-		dots:   util.CountDotdots(path),
-		bufp:   pools.NewBufferPool(config.WriteBufSize),
+	// Open and acquire storage lock for path
+	lock, err := OpenLock(lockfile)
+	if err != nil {
+		return nil, err
+	}
+
+	// Prepare DiskStorage
+	st := &DiskStorage{
+		path:   storePath,
 		config: config,
-	}, nil
+		lock:   lock,
+	}
+
+	// Set copypool buffer size
+	st.cppool.Buffer(config.WriteBufSize)
+
+	return st, nil
 }
 
 // Clean implements Storage.Clean()
 func (st *DiskStorage) Clean() error {
+	st.lock.Add()
+	defer st.lock.Done()
+	if st.lock.Closed() {
+		return ErrClosed
+	}
 	return util.CleanDirs(st.path)
 }
 
@@ -152,9 +191,18 @@ func (st *DiskStorage) ReadStream(key string) (io.ReadCloser, error) {
 		return nil, err
 	}
 
+	// Track open
+	st.lock.Add()
+
+	// Check if open
+	if st.lock.Closed() {
+		return nil, ErrClosed
+	}
+
 	// Attempt to open file (replace ENOENT with our own)
 	file, err := open(kpath, defaultFileROFlags)
 	if err != nil {
+		st.lock.Done()
 		return nil, errSwapNotFound(err)
 	}
 
@@ -162,12 +210,14 @@ func (st *DiskStorage) ReadStream(key string) (io.ReadCloser, error) {
 	cFile, err := st.config.Compression.Reader(file)
 	if err != nil {
 		file.Close() // close this here, ignore error
+		st.lock.Done()
 		return nil, err
 	}
 
 	// Wrap compressor to ensure file close
 	return util.ReadCloserWithCallback(cFile, func() {
 		file.Close()
+		st.lock.Done()
 	}), nil
 }
 
@@ -182,6 +232,15 @@ func (st *DiskStorage) WriteStream(key string, r io.Reader) error {
 	kpath, err := st.filepath(key)
 	if err != nil {
 		return err
+	}
+
+	// Track open
+	st.lock.Add()
+	defer st.lock.Done()
+
+	// Check if open
+	if st.lock.Closed() {
+		return ErrClosed
 	}
 
 	// Ensure dirs leading up to file exist
@@ -216,13 +275,8 @@ func (st *DiskStorage) WriteStream(key string, r io.Reader) error {
 	}
 	defer cFile.Close()
 
-	// Acquire write buffer
-	buf := st.bufp.Get()
-	defer st.bufp.Put(buf)
-	buf.Grow(st.config.WriteBufSize)
-
-	// Copy reader to file
-	_, err = io.CopyBuffer(cFile, r, buf.B)
+	// Copy provided reader to file
+	_, err = st.cppool.Copy(cFile, r)
 	return err
 }
 
@@ -232,6 +286,15 @@ func (st *DiskStorage) Stat(key string) (bool, error) {
 	kpath, err := st.filepath(key)
 	if err != nil {
 		return false, err
+	}
+
+	// Track open
+	st.lock.Add()
+	defer st.lock.Done()
+
+	// Check if open
+	if st.lock.Closed() {
+		return false, ErrClosed
 	}
 
 	// Check for file on disk
@@ -246,20 +309,48 @@ func (st *DiskStorage) Remove(key string) error {
 		return err
 	}
 
-	// Attempt to remove file
-	return os.Remove(kpath)
+	// Track open
+	st.lock.Add()
+	defer st.lock.Done()
+
+	// Check if open
+	if st.lock.Closed() {
+		return ErrClosed
+	}
+
+	// Remove at path (we know this is file)
+	if err := unlink(kpath); err != nil {
+		return errSwapNotFound(err)
+	}
+
+	return nil
+}
+
+// Close implements Storage.Close()
+func (st *DiskStorage) Close() error {
+	return st.lock.Close()
 }
 
 // WalkKeys implements Storage.WalkKeys()
-func (st *DiskStorage) WalkKeys(opts *WalkKeysOptions) error {
+func (st *DiskStorage) WalkKeys(opts WalkKeysOptions) error {
+	// Track open
+	st.lock.Add()
+	defer st.lock.Done()
+
+	// Check if open
+	if st.lock.Closed() {
+		return ErrClosed
+	}
+
 	// Acquire path builder
 	pb := util.GetPathBuilder()
 	defer util.PutPathBuilder(pb)
 
 	// Walk dir for entries
 	return util.WalkDir(pb, st.path, func(kpath string, fsentry fs.DirEntry) {
-		// Only deal with regular files
 		if fsentry.Type().IsRegular() {
+			// Only deal with regular files
+
 			// Get full item path (without root)
 			kpath = pb.Join(kpath, fsentry.Name())[len(st.path):]
 
@@ -271,21 +362,39 @@ func (st *DiskStorage) WalkKeys(opts *WalkKeysOptions) error {
 
 // filepath checks and returns a formatted filepath for given key
 func (st *DiskStorage) filepath(key string) (string, error) {
+	// Calculate transformed key path
+	key = st.config.Transform.KeyToPath(key)
+
 	// Acquire path builder
 	pb := util.GetPathBuilder()
 	defer util.PutPathBuilder(pb)
-
-	// Calculate transformed key path
-	key = st.config.Transform.KeyToPath(key)
 
 	// Generated joined root path
 	pb.AppendString(st.path)
 	pb.AppendString(key)
 
-	// If path is dir traversal, and traverses FURTHER
-	// than store root, this is an error
-	if util.CountDotdots(pb.StringPtr()) > st.dots {
+	// Check for dir traversal outside of root
+	if isDirTraversal(st.path, pb.StringPtr()) {
 		return "", ErrInvalidKey
 	}
+
 	return pb.String(), nil
+}
+
+// isDirTraversal will check if rootPlusPath is a dir traversal outside of root,
+// assuming that both are cleaned and that rootPlusPath is path.Join(root, somePath)
+func isDirTraversal(root, rootPlusPath string) bool {
+	switch {
+	// Root is $PWD, check for traversal out of
+	case root == ".":
+		return strings.HasPrefix(rootPlusPath, "../")
+
+	// The path MUST be prefixed by root
+	case !strings.HasPrefix(rootPlusPath, root):
+		return true
+
+	// In all other cases, check not equal
+	default:
+		return len(root) == len(rootPlusPath)
+	}
 }

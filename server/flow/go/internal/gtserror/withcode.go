@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -120,5 +120,18 @@ func NewErrorInternalError(original error, helpText ...string) WithCode {
 		original: original,
 		safe:     errors.New(safe),
 		code:     http.StatusInternalServerError,
+	}
+}
+
+// NewErrorConflict returns an ErrorWithCode 409 with the given original error and optional help text.
+func NewErrorConflict(original error, helpText ...string) WithCode {
+	safe := "conflict"
+	if helpText != nil {
+		safe = safe + ": " + strings.Join(helpText, ": ")
+	}
+	return withCode{
+		original: original,
+		safe:     errors.New(safe),
+		code:     http.StatusConflict,
 	}
 }

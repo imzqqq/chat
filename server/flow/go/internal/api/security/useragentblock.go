@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -31,8 +31,7 @@ func (m *Module) UserAgentBlock(c *gin.Context) {
 		"func": "UserAgentBlock",
 	})
 
-	ua := c.Request.UserAgent()
-	if ua == "" {
+	if ua := c.Request.UserAgent(); ua == "" {
 		l.Debug("aborting request because there's no user-agent set")
 		c.AbortWithStatus(http.StatusTeapot)
 		return

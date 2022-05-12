@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -26,8 +26,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
-	"github.com/superseriousbusiness/gotosocial/internal/text"
-	"github.com/superseriousbusiness/gotosocial/testrig"
 )
 
 const (
@@ -49,37 +47,12 @@ type PlainTestSuite struct {
 	TextStandardTestSuite
 }
 
-func (suite *PlainTestSuite) SetupSuite() {
-	suite.testTokens = testrig.NewTestTokens()
-	suite.testClients = testrig.NewTestClients()
-	suite.testApplications = testrig.NewTestApplications()
-	suite.testUsers = testrig.NewTestUsers()
-	suite.testAccounts = testrig.NewTestAccounts()
-	suite.testAttachments = testrig.NewTestAttachments()
-	suite.testStatuses = testrig.NewTestStatuses()
-	suite.testTags = testrig.NewTestTags()
-	suite.testMentions = testrig.NewTestMentions()
-}
-
-func (suite *PlainTestSuite) SetupTest() {
-	suite.config = testrig.NewTestConfig()
-	suite.db = testrig.NewTestDB()
-	suite.formatter = text.NewFormatter(suite.config, suite.db)
-
-	testrig.StandardDBSetup(suite.db, nil)
-}
-
-func (suite *PlainTestSuite) TearDownTest() {
-	testrig.StandardDBTeardown(suite.db)
-}
-
 func (suite *PlainTestSuite) TestParseSimple() {
 	f := suite.formatter.FromPlain(context.Background(), simple, nil, nil)
 	assert.Equal(suite.T(), simpleExpected, f)
 }
 
 func (suite *PlainTestSuite) TestParseWithTag() {
-
 	foundTags := []*gtsmodel.Tag{
 		suite.testTags["welcome"],
 	}
@@ -89,7 +62,6 @@ func (suite *PlainTestSuite) TestParseWithTag() {
 }
 
 func (suite *PlainTestSuite) TestParseMoreComplex() {
-
 	foundTags := []*gtsmodel.Tag{
 		suite.testTags["Hashtag"],
 	}

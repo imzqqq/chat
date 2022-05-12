@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -22,22 +22,23 @@ import (
 	"context"
 
 	"github.com/stretchr/testify/suite"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
+	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/federation/federatingdb"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/messages"
 	"github.com/superseriousbusiness/gotosocial/internal/typeutils"
-	"github.com/superseriousbusiness/gotosocial/internal/util"
+	"github.com/superseriousbusiness/gotosocial/internal/worker"
 	"github.com/superseriousbusiness/gotosocial/testrig"
 )
 
 type FederatingDBTestSuite struct {
 	suite.Suite
-	config       *config.Config
-	db           db.DB
-	tc           typeutils.TypeConverter
-	federatingDB federatingdb.DB
+	db            db.DB
+	tc            typeutils.TypeConverter
+	fedWorker     *worker.Worker[messages.FromFederator]
+	fromFederator chan messages.FromFederator
+	federatingDB  federatingdb.DB
 
 	testTokens       map[string]*gtsmodel.Token
 	testClients      map[string]*gtsmodel.Client
@@ -59,15 +60,22 @@ func (suite *FederatingDBTestSuite) SetupSuite() {
 	suite.testAttachments = testrig.NewTestAttachments()
 	suite.testStatuses = testrig.NewTestStatuses()
 	suite.testBlocks = testrig.NewTestBlocks()
-	suite.testActivities = testrig.NewTestActivities(suite.testAccounts)
 }
 
 func (suite *FederatingDBTestSuite) SetupTest() {
 	testrig.InitTestLog()
-	suite.config = testrig.NewTestConfig()
+	testrig.InitTestConfig()
+	suite.fedWorker = worker.New[messages.FromFederator](-1, -1)
+	suite.fromFederator = make(chan messages.FromFederator, 10)
+	suite.fedWorker.SetProcessor(func(ctx context.Context, msg messages.FromFederator) error {
+		suite.fromFederator <- msg
+		return nil
+	})
+	_ = suite.fedWorker.Start()
 	suite.db = testrig.NewTestDB()
+	suite.testActivities = testrig.NewTestActivities(suite.testAccounts)
 	suite.tc = testrig.NewTestTypeConverter(suite.db)
-	suite.federatingDB = testrig.NewTestFederatingDB(suite.db)
+	suite.federatingDB = testrig.NewTestFederatingDB(suite.db, suite.fedWorker)
 	testrig.StandardDBSetup(suite.db, suite.testAccounts)
 }
 
@@ -75,10 +83,9 @@ func (suite *FederatingDBTestSuite) TearDownTest() {
 	testrig.StandardDBTeardown(suite.db)
 }
 
-func createTestContext(receivingAccount *gtsmodel.Account, requestingAccount *gtsmodel.Account, fromFederatorChan chan messages.FromFederator) context.Context {
+func createTestContext(receivingAccount *gtsmodel.Account, requestingAccount *gtsmodel.Account) context.Context {
 	ctx := context.Background()
-	ctx = context.WithValue(ctx, util.APReceivingAccount, receivingAccount)
-	ctx = context.WithValue(ctx, util.APRequestingAccount, requestingAccount)
-	ctx = context.WithValue(ctx, util.APFromFederatorChanKey, fromFederatorChan)
+	ctx = context.WithValue(ctx, ap.ContextReceivingAccount, receivingAccount)
+	ctx = context.WithValue(ctx, ap.ContextRequestingAccount, requestingAccount)
 	return ctx
 }

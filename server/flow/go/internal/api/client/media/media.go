@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -22,38 +22,48 @@ import (
 	"net/http"
 
 	"github.com/superseriousbusiness/gotosocial/internal/api"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/processing"
 	"github.com/superseriousbusiness/gotosocial/internal/router"
 )
 
-// BasePath is the base API path for making media requests
-const BasePath = "/api/v1/media"
+// BasePathV1 is the base API path for making media requests through v1 of the api (for mastodon API compatibility)
+const BasePathV1 = "/api/v1/media"
+
+// BasePathV2 is the base API path for making media requests through v2 of the api (for mastodon API compatibility)
+const BasePathV2 = "/api/v2/media"
 
 // IDKey is the key for media attachment IDs
 const IDKey = "id"
 
-// BasePathWithID corresponds to a media attachment with the given ID
-const BasePathWithID = BasePath + "/:" + IDKey
+// BasePathWithIDV1 corresponds to a media attachment with the given ID
+const BasePathWithIDV1 = BasePathV1 + "/:" + IDKey
+
+// BasePathWithIDV2 corresponds to a media attachment with the given ID
+const BasePathWithIDV2 = BasePathV2 + "/:" + IDKey
 
 // Module implements the ClientAPIModule interface for media
 type Module struct {
-	config    *config.Config
 	processor processing.Processor
 }
 
 // New returns a new auth module
-func New(config *config.Config, processor processing.Processor) api.ClientModule {
+func New(processor processing.Processor) api.ClientModule {
 	return &Module{
-		config:    config,
 		processor: processor,
 	}
 }
 
 // Route satisfies the RESTAPIModule interface
 func (m *Module) Route(s router.Router) error {
-	s.AttachHandler(http.MethodPost, BasePath, m.MediaCreatePOSTHandler)
-	s.AttachHandler(http.MethodGet, BasePathWithID, m.MediaGETHandler)
-	s.AttachHandler(http.MethodPut, BasePathWithID, m.MediaPUTHandler)
+	// v1 handlers
+	s.AttachHandler(http.MethodPost, BasePathV1, m.MediaCreatePOSTHandler)
+	s.AttachHandler(http.MethodGet, BasePathWithIDV1, m.MediaGETHandler)
+	s.AttachHandler(http.MethodPut, BasePathWithIDV1, m.MediaPUTHandler)
+
+	// v2 handlers
+	s.AttachHandler(http.MethodPost, BasePathV2, m.MediaCreatePOSTHandler)
+	s.AttachHandler(http.MethodGet, BasePathWithIDV2, m.MediaGETHandler)
+	s.AttachHandler(http.MethodPut, BasePathWithIDV2, m.MediaPUTHandler)
+
 	return nil
 }

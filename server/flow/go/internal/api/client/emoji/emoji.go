@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -22,7 +22,6 @@ import (
 	"net/http"
 
 	"github.com/superseriousbusiness/gotosocial/internal/api"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/processing"
 	"github.com/superseriousbusiness/gotosocial/internal/router"
 )
@@ -34,14 +33,12 @@ const (
 
 // Module implements the ClientAPIModule interface for everything related to emoji
 type Module struct {
-	config    *config.Config
 	processor processing.Processor
 }
 
 // New returns a new emoji module
-func New(config *config.Config, processor processing.Processor) api.ClientModule {
+func New(processor processing.Processor) api.ClientModule {
 	return &Module{
-		config:    config,
 		processor: processor,
 	}
 }

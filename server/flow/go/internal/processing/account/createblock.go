@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -29,7 +29,7 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/id"
 	"github.com/superseriousbusiness/gotosocial/internal/messages"
-	"github.com/superseriousbusiness/gotosocial/internal/util"
+	"github.com/superseriousbusiness/gotosocial/internal/uris"
 )
 
 func (p *processor) BlockCreate(ctx context.Context, requestingAccount *gtsmodel.Account, targetAccountID string) (*apimodel.Relationship, gtserror.WithCode) {
@@ -57,7 +57,7 @@ func (p *processor) BlockCreate(ctx context.Context, requestingAccount *gtsmodel
 	block.Account = requestingAccount
 	block.TargetAccountID = targetAccountID
 	block.TargetAccount = targetAccount
-	block.URI = util.GenerateURIForBlock(requestingAccount.Username, p.config.Protocol, p.config.Host, newBlockID)
+	block.URI = uris.GenerateURIForBlock(requestingAccount.Username, newBlockID)
 
 	// whack it in the database
 	if err := p.db.Put(ctx, block); err != nil {
@@ -113,7 +113,7 @@ func (p *processor) BlockCreate(ctx context.Context, requestingAccount *gtsmodel
 
 	// follow request status changed so send the UNDO activity to the channel for async processing
 	if frChanged {
-		p.fromClientAPI <- messages.FromClientAPI{
+		p.clientWorker.Queue(messages.FromClientAPI{
 			APObjectType:   ap.ActivityFollow,
 			APActivityType: ap.ActivityUndo,
 			GTSModel: &gtsmodel.Follow{
@@ -123,12 +123,12 @@ func (p *processor) BlockCreate(ctx context.Context, requestingAccount *gtsmodel
 			},
 			OriginAccount: requestingAccount,
 			TargetAccount: targetAccount,
-		}
+		})
 	}
 
 	// follow status changed so send the UNDO activity to the channel for async processing
 	if fChanged {
-		p.fromClientAPI <- messages.FromClientAPI{
+		p.clientWorker.Queue(messages.FromClientAPI{
 			APObjectType:   ap.ActivityFollow,
 			APActivityType: ap.ActivityUndo,
 			GTSModel: &gtsmodel.Follow{
@@ -138,17 +138,17 @@ func (p *processor) BlockCreate(ctx context.Context, requestingAccount *gtsmodel
 			},
 			OriginAccount: requestingAccount,
 			TargetAccount: targetAccount,
-		}
+		})
 	}
 
 	// handle the rest of the block process asynchronously
-	p.fromClientAPI <- messages.FromClientAPI{
+	p.clientWorker.Queue(messages.FromClientAPI{
 		APObjectType:   ap.ActivityBlock,
 		APActivityType: ap.ActivityCreate,
 		GTSModel:       block,
 		OriginAccount:  requestingAccount,
 		TargetAccount:  targetAccount,
-	}
+	})
 
 	return p.RelationshipGet(ctx, requestingAccount, targetAccountID)
 }

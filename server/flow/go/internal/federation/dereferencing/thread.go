@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -24,8 +24,10 @@ import (
 	"net/url"
 
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
-	"github.com/superseriousbusiness/gotosocial/internal/util"
+	"github.com/superseriousbusiness/gotosocial/internal/config"
+	"github.com/superseriousbusiness/gotosocial/internal/uris"
 )
 
 // DereferenceThread takes a statusable (something that has withReplies and withInReplyTo),
@@ -43,7 +45,8 @@ func (d *deref) DereferenceThread(ctx context.Context, username string, statusIR
 	l.Debug("entering DereferenceThread")
 
 	// if it's our status we already have everything stashed so we can bail early
-	if statusIRI.Host == d.config.Host {
+	host := viper.GetString(config.Keys.Host)
+	if statusIRI.Host == host {
 		l.Debug("iri belongs to us, bailing")
 		return nil
 	}
@@ -77,11 +80,12 @@ func (d *deref) iterateAncestors(ctx context.Context, username string, statusIRI
 	l.Debug("entering iterateAncestors")
 
 	// if it's our status we don't need to dereference anything so we can immediately move up the chain
-	if statusIRI.Host == d.config.Host {
+	host := viper.GetString(config.Keys.Host)
+	if statusIRI.Host == host {
 		l.Debug("iri belongs to us, moving up to next ancestor")
 
 		// since this is our status, we know we can extract the id from the status path
-		_, id, err := util.ParseStatusesPath(&statusIRI)
+		_, id, err := uris.ParseStatusesPath(&statusIRI)
 		if err != nil {
 			return err
 		}
@@ -129,7 +133,8 @@ func (d *deref) iterateDescendants(ctx context.Context, username string, statusI
 	l.Debug("entering iterateDescendants")
 
 	// if it's our status we already have descendants stashed so we can bail early
-	if statusIRI.Host == d.config.Host {
+	host := viper.GetString(config.Keys.Host)
+	if statusIRI.Host == host {
 		l.Debug("iri belongs to us, bailing")
 		return nil
 	}
@@ -172,7 +177,7 @@ pageLoop:
 		l.Debugf("dereferencing page %s", currentPageIRI)
 		nextPage, err := d.DereferenceCollectionPage(ctx, username, currentPageIRI)
 		if err != nil {
-			return nil
+			return err
 		}
 
 		// next items could be either a list of URLs or a list of statuses
@@ -188,30 +193,31 @@ pageLoop:
 			// We're looking for a url to feed to GetRemoteStatus.
 			// Items can be either an IRI, or a Note.
 			// If a note, we grab the ID from it and call it, rather than parsing the note.
-
 			var itemURI *url.URL
-			if iter.IsIRI() {
+			switch {
+			case iter.IsIRI():
 				// iri, easy
 				itemURI = iter.GetIRI()
-			} else if iter.IsActivityStreamsNote() {
+			case iter.IsActivityStreamsNote():
 				// note, get the id from it to use as iri
 				n := iter.GetActivityStreamsNote()
 				id := n.GetJSONLDId()
 				if id != nil && id.IsIRI() {
 					itemURI = id.GetIRI()
 				}
-			} else {
+			default:
 				// if it's not an iri or a note, we don't know how to process it
 				continue
 			}
 
-			if itemURI.Host == d.config.Host {
+			host := viper.GetString(config.Keys.Host)
+			if itemURI.Host == host {
 				// skip if the reply is from us -- we already have it then
 				continue
 			}
 
 			// we can confidently say now that we found something
-			foundReplies = foundReplies + 1
+			foundReplies++
 
 			// get the remote statusable and put it in the db
 			_, statusable, new, err := d.GetRemoteStatus(ctx, username, itemURI, false, false)

@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -18,14 +18,16 @@
 
 package model
 
+import "io"
+
 // Content wraps everything needed to serve a blob of content (some kind of media) through the API.
 type Content struct {
 	// MIME content type
 	ContentType string
 	// ContentLength in bytes
 	ContentLength int64
-	// Actual content blob
-	Content []byte
+	// Actual content
+	Content io.Reader
 }
 
 // GetContentRequestForm describes a piece of content desired by the caller of the fileserver API.

@@ -1,5 +1,7 @@
 # GoToSocial <!-- omit in toc -->
 
+![patrons](https://img.shields.io/liberapay/patrons/GoToSocial.svg?logo=liberapay) ![receives](https://img.shields.io/liberapay/receives/GoToSocial.svg?logo=liberapay) [![Build Status](https://drone.superseriousbusiness.org/api/badges/superseriousbusiness/gotosocial/status.svg?ref=refs/heads/main)](https://drone.superseriousbusiness.org/superseriousbusiness/gotosocial)
+
 GoToSocial is an [ActivityPub](https://activitypub.rocks/) social network server, written in Golang.
 
 With GoToSocial, you can keep in touch with your friends, post, read, and share images and articles. All without being tracked or advertised to!
@@ -9,6 +11,10 @@ With GoToSocial, you can keep in touch with your friends, post, read, and share 
 </p>
 
 Documentation is at [docs.gotosocial.org](https://docs.gotosocial.org). You can skip straight to the API documentation [here](https://docs.gotosocial.org/en/latest/api/swagger/).
+
+Here's a screenshot of the instance landing page!
+
+![Screenshot of the landing page for the GoToSocial instance goblin.technology. It shows basic information about the instance; number of users and posts etc.](./docs/assets/instancesplash.png)
 
 ## Table of Contents <!-- omit in toc -->
 
@@ -26,6 +32,10 @@ Documentation is at [docs.gotosocial.org](https://docs.gotosocial.org). You can 
   - [Backend-first design](#backend-first-design)
 - [Wishlist](#wishlist)
 - [Getting Started](#getting-started)
+- [Third-Party Packaging](#third-party-packaging)
+- [Known Issues](#known-issues)
+  - [Client App Issues](#client-app-issues)
+  - [Federation Issues](#federation-issues)
 - [Contributing](#contributing)
 - [Contact](#contact)
 - [Credits](#credits)
@@ -41,6 +51,8 @@ Documentation is at [docs.gotosocial.org](https://docs.gotosocial.org). You can 
 GoToSocial provides a lightweight, customizable, and safety-focused entryway into the [Fediverse](https://en.wikipedia.org/wiki/Fediverse), and is comparable to (but distinct from) existing projects such as [Mastodon](https://joinmastodon.org/), [Pleroma](https://pleroma.social/), [Friendica](https://friendica.net), and [PixelFed](https://pixelfed.org/).
 
 If you've ever used something like Twitter or Tumblr (or even Myspace!) GoToSocial will probably feel familiar to you: You can follow people and have followers, you make posts which people can favourite and reply to and share, and you scroll through posts from people you follow using a timeline. You can write long posts or short posts, or just post images, it's up to you. You can also, of course, block people or otherwise limit interactions that you don't want by posting just to your friends.
+
+![Screenshot of the web view of a profile in GoToSocial, showing header and avatar, bio, and numbers of followers/following.](./docs/assets/profile1.png)
 
 **GoToSocial does NOT use algorithms or collect data about you to suggest content or 'improve your experience'**. The timeline is chronological: whatever you see at the top of your timeline is there because it's *just been posted*, not because it's been selected as interesting (or controversial) based on your personal profile.
 
@@ -62,13 +74,13 @@ GoToSocial advocates for many small, weird, specialist servers where people can 
 
 ### History and Status
 
-This project sprang up in 2021 out of a dissatisfaction with the safety + privacy features of other Federated microblogging/social media applications, and a desire to implement something a little different.
+This project sprang up in February/March 2021 out of a dissatisfaction with the safety + privacy features of other Federated microblogging/social media applications, and a desire to implement something a little different.
 
 It began as a solo project, and then picked up steam as more developers became interested and jumped on.
 
-The project is still in prerelease, but is already deployable and very useable, and it federates cleanly with most other Fediverse servers (not yet all).
+The project is still [alpha software](https://en.wikipedia.org/wiki/Software_release_life_cycle#Alpha), but is already deployable and very useable, and it federates cleanly with many other Fediverse servers (not yet all).
 
-For a detailed view on what's implemented and what's not, and progress made towards a first v0.1.0 (beta) release, see [here](./PROGRESS.md).
+For a detailed view on what's implemented and what's not, and progress made towards [beta release](https://en.wikipedia.org/wiki/Software_release_life_cycle#Beta), please see [the roadmap document](./ROADMAP.md).
 
 ## Features
 
@@ -152,9 +164,39 @@ These cool things will be implemented if time allows (because we really want the
 
 ## Getting Started
 
-Proper documentation for running and maintaining GoToSocial will be forthcoming in the first release.
+All docs for installation and configuration are hosted at [docs.gotosocial.org](https://docs.gotosocial.org).
 
-For now (if you want to run it pre-alpha, like a beast), check out the [quick and dirty getting started guide](https://docs.gotosocial.org/en/latest/installation_guide/quick_and_dirty/).
+## Third-Party Packaging
+
+Thank you so much to the cool people who have put time and energy into packaging GoToSocial! Known third-party packaging projects are listed below:
+
+- [YunoHost GoToSocial Packaging](https://github.com/YunoHost-Apps/gotosocial_ynh) by [OniriCorpe](https://github.com/OniriCorpe).
+- GoToSocial Helm Charts:
+  - [GoToSocial Helm Chart](https://github.com/Maxxblow/charts/tree/main/charts/gotosocial) by [0hlov3](https://github.com/0hlov3).
+
+These packages are not maintained by GoToSocial, so please direct questions and issues to the repository maintainers (and donate to them!).
+
+## Known Issues
+
+Since GoToSocial is still in alpha, there are plenty of bugs. We use Github issues to track these. [Check them out here](https://github.com/superseriousbusiness/gotosocial/issues?q=is%3Aissue+is%3Aopen+label%3Abug).
+
+### Client App Issues
+
+GoToSocial works great with Tusky and Pinafore, but some other client applications still need work or have issues connecting to GoToSocial. We're tracking them [right here](https://github.com/superseriousbusiness/gotosocial/projects/5). It's our goal to make any app that's compatible with the Mastodon API work seamlessly with GoToSocial.
+
+### Federation Issues
+
+Since every ActivityPub server implementation has a slightly different interpretation of the protocol, some servers don't quite federate properly with GoToSocial yet. We're tracking these issues [in this project](https://github.com/superseriousbusiness/gotosocial/projects/4). Eventually we want to make sure that any implementation that can federate nicely with Mastodon should also be able to federate with GoToSocial.
+
+## Contributing
+
+You wanna contribute to GtS? Great! ❤️❤️❤️ Check out the issues page to see if there's anything you wanna jump in on, and read the [CONTRIBUTING.md](./CONTRIBUTING.md) file for guidelines and setting up your dev environment.
+
+## Contact
+
+For questions and comments, you can [join our Matrix channel](https://matrix.to/#/#gotosocial:superseriousbusiness.org) at `#gotosocial:superseriousbusiness.org`. This is the quickest way to reach the devs. You can also mail [admin@gotosocial.org](mailto:admin@gotosocial.org).
+
+For bugs and feature requests, please check to see if there's [already an issue](https://github.com/superseriousbusiness/gotosocial/issues), and if not, open one or use one of the above channels to make a request (if you don't have a Github account).
 
 ## Credits
 
@@ -166,15 +208,21 @@ The following libraries and frameworks are used by GoToSocial, with gratitude �
 - [coreos/go-oidc](https://github.com/coreos/go-oidc); OIDC client library. [Apache-2.0 License](https://spdx.org/licenses/Apache-2.0.html).
 - [gin-gonic/gin](https://github.com/gin-gonic/gin); speedy router engine. [MIT License](https://spdx.org/licenses/MIT.html).
   - [gin-contrib/cors](https://github.com/gin-contrib/cors); Gin CORS middleware. [MIT License](https://spdx.org/licenses/MIT.html).
+  - [gin-contrib/gzip](https://github.com/gin-contrib/gzip); Gin gzip middleware. [MIT License](https://spdx.org/licenses/MIT.html).
   - [gin-contrib/sessions](https://github.com/gin-contrib/sessions); Gin sessions middleware. [MIT License](https://spdx.org/licenses/MIT.html)
   - [gin-contrib/static](https://github.com/gin-contrib/static); Gin static page middleware. [MIT License](https://spdx.org/licenses/MIT.html)
-- [go-fed/activity](https://github.com/go-fed/activity); Golang ActivityPub/ActivityStreams library. [BSD-3-Clause License](https://spdx.org/licenses/BSD-3-Clause.html).
 - [go-fed/httpsig](https://github.com/go-fed/httpsig); secure HTTP signature library. [BSD-3-Clause License](https://spdx.org/licenses/BSD-3-Clause.html).
 - [google/uuid](https://github.com/google/uuid); UUID generation. [BSD-3-Clause License](https://spdx.org/licenses/BSD-3-Clause.html)
+- [google/wuffs](https://github.com/google/wuffs); png-stripping code. [Apache-2.0 License](https://spdx.org/licenses/Apache-2.0.html).
 - [go-playground/validator](https://github.com/go-playground/validator); struct validation. [MIT License](https://spdx.org/licenses/MIT.html)
 - [gorilla/websocket](https://github.com/gorilla/websocket); Websocket connectivity. [BSD-2-Clause License](https://spdx.org/licenses/BSD-2-Clause.html).
+- [gruf/go-debug](https://codeberg.org/gruf/go-debug); profiling support in debug builds. [MIT License](https://spdx.org/licenses/MIT.html).
+- [gruf/go-mutexes](https://codeberg.org/gruf/go-mutexes); mutex map. [MIT License](https://spdx.org/licenses/MIT.html).
+- [gruf/go-runners](https://codeberg.org/gruf/go-runners); worker pool library. [MIT License](https://spdx.org/licenses/MIT.html).
+- [gruf/go-store](https://codeberg.org/gruf/go-store); local media store. [MIT License](https://spdx.org/licenses/MIT.html).
 - [h2non/filetype](https://github.com/h2non/filetype); filetype checking. [MIT License](https://spdx.org/licenses/MIT.html).
 - [jackc/pgx](https://github.com/jackc/pgx); Postgres driver. [MIT License](https://spdx.org/licenses/MIT.html).
+- [mcuadros/go-syslog](https://github.com/mcuadros/go-syslog); Syslog server library. [MIT License](https://spdx.org/licenses/MIT.html).
 - [microcosm-cc/bluemonday](https://github.com/microcosm-cc/bluemonday); HTML user-input sanitization. [BSD-3-Clause License](https://spdx.org/licenses/BSD-3-Clause.html).
 - [mitchellh/mapstructure](https://github.com/mitchellh/mapstructure); Go interface => struct parsing. [MIT License](https://spdx.org/licenses/MIT.html).
 - [modernc.org/sqlite](https://gitlab.com/cznic/sqlite); cgo-free port of SQLite. [Other License](https://gitlab.com/cznic/sqlite/-/blob/master/LICENSE).
@@ -184,13 +232,57 @@ The following libraries and frameworks are used by GoToSocial, with gratitude �
 - [nfnt/resize](https://github.com/nfnt/resize); convenient image resizing. [ISC License](https://spdx.org/licenses/ISC.html).
 - [oklog/ulid](https://github.com/oklog/ulid); sequential, database-friendly ID generation. [Apache-2.0 License](https://spdx.org/licenses/Apache-2.0.html).
 - [ReneKroon/ttlcache](https://github.com/ReneKroon/ttlcache); in-memory caching. [MIT License](https://spdx.org/licenses/MIT.html).
+- [robfig/cron](https://github.com/robfig/cron); cron job scheduling. [MIT License](https://spdx.org/licenses/MIT.html).
 - [russross/blackfriday](https://github.com/russross/blackfriday); markdown parsing for statuses. [Simplified BSD License](https://spdx.org/licenses/BSD-2-Clause.html).
 - [sirupsen/logrus](https://github.com/sirupsen/logrus); logging. [MIT License](https://spdx.org/licenses/MIT.html).
+- [spf13/cobra](https://github.com/spf13/cobra); command-line tooling. [Apache-2.0 License](https://spdx.org/licenses/Apache-2.0.html).
+- [spf13/pflag](https://github.com/spf13/pflag); command-line flag utilities. [Apache-2.0 License](https://spdx.org/licenses/Apache-2.0.html).
+- [spf13/viper](https://github.com/spf13/viper); configuration management. [Apache-2.0 License](https://spdx.org/licenses/Apache-2.0.html).
 - [stretchr/testify](https://github.com/stretchr/testify); test framework. [MIT License](https://spdx.org/licenses/MIT.html).
-- [superseriousbusiness/exifremove](https://github.com/superseriousbusiness/exifremove) forked from [scottleedavis/go-exif-remove](https://github.com/scottleedavis/go-exif-remove); EXIF data removal. [MIT License](https://spdx.org/licenses/MIT.html).
+- [superseriousbusiness/exif-terminator](https://github.com/superseriousbusiness/exif-terminator); EXIF data removal. [GNU AGPL v3 LICENSE](https://spdx.org/licenses/AGPL-3.0-or-later.html).
+- [superseriousbusiness/activity](https://github.com/superseriousbusiness/activity) forked from [go-fed/activity](https://github.com/go-fed/activity); Golang ActivityPub/ActivityStreams library. [BSD-3-Clause License](https://spdx.org/licenses/BSD-3-Clause.html).
 - [superseriousbusiness/oauth2](https://github.com/superseriousbusiness/oauth2) forked from [go-oauth2/oauth2](https://github.com/go-oauth2/oauth2); oauth server framework and token handling. [MIT License](https://spdx.org/licenses/MIT.html).
 - [go-swagger/go-swagger](https://github.com/go-swagger/go-swagger); Swagger OpenAPI spec generation. [Apache-2.0 License](https://spdx.org/licenses/Apache-2.0.html).
 - [tdewolff/minify](https://github.com/tdewolff/minify); HTML minification. [MIT License](https://spdx.org/licenses/MIT.html).
 - [uptrace/bun](https://github.com/uptrace/bun); database ORM. [BSD-2-Clause License](https://spdx.org/licenses/BSD-2-Clause.html).
-- [urfave/cli](https://github.com/urfave/cli); command-line interface framework. [MIT License](https://spdx.org/licenses/MIT.html).
 - [wagslane/go-password-validator](https://github.com/wagslane/go-password-validator); password strength validation. [MIT License](https://spdx.org/licenses/MIT.html).
+
+### Image Attribution
+
+Sloth logo by [Anna Abramek](https://abramek.art/), Copyright (C) 2021-2022 the GoToSocial Authors.
+
+### Developers
+
+In alphabetical order:
+
+- f0x \[[donate with liberapay](https://liberapay.com/f0x)\]
+- kim
+- tobi \[[donate with liberapay](https://liberapay.com/GoToSocial/)\]
+
+### Special Thanks
+
+A huge thank you to CJ from [go-fed](https://github.com/go-fed/activity): without your work GoToSocial would not have been possible.
+
+Thanks to everyone who has used GtS, opened an issue, suggested something, given funding, and otherwise encouraged or supported the project!
+
+## Sponsorship + Funding
+
+Currently, this project is funded using Liberapay, to put bread on the table while work continues on it.
+
+If you want to sponsor this project, you can do so [here](https://liberapay.com/GoToSocial/)! `<3`
+
+**GoToSocial has NO CORPORATE SPONSORS and does not desire corporate sponsorship.**
+
+## License
+
+![the gnu AGPL logo](https://www.gnu.org/graphics/agplv3-155x51.png)
+
+GoToSocial is free software, licensed under the [GNU AGPL v3 LICENSE](LICENSE). We encourage forking and changing the code, hacking around with it, and experimenting.
+
+See [here](https://www.gnu.org/licenses/why-affero-gpl.html) for the differences between AGPL versus GPL licensing, and [here](https://www.gnu.org/licenses/gpl-faq.html) for FAQ's about GPL licenses, including the AGPL.
+
+If you modify the GoToSocial source code, and run that modified code in a way that's accessible over a network, you *must* make your modifications to the source code available following the guidelines of the license:
+
+> \[I\]f you modify the Program, your modified version must prominently offer all users interacting with it remotely through a computer network (if your version supports such interaction) an opportunity to receive the Corresponding Source of your version by providing access to the Corresponding Source from a network server at no charge, through some standard or customary means of facilitating copying of software.
+
+Copyright (C) 2021-2022 the GoToSocial Authors.

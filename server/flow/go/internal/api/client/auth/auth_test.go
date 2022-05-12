@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -21,131 +21,93 @@ package auth_test
 import (
 	"context"
 	"fmt"
-	"testing"
+	"net/http/httptest"
 
-	"github.com/google/uuid"
-	"github.com/sirupsen/logrus"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/memstore"
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"github.com/stretchr/testify/suite"
+	"github.com/superseriousbusiness/gotosocial/internal/api/client/auth"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
-	"github.com/superseriousbusiness/gotosocial/internal/db/bundb"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
-	"golang.org/x/crypto/bcrypt"
+	"github.com/superseriousbusiness/gotosocial/internal/oidc"
+	"github.com/superseriousbusiness/gotosocial/internal/router"
+	"github.com/superseriousbusiness/gotosocial/testrig"
 )
 
-type AuthTestSuite struct {
+type AuthStandardTestSuite struct {
 	suite.Suite
-	oauthServer     oauth.Server
-	db              db.DB
-	testAccount     *gtsmodel.Account
-	testApplication *gtsmodel.Application
-	testUser        *gtsmodel.User
-	testClient      *gtsmodel.Client
-	config          *config.Config
+	db          db.DB
+	idp         oidc.IDP
+	oauthServer oauth.Server
+
+	// standard suite models
+	testTokens       map[string]*gtsmodel.Token
+	testClients      map[string]*gtsmodel.Client
+	testApplications map[string]*gtsmodel.Application
+	testUsers        map[string]*gtsmodel.User
+	testAccounts     map[string]*gtsmodel.Account
+
+	// module being tested
+	authModule *auth.Module
 }
 
-// SetupSuite sets some variables on the suite that we can use as consts (more or less) throughout
-func (suite *AuthTestSuite) SetupSuite() {
-	c := config.Empty()
-	// we're running on localhost without https so set the protocol to http
-	c.Protocol = "http"
-	// just for testing
-	c.Host = "localhost:8080"
-	// because go tests are run within the test package directory, we need to fiddle with the templateconfig
-	// basedir in a way that we wouldn't normally have to do when running the binary, in order to make
-	// the templates actually load
-	c.TemplateConfig.BaseDir = "../../../web/template/"
-	c.DBConfig = &config.DBConfig{
-		Type:            "postgres",
-		Address:         "localhost",
-		Port:            5432,
-		User:            "postgres",
-		Password:        "postgres",
-		Database:        "postgres",
-		ApplicationName: "gotosocial",
-	}
-	suite.config = c
+const (
+	sessionUserID   = "userid"
+	sessionClientID = "client_id"
+)
 
-	encryptedPassword, err := bcrypt.GenerateFromPassword([]byte("password"), bcrypt.DefaultCost)
+func (suite *AuthStandardTestSuite) SetupSuite() {
+	suite.testTokens = testrig.NewTestTokens()
+	suite.testClients = testrig.NewTestClients()
+	suite.testApplications = testrig.NewTestApplications()
+	suite.testUsers = testrig.NewTestUsers()
+	suite.testAccounts = testrig.NewTestAccounts()
+}
+
+func (suite *AuthStandardTestSuite) SetupTest() {
+	testrig.InitTestConfig()
+	suite.db = testrig.NewTestDB()
+	testrig.InitTestLog()
+
+	suite.oauthServer = testrig.NewTestOauthServer(suite.db)
+	var err error
+	suite.idp, err = oidc.NewIDP(context.Background())
 	if err != nil {
-		logrus.Panicf("error encrypting user pass: %s", err)
+		panic(err)
 	}
-
-	acctID := uuid.NewString()
-
-	suite.testAccount = &gtsmodel.Account{
-		ID:       acctID,
-		Username: "test_user",
-	}
-	suite.testUser = &gtsmodel.User{
-		EncryptedPassword: string(encryptedPassword),
-		Email:             "user@example.org",
-		AccountID:         acctID,
-	}
-	suite.testClient = &gtsmodel.Client{
-		ID:     "a-known-client-id",
-		Secret: "some-secret",
-		Domain: fmt.Sprintf("%s://%s", c.Protocol, c.Host),
-	}
-	suite.testApplication = &gtsmodel.Application{
-		Name:         "a test application",
-		Website:      "https://some-application-website.com",
-		RedirectURI:  "http://localhost:8080",
-		ClientID:     "a-known-client-id",
-		ClientSecret: "some-secret",
-		Scopes:       "read",
-	}
+	suite.authModule = auth.New(suite.db, suite.oauthServer, suite.idp).(*auth.Module)
+	testrig.StandardDBSetup(suite.db, nil)
 }
 
-// SetupTest creates a postgres connection and creates the oauth_clients table before each test
-func (suite *AuthTestSuite) SetupTest() {
-
-	log := logrus.New()
-	log.SetLevel(logrus.TraceLevel)
-	db, err := bundb.NewBunDBService(context.Background(), suite.config)
-	if err != nil {
-		logrus.Panicf("error creating database connection: %s", err)
-	}
-
-	suite.db = db
-	suite.oauthServer = oauth.New(context.Background(), suite.db)
-
-	if err := suite.db.Put(context.Background(), suite.testAccount); err != nil {
-		logrus.Panicf("could not insert test account into db: %s", err)
-	}
-	if err := suite.db.Put(context.Background(), suite.testUser); err != nil {
-		logrus.Panicf("could not insert test user into db: %s", err)
-	}
-	if err := suite.db.Put(context.Background(), suite.testClient); err != nil {
-		logrus.Panicf("could not insert test client into db: %s", err)
-	}
-	if err := suite.db.Put(context.Background(), suite.testApplication); err != nil {
-		logrus.Panicf("could not insert test application into db: %s", err)
-	}
-
+func (suite *AuthStandardTestSuite) TearDownTest() {
+	testrig.StandardDBTeardown(suite.db)
 }
 
-// TearDownTest drops the oauth_clients table and closes the pg connection after each test
-func (suite *AuthTestSuite) TearDownTest() {
-	models := []interface{}{
-		&gtsmodel.Client{},
-		&gtsmodel.Token{},
-		&gtsmodel.User{},
-		&gtsmodel.Account{},
-		&gtsmodel.Application{},
-	}
-	for _, m := range models {
-		if err := suite.db.DropTable(context.Background(), m); err != nil {
-			logrus.Panicf("error dropping table: %s", err)
-		}
-	}
-	if err := suite.db.Stop(context.Background()); err != nil {
-		logrus.Panicf("error closing db connection: %s", err)
-	}
-	suite.db = nil
-}
+func (suite *AuthStandardTestSuite) newContext(requestMethod string, requestPath string) (*gin.Context, *httptest.ResponseRecorder) {
+	// create the recorder and gin test context
+	recorder := httptest.NewRecorder()
+	ctx, engine := gin.CreateTestContext(recorder)
 
-func TestAuthTestSuite(t *testing.T) {
-	suite.Run(t, new(AuthTestSuite))
+	// load templates into the engine
+	testrig.ConfigureTemplatesWithGin(engine)
+
+	// create the request
+	protocol := viper.GetString(config.Keys.Protocol)
+	host := viper.GetString(config.Keys.Host)
+	baseURI := fmt.Sprintf("%s://%s", protocol, host)
+	requestURI := fmt.Sprintf("%s/%s", baseURI, requestPath)
+	ctx.Request = httptest.NewRequest(requestMethod, requestURI, nil) // the endpoint we're hitting
+	ctx.Request.Header.Set("accept", "text/html")
+
+	// trigger the session middleware on the context
+	store := memstore.NewStore(make([]byte, 32), make([]byte, 32))
+	store.Options(router.SessionOptions())
+	sessionMiddleware := sessions.Sessions("gotosocial-localhost", store)
+	sessionMiddleware(ctx)
+
+	return ctx, recorder
 }

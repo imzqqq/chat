@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -19,10 +19,12 @@
 package followrequest
 
 import (
-	"github.com/sirupsen/logrus"
 	"net/http"
 
+	"github.com/sirupsen/logrus"
+
 	"github.com/gin-gonic/gin"
+	"github.com/superseriousbusiness/gotosocial/internal/api"
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
 )
 
@@ -80,6 +82,11 @@ func (m *Module) FollowRequestGETHandler(c *gin.Context) {
 	if err != nil {
 		l.Debugf("couldn't auth: %s", err)
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	if _, err := api.NegotiateAccept(c, api.JSONAcceptHeaders...); err != nil {
+		c.JSON(http.StatusNotAcceptable, gin.H{"error": err.Error()})
 		return
 	}
 

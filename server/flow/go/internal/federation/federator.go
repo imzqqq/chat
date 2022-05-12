@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -24,10 +24,10 @@ import (
 
 	"github.com/superseriousbusiness/activity/pub"
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/federation/dereferencing"
 	"github.com/superseriousbusiness/gotosocial/internal/federation/federatingdb"
+	"github.com/superseriousbusiness/gotosocial/internal/gtserror"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/media"
 	"github.com/superseriousbusiness/gotosocial/internal/transport"
@@ -40,6 +40,8 @@ type Federator interface {
 	FederatingActor() pub.FederatingActor
 	// FederatingDB returns the underlying FederatingDB interface.
 	FederatingDB() federatingdb.DB
+	// TransportController returns the underlying transport controller.
+	TransportController() transport.Controller
 
 	// AuthenticateFederatedRequest can be used to check the authenticity of incoming http-signed requests for federating resources.
 	// The given username will be used to create a transport for making outgoing requests. See the implementation for more detailed comments.
@@ -49,7 +51,7 @@ type Federator interface {
 	// If the request does not pass authentication, or there's a domain block, nil, false, nil will be returned.
 	//
 	// If something goes wrong during authentication, nil, false, and an error will be returned.
-	AuthenticateFederatedRequest(ctx context.Context, username string) (*url.URL, bool, error)
+	AuthenticateFederatedRequest(ctx context.Context, username string) (*url.URL, gtserror.WithCode)
 
 	// FingerRemoteAccount performs a webfinger lookup for a remote account, using the .well-known path. It will return the ActivityPub URI for that
 	// account, or an error if it doesn't exist or can't be retrieved.
@@ -58,8 +60,7 @@ type Federator interface {
 	DereferenceRemoteThread(ctx context.Context, username string, statusURI *url.URL) error
 	DereferenceAnnounce(ctx context.Context, announce *gtsmodel.Status, requestingUsername string) error
 
-	GetRemoteAccount(ctx context.Context, username string, remoteAccountID *url.URL, refresh bool) (*gtsmodel.Account, bool, error)
-	EnrichRemoteAccount(ctx context.Context, username string, account *gtsmodel.Account) (*gtsmodel.Account, error)
+	GetRemoteAccount(ctx context.Context, username string, remoteAccountID *url.URL, blocking bool, refresh bool) (*gtsmodel.Account, error)
 
 	GetRemoteStatus(ctx context.Context, username string, remoteStatusID *url.URL, refresh, includeParent bool) (*gtsmodel.Status, ap.Statusable, bool, error)
 	EnrichRemoteStatus(ctx context.Context, username string, status *gtsmodel.Status, includeParent bool) (*gtsmodel.Status, error)
@@ -73,31 +74,29 @@ type Federator interface {
 }
 
 type federator struct {
-	config              *config.Config
 	db                  db.DB
 	federatingDB        federatingdb.DB
 	clock               pub.Clock
 	typeConverter       typeutils.TypeConverter
 	transportController transport.Controller
 	dereferencer        dereferencing.Dereferencer
-	mediaHandler        media.Handler
+	mediaManager        media.Manager
 	actor               pub.FederatingActor
 }
 
 // NewFederator returns a new federator
-func NewFederator(db db.DB, federatingDB federatingdb.DB, transportController transport.Controller, config *config.Config, typeConverter typeutils.TypeConverter, mediaHandler media.Handler) Federator {
-	dereferencer := dereferencing.NewDereferencer(config, db, typeConverter, transportController, mediaHandler)
+func NewFederator(db db.DB, federatingDB federatingdb.DB, transportController transport.Controller, typeConverter typeutils.TypeConverter, mediaManager media.Manager) Federator {
+	dereferencer := dereferencing.NewDereferencer(db, typeConverter, transportController, mediaManager)
 
 	clock := &Clock{}
 	f := &federator{
-		config:              config,
 		db:                  db,
 		federatingDB:        federatingDB,
 		clock:               &Clock{},
 		typeConverter:       typeConverter,
 		transportController: transportController,
 		dereferencer:        dereferencer,
-		mediaHandler:        mediaHandler,
+		mediaManager:        mediaManager,
 	}
 	actor := newFederatingActor(f, f, federatingDB, clock)
 	f.actor = actor
@@ -110,4 +109,8 @@ func (f *federator) FederatingActor() pub.FederatingActor {
 
 func (f *federator) FederatingDB() federatingdb.DB {
 	return f.federatingDB
+}
+
+func (f *federator) TransportController() transport.Controller {
+	return f.transportController
 }

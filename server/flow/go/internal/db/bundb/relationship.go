@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -23,15 +23,13 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/uptrace/bun"
 )
 
 type relationshipDB struct {
-	config *config.Config
-	conn   *DBConn
+	conn *DBConn
 }
 
 func (r *relationshipDB) newBlockQ(block *gtsmodel.Block) *bun.SelectQuery {
@@ -54,14 +52,25 @@ func (r *relationshipDB) IsBlocked(ctx context.Context, account1 string, account
 	q := r.conn.
 		NewSelect().
 		Model(&gtsmodel.Block{}).
-		Where("account_id = ?", account1).
-		Where("target_account_id = ?", account2).
+		ExcludeColumn("id", "created_at", "updated_at", "uri").
 		Limit(1)
 
 	if eitherDirection {
 		q = q.
-			WhereOr("target_account_id = ?", account1).
-			Where("account_id = ?", account2)
+			WhereGroup(" OR ", func(inner *bun.SelectQuery) *bun.SelectQuery {
+				return inner.
+					Where("account_id = ?", account1).
+					Where("target_account_id = ?", account2)
+			}).
+			WhereGroup(" OR ", func(inner *bun.SelectQuery) *bun.SelectQuery {
+				return inner.
+					Where("account_id = ?", account2).
+					Where("target_account_id = ?", account1)
+			})
+	} else {
+		q = q.
+			Where("account_id = ?", account1).
+			Where("target_account_id = ?", account2)
 	}
 
 	return r.conn.Exists(ctx, q)
@@ -74,8 +83,7 @@ func (r *relationshipDB) GetBlock(ctx context.Context, account1 string, account2
 		Where("block.account_id = ?", account1).
 		Where("block.target_account_id = ?", account2)
 
-	err := q.Scan(ctx)
-	if err != nil {
+	if err := q.Scan(ctx); err != nil {
 		return nil, r.conn.ProcessError(err)
 	}
 	return block, nil
@@ -286,8 +294,7 @@ func (r *relationshipDB) GetAccountFollowRequests(ctx context.Context, accountID
 	q := r.newFollowQ(&followRequests).
 		Where("target_account_id = ?", accountID)
 
-	err := q.Scan(ctx)
-	if err != nil {
+	if err := q.Scan(ctx); err != nil {
 		return nil, r.conn.ProcessError(err)
 	}
 	return followRequests, nil
@@ -299,8 +306,7 @@ func (r *relationshipDB) GetAccountFollows(ctx context.Context, accountID string
 	q := r.newFollowQ(&follows).
 		Where("account_id = ?", accountID)
 
-	err := q.Scan(ctx)
-	if err != nil {
+	if err := q.Scan(ctx); err != nil {
 		return nil, r.conn.ProcessError(err)
 	}
 	return follows, nil

@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
@@ -16,6 +16,7 @@
 package status_test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -29,6 +30,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/superseriousbusiness/gotosocial/internal/api/client/status"
 	"github.com/superseriousbusiness/gotosocial/internal/api/model"
+	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
 )
 
@@ -51,6 +53,7 @@ func (suite *StatusBoostTestSuite) TestPostBoost() {
 	ctx.Set(oauth.SessionAuthorizedUser, suite.testUsers["local_account_1"])
 	ctx.Set(oauth.SessionAuthorizedAccount, suite.testAccounts["local_account_1"])
 	ctx.Request = httptest.NewRequest(http.MethodPost, fmt.Sprintf("http://localhost:8080%s", strings.Replace(status.ReblogPath, ":id", targetStatus.ID, 1)), nil) // the endpoint we're hitting
+	ctx.Request.Header.Set("accept", "application/json")
 
 	// normally the router would populate these params from the path values,
 	// but because we're calling the function directly, we need to set them manually.
@@ -117,6 +120,7 @@ func (suite *StatusBoostTestSuite) TestPostUnboostable() {
 	ctx.Set(oauth.SessionAuthorizedUser, suite.testUsers["local_account_1"])
 	ctx.Set(oauth.SessionAuthorizedAccount, suite.testAccounts["local_account_1"])
 	ctx.Request = httptest.NewRequest(http.MethodPost, fmt.Sprintf("http://localhost:8080%s", strings.Replace(status.ReblogPath, ":id", targetStatus.ID, 1)), nil) // the endpoint we're hitting
+	ctx.Request.Header.Set("accept", "application/json")
 
 	// normally the router would populate these params from the path values,
 	// but because we're calling the function directly, we need to set them manually.
@@ -142,6 +146,10 @@ func (suite *StatusBoostTestSuite) TestPostUnboostable() {
 // try to boost a status that's not visible to the user
 func (suite *StatusBoostTestSuite) TestPostNotVisible() {
 
+	// stop local_account_2 following zork
+	err := suite.db.DeleteByID(context.Background(), suite.testFollows["local_account_2_local_account_1"].ID, &gtsmodel.Follow{})
+	suite.NoError(err)
+
 	t := suite.testTokens["local_account_2"]
 	oauthToken := oauth.DBTokenToToken(t)
 
@@ -155,6 +163,7 @@ func (suite *StatusBoostTestSuite) TestPostNotVisible() {
 	ctx.Set(oauth.SessionAuthorizedUser, suite.testUsers["local_account_2"])
 	ctx.Set(oauth.SessionAuthorizedAccount, suite.testAccounts["local_account_2"])
 	ctx.Request = httptest.NewRequest(http.MethodPost, fmt.Sprintf("http://localhost:8080%s", strings.Replace(status.ReblogPath, ":id", targetStatus.ID, 1)), nil) // the endpoint we're hitting
+	ctx.Request.Header.Set("accept", "application/json")
 
 	// normally the router would populate these params from the path values,
 	// but because we're calling the function directly, we need to set them manually.

@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -20,42 +20,26 @@ package user
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
-	"github.com/superseriousbusiness/gotosocial/internal/util"
+	"github.com/superseriousbusiness/gotosocial/internal/ap"
 )
-
-// ActivityPubAcceptHeaders represents the Accept headers mentioned here:
-// https://www.w3.org/TR/activitypub/#retrieving-objects
-var ActivityPubAcceptHeaders = []string{
-	`application/activity+json`,
-	`application/ld+json; profile="https://www.w3.org/ns/activitystreams"`,
-}
 
 // transferContext transfers the signature verifier and signature from the gin context to the request context
 func transferContext(c *gin.Context) context.Context {
 	ctx := c.Request.Context()
 
-	verifier, signed := c.Get(string(util.APRequestingPublicKeyVerifier))
+	verifier, signed := c.Get(string(ap.ContextRequestingPublicKeyVerifier))
 	if signed {
-		ctx = context.WithValue(ctx, util.APRequestingPublicKeyVerifier, verifier)
+		ctx = context.WithValue(ctx, ap.ContextRequestingPublicKeyVerifier, verifier)
 	}
 
-	signature, signed := c.Get(string(util.APRequestingPublicKeySignature))
+	signature, signed := c.Get(string(ap.ContextRequestingPublicKeySignature))
 	if signed {
-		ctx = context.WithValue(ctx, util.APRequestingPublicKeySignature, signature)
+		ctx = context.WithValue(ctx, ap.ContextRequestingPublicKeySignature, signature)
 	}
 
 	return ctx
-}
-
-func negotiateFormat(c *gin.Context) (string, error) {
-	format := c.NegotiateFormat(ActivityPubAcceptHeaders...)
-	if format == "" {
-		return "", fmt.Errorf("no format can be offered for Accept headers %s", c.Request.Header.Get("Accept"))
-	}
-	return format, nil
 }
 
 // SwaggerCollection represents an activitypub collection.

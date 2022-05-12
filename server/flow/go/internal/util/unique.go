@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -20,7 +20,7 @@ package util
 
 // UniqueStrings returns a deduplicated version of a given string slice.
 func UniqueStrings(s []string) []string {
-	keys := make(map[string]bool)
+	keys := make(map[string]bool, len(s))
 	list := []string{}
 	for _, entry := range s {
 		if _, value := keys[entry]; !value {

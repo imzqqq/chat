@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -34,6 +34,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/superseriousbusiness/activity/pub"
@@ -41,6 +42,8 @@ import (
 	"github.com/superseriousbusiness/activity/streams/vocab"
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
+	"github.com/superseriousbusiness/gotosocial/internal/messages"
+	"github.com/superseriousbusiness/gotosocial/internal/worker"
 )
 
 // NewTestTokens returns a map of tokens keyed according to which account the token belongs to.
@@ -63,6 +66,16 @@ func NewTestTokens() map[string]*gtsmodel.Token {
 			RedirectURI:     "http://localhost:8080",
 			Scope:           "read write follow push",
 			Access:          "PIPINALKNNNFNF98717NAMNAMNFKIJKJ881818KJKJAKJJJA",
+			AccessCreateAt:  time.Now(),
+			AccessExpiresAt: time.Now().Add(72 * time.Hour),
+		},
+		"admin_account": {
+			ID:              "01FS4TP8ANA5VE92EAPA9E0M7Q",
+			ClientID:        "01F8MGWSJCND9BWBD4WGJXBM93",
+			UserID:          "01F8MGWYWKVKS3VS8DV1AMYPGE",
+			RedirectURI:     "http://localhost:8080",
+			Scope:           "read write follow push admin",
+			Access:          "AININALKNENFNF98717NAMG4LWE4NJITMWUXM2M4MTRHZDEX",
 			AccessCreateAt:  time.Now(),
 			AccessExpiresAt: time.Now().Add(72 * time.Hour),
 		},
@@ -306,6 +319,7 @@ func NewTestAccounts() map[string]*gtsmodel.Account {
 			DisplayName:             "",
 			Fields:                  []gtsmodel.Field{},
 			Note:                    "",
+			NoteRaw:                 "",
 			Memorial:                false,
 			MovedToAccountID:        "",
 			CreatedAt:               time.Now().Add(-72 * time.Hour),
@@ -343,7 +357,8 @@ func NewTestAccounts() map[string]*gtsmodel.Account {
 			HeaderMediaAttachmentID: "01PFPMWK2FF0D9WMHEJHR07C3Q",
 			DisplayName:             "original zork (he/they)",
 			Fields:                  []gtsmodel.Field{},
-			Note:                    "hey yo this is my profile!",
+			Note:                    "<p>hey yo this is my profile!</p>",
+			NoteRaw:                 "hey yo this is my profile!",
 			Memorial:                false,
 			MovedToAccountID:        "",
 			CreatedAt:               time.Now().Add(-48 * time.Hour),
@@ -367,7 +382,7 @@ func NewTestAccounts() map[string]*gtsmodel.Account {
 			AlsoKnownAs:             "",
 			PrivateKey:              &rsa.PrivateKey{},
 			PublicKey:               &rsa.PublicKey{},
-			PublicKeyURI:            "http://localhost:8080/users/the_mighty_zork#main-key",
+			PublicKeyURI:            "http://localhost:8080/users/the_mighty_zork/main-key",
 			SensitizedAt:            time.Time{},
 			SilencedAt:              time.Time{},
 			SuspendedAt:             time.Time{},
@@ -381,7 +396,8 @@ func NewTestAccounts() map[string]*gtsmodel.Account {
 			HeaderMediaAttachmentID: "",
 			DisplayName:             "happy little turtle :3",
 			Fields:                  []gtsmodel.Field{},
-			Note:                    "i post about things that concern me",
+			Note:                    "<p>i post about things that concern me</p>",
+			NoteRaw:                 "i post about things that concern me",
 			Memorial:                false,
 			MovedToAccountID:        "",
 			CreatedAt:               time.Now().Add(-190 * time.Hour),
@@ -494,7 +510,7 @@ func NewTestAccounts() map[string]*gtsmodel.Account {
 	}
 
 	if diff := len(accounts) - len(preserializedKeys); diff > 0 {
-		var keyStrings = make([]string, diff)
+		keyStrings := make([]string, diff)
 		for i := 0; i < diff; i++ {
 			priv, _ := rsa.GenerateKey(rand.Reader, 2048)
 			key, _ := x509.MarshalPKCS8PrivateKey(priv)
@@ -557,13 +573,13 @@ func NewTestAttachments() map[string]*gtsmodel.MediaAttachment {
 			Blurhash:          "LNJRdVM{00Rj%Mayt7j[4nWBofRj",
 			Processing:        2,
 			File: gtsmodel.File{
-				Path:        "/gotosocial/storage/01F8MH17FWEB39HZJ76B6VXSKF/attachment/original/01F8MH6NEM8D7527KZAECTCR76.jpeg",
+				Path:        "01F8MH17FWEB39HZJ76B6VXSKF/attachment/original/01F8MH6NEM8D7527KZAECTCR76.jpeg",
 				ContentType: "image/jpeg",
 				FileSize:    62529,
 				UpdatedAt:   time.Now().Add(-71 * time.Hour),
 			},
 			Thumbnail: gtsmodel.Thumbnail{
-				Path:        "/gotosocial/storage/01F8MH17FWEB39HZJ76B6VXSKF/attachment/small/01F8MH6NEM8D7527KZAECTCR76.jpeg",
+				Path:        "01F8MH17FWEB39HZJ76B6VXSKF/attachment/small/01F8MH6NEM8D7527KZAECTCR76.jpeg",
 				ContentType: "image/jpeg",
 				FileSize:    6872,
 				UpdatedAt:   time.Now().Add(-71 * time.Hour),
@@ -572,6 +588,7 @@ func NewTestAttachments() map[string]*gtsmodel.MediaAttachment {
 			},
 			Avatar: false,
 			Header: false,
+			Cached: true,
 		},
 		"local_account_1_status_4_attachment_1": {
 			ID:        "01F8MH7TDVANYKWVE8VVKFPJTJ",
@@ -605,13 +622,13 @@ func NewTestAttachments() map[string]*gtsmodel.MediaAttachment {
 			Blurhash:          "LEDara58O=t5EMSOENEN9]}?aK%0",
 			Processing:        2,
 			File: gtsmodel.File{
-				Path:        "/gotosocial/storage/01F8MH1H7YV1Z7D2C8K2730QBF/attachment/original/01F8MH7TDVANYKWVE8VVKFPJTJ.gif",
+				Path:        "01F8MH1H7YV1Z7D2C8K2730QBF/attachment/original/01F8MH7TDVANYKWVE8VVKFPJTJ.gif",
 				ContentType: "image/gif",
 				FileSize:    1109138,
 				UpdatedAt:   time.Now().Add(-1 * time.Hour),
 			},
 			Thumbnail: gtsmodel.Thumbnail{
-				Path:        "/gotosocial/storage/01F8MH1H7YV1Z7D2C8K2730QBF/attachment/small/01F8MH7TDVANYKWVE8VVKFPJTJ.jpeg",
+				Path:        "01F8MH1H7YV1Z7D2C8K2730QBF/attachment/small/01F8MH7TDVANYKWVE8VVKFPJTJ.jpeg",
 				ContentType: "image/jpeg",
 				FileSize:    8803,
 				UpdatedAt:   time.Now().Add(-1 * time.Hour),
@@ -620,6 +637,7 @@ func NewTestAttachments() map[string]*gtsmodel.MediaAttachment {
 			},
 			Avatar: false,
 			Header: false,
+			Cached: true,
 		},
 		"local_account_1_unattached_1": {
 			ID:        "01F8MH8RMYQ6MSNY3JM2XT1CQ5",
@@ -653,13 +671,13 @@ func NewTestAttachments() map[string]*gtsmodel.MediaAttachment {
 			Blurhash:          "LSAd]9ogDge-R:M|j=xWIto0xXWX",
 			Processing:        2,
 			File: gtsmodel.File{
-				Path:        "/gotosocial/storage/01F8MH1H7YV1Z7D2C8K2730QBF/attachment/original/01F8MH8RMYQ6MSNY3JM2XT1CQ5.jpeg",
+				Path:        "01F8MH1H7YV1Z7D2C8K2730QBF/attachment/original/01F8MH8RMYQ6MSNY3JM2XT1CQ5.jpeg",
 				ContentType: "image/jpeg",
 				FileSize:    27759,
 				UpdatedAt:   time.Now().Add(30 * time.Second),
 			},
 			Thumbnail: gtsmodel.Thumbnail{
-				Path:        "/gotosocial/storage/01F8MH1H7YV1Z7D2C8K2730QBF/attachment/small/01F8MH8RMYQ6MSNY3JM2XT1CQ5.jpeg",
+				Path:        "01F8MH1H7YV1Z7D2C8K2730QBF/attachment/small/01F8MH8RMYQ6MSNY3JM2XT1CQ5.jpeg",
 				ContentType: "image/jpeg",
 				FileSize:    6177,
 				UpdatedAt:   time.Now().Add(30 * time.Second),
@@ -668,6 +686,7 @@ func NewTestAttachments() map[string]*gtsmodel.MediaAttachment {
 			},
 			Avatar: false,
 			Header: false,
+			Cached: true,
 		},
 		"local_account_1_avatar": {
 			ID:        "01F8MH58A357CV5K7R7TJMSH6S",
@@ -701,13 +720,13 @@ func NewTestAttachments() map[string]*gtsmodel.MediaAttachment {
 			Blurhash:          "LKK9MT,p|YSNDkJ-5rsmvnwcOoe:",
 			Processing:        2,
 			File: gtsmodel.File{
-				Path:        "/gotosocial/storage/01F8MH1H7YV1Z7D2C8K2730QBF/avatar/original/01F8MH58A357CV5K7R7TJMSH6S.jpeg",
+				Path:        "01F8MH1H7YV1Z7D2C8K2730QBF/avatar/original/01F8MH58A357CV5K7R7TJMSH6S.jpeg",
 				ContentType: "image/jpeg",
 				FileSize:    457680,
 				UpdatedAt:   time.Now().Add(-47 * time.Hour),
 			},
 			Thumbnail: gtsmodel.Thumbnail{
-				Path:        "/gotosocial/storage/01F8MH1H7YV1Z7D2C8K2730QBF/avatar/small/01F8MH58A357CV5K7R7TJMSH6S.jpeg",
+				Path:        "01F8MH1H7YV1Z7D2C8K2730QBF/avatar/small/01F8MH58A357CV5K7R7TJMSH6S.jpeg",
 				ContentType: "image/jpeg",
 				FileSize:    15374,
 				UpdatedAt:   time.Now().Add(-47 * time.Hour),
@@ -716,6 +735,7 @@ func NewTestAttachments() map[string]*gtsmodel.MediaAttachment {
 			},
 			Avatar: true,
 			Header: false,
+			Cached: true,
 		},
 		"local_account_1_header": {
 			ID:        "01PFPMWK2FF0D9WMHEJHR07C3Q",
@@ -749,13 +769,13 @@ func NewTestAttachments() map[string]*gtsmodel.MediaAttachment {
 			Blurhash:          "L26j{^WCs+R-N}jsxWj@4;WWxDoK",
 			Processing:        2,
 			File: gtsmodel.File{
-				Path:        "/gotosocial/storage/01F8MH1H7YV1Z7D2C8K2730QBF/header/original/01PFPMWK2FF0D9WMHEJHR07C3Q.jpeg",
+				Path:        "01F8MH1H7YV1Z7D2C8K2730QBF/header/original/01PFPMWK2FF0D9WMHEJHR07C3Q.jpeg",
 				ContentType: "image/jpeg",
 				FileSize:    517226,
 				UpdatedAt:   time.Now().Add(-47 * time.Hour),
 			},
 			Thumbnail: gtsmodel.Thumbnail{
-				Path:        "/gotosocial/storage/01F8MH1H7YV1Z7D2C8K2730QBF/header/small/01PFPMWK2FF0D9WMHEJHR07C3Q.jpeg",
+				Path:        "01F8MH1H7YV1Z7D2C8K2730QBF/header/small/01PFPMWK2FF0D9WMHEJHR07C3Q.jpeg",
 				ContentType: "image/jpeg",
 				FileSize:    42308,
 				UpdatedAt:   time.Now().Add(-47 * time.Hour),
@@ -764,6 +784,56 @@ func NewTestAttachments() map[string]*gtsmodel.MediaAttachment {
 			},
 			Avatar: false,
 			Header: true,
+			Cached: true,
+		},
+		"remote_account_1_status_1_attachment_1": {
+			ID:        "01FVW7RXPQ8YJHTEXYPE7Q8ZY0",
+			StatusID:  "01FVW7JHQFSFK166WWKR8CBA6M",
+			URL:       "http://localhost:8080/fileserver/01F8MH1H7YV1Z7D2C8K2730QBF/attachment/original/01FVW7RXPQ8YJHTEXYPE7Q8ZY0.jpeg",
+			RemoteURL: "http://fossbros-anonymous.io/attachments/original/13bbc3f8-2b5e-46ea-9531-40b4974d9912.jpeg",
+			CreatedAt: TimeMustParse("2021-09-20T12:40:37+02:00"),
+			UpdatedAt: TimeMustParse("2021-09-20T12:40:37+02:00"),
+			Type:      gtsmodel.FileTypeImage,
+			FileMeta: gtsmodel.FileMeta{
+				Original: gtsmodel.Original{
+					Width:  472,
+					Height: 291,
+					Size:   137352,
+					Aspect: 1.6219931271477663,
+				},
+				Small: gtsmodel.Small{
+					Width:  472,
+					Height: 291,
+					Size:   137352,
+					Aspect: 1.6219931271477663,
+				},
+				Focus: gtsmodel.Focus{
+					X: 0,
+					Y: 0,
+				},
+			},
+			AccountID:         "01F8MH1H7YV1Z7D2C8K2730QBF",
+			Description:       "tweet from thoughts of dog: i drank. all the water. in my bowl. earlier. but just now. i returned. to the same bowl. and it was. full again.. the bowl. is haunted",
+			ScheduledStatusID: "",
+			Blurhash:          "LARysgM_IU_3~pD%M_Rj_39FIAt6",
+			Processing:        2,
+			File: gtsmodel.File{
+				Path:        "01F8MH1H7YV1Z7D2C8K2730QBF/attachment/original/01FVW7RXPQ8YJHTEXYPE7Q8ZY0.jpeg",
+				ContentType: "image/jpeg",
+				FileSize:    19310,
+				UpdatedAt:   TimeMustParse("2021-09-20T12:40:37+02:00"),
+			},
+			Thumbnail: gtsmodel.Thumbnail{
+				Path:        "01F8MH1H7YV1Z7D2C8K2730QBF/attachment/small/01FVW7RXPQ8YJHTEXYPE7Q8ZY0.jpeg",
+				ContentType: "image/jpeg",
+				FileSize:    20395,
+				UpdatedAt:   TimeMustParse("2021-09-20T12:40:37+02:00"),
+				URL:         "http://localhost:8080/fileserver/01F8MH1H7YV1Z7D2C8K2730QBF/attachment/small/01FVW7RXPQ8YJHTEXYPE7Q8ZY0.jpeg",
+				RemoteURL:   "http://fossbros-anonymous.io/attachments/small/a499f55b-2d1e-4acd-98d2-1ac2ba6d79b9.jpeg",
+			},
+			Avatar: false,
+			Header: false,
+			Cached: true,
 		},
 	}
 }
@@ -838,6 +908,10 @@ func newTestStoredAttachments() map[string]filenames {
 			Original: "team-fortress-original.jpeg",
 			Small:    "team-fortress-small.jpeg",
 		},
+		"remote_account_1_status_1_attachment_1": {
+			Original: "thoughtsofdog-original.jpeg",
+			Small:    "thoughtsofdog-small.jpeg",
+		},
 	}
 }
 
@@ -910,8 +984,8 @@ func NewTestStatuses() map[string]*gtsmodel.Status {
 			URI:                      "http://localhost:8080/users/admin/statuses/01FF25D5Q0DH7CHD57CTRS6WK0",
 			URL:                      "http://localhost:8080/@admin/statuses/01FF25D5Q0DH7CHD57CTRS6WK0",
 			Content:                  "hi @the_mighty_zork welcome to the instance!",
-			CreatedAt:                time.Now().Add(-46 * time.Hour),
-			UpdatedAt:                time.Now().Add(-46 * time.Hour),
+			CreatedAt:                TimeMustParse("2021-11-20T13:32:16Z"),
+			UpdatedAt:                TimeMustParse("2021-11-20T13:32:16Z"),
 			Local:                    true,
 			AccountURI:               "http://localhost:8080/users/admin",
 			MentionIDs:               []string{"01FF26A6BGEKCZFWNEHXB2ZZ6M"},
@@ -1037,7 +1111,7 @@ func NewTestStatuses() map[string]*gtsmodel.Status {
 			InReplyToID:              "",
 			BoostOfID:                "",
 			ContentWarning:           "",
-			Visibility:               gtsmodel.VisibilityMutualsOnly,
+			Visibility:               gtsmodel.VisibilityFollowersOnly,
 			Sensitive:                false,
 			Language:                 "en",
 			CreatedWithApplicationID: "01F8MGY43H3N2C8EWPR2FPYEXG",
@@ -1166,6 +1240,83 @@ func NewTestStatuses() map[string]*gtsmodel.Status {
 			Likeable:                 true,
 			ActivityStreamsType:      ap.ObjectNote,
 		},
+		"local_account_2_status_6": {
+			ID:                       "01FN3VJGFH10KR7S2PB0GFJZYG",
+			URI:                      "http://localhost:8080/users/1happyturtle/statuses/01FN3VJGFH10KR7S2PB0GFJZYG",
+			URL:                      "http://localhost:8080/@1happyturtle/statuses/01FN3VJGFH10KR7S2PB0GFJZYG",
+			Content:                  "🐢 @the_mighty_zork hi zork, this is a direct message, shhhhhh! 🐢",
+			CreatedAt:                time.Now().Add(-1 * time.Minute),
+			UpdatedAt:                time.Now().Add(-1 * time.Minute),
+			Local:                    true,
+			AccountURI:               "http://localhost:8080/users/1happyturtle",
+			MentionIDs:               []string{"01FDF2HM2NF6FSRZCDEDV451CN"},
+			AccountID:                "01F8MH5NBDF2MV7CTC4Q5128HF",
+			InReplyToID:              "",
+			InReplyToAccountID:       "",
+			InReplyToURI:             "",
+			BoostOfID:                "",
+			ContentWarning:           "",
+			Visibility:               gtsmodel.VisibilityDirect,
+			Sensitive:                false,
+			Language:                 "en",
+			CreatedWithApplicationID: "01F8MGYG9E893WRHW0TAEXR8GJ",
+			Federated:                true,
+			Boostable:                true,
+			Replyable:                true,
+			Likeable:                 true,
+			ActivityStreamsType:      ap.ObjectNote,
+		},
+		"local_account_2_status_7": {
+			ID:                       "01G20ZM733MGN8J344T4ZDDFY1",
+			URI:                      "http://localhost:8080/users/1happyturtle/statuses/01G20ZM733MGN8J344T4ZDDFY1",
+			URL:                      "http://localhost:8080/@1happyturtle/statuses/01G20ZM733MGN8J344T4ZDDFY1",
+			Content:                  "🐢 hi followers! did u know i'm a turtle? 🐢",
+			AttachmentIDs:            []string{},
+			CreatedAt:                time.Now().Add(-1 * time.Minute),
+			UpdatedAt:                time.Now().Add(-1 * time.Minute),
+			Local:                    true,
+			AccountURI:               "http://localhost:8080/users/1happyturtle",
+			AccountID:                "01F8MH5NBDF2MV7CTC4Q5128HF",
+			InReplyToID:              "",
+			BoostOfID:                "",
+			ContentWarning:           "",
+			Visibility:               gtsmodel.VisibilityFollowersOnly,
+			Sensitive:                false,
+			Language:                 "en",
+			CreatedWithApplicationID: "01F8MGYG9E893WRHW0TAEXR8GJ",
+			Federated:                true,
+			Boostable:                true,
+			Replyable:                true,
+			Likeable:                 true,
+			ActivityStreamsType:      ap.ObjectNote,
+		},
+		"remote_account_1_status_1": {
+			ID:                       "01FVW7JHQFSFK166WWKR8CBA6M",
+			URI:                      "http://fossbros-anonymous.io/users/foss_satan/statuses/01FVW7JHQFSFK166WWKR8CBA6M",
+			URL:                      "http://fossbros-anonymous.io/@foss_satan/statuses/01FVW7JHQFSFK166WWKR8CBA6M",
+			Content:                  "dark souls status bot: \"thoughts of dog\"",
+			AttachmentIDs:            []string{"01FVW7RXPQ8YJHTEXYPE7Q8ZY0"},
+			CreatedAt:                TimeMustParse("2021-09-20T12:40:37+02:00"),
+			UpdatedAt:                TimeMustParse("2021-09-20T12:40:37+02:00"),
+			Local:                    false,
+			AccountURI:               "http://fossbros-anonymous.io/users/foss_satan",
+			MentionIDs:               []string{},
+			AccountID:                "01F8MH5ZK5VRH73AKHQM6Y9VNX",
+			InReplyToID:              "",
+			InReplyToAccountID:       "",
+			InReplyToURI:             "",
+			BoostOfID:                "",
+			ContentWarning:           "",
+			Visibility:               gtsmodel.VisibilityUnlocked,
+			Sensitive:                false,
+			Language:                 "en",
+			CreatedWithApplicationID: "",
+			Federated:                true,
+			Boostable:                true,
+			Replyable:                true,
+			Likeable:                 true,
+			ActivityStreamsType:      ap.ObjectNote,
+		},
 	}
 }
 
@@ -1215,6 +1366,18 @@ func NewTestMentions() map[string]*gtsmodel.Mention {
 		"local_user_2_mention_zork": {
 			ID:               "01FDF2HM2NF6FSRZCDEDV451CN",
 			StatusID:         "01FCQSQ667XHJ9AV9T27SJJSX5",
+			CreatedAt:        time.Now().Add(-1 * time.Minute),
+			UpdatedAt:        time.Now().Add(-1 * time.Minute),
+			OriginAccountID:  "01F8MH5NBDF2MV7CTC4Q5128HF",
+			OriginAccountURI: "http://localhost:8080/users/1happyturtle",
+			TargetAccountID:  "01F8MH1H7YV1Z7D2C8K2730QBF",
+			NameString:       "@the_mighty_zork",
+			TargetAccountURI: "http://localhost:8080/users/the_mighty_zork",
+			TargetAccountURL: "http://localhost:8080/@the_mighty_zork",
+		},
+		"local_user_2_mention_zork_direct_message": {
+			ID:               "01FN3VKDEF4CN2W9TKX339BEHB",
+			StatusID:         "01FN3VJGFH10KR7S2PB0GFJZYG",
 			CreatedAt:        time.Now().Add(-1 * time.Minute),
 			UpdatedAt:        time.Now().Add(-1 * time.Minute),
 			OriginAccountID:  "01F8MH5NBDF2MV7CTC4Q5128HF",
@@ -1299,6 +1462,26 @@ func NewTestFollows() map[string]*gtsmodel.Follow {
 			URI:             "http://localhost:8080/users/the_mighty_zork/follow/01F8PYDCE8XE23GRE5DPZJDZDP",
 			Notify:          false,
 		},
+		"local_account_2_local_account_1": {
+			ID:              "01G1TK1RS4K3E0MSFTXBFWAH9Q",
+			CreatedAt:       time.Now().Add(-1 * time.Hour),
+			UpdatedAt:       time.Now().Add(-1 * time.Hour),
+			AccountID:       "01F8MH5NBDF2MV7CTC4Q5128HF",
+			TargetAccountID: "01F8MH1H7YV1Z7D2C8K2730QBF",
+			ShowReblogs:     true,
+			URI:             "http://localhost:8080/users/1happyturtle/follow/01F8PYDCE8XE23GRE5DPZJDZDP",
+			Notify:          false,
+		},
+		"admin_account_local_account_1": {
+			ID:              "01G1TK3PQKFW1BQZ9WVYRTFECK",
+			CreatedAt:       time.Now().Add(-46 * time.Hour),
+			UpdatedAt:       time.Now().Add(-46 * time.Hour),
+			AccountID:       "01F8MH17FWEB39HZJ76B6VXSKF",
+			TargetAccountID: "01F8MH1H7YV1Z7D2C8K2730QBF",
+			ShowReblogs:     true,
+			URI:             "http://localhost:8080/users/admin/follow/01G1TK3PQKFW1BQZ9WVYRTFECK",
+			Notify:          false,
+		},
 	}
 }
 
@@ -1327,7 +1510,7 @@ type ActivityWithSignature struct {
 // A struct of accounts needs to be passed in because the activities will also be bundled along with
 // their requesting signatures.
 func NewTestActivities(accounts map[string]*gtsmodel.Account) map[string]ActivityWithSignature {
-	dmForZork := newNote(
+	dmForZork := NewAPNote(
 		URLMustParse("http://fossbros-anonymous.io/users/foss_satan/statuses/5424b153-4553-4f30-9358-7b92f7cd42f6"),
 		URLMustParse("http://fossbros-anonymous.io/@foss_satan/5424b153-4553-4f30-9358-7b92f7cd42f6"),
 		time.Now(),
@@ -1337,15 +1520,17 @@ func NewTestActivities(accounts map[string]*gtsmodel.Account) map[string]Activit
 		[]*url.URL{URLMustParse("http://localhost:8080/users/the_mighty_zork")},
 		nil,
 		true,
-		[]vocab.ActivityStreamsMention{})
-	createDmForZork := wrapNoteInCreate(
+		[]vocab.ActivityStreamsMention{},
+		nil,
+	)
+	createDmForZork := WrapAPNoteInCreate(
 		URLMustParse("http://fossbros-anonymous.io/users/foss_satan/statuses/5424b153-4553-4f30-9358-7b92f7cd42f6/activity"),
 		URLMustParse("http://fossbros-anonymous.io/users/foss_satan"),
 		time.Now(),
 		dmForZork)
 	createDmForZorkSig, createDmForZorkDigest, creatDmForZorkDate := GetSignatureForActivity(createDmForZork, accounts["remote_account_1"].PublicKeyURI, accounts["remote_account_1"].PrivateKey, URLMustParse(accounts["local_account_1"].InboxURI))
 
-	forwardedMessage := newNote(
+	forwardedMessage := NewAPNote(
 		URLMustParse("http://example.org/users/some_user/statuses/afaba698-5740-4e32-a702-af61aa543bc1"),
 		URLMustParse("http://example.org/@some_user/afaba698-5740-4e32-a702-af61aa543bc1"),
 		time.Now(),
@@ -1355,8 +1540,10 @@ func NewTestActivities(accounts map[string]*gtsmodel.Account) map[string]Activit
 		[]*url.URL{URLMustParse(pub.PublicActivityPubIRI)},
 		nil,
 		false,
-		[]vocab.ActivityStreamsMention{})
-	createForwardedMessage := wrapNoteInCreate(
+		[]vocab.ActivityStreamsMention{},
+		nil,
+	)
+	createForwardedMessage := WrapAPNoteInCreate(
 		URLMustParse("http://example.org/users/some_user/statuses/afaba698-5740-4e32-a702-af61aa543bc1/activity"),
 		URLMustParse("http://example.org/users/some_user"),
 		time.Now(),
@@ -1387,8 +1574,14 @@ func NewTestFediPeople() map[string]vocab.ActivityStreamsPerson {
 	}
 	newPerson1Pub := &newPerson1Priv.PublicKey
 
+	turnipLover6969Priv, err := rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		panic(err)
+	}
+	turnipLover6969Pub := &turnipLover6969Priv.PublicKey
+
 	return map[string]vocab.ActivityStreamsPerson{
-		"https://unknown-instance.com/users/brand_new_person": newPerson(
+		"https://unknown-instance.com/users/brand_new_person": newAPPerson(
 			URLMustParse("https://unknown-instance.com/users/brand_new_person"),
 			URLMustParse("https://unknown-instance.com/users/brand_new_person/following"),
 			URLMustParse("https://unknown-instance.com/users/brand_new_person/followers"),
@@ -1408,6 +1601,26 @@ func NewTestFediPeople() map[string]vocab.ActivityStreamsPerson {
 			"image/png",
 			false,
 		),
+		"https://turnip.farm/users/turniplover6969": newAPPerson(
+			URLMustParse("https://turnip.farm/users/turniplover6969"),
+			URLMustParse("https://turnip.farm/users/turniplover6969/following"),
+			URLMustParse("https://turnip.farm/users/turniplover6969/followers"),
+			URLMustParse("https://turnip.farm/users/turniplover6969/inbox"),
+			URLMustParse("https://turnip.farm/users/turniplover6969/outbox"),
+			URLMustParse("https://turnip.farm/users/turniplover6969/collections/featured"),
+			"turniplover6969",
+			"Turnip Lover 6969",
+			"I just think they're neat",
+			URLMustParse("https://turnip.farm/@turniplover6969"),
+			true,
+			URLMustParse("https://turnip.farm/users/turniplover6969#main-key"),
+			turnipLover6969Pub,
+			nil,
+			"image/jpeg",
+			nil,
+			"image/png",
+			false,
+		),
 	}
 }
 
@@ -1419,7 +1632,7 @@ func NewTestFediGroups() map[string]vocab.ActivityStreamsGroup {
 	newGroup1Pub := &newGroup1Priv.PublicKey
 
 	return map[string]vocab.ActivityStreamsGroup{
-		"https://unknown-instance.com/groups/some_group": newGroup(
+		"https://unknown-instance.com/groups/some_group": newAPGroup(
 			URLMustParse("https://unknown-instance.com/groups/some_group"),
 			URLMustParse("https://unknown-instance.com/groups/some_group/following"),
 			URLMustParse("https://unknown-instance.com/groups/some_group/followers"),
@@ -1453,9 +1666,28 @@ func NewTestFediAttachments(relativePath string) map[string]RemoteAttachmentFile
 	if err != nil {
 		panic(err)
 	}
+
+	thoughtsOfDogBytes, err := os.ReadFile(fmt.Sprintf("%s/thoughtsofdog-original.jpeg", relativePath))
+	if err != nil {
+		panic(err)
+	}
+
+	massiveFuckingTurnipBytes, err := os.ReadFile(fmt.Sprintf("%s/giant-turnip-world-record.jpg", relativePath))
+	if err != nil {
+		panic(err)
+	}
+
 	return map[string]RemoteAttachmentFile{
 		"https://s3-us-west-2.amazonaws.com/plushcity/media_attachments/files/106/867/380/219/163/828/original/88e8758c5f011439.jpg": {
 			Data:        beeBytes,
+			ContentType: "image/jpeg",
+		},
+		"http://fossbros-anonymous.io/attachments/original/13bbc3f8-2b5e-46ea-9531-40b4974d9912.jpeg": {
+			Data:        thoughtsOfDogBytes,
+			ContentType: "image/jpeg",
+		},
+		"https://turnip.farm/attachments/f17843c7-015e-4251-9b5a-91389c49ee57.jpg": {
+			Data:        massiveFuckingTurnipBytes,
 			ContentType: "image/jpeg",
 		},
 	}
@@ -1463,7 +1695,7 @@ func NewTestFediAttachments(relativePath string) map[string]RemoteAttachmentFile
 
 func NewTestFediStatuses() map[string]vocab.ActivityStreamsNote {
 	return map[string]vocab.ActivityStreamsNote{
-		"https://unknown-instance.com/users/brand_new_person/statuses/01FE4NTHKWW7THT67EF10EB839": newNote(
+		"https://unknown-instance.com/users/brand_new_person/statuses/01FE4NTHKWW7THT67EF10EB839": NewAPNote(
 			URLMustParse("https://unknown-instance.com/users/brand_new_person/statuses/01FE4NTHKWW7THT67EF10EB839"),
 			URLMustParse("https://unknown-instance.com/users/@brand_new_person/01FE4NTHKWW7THT67EF10EB839"),
 			time.Now(),
@@ -1475,9 +1707,10 @@ func NewTestFediStatuses() map[string]vocab.ActivityStreamsNote {
 			},
 			[]*url.URL{},
 			false,
-			[]vocab.ActivityStreamsMention{},
+			nil,
+			nil,
 		),
-		"https://unknown-instance.com/users/brand_new_person/statuses/01FE5Y30E3W4P7TRE0R98KAYQV": newNote(
+		"https://unknown-instance.com/users/brand_new_person/statuses/01FE5Y30E3W4P7TRE0R98KAYQV": NewAPNote(
 			URLMustParse("https://unknown-instance.com/users/brand_new_person/statuses/01FE5Y30E3W4P7TRE0R98KAYQV"),
 			URLMustParse("https://unknown-instance.com/users/@brand_new_person/01FE5Y30E3W4P7TRE0R98KAYQV"),
 			time.Now(),
@@ -1490,9 +1723,32 @@ func NewTestFediStatuses() map[string]vocab.ActivityStreamsNote {
 			[]*url.URL{},
 			false,
 			[]vocab.ActivityStreamsMention{
-				newMention(
+				newAPMention(
 					URLMustParse("http://localhost:8080/users/the_mighty_zork"),
 					"@the_mighty_zork@localhost:8080",
+				),
+			},
+			nil,
+		),
+		"https://turnip.farm/users/turniplover6969/statuses/70c53e54-3146-42d5-a630-83c8b6c7c042": NewAPNote(
+			URLMustParse("https://turnip.farm/users/turniplover6969/statuses/70c53e54-3146-42d5-a630-83c8b6c7c042"),
+			URLMustParse("https://turnip.farm/@turniplover6969/70c53e54-3146-42d5-a630-83c8b6c7c042"),
+			time.Now(),
+			"",
+			"",
+			URLMustParse("https://turnip.farm/users/turniplover6969"),
+			[]*url.URL{
+				URLMustParse(pub.PublicActivityPubIRI),
+			},
+			[]*url.URL{},
+			false,
+			nil,
+			[]vocab.ActivityStreamsImage{
+				newAPImage(
+					URLMustParse("https://turnip.farm/attachments/f17843c7-015e-4251-9b5a-91389c49ee57.jpg"),
+					"image/jpeg",
+					"",
+					"",
 				),
 			},
 		),
@@ -1508,6 +1764,30 @@ func NewTestDereferenceRequests(accounts map[string]*gtsmodel.Account) map[strin
 	target = URLMustParse(accounts["local_account_1"].URI)
 	sig, digest, date = GetSignatureForDereference(accounts["remote_account_1"].PublicKeyURI, accounts["remote_account_1"].PrivateKey, target)
 	fossSatanDereferenceZork := ActivityWithSignature{
+		SignatureHeader: sig,
+		DigestHeader:    digest,
+		DateHeader:      date,
+	}
+
+	target = URLMustParse(accounts["local_account_1"].PublicKeyURI)
+	sig, digest, date = GetSignatureForDereference(accounts["remote_account_1"].PublicKeyURI, accounts["remote_account_1"].PrivateKey, target)
+	fossSatanDereferenceZorkPublicKey := ActivityWithSignature{
+		SignatureHeader: sig,
+		DigestHeader:    digest,
+		DateHeader:      date,
+	}
+
+	target = URLMustParse(statuses["local_account_1_status_1"].URI)
+	sig, digest, date = GetSignatureForDereference(accounts["remote_account_1"].PublicKeyURI, accounts["remote_account_1"].PrivateKey, target)
+	fossSatanDereferenceLocalAccount1Status1 := ActivityWithSignature{
+		SignatureHeader: sig,
+		DigestHeader:    digest,
+		DateHeader:      date,
+	}
+
+	target = URLMustParse(strings.ToLower(statuses["local_account_1_status_1"].URI))
+	sig, digest, date = GetSignatureForDereference(accounts["remote_account_1"].PublicKeyURI, accounts["remote_account_1"].PrivateKey, target)
+	fossSatanDereferenceLocalAccount1Status1Lowercase := ActivityWithSignature{
 		SignatureHeader: sig,
 		DigestHeader:    digest,
 		DateHeader:      date,
@@ -1563,6 +1843,9 @@ func NewTestDereferenceRequests(accounts map[string]*gtsmodel.Account) map[strin
 
 	return map[string]ActivityWithSignature{
 		"foss_satan_dereference_zork":                                  fossSatanDereferenceZork,
+		"foss_satan_dereference_zork_public_key":                       fossSatanDereferenceZorkPublicKey,
+		"foss_satan_dereference_local_account_1_status_1":              fossSatanDereferenceLocalAccount1Status1,
+		"foss_satan_dereference_local_account_1_status_1_lowercase":    fossSatanDereferenceLocalAccount1Status1Lowercase,
 		"foss_satan_dereference_local_account_1_status_1_replies":      fossSatanDereferenceLocalAccount1Status1Replies,
 		"foss_satan_dereference_local_account_1_status_1_replies_next": fossSatanDereferenceLocalAccount1Status1RepliesNext,
 		"foss_satan_dereference_local_account_1_status_1_replies_last": fossSatanDereferenceLocalAccount1Status1RepliesLast,
@@ -1589,8 +1872,13 @@ func GetSignatureForActivity(activity pub.Activity, pubKeyID string, privkey cry
 		},
 	}
 
+	// Create temporary federator worker for transport controller
+	fedWorker := worker.New[messages.FromFederator](-1, -1)
+	_ = fedWorker.Start()
+	defer func() { _ = fedWorker.Stop() }()
+
 	// use the client to create a new transport
-	c := NewTestTransportController(client, NewTestDB())
+	c := NewTestTransportController(client, NewTestDB(), fedWorker)
 	tp, err := c.NewTransport(pubKeyID, privkey)
 	if err != nil {
 		panic(err)
@@ -1606,8 +1894,8 @@ func GetSignatureForActivity(activity pub.Activity, pubKeyID string, privkey cry
 		panic(err)
 	}
 
-	// trigger the delivery function, which will trigger the 'do' function of the recorder above
-	if err := tp.Deliver(context.Background(), bytes, destination); err != nil {
+	// trigger the delivery function for the underlying signature transport, which will trigger the 'do' function of the recorder above
+	if err := tp.SigTransport().Deliver(context.Background(), bytes, destination); err != nil {
 		panic(err)
 	}
 
@@ -1631,15 +1919,20 @@ func GetSignatureForDereference(pubKeyID string, privkey crypto.PrivateKey, dest
 		},
 	}
 
+	// Create temporary federator worker for transport controller
+	fedWorker := worker.New[messages.FromFederator](-1, -1)
+	_ = fedWorker.Start()
+	defer func() { _ = fedWorker.Stop() }()
+
 	// use the client to create a new transport
-	c := NewTestTransportController(client, NewTestDB())
+	c := NewTestTransportController(client, NewTestDB(), fedWorker)
 	tp, err := c.NewTransport(pubKeyID, privkey)
 	if err != nil {
 		panic(err)
 	}
 
-	// trigger the delivery function, which will trigger the 'do' function of the recorder above
-	if _, err := tp.Dereference(context.Background(), destination); err != nil {
+	// trigger the dereference function for the underlying signature transport, which will trigger the 'do' function of the recorder above
+	if _, err := tp.SigTransport().Dereference(context.Background(), destination); err != nil {
 		panic(err)
 	}
 
@@ -1647,7 +1940,7 @@ func GetSignatureForDereference(pubKeyID string, privkey crypto.PrivateKey, dest
 	return
 }
 
-func newPerson(
+func newAPPerson(
 	profileIDURI *url.URL,
 	followingURI *url.URL,
 	followersURI *url.URL,
@@ -1665,7 +1958,8 @@ func newPerson(
 	avatarContentType string,
 	headerURL *url.URL,
 	headerContentType string,
-	manuallyApprovesFollowers bool) vocab.ActivityStreamsPerson {
+	manuallyApprovesFollowers bool,
+) vocab.ActivityStreamsPerson {
 	person := streams.NewActivityStreamsPerson()
 
 	// id should be the activitypub URI of this user
@@ -1830,7 +2124,7 @@ func newPerson(
 	return person
 }
 
-func newGroup(
+func newAPGroup(
 	profileIDURI *url.URL,
 	followingURI *url.URL,
 	followersURI *url.URL,
@@ -1848,7 +2142,8 @@ func newGroup(
 	avatarContentType string,
 	headerURL *url.URL,
 	headerContentType string,
-	manuallyApprovesFollowers bool) vocab.ActivityStreamsGroup {
+	manuallyApprovesFollowers bool,
+) vocab.ActivityStreamsGroup {
 	group := streams.NewActivityStreamsGroup()
 
 	// id should be the activitypub URI of this group
@@ -2013,7 +2308,7 @@ func newGroup(
 	return group
 }
 
-func newMention(uri *url.URL, namestring string) vocab.ActivityStreamsMention {
+func newAPMention(uri *url.URL, namestring string) vocab.ActivityStreamsMention {
 	mention := streams.NewActivityStreamsMention()
 
 	hrefProp := streams.NewActivityStreamsHrefProperty()
@@ -2027,8 +2322,38 @@ func newMention(uri *url.URL, namestring string) vocab.ActivityStreamsMention {
 	return mention
 }
 
-// newNote returns a new activity streams note for the given parameters
-func newNote(
+func newAPImage(url *url.URL, mediaType string, imageDescription string, blurhash string) vocab.ActivityStreamsImage {
+	image := streams.NewActivityStreamsImage()
+
+	if url != nil {
+		urlProp := streams.NewActivityStreamsUrlProperty()
+		urlProp.AppendIRI(url)
+		image.SetActivityStreamsUrl(urlProp)
+	}
+
+	if mediaType != "" {
+		mediaTypeProp := streams.NewActivityStreamsMediaTypeProperty()
+		mediaTypeProp.Set(mediaType)
+		image.SetActivityStreamsMediaType(mediaTypeProp)
+	}
+
+	if imageDescription != "" {
+		nameProp := streams.NewActivityStreamsNameProperty()
+		nameProp.AppendXMLSchemaString(imageDescription)
+		image.SetActivityStreamsName(nameProp)
+	}
+
+	if blurhash != "" {
+		blurhashProp := streams.NewTootBlurhashProperty()
+		blurhashProp.Set(blurhash)
+		image.SetTootBlurhash(blurhashProp)
+	}
+
+	return image
+}
+
+// NewAPNote returns a new activity streams note for the given parameters
+func NewAPNote(
 	noteID *url.URL,
 	noteURL *url.URL,
 	noteCreatedAt time.Time,
@@ -2038,8 +2363,9 @@ func newNote(
 	noteTo []*url.URL,
 	noteCC []*url.URL,
 	noteSensitive bool,
-	noteMentions []vocab.ActivityStreamsMention) vocab.ActivityStreamsNote {
-
+	noteMentions []vocab.ActivityStreamsMention,
+	noteAttachments []vocab.ActivityStreamsImage,
+) vocab.ActivityStreamsNote {
 	// create the note itself
 	note := streams.NewActivityStreamsNote()
 
@@ -2103,21 +2429,27 @@ func newNote(
 		note.SetActivityStreamsCc(cc)
 	}
 
-	// set note tags
-	tag := streams.NewActivityStreamsTagProperty()
-
 	// mentions
+	tag := streams.NewActivityStreamsTagProperty()
 	for _, m := range noteMentions {
 		tag.AppendActivityStreamsMention(m)
 	}
-
 	note.SetActivityStreamsTag(tag)
+
+	// append any attachments as ActivityStreamsImage
+	if noteAttachments != nil {
+		attachmentProperty := streams.NewActivityStreamsAttachmentProperty()
+		for _, a := range noteAttachments {
+			attachmentProperty.AppendActivityStreamsImage(a)
+		}
+		note.SetActivityStreamsAttachment(attachmentProperty)
+	}
 
 	return note
 }
 
-// wrapNoteInCreate wraps the given activity streams note in a Create activity streams action
-func wrapNoteInCreate(createID *url.URL, createActor *url.URL, createPublished time.Time, createNote vocab.ActivityStreamsNote) vocab.ActivityStreamsCreate {
+// WrapAPNoteInCreate wraps the given activity streams note in a Create activity streams action
+func WrapAPNoteInCreate(createID *url.URL, createActor *url.URL, createPublished time.Time, createNote vocab.ActivityStreamsNote) vocab.ActivityStreamsCreate {
 	// create the.... create
 	create := streams.NewActivityStreamsCreate()
 

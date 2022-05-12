@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -22,9 +22,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"github.com/superseriousbusiness/gotosocial/internal/api"
 )
 
 // StatusGETHandler serves the target status as an activitystreams NOTE so that other AP servers can parse it.
@@ -34,21 +36,23 @@ func (m *Module) StatusGETHandler(c *gin.Context) {
 		"url":  c.Request.RequestURI,
 	})
 
-	requestedUsername := c.Param(UsernameKey)
+	// usernames on our instance are always lowercase
+	requestedUsername := strings.ToLower(c.Param(UsernameKey))
 	if requestedUsername == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "no username specified in request"})
 		return
 	}
 
-	requestedStatusID := c.Param(StatusIDKey)
+	// status IDs on our instance are always uppercase
+	requestedStatusID := strings.ToUpper(c.Param(StatusIDKey))
 	if requestedStatusID == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "no status id specified in request"})
 		return
 	}
 
-	format, err := negotiateFormat(c)
+	format, err := api.NegotiateAccept(c, api.ActivityPubAcceptHeaders...)
 	if err != nil {
-		c.JSON(http.StatusNotAcceptable, gin.H{"error": fmt.Sprintf("could not negotiate format with given Accept header(s): %s", err)})
+		c.JSON(http.StatusNotAcceptable, gin.H{"error": err.Error()})
 		return
 	}
 	l.Tracef("negotiated format: %s", format)

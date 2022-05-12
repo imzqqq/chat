@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -19,13 +19,13 @@
 package status
 
 import (
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"strings"
 
+	"github.com/sirupsen/logrus"
+
 	"github.com/gin-gonic/gin"
 	"github.com/superseriousbusiness/gotosocial/internal/api"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/processing"
 	"github.com/superseriousbusiness/gotosocial/internal/router"
 )
@@ -74,14 +74,12 @@ const (
 
 // Module implements the ClientAPIModule interface for every related to posting/deleting/interacting with statuses
 type Module struct {
-	config    *config.Config
 	processor processing.Processor
 }
 
 // New returns a new account module
-func New(config *config.Config, processor processing.Processor) api.ClientModule {
+func New(processor processing.Processor) api.ClientModule {
 	return &Module{
-		config:    config,
 		processor: processor,
 	}
 }
@@ -110,13 +108,13 @@ func (m *Module) muxHandler(c *gin.Context) {
 	logrus.Debug("entering mux handler")
 	ru := c.Request.RequestURI
 
-	switch c.Request.Method {
-	case http.MethodGet:
-		if strings.HasPrefix(ru, ContextPath) {
+	if c.Request.Method == http.MethodGet {
+		switch {
+		case strings.HasPrefix(ru, ContextPath):
 			// TODO
-		} else if strings.HasPrefix(ru, FavouritedPath) {
+		case strings.HasPrefix(ru, FavouritedPath):
 			m.StatusFavedByGETHandler(c)
-		} else {
+		default:
 			m.StatusGETHandler(c)
 		}
 	}

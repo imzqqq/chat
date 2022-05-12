@@ -967,313 +967,313 @@ func BoolUint64(b bool) uint64 {
 }
 
 func SetBitFieldPtr8Int8(p uintptr, v int8, off int, mask uint8) {
-	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v<<off)&mask
+	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v)<<off&mask
 }
 
 func SetBitFieldPtr8Int16(p uintptr, v int16, off int, mask uint8) {
-	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v<<off)&mask
+	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v)<<off&mask
 }
 
 func SetBitFieldPtr8Int32(p uintptr, v int32, off int, mask uint8) {
-	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v<<off)&mask
+	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v)<<off&mask
 }
 
 func SetBitFieldPtr8Int64(p uintptr, v int64, off int, mask uint8) {
-	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v<<off)&mask
+	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v)<<off&mask
 }
 
 func SetBitFieldPtr8Uint8(p uintptr, v uint8, off int, mask uint8) {
-	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v<<off)&mask
+	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v)<<off&mask
 }
 
 func SetBitFieldPtr8Uint16(p uintptr, v uint16, off int, mask uint8) {
-	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v<<off)&mask
+	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v)<<off&mask
 }
 
 func SetBitFieldPtr8Uint32(p uintptr, v uint32, off int, mask uint8) {
-	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v<<off)&mask
+	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v)<<off&mask
 }
 
 func SetBitFieldPtr8Uint64(p uintptr, v uint64, off int, mask uint8) {
-	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v<<off)&mask
+	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v)<<off&mask
 }
 
 func SetBitFieldPtr16Int8(p uintptr, v int8, off int, mask uint16) {
-	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v<<off)&mask
+	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v)<<off&mask
 }
 
 func SetBitFieldPtr16Int16(p uintptr, v int16, off int, mask uint16) {
-	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v<<off)&mask
+	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v)<<off&mask
 }
 
 func SetBitFieldPtr16Int32(p uintptr, v int32, off int, mask uint16) {
-	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v<<off)&mask
+	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v)<<off&mask
 }
 
 func SetBitFieldPtr16Int64(p uintptr, v int64, off int, mask uint16) {
-	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v<<off)&mask
+	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v)<<off&mask
 }
 
 func SetBitFieldPtr16Uint8(p uintptr, v uint8, off int, mask uint16) {
-	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v<<off)&mask
+	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v)<<off&mask
 }
 
 func SetBitFieldPtr16Uint16(p uintptr, v uint16, off int, mask uint16) {
-	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v<<off)&mask
+	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v)<<off&mask
 }
 
 func SetBitFieldPtr16Uint32(p uintptr, v uint32, off int, mask uint16) {
-	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v<<off)&mask
+	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v)<<off&mask
 }
 
 func SetBitFieldPtr16Uint64(p uintptr, v uint64, off int, mask uint16) {
-	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v<<off)&mask
+	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v)<<off&mask
 }
 
 func SetBitFieldPtr32Int8(p uintptr, v int8, off int, mask uint32) {
-	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v<<off)&mask
+	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v)<<off&mask
 }
 
 func SetBitFieldPtr32Int16(p uintptr, v int16, off int, mask uint32) {
-	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v<<off)&mask
+	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v)<<off&mask
 }
 
 func SetBitFieldPtr32Int32(p uintptr, v int32, off int, mask uint32) {
-	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v<<off)&mask
+	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v)<<off&mask
 }
 
 func SetBitFieldPtr32Int64(p uintptr, v int64, off int, mask uint32) {
-	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v<<off)&mask
+	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v)<<off&mask
 }
 
 func SetBitFieldPtr32Uint8(p uintptr, v uint8, off int, mask uint32) {
-	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v<<off)&mask
+	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v)<<off&mask
 }
 
 func SetBitFieldPtr32Uint16(p uintptr, v uint16, off int, mask uint32) {
-	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v<<off)&mask
+	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v)<<off&mask
 }
 
 func SetBitFieldPtr32Uint32(p uintptr, v uint32, off int, mask uint32) {
-	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v<<off)&mask
+	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v)<<off&mask
 }
 
 func SetBitFieldPtr32Uint64(p uintptr, v uint64, off int, mask uint32) {
-	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v<<off)&mask
+	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v)<<off&mask
 }
 
 func SetBitFieldPtr64Int8(p uintptr, v int8, off int, mask uint64) {
-	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v<<off)&mask
+	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v)<<off&mask
 }
 
 func SetBitFieldPtr64Int16(p uintptr, v int16, off int, mask uint64) {
-	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v<<off)&mask
+	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v)<<off&mask
 }
 
 func SetBitFieldPtr64Int32(p uintptr, v int32, off int, mask uint64) {
-	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v<<off)&mask
+	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v)<<off&mask
 }
 
 func SetBitFieldPtr64Int64(p uintptr, v int64, off int, mask uint64) {
-	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v<<off)&mask
+	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v)<<off&mask
 }
 
 func SetBitFieldPtr64Uint8(p uintptr, v uint8, off int, mask uint64) {
-	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v<<off)&mask
+	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v)<<off&mask
 }
 
 func SetBitFieldPtr64Uint16(p uintptr, v uint16, off int, mask uint64) {
-	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v<<off)&mask
+	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v)<<off&mask
 }
 
 func SetBitFieldPtr64Uint32(p uintptr, v uint32, off int, mask uint64) {
-	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v<<off)&mask
+	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v)<<off&mask
 }
 
 func SetBitFieldPtr64Uint64(p uintptr, v uint64, off int, mask uint64) {
-	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v<<off)&mask
+	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v)<<off&mask
 }
 
 func AssignBitFieldPtr8Int8(p uintptr, v int8, w, off int, mask uint8) int8 {
-	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v<<off)&mask
+	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v)<<off&mask
 	s := 8 - w
 	return v << s >> s
 }
 
 func AssignBitFieldPtr8Int16(p uintptr, v int16, w, off int, mask uint8) int16 {
-	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v<<off)&mask
+	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v)<<off&mask
 	s := 16 - w
 	return v << s >> s
 }
 
 func AssignBitFieldPtr8Int32(p uintptr, v int32, w, off int, mask uint8) int32 {
-	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v<<off)&mask
+	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v)<<off&mask
 	s := 32 - w
 	return v << s >> s
 }
 
 func AssignBitFieldPtr8Int64(p uintptr, v int64, w, off int, mask uint8) int64 {
-	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v<<off)&mask
+	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v)<<off&mask
 	s := 64 - w
 	return v << s >> s
 }
 
 func AssignBitFieldPtr16Int8(p uintptr, v int8, w, off int, mask uint16) int8 {
-	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v<<off)&mask
+	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v)<<off&mask
 	s := 8 - w
 	return v << s >> s
 }
 
 func AssignBitFieldPtr16Int16(p uintptr, v int16, w, off int, mask uint16) int16 {
-	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v<<off)&mask
+	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v)<<off&mask
 	s := 16 - w
 	return v << s >> s
 }
 
 func AssignBitFieldPtr16Int32(p uintptr, v int32, w, off int, mask uint16) int32 {
-	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v<<off)&mask
+	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v)<<off&mask
 	s := 32 - w
 	return v << s >> s
 }
 
 func AssignBitFieldPtr16Int64(p uintptr, v int64, w, off int, mask uint16) int64 {
-	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v<<off)&mask
+	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v)<<off&mask
 	s := 64 - w
 	return v << s >> s
 }
 
 func AssignBitFieldPtr32Int8(p uintptr, v int8, w, off int, mask uint32) int8 {
-	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v<<off)&mask
+	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v)<<off&mask
 	s := 8 - w
 	return v << s >> s
 }
 
 func AssignBitFieldPtr32Int16(p uintptr, v int16, w, off int, mask uint32) int16 {
-	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v<<off)&mask
+	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v)<<off&mask
 	s := 16 - w
 	return v << s >> s
 }
 
 func AssignBitFieldPtr32Int32(p uintptr, v int32, w, off int, mask uint32) int32 {
-	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v<<off)&mask
+	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v)<<off&mask
 	s := 32 - w
 	return v << s >> s
 }
 
 func AssignBitFieldPtr32Int64(p uintptr, v int64, w, off int, mask uint32) int64 {
-	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v<<off)&mask
+	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v)<<off&mask
 	s := 64 - w
 	return v << s >> s
 }
 
 func AssignBitFieldPtr64Int8(p uintptr, v int8, w, off int, mask uint64) int8 {
-	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v<<off)&mask
+	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v)<<off&mask
 	s := 8 - w
 	return v << s >> s
 }
 
 func AssignBitFieldPtr64Int16(p uintptr, v int16, w, off int, mask uint64) int16 {
-	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v<<off)&mask
+	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v)<<off&mask
 	s := 16 - w
 	return v << s >> s
 }
 
 func AssignBitFieldPtr64Int32(p uintptr, v int32, w, off int, mask uint64) int32 {
-	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v<<off)&mask
+	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v)<<off&mask
 	s := 32 - w
 	return v << s >> s
 }
 
 func AssignBitFieldPtr64Int64(p uintptr, v int64, w, off int, mask uint64) int64 {
-	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v<<off)&mask
+	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v)<<off&mask
 	s := 64 - w
 	return v << s >> s
 }
 
 func AssignBitFieldPtr8Uint8(p uintptr, v uint8, w, off int, mask uint8) uint8 {
-	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v<<off)&mask
+	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v)<<off&mask
 	return v & uint8(mask>>off)
 }
 
 func AssignBitFieldPtr8Uint16(p uintptr, v uint16, w, off int, mask uint8) uint16 {
-	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v<<off)&mask
+	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v)<<off&mask
 	return v & uint16(mask>>off)
 }
 
 func AssignBitFieldPtr8Uint32(p uintptr, v uint32, w, off int, mask uint8) uint32 {
-	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v<<off)&mask
+	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v)<<off&mask
 	return v & uint32(mask>>off)
 }
 
 func AssignBitFieldPtr8Uint64(p uintptr, v uint64, w, off int, mask uint8) uint64 {
-	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v<<off)&mask
+	*(*uint8)(unsafe.Pointer(p)) = *(*uint8)(unsafe.Pointer(p))&^uint8(mask) | uint8(v)<<off&mask
 	return v & uint64(mask>>off)
 }
 
 func AssignBitFieldPtr16Uint8(p uintptr, v uint8, w, off int, mask uint16) uint8 {
-	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v<<off)&mask
+	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v)<<off&mask
 	return v & uint8(mask>>off)
 }
 
 func AssignBitFieldPtr16Uint16(p uintptr, v uint16, w, off int, mask uint16) uint16 {
-	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v<<off)&mask
+	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v)<<off&mask
 	return v & uint16(mask>>off)
 }
 
 func AssignBitFieldPtr16Uint32(p uintptr, v uint32, w, off int, mask uint16) uint32 {
-	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v<<off)&mask
+	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v)<<off&mask
 	return v & uint32(mask>>off)
 }
 
 func AssignBitFieldPtr16Uint64(p uintptr, v uint64, w, off int, mask uint16) uint64 {
-	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v<<off)&mask
+	*(*uint16)(unsafe.Pointer(p)) = *(*uint16)(unsafe.Pointer(p))&^uint16(mask) | uint16(v)<<off&mask
 	return v & uint64(mask>>off)
 }
 
 func AssignBitFieldPtr32Uint8(p uintptr, v uint8, w, off int, mask uint32) uint8 {
-	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v<<off)&mask
+	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v)<<off&mask
 	return v & uint8(mask>>off)
 }
 
 func AssignBitFieldPtr32Uint16(p uintptr, v uint16, w, off int, mask uint32) uint16 {
-	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v<<off)&mask
+	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v)<<off&mask
 	return v & uint16(mask>>off)
 }
 
 func AssignBitFieldPtr32Uint32(p uintptr, v uint32, w, off int, mask uint32) uint32 {
-	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v<<off)&mask
+	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v)<<off&mask
 	return v & uint32(mask>>off)
 }
 
 func AssignBitFieldPtr32Uint64(p uintptr, v uint64, w, off int, mask uint32) uint64 {
-	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v<<off)&mask
+	*(*uint32)(unsafe.Pointer(p)) = *(*uint32)(unsafe.Pointer(p))&^uint32(mask) | uint32(v)<<off&mask
 	return v & uint64(mask>>off)
 }
 
 func AssignBitFieldPtr64Uint8(p uintptr, v uint8, w, off int, mask uint64) uint8 {
-	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v<<off)&mask
+	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v)<<off&mask
 	return v & uint8(mask>>off)
 }
 
 func AssignBitFieldPtr64Uint16(p uintptr, v uint16, w, off int, mask uint64) uint16 {
-	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v<<off)&mask
+	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v)<<off&mask
 	return v & uint16(mask>>off)
 }
 
 func AssignBitFieldPtr64Uint32(p uintptr, v uint32, w, off int, mask uint64) uint32 {
-	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v<<off)&mask
+	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v)<<off&mask
 	return v & uint32(mask>>off)
 }
 
 func AssignBitFieldPtr64Uint64(p uintptr, v uint64, w, off int, mask uint64) uint64 {
-	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v<<off)&mask
+	*(*uint64)(unsafe.Pointer(p)) = *(*uint64)(unsafe.Pointer(p))&^uint64(mask) | uint64(v)<<off&mask
 	return v & uint64(mask>>off)
 }
 
 func PostDecBitFieldPtr8Int8(p uintptr, d int8, w, off int, mask uint8) (r int8) {
 	x0 := *(*uint8)(unsafe.Pointer(p))
 	s := 8 - w
-	r = int8(x0) & int8(mask) << s >> s
+	r = int8(x0) & int8(mask) << s >> (s + off)
 	*(*uint8)(unsafe.Pointer(p)) = x0&^uint8(mask) | uint8(r-d)<<off&mask
 	return r
 }
@@ -1281,7 +1281,7 @@ func PostDecBitFieldPtr8Int8(p uintptr, d int8, w, off int, mask uint8) (r int8)
 func PostDecBitFieldPtr8Int16(p uintptr, d int16, w, off int, mask uint8) (r int16) {
 	x0 := *(*uint8)(unsafe.Pointer(p))
 	s := 16 - w
-	r = int16(x0) & int16(mask) << s >> s
+	r = int16(x0) & int16(mask) << s >> (s + off)
 	*(*uint8)(unsafe.Pointer(p)) = x0&^uint8(mask) | uint8(r-d)<<off&mask
 	return r
 }
@@ -1289,7 +1289,7 @@ func PostDecBitFieldPtr8Int16(p uintptr, d int16, w, off int, mask uint8) (r int
 func PostDecBitFieldPtr8Int32(p uintptr, d int32, w, off int, mask uint8) (r int32) {
 	x0 := *(*uint8)(unsafe.Pointer(p))
 	s := 32 - w
-	r = int32(x0) & int32(mask) << s >> s
+	r = int32(x0) & int32(mask) << s >> (s + off)
 	*(*uint8)(unsafe.Pointer(p)) = x0&^uint8(mask) | uint8(r-d)<<off&mask
 	return r
 }
@@ -1297,7 +1297,7 @@ func PostDecBitFieldPtr8Int32(p uintptr, d int32, w, off int, mask uint8) (r int
 func PostDecBitFieldPtr8Int64(p uintptr, d int64, w, off int, mask uint8) (r int64) {
 	x0 := *(*uint8)(unsafe.Pointer(p))
 	s := 64 - w
-	r = int64(x0) & int64(mask) << s >> s
+	r = int64(x0) & int64(mask) << s >> (s + off)
 	*(*uint8)(unsafe.Pointer(p)) = x0&^uint8(mask) | uint8(r-d)<<off&mask
 	return r
 }
@@ -1305,7 +1305,7 @@ func PostDecBitFieldPtr8Int64(p uintptr, d int64, w, off int, mask uint8) (r int
 func PostDecBitFieldPtr16Int8(p uintptr, d int8, w, off int, mask uint16) (r int8) {
 	x0 := *(*uint16)(unsafe.Pointer(p))
 	s := 8 - w
-	r = int8(x0) & int8(mask) << s >> s
+	r = int8(x0) & int8(mask) << s >> (s + off)
 	*(*uint16)(unsafe.Pointer(p)) = x0&^uint16(mask) | uint16(r-d)<<off&mask
 	return r
 }
@@ -1313,7 +1313,7 @@ func PostDecBitFieldPtr16Int8(p uintptr, d int8, w, off int, mask uint16) (r int
 func PostDecBitFieldPtr16Int16(p uintptr, d int16, w, off int, mask uint16) (r int16) {
 	x0 := *(*uint16)(unsafe.Pointer(p))
 	s := 16 - w
-	r = int16(x0) & int16(mask) << s >> s
+	r = int16(x0) & int16(mask) << s >> (s + off)
 	*(*uint16)(unsafe.Pointer(p)) = x0&^uint16(mask) | uint16(r-d)<<off&mask
 	return r
 }
@@ -1321,7 +1321,7 @@ func PostDecBitFieldPtr16Int16(p uintptr, d int16, w, off int, mask uint16) (r i
 func PostDecBitFieldPtr16Int32(p uintptr, d int32, w, off int, mask uint16) (r int32) {
 	x0 := *(*uint16)(unsafe.Pointer(p))
 	s := 32 - w
-	r = int32(x0) & int32(mask) << s >> s
+	r = int32(x0) & int32(mask) << s >> (s + off)
 	*(*uint16)(unsafe.Pointer(p)) = x0&^uint16(mask) | uint16(r-d)<<off&mask
 	return r
 }
@@ -1329,7 +1329,7 @@ func PostDecBitFieldPtr16Int32(p uintptr, d int32, w, off int, mask uint16) (r i
 func PostDecBitFieldPtr16Int64(p uintptr, d int64, w, off int, mask uint16) (r int64) {
 	x0 := *(*uint16)(unsafe.Pointer(p))
 	s := 64 - w
-	r = int64(x0) & int64(mask) << s >> s
+	r = int64(x0) & int64(mask) << s >> (s + off)
 	*(*uint16)(unsafe.Pointer(p)) = x0&^uint16(mask) | uint16(r-d)<<off&mask
 	return r
 }
@@ -1337,7 +1337,7 @@ func PostDecBitFieldPtr16Int64(p uintptr, d int64, w, off int, mask uint16) (r i
 func PostDecBitFieldPtr32Int8(p uintptr, d int8, w, off int, mask uint32) (r int8) {
 	x0 := *(*uint32)(unsafe.Pointer(p))
 	s := 8 - w
-	r = int8(x0) & int8(mask) << s >> s
+	r = int8(x0) & int8(mask) << s >> (s + off)
 	*(*uint32)(unsafe.Pointer(p)) = x0&^uint32(mask) | uint32(r-d)<<off&mask
 	return r
 }
@@ -1345,7 +1345,7 @@ func PostDecBitFieldPtr32Int8(p uintptr, d int8, w, off int, mask uint32) (r int
 func PostDecBitFieldPtr32Int16(p uintptr, d int16, w, off int, mask uint32) (r int16) {
 	x0 := *(*uint32)(unsafe.Pointer(p))
 	s := 16 - w
-	r = int16(x0) & int16(mask) << s >> s
+	r = int16(x0) & int16(mask) << s >> (s + off)
 	*(*uint32)(unsafe.Pointer(p)) = x0&^uint32(mask) | uint32(r-d)<<off&mask
 	return r
 }
@@ -1353,7 +1353,7 @@ func PostDecBitFieldPtr32Int16(p uintptr, d int16, w, off int, mask uint32) (r i
 func PostDecBitFieldPtr32Int32(p uintptr, d int32, w, off int, mask uint32) (r int32) {
 	x0 := *(*uint32)(unsafe.Pointer(p))
 	s := 32 - w
-	r = int32(x0) & int32(mask) << s >> s
+	r = int32(x0) & int32(mask) << s >> (s + off)
 	*(*uint32)(unsafe.Pointer(p)) = x0&^uint32(mask) | uint32(r-d)<<off&mask
 	return r
 }
@@ -1361,7 +1361,7 @@ func PostDecBitFieldPtr32Int32(p uintptr, d int32, w, off int, mask uint32) (r i
 func PostDecBitFieldPtr32Int64(p uintptr, d int64, w, off int, mask uint32) (r int64) {
 	x0 := *(*uint32)(unsafe.Pointer(p))
 	s := 64 - w
-	r = int64(x0) & int64(mask) << s >> s
+	r = int64(x0) & int64(mask) << s >> (s + off)
 	*(*uint32)(unsafe.Pointer(p)) = x0&^uint32(mask) | uint32(r-d)<<off&mask
 	return r
 }
@@ -1369,7 +1369,7 @@ func PostDecBitFieldPtr32Int64(p uintptr, d int64, w, off int, mask uint32) (r i
 func PostDecBitFieldPtr64Int8(p uintptr, d int8, w, off int, mask uint64) (r int8) {
 	x0 := *(*uint64)(unsafe.Pointer(p))
 	s := 8 - w
-	r = int8(x0) & int8(mask) << s >> s
+	r = int8(x0) & int8(mask) << s >> (s + off)
 	*(*uint64)(unsafe.Pointer(p)) = x0&^uint64(mask) | uint64(r-d)<<off&mask
 	return r
 }
@@ -1377,7 +1377,7 @@ func PostDecBitFieldPtr64Int8(p uintptr, d int8, w, off int, mask uint64) (r int
 func PostDecBitFieldPtr64Int16(p uintptr, d int16, w, off int, mask uint64) (r int16) {
 	x0 := *(*uint64)(unsafe.Pointer(p))
 	s := 16 - w
-	r = int16(x0) & int16(mask) << s >> s
+	r = int16(x0) & int16(mask) << s >> (s + off)
 	*(*uint64)(unsafe.Pointer(p)) = x0&^uint64(mask) | uint64(r-d)<<off&mask
 	return r
 }
@@ -1385,7 +1385,7 @@ func PostDecBitFieldPtr64Int16(p uintptr, d int16, w, off int, mask uint64) (r i
 func PostDecBitFieldPtr64Int32(p uintptr, d int32, w, off int, mask uint64) (r int32) {
 	x0 := *(*uint64)(unsafe.Pointer(p))
 	s := 32 - w
-	r = int32(x0) & int32(mask) << s >> s
+	r = int32(x0) & int32(mask) << s >> (s + off)
 	*(*uint64)(unsafe.Pointer(p)) = x0&^uint64(mask) | uint64(r-d)<<off&mask
 	return r
 }
@@ -1393,7 +1393,7 @@ func PostDecBitFieldPtr64Int32(p uintptr, d int32, w, off int, mask uint64) (r i
 func PostDecBitFieldPtr64Int64(p uintptr, d int64, w, off int, mask uint64) (r int64) {
 	x0 := *(*uint64)(unsafe.Pointer(p))
 	s := 64 - w
-	r = int64(x0) & int64(mask) << s >> s
+	r = int64(x0) & int64(mask) << s >> (s + off)
 	*(*uint64)(unsafe.Pointer(p)) = x0&^uint64(mask) | uint64(r-d)<<off&mask
 	return r
 }
@@ -1513,7 +1513,7 @@ func PostDecBitFieldPtr64Uint64(p uintptr, d uint64, w, off int, mask uint64) (r
 func PostIncBitFieldPtr8Int8(p uintptr, d int8, w, off int, mask uint8) (r int8) {
 	x0 := *(*uint8)(unsafe.Pointer(p))
 	s := 8 - w
-	r = int8(x0) & int8(mask) << s >> s
+	r = int8(x0) & int8(mask) << s >> (s + off)
 	*(*uint8)(unsafe.Pointer(p)) = x0&^uint8(mask) | uint8(r+d)<<off&mask
 	return r
 }
@@ -1521,7 +1521,7 @@ func PostIncBitFieldPtr8Int8(p uintptr, d int8, w, off int, mask uint8) (r int8)
 func PostIncBitFieldPtr8Int16(p uintptr, d int16, w, off int, mask uint8) (r int16) {
 	x0 := *(*uint8)(unsafe.Pointer(p))
 	s := 16 - w
-	r = int16(x0) & int16(mask) << s >> s
+	r = int16(x0) & int16(mask) << s >> (s + off)
 	*(*uint8)(unsafe.Pointer(p)) = x0&^uint8(mask) | uint8(r+d)<<off&mask
 	return r
 }
@@ -1529,7 +1529,7 @@ func PostIncBitFieldPtr8Int16(p uintptr, d int16, w, off int, mask uint8) (r int
 func PostIncBitFieldPtr8Int32(p uintptr, d int32, w, off int, mask uint8) (r int32) {
 	x0 := *(*uint8)(unsafe.Pointer(p))
 	s := 32 - w
-	r = int32(x0) & int32(mask) << s >> s
+	r = int32(x0) & int32(mask) << s >> (s + off)
 	*(*uint8)(unsafe.Pointer(p)) = x0&^uint8(mask) | uint8(r+d)<<off&mask
 	return r
 }
@@ -1537,7 +1537,7 @@ func PostIncBitFieldPtr8Int32(p uintptr, d int32, w, off int, mask uint8) (r int
 func PostIncBitFieldPtr8Int64(p uintptr, d int64, w, off int, mask uint8) (r int64) {
 	x0 := *(*uint8)(unsafe.Pointer(p))
 	s := 64 - w
-	r = int64(x0) & int64(mask) << s >> s
+	r = int64(x0) & int64(mask) << s >> (s + off)
 	*(*uint8)(unsafe.Pointer(p)) = x0&^uint8(mask) | uint8(r+d)<<off&mask
 	return r
 }
@@ -1545,7 +1545,7 @@ func PostIncBitFieldPtr8Int64(p uintptr, d int64, w, off int, mask uint8) (r int
 func PostIncBitFieldPtr16Int8(p uintptr, d int8, w, off int, mask uint16) (r int8) {
 	x0 := *(*uint16)(unsafe.Pointer(p))
 	s := 8 - w
-	r = int8(x0) & int8(mask) << s >> s
+	r = int8(x0) & int8(mask) << s >> (s + off)
 	*(*uint16)(unsafe.Pointer(p)) = x0&^uint16(mask) | uint16(r+d)<<off&mask
 	return r
 }
@@ -1553,7 +1553,7 @@ func PostIncBitFieldPtr16Int8(p uintptr, d int8, w, off int, mask uint16) (r int
 func PostIncBitFieldPtr16Int16(p uintptr, d int16, w, off int, mask uint16) (r int16) {
 	x0 := *(*uint16)(unsafe.Pointer(p))
 	s := 16 - w
-	r = int16(x0) & int16(mask) << s >> s
+	r = int16(x0) & int16(mask) << s >> (s + off)
 	*(*uint16)(unsafe.Pointer(p)) = x0&^uint16(mask) | uint16(r+d)<<off&mask
 	return r
 }
@@ -1561,7 +1561,7 @@ func PostIncBitFieldPtr16Int16(p uintptr, d int16, w, off int, mask uint16) (r i
 func PostIncBitFieldPtr16Int32(p uintptr, d int32, w, off int, mask uint16) (r int32) {
 	x0 := *(*uint16)(unsafe.Pointer(p))
 	s := 32 - w
-	r = int32(x0) & int32(mask) << s >> s
+	r = int32(x0) & int32(mask) << s >> (s + off)
 	*(*uint16)(unsafe.Pointer(p)) = x0&^uint16(mask) | uint16(r+d)<<off&mask
 	return r
 }
@@ -1569,7 +1569,7 @@ func PostIncBitFieldPtr16Int32(p uintptr, d int32, w, off int, mask uint16) (r i
 func PostIncBitFieldPtr16Int64(p uintptr, d int64, w, off int, mask uint16) (r int64) {
 	x0 := *(*uint16)(unsafe.Pointer(p))
 	s := 64 - w
-	r = int64(x0) & int64(mask) << s >> s
+	r = int64(x0) & int64(mask) << s >> (s + off)
 	*(*uint16)(unsafe.Pointer(p)) = x0&^uint16(mask) | uint16(r+d)<<off&mask
 	return r
 }
@@ -1577,7 +1577,7 @@ func PostIncBitFieldPtr16Int64(p uintptr, d int64, w, off int, mask uint16) (r i
 func PostIncBitFieldPtr32Int8(p uintptr, d int8, w, off int, mask uint32) (r int8) {
 	x0 := *(*uint32)(unsafe.Pointer(p))
 	s := 8 - w
-	r = int8(x0) & int8(mask) << s >> s
+	r = int8(x0) & int8(mask) << s >> (s + off)
 	*(*uint32)(unsafe.Pointer(p)) = x0&^uint32(mask) | uint32(r+d)<<off&mask
 	return r
 }
@@ -1585,7 +1585,7 @@ func PostIncBitFieldPtr32Int8(p uintptr, d int8, w, off int, mask uint32) (r int
 func PostIncBitFieldPtr32Int16(p uintptr, d int16, w, off int, mask uint32) (r int16) {
 	x0 := *(*uint32)(unsafe.Pointer(p))
 	s := 16 - w
-	r = int16(x0) & int16(mask) << s >> s
+	r = int16(x0) & int16(mask) << s >> (s + off)
 	*(*uint32)(unsafe.Pointer(p)) = x0&^uint32(mask) | uint32(r+d)<<off&mask
 	return r
 }
@@ -1593,7 +1593,7 @@ func PostIncBitFieldPtr32Int16(p uintptr, d int16, w, off int, mask uint32) (r i
 func PostIncBitFieldPtr32Int32(p uintptr, d int32, w, off int, mask uint32) (r int32) {
 	x0 := *(*uint32)(unsafe.Pointer(p))
 	s := 32 - w
-	r = int32(x0) & int32(mask) << s >> s
+	r = int32(x0) & int32(mask) << s >> (s + off)
 	*(*uint32)(unsafe.Pointer(p)) = x0&^uint32(mask) | uint32(r+d)<<off&mask
 	return r
 }
@@ -1601,7 +1601,7 @@ func PostIncBitFieldPtr32Int32(p uintptr, d int32, w, off int, mask uint32) (r i
 func PostIncBitFieldPtr32Int64(p uintptr, d int64, w, off int, mask uint32) (r int64) {
 	x0 := *(*uint32)(unsafe.Pointer(p))
 	s := 64 - w
-	r = int64(x0) & int64(mask) << s >> s
+	r = int64(x0) & int64(mask) << s >> (s + off)
 	*(*uint32)(unsafe.Pointer(p)) = x0&^uint32(mask) | uint32(r+d)<<off&mask
 	return r
 }
@@ -1609,7 +1609,7 @@ func PostIncBitFieldPtr32Int64(p uintptr, d int64, w, off int, mask uint32) (r i
 func PostIncBitFieldPtr64Int8(p uintptr, d int8, w, off int, mask uint64) (r int8) {
 	x0 := *(*uint64)(unsafe.Pointer(p))
 	s := 8 - w
-	r = int8(x0) & int8(mask) << s >> s
+	r = int8(x0) & int8(mask) << s >> (s + off)
 	*(*uint64)(unsafe.Pointer(p)) = x0&^uint64(mask) | uint64(r+d)<<off&mask
 	return r
 }
@@ -1617,7 +1617,7 @@ func PostIncBitFieldPtr64Int8(p uintptr, d int8, w, off int, mask uint64) (r int
 func PostIncBitFieldPtr64Int16(p uintptr, d int16, w, off int, mask uint64) (r int16) {
 	x0 := *(*uint64)(unsafe.Pointer(p))
 	s := 16 - w
-	r = int16(x0) & int16(mask) << s >> s
+	r = int16(x0) & int16(mask) << s >> (s + off)
 	*(*uint64)(unsafe.Pointer(p)) = x0&^uint64(mask) | uint64(r+d)<<off&mask
 	return r
 }
@@ -1625,7 +1625,7 @@ func PostIncBitFieldPtr64Int16(p uintptr, d int16, w, off int, mask uint64) (r i
 func PostIncBitFieldPtr64Int32(p uintptr, d int32, w, off int, mask uint64) (r int32) {
 	x0 := *(*uint64)(unsafe.Pointer(p))
 	s := 32 - w
-	r = int32(x0) & int32(mask) << s >> s
+	r = int32(x0) & int32(mask) << s >> (s + off)
 	*(*uint64)(unsafe.Pointer(p)) = x0&^uint64(mask) | uint64(r+d)<<off&mask
 	return r
 }
@@ -1633,7 +1633,7 @@ func PostIncBitFieldPtr64Int32(p uintptr, d int32, w, off int, mask uint64) (r i
 func PostIncBitFieldPtr64Int64(p uintptr, d int64, w, off int, mask uint64) (r int64) {
 	x0 := *(*uint64)(unsafe.Pointer(p))
 	s := 64 - w
-	r = int64(x0) & int64(mask) << s >> s
+	r = int64(x0) & int64(mask) << s >> (s + off)
 	*(*uint64)(unsafe.Pointer(p)) = x0&^uint64(mask) | uint64(r+d)<<off&mask
 	return r
 }

@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -33,6 +33,8 @@ import (
 	"github.com/superseriousbusiness/activity/streams"
 	"github.com/superseriousbusiness/activity/streams/vocab"
 	"github.com/superseriousbusiness/gotosocial/internal/api/s2s/user"
+	"github.com/superseriousbusiness/gotosocial/internal/messages"
+	"github.com/superseriousbusiness/gotosocial/internal/worker"
 	"github.com/superseriousbusiness/gotosocial/testrig"
 )
 
@@ -47,16 +49,20 @@ func (suite *RepliesGetTestSuite) TestGetReplies() {
 	targetAccount := suite.testAccounts["local_account_1"]
 	targetStatus := suite.testStatuses["local_account_1_status_1"]
 
-	tc := testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil), suite.db)
-	federator := testrig.NewTestFederator(suite.db, tc, suite.storage)
+	clientWorker := worker.New[messages.FromClientAPI](-1, -1)
+	fedWorker := worker.New[messages.FromFederator](-1, -1)
+
+	tc := testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil), suite.db, fedWorker)
+	federator := testrig.NewTestFederator(suite.db, tc, suite.storage, suite.mediaManager, fedWorker)
 	emailSender := testrig.NewEmailSender("../../../../web/template/", nil)
-	processor := testrig.NewTestProcessor(suite.db, suite.storage, federator, emailSender)
-	userModule := user.New(suite.config, processor).(*user.Module)
+	processor := testrig.NewTestProcessor(suite.db, suite.storage, federator, emailSender, suite.mediaManager, clientWorker, fedWorker)
+	userModule := user.New(processor).(*user.Module)
 
 	// setup request
 	recorder := httptest.NewRecorder()
 	ctx, _ := gin.CreateTestContext(recorder)
 	ctx.Request = httptest.NewRequest(http.MethodGet, targetStatus.URI+"/replies", nil) // the endpoint we're hitting
+	ctx.Request.Header.Set("accept", "application/activity+json")
 	ctx.Request.Header.Set("Signature", signedRequest.SignatureHeader)
 	ctx.Request.Header.Set("Date", signedRequest.DateHeader)
 
@@ -107,16 +113,20 @@ func (suite *RepliesGetTestSuite) TestGetRepliesNext() {
 	targetAccount := suite.testAccounts["local_account_1"]
 	targetStatus := suite.testStatuses["local_account_1_status_1"]
 
-	tc := testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil), suite.db)
-	federator := testrig.NewTestFederator(suite.db, tc, suite.storage)
+	clientWorker := worker.New[messages.FromClientAPI](-1, -1)
+	fedWorker := worker.New[messages.FromFederator](-1, -1)
+
+	tc := testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil), suite.db, fedWorker)
+	federator := testrig.NewTestFederator(suite.db, tc, suite.storage, suite.mediaManager, fedWorker)
 	emailSender := testrig.NewEmailSender("../../../../web/template/", nil)
-	processor := testrig.NewTestProcessor(suite.db, suite.storage, federator, emailSender)
-	userModule := user.New(suite.config, processor).(*user.Module)
+	processor := testrig.NewTestProcessor(suite.db, suite.storage, federator, emailSender, suite.mediaManager, clientWorker, fedWorker)
+	userModule := user.New(processor).(*user.Module)
 
 	// setup request
 	recorder := httptest.NewRecorder()
 	ctx, _ := gin.CreateTestContext(recorder)
 	ctx.Request = httptest.NewRequest(http.MethodGet, targetStatus.URI+"/replies?only_other_accounts=false&page=true", nil) // the endpoint we're hitting
+	ctx.Request.Header.Set("accept", "application/activity+json")
 	ctx.Request.Header.Set("Signature", signedRequest.SignatureHeader)
 	ctx.Request.Header.Set("Date", signedRequest.DateHeader)
 
@@ -170,16 +180,20 @@ func (suite *RepliesGetTestSuite) TestGetRepliesLast() {
 	targetAccount := suite.testAccounts["local_account_1"]
 	targetStatus := suite.testStatuses["local_account_1_status_1"]
 
-	tc := testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil), suite.db)
-	federator := testrig.NewTestFederator(suite.db, tc, suite.storage)
+	clientWorker := worker.New[messages.FromClientAPI](-1, -1)
+	fedWorker := worker.New[messages.FromFederator](-1, -1)
+
+	tc := testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil), suite.db, fedWorker)
+	federator := testrig.NewTestFederator(suite.db, tc, suite.storage, suite.mediaManager, fedWorker)
 	emailSender := testrig.NewEmailSender("../../../../web/template/", nil)
-	processor := testrig.NewTestProcessor(suite.db, suite.storage, federator, emailSender)
-	userModule := user.New(suite.config, processor).(*user.Module)
+	processor := testrig.NewTestProcessor(suite.db, suite.storage, federator, emailSender, suite.mediaManager, clientWorker, fedWorker)
+	userModule := user.New(processor).(*user.Module)
 
 	// setup request
 	recorder := httptest.NewRecorder()
 	ctx, _ := gin.CreateTestContext(recorder)
 	ctx.Request = httptest.NewRequest(http.MethodGet, targetStatus.URI+"/replies?only_other_accounts=false&page=true&min_id=01FF25D5Q0DH7CHD57CTRS6WK0", nil) // the endpoint we're hitting
+	ctx.Request.Header.Set("accept", "application/activity+json")
 	ctx.Request.Header.Set("Signature", signedRequest.SignatureHeader)
 	ctx.Request.Header.Set("Date", signedRequest.DateHeader)
 

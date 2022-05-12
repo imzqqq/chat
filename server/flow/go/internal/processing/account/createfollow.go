@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -29,7 +29,7 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/id"
 	"github.com/superseriousbusiness/gotosocial/internal/messages"
-	"github.com/superseriousbusiness/gotosocial/internal/util"
+	"github.com/superseriousbusiness/gotosocial/internal/uris"
 )
 
 func (p *processor) FollowCreate(ctx context.Context, requestingAccount *gtsmodel.Account, form *apimodel.AccountFollowRequest) (*apimodel.Relationship, gtserror.WithCode) {
@@ -76,7 +76,7 @@ func (p *processor) FollowCreate(ctx context.Context, requestingAccount *gtsmode
 		AccountID:       requestingAccount.ID,
 		TargetAccountID: form.ID,
 		ShowReblogs:     true,
-		URI:             util.GenerateURIForFollow(requestingAccount.Username, p.config.Protocol, p.config.Host, newFollowID),
+		URI:             uris.GenerateURIForFollow(requestingAccount.Username, newFollowID),
 		Notify:          false,
 	}
 	if form.Reblogs != nil {
@@ -101,13 +101,13 @@ func (p *processor) FollowCreate(ctx context.Context, requestingAccount *gtsmode
 	}
 
 	// otherwise we leave the follow request as it is and we handle the rest of the process asynchronously
-	p.fromClientAPI <- messages.FromClientAPI{
+	p.clientWorker.Queue(messages.FromClientAPI{
 		APObjectType:   ap.ActivityFollow,
 		APActivityType: ap.ActivityCreate,
 		GTSModel:       fr,
 		OriginAccount:  requestingAccount,
 		TargetAccount:  targetAcct,
-	}
+	})
 
 	// return whatever relationship results from this
 	return p.RelationshipGet(ctx, requestingAccount, form.ID)

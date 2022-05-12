@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -50,22 +50,22 @@ func (suite *ValidationTestSuite) TestCheckPasswordStrength() {
 
 	err = validate.NewPassword(terriblePassword)
 	if assert.Error(suite.T(), err) {
-		assert.Equal(suite.T(), errors.New("insecure password, try including more special characters, using uppercase letters, using numbers or using a longer password"), err)
+		assert.Equal(suite.T(), errors.New("password is 62% strength, try including more special characters, using uppercase letters, using numbers or using a longer password"), err)
 	}
 
 	err = validate.NewPassword(weakPassword)
 	if assert.Error(suite.T(), err) {
-		assert.Equal(suite.T(), errors.New("insecure password, try including more special characters, using numbers or using a longer password"), err)
+		assert.Equal(suite.T(), errors.New("password is 95% strength, try including more special characters, using numbers or using a longer password"), err)
 	}
 
 	err = validate.NewPassword(shortPassword)
 	if assert.Error(suite.T(), err) {
-		assert.Equal(suite.T(), errors.New("insecure password, try including more special characters or using a longer password"), err)
+		assert.Equal(suite.T(), errors.New("password is 39% strength, try including more special characters or using a longer password"), err)
 	}
 
 	err = validate.NewPassword(specialPassword)
 	if assert.Error(suite.T(), err) {
-		assert.Equal(suite.T(), errors.New("insecure password, try including more special characters or using a longer password"), err)
+		assert.Equal(suite.T(), errors.New("password is 53% strength, try including more special characters or using a longer password"), err)
 	}
 
 	err = validate.NewPassword(longPassword)

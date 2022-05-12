@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -28,25 +28,30 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/memstore"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
+	"golang.org/x/net/idna"
 )
 
-// sessionOptions returns the standard set of options to use for each session.
-func sessionOptions(cfg *config.Config) sessions.Options {
+// SessionOptions returns the standard set of options to use for each session.
+func SessionOptions() sessions.Options {
 	return sessions.Options{
 		Path:     "/",
-		Domain:   cfg.Host,
-		MaxAge:   120,                      // 2 minutes
-		Secure:   true,                     // only use cookie over https
-		HttpOnly: true,                     // exclude javascript from inspecting cookie
-		SameSite: http.SameSiteDefaultMode, // https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-cookie-same-site-00#section-4.1.1
+		Domain:   viper.GetString(config.Keys.Host),
+		MaxAge:   120,                                              // 2 minutes
+		Secure:   viper.GetString(config.Keys.Protocol) == "https", // only use cookie over https
+		HttpOnly: true,                                             // exclude javascript from inspecting cookie
+		SameSite: http.SameSiteDefaultMode,                         // https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-cookie-same-site-00#section-4.1.1
 	}
 }
 
-func sessionName(cfg *config.Config) (string, error) {
+// SessionName is a utility function that derives an appropriate session name from the hostname.
+func SessionName() (string, error) {
 	// parse the protocol + host
-	u, err := url.Parse(fmt.Sprintf("%s://%s", cfg.Protocol, cfg.Host))
+	protocol := viper.GetString(config.Keys.Protocol)
+	host := viper.GetString(config.Keys.Host)
+	u, err := url.Parse(fmt.Sprintf("%s://%s", protocol, host))
 	if err != nil {
 		return "", err
 	}
@@ -54,13 +59,20 @@ func sessionName(cfg *config.Config) (string, error) {
 	// take the hostname without any port attached
 	strippedHostname := u.Hostname()
 	if strippedHostname == "" {
-		return "", fmt.Errorf("could not derive hostname without port from %s://%s", cfg.Protocol, cfg.Host)
+		return "", fmt.Errorf("could not derive hostname without port from %s://%s", protocol, host)
 	}
 
-	return fmt.Sprintf("gotosocial-%s", strippedHostname), nil
+	// make sure IDNs are converted to punycode or the cookie library breaks:
+	// see https://en.wikipedia.org/wiki/Punycode
+	punyHostname, err := idna.New().ToASCII(strippedHostname)
+	if err != nil {
+		return "", fmt.Errorf("could not convert %s to punycode: %s", strippedHostname, err)
+	}
+
+	return fmt.Sprintf("gotosocial-%s", punyHostname), nil
 }
 
-func useSession(ctx context.Context, cfg *config.Config, sessionDB db.Session, engine *gin.Engine) error {
+func useSession(ctx context.Context, sessionDB db.Session, engine *gin.Engine) error {
 	// check if we have a saved router session already
 	rs, err := sessionDB.GetSession(ctx)
 	if err != nil {
@@ -71,9 +83,9 @@ func useSession(ctx context.Context, cfg *config.Config, sessionDB db.Session, e
 	}
 
 	store := memstore.NewStore(rs.Auth, rs.Crypt)
-	store.Options(sessionOptions(cfg))
+	store.Options(SessionOptions())
 
-	sessionName, err := sessionName(cfg)
+	sessionName, err := SessionName()
 	if err != nil {
 		return err
 	}

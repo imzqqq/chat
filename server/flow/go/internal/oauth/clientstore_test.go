@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -49,6 +49,8 @@ func (suite *PgClientStoreTestSuite) SetupSuite() {
 
 // SetupTest creates a postgres connection and creates the oauth_clients table before each test
 func (suite *PgClientStoreTestSuite) SetupTest() {
+	testrig.InitTestLog()
+	testrig.InitTestConfig()
 	suite.db = testrig.NewTestDB()
 	testrig.StandardDBSetup(suite.db, nil)
 }

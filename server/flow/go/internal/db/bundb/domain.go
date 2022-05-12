@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -21,16 +21,15 @@ package bundb
 import (
 	"context"
 	"net/url"
+	"strings"
 
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/util"
 )
 
 type domainDB struct {
-	config *config.Config
-	conn   *DBConn
+	conn *DBConn
 }
 
 func (d *domainDB) IsDomainBlocked(ctx context.Context, domain string) (bool, db.Error) {
@@ -41,7 +40,8 @@ func (d *domainDB) IsDomainBlocked(ctx context.Context, domain string) (bool, db
 	q := d.conn.
 		NewSelect().
 		Model(&gtsmodel.DomainBlock{}).
-		Where("LOWER(domain) = LOWER(?)", domain).
+		ExcludeColumn("id", "created_at", "updated_at", "created_by_account_id", "private_comment", "public_comment", "obfuscate", "subscription_id").
+		Where("domain = ?", domain).
 		Limit(1)
 
 	return d.conn.Exists(ctx, q)
@@ -52,7 +52,7 @@ func (d *domainDB) AreDomainsBlocked(ctx context.Context, domains []string) (boo
 	uniqueDomains := util.UniqueStrings(domains)
 
 	for _, domain := range uniqueDomains {
-		if blocked, err := d.IsDomainBlocked(ctx, domain); err != nil {
+		if blocked, err := d.IsDomainBlocked(ctx, strings.ToLower(domain)); err != nil {
 			return false, err
 		} else if blocked {
 			return blocked, nil

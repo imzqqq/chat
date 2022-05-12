@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/ReneKroon/ttlcache"
+	"github.com/sirupsen/logrus"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 )
 
@@ -26,7 +27,10 @@ func NewStatusCache() *StatusCache {
 
 	// Set callback to purge lookup maps on expiration
 	c.cache.SetExpirationCallback(func(key string, value interface{}) {
-		status := value.(*gtsmodel.Status)
+		status, ok := value.(*gtsmodel.Status)
+		if !ok {
+			logrus.Panicf("StatusCache could not assert entry with key %s to *gtsmodel.Status", key)
+		}
 
 		c.mutex.Lock()
 		delete(c.urls, status.URL)
@@ -87,7 +91,13 @@ func (c *StatusCache) getByID(id string) (*gtsmodel.Status, bool) {
 	if !ok {
 		return nil, false
 	}
-	return copyStatus(v.(*gtsmodel.Status)), true
+
+	s, ok := v.(*gtsmodel.Status)
+	if !ok {
+		panic("status cache entry was not a status")
+	}
+
+	return copyStatus(s), true
 }
 
 // Put places a status in the cache, ensuring that the object place is a copy for thread-safety

@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -23,12 +23,14 @@ import (
 	"net/http"
 
 	"github.com/superseriousbusiness/gotosocial/internal/api"
-	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/processing"
 	"github.com/superseriousbusiness/gotosocial/internal/router"
+	"github.com/superseriousbusiness/gotosocial/internal/uris"
 )
 
 const (
+	// FileServeBasePath forms the first part of the fileserver path.
+	FileServeBasePath = "/" + uris.FileserverPath
 	// AccountIDKey is the url key for account id (an account ulid)
 	AccountIDKey = "account_id"
 	// MediaTypeKey is the url key for media type (usually something like attachment or header etc)
@@ -42,22 +44,20 @@ const (
 // FileServer implements the RESTAPIModule interface.
 // The goal here is to serve requested media files if the gotosocial server is configured to use local storage.
 type FileServer struct {
-	config      *config.Config
-	processor   processing.Processor
-	storageBase string
+	processor processing.Processor
 }
 
 // New returns a new fileServer module
-func New(config *config.Config, processor processing.Processor) api.ClientModule {
+func New(processor processing.Processor) api.ClientModule {
 	return &FileServer{
-		config:      config,
-		processor:   processor,
-		storageBase: config.StorageConfig.ServeBasePath,
+		processor: processor,
 	}
 }
 
 // Route satisfies the RESTAPIModule interface
 func (m *FileServer) Route(s router.Router) error {
-	s.AttachHandler(http.MethodGet, fmt.Sprintf("%s/:%s/:%s/:%s/:%s", m.storageBase, AccountIDKey, MediaTypeKey, MediaSizeKey, FileNameKey), m.ServeFile)
+	// something like "/fileserver/:account_id/:media_type/:media_size/:file_name"
+	fileServePath := fmt.Sprintf("%s/:%s/:%s/:%s/:%s", FileServeBasePath, AccountIDKey, MediaTypeKey, MediaSizeKey, FileNameKey)
+	s.AttachHandler(http.MethodGet, fileServePath, m.ServeFile)
 	return nil
 }

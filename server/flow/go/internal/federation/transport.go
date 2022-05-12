@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -24,7 +24,7 @@ import (
 	"net/url"
 
 	"github.com/superseriousbusiness/activity/pub"
-	"github.com/superseriousbusiness/gotosocial/internal/util"
+	"github.com/superseriousbusiness/gotosocial/internal/uris"
 )
 
 // NewTransport returns a new Transport on behalf of a specific actor.
@@ -54,17 +54,18 @@ func (f *federator) NewTransport(ctx context.Context, actorBoxIRI *url.URL, gofe
 	var username string
 	var err error
 
-	if util.IsInboxPath(actorBoxIRI) {
-		username, err = util.ParseInboxPath(actorBoxIRI)
+	switch {
+	case uris.IsInboxPath(actorBoxIRI):
+		username, err = uris.ParseInboxPath(actorBoxIRI)
 		if err != nil {
 			return nil, fmt.Errorf("couldn't parse path %s as an inbox: %s", actorBoxIRI.String(), err)
 		}
-	} else if util.IsOutboxPath(actorBoxIRI) {
-		username, err = util.ParseOutboxPath(actorBoxIRI)
+	case uris.IsOutboxPath(actorBoxIRI):
+		username, err = uris.ParseOutboxPath(actorBoxIRI)
 		if err != nil {
 			return nil, fmt.Errorf("couldn't parse path %s as an outbox: %s", actorBoxIRI.String(), err)
 		}
-	} else {
+	default:
 		return nil, fmt.Errorf("id %s was neither an inbox path nor an outbox path", actorBoxIRI.String())
 	}
 

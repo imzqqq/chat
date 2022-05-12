@@ -1,6 +1,6 @@
 /*
    GoToSocial
-   Copyright (C) 2021 GoToSocial Authors admin@gotosocial.org
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published by
@@ -24,11 +24,12 @@ import (
 	"fmt"
 
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"github.com/superseriousbusiness/activity/streams/vocab"
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
+	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/messages"
-	"github.com/superseriousbusiness/gotosocial/internal/util"
 )
 
 // Update sets an existing entry to the database based on the value's
@@ -56,15 +57,15 @@ func (f *federatingDB) Update(ctx context.Context, asType vocab.Type) error {
 		l.Debug("entering Update")
 	}
 
-	receivingAccount, _, fromFederatorChan := extractFromCtx(ctx)
-	if receivingAccount == nil || fromFederatorChan == nil {
-		// If the receiving account or federator channel wasn't set on the context, that means this request didn't pass
+	receivingAccount, _ := extractFromCtx(ctx)
+	if receivingAccount == nil {
+		// If the receiving account wasn't set on the context, that means this request didn't pass
 		// through the API, but came from inside GtS as the result of another activity on this instance. That being so,
 		// we can safely just ignore this activity, since we know we've already processed it elsewhere.
 		return nil
 	}
 
-	requestingAcctI := ctx.Value(util.APRequestingAccount)
+	requestingAcctI := ctx.Value(ap.ContextRequestingAccount)
 	if requestingAcctI == nil {
 		l.Error("UPDATE: requesting account wasn't set on context")
 	}
@@ -124,7 +125,8 @@ func (f *federatingDB) Update(ctx context.Context, asType vocab.Type) error {
 			return fmt.Errorf("UPDATE: error converting to account: %s", err)
 		}
 
-		if updatedAcct.Domain == f.config.Host {
+		host := viper.GetString(config.Keys.Host)
+		if updatedAcct.Domain == host {
 			// no need to update local accounts
 			// in fact, if we do this will break the shit out of things so do NOT
 			return nil
@@ -146,12 +148,12 @@ func (f *federatingDB) Update(ctx context.Context, asType vocab.Type) error {
 		}
 
 		// pass to the processor for further processing of eg., avatar/header
-		fromFederatorChan <- messages.FromFederator{
+		f.fedWorker.Queue(messages.FromFederator{
 			APObjectType:     ap.ObjectProfile,
 			APActivityType:   ap.ActivityUpdate,
 			GTSModel:         updatedAcct,
 			ReceivingAccount: receivingAccount,
-		}
+		})
 	}
 
 	return nil

@@ -1,0 +1,26 @@
+version: "3.3"
+
+services:
+  gotosocial:
+    image: superseriousbusiness/gotosocial:latest
+    container_name: gotosocial
+    user: 1000:1000
+    networks:
+      - gotosocial
+    environment:
+      GTS_HOST: example.org
+      GTS_DB_TYPE: sqlite
+      GTS_DB_ADDRESS: /gotosocial/storage/sqlite.db
+      GTS_LETSENCRYPT_ENABLED: "false"
+      GTS_LETSENCRYPT_EMAIL_ADDRESS: ""
+    ports:
+      - "443:8080"
+      #- "80:80"
+    volumes:
+      - ~/gotosocial/data:/gotosocial/storage
+    restart: "always"
+
+networks:
+  gotosocial:
+    ipam:
+      driver: default
