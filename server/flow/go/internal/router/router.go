@@ -91,19 +91,18 @@ func (r *router) Start() {
 			http.Redirect(rw, r, target, http.StatusTemporaryRedirect)
 		})
 
-		// Clone HTTP server but with autocert handler
-		srv := r.srv
-		srv.Handler = r.certManager.HTTPHandler(redirect)
-
-		// Start the LetsEncrypt autocert manager HTTP server.
 		go func() {
-			addr := fmt.Sprintf("%s:%d",
+			// Take our own copy of HTTP server
+			// with updated autocert manager endpoint
+			srv := (*r.srv) //nolint
+			srv.Handler = r.certManager.HTTPHandler(redirect)
+			srv.Addr = fmt.Sprintf("%s:%d",
 				viper.GetString(keys.BindAddress),
 				viper.GetInt(keys.LetsEncryptPort),
 			)
 
-			logrus.Infof("letsencrypt listening on %s", addr)
-
+			// Start the LetsEncrypt autocert manager HTTP server.
+			logrus.Infof("letsencrypt listening on %s", srv.Addr)
 			if err := srv.ListenAndServe(); err != nil &&
 				err != http.ErrServerClosed {
 				logrus.Fatalf("letsencrypt: listen: %s", err)
