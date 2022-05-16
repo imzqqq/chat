@@ -78,7 +78,7 @@ bind-address: "0.0.0.0"
 # This *MUST NOT* be the same as the letsencrypt port specified below, unless letsencrypt is turned off.
 # Examples: [443, 6666, 8080]
 # Default: 8080
-port: 8080
+port: 8085
 
 # Array of string. CIDRs or IP addresses of proxies that should be trusted when determining real client IP from behind a reverse proxy.
 # If you're running inside a Docker container behind Traefik or Nginx, for example, add the subnet of your docker network,
@@ -112,7 +112,7 @@ db-type: "postgres"
 #
 # Examples: ["localhost","my.db.host","127.0.0.1","192.111.39.110",":memory:", "sqlite.db"]
 # Default: ""
-db-address: ""
+db-address: "localhost"
 
 # Int. Port for database connection.
 # Examples: [5432, 1234, 6969]
@@ -122,12 +122,12 @@ db-port: 5432
 # String. Username for the database connection.
 # Examples: ["mydbuser","postgres","gotosocial"]
 # Default: ""
-db-user: ""
+db-user: "imzqqq"
 
 # String. Password to use for the database connection
 # Examples: ["password123","verysafepassword","postgres"]
 # Default: ""
-db-password: ""
+db-password: "newpwd"
 
 # String. Name of the database to use within the provided database type.
 # Examples: ["mydb","postgres","gotosocial"]
