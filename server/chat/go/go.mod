@@ -65,4 +65,14 @@ require (
 	nhooyr.io/websocket v1.8.7
 )
 
+/// MARK - imzqqq
+// replace github.com/matrix-org/dugong => /home/imzqqq/workspace/chat/server/chat/go/dugong
+// replace github.com/matrix-org/go-http-js-libp2p => /home/imzqqq/workspace/chat/server/chat/go/go-http-js-libp2p
+// replace github.com/matrix-org/go-sqlite3-js => /home/imzqqq/workspace/chat/server/chat/go/go-sqlite3-js
+// replace github.com/matrix-org/gomatrix => /home/imzqqq/workspace/chat/server/chat/go/gomatrix
+// replace github.com/matrix-org/naffka => /home/imzqqq/workspace/chat/server/chat/go/naffka
+// replace github.com/matrix-org/pinecone => /home/imzqqq/workspace/chat/server/chat/go/pinecone
+// replace github.com/matrix-org/util => /home/imzqqq/workspace/chat/server/chat/go/util
+/// END
+
 go 1.16
