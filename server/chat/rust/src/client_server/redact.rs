@@ -1,30 +1,24 @@
 use std::sync::Arc;
 
-use crate::{database::DatabaseGuard, pdu::PduBuilder, ConduitResult, Ruma};
+use crate::{database::DatabaseGuard, pdu::PduBuilder, Result, Ruma};
 use ruma::{
-    api::client::r0::redact::redact_event,
-    events::{room::redaction::RoomRedactionEventContent, EventType},
+    api::client::redact::redact_event,
+    events::{room::redaction::RoomRedactionEventContent, RoomEventType},
 };
 
-#[cfg(feature = "conduit_bin")]
-use rocket::put;
 use serde_json::value::to_raw_value;
 
-/// # `PUT /chat/client/r0/rooms/{roomId}/redact/{eventId}/{txnId}`
+/// # `PUT /_matrix/client/r0/rooms/{roomId}/redact/{eventId}/{txnId}`
 ///
 /// Tries to send a redaction event into the room.
 ///
 /// - TODO: Handle txn id
-#[cfg_attr(
-    feature = "conduit_bin",
-    put("/chat/client/r0/rooms/<_>/redact/<_>/<_>", data = "<body>")
-)]
-#[tracing::instrument(skip(db, body))]
 pub async fn redact_event_route(
     db: DatabaseGuard,
-    body: Ruma<redact_event::Request<'_>>,
-) -> ConduitResult<redact_event::Response> {
+    body: Ruma<redact_event::v3::IncomingRequest>,
+) -> Result<redact_event::v3::Response> {
     let sender_user = body.sender_user.as_ref().expect("user is authenticated");
+    let body = body.body;
 
     let mutex_state = Arc::clone(
         db.globals
@@ -38,14 +32,14 @@ pub async fn redact_event_route(
 
     let event_id = db.rooms.build_and_append_pdu(
         PduBuilder {
-            event_type: EventType::RoomRedaction,
+            event_type: RoomEventType::RoomRedaction,
             content: to_raw_value(&RoomRedactionEventContent {
                 reason: body.reason.clone(),
             })
             .expect("event is valid, we just created it"),
             unsigned: None,
             state_key: None,
-            redacts: Some(body.event_id.clone()),
+            redacts: Some(body.event_id.into()),
         },
         sender_user,
         &body.room_id,
@@ -57,5 +51,6 @@ pub async fn redact_event_route(
 
     db.flush()?;
 
-    Ok(redact_event::Response { event_id }.into())
+    let event_id = (*event_id).to_owned();
+    Ok(redact_event::v3::Response { event_id })
 }

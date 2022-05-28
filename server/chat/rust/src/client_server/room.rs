@@ -1,11 +1,10 @@
 use crate::{
-    client_server::invite_helper, database::DatabaseGuard, pdu::PduBuilder, ConduitResult, Error,
-    Ruma,
+    client_server::invite_helper, database::DatabaseGuard, pdu::PduBuilder, Error, Result, Ruma,
 };
 use ruma::{
     api::client::{
         error::ErrorKind,
-        r0::room::{self, aliases, create_room, get_room_event, upgrade_room},
+        room::{self, aliases, create_room, get_room_event, upgrade_room},
     },
     events::{
         room::{
@@ -20,24 +19,17 @@ use ruma::{
             tombstone::RoomTombstoneEventContent,
             topic::RoomTopicEventContent,
         },
-        EventType,
+        RoomEventType, StateEventType,
     },
+    int,
     serde::{CanonicalJsonObject, JsonObject},
-    RoomAliasId, RoomId, RoomVersionId,
+    RoomAliasId, RoomId,
 };
 use serde_json::{json, value::to_raw_value};
-use std::{
-    cmp::max,
-    collections::BTreeMap,
-    convert::{TryFrom, TryInto},
-    sync::Arc,
-};
+use std::{cmp::max, collections::BTreeMap, sync::Arc};
 use tracing::{info, warn};
 
-#[cfg(feature = "conduit_bin")]
-use rocket::{get, post};
-
-/// # `POST /chat/client/r0/createRoom`
+/// # `POST /_matrix/client/r0/createRoom`
 ///
 /// Creates a new room.
 ///
@@ -53,15 +45,12 @@ use rocket::{get, post};
 /// - Send events listed in initial state
 /// - Send events implied by `name` and `topic`
 /// - Send invite events
-#[cfg_attr(
-    feature = "conduit_bin",
-    post("/chat/client/r0/createRoom", data = "<body>")
-)]
-#[tracing::instrument(skip(db, body))]
 pub async fn create_room_route(
     db: DatabaseGuard,
-    body: Ruma<create_room::Request<'_>>,
-) -> ConduitResult<create_room::Response> {
+    body: Ruma<create_room::v3::IncomingRequest>,
+) -> Result<create_room::v3::Response> {
+    use create_room::v3::RoomPreset;
+
     let sender_user = body.sender_user.as_ref().expect("user is authenticated");
 
     let room_id = RoomId::new(db.globals.server_name());
@@ -88,14 +77,16 @@ pub async fn create_room_route(
         ));
     }
 
-    let alias: Option<RoomAliasId> =
+    let alias: Option<Box<RoomAliasId>> =
         body.room_alias_name
             .as_ref()
             .map_or(Ok(None), |localpart| {
                 // TODO: Check for invalid characters and maximum length
                 let alias =
-                    RoomAliasId::try_from(format!("#{}:{}", localpart, db.globals.server_name()))
-                        .map_err(|_| Error::BadRequest(ErrorKind::InvalidParam, "Invalid alias."))?;
+                    RoomAliasId::parse(format!("#{}:{}", localpart, db.globals.server_name()))
+                        .map_err(|_| {
+                            Error::BadRequest(ErrorKind::InvalidParam, "Invalid alias.")
+                        })?;
 
                 if db.rooms.id_from_alias(&alias)?.is_some() {
                     Err(Error::BadRequest(
@@ -109,7 +100,7 @@ pub async fn create_room_route(
 
     let room_version = match body.room_version.clone() {
         Some(room_version) => {
-            if room_version == RoomVersionId::Version5 || room_version == RoomVersionId::Version6 {
+            if db.rooms.is_supported_version(&db, &room_version) {
                 room_version
             } else {
                 return Err(Error::BadRequest(
@@ -118,7 +109,7 @@ pub async fn create_room_route(
                 ));
             }
         }
-        None => RoomVersionId::Version6,
+        None => db.globals.default_room_version(),
     };
 
     let content = match &body.creation_content {
@@ -164,7 +155,7 @@ pub async fn create_room_route(
             .get(),
     );
 
-    if let Err(_) = de_result {
+    if de_result.is_err() {
         return Err(Error::BadRequest(
             ErrorKind::BadJson,
             "Invalid creation content",
@@ -174,7 +165,7 @@ pub async fn create_room_route(
     // 1. The room create event
     db.rooms.build_and_append_pdu(
         PduBuilder {
-            event_type: EventType::RoomCreate,
+            event_type: RoomEventType::RoomCreate,
             content: to_raw_value(&content).expect("event is valid, we just created it"),
             unsigned: None,
             state_key: Some("".to_owned()),
@@ -189,7 +180,7 @@ pub async fn create_room_route(
     // 2. Let the room creator join
     db.rooms.build_and_append_pdu(
         PduBuilder {
-            event_type: EventType::RoomMember,
+            event_type: RoomEventType::RoomMember,
             content: to_raw_value(&RoomMemberEventContent {
                 membership: MembershipState::Join,
                 displayname: db.users.displayname(sender_user)?,
@@ -198,6 +189,7 @@ pub async fn create_room_route(
                 third_party_invite: None,
                 blurhash: db.users.blurhash(sender_user)?,
                 reason: None,
+                join_authorized_via_users_server: None,
             })
             .expect("event is valid, we just created it"),
             unsigned: None,
@@ -217,17 +209,17 @@ pub async fn create_room_route(
         .preset
         .clone()
         .unwrap_or_else(|| match &body.visibility {
-            room::Visibility::Private => create_room::RoomPreset::PrivateChat,
-            room::Visibility::Public => create_room::RoomPreset::PublicChat,
-            _ => create_room::RoomPreset::PrivateChat, // Room visibility should not be custom
+            room::Visibility::Private => RoomPreset::PrivateChat,
+            room::Visibility::Public => RoomPreset::PublicChat,
+            _ => RoomPreset::PrivateChat, // Room visibility should not be custom
         });
 
     let mut users = BTreeMap::new();
-    users.insert(sender_user.clone(), 100.into());
+    users.insert(sender_user.clone(), int!(100));
 
-    if preset == create_room::RoomPreset::TrustedPrivateChat {
+    if preset == RoomPreset::TrustedPrivateChat {
         for invite_ in &body.invite {
-            users.insert(invite_.clone(), 100.into());
+            users.insert(invite_.clone(), int!(100));
         }
     }
 
@@ -250,7 +242,7 @@ pub async fn create_room_route(
 
     db.rooms.build_and_append_pdu(
         PduBuilder {
-            event_type: EventType::RoomPowerLevels,
+            event_type: RoomEventType::RoomPowerLevels,
             content: to_raw_value(&power_levels_content)
                 .expect("to_raw_value always works on serde_json::Value"),
             unsigned: None,
@@ -267,9 +259,9 @@ pub async fn create_room_route(
     if let Some(room_alias_id) = &alias {
         db.rooms.build_and_append_pdu(
             PduBuilder {
-                event_type: EventType::RoomCanonicalAlias,
+                event_type: RoomEventType::RoomCanonicalAlias,
                 content: to_raw_value(&RoomCanonicalAliasEventContent {
-                    alias: Some(room_alias_id.clone()),
+                    alias: Some(room_alias_id.to_owned()),
                     alt_aliases: vec![],
                 })
                 .expect("We checked that alias earlier, it must be fine"),
@@ -289,9 +281,9 @@ pub async fn create_room_route(
     // 5.1 Join Rules
     db.rooms.build_and_append_pdu(
         PduBuilder {
-            event_type: EventType::RoomJoinRules,
+            event_type: RoomEventType::RoomJoinRules,
             content: to_raw_value(&RoomJoinRulesEventContent::new(match preset {
-                create_room::RoomPreset::PublicChat => JoinRule::Public,
+                RoomPreset::PublicChat => JoinRule::Public,
                 // according to spec "invite" is the default
                 _ => JoinRule::Invite,
             }))
@@ -309,7 +301,7 @@ pub async fn create_room_route(
     // 5.2 History Visibility
     db.rooms.build_and_append_pdu(
         PduBuilder {
-            event_type: EventType::RoomHistoryVisibility,
+            event_type: RoomEventType::RoomHistoryVisibility,
             content: to_raw_value(&RoomHistoryVisibilityEventContent::new(
                 HistoryVisibility::Shared,
             ))
@@ -327,9 +319,9 @@ pub async fn create_room_route(
     // 5.3 Guest Access
     db.rooms.build_and_append_pdu(
         PduBuilder {
-            event_type: EventType::RoomGuestAccess,
+            event_type: RoomEventType::RoomGuestAccess,
             content: to_raw_value(&RoomGuestAccessEventContent::new(match preset {
-                create_room::RoomPreset::PublicChat => GuestAccess::Forbidden,
+                RoomPreset::PublicChat => GuestAccess::Forbidden,
                 _ => GuestAccess::CanJoin,
             }))
             .expect("event is valid, we just created it"),
@@ -345,13 +337,17 @@ pub async fn create_room_route(
 
     // 6. Events listed in initial_state
     for event in &body.initial_state {
-        let pdu_builder = PduBuilder::from(event.deserialize().map_err(|e| {
+        let mut pdu_builder = event.deserialize_as::<PduBuilder>().map_err(|e| {
             warn!("Invalid initial state event: {:?}", e);
             Error::BadRequest(ErrorKind::InvalidParam, "Invalid initial state event.")
-        })?);
+        })?;
+
+        // Implicit state key defaults to ""
+        pdu_builder.state_key.get_or_insert_with(|| "".to_owned());
 
         // Silently skip encryption events if they are not allowed
-        if pdu_builder.event_type == EventType::RoomEncryption && !db.globals.allow_encryption() {
+        if pdu_builder.event_type == RoomEventType::RoomEncryption && !db.globals.allow_encryption()
+        {
             continue;
         }
 
@@ -363,7 +359,7 @@ pub async fn create_room_route(
     if let Some(name) = &body.name {
         db.rooms.build_and_append_pdu(
             PduBuilder {
-                event_type: EventType::RoomName,
+                event_type: RoomEventType::RoomName,
                 content: to_raw_value(&RoomNameEventContent::new(Some(name.clone())))
                     .expect("event is valid, we just created it"),
                 unsigned: None,
@@ -380,7 +376,7 @@ pub async fn create_room_route(
     if let Some(topic) = &body.topic {
         db.rooms.build_and_append_pdu(
             PduBuilder {
-                event_type: EventType::RoomTopic,
+                event_type: RoomEventType::RoomTopic,
                 content: to_raw_value(&RoomTopicEventContent {
                     topic: topic.clone(),
                 })
@@ -415,23 +411,18 @@ pub async fn create_room_route(
 
     db.flush()?;
 
-    Ok(create_room::Response::new(room_id).into())
+    Ok(create_room::v3::Response::new(room_id))
 }
 
-/// # `GET /chat/client/r0/rooms/{roomId}/event/{eventId}`
+/// # `GET /_matrix/client/r0/rooms/{roomId}/event/{eventId}`
 ///
 /// Gets a single event.
 ///
 /// - You have to currently be joined to the room (TODO: Respect history visibility)
-#[cfg_attr(
-    feature = "conduit_bin",
-    get("/chat/client/r0/rooms/<_>/event/<_>", data = "<body>")
-)]
-#[tracing::instrument(skip(db, body))]
 pub async fn get_room_event_route(
     db: DatabaseGuard,
-    body: Ruma<get_room_event::Request<'_>>,
-) -> ConduitResult<get_room_event::Response> {
+    body: Ruma<get_room_event::v3::IncomingRequest>,
+) -> Result<get_room_event::v3::Response> {
     let sender_user = body.sender_user.as_ref().expect("user is authenticated");
 
     if !db.rooms.is_joined(sender_user, &body.room_id)? {
@@ -441,30 +432,24 @@ pub async fn get_room_event_route(
         ));
     }
 
-    Ok(get_room_event::Response {
+    Ok(get_room_event::v3::Response {
         event: db
             .rooms
             .get_pdu(&body.event_id)?
             .ok_or(Error::BadRequest(ErrorKind::NotFound, "Event not found."))?
             .to_room_event(),
-    }
-    .into())
+    })
 }
 
-/// # `GET /chat/client/r0/rooms/{roomId}/aliases`
+/// # `GET /_matrix/client/r0/rooms/{roomId}/aliases`
 ///
 /// Lists all aliases of the room.
 ///
 /// - Only users joined to the room are allowed to call this TODO: Allow any user to call it if history_visibility is world readable
-#[cfg_attr(
-    feature = "conduit_bin",
-    get("/chat/client/r0/rooms/<_>/aliases", data = "<body>")
-)]
-#[tracing::instrument(skip(db, body))]
 pub async fn get_room_aliases_route(
     db: DatabaseGuard,
-    body: Ruma<aliases::Request<'_>>,
-) -> ConduitResult<aliases::Response> {
+    body: Ruma<aliases::v3::IncomingRequest>,
+) -> Result<aliases::v3::Response> {
     let sender_user = body.sender_user.as_ref().expect("user is authenticated");
 
     if !db.rooms.is_joined(sender_user, &body.room_id)? {
@@ -474,17 +459,16 @@ pub async fn get_room_aliases_route(
         ));
     }
 
-    Ok(aliases::Response {
+    Ok(aliases::v3::Response {
         aliases: db
             .rooms
             .room_aliases(&body.room_id)
             .filter_map(|a| a.ok())
             .collect(),
-    }
-    .into())
+    })
 }
 
-/// # `POST /chat/client/r0/rooms/{roomId}/upgrade`
+/// # `POST /_matrix/client/r0/rooms/{roomId}/upgrade`
 ///
 /// Upgrades the room.
 ///
@@ -494,21 +478,13 @@ pub async fn get_room_aliases_route(
 /// - Transfers some state events
 /// - Moves local aliases
 /// - Modifies old room power levels to prevent users from speaking
-#[cfg_attr(
-    feature = "conduit_bin",
-    post("/chat/client/r0/rooms/<_>/upgrade", data = "<body>")
-)]
-#[tracing::instrument(skip(db, body))]
 pub async fn upgrade_room_route(
     db: DatabaseGuard,
-    body: Ruma<upgrade_room::Request<'_>>,
-) -> ConduitResult<upgrade_room::Response> {
+    body: Ruma<upgrade_room::v3::IncomingRequest>,
+) -> Result<upgrade_room::v3::Response> {
     let sender_user = body.sender_user.as_ref().expect("user is authenticated");
 
-    if !matches!(
-        body.new_version,
-        RoomVersionId::Version5 | RoomVersionId::Version6
-    ) {
+    if !db.rooms.is_supported_version(&db, &body.new_version) {
         return Err(Error::BadRequest(
             ErrorKind::UnsupportedRoomVersion,
             "This server does not support that room version.",
@@ -534,7 +510,7 @@ pub async fn upgrade_room_route(
     // Fail if the sender does not have the required permissions
     let tombstone_event_id = db.rooms.build_and_append_pdu(
         PduBuilder {
-            event_type: EventType::RoomTombstone,
+            event_type: RoomEventType::RoomTombstone,
             content: to_raw_value(&RoomTombstoneEventContent {
                 body: "This room has been replaced".to_owned(),
                 replacement_room: replacement_room.clone(),
@@ -565,7 +541,7 @@ pub async fn upgrade_room_route(
     // Get the old room creation event
     let mut create_event_content = serde_json::from_str::<CanonicalJsonObject>(
         db.rooms
-            .room_state_get(&body.room_id, &EventType::RoomCreate, "")?
+            .room_state_get(&body.room_id, &StateEventType::RoomCreate, "")?
             .ok_or_else(|| Error::bad_database("Found room without m.room.create event."))?
             .content
             .get(),
@@ -575,7 +551,7 @@ pub async fn upgrade_room_route(
     // Use the m.room.tombstone event as the predecessor
     let predecessor = Some(ruma::events::room::create::PreviousRoom::new(
         body.room_id.clone(),
-        tombstone_event_id,
+        (*tombstone_event_id).to_owned(),
     ));
 
     // Send a m.room.create event containing a predecessor field and the applicable room_version
@@ -605,7 +581,7 @@ pub async fn upgrade_room_route(
             .get(),
     );
 
-    if let Err(_) = de_result {
+    if de_result.is_err() {
         return Err(Error::BadRequest(
             ErrorKind::BadJson,
             "Error forming creation event",
@@ -614,7 +590,7 @@ pub async fn upgrade_room_route(
 
     db.rooms.build_and_append_pdu(
         PduBuilder {
-            event_type: EventType::RoomCreate,
+            event_type: RoomEventType::RoomCreate,
             content: to_raw_value(&create_event_content)
                 .expect("event is valid, we just created it"),
             unsigned: None,
@@ -630,7 +606,7 @@ pub async fn upgrade_room_route(
     // Join the new room
     db.rooms.build_and_append_pdu(
         PduBuilder {
-            event_type: EventType::RoomMember,
+            event_type: RoomEventType::RoomMember,
             content: to_raw_value(&RoomMemberEventContent {
                 membership: MembershipState::Join,
                 displayname: db.users.displayname(sender_user)?,
@@ -639,6 +615,7 @@ pub async fn upgrade_room_route(
                 third_party_invite: None,
                 blurhash: db.users.blurhash(sender_user)?,
                 reason: None,
+                join_authorized_via_users_server: None,
             })
             .expect("event is valid, we just created it"),
             unsigned: None,
@@ -653,15 +630,15 @@ pub async fn upgrade_room_route(
 
     // Recommended transferable state events list from the specs
     let transferable_state_events = vec![
-        EventType::RoomServerAcl,
-        EventType::RoomEncryption,
-        EventType::RoomName,
-        EventType::RoomAvatar,
-        EventType::RoomTopic,
-        EventType::RoomGuestAccess,
-        EventType::RoomHistoryVisibility,
-        EventType::RoomJoinRules,
-        EventType::RoomPowerLevels,
+        StateEventType::RoomServerAcl,
+        StateEventType::RoomEncryption,
+        StateEventType::RoomName,
+        StateEventType::RoomAvatar,
+        StateEventType::RoomTopic,
+        StateEventType::RoomGuestAccess,
+        StateEventType::RoomHistoryVisibility,
+        StateEventType::RoomJoinRules,
+        StateEventType::RoomPowerLevels,
     ];
 
     // Replicate transferable state events to the new room
@@ -673,7 +650,7 @@ pub async fn upgrade_room_route(
 
         db.rooms.build_and_append_pdu(
             PduBuilder {
-                event_type,
+                event_type: event_type.to_string().into(),
                 content: event_content,
                 unsigned: None,
                 state_key: Some("".to_owned()),
@@ -695,7 +672,7 @@ pub async fn upgrade_room_route(
     // Get the old room power levels
     let mut power_levels_event_content: RoomPowerLevelsEventContent = serde_json::from_str(
         db.rooms
-            .room_state_get(&body.room_id, &EventType::RoomPowerLevels, "")?
+            .room_state_get(&body.room_id, &StateEventType::RoomPowerLevels, "")?
             .ok_or_else(|| Error::bad_database("Found room without m.room.create event."))?
             .content
             .get(),
@@ -703,17 +680,14 @@ pub async fn upgrade_room_route(
     .map_err(|_| Error::bad_database("Invalid room event in database."))?;
 
     // Setting events_default and invite to the greater of 50 and users_default + 1
-    let new_level = max(
-        50.into(),
-        power_levels_event_content.users_default + 1.into(),
-    );
+    let new_level = max(int!(50), power_levels_event_content.users_default + int!(1));
     power_levels_event_content.events_default = new_level;
     power_levels_event_content.invite = new_level;
 
     // Modify the power levels in the old room to prevent sending of events and inviting new users
     let _ = db.rooms.build_and_append_pdu(
         PduBuilder {
-            event_type: EventType::RoomPowerLevels,
+            event_type: RoomEventType::RoomPowerLevels,
             content: to_raw_value(&power_levels_event_content)
                 .expect("event is valid, we just created it"),
             unsigned: None,
@@ -731,5 +705,5 @@ pub async fn upgrade_room_route(
     db.flush()?;
 
     // Return the replacement room id
-    Ok(upgrade_room::Response { replacement_room }.into())
+    Ok(upgrade_room::v3::Response { replacement_room })
 }

@@ -1,16 +1,17 @@
-use crate::{database::Config, server_server::FedDest, utils, ConduitResult, Error, Result};
+use crate::{database::Config, server_server::FedDest, utils, Error, Result};
 use ruma::{
     api::{
-        client::r0::sync::sync_events,
+        client::sync::sync_events,
         federation::discovery::{ServerSigningKeys, VerifyKey},
     },
-    DeviceId, EventId, MilliSecondsSinceUnixEpoch, RoomId, ServerName, ServerSigningKeyId, UserId,
+    DeviceId, EventId, MilliSecondsSinceUnixEpoch, RoomId, RoomVersionId, ServerName,
+    ServerSigningKeyId, UserId,
 };
 use std::{
     collections::{BTreeMap, HashMap},
     fs,
     future::Future,
-    net::IpAddr,
+    net::{IpAddr, SocketAddr},
     path::PathBuf,
     sync::{Arc, Mutex, RwLock},
     time::{Duration, Instant},
@@ -27,26 +28,30 @@ type WellKnownMap = HashMap<Box<ServerName>, (FedDest, String)>;
 type TlsNameMap = HashMap<String, (Vec<IpAddr>, u16)>;
 type RateLimitState = (Instant, u32); // Time if last failed try, number of failed tries
 type SyncHandle = (
-    Option<String>,                                         // since
-    Receiver<Option<ConduitResult<sync_events::Response>>>, // rx
+    Option<String>,                                      // since
+    Receiver<Option<Result<sync_events::v3::Response>>>, // rx
 );
 
 pub struct Globals {
     pub actual_destination_cache: Arc<RwLock<WellKnownMap>>, // actual_destination, host
     pub tls_name_override: Arc<RwLock<TlsNameMap>>,
     pub(super) globals: Arc<dyn Tree>,
-    config: Config,
+    pub config: Config,
     keypair: Arc<ruma::signatures::Ed25519KeyPair>,
     dns_resolver: TokioAsyncResolver,
     jwt_decoding_key: Option<jsonwebtoken::DecodingKey<'static>>,
+    federation_client: reqwest::Client,
+    default_client: reqwest::Client,
+    pub stable_room_versions: Vec<RoomVersionId>,
+    pub unstable_room_versions: Vec<RoomVersionId>,
     pub(super) server_signingkeys: Arc<dyn Tree>,
-    pub bad_event_ratelimiter: Arc<RwLock<HashMap<EventId, RateLimitState>>>,
+    pub bad_event_ratelimiter: Arc<RwLock<HashMap<Box<EventId>, RateLimitState>>>,
     pub bad_signature_ratelimiter: Arc<RwLock<HashMap<Vec<String>, RateLimitState>>>,
     pub servername_ratelimiter: Arc<RwLock<HashMap<Box<ServerName>, Arc<Semaphore>>>>,
-    pub sync_receivers: RwLock<HashMap<(UserId, Box<DeviceId>), SyncHandle>>,
-    pub roomid_mutex_insert: RwLock<HashMap<RoomId, Arc<Mutex<()>>>>,
-    pub roomid_mutex_state: RwLock<HashMap<RoomId, Arc<TokioMutex<()>>>>,
-    pub roomid_mutex_federation: RwLock<HashMap<RoomId, Arc<TokioMutex<()>>>>, // this lock will be held longer
+    pub sync_receivers: RwLock<HashMap<(Box<UserId>, Box<DeviceId>), SyncHandle>>,
+    pub roomid_mutex_insert: RwLock<HashMap<Box<RoomId>, Arc<Mutex<()>>>>,
+    pub roomid_mutex_state: RwLock<HashMap<Box<RoomId>, Arc<TokioMutex<()>>>>,
+    pub roomid_mutex_federation: RwLock<HashMap<Box<RoomId>, Arc<TokioMutex<()>>>>, // this lock will be held longer
     pub rotate: RotationHandler,
 }
 
@@ -132,17 +137,46 @@ impl Globals {
             .as_ref()
             .map(|secret| jsonwebtoken::DecodingKey::from_secret(secret.as_bytes()).into_static());
 
-        let s = Self {
+        let default_client = reqwest_client_builder(&config)?.build()?;
+        let name_override = Arc::clone(&tls_name_override);
+        let federation_client = reqwest_client_builder(&config)?
+            .resolve_fn(move |domain| {
+                let read_guard = name_override.read().unwrap();
+                let (override_name, port) = read_guard.get(&domain)?;
+                let first_name = override_name.get(0)?;
+                Some(SocketAddr::new(*first_name, *port))
+            })
+            .build()?;
+
+        // Supported and stable room versions
+        let stable_room_versions = vec![
+            RoomVersionId::V6,
+            RoomVersionId::V7,
+            RoomVersionId::V8,
+            RoomVersionId::V9,
+        ];
+        // Experimental, partially supported room versions
+        let unstable_room_versions = vec![RoomVersionId::V3, RoomVersionId::V4, RoomVersionId::V5];
+
+        let mut s = Self {
             globals,
             config,
             keypair: Arc::new(keypair),
-            dns_resolver: TokioAsyncResolver::tokio_from_system_conf().map_err(|_| {
+            dns_resolver: TokioAsyncResolver::tokio_from_system_conf().map_err(|e| {
+                error!(
+                    "Failed to set up trust dns resolver with system config: {}",
+                    e
+                );
                 Error::bad_config("Failed to set up trust dns resolver with system config.")
             })?,
             actual_destination_cache: Arc::new(RwLock::new(WellKnownMap::new())),
             tls_name_override,
+            federation_client,
+            default_client,
             server_signingkeys,
             jwt_decoding_key,
+            stable_room_versions,
+            unstable_room_versions,
             bad_event_ratelimiter: Arc::new(RwLock::new(HashMap::new())),
             bad_signature_ratelimiter: Arc::new(RwLock::new(HashMap::new())),
             servername_ratelimiter: Arc::new(RwLock::new(HashMap::new())),
@@ -155,6 +189,14 @@ impl Globals {
 
         fs::create_dir_all(s.get_media_folder())?;
 
+        if !s
+            .supported_room_versions()
+            .contains(&s.config.default_room_version)
+        {
+            error!("Room version in config isn't supported, falling back to Version 6");
+            s.config.default_room_version = RoomVersionId::V6;
+        };
+
         Ok(s)
     }
 
@@ -163,17 +205,16 @@ impl Globals {
         &self.keypair
     }
 
-    /// Returns a reqwest client which can be used to send requests.
-    pub fn reqwest_client(&self) -> Result<reqwest::ClientBuilder> {
-        let mut reqwest_client_builder = reqwest::Client::builder()
-            .connect_timeout(Duration::from_secs(30))
-            .timeout(Duration::from_secs(60 * 3))
-            .pool_max_idle_per_host(1);
-        if let Some(proxy) = self.config.proxy.to_proxy()? {
-            reqwest_client_builder = reqwest_client_builder.proxy(proxy);
-        }
+    /// Returns a reqwest client which can be used to send requests
+    pub fn default_client(&self) -> reqwest::Client {
+        // Client is cheap to clone (Arc wrapper) and avoids lifetime issues
+        self.default_client.clone()
+    }
 
-        Ok(reqwest_client_builder)
+    /// Returns a client used for resolving .well-knowns
+    pub fn federation_client(&self) -> reqwest::Client {
+        // Client is cheap to clone (Arc wrapper) and avoids lifetime issues
+        self.federation_client.clone()
     }
 
     #[tracing::instrument(skip(self))]
@@ -214,6 +255,14 @@ impl Globals {
         self.config.allow_room_creation
     }
 
+    pub fn allow_unstable_room_versions(&self) -> bool {
+        self.config.allow_unstable_room_versions
+    }
+
+    pub fn default_room_version(&self) -> RoomVersionId {
+        self.config.default_room_version.clone()
+    }
+
     pub fn trusted_servers(&self) -> &[Box<ServerName>] {
         &self.config.trusted_servers
     }
@@ -226,6 +275,39 @@ impl Globals {
         self.jwt_decoding_key.as_ref()
     }
 
+    pub fn turn_password(&self) -> &String {
+        &self.config.turn_password
+    }
+
+    pub fn turn_ttl(&self) -> u64 {
+        self.config.turn_ttl
+    }
+
+    pub fn turn_uris(&self) -> &[String] {
+        &self.config.turn_uris
+    }
+
+    pub fn turn_username(&self) -> &String {
+        &self.config.turn_username
+    }
+
+    pub fn turn_secret(&self) -> &String {
+        &self.config.turn_secret
+    }
+
+    pub fn emergency_password(&self) -> &Option<String> {
+        &self.config.emergency_password
+    }
+
+    pub fn supported_room_versions(&self) -> Vec<RoomVersionId> {
+        let mut room_versions: Vec<RoomVersionId> = vec![];
+        room_versions.extend(self.stable_room_versions.clone());
+        if self.allow_unstable_room_versions() {
+            room_versions.extend(self.unstable_room_versions.clone());
+        };
+        room_versions
+    }
+
     /// TODO: the key valid until timestamp is only honored in room version > 4
     /// Remove the outdated keys and insert the new ones.
     ///
@@ -234,7 +316,7 @@ impl Globals {
         &self,
         origin: &ServerName,
         new_keys: ServerSigningKeys,
-    ) -> Result<BTreeMap<ServerSigningKeyId, VerifyKey>> {
+    ) -> Result<BTreeMap<Box<ServerSigningKeyId>, VerifyKey>> {
         // Not atomic, but this is not critical
         let signingkeys = self.server_signingkeys.get(origin.as_bytes())?;
 
@@ -273,7 +355,7 @@ impl Globals {
     pub fn signing_keys_for(
         &self,
         origin: &ServerName,
-    ) -> Result<BTreeMap<ServerSigningKeyId, VerifyKey>> {
+    ) -> Result<BTreeMap<Box<ServerSigningKeyId>, VerifyKey>> {
         let signingkeys = self
             .server_signingkeys
             .get(origin.as_bytes())?
@@ -319,4 +401,16 @@ impl Globals {
         r.push(base64::encode_config(key, base64::URL_SAFE_NO_PAD));
         r
     }
+}
+
+fn reqwest_client_builder(config: &Config) -> Result<reqwest::ClientBuilder> {
+    let mut reqwest_client_builder = reqwest::Client::builder()
+        .connect_timeout(Duration::from_secs(30))
+        .timeout(Duration::from_secs(60 * 3));
+
+    if let Some(proxy) = config.proxy.to_proxy()? {
+        reqwest_client_builder = reqwest_client_builder.proxy(proxy);
+    }
+
+    Ok(reqwest_client_builder)
 }

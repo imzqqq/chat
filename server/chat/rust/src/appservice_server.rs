@@ -1,14 +1,10 @@
 use crate::{utils, Error, Result};
 use bytes::BytesMut;
-use ruma::api::{IncomingResponse, OutgoingRequest, SendAccessToken};
-use std::{
-    convert::{TryFrom, TryInto},
-    fmt::Debug,
-    mem,
-    time::Duration,
-};
+use ruma::api::{IncomingResponse, MatrixVersion, OutgoingRequest, SendAccessToken};
+use std::{fmt::Debug, mem, time::Duration};
 use tracing::warn;
 
+#[tracing::instrument(skip(globals, request))]
 pub(crate) async fn send_request<T: OutgoingRequest>(
     globals: &crate::database::globals::Globals,
     registration: serde_yaml::Value,
@@ -21,7 +17,11 @@ where
     let hs_token = registration.get("hs_token").unwrap().as_str().unwrap();
 
     let mut http_request = request
-        .try_into_http_request::<BytesMut>(destination, SendAccessToken::IfRequired(""))
+        .try_into_http_request::<BytesMut>(
+            destination,
+            SendAccessToken::IfRequired(""),
+            &[MatrixVersion::V1_0],
+        )
         .unwrap()
         .map(|body| body.freeze());
 
@@ -46,11 +46,7 @@ where
     *reqwest_request.timeout_mut() = Some(Duration::from_secs(30));
 
     let url = reqwest_request.url().clone();
-    let mut response = globals
-        .reqwest_client()?
-        .build()?
-        .execute(reqwest_request)
-        .await?;
+    let mut response = globals.default_client().execute(reqwest_request).await?;
 
     // reqwest::Response -> http::Response conversion
     let status = response.status();

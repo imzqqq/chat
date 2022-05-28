@@ -1,6 +1,5 @@
 use std::{
     collections::{BTreeMap, HashMap, HashSet},
-    convert::{TryFrom, TryInto},
     fmt::Debug,
     sync::Arc,
     time::{Duration, Instant},
@@ -10,11 +9,8 @@ use crate::{
     appservice_server, database::pusher, server_server, utils, Database, Error, PduEvent, Result,
 };
 use federation::transactions::send_transaction_message;
+use futures_util::{stream::FuturesUnordered, StreamExt};
 use ring::digest;
-use rocket::futures::{
-    channel::mpsc,
-    stream::{FuturesUnordered, StreamExt},
-};
 use ruma::{
     api::{
         appservice,
@@ -27,14 +23,14 @@ use ruma::{
         OutgoingRequest,
     },
     device_id,
-    events::{push_rules::PushRulesEvent, AnySyncEphemeralRoomEvent, EventType},
+    events::{push_rules::PushRulesEvent, AnySyncEphemeralRoomEvent, GlobalAccountDataEventType},
     push,
     receipt::ReceiptType,
     uint, MilliSecondsSinceUnixEpoch, ServerName, UInt, UserId,
 };
 use tokio::{
     select,
-    sync::{RwLock, Semaphore},
+    sync::{mpsc, RwLock, Semaphore},
 };
 use tracing::{error, warn};
 
@@ -42,7 +38,7 @@ use super::abstraction::Tree;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub enum OutgoingKind {
-    Appservice(Box<ServerName>),
+    Appservice(String),
     Push(Vec<u8>, Vec<u8>), // user and pushkey
     Normal(Box<ServerName>),
 }
@@ -171,7 +167,7 @@ impl Sending {
                                         Self::parse_servercurrentevent(&k, v).ok().map(|ev| (ev, k))
                                     })
                                     .take(30)
-                                    .collect::<>();
+                                    .collect();
 
                                 // TODO: find edus
 
@@ -208,7 +204,7 @@ impl Sending {
                             }
                         };
                     },
-                    Some((key, value)) = receiver.next() => {
+                    Some((key, value)) = receiver.recv() => {
                         if let Ok((outgoing_kind, event)) = Self::parse_servercurrentevent(&key, value) {
                             let guard = db.read().await;
 
@@ -397,7 +393,7 @@ impl Sending {
             // Because synapse resyncs, we can just insert dummy data
             let edu = Edu::DeviceListUpdate(DeviceListUpdateContent {
                 user_id,
-                device_id: device_id!("dummy"),
+                device_id: device_id!("dummy").to_owned(),
                 device_display_name: Some("Dummy".to_owned()),
                 stream_id: uint!(1),
                 prev_id: Vec::new(),
@@ -418,7 +414,7 @@ impl Sending {
         key.push(0xff);
         key.extend_from_slice(pdu_id);
         self.servernameevent_data.insert(&key, &[])?;
-        self.sender.unbounded_send((key, vec![])).unwrap();
+        self.sender.send((key, vec![])).unwrap();
 
         Ok(())
     }
@@ -434,7 +430,7 @@ impl Sending {
             key.push(0xff);
             key.extend_from_slice(pdu_id);
 
-            self.sender.unbounded_send((key.clone(), vec![])).unwrap();
+            self.sender.send((key.clone(), vec![])).unwrap();
 
             (key, Vec::new())
         });
@@ -455,7 +451,7 @@ impl Sending {
         key.push(0xff);
         key.extend_from_slice(&id.to_be_bytes());
         self.servernameevent_data.insert(&key, &serialized)?;
-        self.sender.unbounded_send((key, serialized)).unwrap();
+        self.sender.send((key, serialized)).unwrap();
 
         Ok(())
     }
@@ -467,7 +463,7 @@ impl Sending {
         key.push(0xff);
         key.extend_from_slice(pdu_id);
         self.servernameevent_data.insert(&key, &[])?;
-        self.sender.unbounded_send((key, vec![])).unwrap();
+        self.sender.send((key, vec![])).unwrap();
 
         Ok(())
     }
@@ -480,6 +476,26 @@ impl Sending {
         hash.as_ref().to_owned()
     }
 
+    /// Cleanup event data
+    /// Used for instance after we remove an appservice registration
+    ///
+    #[tracing::instrument(skip(self))]
+    pub fn cleanup_events(&self, key_id: &str) -> Result<()> {
+        let mut prefix = b"+".to_vec();
+        prefix.extend_from_slice(key_id.as_bytes());
+        prefix.push(0xff);
+
+        for (key, _) in self.servercurrentevent_data.scan_prefix(prefix.clone()) {
+            self.servercurrentevent_data.remove(&key).unwrap();
+        }
+
+        for (key, _) in self.servernameevent_data.scan_prefix(prefix.clone()) {
+            self.servernameevent_data.remove(&key).unwrap();
+        }
+
+        Ok(())
+    }
+
     #[tracing::instrument(skip(db, events, kind))]
     async fn handle_events(
         kind: OutgoingKind,
@@ -489,7 +505,7 @@ impl Sending {
         let db = db.read().await;
 
         match &kind {
-            OutgoingKind::Appservice(server) => {
+            OutgoingKind::Appservice(id) => {
                 let mut pdu_jsons = Vec::new();
 
                 for event in &events {
@@ -519,12 +535,19 @@ impl Sending {
                 let response = appservice_server::send_request(
                     &db.globals,
                     db.appservice
-                        .get_registration(server.as_str())
-                        .unwrap()
-                        .unwrap(), // TODO: handle error
+                        .get_registration(&id)
+                        .map_err(|e| (kind.clone(), e))?
+                        .ok_or_else(|| {
+                            (
+                                kind.clone(),
+                                Error::bad_database(
+                                    "[Appservice] Could not load registration from db.",
+                                ),
+                            )
+                        })?,
                     appservice::event::push_events::v1::Request {
                         events: &pdu_jsons,
-                        txn_id: &base64::encode_config(
+                        txn_id: (&*base64::encode_config(
                             Self::calculate_hash(
                                 &events
                                     .iter()
@@ -534,7 +557,8 @@ impl Sending {
                                     .collect::<Vec<_>>(),
                             ),
                             base64::URL_SAFE_NO_PAD,
-                        ),
+                        ))
+                            .into(),
                     },
                 )
                 .await
@@ -583,19 +607,18 @@ impl Sending {
                         }
                     }
 
-                    let userid =
-                        UserId::try_from(utils::string_from_bytes(user).map_err(|_| {
-                            (
-                                kind.clone(),
-                                Error::bad_database("Invalid push user string in db."),
-                            )
-                        })?)
-                        .map_err(|_| {
-                            (
-                                kind.clone(),
-                                Error::bad_database("Invalid push user id in db."),
-                            )
-                        })?;
+                    let userid = UserId::parse(utils::string_from_bytes(user).map_err(|_| {
+                        (
+                            kind.clone(),
+                            Error::bad_database("Invalid push user string in db."),
+                        )
+                    })?)
+                    .map_err(|_| {
+                        (
+                            kind.clone(),
+                            Error::bad_database("Invalid push user id in db."),
+                        )
+                    })?;
 
                     let mut senderkey = user.clone();
                     senderkey.push(0xff);
@@ -612,7 +635,11 @@ impl Sending {
 
                     let rules_for_user = db
                         .account_data
-                        .get(None, &userid, EventType::PushRules)
+                        .get(
+                            None,
+                            &userid,
+                            GlobalAccountDataEventType::PushRules.to_string().into(),
+                        )
                         .unwrap_or_default()
                         .map(|ev: PushRulesEvent| ev.content.global)
                         .unwrap_or_else(|| push::Ruleset::server_default(&userid));
@@ -683,7 +710,7 @@ impl Sending {
                         pdus: &pdu_jsons,
                         edus: &edu_jsons,
                         origin_server_ts: MilliSecondsSinceUnixEpoch::now(),
-                        transaction_id: &base64::encode_config(
+                        transaction_id: (&*base64::encode_config(
                             Self::calculate_hash(
                                 &events
                                     .iter()
@@ -693,7 +720,8 @@ impl Sending {
                                     .collect::<Vec<_>>(),
                             ),
                             base64::URL_SAFE_NO_PAD,
-                        ),
+                        ))
+                            .into(),
                     },
                 )
                 .await
@@ -732,9 +760,7 @@ impl Sending {
             })?;
 
             (
-                OutgoingKind::Appservice(Box::<ServerName>::try_from(server).map_err(|_| {
-                    Error::bad_database("Invalid server string in server_currenttransaction")
-                })?),
+                OutgoingKind::Appservice(server),
                 if value.is_empty() {
                     SendingEventType::Pdu(event.to_vec())
                 } else {
@@ -771,7 +797,7 @@ impl Sending {
             })?;
 
             (
-                OutgoingKind::Normal(Box::<ServerName>::try_from(server).map_err(|_| {
+                OutgoingKind::Normal(ServerName::parse(server).map_err(|_| {
                     Error::bad_database("Invalid server string in server_currenttransaction")
                 })?),
                 if value.is_empty() {

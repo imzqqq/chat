@@ -6,7 +6,6 @@ pub mod appservice;
 pub mod globals;
 pub mod key_backups;
 pub mod media;
-pub mod proxy;
 pub mod pusher;
 pub mod rooms;
 pub mod sending;
@@ -14,21 +13,22 @@ pub mod transaction_ids;
 pub mod uiaa;
 pub mod users;
 
-use crate::{utils, Error, Result};
+use self::admin::create_admin_room;
+use crate::{utils, Config, Error, Result};
 use abstraction::DatabaseEngine;
 use directories::ProjectDirs;
+use futures_util::{stream::FuturesUnordered, StreamExt};
 use lru_cache::LruCache;
-use rocket::{
-    futures::{channel::mpsc, stream::FuturesUnordered, StreamExt},
-    outcome::{try_outcome, IntoOutcome},
-    request::{FromRequest, Request},
-    Shutdown, State,
+use ruma::{
+    events::{
+        push_rules::PushRulesEventContent, room::message::RoomMessageEventContent,
+        GlobalAccountDataEvent, GlobalAccountDataEventType,
+    },
+    push::Ruleset,
+    DeviceId, EventId, RoomId, UserId,
 };
-use ruma::{DeviceId, EventId, RoomId, ServerName, UserId};
-use serde::{de::IgnoredAny, Deserialize};
 use std::{
     collections::{BTreeMap, HashMap, HashSet},
-    convert::{TryFrom, TryInto},
     fs::{self, remove_dir_all},
     io::Write,
     mem::size_of,
@@ -36,112 +36,11 @@ use std::{
     path::Path,
     sync::{Arc, Mutex, RwLock},
 };
-use tokio::sync::{OwnedRwLockReadGuard, RwLock as TokioRwLock, Semaphore};
-use tracing::{debug, error, warn};
-
-use self::proxy::ProxyConfig;
-
-#[derive(Clone, Debug, Deserialize)]
-pub struct Config {
-    server_name: Box<ServerName>,
-    database_path: String,
-    #[serde(default = "default_db_cache_capacity_mb")]
-    db_cache_capacity_mb: f64,
-    #[serde(default = "default_pdu_cache_capacity")]
-    pdu_cache_capacity: u32,
-    #[serde(default = "default_sqlite_wal_clean_second_interval")]
-    sqlite_wal_clean_second_interval: u32,
-    #[serde(default = "default_max_request_size")]
-    max_request_size: u32,
-    #[serde(default = "default_max_concurrent_requests")]
-    max_concurrent_requests: u16,
-    #[serde(default = "false_fn")]
-    allow_registration: bool,
-    #[serde(default = "true_fn")]
-    allow_encryption: bool,
-    #[serde(default = "false_fn")]
-    allow_federation: bool,
-    #[serde(default = "true_fn")]
-    allow_room_creation: bool,
-    #[serde(default = "false_fn")]
-    pub allow_jaeger: bool,
-    #[serde(default = "false_fn")]
-    pub tracing_flame: bool,
-    #[serde(default)]
-    proxy: ProxyConfig,
-    jwt_secret: Option<String>,
-    #[serde(default = "Vec::new")]
-    trusted_servers: Vec<Box<ServerName>>,
-    #[serde(default = "default_log")]
-    pub log: String,
-
-    #[serde(flatten)]
-    catchall: BTreeMap<String, IgnoredAny>,
-}
-
-const DEPRECATED_KEYS: &[&str] = &["cache_capacity"];
-
-impl Config {
-    pub fn warn_deprecated(&self) {
-        let mut was_deprecated = false;
-        for key in self
-            .catchall
-            .keys()
-            .filter(|key| DEPRECATED_KEYS.iter().any(|s| s == key))
-        {
-            warn!("Config parameter {} is deprecated", key);
-            was_deprecated = true;
-        }
-
-        if was_deprecated {
-            warn!("Read conduit documentation and check your configuration if any new configuration parameters should be adjusted");
-        }
-    }
-}
-
-fn false_fn() -> bool {
-    false
-}
-
-fn true_fn() -> bool {
-    true
-}
-
-fn default_db_cache_capacity_mb() -> f64 {
-    200.0
-}
-
-fn default_pdu_cache_capacity() -> u32 {
-    100_000
-}
-
-fn default_sqlite_wal_clean_second_interval() -> u32 {
-    1 * 60 // every minute
-}
-
-fn default_max_request_size() -> u32 {
-    20 * 1024 * 1024 // Default to 20 MB
-}
-
-fn default_max_concurrent_requests() -> u16 {
-    100
-}
-
-fn default_log() -> String {
-    "info,state_res=warn,rocket=off,_=off,sled=off".to_owned()
-}
-
-#[cfg(feature = "sled")]
-pub type Engine = abstraction::sled::Engine;
-
-#[cfg(feature = "sqlite")]
-pub type Engine = abstraction::sqlite::Engine;
-
-#[cfg(feature = "heed")]
-pub type Engine = abstraction::heed::Engine;
+use tokio::sync::{mpsc, OwnedRwLockReadGuard, RwLock as TokioRwLock, Semaphore};
+use tracing::{debug, error, info, warn};
 
 pub struct Database {
-    _db: Arc<Engine>,
+    _db: Arc<dyn DatabaseEngine>,
     pub globals: globals::Globals,
     pub users: users::Users,
     pub uiaa: uiaa::Uiaa,
@@ -169,28 +68,48 @@ impl Database {
         Ok(())
     }
 
-    fn check_sled_or_sqlite_db(config: &Config) -> Result<()> {
-        #[cfg(feature = "backend_sqlite")]
-        {
-            let path = Path::new(&config.database_path);
+    fn check_db_setup(config: &Config) -> Result<()> {
+        let path = Path::new(&config.database_path);
 
-            let sled_exists = path.join("db").exists();
-            let sqlite_exists = path.join("conduit.db").exists();
-            if sled_exists {
-                if sqlite_exists {
-                    // most likely an in-place directory, only warn
-                    warn!("Both sled and sqlite databases are detected in database directory");
-                    warn!("Currently running from the sqlite database, but consider removing sled database files to free up space")
-                } else {
-                    error!(
-                        "Sled database detected, conduit now uses sqlite for database operations"
-                    );
-                    error!("This database must be converted to sqlite, go to https://github.com/ShadowJonathan/conduit_toolbox#conduit_sled_to_sqlite");
-                    return Err(Error::bad_config(
-                        "sled database detected, migrate to sqlite",
-                    ));
-                }
-            }
+        let sled_exists = path.join("db").exists();
+        let sqlite_exists = path.join("conduit.db").exists();
+        let rocksdb_exists = path.join("IDENTITY").exists();
+
+        let mut count = 0;
+
+        if sled_exists {
+            count += 1;
+        }
+
+        if sqlite_exists {
+            count += 1;
+        }
+
+        if rocksdb_exists {
+            count += 1;
+        }
+
+        if count > 1 {
+            warn!("Multiple databases at database_path detected");
+            return Ok(());
+        }
+
+        if sled_exists && config.database_backend != "sled" {
+            return Err(Error::bad_config(
+                "Found sled at database_path, but is not specified in config.",
+            ));
+        }
+
+        if sqlite_exists && config.database_backend != "sqlite" {
+            return Err(Error::bad_config(
+                "Found sqlite at database_path, but is not specified in config.",
+            ));
+        }
+
+        if rocksdb_exists && config.database_backend != "rocksdb" {
+            return Err(Error::bad_config(
+                "Found rocksdb at database_path, but is not specified in config.",
+            ));
         }
 
         Ok(())
@@ -198,21 +117,43 @@ impl Database {
 
     /// Load an existing database or create a new one.
     pub async fn load_or_create(config: &Config) -> Result<Arc<TokioRwLock<Self>>> {
-        Self::check_sled_or_sqlite_db(config)?;
+        Self::check_db_setup(config)?;
 
         if !Path::new(&config.database_path).exists() {
             std::fs::create_dir_all(&config.database_path)
                 .map_err(|_| Error::BadConfig("Database folder doesn't exists and couldn't be created (e.g. due to missing permissions). Please create the database folder yourself."))?;
         }
 
-        let builder = Engine::open(config)?;
+        let builder: Arc<dyn DatabaseEngine> = match &*config.database_backend {
+            "sqlite" => {
+                #[cfg(not(feature = "sqlite"))]
+                return Err(Error::BadConfig("Database backend not found."));
+                #[cfg(feature = "sqlite")]
+                Arc::new(Arc::<abstraction::sqlite::Engine>::open(config)?)
+            }
+            "rocksdb" => {
+                #[cfg(not(feature = "rocksdb"))]
+                return Err(Error::BadConfig("Database backend not found."));
+                #[cfg(feature = "rocksdb")]
+                Arc::new(Arc::<abstraction::rocksdb::Engine>::open(config)?)
+            }
+            "persy" => {
+                #[cfg(not(feature = "persy"))]
+                return Err(Error::BadConfig("Database backend not found."));
+                #[cfg(feature = "persy")]
+                Arc::new(Arc::<abstraction::persy::Engine>::open(config)?)
+            }
+            _ => {
+                return Err(Error::BadConfig("Database backend not found."));
+            }
+        };
 
         if config.max_request_size < 1024 {
             eprintln!("ERROR: Max request size is less than 1KB. Please increase it.");
         }
 
-        let (admin_sender, admin_receiver) = mpsc::unbounded();
-        let (sending_sender, sending_receiver) = mpsc::unbounded();
+        let (admin_sender, admin_receiver) = mpsc::unbounded_channel();
+        let (sending_sender, sending_receiver) = mpsc::unbounded_channel();
 
         let db = Arc::new(TokioRwLock::from(Self {
             _db: builder.clone(),
@@ -232,12 +173,12 @@ impl Database {
                 userid_masterkeyid: builder.open_tree("userid_masterkeyid")?,
                 userid_selfsigningkeyid: builder.open_tree("userid_selfsigningkeyid")?,
                 userid_usersigningkeyid: builder.open_tree("userid_usersigningkeyid")?,
+                userfilterid_filter: builder.open_tree("userfilterid_filter")?,
                 todeviceid_events: builder.open_tree("todeviceid_events")?,
             },
             uiaa: uiaa::Uiaa {
                 userdevicesessionid_uiaainfo: builder.open_tree("userdevicesessionid_uiaainfo")?,
-                userdevicesessionid_uiaarequest: builder
-                    .open_tree("userdevicesessionid_uiaarequest")?,
+                userdevicesessionid_uiaarequest: RwLock::new(BTreeMap::new()),
             },
             rooms: rooms::Rooms {
                 edus: rooms::RoomEdus {
@@ -272,6 +213,8 @@ impl Database {
                 userroomid_leftstate: builder.open_tree("userroomid_leftstate")?,
                 roomuserid_leftcount: builder.open_tree("roomuserid_leftcount")?,
 
+                lazyloadedids: builder.open_tree("lazyloadedids")?,
+
                 userroomid_notificationcount: builder.open_tree("userroomid_notificationcount")?,
                 userroomid_highlightcount: builder.open_tree("userroomid_highlightcount")?,
 
@@ -300,14 +243,28 @@ impl Database {
                         .try_into()
                         .expect("pdu cache capacity fits into usize"),
                 )),
-                auth_chain_cache: Mutex::new(LruCache::new(1_000_000)),
-                shorteventid_cache: Mutex::new(LruCache::new(1_000_000)),
-                eventidshort_cache: Mutex::new(LruCache::new(1_000_000)),
-                shortstatekey_cache: Mutex::new(LruCache::new(1_000_000)),
-                statekeyshort_cache: Mutex::new(LruCache::new(1_000_000)),
+                auth_chain_cache: Mutex::new(LruCache::new(
+                    (100_000.0 * config.conduit_cache_capacity_modifier) as usize,
+                )),
+                shorteventid_cache: Mutex::new(LruCache::new(
+                    (100_000.0 * config.conduit_cache_capacity_modifier) as usize,
+                )),
+                eventidshort_cache: Mutex::new(LruCache::new(
+                    (100_000.0 * config.conduit_cache_capacity_modifier) as usize,
+                )),
+                shortstatekey_cache: Mutex::new(LruCache::new(
+                    (100_000.0 * config.conduit_cache_capacity_modifier) as usize,
+                )),
+                statekeyshort_cache: Mutex::new(LruCache::new(
+                    (100_000.0 * config.conduit_cache_capacity_modifier) as usize,
+                )),
                 our_real_users_cache: RwLock::new(HashMap::new()),
                 appservice_in_room_cache: RwLock::new(HashMap::new()),
-                stateinfo_cache: Mutex::new(LruCache::new(1000)),
+                lazy_load_waiting: Mutex::new(HashMap::new()),
+                stateinfo_cache: Mutex::new(LruCache::new(
+                    (100.0 * config.conduit_cache_capacity_modifier) as usize,
+                )),
+                lasttimelinecount_cache: Mutex::new(HashMap::new()),
             },
             account_data: account_data::AccountData {
                 roomuserdataid_accountdata: builder.open_tree("roomuserdataid_accountdata")?,
@@ -348,10 +305,32 @@ impl Database {
             )?,
         }));
 
-        {
-            let db = db.read().await;
+        let guard = db.read().await;
+
+        // Matrix resource ownership is based on the server name; changing it
+        // requires recreating the database from scratch.
+        if guard.users.count()? > 0 {
+            let conduit_user =
+                UserId::parse_with_server_name("conduit", guard.globals.server_name())
+                    .expect("@conduit:server_name is valid");
+
+            if !guard.users.exists(&conduit_user)? {
+                error!(
+                    "The {} server user does not exist, and the database is not new.",
+                    conduit_user
+                );
+                return Err(Error::bad_database(
+                    "Cannot reuse an existing database after changing the server name, please delete the old one first."
+                ));
+            }
+        }
+
+        // If the database has any data, perform data migrations before starting
+        let latest_database_version = 11;
+
+        if guard.users.count()? > 0 {
+            let db = &*guard;
             // MIGRATIONS
-            // TODO: database versions of new dbs should probably not be 0
             if db.globals.database_version()? < 1 {
                 for (roomserverid, _) in db.rooms.roomserverids.iter() {
                     let mut parts = roomserverid.split(|&b| b == 0xff);
@@ -372,7 +351,7 @@ impl Database {
 
                 db.globals.bump_database_version(1)?;
 
-                println!("Migration: 0 -> 1 finished");
+                warn!("Migration: 0 -> 1 finished");
             }
 
             if db.globals.database_version()? < 2 {
@@ -391,7 +370,7 @@ impl Database {
 
                 db.globals.bump_database_version(2)?;
 
-                println!("Migration: 1 -> 2 finished");
+                warn!("Migration: 1 -> 2 finished");
             }
 
             if db.globals.database_version()? < 3 {
@@ -409,7 +388,7 @@ impl Database {
 
                 db.globals.bump_database_version(3)?;
 
-                println!("Migration: 2 -> 3 finished");
+                warn!("Migration: 2 -> 3 finished");
             }
 
             if db.globals.database_version()? < 4 {
@@ -432,7 +411,7 @@ impl Database {
 
                 db.globals.bump_database_version(4)?;
 
-                println!("Migration: 3 -> 4 finished");
+                warn!("Migration: 3 -> 4 finished");
             }
 
             if db.globals.database_version()? < 5 {
@@ -456,26 +435,25 @@ impl Database {
 
                 db.globals.bump_database_version(5)?;
 
-                println!("Migration: 4 -> 5 finished");
+                warn!("Migration: 4 -> 5 finished");
             }
 
             if db.globals.database_version()? < 6 {
                 // Set room member count
                 for (roomid, _) in db.rooms.roomid_shortstatehash.iter() {
-                    let room_id =
-                        RoomId::try_from(utils::string_from_bytes(&roomid).unwrap()).unwrap();
-
-                    db.rooms.update_joined_count(&room_id, &db)?;
+                    let string = utils::string_from_bytes(&roomid).unwrap();
+                    let room_id = <&RoomId>::try_from(string.as_str()).unwrap();
+                    db.rooms.update_joined_count(room_id, &db)?;
                 }
 
                 db.globals.bump_database_version(6)?;
 
-                println!("Migration: 5 -> 6 finished");
+                warn!("Migration: 5 -> 6 finished");
             }
 
             if db.globals.database_version()? < 7 {
                 // Upgrade state store
-                let mut last_roomstates: HashMap<RoomId, u64> = HashMap::new();
+                let mut last_roomstates: HashMap<Box<RoomId>, u64> = HashMap::new();
                 let mut current_sstatehash: Option<u64> = None;
                 let mut current_room = None;
                 let mut current_state = HashSet::new();
@@ -556,7 +534,7 @@ impl Database {
                         if let Some(current_sstatehash) = current_sstatehash {
                             handle_state(
                                 current_sstatehash,
-                                current_room.as_ref().unwrap(),
+                                current_room.as_deref().unwrap(),
                                 current_state,
                                 &mut last_roomstates,
                             )?;
@@ -572,10 +550,9 @@ impl Database {
                             .get(&seventid)
                             .unwrap()
                             .unwrap();
-                        let event_id =
-                            EventId::try_from(utils::string_from_bytes(&event_id).unwrap())
-                                .unwrap();
-                        let pdu = db.rooms.get_pdu(&event_id).unwrap().unwrap();
+                        let string = utils::string_from_bytes(&event_id).unwrap();
+                        let event_id = <&EventId>::try_from(string.as_str()).unwrap();
+                        let pdu = db.rooms.get_pdu(event_id).unwrap().unwrap();
 
                         if Some(&pdu.room_id) != current_room.as_ref() {
                             current_room = Some(pdu.room_id.clone());
@@ -590,7 +567,7 @@ impl Database {
                 if let Some(current_sstatehash) = current_sstatehash {
                     handle_state(
                         current_sstatehash,
-                        current_room.as_ref().unwrap(),
+                        current_room.as_deref().unwrap(),
                         current_state,
                         &mut last_roomstates,
                     )?;
@@ -598,7 +575,7 @@ impl Database {
 
                 db.globals.bump_database_version(7)?;
 
-                println!("Migration: 6 -> 7 finished");
+                warn!("Migration: 6 -> 7 finished");
             }
 
             if db.globals.database_version()? < 8 {
@@ -606,7 +583,7 @@ impl Database {
                 for (room_id, _) in db.rooms.roomid_shortstatehash.iter() {
                     let shortroomid = db.globals.next_count()?.to_be_bytes();
                     db.rooms.roomid_shortroomid.insert(&room_id, &shortroomid)?;
-                    println!("Migration: 8");
+                    info!("Migration: 8");
                 }
                 // Update pduids db layout
                 let mut batch = db.rooms.pduid_pdu.iter().filter_map(|(key, v)| {
@@ -657,7 +634,7 @@ impl Database {
 
                 db.globals.bump_database_version(8)?;
 
-                println!("Migration: 7 -> 8 finished");
+                warn!("Migration: 7 -> 8 finished");
             }
 
             if db.globals.database_version()? < 9 {
@@ -699,7 +676,7 @@ impl Database {
                     println!("smaller batch done");
                 }
 
-                println!("Deleting starts");
+                info!("Deleting starts");
 
                 let batch2: Vec<_> = db
                     .rooms
@@ -722,7 +699,7 @@ impl Database {
 
                 db.globals.bump_database_version(9)?;
 
-                println!("Migration: 8 -> 9 finished");
+                warn!("Migration: 8 -> 9 finished");
             }
 
             if db.globals.database_version()? < 10 {
@@ -741,41 +718,74 @@ impl Database {
 
                 db.globals.bump_database_version(10)?;
 
-                println!("Migration: 9 -> 10 finished");
+                warn!("Migration: 9 -> 10 finished");
             }
-        }
 
-        let guard = db.read().await;
+            if db.globals.database_version()? < 11 {
+                db._db
+                    .open_tree("userdevicesessionid_uiaarequest")?
+                    .clear()?;
+                db.globals.bump_database_version(11)?;
+
+                warn!("Migration: 10 -> 11 finished");
+            }
+
+            assert_eq!(11, latest_database_version);
+
+            info!(
+                "Loaded {} database with version {}",
+                config.database_backend, latest_database_version
+            );
+        } else {
+            guard
+                .globals
+                .bump_database_version(latest_database_version)?;
+
+            // Create the admin room and server user on first run
+            create_admin_room(&guard).await?;
+
+            warn!(
+                "Created new {} database with version {}",
+                config.database_backend, latest_database_version
+            );
+        }
 
         // This data is probably outdated
         guard.rooms.edus.presenceid_presence.clear()?;
 
         guard.admin.start_handler(Arc::clone(&db), admin_receiver);
+
+        // Set emergency access for the conduit user
+        match set_emergency_access(&guard) {
+            Ok(pwd_set) => {
+                if pwd_set {
+                    warn!("The Conduit account emergency password is set! Please unset it as soon as you finish admin account recovery!");
+                    guard.admin.send_message(RoomMessageEventContent::text_plain("The Conduit account emergency password is set! Please unset it as soon as you finish admin account recovery!"));
+                }
+            }
+            Err(e) => {
+                error!(
+                    "Could not set the configured emergency password for the conduit user: {}",
+                    e
+                )
+            }
+        };
+
         guard
             .sending
             .start_handler(Arc::clone(&db), sending_receiver);
 
         drop(guard);
 
-        #[cfg(feature = "sqlite")]
-        {
-            Self::start_wal_clean_task(Arc::clone(&db), config).await;
-        }
+        Self::start_cleanup_task(Arc::clone(&db), config).await;
 
         Ok(db)
     }
 
     #[cfg(feature = "conduit_bin")]
-    pub async fn start_on_shutdown_tasks(db: Arc<TokioRwLock<Self>>, shutdown: Shutdown) {
-        use tracing::info;
-
-        tokio::spawn(async move {
-            shutdown.await;
-
-            info!(target: "shutdown-sync", "Received shutdown notification, notifying sync helpers...");
-
-            db.read().await.globals.rotate.fire();
-        });
+    pub async fn on_shutdown(db: Arc<TokioRwLock<Self>>) {
+        info!(target: "shutdown-sync", "Received shutdown notification, notifying sync helpers...");
+        db.read().await.globals.rotate.fire();
     }
 
     pub async fn watch(&self, user_id: &UserId, device_id: &DeviceId) {
@@ -898,15 +908,8 @@ impl Database {
         res
     }
 
-    #[cfg(feature = "sqlite")]
-    #[tracing::instrument(skip(self))]
-    pub fn flush_wal(&self) -> Result<()> {
-        self._db.flush_wal()
-    }
-
-    #[cfg(feature = "sqlite")]
     #[tracing::instrument(skip(db, config))]
-    pub async fn start_wal_clean_task(db: Arc<TokioRwLock<Self>>, config: &Config) {
+    pub async fn start_cleanup_task(db: Arc<TokioRwLock<Self>>, config: &Config) {
         use tokio::time::interval;
 
         #[cfg(unix)]
@@ -915,7 +918,7 @@ impl Database {
 
         use std::time::{Duration, Instant};
 
-        let timer_interval = Duration::from_secs(config.sqlite_wal_clean_second_interval as u64);
+        let timer_interval = Duration::from_secs(config.cleanup_second_interval as u64);
 
         tokio::spawn(async move {
             let mut i = interval(timer_interval);
@@ -926,27 +929,53 @@ impl Database {
                 #[cfg(unix)]
                 tokio::select! {
                     _ = i.tick() => {
-                        info!("wal-trunc: Timer ticked");
+                        info!("cleanup: Timer ticked");
                     }
                     _ = s.recv() => {
-                        info!("wal-trunc: Received SIGHUP");
+                        info!("cleanup: Received SIGHUP");
                     }
                 };
                 #[cfg(not(unix))]
                 {
                     i.tick().await;
-                    info!("wal-trunc: Timer ticked")
+                    info!("cleanup: Timer ticked")
                 }
 
                 let start = Instant::now();
-                if let Err(e) = db.read().await.flush_wal() {
-                    error!("wal-trunc: Errored: {}", e);
+                if let Err(e) = db.read().await._db.cleanup() {
+                    error!("cleanup: Errored: {}", e);
                 } else {
-                    info!("wal-trunc: Flushed in {:?}", start.elapsed());
+                    info!("cleanup: Finished in {:?}", start.elapsed());
                 }
             }
         });
     }
+}
+
+/// Sets the emergency password and push rules for the @conduit account in case emergency password is set
+fn set_emergency_access(db: &Database) -> Result<bool> {
+    let conduit_user = UserId::parse_with_server_name("conduit", db.globals.server_name())
+        .expect("@conduit:server_name is a valid UserId");
+
+    db.users
+        .set_password(&conduit_user, db.globals.emergency_password().as_deref())?;
+
+    let (ruleset, res) = match db.globals.emergency_password() {
+        Some(_) => (Ruleset::server_default(&conduit_user), Ok(true)),
+        None => (Ruleset::new(), Ok(false)),
+    };
+
+    db.account_data.update(
+        None,
+        &conduit_user,
+        GlobalAccountDataEventType::PushRules.to_string().into(),
+        &GlobalAccountDataEvent {
+            content: PushRulesEventContent { global: ruleset },
+        },
+        &db.globals,
+    )?;
+
+    res
 }
 
 pub struct DatabaseGuard(OwnedRwLockReadGuard<Database>);
@@ -959,14 +988,23 @@ impl Deref for DatabaseGuard {
     }
 }
 
-#[rocket::async_trait]
-impl<'r> FromRequest<'r> for DatabaseGuard {
-    type Error = ();
+#[cfg(feature = "conduit_bin")]
+#[axum::async_trait]
+impl<B> axum::extract::FromRequest<B> for DatabaseGuard
+where
+    B: Send,
+{
+    type Rejection = axum::extract::rejection::ExtensionRejection;
 
-    async fn from_request(req: &'r Request<'_>) -> rocket::request::Outcome<Self, ()> {
-        let db = try_outcome!(req.guard::<&State<Arc<TokioRwLock<Database>>>>().await);
+    async fn from_request(
+        req: &mut axum::extract::RequestParts<B>,
+    ) -> Result<Self, Self::Rejection> {
+        use axum::extract::Extension;
 
-        Ok(DatabaseGuard(Arc::clone(db).read_owned().await)).or_forward(())
+        let Extension(db): Extension<Arc<TokioRwLock<Database>>> =
+            Extension::from_request(req).await?;
+
+        Ok(DatabaseGuard(db.read_owned().await))
     }
 }
 

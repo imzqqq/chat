@@ -3,8 +3,9 @@ Description=Conduit Matrix homeserver
 After=network.target
 
 [Service]
-User=chat-conduit
-Group=chat-conduit
+DynamicUser=yes
+User=_matrix-conduit
+Group=_matrix-conduit
 Type=simple
 
 AmbientCapabilities=

@@ -1,12 +1,13 @@
 use crate::{utils, Error, Result};
 use ruma::{
     api::client::{
+        backup::{BackupAlgorithm, KeyBackupData, RoomKeyBackup},
         error::ErrorKind,
-        r0::backup::{BackupAlgorithm, KeyBackupData, RoomKeyBackup},
     },
+    serde::Raw,
     RoomId, UserId,
 };
-use std::{collections::BTreeMap, convert::TryFrom, sync::Arc};
+use std::{collections::BTreeMap, sync::Arc};
 
 use super::abstraction::Tree;
 
@@ -20,7 +21,7 @@ impl KeyBackups {
     pub fn create_backup(
         &self,
         user_id: &UserId,
-        backup_metadata: &BackupAlgorithm,
+        backup_metadata: &Raw<BackupAlgorithm>,
         globals: &super::globals::Globals,
     ) -> Result<String> {
         let version = globals.next_count()?.to_string();
@@ -59,7 +60,7 @@ impl KeyBackups {
         &self,
         user_id: &UserId,
         version: &str,
-        backup_metadata: &BackupAlgorithm,
+        backup_metadata: &Raw<BackupAlgorithm>,
         globals: &super::globals::Globals,
     ) -> Result<String> {
         let mut key = user_id.as_bytes().to_vec();
@@ -73,12 +74,8 @@ impl KeyBackups {
             ));
         }
 
-        self.backupid_algorithm.insert(
-            &key,
-            serde_json::to_string(backup_metadata)
-                .expect("BackupAlgorithm::to_string always works")
-                .as_bytes(),
-        )?;
+        self.backupid_algorithm
+            .insert(&key, backup_metadata.json().get().as_bytes())?;
         self.backupid_etag
             .insert(&key, &globals.next_count()?.to_be_bytes())?;
         Ok(version.to_owned())
@@ -105,7 +102,10 @@ impl KeyBackups {
             .transpose()
     }
 
-    pub fn get_latest_backup(&self, user_id: &UserId) -> Result<Option<(String, BackupAlgorithm)>> {
+    pub fn get_latest_backup(
+        &self,
+        user_id: &UserId,
+    ) -> Result<Option<(String, Raw<BackupAlgorithm>)>> {
         let mut prefix = user_id.as_bytes().to_vec();
         prefix.push(0xff);
         let mut last_possible_key = prefix.clone();
@@ -133,7 +133,11 @@ impl KeyBackups {
             .transpose()
     }
 
-    pub fn get_backup(&self, user_id: &UserId, version: &str) -> Result<Option<BackupAlgorithm>> {
+    pub fn get_backup(
+        &self,
+        user_id: &UserId,
+        version: &str,
+    ) -> Result<Option<Raw<BackupAlgorithm>>> {
         let mut key = user_id.as_bytes().to_vec();
         key.push(0xff);
         key.extend_from_slice(version.as_bytes());
@@ -152,7 +156,7 @@ impl KeyBackups {
         version: &str,
         room_id: &RoomId,
         session_id: &str,
-        key_data: &KeyBackupData,
+        key_data: &Raw<KeyBackupData>,
         globals: &super::globals::Globals,
     ) -> Result<()> {
         let mut key = user_id.as_bytes().to_vec();
@@ -174,10 +178,8 @@ impl KeyBackups {
         key.push(0xff);
         key.extend_from_slice(session_id.as_bytes());
 
-        self.backupkeyid_backup.insert(
-            &key,
-            &serde_json::to_vec(&key_data).expect("KeyBackupData::to_vec always works"),
-        )?;
+        self.backupkeyid_backup
+            .insert(&key, key_data.json().get().as_bytes())?;
 
         Ok(())
     }
@@ -209,13 +211,13 @@ impl KeyBackups {
         &self,
         user_id: &UserId,
         version: &str,
-    ) -> Result<BTreeMap<RoomId, RoomKeyBackup>> {
+    ) -> Result<BTreeMap<Box<RoomId>, RoomKeyBackup>> {
         let mut prefix = user_id.as_bytes().to_vec();
         prefix.push(0xff);
         prefix.extend_from_slice(version.as_bytes());
         prefix.push(0xff);
 
-        let mut rooms = BTreeMap::<RoomId, RoomKeyBackup>::new();
+        let mut rooms = BTreeMap::<Box<RoomId>, RoomKeyBackup>::new();
 
         for result in self
             .backupkeyid_backup
@@ -231,7 +233,7 @@ impl KeyBackups {
                         Error::bad_database("backupkeyid_backup session_id is invalid.")
                     })?;
 
-                let room_id = RoomId::try_from(
+                let room_id = RoomId::parse(
                     utils::string_from_bytes(parts.next().ok_or_else(|| {
                         Error::bad_database("backupkeyid_backup key is invalid.")
                     })?)
@@ -266,7 +268,7 @@ impl KeyBackups {
         user_id: &UserId,
         version: &str,
         room_id: &RoomId,
-    ) -> Result<BTreeMap<String, KeyBackupData>> {
+    ) -> Result<BTreeMap<String, Raw<KeyBackupData>>> {
         let mut prefix = user_id.as_bytes().to_vec();
         prefix.push(0xff);
         prefix.extend_from_slice(version.as_bytes());
@@ -304,7 +306,7 @@ impl KeyBackups {
         version: &str,
         room_id: &RoomId,
         session_id: &str,
-    ) -> Result<Option<KeyBackupData>> {
+    ) -> Result<Option<Raw<KeyBackupData>>> {
         let mut key = user_id.as_bytes().to_vec();
         key.push(0xff);
         key.extend_from_slice(version.as_bytes());

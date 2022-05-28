@@ -1,51 +1,35 @@
-use std::{
-    collections::BTreeMap,
-    convert::{TryFrom, TryInto},
-    sync::Arc,
-};
+use std::sync::Arc;
 
 use super::{DEVICE_ID_LENGTH, SESSION_ID_LENGTH, TOKEN_LENGTH};
-use crate::{database::DatabaseGuard, pdu::PduBuilder, utils, ConduitResult, Error, Ruma};
+use crate::{
+    database::{admin::make_user_admin, DatabaseGuard},
+    pdu::PduBuilder,
+    utils, Error, Result, Ruma,
+};
 use ruma::{
     api::client::{
-        error::ErrorKind,
-        r0::{
-            account::{
-                change_password, deactivate, get_username_availability, register, whoami,
-                ThirdPartyIdRemovalStatus,
-            },
-            contact::get_contacts,
-            uiaa::{AuthFlow, AuthType, UiaaInfo},
+        account::{
+            change_password, deactivate, get_3pids, get_username_availability, register, whoami,
+            ThirdPartyIdRemovalStatus,
         },
+        error::ErrorKind,
+        uiaa::{AuthFlow, AuthType, UiaaInfo},
     },
     events::{
-        room::{
-            canonical_alias::RoomCanonicalAliasEventContent,
-            create::RoomCreateEventContent,
-            guest_access::{GuestAccess, RoomGuestAccessEventContent},
-            history_visibility::{HistoryVisibility, RoomHistoryVisibilityEventContent},
-            join_rules::{JoinRule, RoomJoinRulesEventContent},
-            member::{MembershipState, RoomMemberEventContent},
-            message::RoomMessageEventContent,
-            name::RoomNameEventContent,
-            power_levels::RoomPowerLevelsEventContent,
-            topic::RoomTopicEventContent,
-        },
-        EventType,
+        room::member::{MembershipState, RoomMemberEventContent},
+        room::message::RoomMessageEventContent,
+        GlobalAccountDataEventType, RoomEventType,
     },
-    identifiers::RoomName,
-    push, RoomAliasId, RoomId, RoomVersionId, UserId,
+    push, UserId,
 };
 use serde_json::value::to_raw_value;
-use tracing::info;
+use tracing::{info, warn};
 
 use register::RegistrationKind;
-#[cfg(feature = "conduit_bin")]
-use rocket::{get, post};
 
 const GUEST_NAME_LENGTH: usize = 10;
 
-/// # `GET /chat/client/r0/register/available`
+/// # `GET /_matrix/client/r0/register/available`
 ///
 /// Checks if a username is valid and available on this server.
 ///
@@ -55,25 +39,21 @@ const GUEST_NAME_LENGTH: usize = 10;
 /// - No user or appservice on this server already claimed this username
 ///
 /// Note: This will not reserve the username, so the username might become invalid when trying to register
-#[cfg_attr(
-    feature = "conduit_bin",
-    get("/chat/client/r0/register/available", data = "<body>")
-)]
-#[tracing::instrument(skip(db, body))]
 pub async fn get_register_available_route(
     db: DatabaseGuard,
-    body: Ruma<get_username_availability::Request<'_>>,
-) -> ConduitResult<get_username_availability::Response> {
+    body: Ruma<get_username_availability::v3::IncomingRequest>,
+) -> Result<get_username_availability::v3::Response> {
     // Validate user id
-    let user_id = UserId::parse_with_server_name(body.username.clone(), db.globals.server_name())
-        .ok()
-        .filter(|user_id| {
-            !user_id.is_historical() && user_id.server_name() == db.globals.server_name()
-        })
-        .ok_or(Error::BadRequest(
-            ErrorKind::InvalidUsername,
-            "Username is invalid.",
-        ))?;
+    let user_id =
+        UserId::parse_with_server_name(body.username.to_lowercase(), db.globals.server_name())
+            .ok()
+            .filter(|user_id| {
+                !user_id.is_historical() && user_id.server_name() == db.globals.server_name()
+            })
+            .ok_or(Error::BadRequest(
+                ErrorKind::InvalidUsername,
+                "Username is invalid.",
+            ))?;
 
     // Check if username is creative enough
     if db.users.exists(&user_id)? {
@@ -86,14 +66,14 @@ pub async fn get_register_available_route(
     // TODO add check for appservice namespaces
 
     // If no if check is true we have an username that's available to be used.
-    Ok(get_username_availability::Response { available: true }.into())
+    Ok(get_username_availability::v3::Response { available: true })
 }
 
-/// # `POST /chat/client/r0/register`
+/// # `POST /_matrix/client/r0/register`
 ///
 /// Register an account on this homeserver.
 ///
-/// You can use [`GET /chat/client/r0/register/available`](fn.get_register_available_route.html)
+/// You can use [`GET /_matrix/client/r0/register/available`](fn.get_register_available_route.html)
 /// to check if the user id is valid and available.
 ///
 /// - Only works if registration is enabled
@@ -102,15 +82,10 @@ pub async fn get_register_available_route(
 /// - If type is not guest and no username is given: Always fails after UIAA check
 /// - Creates a new account and populates it with default account data
 /// - If `inhibit_login` is false: Creates a device and returns device id and access_token
-#[cfg_attr(
-    feature = "conduit_bin",
-    post("/chat/client/r0/register", data = "<body>")
-)]
-#[tracing::instrument(skip(db, body))]
 pub async fn register_route(
     db: DatabaseGuard,
-    body: Ruma<register::Request<'_>>,
-) -> ConduitResult<register::Response> {
+    body: Ruma<register::v3::IncomingRequest>,
+) -> Result<register::v3::Response> {
     if !db.globals.allow_registration() && !body.from_appservice {
         return Err(Error::BadRequest(
             ErrorKind::Forbidden,
@@ -219,7 +194,7 @@ pub async fn register_route(
     db.account_data.update(
         None,
         &user_id,
-        EventType::PushRules,
+        GlobalAccountDataEventType::PushRules.to_string().into(),
         &ruma::events::push_rules::PushRulesEvent {
             content: ruma::events::push_rules::PushRulesEventContent {
                 global: push::Ruleset::server_default(&user_id),
@@ -230,12 +205,11 @@ pub async fn register_route(
 
     // Inhibit login does not work for guests
     if !is_guest && body.inhibit_login {
-        return Ok(register::Response {
+        return Ok(register::v3::Response {
             access_token: None,
             user_id,
             device_id: None,
-        }
-        .into());
+        });
     }
 
     // Generate new device id if the user didn't specify one
@@ -257,285 +231,31 @@ pub async fn register_route(
         body.initial_device_display_name.clone(),
     )?;
 
-    // If this is the first user on this server, create the admin room
-    if db.users.count()? == 1 {
-        // Create a user for the server
-        let conduit_user = UserId::parse_with_server_name("conduit", db.globals.server_name())
-            .expect("@conduit:server_name is valid");
+    info!("New user {} registered on this server.", user_id);
+    db.admin
+        .send_message(RoomMessageEventContent::notice_plain(format!(
+            "New user {} registered on this server.",
+            user_id
+        )));
 
-        db.users.create(&conduit_user, None)?;
+    // If this is the first real user, grant them admin privileges
+    // Note: the server user, @conduit:servername, is generated first
+    if db.users.count()? == 2 {
+        make_user_admin(&db, &user_id, displayname).await?;
 
-        let room_id = RoomId::new(db.globals.server_name());
-
-        db.rooms.get_or_create_shortroomid(&room_id, &db.globals)?;
-
-        let mutex_state = Arc::clone(
-            db.globals
-                .roomid_mutex_state
-                .write()
-                .unwrap()
-                .entry(room_id.clone())
-                .or_default(),
-        );
-        let state_lock = mutex_state.lock().await;
-
-        let mut content = RoomCreateEventContent::new(conduit_user.clone());
-        content.federate = true;
-        content.predecessor = None;
-        content.room_version = RoomVersionId::Version6;
-
-        // 1. The room create event
-        db.rooms.build_and_append_pdu(
-            PduBuilder {
-                event_type: EventType::RoomCreate,
-                content: to_raw_value(&content).expect("event is valid, we just created it"),
-                unsigned: None,
-                state_key: Some("".to_owned()),
-                redacts: None,
-            },
-            &conduit_user,
-            &room_id,
-            &db,
-            &state_lock,
-        )?;
-
-        // 2. Make conduit bot join
-        db.rooms.build_and_append_pdu(
-            PduBuilder {
-                event_type: EventType::RoomMember,
-                content: to_raw_value(&RoomMemberEventContent {
-                    membership: MembershipState::Join,
-                    displayname: None,
-                    avatar_url: None,
-                    is_direct: None,
-                    third_party_invite: None,
-                    blurhash: None,
-                    reason: None,
-                })
-                .expect("event is valid, we just created it"),
-                unsigned: None,
-                state_key: Some(conduit_user.to_string()),
-                redacts: None,
-            },
-            &conduit_user,
-            &room_id,
-            &db,
-            &state_lock,
-        )?;
-
-        // 3. Power levels
-        let mut users = BTreeMap::new();
-        users.insert(conduit_user.clone(), 100.into());
-        users.insert(user_id.clone(), 100.into());
-
-        db.rooms.build_and_append_pdu(
-            PduBuilder {
-                event_type: EventType::RoomPowerLevels,
-                content: to_raw_value(&RoomPowerLevelsEventContent {
-                    users,
-                    ..Default::default()
-                })
-                .expect("event is valid, we just created it"),
-                unsigned: None,
-                state_key: Some("".to_owned()),
-                redacts: None,
-            },
-            &conduit_user,
-            &room_id,
-            &db,
-            &state_lock,
-        )?;
-
-        // 4.1 Join Rules
-        db.rooms.build_and_append_pdu(
-            PduBuilder {
-                event_type: EventType::RoomJoinRules,
-                content: to_raw_value(&RoomJoinRulesEventContent::new(JoinRule::Invite))
-                    .expect("event is valid, we just created it"),
-                unsigned: None,
-                state_key: Some("".to_owned()),
-                redacts: None,
-            },
-            &conduit_user,
-            &room_id,
-            &db,
-            &state_lock,
-        )?;
-
-        // 4.2 History Visibility
-        db.rooms.build_and_append_pdu(
-            PduBuilder {
-                event_type: EventType::RoomHistoryVisibility,
-                content: to_raw_value(&RoomHistoryVisibilityEventContent::new(
-                    HistoryVisibility::Shared,
-                ))
-                .expect("event is valid, we just created it"),
-                unsigned: None,
-                state_key: Some("".to_owned()),
-                redacts: None,
-            },
-            &conduit_user,
-            &room_id,
-            &db,
-            &state_lock,
-        )?;
-
-        // 4.3 Guest Access
-        db.rooms.build_and_append_pdu(
-            PduBuilder {
-                event_type: EventType::RoomGuestAccess,
-                content: to_raw_value(&RoomGuestAccessEventContent::new(GuestAccess::Forbidden))
-                    .expect("event is valid, we just created it"),
-                unsigned: None,
-                state_key: Some("".to_owned()),
-                redacts: None,
-            },
-            &conduit_user,
-            &room_id,
-            &db,
-            &state_lock,
-        )?;
-
-        // 6. Events implied by name and topic
-        let room_name =
-            Box::<RoomName>::try_from(format!("{} Admin Room", db.globals.server_name()))
-                .expect("Room name is valid");
-        db.rooms.build_and_append_pdu(
-            PduBuilder {
-                event_type: EventType::RoomName,
-                content: to_raw_value(&RoomNameEventContent::new(Some(room_name)))
-                    .expect("event is valid, we just created it"),
-                unsigned: None,
-                state_key: Some("".to_owned()),
-                redacts: None,
-            },
-            &conduit_user,
-            &room_id,
-            &db,
-            &state_lock,
-        )?;
-
-        db.rooms.build_and_append_pdu(
-            PduBuilder {
-                event_type: EventType::RoomTopic,
-                content: to_raw_value(&RoomTopicEventContent {
-                    topic: format!("Manage {}", db.globals.server_name()),
-                })
-                .expect("event is valid, we just created it"),
-                unsigned: None,
-                state_key: Some("".to_owned()),
-                redacts: None,
-            },
-            &conduit_user,
-            &room_id,
-            &db,
-            &state_lock,
-        )?;
-
-        // Room alias
-        let alias: RoomAliasId = format!("#admins:{}", db.globals.server_name())
-            .try_into()
-            .expect("#admins:server_name is a valid alias name");
-
-        db.rooms.build_and_append_pdu(
-            PduBuilder {
-                event_type: EventType::RoomCanonicalAlias,
-                content: to_raw_value(&RoomCanonicalAliasEventContent {
-                    alias: Some(alias.clone()),
-                    alt_aliases: Vec::new(),
-                })
-                .expect("event is valid, we just created it"),
-                unsigned: None,
-                state_key: Some("".to_owned()),
-                redacts: None,
-            },
-            &conduit_user,
-            &room_id,
-            &db,
-            &state_lock,
-        )?;
-
-        db.rooms.set_alias(&alias, Some(&room_id), &db.globals)?;
-
-        // Invite and join the real user
-        db.rooms.build_and_append_pdu(
-            PduBuilder {
-                event_type: EventType::RoomMember,
-                content: to_raw_value(&RoomMemberEventContent {
-                    membership: MembershipState::Invite,
-                    displayname: None,
-                    avatar_url: None,
-                    is_direct: None,
-                    third_party_invite: None,
-                    blurhash: None,
-                    reason: None,
-                })
-                .expect("event is valid, we just created it"),
-                unsigned: None,
-                state_key: Some(user_id.to_string()),
-                redacts: None,
-            },
-            &conduit_user,
-            &room_id,
-            &db,
-            &state_lock,
-        )?;
-        db.rooms.build_and_append_pdu(
-            PduBuilder {
-                event_type: EventType::RoomMember,
-                content: to_raw_value(&RoomMemberEventContent {
-                    membership: MembershipState::Join,
-                    displayname: Some(displayname),
-                    avatar_url: None,
-                    is_direct: None,
-                    third_party_invite: None,
-                    blurhash: None,
-                    reason: None,
-                })
-                .expect("event is valid, we just created it"),
-                unsigned: None,
-                state_key: Some(user_id.to_string()),
-                redacts: None,
-            },
-            &user_id,
-            &room_id,
-            &db,
-            &state_lock,
-        )?;
-
-        // Send welcome message
-        db.rooms.build_and_append_pdu(
-            PduBuilder {
-                event_type: EventType::RoomMessage,
-                content: to_raw_value(&RoomMessageEventContent::text_html(
-                        "## Thank you for trying out Conduit!\n\nConduit is currently in Beta. This means you can join and participate in most Matrix rooms, but not all features are supported and you might run into bugs from time to time.\n\nHelpful links:\n> Website: https://conduit.rs\n> Git and Documentation: https://gitlab.com/famedly/conduit\n> Report issues: https://gitlab.com/famedly/conduit/-/issues\n\nHere are some rooms you can join (by typing the command):\n\nConduit room (Ask questions and get notified on updates):\n`/join #conduit:fachschaften.org`\n\nConduit lounge (Off-topic, only Conduit users are allowed to join)\n`/join #conduit-lounge:conduit.rs`".to_owned(),
-                        "<h2>Thank you for trying out Conduit!</h2>\n<p>Conduit is currently in Beta. This means you can join and participate in most Matrix rooms, but not all features are supported and you might run into bugs from time to time.</p>\n<p>Helpful links:</p>\n<blockquote>\n<p>Website: https://conduit.rs<br>Git and Documentation: https://gitlab.com/famedly/conduit<br>Report issues: https://gitlab.com/famedly/conduit/-/issues</p>\n</blockquote>\n<p>Here are some rooms you can join (by typing the command):</p>\n<p>Conduit room (Ask questions and get notified on updates):<br><code>/join #conduit:fachschaften.org</code></p>\n<p>Conduit lounge (Off-topic, only Conduit users are allowed to join)<br><code>/join #conduit-lounge:conduit.rs</code></p>\n".to_owned(),
-                ))
-                .expect("event is valid, we just created it"),
-                unsigned: None,
-                state_key: None,
-                redacts: None,
-            },
-            &conduit_user,
-            &room_id,
-            &db,
-            &state_lock,
-        )?;
+        warn!("Granting {} admin privileges as the first user", user_id);
     }
-
-    info!("{} registered on this server", user_id);
 
     db.flush()?;
 
-    Ok(register::Response {
+    Ok(register::v3::Response {
         access_token: Some(token),
         user_id,
         device_id: Some(device_id),
-    }
-    .into())
+    })
 }
 
-/// # `POST /chat/client/r0/account/password`
+/// # `POST /_matrix/client/r0/account/password`
 ///
 /// Changes the password of this account.
 ///
@@ -549,15 +269,10 @@ pub async fn register_route(
 /// - Deletes device metadata (device id, device display name, last seen ip, last seen ts)
 /// - Forgets to-device events
 /// - Triggers device list updates
-#[cfg_attr(
-    feature = "conduit_bin",
-    post("/chat/client/r0/account/password", data = "<body>")
-)]
-#[tracing::instrument(skip(db, body))]
 pub async fn change_password_route(
     db: DatabaseGuard,
-    body: Ruma<change_password::Request<'_>>,
-) -> ConduitResult<change_password::Response> {
+    body: Ruma<change_password::v3::IncomingRequest>,
+) -> Result<change_password::v3::Response> {
     let sender_user = body.sender_user.as_ref().expect("user is authenticated");
     let sender_device = body.sender_device.as_ref().expect("user is authenticated");
 
@@ -610,28 +325,36 @@ pub async fn change_password_route(
 
     db.flush()?;
 
-    Ok(change_password::Response {}.into())
+    info!("User {} changed their password.", sender_user);
+    db.admin
+        .send_message(RoomMessageEventContent::notice_plain(format!(
+            "User {} changed their password.",
+            sender_user
+        )));
+
+    Ok(change_password::v3::Response {})
 }
 
-/// # `GET chat/client/r0/account/whoami`
+/// # `GET _matrix/client/r0/account/whoami`
 ///
 /// Get user_id of the sender user.
 ///
 /// Note: Also works for Application Services
-#[cfg_attr(
-    feature = "conduit_bin",
-    get("/chat/client/r0/account/whoami", data = "<body>")
-)]
-#[tracing::instrument(skip(body))]
-pub async fn whoami_route(body: Ruma<whoami::Request>) -> ConduitResult<whoami::Response> {
+pub async fn whoami_route(
+    db: DatabaseGuard,
+    body: Ruma<whoami::v3::Request>,
+) -> Result<whoami::v3::Response> {
     let sender_user = body.sender_user.as_ref().expect("user is authenticated");
-    Ok(whoami::Response {
+    let device_id = body.sender_device.as_ref().cloned();
+
+    Ok(whoami::v3::Response {
         user_id: sender_user.clone(),
-    }
-    .into())
+        device_id,
+        is_guest: db.users.is_deactivated(&sender_user)?,
+    })
 }
 
-/// # `POST /chat/client/r0/account/deactivate`
+/// # `POST /_matrix/client/r0/account/deactivate`
 ///
 /// Deactivate sender user account.
 ///
@@ -641,15 +364,10 @@ pub async fn whoami_route(body: Ruma<whoami::Request>) -> ConduitResult<whoami::
 /// - Forgets all to-device events
 /// - Triggers device list updates
 /// - Removes ability to log in again
-#[cfg_attr(
-    feature = "conduit_bin",
-    post("/chat/client/r0/account/deactivate", data = "<body>")
-)]
-#[tracing::instrument(skip(db, body))]
 pub async fn deactivate_route(
     db: DatabaseGuard,
-    body: Ruma<deactivate::Request<'_>>,
-) -> ConduitResult<deactivate::Response> {
+    body: Ruma<deactivate::v3::IncomingRequest>,
+) -> Result<deactivate::v3::Response> {
     let sender_user = body.sender_user.as_ref().expect("user is authenticated");
     let sender_device = body.sender_device.as_ref().expect("user is authenticated");
 
@@ -707,6 +425,7 @@ pub async fn deactivate_route(
             third_party_invite: None,
             blurhash: None,
             reason: None,
+            join_authorized_via_users_server: None,
         };
 
         let mutex_state = Arc::clone(
@@ -721,7 +440,7 @@ pub async fn deactivate_route(
 
         db.rooms.build_and_append_pdu(
             PduBuilder {
-                event_type: EventType::RoomMember,
+                event_type: RoomEventType::RoomMember,
                 content: to_raw_value(&event).expect("event is valid, we just created it"),
                 unsigned: None,
                 state_key: Some(sender_user.to_string()),
@@ -737,29 +456,29 @@ pub async fn deactivate_route(
     // Remove devices and mark account as deactivated
     db.users.deactivate_account(sender_user)?;
 
-    info!("{} deactivated their account", sender_user);
+    info!("User {} deactivated their account.", sender_user);
+    db.admin
+        .send_message(RoomMessageEventContent::notice_plain(format!(
+            "User {} deactivated their account.",
+            sender_user
+        )));
 
     db.flush()?;
 
-    Ok(deactivate::Response {
+    Ok(deactivate::v3::Response {
         id_server_unbind_result: ThirdPartyIdRemovalStatus::NoSupport,
-    }
-    .into())
+    })
 }
 
-/// # `GET chat/client/r0/account/3pid`
+/// # `GET _matrix/client/r0/account/3pid`
 ///
 /// Get a list of third party identifiers associated with this account.
 ///
 /// - Currently always returns empty list
-#[cfg_attr(
-    feature = "conduit_bin",
-    get("/chat/client/r0/account/3pid", data = "<body>")
-)]
 pub async fn third_party_route(
-    body: Ruma<get_contacts::Request>,
-) -> ConduitResult<get_contacts::Response> {
+    body: Ruma<get_3pids::v3::Request>,
+) -> Result<get_3pids::v3::Response> {
     let _sender_user = body.sender_user.as_ref().expect("user is authenticated");
 
-    Ok(get_contacts::Response::new(Vec::new()).into())
+    Ok(get_3pids::v3::Response::new(Vec::new()))
 }
