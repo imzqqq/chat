@@ -53,7 +53,7 @@ The [Federation Tester](https://federationtester.matrix.org) can be used to veri
 
 ## Get started
 
-If you wish to build a fully-federating Dendrite instance, see [the Installation documentation](docs/installation). For running in Docker, see [build/docker](build/docker).
+If you wish to build a fully-federating Dendrite instance, see [the Installation documentation](https://matrix-org.github.io/dendrite/installation). For running in Docker, see [build/docker](build/docker).
 
 The following instructions are enough to get Dendrite started as a non-federating test deployment using self-signed certificates and SQLite databases:
 
@@ -71,7 +71,7 @@ $ ./bin/generate-keys --tls-cert server.crt --tls-key server.key
 
 # Copy and modify the config file - you'll need to set a server name and paths to the keys
 # at the very least, along with setting up the database connection strings.
-$ cp dendrite-config.yaml dendrite.yaml
+$ cp dendrite-sample.monolith.yaml dendrite.yaml
 
 # Build and run the server:
 $ ./bin/dendrite-monolith-server --tls-cert server.crt --tls-key server.key --config dendrite.yaml

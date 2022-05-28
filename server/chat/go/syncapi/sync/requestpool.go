@@ -53,10 +53,15 @@ type RequestPool struct {
 	streams  *streams.Streams
 	Notifier *notifier.Notifier
 	producer PresencePublisher
+	consumer PresenceConsumer
 }
 
 type PresencePublisher interface {
 	SendPresence(userID string, presence types.Presence, statusMsg *string) error
+}
+
+type PresenceConsumer interface {
+	EmitPresence(ctx context.Context, userID string, presence types.Presence, statusMsg *string, ts int, fromSync bool)
 }
 
 // NewRequestPool makes a new RequestPool
@@ -65,7 +70,7 @@ func NewRequestPool(
 	userAPI userapi.SyncUserAPI, keyAPI keyapi.SyncKeyAPI,
 	rsAPI roomserverAPI.SyncRoomserverAPI,
 	streams *streams.Streams, notifier *notifier.Notifier,
-	producer PresencePublisher, enableMetrics bool,
+	producer PresencePublisher, consumer PresenceConsumer, enableMetrics bool,
 ) *RequestPool {
 	if enableMetrics {
 		prometheus.MustRegister(
@@ -83,6 +88,7 @@ func NewRequestPool(
 		streams:  streams,
 		Notifier: notifier,
 		producer: producer,
+		consumer: consumer,
 	}
 	go rp.cleanLastSeen()
 	go rp.cleanPresence(db, time.Minute*5)
@@ -160,6 +166,13 @@ func (rp *RequestPool) updatePresence(db storage.Presence, presence string, user
 		logrus.WithError(err).Error("Unable to publish presence message from sync")
 		return
 	}
+
+	// now synchronously update our view of the world. It's critical we do this before calculating
+	// the /sync response else we may not return presence: online immediately.
+	rp.consumer.EmitPresence(
+		context.Background(), userID, presenceID, newPresence.ClientFields.StatusMsg,
+		int(gomatrixserverlib.AsTimestamp(time.Now())), true,
+	)
 }
 
 func (rp *RequestPool) updateLastSeen(req *http.Request, device *userapi.Device) {
@@ -253,9 +266,12 @@ func (rp *RequestPool) OnIncomingSyncRequest(req *http.Request, device *userapi.
 			// We should always try to include OTKs in sync responses, otherwise clients might upload keys
 			// even if that's not required. See also:
 			// https://github.com/matrix-org/synapse/blob/29f06704b8871a44926f7c99e73cf4a978fb8e81/synapse/rest/client/sync.py#L276-L281
-			err = internal.DeviceOTKCounts(syncReq.Context, rp.keyAPI, syncReq.Device.UserID, syncReq.Device.ID, syncReq.Response)
-			if err != nil {
-				syncReq.Log.WithError(err).Error("failed to get OTK counts")
+			// Only try to get OTKs if the context isn't already done.
+			if syncReq.Context.Err() == nil {
+				err = internal.DeviceOTKCounts(syncReq.Context, rp.keyAPI, syncReq.Device.UserID, syncReq.Device.ID, syncReq.Response)
+				if err != nil && err != context.Canceled {
+					syncReq.Log.WithError(err).Warn("failed to get OTK counts")
+				}
 			}
 			return util.JSONResponse{
 				Code: http.StatusOK,
