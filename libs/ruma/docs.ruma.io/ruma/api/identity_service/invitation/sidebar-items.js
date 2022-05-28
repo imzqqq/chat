@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["sign_invitation_ed25519","`POST /_matrix/identity/*/sign-ed25519`"],["store_invitation","`POST /_matrix/identity/*/store-invite`"]]});

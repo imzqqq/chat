@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["create_email_validation_session","`POST /_matrix/identity/*/validate/email/requestToken`"],["validate_email","`POST /_matrix/identity/*/validate/email/submitToken`"],["validate_email_by_end_user","`GET /_matrix/identity/*/validate/email/submitToken`"]]});

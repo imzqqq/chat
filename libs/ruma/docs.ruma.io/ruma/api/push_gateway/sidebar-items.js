@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["send_event_notification","`POST /_matrix/push/*/notify`"]]});

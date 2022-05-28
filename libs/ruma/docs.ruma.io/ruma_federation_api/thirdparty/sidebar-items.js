@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["bind_callback","`PUT /_matrix/federation/*/3pid/onbind`"],["exchange_invite","`PUT /_matrix/federation/*/exchange_third_party_invite/{roomId}`"]]});

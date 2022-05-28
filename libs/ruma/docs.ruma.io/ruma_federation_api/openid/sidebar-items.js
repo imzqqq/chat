@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["get_openid_userinfo","`GET /_matrix/federation/*/openid/userinfo`"]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["edu","Edu type and variant content structs."],["send_transaction_message","`PUT /_matrix/federation/*/send/{txnId}`"]]});

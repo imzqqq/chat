@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["create_knock_event_template","`GET /_matrix/federation/*/make_knock/{roomId}/{userId}`"],["send_knock","`PUT /_matrix/federation/*/send_knock/{roomId}/{eventId}`"]]});
