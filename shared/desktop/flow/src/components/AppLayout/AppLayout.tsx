@@ -54,7 +54,7 @@ import {
     LinkableIconButton,
     LinkableFab
 } from "../../interfaces/overrides";
-import Mastodon from "megalodon";
+import {Mastodon} from "megalodon";
 import { Notification } from "../../types/Notification";
 import { sendNotificationRequest } from "../../utilities/notifications";
 import { withSnackbar } from "notistack";
@@ -188,8 +188,10 @@ export class AppLayout extends Component<any, IAppLayoutState> {
      */
     getAccountData() {
         // Try to get updated credentials from Mastodon.
-        this.client
-            .get("/accounts/verify_credentials")
+		this.client.verifyAppCredentials()
+			/// MARK - imzqqq
+            // .get("/accounts/verify_credentials")
+			/// END
             .then((resp: any) => {
                 // Update the account if possible.
                 let data: UAccount = resp.data;
@@ -212,14 +214,21 @@ export class AppLayout extends Component<any, IAppLayoutState> {
      */
     streamNotifications() {
         // Set up the stream listener.
-        this.streamListener = this.client.stream("/streaming/user");
-
+		this.streamListener = this.client.userStream()
+			/// MARK - imzqqq
+			// .stream("/streaming/user");
+			/// END
+		
         // Set the count if the user asked to display the total count.
         if (getUserDefaultBool("displayAllOnNotificationBadge")) {
-            this.client.get("/notifications").then((resp: any) => {
-                let notifArray = resp.data;
-                this.setState({ notificationCount: notifArray.length });
-            });
+			this.client.getNotifications()
+				/// MARK - imzqqq
+				// .get("/notifications")
+				/// END
+				.then((resp: any) => {
+					let notifArray = resp.data;
+					this.setState({ notificationCount: notifArray.length });
+            	});
         }
 
         // Listen for notifications.
@@ -427,7 +436,7 @@ export class AppLayout extends Component<any, IAppLayoutState> {
                                     : "1"
                             }`}
                         >
-                            <ListItemAvatar>
+                            {/* <ListItemAvatar> */}
                                 <Avatar
                                     alt="You"
                                     src={
@@ -437,7 +446,7 @@ export class AppLayout extends Component<any, IAppLayoutState> {
                                             : ""
                                     }
                                 />
-                            </ListItemAvatar>
+                            {/* </ListItemAvatar> */}
                             <ListItemText
                                 primary={
                                     this.state.currentUser
@@ -733,7 +742,7 @@ export class AppLayout extends Component<any, IAppLayoutState> {
                                                         : "1"
                                                 }`}
                                             >
-                                                <ListItemAvatar>
+                                                {/* <ListItemAvatar> */}
                                                     <Avatar
                                                         alt="You"
                                                         src={
@@ -748,7 +757,7 @@ export class AppLayout extends Component<any, IAppLayoutState> {
                                                                 : ""
                                                         }
                                                     />
-                                                </ListItemAvatar>
+                                                {/* </ListItemAvatar> */}
                                                 <ListItemText
                                                     primary={
                                                         this.state.currentUser
@@ -815,7 +824,7 @@ export class AppLayout extends Component<any, IAppLayoutState> {
                         </Toolbar>
                     </AppBar>
                     <nav className={classes.drawer}>
-                        <Hidden mdUp implementation="css">
+                        {/* <Hidden mdUp implementation="css"> */}
                             <Drawer
                                 container={this.props.container}
                                 variant="temporary"
@@ -826,8 +835,8 @@ export class AppLayout extends Component<any, IAppLayoutState> {
                             >
                                 {this.appDrawer()}
                             </Drawer>
-                        </Hidden>
-                        <Hidden smDown implementation="css">
+                        {/* </Hidden> */}
+                        {/* <Hidden smDown implementation="css"> */}
                             <Drawer
                                 classes={{
                                     paper: this.titlebar()
@@ -839,7 +848,7 @@ export class AppLayout extends Component<any, IAppLayoutState> {
                             >
                                 {this.appDrawer()}
                             </Drawer>
-                        </Hidden>
+                        {/* </Hidden> */}
                     </nav>
                 </div>
                 {this.logoutDialog()}

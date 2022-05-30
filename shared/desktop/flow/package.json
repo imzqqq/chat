@@ -33,16 +33,26 @@
     "@types/emoji-mart": "^2.11.3",
     "@types/jest": "^24.9.1",
     "@types/node": "11.11.6",
-    "@types/react": "16.8.8",
+    "@types/react": "18.0.1",
     "@types/react-dom": "16.8.3",
     "@types/react-router-dom": "^4.3.5",
     "@types/react-swipeable-views": "latest",
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
+    "@typescript-eslint/parser": "^4.32.0",
     "axios": "^0.21.1",
     "babel-loader": "8.1.0",
     "cross-env": "^7.0.3",
     "electron": "^11.5.0",
     "electron-builder": "^22.7.0",
     "emoji-mart": "^2.11.2",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-config-standard": "^14.0.1",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-standard": "^5.0.0",
     "file-dialog": "^0.0.7",
     "material-ui-pickers": "^2.2.4",
     "mdi-material-ui": "^5.27.0",
@@ -56,21 +66,12 @@
     "react-router-dom": "^5.2.0",
     "react-swipeable-views": "^0.13.9",
     "react-web-share-api": "^0.0.2",
-    "@typescript-eslint/eslint-plugin": "^4.32.0",
-    "@typescript-eslint/parser": "^4.32.0",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^6.7.0",
-    "eslint-config-standard": "^14.0.1",
-    "eslint-plugin-import": "^2.18.0",
-    "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-prettier": "^3.1.0",
-    "eslint-plugin-promise": "^4.1.1",
-    "eslint-plugin-standard": "^5.0.0",
     "ts-jest": "^27.0.5",
     "typescript": "^3.9.5"
   },
   "dependencies": {
     "@babel/core": "7.12.3",
+    "@babel/preset-react": "^7.17.12",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@svgr/webpack": "5.5.0",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
@@ -139,6 +140,12 @@
     "not ie <= 11",
     "not op_mini all"
   ],
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
   "jest": {
     "roots": [
       "<rootDir>/src"

@@ -1,7 +1,8 @@
 make --dry-run --always-make --keep-going --print-directory
 make: Entering directory '/home/zq/workspace/chat'
-rm -fr build
-make: Leaving directory '/home/zq/workspace/chat'
  
 make: *** No rule to make target 'compile', needed by 'all'.
 
+rm -fr build
+make: Leaving directory '/home/zq/workspace/chat'
+ 

@@ -8,7 +8,7 @@ make: *** No rule to make target 'compile', needed by 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat May 28 09:14:10 2022
+# Make data base, printed on Mon May 30 06:45:11 2022
 
 # Variables
 
@@ -55,7 +55,7 @@ LESSOPEN = | /usr/bin/lesspipe %s
 # environment
 VSCODE_CWD = /home/zq
 # environment
-SSH_CONNECTION = 192.168.7.171 35822 192.168.7.166 1320
+SSH_CONNECTION = 192.168.7.171 49894 192.168.7.166 1320
 # environment
 PATH = /home/zq/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/bin/remote-cli:/home/zq/.local/bin:/home/zq/gems/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin:/home/zq/go/bin
 # makefile (from 'Makefile', line 6)
@@ -85,7 +85,7 @@ VSCODE_PIPE_LOGGING = true
 # environment
 PWD = /home/zq/workspace/chat
 # environment
-VSCODE_IPC_HOOK_CLI = /run/user/1004/vscode-ipc-e958c6d3-f5ee-4dc2-ae8e-b3fc6d6737e9.sock
+VSCODE_IPC_HOOK_CLI = /run/user/1004/vscode-ipc-ce2c5377-5f64-4c2f-8f3d-b8b977e9ee5d.sock
 # environment
 GEM_HOME = /home/zq/gems
 # makefile (from 'Makefile', line 11)
@@ -101,7 +101,7 @@ LESSCLOSE = /usr/bin/lesspipe %s %s
 # environment
 LOGNAME = zq
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # automatic
 +F = $(notdir $+)
 # makefile (from 'Makefile', line 9)
@@ -125,7 +125,7 @@ SHLVL = 3
 # makefile (from 'Makefile', line 3)
 BUILD_DIR = build
 # environment
-XDG_SESSION_ID = 1486
+XDG_SESSION_ID = 1828
 # environment
 USER = zq
 # makefile
@@ -145,7 +145,7 @@ MAKEFLAGS = pqrR
 # environment
 MFLAGS = -pqrR
 # environment
-SSH_CLIENT = 192.168.7.171 35822 1320
+SSH_CLIENT = 192.168.7.171 49894 1320
 # environment
 MAIL = /var/mail/zq
 # automatic
@@ -195,9 +195,9 @@ VSCODE_EXTHOST_WILL_SEND_SOCKET = true
 
 # Directories
 
-# . (device 64769, inode 69640505): 17 files, no impossibilities.
+# . (device 64769, inode 69640505): 16 files, no impossibilities.
 
-# 17 files, no impossibilities in 1 directories.
+# 16 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -251,12 +251,12 @@ deploy:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 24 / storage = 208 B / avg = 8 B
-# current buf: size = 8162 B / used = 208 B / count = 24 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 23 / storage = 202 B / avg = 8 B
+# current buf: size = 8162 B / used = 202 B / count = 23 / avg = 8 B
 
-# strcache performance: lookups = 33 / hit rate = 27%
+# strcache performance: lookups = 32 / hit rate = 28%
 # hash-table stats:
-# Load=24/8192=0%, Rehash=0, Collisions=1/33=3%
-# Finished Make data base on Sat May 28 09:14:10 2022
+# Load=23/8192=0%, Rehash=0, Collisions=1/32=3%
+# Finished Make data base on Mon May 30 06:45:11 2022
 
  

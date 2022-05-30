@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import { styles } from "./ComposeMediaAttachment.styles";
 import { withSnackbar, withSnackbarProps } from "notistack";
-import Mastodon from "megalodon";
+import {Mastodon} from "megalodon";
 import { Attachment } from "../../types/Attachment";
 import DeleteIcon from "@material-ui/icons/Delete";
 
@@ -41,8 +41,11 @@ class ComposeMediaAttachment extends Component<
     }
 
     updateAttachmentText(text: string) {
-        this.client
-            .put(`/media/${this.state.attachment.id}`, { description: text })
+		this.client
+			/// MARK - imzqqq
+            // .put(`/media/${this.state.attachment.id}`, { description: text })
+			/// END
+            .updateMedia(this.state.attachment.id, { description: text })
             .then((resp: any) => {
                 this.props.onAttachmentUpdate(resp.data);
                 this.props.enqueueSnackbar("Description updated.");

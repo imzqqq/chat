@@ -47,7 +47,7 @@ import { Mention } from "../../types/Mention";
 import { Visibility } from "../../types/Visibility";
 import moment from "moment";
 import AttachmentComponent from "../Attachment";
-import Mastodon from "megalodon";
+import {Mastodon} from "megalodon";
 import {
     LinkableAvatar,
     LinkableChip,
@@ -114,8 +114,11 @@ export class Post extends React.Component<any, IPostState> {
     }
 
     deletePost() {
-        this.client
-            .del("/statuses/" + this.state.post.id)
+		this.client
+			/// MARK - imzqqq
+            // .del("/statuses/" + this.state.post.id)
+			/// END
+            .deleteStatus(this.state.post.id)
             .then(() => {
                 this.props.enqueueSnackbar(
                     "Post deleted. Refresh to see changes."
@@ -163,8 +166,11 @@ export class Post extends React.Component<any, IPostState> {
     submitVote() {
         let poll = this.state.post.poll;
         if (poll) {
-            this.client
-                .post(`/polls/${poll.id}/votes`, { choices: this.state.myVote })
+			this.client
+				/// MARK - imzqqq
+                // .post(`/polls/${poll.id}/votes`, { choices: this.state.myVote })
+				/// END
+                .votePoll(poll.id, this.state.myVote)
                 .then((resp: any) => {
                     let post = this.state.post;
                     post.poll = resp.data;
