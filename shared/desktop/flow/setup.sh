@@ -20,3 +20,4 @@ echo "Linking local deps..."
 ### MARK - imzqqq, FIXME:
 $yarn link megalodon
 $yarn install
+### END

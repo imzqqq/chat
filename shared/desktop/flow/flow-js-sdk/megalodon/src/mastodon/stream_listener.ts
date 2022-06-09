@@ -66,7 +66,11 @@ export default class StreamListener extends EventEmitter implements StreamListen
     let options: AxiosRequestConfig = {
       responseType: 'stream',
       adapter: httpAdapter,
-      cancelToken: this._cancelSource.token
+      cancelToken: this._cancelSource.token,
+      /// MARK - imzqqq, NOTE: Do you need this? Do you ever upload files through StreamListener?
+      maxContentLength: Infinity,
+      maxBodyLength: Infinity
+      /// END
     }
     if (this.proxyConfig) {
       options = Object.assign(options, {
