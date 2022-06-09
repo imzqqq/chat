@@ -320,6 +320,19 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
 ## Architecture
 
+- deploy
+
+
+- libs
+  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[matrix-rust-sdk](./matrix-rust-sdk/README.md)
+  - matrix-synapse-rest-password-provider
+  - matrix-synapse-shared-secret-auth
+  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[olm](./olm/README.md)
+  - ruma
+  - synapse-simple-antispam
+  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[vodozemac](./vodozemac/README.md)
+
+
 - server
   - flow
     - [go](./server/flow/go/README.md)
@@ -328,7 +341,6 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
       - <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[omniauth-mastodon](./server/flow/ruby/omniauth-mastodon/README.md)
 	- rust
 	- python
-    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[join-flow](./server/flow/ruby/joinmastodon/README.md), <http://localhost:3002>
   - chat
     - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[go](./server/chat/go/README.md),
       - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[dugong](./server/chat/go/dugong/README.md),
@@ -366,42 +378,37 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
   - bug-report
 
 
-- deploy
-
-
-- libs
-  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[matrix-rust-sdk](./matrix-rust-sdk/README.md), 
-  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[olm](./olm/README.md), 
-  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[vodozemac](./vodozemac/README.md), 
-
-
 - shared
-  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[ios](./shared/ios/README.md), 
-    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[flow](./shared/ios/Riot/Flow/README.md),
-  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[android](./shared/android/README.md),
-    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[flow](./shared/android/README.md/#Flow),
+  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[android](./shared/android/README.md)
+  - android-Flow
+  - android-Tube
   - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[desktop](./shared/desktop/README.md), <http://localhost:8084>
-    - <i class="fas fa-check" style="color:green; margin-right:5px;"></i>[eslint-plugin-matrix-org](./shared/desktop/eslint-plugin-matrix-org/README.md),
-    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[matrix-mock-request](./shared/desktop/matrix-mock-request/README.md),
-    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[matrix-react-test-utils](./shared/desktop/matrix-react-test-utils/README.md),
+    - <i class="fas fa-check" style="color:green; margin-right:5px;"></i>[eslint-plugin-matrix-org](./shared/desktop/eslint-plugin-matrix-org/README.md)
+    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[matrix-mock-request](./shared/desktop/matrix-mock-request/README.md)
+    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[matrix-react-test-utils](./shared/desktop/matrix-react-test-utils/README.md)
     - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[matrix-web-i18n](./shared/desktop/matrix-web-i18n/README.md),
     - <i class="fa fa-check" style="color:#ff922b; margin-right:5px;"></i>[matrix-widget-api](./shared/desktop/matrix-widget-api/README.md), Not Ready
-    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[seshat](./shared/desktop/seshat/README.md),
-    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[matrix-react-sdk](./shared/desktop/seshat/README.md),
-    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[matrix-js-sdk](./shared/desktop/seshat/README.md),
+    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[seshat](./shared/desktop/seshat/README.md)
+    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[matrix-react-sdk](./shared/desktop/seshat/README.md)
+    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[matrix-js-sdk](./shared/desktop/seshat/README.md)
+  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[ios](./shared/ios/README.md)
+    - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[flow](./shared/ios/Chat/Flow/README.md)
+  - ios-Flow
 
 
 - test
   - <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[complement](./complement/README.md)
-  - <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[sytest](./sytest/README.rst),
   - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[federation-tester](./federation-tester/README.md), <http://localhost:8085/api/report?server_name=localhost:8082>
-  - <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[matrix-is-tester](./matrix-is-tester/README.md), 
+  - <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[matrix-is-tester](./matrix-is-tester/README.md)
+  - <i class="fas fa-running" style="color:#ff922b; margin-right:5px;"></i>[sytest](./sytest/README.rst)
 
 
 - website
   - <i class="fa fa-running" style="color:green; margin-right:5px;"></i>[apps](./websites/official-site2/README.md)
   - berty
+  - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[join-flow](./website/join-flow/README.md), <http://localhost:3002>
   - live
+  - matrix-spec-proposals
   - <i class="fa fa-check" style="color:green; margin-right:5px;"></i>[official-site](./websites/official-site/README.md), <http://localhost:8000>
   - space
 
