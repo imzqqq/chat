@@ -495,6 +495,7 @@ $ systemctl daemon-reload
 $ systemctl enable --now service-name.service
 $ journalctl -u service-name.service
 
+$ git submodule update --remote 
 $ git submodule update --init --recursive
 
 $ git config http.postBuffer 524288000
@@ -531,6 +532,16 @@ $ git config --global core.autocrlf false
 $ git config --global core.safecrlf true
 
 $ git push origin local_branch:remote_branch
+
+# Ignore all untracked files in any submodule
+$ git config --global diff.ignoreSubmodules dirty
+
+# Git prompt file has been modified but actual file has not been modified.
+#   1. Caused by file permissions
+#   2. Caused by EOL
+# FIX: Set file mode to `false`
+$ git config --list
+$ git config --edit
 
 $ npm config delete proxy
 
