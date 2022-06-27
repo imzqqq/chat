@@ -1,11 +1,4 @@
-*.sw[op]
-key_*.pem
-data/*
-config/*
-!config/me.sample.yml
-static/media/*
-
-.mypy_cache/
+*.db
 __pycache__/
-.venv
-.env
+.mypy_cache/
+.pytest_cache/

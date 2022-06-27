@@ -1,7 +1,0 @@
-mdx_linkify
-bleach
-requests
-markdown
-pycryptodome
-html2text
-regex

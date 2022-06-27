@@ -1,0 +1,285 @@
+{% macro embed_csrf_token() %}
+<input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+{% endmacro %}
+
+{% macro embed_redirect_url() %}
+<input type="hidden" name="redirect_url" value="{{ request.url }}">
+{% endmacro %}
+
+{% macro admin_follow_button(actor) %}
+<form action="{{ request.url_for("admin_actions_follow") }}" method="POST">
+    {{ embed_csrf_token() }}
+    {{ embed_redirect_url() }}
+    <input type="hidden" name="ap_actor_id" value="{{ actor.ap_id }}">
+    <input type="submit" value="Follow">
+</form>
+{% endmacro %}
+
+{% macro admin_like_button(ap_object_id) %}
+<form action="{{ request.url_for("admin_actions_like") }}" method="POST">
+    {{ embed_csrf_token() }}
+    {{ embed_redirect_url() }}
+    <input type="hidden" name="ap_object_id" value="{{ ap_object_id }}">
+    <input type="submit" value="Like">
+</form>
+{% endmacro %}
+
+{% macro admin_bookmark_button(ap_object_id) %}
+<form action="{{ request.url_for("admin_actions_bookmark") }}" method="POST">
+    {{ embed_csrf_token() }}
+    {{ embed_redirect_url() }}
+    <input type="hidden" name="ap_object_id" value="{{ ap_object_id }}">
+    <input type="submit" value="Bookmark">
+</form>
+{% endmacro %}
+
+{% macro admin_unbookmark_button(ap_object_id) %}
+<form action="{{ request.url_for("admin_actions_unbookmark") }}" method="POST">
+    {{ embed_csrf_token() }}
+    {{ embed_redirect_url() }}
+    <input type="hidden" name="ap_object_id" value="{{ ap_object_id }}">
+    <input type="submit" value="Unbookmark">
+</form>
+{% endmacro %}
+
+{% macro admin_pin_button(ap_object_id) %}
+<form action="{{ request.url_for("admin_actions_pin") }}" method="POST">
+    {{ embed_csrf_token() }}
+    {{ embed_redirect_url() }}
+    <input type="hidden" name="ap_object_id" value="{{ ap_object_id }}">
+    <input type="submit" value="Pin">
+</form>
+{% endmacro %}
+
+{% macro admin_unpin_button(ap_object_id) %}
+<form action="{{ request.url_for("admin_actions_unpin") }}" method="POST">
+    {{ embed_csrf_token() }}
+    {{ embed_redirect_url() }}
+    <input type="hidden" name="ap_object_id" value="{{ ap_object_id }}">
+    <input type="submit" value="Unpin">
+</form>
+{% endmacro %}
+
+{% macro admin_announce_button(ap_object_id, disabled=False) %}
+<form action="{{ request.url_for("admin_actions_announce") }}" method="POST">
+    {{ embed_csrf_token() }}
+    {{ embed_redirect_url() }}
+    <input type="hidden" name="ap_object_id" value="{{ ap_object_id }}">
+    <input type="submit" value="Share" {% if disabled %}title="Cannot share non-public content" disabled{% endif %}>
+</form>
+{% endmacro %}
+
+{% macro admin_undo_button(ap_object_id, action="Undo") %}
+<form action="{{ request.url_for("admin_actions_undo") }}" method="POST">
+    {{ embed_csrf_token() }}
+    {{ embed_redirect_url() }}
+    <input type="hidden" name="ap_object_id" value="{{ ap_object_id }}">
+    <input type="submit" value="{{ action }}">
+</form>
+{% endmacro %}
+
+{% macro sensitive_button(permalink_id) %}
+<form action=""  method="GET">
+<input type="hidden" name="show_sensitive" value="{{ permalink_id }}">
+{% for k, v in request.query_params.items() %}
+<input type="hidden" name="{{k}}" value="{{v}}">
+{% endfor %}
+<button type="submit">display sensitive content</button>
+</form> 
+{% endmacro %}
+
+{% macro admin_reply_button(ap_object_id) %}
+<form action="/admin/new"  method="GET">
+<input type="hidden" name="in_reply_to" value="{{ ap_object_id }}">
+<button type="submit">Reply</button>
+</form> 
+{% endmacro %}
+
+{% macro admin_profile_button(ap_actor_id) %}
+<form action="{{ url_for("admin_profile") }}"  method="GET">
+<input type="hidden" name="actor_id" value="{{ ap_actor_id }}">
+<button type="submit">Profile</button>
+</form> 
+{% endmacro %}
+
+{% macro admin_expand_button(ap_object_id) %}
+<form action="{{ url_for("admin_object") }}"  method="GET">
+<input type="hidden" name="ap_id" value="{{ ap_object_id }}">
+<button type="submit">Expand</button>
+</form> 
+{% endmacro %}
+
+{% macro display_actor(actor, actors_metadata) %}
+{% set metadata = actors_metadata.get(actor.ap_id) %}
+<div style="display: flex;column-gap: 20px;margin:20px 0 10px 0;" class="actor-box h-card p-author">
+    <div style="flex: 0 0 48px;">
+        <img src="{{ actor.resized_icon_url }}" style="max-width:45px;">
+    </div>
+    <a href="{{ actor.url }}" class="u-url" style="">
+        <div><strong>{{ actor.display_name | clean_html(actor) | safe  }}</strong></div>
+        <div class="p-name">{{ actor.handle }}</div>
+    </a>
+</div>
+{% if is_admin and metadata %}
+<div>
+    <nav class="flexbox">
+    <ul>
+            {% if metadata.is_following %}
+                <li>already following</li>
+                <li>{{ admin_undo_button(metadata.outbox_follow_ap_id, "Unfollow")}}</li>
+            {% elif metadata.is_follow_request_sent %}
+                <li>follow request sent</li>
+            {% else %}
+                <li>{{ admin_follow_button(actor) }}</li>
+            {% endif %}
+            {% if metadata.is_follower %}
+                <li>follows you</li>
+            {% endif %}
+        </li>
+    </ul>
+    </nav>
+</div>
+{% endif %}
+
+{% endmacro %}
+
+{% macro display_object_expanded(object) %}
+
+<div class="activity-expanded h-entry">
+
+{{ display_actor(object.actor, {}) }}
+
+<div class="e-content">
+{{ object.content | clean_html(object) | safe }}
+</div>
+
+<a href="{{ object.url }}" class="u-url u-uid"><time class="dt-published" datetime="{{ object.ap_published_at }}">{{ object.ap_published_at | format_date }}</time></a>
+{{ object.visibility.value }}
+{% if object.is_from_outbox %}
+{{ object.likes_count }} likes
+{% endif %}
+
+{% if object.is_from_outbox %}
+{{ object.announces_count }} shares
+{% endif %}
+
+
+</div>
+
+{% endmacro %}
+
+{% macro display_object(object) %}
+{% if object.ap_type in ["Note", "Article", "Video"] %}
+<div class="activity-wrap h-entry" id="{{ object.permalink_id }}">
+  <div class="activity-content">
+      <img src="{{ object.actor.resized_icon_url }}" alt="" class="actor-icon">
+    <div class="activity-header">
+        <strong>{{ object.actor.display_name }}</strong>
+        <a href="{{ object.actor.url}}" class="p-author h-card">{{ object.actor.handle }}</a>
+        <span class="activity-date" title="{{ object.ap_published_at.isoformat() }}">
+            {{ object.visibility.value }}
+            <a href="{{ object.url }}" class="u-url u-uid"><time class="dt-published" datetime="{{ object.ap_published_at }}">{{ object.ap_published_at | timeago }}</time></a>
+        </span>
+        <div class="activity-main e-content">
+            {{ object.content | clean_html(object) | safe }}
+        </div>
+    </div>
+  </div>
+  {% if object.attachments and object.sensitive and not request.query_params["show_sensitive"] == object.permalink_id %}
+  <div class="activity-attachment">
+  {{ sensitive_button(object.permalink_id )}}
+  </div>
+  {% endif %}
+
+  {% if object.attachments and (not object.sensitive or (object.sensitive and request.query_params["show_sensitive"] == object.permalink_id)) %}
+  <div class="activity-attachment">
+    {% for attachment in object.attachments %}
+    {% if attachment.type == "Image" or (attachment | has_media_type("image")) %}
+    <img src="{{ attachment.resized_url or attachment.proxied_url }}"{% if attachment.name %} alt="{{ attachment.name }}"{% endif %} class="attachment">
+    {% elif attachment.type == "Video" or (attachment | has_media_type("video")) %}
+    <video controls preload="metadata"  src="{{ attachment.url | media_proxy_url }}"{% if attachment.name %} title="{{ attachment.name }}"{% endif %} class="attachmeent"></video>
+    {% elif attachment.type == "Audio" or (attachment | has_media_type("audio")) %}
+    <audio controls preload="metadata"  src="{{ attachment.url | media_proxy_url }}"{% if attachment.name%} title="{{ attachment.name }}"{% endif %} style="width:480px;" class="attachment"></audio>
+    {% else %}
+    <a href="{{ attachment.url | media_proxy_url }}"{% if attachment.name %} title="{{ attachment.name }}"{% endif %} class="attachment">{{ attachment.url }}</a>
+    {% endif %}
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="activity-bar">
+    {% if object.is_from_outbox %}
+    <div class="bar-item">
+        <div class="comment-count">{{ object.likes_count }} like{{ object.likes_count | pluralize }}</div>
+    </div>
+    
+    <div class="bar-item">
+        <div class="retweet-count">{{ object.announces_count }} share{{ object.announces_count | pluralize }}</div>
+    </div>
+
+    <div class="bar-item">
+        <div class="retweet-count">{{ object.replies_count }} repl{{ object.replies_count | pluralize("y", "ies") }}</div>
+    </div>
+
+    {% if is_admin %}
+    <div class="bar-item">
+        {{ admin_reply_button(object.ap_id) }}
+    </div>
+    <div class="bar-item">
+        {% if object.is_pinned %}
+            {{ admin_unpin_button(object.ap_id) }}
+        {% else %}
+            {{ admin_pin_button(object.ap_id) }}
+        {% endif %}
+    </div>
+    {% endif %}
+    {% endif %}
+
+    {% if object.is_from_inbox %}
+            <div class="bar-item">
+            {% if object.liked_via_outbox_object_ap_id %}
+                {{ admin_undo_button(object.liked_via_outbox_object_ap_id, "Unlike") }}
+            {% else %}
+                {{ admin_like_button(object.ap_id) }}
+            {% endif %}
+            </div>
+            <div class="bar-item">
+            {% if object.is_bookmarked %}
+                {{ admin_unbookmark_button(object.ap_id) }}
+            {% else %}
+                {{ admin_bookmark_button(object.ap_id) }}
+            {% endif %}
+            </div>
+            <div class="bar-item">
+            {% if object.announced_via_outbox_object_ap_id %}
+                {{ admin_undo_button(object.liked_via_outbox_object_ap_id, "Unshare") }}
+            {% else %}
+                {{ admin_announce_button(object.ap_id, disabled=object.visibility not in [visibility_enum.PUBLIC, visibility_enum.UNLISTED]) }}
+            {% endif %}
+            </div>
+            <div class="bar-item">
+                {{ admin_reply_button(object.ap_id) }}
+            </div>
+            <div class="bar-item">
+                {{ admin_profile_button(object.actor.ap_id) }}
+            </div>
+            <div class="bar-item">
+                {{ admin_expand_button(object.ap_id) }}
+            </div>
+
+
+    {% endif %}
+    
+  </div>
+</div>
+{% elif object.ap_type == "Follow" %}
+
+    {% if object.is_from_inbox %}
+    <div class="actor-action">
+        {{ object.actor.display_name }} followed you
+        <span>{{ object.ap_published_at | timeago }}</span>
+    </div>
+    {{ display_actor(object.actor, {}) }}
+    {% endif %}
+
+{% endif %}
+{% endmacro %}
