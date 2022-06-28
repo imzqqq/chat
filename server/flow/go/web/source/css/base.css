@@ -1,0 +1,256 @@
+/*
+	GoToSocial
+	Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Affero General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Affero General Public License for more details.
+
+	You should have received a copy of the GNU Affero General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+$br: 0.4rem;
+$boxshadow: 0 0.4rem 1rem -0.2rem rgba(0,0,0,0.2);
+
+html, body {
+	padding: 0;
+	margin: 0;
+	background: $bg_darker5;
+	color: $fg;
+	font-family: sans-serif;
+}
+
+body {
+	line-height: 1.5em;
+	min-height: 100vh;
+	position: relative;
+}
+
+.page {
+	position: absolute;
+	display: grid;
+	min-height: 100%;
+	min-width: 100%;
+
+	grid-template-rows: auto 1fr auto;
+}
+
+main {
+	background: $bg;
+	display: grid;
+	padding-top: 2rem;
+	padding-bottom: 2rem;
+	grid-template-columns: 1fr 50% 1fr;
+	grid-template-columns: auto min(92%, 90ch) auto;
+
+	.left {
+		grid-column: 1;
+	}
+
+	.right {
+		grid-column: 3;
+	}
+
+	&.lightgray {
+		background: $bg;
+	}
+
+	& > * {
+		align-self: start;
+		grid-column: 2;
+	}
+}
+
+header {
+	background: $bg_darker5;
+	padding: 2rem 0;
+	padding-bottom: 0;
+	display: flex;
+	flex-wrap: wrap;
+
+	img {
+		height: 4rem;
+		padding-left: 2rem;
+		padding-bottom: 2rem;
+	}
+
+	div {
+		height: 100%;
+		margin: 0 2rem;
+		margin-top: -2rem;
+		flex-grow: 1;
+		align-self: center;
+		display: flex;
+
+		h1 {
+			align-self: center;
+			color: $fg;
+		}
+	}
+}
+
+h1 {
+	/* color: $acc1; */
+	margin: 0;
+	line-height: 2.4rem;
+}
+
+a {
+	color: $acc1;
+}
+
+.button, button {
+	border-radius: 0.2rem;
+	background: $acc1;
+	color: $fg;
+	text-decoration: none;
+	font-size: 1.2rem;
+	font-weight: bold;
+	padding: 0.5rem;
+	border: none;
+	cursor: pointer;
+
+	&:hover {
+		background: $acc2;
+	}
+}
+
+.count {
+	background: $bg_darker5;
+	border-radius: 0.3rem;
+	padding: 0.2rem;
+}
+
+.nounderline {
+	text-decoration: none;
+}
+
+.accent {
+	color: $acc1;
+}
+
+.logo {
+	justify-self: center;
+	img {
+		height: 30vh;
+	}
+}
+
+section.apps {
+	align-self: start;
+
+	.applist {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-gap: 0.5rem;
+		align-content: start;
+
+		.entry {
+			display: grid;
+			grid-template-columns: 30% 1fr;
+			gap: 0.5rem;
+			padding: 0.5rem;
+			background: $bg_darker5;
+			border-radius: 0.5rem;
+
+			.logo {
+				align-self: center;
+				width: 100%;
+				object-fit: contain;
+				flex: 1 1 auto;
+			}
+
+			.logo.redraw {
+				fill: $fg;
+				stroke: $fg;
+			}
+
+			div {
+				padding: 1rem 0;
+				h3 {
+					margin-top: 0;
+				}
+			}
+		}
+	}
+}
+
+section.login {
+	form {
+		display: inline-grid;
+		grid-template-columns: auto 100%;
+		grid-gap: 0.7rem;
+
+		button {
+			place-self: center;
+			grid-column: 2;
+		}
+	}
+}
+
+section.error {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+  span {
+	font-size: 2em;
+  }
+  pre {
+	border: 1px solid #ff000080;
+	margin-left: 1em;
+	padding: 0 0.7em;
+	border-radius: 0.5em;
+	background-color: #ff000010;
+	font-size: 1.3em;
+	white-space: pre-wrap;
+  }
+}
+
+input, select, textarea {
+	border: 1px solid $fg;
+	color: $fg;
+	background: $bg;
+	width: 100%;
+}
+
+footer {
+	align-self: end;
+
+	padding: 2rem;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+
+	a {
+		font-weight: bold;
+	}
+}
+
+@media screen and (orientation: portrait) {
+	main {
+		grid-template-columns: 1fr 92% 1fr;
+	}
+
+	header {
+		text-align: center;
+	}
+
+	footer {
+		margin-top: 2rem;
+		grid-template-columns: 1fr;
+
+		div {
+			margin: 0.3rem 0;
+		}
+	}
+
+	section.apps .applist {
+		grid-template-columns: 1fr;
+	}
+}

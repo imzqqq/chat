@@ -26,7 +26,6 @@ import (
 
 	"codeberg.org/gruf/go-store/kv"
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
 	"github.com/stretchr/testify/suite"
 	"github.com/superseriousbusiness/gotosocial/internal/api/client/admin"
 	"github.com/superseriousbusiness/gotosocial/internal/concurrency"
@@ -86,7 +85,7 @@ func (suite *AdminStandardTestSuite) SetupTest() {
 	suite.db = testrig.NewTestDB()
 	suite.storage = testrig.NewTestStorage()
 	suite.mediaManager = testrig.NewTestMediaManager(suite.db, suite.storage)
-	suite.federator = testrig.NewTestFederator(suite.db, testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil), suite.db, fedWorker), suite.storage, suite.mediaManager, fedWorker)
+	suite.federator = testrig.NewTestFederator(suite.db, testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil, "../../../../testrig/media"), suite.db, fedWorker), suite.storage, suite.mediaManager, fedWorker)
 	suite.sentEmails = make(map[string]string)
 	suite.emailSender = testrig.NewEmailSender("../../../../web/template/", suite.sentEmails)
 	suite.processor = testrig.NewTestProcessor(suite.db, suite.storage, suite.federator, suite.emailSender, suite.mediaManager, clientWorker, fedWorker)
@@ -108,8 +107,8 @@ func (suite *AdminStandardTestSuite) newContext(recorder *httptest.ResponseRecor
 	ctx.Set(oauth.SessionAuthorizedApplication, suite.testApplications["admin_account"])
 	ctx.Set(oauth.SessionAuthorizedUser, suite.testUsers["admin_account"])
 
-	protocol := viper.GetString(config.Keys.Protocol)
-	host := viper.GetString(config.Keys.Host)
+	protocol := config.GetProtocol()
+	host := config.GetHost()
 
 	baseURI := fmt.Sprintf("%s://%s", protocol, host)
 	requestURI := fmt.Sprintf("%s/%s", baseURI, requestPath)

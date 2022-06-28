@@ -1,12 +1,29 @@
+/*
+   GoToSocial
+   Copyright (C) 2021-2022 GoToSocial Authors admin@gotosocial.org
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU Affero General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package instance
 
 import (
 	"net/http"
 
-	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"github.com/superseriousbusiness/gotosocial/internal/api"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
+	"github.com/superseriousbusiness/gotosocial/internal/gtserror"
 
 	"github.com/gin-gonic/gin"
 )
@@ -31,22 +48,19 @@ import (
 //     description: "Instance information."
 //     schema:
 //       "$ref": "#/definitions/instance"
+//   '406':
+//      description: not acceptable
 //   '500':
 //      description: internal error
 func (m *Module) InstanceInformationGETHandler(c *gin.Context) {
-	l := logrus.WithField("func", "InstanceInformationGETHandler")
-
 	if _, err := api.NegotiateAccept(c, api.JSONAcceptHeaders...); err != nil {
-		c.JSON(http.StatusNotAcceptable, gin.H{"error": err.Error()})
+		api.ErrorHandler(c, gtserror.NewErrorNotAcceptable(err, err.Error()), m.processor.InstanceGet)
 		return
 	}
 
-	host := viper.GetString(config.Keys.Host)
-
-	instance, err := m.processor.InstanceGet(c.Request.Context(), host)
-	if err != nil {
-		l.Debugf("error getting instance from processor: %s", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
+	instance, errWithCode := m.processor.InstanceGet(c.Request.Context(), config.GetHost())
+	if errWithCode != nil {
+		api.ErrorHandler(c, errWithCode, m.processor.InstanceGet)
 		return
 	}
 

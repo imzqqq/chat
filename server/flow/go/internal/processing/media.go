@@ -26,7 +26,7 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
 )
 
-func (p *processor) MediaCreate(ctx context.Context, authed *oauth.Auth, form *apimodel.AttachmentRequest) (*apimodel.Attachment, error) {
+func (p *processor) MediaCreate(ctx context.Context, authed *oauth.Auth, form *apimodel.AttachmentRequest) (*apimodel.Attachment, gtserror.WithCode) {
 	return p.mediaProcessor.Create(ctx, authed.Account, form)
 }
 
@@ -40,4 +40,8 @@ func (p *processor) MediaUpdate(ctx context.Context, authed *oauth.Auth, mediaAt
 
 func (p *processor) FileGet(ctx context.Context, authed *oauth.Auth, form *apimodel.GetContentRequestForm) (*apimodel.Content, gtserror.WithCode) {
 	return p.mediaProcessor.GetFile(ctx, authed.Account, form)
+}
+
+func (p *processor) CustomEmojisGet(ctx context.Context) ([]*apimodel.Emoji, gtserror.WithCode) {
+	return p.mediaProcessor.GetCustomEmojis(ctx)
 }

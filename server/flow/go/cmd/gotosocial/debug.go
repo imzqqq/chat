@@ -21,7 +21,6 @@ package main
 import (
 	"github.com/spf13/cobra"
 	configaction "github.com/superseriousbusiness/gotosocial/cmd/gotosocial/action/debug/config"
-	"github.com/superseriousbusiness/gotosocial/cmd/gotosocial/flag"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
 )
 
@@ -35,14 +34,13 @@ func debugCommands() *cobra.Command {
 		Use:   "config",
 		Short: "print the collated config (derived from env, flag, and config file) to stdout",
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-			return preRun(cmd)
+			return preRun(preRunArgs{cmd: cmd, skipValidation: true}) // don't do validation for debugging config
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return run(cmd.Context(), configaction.Config)
 		},
 	}
-	flag.Server(debugConfigCmd, config.Defaults)
-
+	config.AddServerFlags(debugConfigCmd)
 	debugCmd.AddCommand(debugConfigCmd)
 	return debugCmd
 }

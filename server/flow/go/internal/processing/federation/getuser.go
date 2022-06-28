@@ -25,6 +25,7 @@ import (
 
 	"github.com/superseriousbusiness/activity/streams"
 	"github.com/superseriousbusiness/activity/streams/vocab"
+	"github.com/superseriousbusiness/gotosocial/internal/federation/dereferencing"
 	"github.com/superseriousbusiness/gotosocial/internal/gtserror"
 	"github.com/superseriousbusiness/gotosocial/internal/uris"
 )
@@ -52,9 +53,12 @@ func (p *processor) GetUser(ctx context.Context, requestedUsername string, reque
 
 		// if we're not already handshaking/dereferencing a remote account, dereference it now
 		if !p.federator.Handshaking(ctx, requestedUsername, requestingAccountURI) {
-			requestingAccount, err := p.federator.GetRemoteAccount(ctx, requestedUsername, requestingAccountURI, false, false)
+			requestingAccount, err := p.federator.GetRemoteAccount(ctx, dereferencing.GetRemoteAccountParams{
+				RequestingUsername: requestedUsername,
+				RemoteAccountID:    requestingAccountURI,
+			})
 			if err != nil {
-				return nil, gtserror.NewErrorNotAuthorized(err)
+				return nil, gtserror.NewErrorUnauthorized(err)
 			}
 
 			blocked, err := p.db.IsBlocked(ctx, requestedAccount.ID, requestingAccount.ID, true)
@@ -63,7 +67,7 @@ func (p *processor) GetUser(ctx context.Context, requestedUsername string, reque
 			}
 
 			if blocked {
-				return nil, gtserror.NewErrorNotAuthorized(fmt.Errorf("block exists between accounts %s and %s", requestedAccount.ID, requestingAccount.ID))
+				return nil, gtserror.NewErrorUnauthorized(fmt.Errorf("block exists between accounts %s and %s", requestedAccount.ID, requestingAccount.ID))
 			}
 		}
 

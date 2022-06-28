@@ -25,6 +25,7 @@ require (
 	github.com/jackc/pgconn v1.11.0
 	github.com/jackc/pgx/v4 v4.15.0
 	github.com/microcosm-cc/bluemonday v1.0.18
+	github.com/miekg/dns v1.1.49
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/oklog/ulid v1.3.1
@@ -32,11 +33,10 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.4.0
-	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.11.0
 	github.com/stretchr/testify v1.7.1
 	github.com/superseriousbusiness/activity v1.1.0-gts
-	github.com/superseriousbusiness/exif-terminator v0.2.0
+	github.com/superseriousbusiness/exif-terminator v0.3.0
 	github.com/superseriousbusiness/oauth2/v4 v4.3.2-SSB
 	github.com/tdewolff/minify/v2 v2.11.2
 	github.com/uptrace/bun v1.1.3
@@ -44,11 +44,11 @@ require (
 	github.com/uptrace/bun/dialect/sqlitedialect v1.1.3
 	github.com/wagslane/go-password-validator v0.3.0
 	golang.org/x/crypto v0.0.0-20220427172511-eb4f295cb31f
-	golang.org/x/net v0.0.0-20220425223048-2871e0cb64e4
+	golang.org/x/net v0.0.0-20220524220425-1d687d428aca
 	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5
 	golang.org/x/text v0.3.7
 	gopkg.in/mcuadros/go-syslog.v2 v2.3.0
-	modernc.org/sqlite v1.17.0
+	modernc.org/sqlite v1.17.2
 	mvdan.cc/xurls/v2 v2.3.0
 )
 
@@ -105,6 +105,7 @@ require (
 	github.com/spf13/afero v1.8.2 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/superseriousbusiness/go-jpeg-image-structure/v2 v2.0.0-20220321154430-d89a106fdabe // indirect
 	github.com/tdewolff/parse/v2 v2.5.29 // indirect
@@ -124,8 +125,8 @@ require (
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 	lukechampine.com/uint128 v1.2.0 // indirect
 	modernc.org/cc/v3 v3.36.0 // indirect
-	modernc.org/ccgo/v3 v3.16.4 // indirect
-	modernc.org/libc v1.16.1 // indirect
+	modernc.org/ccgo/v3 v3.16.6 // indirect
+	modernc.org/libc v1.16.7 // indirect
 	modernc.org/mathutil v1.4.1 // indirect
 	modernc.org/memory v1.1.1 // indirect
 	modernc.org/opt v0.1.3 // indirect

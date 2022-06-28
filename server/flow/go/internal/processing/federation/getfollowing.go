@@ -24,6 +24,7 @@ import (
 	"net/url"
 
 	"github.com/superseriousbusiness/activity/streams"
+	"github.com/superseriousbusiness/gotosocial/internal/federation/dereferencing"
 	"github.com/superseriousbusiness/gotosocial/internal/gtserror"
 )
 
@@ -40,9 +41,12 @@ func (p *processor) GetFollowing(ctx context.Context, requestedUsername string, 
 		return nil, errWithCode
 	}
 
-	requestingAccount, err := p.federator.GetRemoteAccount(ctx, requestedUsername, requestingAccountURI, false, false)
+	requestingAccount, err := p.federator.GetRemoteAccount(ctx, dereferencing.GetRemoteAccountParams{
+		RequestingUsername: requestedUsername,
+		RemoteAccountID:    requestingAccountURI,
+	})
 	if err != nil {
-		return nil, gtserror.NewErrorNotAuthorized(err)
+		return nil, gtserror.NewErrorUnauthorized(err)
 	}
 
 	blocked, err := p.db.IsBlocked(ctx, requestedAccount.ID, requestingAccount.ID, true)
@@ -51,7 +55,7 @@ func (p *processor) GetFollowing(ctx context.Context, requestedUsername string, 
 	}
 
 	if blocked {
-		return nil, gtserror.NewErrorNotAuthorized(fmt.Errorf("block exists between accounts %s and %s", requestedAccount.ID, requestingAccount.ID))
+		return nil, gtserror.NewErrorUnauthorized(fmt.Errorf("block exists between accounts %s and %s", requestedAccount.ID, requestingAccount.ID))
 	}
 
 	requestedAccountURI, err := url.Parse(requestedAccount.URI)

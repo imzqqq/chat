@@ -22,15 +22,15 @@ import (
 	"context"
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 
 	"github.com/superseriousbusiness/gotosocial/internal/api/model"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
+	"github.com/superseriousbusiness/gotosocial/internal/media"
+	"github.com/superseriousbusiness/gotosocial/internal/util"
 )
 
 func (c *converter) AccountToAPIAccountSensitive(ctx context.Context, a *gtsmodel.Account) (*model.Account, error) {
@@ -93,7 +93,7 @@ func (c *converter) AccountToAPIAccountPublic(ctx context.Context, a *gtsmodel.A
 	var lastStatusAt string
 	lastPosted, err := c.db.GetAccountLastPosted(ctx, a.ID)
 	if err == nil && !lastPosted.IsZero() {
-		lastStatusAt = lastPosted.Format(time.RFC3339)
+		lastStatusAt = util.FormatISO8601(lastPosted)
 	}
 
 	// set account avatar fields if available
@@ -140,7 +140,7 @@ func (c *converter) AccountToAPIAccountPublic(ctx context.Context, a *gtsmodel.A
 			Value: f.Value,
 		}
 		if !f.VerifiedAt.IsZero() {
-			mField.VerifiedAt = f.VerifiedAt.Format(time.RFC3339)
+			mField.VerifiedAt = util.FormatISO8601(f.VerifiedAt)
 		}
 		fields = append(fields, mField)
 	}
@@ -169,7 +169,7 @@ func (c *converter) AccountToAPIAccountPublic(ctx context.Context, a *gtsmodel.A
 		DisplayName:    a.DisplayName,
 		Locked:         a.Locked,
 		Bot:            a.Bot,
-		CreatedAt:      a.CreatedAt.Format(time.RFC3339),
+		CreatedAt:      util.FormatISO8601(a.CreatedAt),
 		Note:           a.Note,
 		URL:            a.URL,
 		Avatar:         aviURL,
@@ -209,7 +209,7 @@ func (c *converter) AccountToAPIAccountBlocked(ctx context.Context, a *gtsmodel.
 		Acct:        acct,
 		DisplayName: a.DisplayName,
 		Bot:         a.Bot,
-		CreatedAt:   a.CreatedAt.Format(time.RFC3339),
+		CreatedAt:   util.FormatISO8601(a.CreatedAt),
 		URL:         a.URL,
 		Suspended:   suspended,
 	}, nil
@@ -238,6 +238,7 @@ func (c *converter) AttachmentToAPIAttachment(ctx context.Context, a *gtsmodel.M
 		ID:               a.ID,
 		Type:             strings.ToLower(string(a.Type)),
 		URL:              a.URL,
+		TextURL:          a.URL,
 		PreviewURL:       a.Thumbnail.URL,
 		RemoteURL:        a.RemoteURL,
 		PreviewRemoteURL: a.Thumbnail.RemoteURL,
@@ -511,7 +512,7 @@ func (c *converter) StatusToAPIStatus(ctx context.Context, s *gtsmodel.Status, r
 
 	apiStatus := &model.Status{
 		ID:                 s.ID,
-		CreatedAt:          s.CreatedAt.Format(time.RFC3339),
+		CreatedAt:          util.FormatISO8601(s.CreatedAt),
 		InReplyToID:        s.InReplyToID,
 		InReplyToAccountID: s.InReplyToAccountID,
 		Sensitive:          s.Sensitive,
@@ -571,13 +572,20 @@ func (c *converter) InstanceToAPIInstance(ctx context.Context, i *gtsmodel.Insta
 		Email:            i.ContactEmail,
 		Version:          i.Version,
 		Stats:            make(map[string]int),
-		ContactAccount:   &model.Account{},
 	}
 
 	// if the requested instance is *this* instance, we can add some extra information
-	keys := config.Keys
-	host := viper.GetString(keys.Host)
-	if i.Domain == host {
+	if host := config.GetHost(); i.Domain == host {
+		if ia, err := c.db.GetInstanceAccount(ctx, ""); err == nil {
+			if ia.HeaderMediaAttachment != nil {
+				// take instance account header as instance thumbnail
+				mi.Thumbnail = ia.HeaderMediaAttachment.URL
+			} else {
+				// or just use a default
+				mi.Thumbnail = config.GetProtocol() + "://" + host + "/assets/logo.png"
+			}
+		}
+
 		userCount, err := c.db.CountInstanceUsers(ctx, host)
 		if err == nil {
 			mi.Stats["user_count"] = userCount
@@ -593,21 +601,36 @@ func (c *converter) InstanceToAPIInstance(ctx context.Context, i *gtsmodel.Insta
 			mi.Stats["domain_count"] = domainCount
 		}
 
-		mi.Registrations = viper.GetBool(keys.AccountsRegistrationOpen)
-		mi.ApprovalRequired = viper.GetBool(keys.AccountsApprovalRequired)
+		mi.Registrations = config.GetAccountsRegistrationOpen()
+		mi.ApprovalRequired = config.GetAccountsApprovalRequired()
 		mi.InvitesEnabled = false // TODO
-		mi.MaxTootChars = uint(viper.GetInt(keys.StatusesMaxChars))
+		mi.MaxTootChars = uint(config.GetStatusesMaxChars())
 		mi.URLS = &model.InstanceURLs{
-			StreamingAPI: fmt.Sprintf("wss://%s", host),
+			StreamingAPI: "wss://" + host,
 		}
-		mi.Version = viper.GetString(keys.SoftwareVersion)
-	}
+		mi.Version = config.GetSoftwareVersion()
 
-	// get the instance account if it exists and just skip if it doesn't
-	ia, err := c.db.GetInstanceAccount(ctx, "")
-	if err == nil {
-		if ia.HeaderMediaAttachment != nil {
-			mi.Thumbnail = ia.HeaderMediaAttachment.URL
+		// todo: remove hardcoded values and put them in config somewhere
+		mi.Configuration = &model.InstanceConfiguration{
+			Statuses: &model.InstanceConfigurationStatuses{
+				MaxCharacters:            config.GetStatusesMaxChars(),
+				MaxMediaAttachments:      config.GetStatusesMediaMaxFiles(),
+				CharactersReservedPerURL: 999,
+			},
+			MediaAttachments: &model.InstanceConfigurationMediaAttachments{
+				SupportedMimeTypes:  media.AllSupportedMIMETypes(),
+				ImageSizeLimit:      config.GetMediaImageMaxSize(),
+				ImageMatrixLimit:    16777216, // height*width
+				VideoSizeLimit:      config.GetMediaVideoMaxSize(),
+				VideoFrameRateLimit: 60,
+				VideoMatrixLimit:    16777216, // height*width
+			},
+			Polls: &model.InstanceConfigurationPolls{
+				MaxOptions:             config.GetStatusesPollMaxOptions(),
+				MaxCharactersPerOption: config.GetStatusesPollOptionMaxChars(),
+				MinExpiration:          300,     // seconds
+				MaxExpiration:          2629746, // seconds
+			},
 		}
 	}
 
@@ -696,7 +719,7 @@ func (c *converter) NotificationToAPINotification(ctx context.Context, n *gtsmod
 	return &model.Notification{
 		ID:        n.ID,
 		Type:      string(n.NotificationType),
-		CreatedAt: n.CreatedAt.Format(time.RFC3339),
+		CreatedAt: util.FormatISO8601(n.CreatedAt),
 		Account:   apiAccount,
 		Status:    apiStatus,
 	}, nil
@@ -704,8 +727,10 @@ func (c *converter) NotificationToAPINotification(ctx context.Context, n *gtsmod
 
 func (c *converter) DomainBlockToAPIDomainBlock(ctx context.Context, b *gtsmodel.DomainBlock, export bool) (*model.DomainBlock, error) {
 	domainBlock := &model.DomainBlock{
-		Domain:        b.Domain,
-		PublicComment: b.PublicComment,
+		Domain: model.Domain{
+			Domain:        b.Domain,
+			PublicComment: b.PublicComment,
+		},
 	}
 
 	// if we're exporting a domain block, return it with minimal information attached
@@ -715,7 +740,7 @@ func (c *converter) DomainBlockToAPIDomainBlock(ctx context.Context, b *gtsmodel
 		domainBlock.PrivateComment = b.PrivateComment
 		domainBlock.SubscriptionID = b.SubscriptionID
 		domainBlock.CreatedBy = b.CreatedByAccountID
-		domainBlock.CreatedAt = b.CreatedAt.Format(time.RFC3339)
+		domainBlock.CreatedAt = util.FormatISO8601(b.CreatedAt)
 	}
 
 	return domainBlock, nil

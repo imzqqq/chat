@@ -23,15 +23,16 @@ import (
 	"net/url"
 
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
+	"github.com/superseriousbusiness/gotosocial/internal/federation/dereferencing"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 )
 
-func (f *federator) GetRemoteAccount(ctx context.Context, username string, remoteAccountID *url.URL, blocking bool, refresh bool) (*gtsmodel.Account, error) {
-	return f.dereferencer.GetRemoteAccount(ctx, username, remoteAccountID, blocking, refresh)
+func (f *federator) GetRemoteAccount(ctx context.Context, params dereferencing.GetRemoteAccountParams) (*gtsmodel.Account, error) {
+	return f.dereferencer.GetRemoteAccount(ctx, params)
 }
 
-func (f *federator) GetRemoteStatus(ctx context.Context, username string, remoteStatusID *url.URL, refresh, includeParent bool) (*gtsmodel.Status, ap.Statusable, bool, error) {
-	return f.dereferencer.GetRemoteStatus(ctx, username, remoteStatusID, refresh, includeParent)
+func (f *federator) GetRemoteStatus(ctx context.Context, username string, remoteStatusID *url.URL, refetch, includeParent bool) (*gtsmodel.Status, ap.Statusable, error) {
+	return f.dereferencer.GetRemoteStatus(ctx, username, remoteStatusID, refetch, includeParent)
 }
 
 func (f *federator) EnrichRemoteStatus(ctx context.Context, username string, status *gtsmodel.Status, includeParent bool) (*gtsmodel.Status, error) {

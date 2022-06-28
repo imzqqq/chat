@@ -21,7 +21,6 @@ package dereferencing_test
 import (
 	"context"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/suite"
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
@@ -38,11 +37,9 @@ func (suite *StatusTestSuite) TestDereferenceSimpleStatus() {
 	fetchingAccount := suite.testAccounts["local_account_1"]
 
 	statusURL := testrig.URLMustParse("https://unknown-instance.com/users/brand_new_person/statuses/01FE4NTHKWW7THT67EF10EB839")
-	status, statusable, new, err := suite.dereferencer.GetRemoteStatus(context.Background(), fetchingAccount.Username, statusURL, false, false)
+	status, _, err := suite.dereferencer.GetRemoteStatus(context.Background(), fetchingAccount.Username, statusURL, false, false)
 	suite.NoError(err)
 	suite.NotNil(status)
-	suite.NotNil(statusable)
-	suite.True(new)
 
 	// status values should be set
 	suite.Equal("https://unknown-instance.com/users/brand_new_person/statuses/01FE4NTHKWW7THT67EF10EB839", status.URI)
@@ -80,11 +77,9 @@ func (suite *StatusTestSuite) TestDereferenceStatusWithMention() {
 	fetchingAccount := suite.testAccounts["local_account_1"]
 
 	statusURL := testrig.URLMustParse("https://unknown-instance.com/users/brand_new_person/statuses/01FE5Y30E3W4P7TRE0R98KAYQV")
-	status, statusable, new, err := suite.dereferencer.GetRemoteStatus(context.Background(), fetchingAccount.Username, statusURL, false, false)
+	status, _, err := suite.dereferencer.GetRemoteStatus(context.Background(), fetchingAccount.Username, statusURL, false, false)
 	suite.NoError(err)
 	suite.NotNil(status)
-	suite.NotNil(statusable)
-	suite.True(new)
 
 	// status values should be set
 	suite.Equal("https://unknown-instance.com/users/brand_new_person/statuses/01FE5Y30E3W4P7TRE0R98KAYQV", status.URI)
@@ -126,8 +121,6 @@ func (suite *StatusTestSuite) TestDereferenceStatusWithMention() {
 	suite.Equal(account.ID, m.OriginAccountID)
 	suite.Equal(fetchingAccount.ID, m.TargetAccountID)
 	suite.Equal(account.URI, m.OriginAccountURI)
-	suite.WithinDuration(time.Now(), m.CreatedAt, 5*time.Minute)
-	suite.WithinDuration(time.Now(), m.UpdatedAt, 5*time.Minute)
 	suite.False(m.Silent)
 }
 
@@ -135,11 +128,9 @@ func (suite *StatusTestSuite) TestDereferenceStatusWithImageAndNoContent() {
 	fetchingAccount := suite.testAccounts["local_account_1"]
 
 	statusURL := testrig.URLMustParse("https://turnip.farm/users/turniplover6969/statuses/70c53e54-3146-42d5-a630-83c8b6c7c042")
-	status, statusable, new, err := suite.dereferencer.GetRemoteStatus(context.Background(), fetchingAccount.Username, statusURL, false, false)
+	status, _, err := suite.dereferencer.GetRemoteStatus(context.Background(), fetchingAccount.Username, statusURL, false, false)
 	suite.NoError(err)
 	suite.NotNil(status)
-	suite.NotNil(statusable)
-	suite.True(new)
 
 	// status values should be set
 	suite.Equal("https://turnip.farm/users/turniplover6969/statuses/70c53e54-3146-42d5-a630-83c8b6c7c042", status.URI)

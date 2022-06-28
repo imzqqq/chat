@@ -31,7 +31,6 @@ import (
 	"codeberg.org/gruf/go-store/kv"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"github.com/stretchr/testify/suite"
 	mediamodule "github.com/superseriousbusiness/gotosocial/internal/api/client/media"
 	"github.com/superseriousbusiness/gotosocial/internal/api/model"
@@ -90,7 +89,7 @@ func (suite *MediaUpdateTestSuite) SetupSuite() {
 	suite.tc = testrig.NewTestTypeConverter(suite.db)
 	suite.mediaManager = testrig.NewTestMediaManager(suite.db, suite.storage)
 	suite.oauthServer = testrig.NewTestOauthServer(suite.db)
-	suite.federator = testrig.NewTestFederator(suite.db, testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil), suite.db, fedWorker), suite.storage, suite.mediaManager, fedWorker)
+	suite.federator = testrig.NewTestFederator(suite.db, testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil, "../../../../testrig/media"), suite.db, fedWorker), suite.storage, suite.mediaManager, fedWorker)
 	suite.emailSender = testrig.NewEmailSender("../../../../web/template/", nil)
 	suite.processor = testrig.NewTestProcessor(suite.db, suite.storage, suite.federator, suite.emailSender, suite.mediaManager, clientWorker, fedWorker)
 
@@ -188,7 +187,7 @@ func (suite *MediaUpdateTestSuite) TestUpdateImage() {
 
 func (suite *MediaUpdateTestSuite) TestUpdateImageShortDescription() {
 	// set the min description length
-	viper.Set(config.Keys.MediaDescriptionMinChars, 50)
+	config.SetMediaDescriptionMinChars(50)
 
 	toUpdate := suite.testAttachments["local_account_1_unattached_1"]
 
@@ -233,7 +232,7 @@ func (suite *MediaUpdateTestSuite) TestUpdateImageShortDescription() {
 	suite.NoError(err)
 
 	// reply should be an error message
-	suite.Equal(`{"error":"image description length must be between 50 and 500 characters (inclusive), but provided image description was 16 chars"}`, string(b))
+	suite.Equal(`{"error":"Bad Request: image description length must be between 50 and 500 characters (inclusive), but provided image description was 16 chars"}`, string(b))
 }
 
 func TestMediaUpdateTestSuite(t *testing.T) {

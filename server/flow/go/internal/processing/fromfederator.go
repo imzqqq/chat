@@ -26,7 +26,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
-	"github.com/superseriousbusiness/gotosocial/internal/db"
+	"github.com/superseriousbusiness/gotosocial/internal/federation/dereferencing"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/id"
 	"github.com/superseriousbusiness/gotosocial/internal/messages"
@@ -109,7 +109,7 @@ func (p *processor) processCreateStatusFromFederator(ctx context.Context, federa
 			return errors.New("ProcessFromFederator: status was not pinned to federatorMsg, and neither was an IRI for us to dereference")
 		}
 		var err error
-		status, _, _, err = p.federator.GetRemoteStatus(ctx, federatorMsg.ReceivingAccount.Username, federatorMsg.APIri, false, false)
+		status, _, err = p.federator.GetRemoteStatus(ctx, federatorMsg.ReceivingAccount.Username, federatorMsg.APIri, false, false)
 		if err != nil {
 			return err
 		}
@@ -131,7 +131,11 @@ func (p *processor) processCreateStatusFromFederator(ctx context.Context, federa
 			return err
 		}
 
-		a, err := p.federator.GetRemoteAccount(ctx, federatorMsg.ReceivingAccount.Username, remoteAccountID, true, false)
+		a, err := p.federator.GetRemoteAccount(ctx, dereferencing.GetRemoteAccountParams{
+			RequestingUsername: federatorMsg.ReceivingAccount.Username,
+			RemoteAccountID:    remoteAccountID,
+			Blocking:           true,
+		})
 		if err != nil {
 			return err
 		}
@@ -173,7 +177,11 @@ func (p *processor) processCreateFaveFromFederator(ctx context.Context, federato
 			return err
 		}
 
-		a, err := p.federator.GetRemoteAccount(ctx, federatorMsg.ReceivingAccount.Username, remoteAccountID, true, false)
+		a, err := p.federator.GetRemoteAccount(ctx, dereferencing.GetRemoteAccountParams{
+			RequestingUsername: federatorMsg.ReceivingAccount.Username,
+			RemoteAccountID:    remoteAccountID,
+			Blocking:           true,
+		})
 		if err != nil {
 			return err
 		}
@@ -211,7 +219,11 @@ func (p *processor) processCreateFollowRequestFromFederator(ctx context.Context,
 			return err
 		}
 
-		a, err := p.federator.GetRemoteAccount(ctx, federatorMsg.ReceivingAccount.Username, remoteAccountID, true, false)
+		a, err := p.federator.GetRemoteAccount(ctx, dereferencing.GetRemoteAccountParams{
+			RequestingUsername: federatorMsg.ReceivingAccount.Username,
+			RemoteAccountID:    remoteAccountID,
+			Blocking:           true,
+		})
 		if err != nil {
 			return err
 		}
@@ -268,7 +280,11 @@ func (p *processor) processCreateAnnounceFromFederator(ctx context.Context, fede
 			return err
 		}
 
-		a, err := p.federator.GetRemoteAccount(ctx, federatorMsg.ReceivingAccount.Username, remoteAccountID, true, false)
+		a, err := p.federator.GetRemoteAccount(ctx, dereferencing.GetRemoteAccountParams{
+			RequestingUsername: federatorMsg.ReceivingAccount.Username,
+			RemoteAccountID:    remoteAccountID,
+			Blocking:           true,
+		})
 		if err != nil {
 			return err
 		}
@@ -333,7 +349,11 @@ func (p *processor) processUpdateAccountFromFederator(ctx context.Context, feder
 		return err
 	}
 
-	if _, err := p.federator.GetRemoteAccount(ctx, federatorMsg.ReceivingAccount.Username, incomingAccountURL, false, true); err != nil {
+	if _, err := p.federator.GetRemoteAccount(ctx, dereferencing.GetRemoteAccountParams{
+		RequestingUsername: federatorMsg.ReceivingAccount.Username,
+		RemoteAccountID:    incomingAccountURL,
+		Blocking:           true,
+	}); err != nil {
 		return fmt.Errorf("error enriching updated account from federator: %s", err)
 	}
 
@@ -342,36 +362,16 @@ func (p *processor) processUpdateAccountFromFederator(ctx context.Context, feder
 
 // processDeleteStatusFromFederator handles Activity Delete and Object Note
 func (p *processor) processDeleteStatusFromFederator(ctx context.Context, federatorMsg messages.FromFederator) error {
-	// TODO: handle side effects of status deletion here:
-	// 1. delete all media associated with status
-	// 2. delete boosts of status
-	// 3. etc etc etc
 	statusToDelete, ok := federatorMsg.GTSModel.(*gtsmodel.Status)
 	if !ok {
 		return errors.New("note was not parseable as *gtsmodel.Status")
 	}
 
-	// delete all attachments for this status
-	for _, a := range statusToDelete.AttachmentIDs {
-		if err := p.mediaProcessor.Delete(ctx, a); err != nil {
-			return err
-		}
-	}
-
-	// delete all mentions for this status
-	for _, m := range statusToDelete.MentionIDs {
-		if err := p.db.DeleteByID(ctx, m, &gtsmodel.Mention{}); err != nil {
-			return err
-		}
-	}
-
-	// delete all notifications for this status
-	if err := p.db.DeleteWhere(ctx, []db.Where{{Key: "status_id", Value: statusToDelete.ID}}, &[]*gtsmodel.Notification{}); err != nil {
-		return err
-	}
-
-	// remove this status from any and all timelines
-	return p.deleteStatusFromTimelines(ctx, statusToDelete)
+	// delete attachments from this status since this request
+	// comes from the federating API, and there's no way the
+	// poster can do a delete + redraft for it on our instance
+	deleteAttachments := true
+	return p.wipeStatus(ctx, statusToDelete, deleteAttachments)
 }
 
 // processDeleteAccountFromFederator handles Activity Delete and Object Profile

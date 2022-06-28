@@ -33,9 +33,9 @@ import (
 
 // Dereferencer wraps logic and functionality for doing dereferencing of remote accounts, statuses, etc, from federated instances.
 type Dereferencer interface {
-	GetRemoteAccount(ctx context.Context, username string, remoteAccountID *url.URL, blocking bool, refresh bool) (*gtsmodel.Account, error)
+	GetRemoteAccount(ctx context.Context, params GetRemoteAccountParams) (*gtsmodel.Account, error)
 
-	GetRemoteStatus(ctx context.Context, username string, remoteStatusID *url.URL, refresh, includeParent bool) (*gtsmodel.Status, ap.Statusable, bool, error)
+	GetRemoteStatus(ctx context.Context, username string, remoteStatusID *url.URL, refetch, includeParent bool) (*gtsmodel.Status, ap.Statusable, error)
 	EnrichRemoteStatus(ctx context.Context, username string, status *gtsmodel.Status, includeParent bool) (*gtsmodel.Status, error)
 
 	GetRemoteInstance(ctx context.Context, username string, remoteInstanceURI *url.URL) (*gtsmodel.Instance, error)

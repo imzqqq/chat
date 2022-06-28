@@ -9,5 +9,3 @@ CGO_ENABLED=0 go build -trimpath \
                        -tags "netgo osusergo static_build $(DEBUG && echo 'debugenv')" \
                        -ldflags="-s -w -extldflags '-static' -X 'main.Version=${VERSION:-$(git describe --tags --abbrev=0)}'" \
                        ./cmd/gotosocial
-
-# CGO_ENABLED=0 go build -trimpath  -tags "netgo osusergo static_build"   -ldflags="-s -w -extldflags '-static' -X 'main.Version=1.0.1'"  ./cmd/gotosocial

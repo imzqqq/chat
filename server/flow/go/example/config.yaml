@@ -78,7 +78,7 @@ bind-address: "0.0.0.0"
 # This *MUST NOT* be the same as the letsencrypt port specified below, unless letsencrypt is turned off.
 # Examples: [443, 6666, 8080]
 # Default: 8080
-port: 8085
+port: 8080
 
 # Array of string. CIDRs or IP addresses of proxies that should be trusted when determining real client IP from behind a reverse proxy.
 # If you're running inside a Docker container behind Traefik or Nginx, for example, add the subnet of your docker network,
@@ -112,7 +112,7 @@ db-type: "postgres"
 #
 # Examples: ["localhost","my.db.host","127.0.0.1","192.111.39.110",":memory:", "sqlite.db"]
 # Default: ""
-db-address: "localhost"
+db-address: ""
 
 # Int. Port for database connection.
 # Examples: [5432, 1234, 6969]
@@ -122,12 +122,12 @@ db-port: 5432
 # String. Username for the database connection.
 # Examples: ["mydbuser","postgres","gotosocial"]
 # Default: ""
-db-user: "imzqqq"
+db-user: ""
 
 # String. Password to use for the database connection
 # Examples: ["password123","verysafepassword","postgres"]
 # Default: ""
-db-password: "newpwd"
+db-password: ""
 
 # String. Name of the database to use within the provided database type.
 # Examples: ["mydb","postgres","gotosocial"]
@@ -164,6 +164,27 @@ web-template-base-dir: "./web/template/"
 # Examples: ["/some/absolute/path/", "./relative/path/", "../../some/weird/path/"]
 # Default: "./web/assets/"
 web-asset-base-dir: "./web/assets/"
+
+###########################
+##### INSTANCE CONFIG #####
+###########################
+
+# Config pertaining to instance federation settings, pages to hide/expose, etc.
+
+# Bool. Allow unauthenticated users to make queries to /api/v1/instance/peers?filter=open in order
+# to see a list of instances that this instance 'peers' with. Even if set to 'false', then authenticated
+# users (members of the instance) will still be able to query the endpoint.
+# Options: [true, false]
+# Default: false
+instance-expose-peers: false
+
+# Bool. Allow unauthenticated users to make queries to /api/v1/instance/peers?filter=suspended in order
+# to see a list of instances that this instance blocks/suspends. This will also allow unauthenticated
+# users to see the list through the web UI. Even if set to 'false', then authenticated users (members
+# of the instance) will still be able to query the endpoint.
+# Options: [true, false]
+# Default: false
+instance-expose-suspended: false
 
 ###########################
 ##### ACCOUNTS CONFIG #####
@@ -428,3 +449,30 @@ syslog-protocol: "udp"
 # String. Address:port to send syslog logs to. Leave empty to connect to local syslog.
 # Default: "localhost:514"
 syslog-address: "localhost:514"
+
+#############################
+##### ADVANCED SETTINGS #####
+#############################
+
+# Advanced settings pertaining to http timeouts, security, cookies, and more.
+#
+# ONLY ADJUST THESE SETTINGS IF YOU KNOW WHAT YOU ARE DOING!
+#
+# Most users will not need to (and should not) touch these settings, since
+# they are set to sensible defaults, and may break if they are changed.
+#
+# Nevertheless, they are provided for the sake of allowing server admins to
+# tweak their instance for performance or security reasons.
+
+# String. Value of the SameSite attribute of cookies set by GoToSocial.
+# Defaults to 'lax' to ensure that the OIDC flow does not break, which is
+# fine in most cases. If you want to harden your instance against CSRF attacks
+# and don't mind if some login-related things might break, you can set this
+# to 'strict' instead.
+#
+# For an overview of what this does, see:
+# https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite
+#
+# Options: ["lax", "strict"]
+# Default: "lax"
+advanced-cookies-samesite: "lax"

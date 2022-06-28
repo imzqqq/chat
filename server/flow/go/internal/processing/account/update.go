@@ -25,11 +25,11 @@ import (
 	"mime/multipart"
 
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	apimodel "github.com/superseriousbusiness/gotosocial/internal/api/model"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
+	"github.com/superseriousbusiness/gotosocial/internal/gtserror"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/media"
 	"github.com/superseriousbusiness/gotosocial/internal/messages"
@@ -38,7 +38,7 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/validate"
 )
 
-func (p *processor) Update(ctx context.Context, account *gtsmodel.Account, form *apimodel.UpdateCredentialsRequest) (*apimodel.Account, error) {
+func (p *processor) Update(ctx context.Context, account *gtsmodel.Account, form *apimodel.UpdateCredentialsRequest) (*apimodel.Account, gtserror.WithCode) {
 	l := logrus.WithField("func", "AccountUpdate")
 
 	if form.Discoverable != nil {
@@ -51,14 +51,14 @@ func (p *processor) Update(ctx context.Context, account *gtsmodel.Account, form 
 
 	if form.DisplayName != nil {
 		if err := validate.DisplayName(*form.DisplayName); err != nil {
-			return nil, err
+			return nil, gtserror.NewErrorBadRequest(err)
 		}
-		account.DisplayName = text.RemoveHTML(*form.DisplayName)
+		account.DisplayName = text.SanitizePlaintext(*form.DisplayName)
 	}
 
 	if form.Note != nil {
 		if err := validate.Note(*form.Note); err != nil {
-			return nil, err
+			return nil, gtserror.NewErrorBadRequest(err)
 		}
 
 		// Set the raw note before processing
@@ -67,7 +67,7 @@ func (p *processor) Update(ctx context.Context, account *gtsmodel.Account, form 
 		// Process note to generate a valid HTML representation
 		note, err := p.processNote(ctx, *form.Note, account.ID)
 		if err != nil {
-			return nil, err
+			return nil, gtserror.NewErrorBadRequest(err)
 		}
 
 		// Set updated HTML-ified note
@@ -77,7 +77,7 @@ func (p *processor) Update(ctx context.Context, account *gtsmodel.Account, form 
 	if form.Avatar != nil && form.Avatar.Size != 0 {
 		avatarInfo, err := p.UpdateAvatar(ctx, form.Avatar, account.ID)
 		if err != nil {
-			return nil, err
+			return nil, gtserror.NewErrorBadRequest(err)
 		}
 		account.AvatarMediaAttachmentID = avatarInfo.ID
 		account.AvatarMediaAttachment = avatarInfo
@@ -87,7 +87,7 @@ func (p *processor) Update(ctx context.Context, account *gtsmodel.Account, form 
 	if form.Header != nil && form.Header.Size != 0 {
 		headerInfo, err := p.UpdateHeader(ctx, form.Header, account.ID)
 		if err != nil {
-			return nil, err
+			return nil, gtserror.NewErrorBadRequest(err)
 		}
 		account.HeaderMediaAttachmentID = headerInfo.ID
 		account.HeaderMediaAttachment = headerInfo
@@ -101,7 +101,7 @@ func (p *processor) Update(ctx context.Context, account *gtsmodel.Account, form 
 	if form.Source != nil {
 		if form.Source.Language != nil {
 			if err := validate.Language(*form.Source.Language); err != nil {
-				return nil, err
+				return nil, gtserror.NewErrorBadRequest(err)
 			}
 			account.Language = *form.Source.Language
 		}
@@ -112,7 +112,7 @@ func (p *processor) Update(ctx context.Context, account *gtsmodel.Account, form 
 
 		if form.Source.Privacy != nil {
 			if err := validate.Privacy(*form.Source.Privacy); err != nil {
-				return nil, err
+				return nil, gtserror.NewErrorBadRequest(err)
 			}
 			privacy := p.tc.APIVisToVis(apimodel.Visibility(*form.Source.Privacy))
 			account.Privacy = privacy
@@ -121,7 +121,7 @@ func (p *processor) Update(ctx context.Context, account *gtsmodel.Account, form 
 
 	updatedAccount, err := p.db.UpdateAccount(ctx, account)
 	if err != nil {
-		return nil, fmt.Errorf("could not update account %s: %s", account.ID, err)
+		return nil, gtserror.NewErrorInternalError(fmt.Errorf("could not update account %s: %s", account.ID, err))
 	}
 
 	p.clientWorker.Queue(messages.FromClientAPI{
@@ -133,7 +133,7 @@ func (p *processor) Update(ctx context.Context, account *gtsmodel.Account, form 
 
 	acctSensitive, err := p.tc.AccountToAPIAccountSensitive(ctx, updatedAccount)
 	if err != nil {
-		return nil, fmt.Errorf("could not convert account into apisensitive account: %s", err)
+		return nil, gtserror.NewErrorInternalError(fmt.Errorf("could not convert account into apisensitive account: %s", err))
 	}
 	return acctSensitive, nil
 }
@@ -142,7 +142,7 @@ func (p *processor) Update(ctx context.Context, account *gtsmodel.Account, form 
 // parsing and checking the image, and doing the necessary updates in the database for this to become
 // the account's new avatar image.
 func (p *processor) UpdateAvatar(ctx context.Context, avatar *multipart.FileHeader, accountID string) (*gtsmodel.MediaAttachment, error) {
-	maxImageSize := viper.GetInt(config.Keys.MediaImageMaxSize)
+	maxImageSize := config.GetMediaImageMaxSize()
 	if int(avatar.Size) > maxImageSize {
 		return nil, fmt.Errorf("UpdateAvatar: avatar with size %d exceeded max image size of %d bytes", avatar.Size, maxImageSize)
 	}
@@ -169,7 +169,7 @@ func (p *processor) UpdateAvatar(ctx context.Context, avatar *multipart.FileHead
 // parsing and checking the image, and doing the necessary updates in the database for this to become
 // the account's new header image.
 func (p *processor) UpdateHeader(ctx context.Context, header *multipart.FileHeader, accountID string) (*gtsmodel.MediaAttachment, error) {
-	maxImageSize := viper.GetInt(config.Keys.MediaImageMaxSize)
+	maxImageSize := config.GetMediaImageMaxSize()
 	if int(header.Size) > maxImageSize {
 		return nil, fmt.Errorf("UpdateHeader: header with size %d exceeded max image size of %d bytes", header.Size, maxImageSize)
 	}

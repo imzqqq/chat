@@ -24,7 +24,6 @@ import (
 	"net/url"
 
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/uris"
@@ -42,19 +41,18 @@ func (d *deref) DereferenceThread(ctx context.Context, username string, statusIR
 		"username":  username,
 		"statusIRI": statusIRI.String(),
 	})
-	l.Debug("entering DereferenceThread")
+	l.Trace("entering DereferenceThread")
 
 	// if it's our status we already have everything stashed so we can bail early
-	host := viper.GetString(config.Keys.Host)
-	if statusIRI.Host == host {
-		l.Debug("iri belongs to us, bailing")
+	if statusIRI.Host == config.GetHost() {
+		l.Trace("iri belongs to us, bailing")
 		return nil
 	}
 
 	// first make sure we have this status in our db
-	_, statusable, _, err := d.GetRemoteStatus(ctx, username, statusIRI, true, false)
+	_, statusable, err := d.GetRemoteStatus(ctx, username, statusIRI, true, false)
 	if err != nil {
-		return fmt.Errorf("DereferenceThread: error getting status with id %s: %s", statusIRI.String(), err)
+		return fmt.Errorf("DereferenceThread: error getting initial status with id %s: %s", statusIRI.String(), err)
 	}
 
 	// first iterate up through ancestors, dereferencing if necessary as we go
@@ -77,12 +75,11 @@ func (d *deref) iterateAncestors(ctx context.Context, username string, statusIRI
 		"username":  username,
 		"statusIRI": statusIRI.String(),
 	})
-	l.Debug("entering iterateAncestors")
+	l.Trace("entering iterateAncestors")
 
 	// if it's our status we don't need to dereference anything so we can immediately move up the chain
-	host := viper.GetString(config.Keys.Host)
-	if statusIRI.Host == host {
-		l.Debug("iri belongs to us, moving up to next ancestor")
+	if statusIRI.Host == config.GetHost() {
+		l.Trace("iri belongs to us, moving up to next ancestor")
 
 		// since this is our status, we know we can extract the id from the status path
 		_, id, err := uris.ParseStatusesPath(&statusIRI)
@@ -99,18 +96,19 @@ func (d *deref) iterateAncestors(ctx context.Context, username string, statusIRI
 			// status doesn't reply to anything
 			return nil
 		}
+
 		nextIRI, err := url.Parse(status.URI)
 		if err != nil {
 			return err
 		}
+
 		return d.iterateAncestors(ctx, username, *nextIRI)
 	}
 
-	// If we reach here, we're looking at a remote status -- make sure we have it in our db by calling GetRemoteStatus
-	// We call it with refresh to true because we want the statusable representation to parse inReplyTo from.
-	_, statusable, _, err := d.GetRemoteStatus(ctx, username, &statusIRI, true, false)
+	// If we reach here, we're looking at a remote status
+	_, statusable, err := d.GetRemoteStatus(ctx, username, &statusIRI, true, false)
 	if err != nil {
-		l.Debugf("error getting remote status: %s", err)
+		l.Debugf("couldn't get remote status %s: %s; can't iterate any more ancestors", statusIRI.String(), err)
 		return nil
 	}
 
@@ -130,42 +128,41 @@ func (d *deref) iterateDescendants(ctx context.Context, username string, statusI
 		"username":  username,
 		"statusIRI": statusIRI.String(),
 	})
-	l.Debug("entering iterateDescendants")
+	l.Trace("entering iterateDescendants")
 
 	// if it's our status we already have descendants stashed so we can bail early
-	host := viper.GetString(config.Keys.Host)
-	if statusIRI.Host == host {
-		l.Debug("iri belongs to us, bailing")
+	if statusIRI.Host == config.GetHost() {
+		l.Trace("iri belongs to us, bailing")
 		return nil
 	}
 
 	replies := statusable.GetActivityStreamsReplies()
 	if replies == nil || !replies.IsActivityStreamsCollection() {
-		l.Debug("no replies, bailing")
+		l.Trace("no replies, bailing")
 		return nil
 	}
 
 	repliesCollection := replies.GetActivityStreamsCollection()
 	if repliesCollection == nil {
-		l.Debug("replies collection is nil, bailing")
+		l.Trace("replies collection is nil, bailing")
 		return nil
 	}
 
 	first := repliesCollection.GetActivityStreamsFirst()
 	if first == nil {
-		l.Debug("replies collection has no first, bailing")
+		l.Trace("replies collection has no first, bailing")
 		return nil
 	}
 
 	firstPage := first.GetActivityStreamsCollectionPage()
 	if firstPage == nil {
-		l.Debug("first has no collection page, bailing")
+		l.Trace("first has no collection page, bailing")
 		return nil
 	}
 
 	firstPageNext := firstPage.GetActivityStreamsNext()
 	if firstPageNext == nil || !firstPageNext.IsIRI() {
-		l.Debug("next is not an iri, bailing")
+		l.Trace("next is not an iri, bailing")
 		return nil
 	}
 
@@ -174,24 +171,23 @@ func (d *deref) iterateDescendants(ctx context.Context, username string, statusI
 
 pageLoop:
 	for {
-		l.Debugf("dereferencing page %s", currentPageIRI)
-		nextPage, err := d.DereferenceCollectionPage(ctx, username, currentPageIRI)
+		l.Tracef("dereferencing page %s", currentPageIRI)
+		collectionPage, err := d.DereferenceCollectionPage(ctx, username, currentPageIRI)
 		if err != nil {
-			return err
+			l.Debugf("couldn't get remote collection page %s: %s; breaking pageLoop", currentPageIRI, err)
+			break pageLoop
 		}
 
-		// next items could be either a list of URLs or a list of statuses
-
-		nextItems := nextPage.GetActivityStreamsItems()
-		if nextItems.Len() == 0 {
+		pageItems := collectionPage.GetActivityStreamsItems()
+		if pageItems.Len() == 0 {
 			// no items on this page, which means we're done
 			break pageLoop
 		}
 
 		// have a look through items and see what we can find
-		for iter := nextItems.Begin(); iter != nextItems.End(); iter = iter.Next() {
+		for iter := pageItems.Begin(); iter != pageItems.End(); iter = iter.Next() {
 			// We're looking for a url to feed to GetRemoteStatus.
-			// Items can be either an IRI, or a Note.
+			// Each item can be either an IRI, or a Note.
 			// If a note, we grab the ID from it and call it, rather than parsing the note.
 			var itemURI *url.URL
 			switch {
@@ -200,18 +196,17 @@ pageLoop:
 				itemURI = iter.GetIRI()
 			case iter.IsActivityStreamsNote():
 				// note, get the id from it to use as iri
-				n := iter.GetActivityStreamsNote()
-				id := n.GetJSONLDId()
-				if id != nil && id.IsIRI() {
-					itemURI = id.GetIRI()
+				note := iter.GetActivityStreamsNote()
+				noteID := note.GetJSONLDId()
+				if noteID != nil && noteID.IsIRI() {
+					itemURI = noteID.GetIRI()
 				}
 			default:
 				// if it's not an iri or a note, we don't know how to process it
 				continue
 			}
 
-			host := viper.GetString(config.Keys.Host)
-			if itemURI.Host == host {
+			if itemURI.Host == config.GetHost() {
 				// skip if the reply is from us -- we already have it then
 				continue
 			}
@@ -220,8 +215,8 @@ pageLoop:
 			foundReplies++
 
 			// get the remote statusable and put it in the db
-			_, statusable, new, err := d.GetRemoteStatus(ctx, username, itemURI, false, false)
-			if new && err == nil && statusable != nil {
+			_, statusable, err := d.GetRemoteStatus(ctx, username, itemURI, true, false)
+			if err == nil {
 				// now iterate descendants of *that* status
 				if err := d.iterateDescendants(ctx, username, *itemURI, statusable); err != nil {
 					continue
@@ -229,12 +224,13 @@ pageLoop:
 			}
 		}
 
-		next := nextPage.GetActivityStreamsNext()
-		if next != nil && next.IsIRI() {
-			l.Debug("setting next page")
-			currentPageIRI = next.GetIRI()
+		nextPage := collectionPage.GetActivityStreamsNext()
+		if nextPage != nil && nextPage.IsIRI() {
+			nextPageIRI := nextPage.GetIRI()
+			l.Tracef("moving on to next page %s", nextPageIRI)
+			currentPageIRI = nextPageIRI
 		} else {
-			l.Debug("no next page, bailing")
+			l.Trace("no next page, bailing")
 			break pageLoop
 		}
 	}

@@ -27,7 +27,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/spf13/viper"
+	"github.com/superseriousbusiness/gotosocial/internal/api"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
 )
 
@@ -69,7 +69,7 @@ outer:
 
 func (t *transport) Deliver(ctx context.Context, b []byte, to *url.URL) error {
 	// if the 'to' host is our own, just skip this delivery since we by definition already have the message!
-	if to.Host == viper.GetString(config.Keys.Host) || to.Host == viper.GetString(config.Keys.AccountDomain) {
+	if to.Host == config.GetHost() || to.Host == config.GetAccountDomain() {
 		return nil
 	}
 
@@ -80,7 +80,7 @@ func (t *transport) Deliver(ctx context.Context, b []byte, to *url.URL) error {
 		return err
 	}
 
-	req.Header.Add("Content-Type", "application/ld+json; profile=\"https://www.w3.org/ns/activitystreams\"")
+	req.Header.Add("Content-Type", string(api.AppActivityLDJSON))
 	req.Header.Add("Accept-Charset", "utf-8")
 	req.Header.Add("User-Agent", t.controller.userAgent)
 	req.Header.Set("Host", to.Host)

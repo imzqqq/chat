@@ -92,6 +92,10 @@ func noteWithMentions1() vocab.ActivityStreamsNote {
 
 	note.SetActivityStreamsTag(tags)
 
+	content := streams.NewActivityStreamsContentProperty()
+	content.AppendXMLSchemaString("hey @f0x and @dumpsterqueer")
+	note.SetActivityStreamsContent(content)
+
 	return note
 }
 
@@ -150,7 +154,7 @@ func addressable4() vocab.ActivityStreamsAnnounce {
 	"cc": "https://another.instance/users/someone_else",
 	"id": "https://example.org/users/someone/statuses/107043888547829808/activity",
 	"object": "https://another.instance/users/someone_else/statuses/107026674805188668",
-	"published": "2021-10-04T15:08:35Z",
+	"published": "2021-10-04T15:08:35.00Z",
 	"to": "https://example.org/users/someone/followers",
 	"type": "Announce"
 }`)

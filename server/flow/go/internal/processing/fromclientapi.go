@@ -284,27 +284,12 @@ func (p *processor) processDeleteStatusFromClientAPI(ctx context.Context, client
 		statusToDelete.Account = clientMsg.OriginAccount
 	}
 
-	// delete all attachments for this status
-	for _, a := range statusToDelete.AttachmentIDs {
-		if err := p.mediaProcessor.Delete(ctx, a); err != nil {
-			return err
-		}
-	}
-
-	// delete all mentions for this status
-	for _, m := range statusToDelete.MentionIDs {
-		if err := p.db.DeleteByID(ctx, m, &gtsmodel.Mention{}); err != nil {
-			return err
-		}
-	}
-
-	// delete all notifications for this status
-	if err := p.db.DeleteWhere(ctx, []db.Where{{Key: "status_id", Value: statusToDelete.ID}}, &[]*gtsmodel.Notification{}); err != nil {
-		return err
-	}
-
-	// delete this status from any and all timelines
-	if err := p.deleteStatusFromTimelines(ctx, statusToDelete); err != nil {
+	// don't delete attachments, just unattach them;
+	// since this request comes from the client API
+	// and the poster might want to use the attachments
+	// again in a new post
+	deleteAttachments := false
+	if err := p.wipeStatus(ctx, statusToDelete, deleteAttachments); err != nil {
 		return err
 	}
 

@@ -23,39 +23,38 @@ import (
 	"fmt"
 
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	apimodel "github.com/superseriousbusiness/gotosocial/internal/api/model"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
+	"github.com/superseriousbusiness/gotosocial/internal/gtserror"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/messages"
 	"github.com/superseriousbusiness/gotosocial/internal/text"
 	"github.com/superseriousbusiness/oauth2/v4"
 )
 
-func (p *processor) Create(ctx context.Context, applicationToken oauth2.TokenInfo, application *gtsmodel.Application, form *apimodel.AccountCreateRequest) (*apimodel.Token, error) {
+func (p *processor) Create(ctx context.Context, applicationToken oauth2.TokenInfo, application *gtsmodel.Application, form *apimodel.AccountCreateRequest) (*apimodel.Token, gtserror.WithCode) {
 	l := logrus.WithField("func", "accountCreate")
 
 	emailAvailable, err := p.db.IsEmailAvailable(ctx, form.Email)
 	if err != nil {
-		return nil, err
+		return nil, gtserror.NewErrorBadRequest(err)
 	}
 	if !emailAvailable {
-		return nil, fmt.Errorf("email address %s in use", form.Email)
+		return nil, gtserror.NewErrorConflict(fmt.Errorf("email address %s is not available", form.Email))
 	}
 
 	usernameAvailable, err := p.db.IsUsernameAvailable(ctx, form.Username)
 	if err != nil {
-		return nil, err
+		return nil, gtserror.NewErrorBadRequest(err)
 	}
 	if !usernameAvailable {
-		return nil, fmt.Errorf("username %s in use", form.Username)
+		return nil, gtserror.NewErrorConflict(fmt.Errorf("username %s in use", form.Username))
 	}
 
-	keys := config.Keys
-	reasonRequired := viper.GetBool(keys.AccountsReasonRequired)
-	approvalRequired := viper.GetBool(keys.AccountsApprovalRequired)
+	reasonRequired := config.GetAccountsReasonRequired()
+	approvalRequired := config.GetAccountsApprovalRequired()
 
 	// don't store a reason if we don't require one
 	reason := form.Reason
@@ -64,21 +63,21 @@ func (p *processor) Create(ctx context.Context, applicationToken oauth2.TokenInf
 	}
 
 	l.Trace("creating new username and account")
-	user, err := p.db.NewSignup(ctx, form.Username, text.RemoveHTML(reason), approvalRequired, form.Email, form.Password, form.IP, form.Locale, application.ID, false, false)
+	user, err := p.db.NewSignup(ctx, form.Username, text.SanitizePlaintext(reason), approvalRequired, form.Email, form.Password, form.IP, form.Locale, application.ID, false, false)
 	if err != nil {
-		return nil, fmt.Errorf("error creating new signup in the database: %s", err)
+		return nil, gtserror.NewErrorInternalError(fmt.Errorf("error creating new signup in the database: %s", err))
 	}
 
 	l.Tracef("generating a token for user %s with account %s and application %s", user.ID, user.AccountID, application.ID)
 	accessToken, err := p.oauthServer.GenerateUserAccessToken(ctx, applicationToken, application.ClientSecret, user.ID)
 	if err != nil {
-		return nil, fmt.Errorf("error creating new access token for user %s: %s", user.ID, err)
+		return nil, gtserror.NewErrorInternalError(fmt.Errorf("error creating new access token for user %s: %s", user.ID, err))
 	}
 
 	if user.Account == nil {
 		a, err := p.db.GetAccountByID(ctx, user.AccountID)
 		if err != nil {
-			return nil, fmt.Errorf("error getting new account from the database: %s", err)
+			return nil, gtserror.NewErrorInternalError(fmt.Errorf("error getting new account from the database: %s", err))
 		}
 		user.Account = a
 	}

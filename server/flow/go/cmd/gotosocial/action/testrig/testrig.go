@@ -85,7 +85,7 @@ var Start action.GTSAction = func(ctx context.Context) error {
 			StatusCode: 200,
 			Body:       r,
 		}, nil
-	}), dbService, fedWorker)
+	}, ""), dbService, fedWorker)
 	mediaManager := testrig.NewTestMediaManager(dbService, storageBackend)
 	federator := testrig.NewTestFederator(dbService, transportController, storageBackend, mediaManager, fedWorker)
 
@@ -108,7 +108,7 @@ var Start action.GTSAction = func(ctx context.Context) error {
 	}
 
 	// build client api modules
-	authModule := auth.New(dbService, oauthServer, idp)
+	authModule := auth.New(dbService, idp, processor)
 	accountModule := account.New(processor)
 	instanceModule := instance.New(processor)
 	appsModule := app.New(processor)

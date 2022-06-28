@@ -23,6 +23,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/util"
@@ -33,7 +34,7 @@ type domainDB struct {
 }
 
 func (d *domainDB) IsDomainBlocked(ctx context.Context, domain string) (bool, db.Error) {
-	if domain == "" {
+	if domain == "" || domain == config.GetHost() {
 		return false, nil
 	}
 

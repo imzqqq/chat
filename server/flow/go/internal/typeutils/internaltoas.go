@@ -26,7 +26,6 @@ import (
 	"net/url"
 
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"github.com/superseriousbusiness/activity/pub"
 	"github.com/superseriousbusiness/activity/streams"
 	"github.com/superseriousbusiness/activity/streams/vocab"
@@ -393,9 +392,9 @@ func (c *converter) StatusToAS(ctx context.Context, s *gtsmodel.Status) (vocab.A
 	if s.InReplyToID != "" {
 		// fetch the replied status if we don't have it on hand already
 		if s.InReplyTo == nil {
-			rs := &gtsmodel.Status{}
-			if err := c.db.GetByID(ctx, s.InReplyToID, rs); err != nil {
-				return nil, fmt.Errorf("StatusToAS: error retrieving replied-to status from db: %s", err)
+			rs, err := c.db.GetStatusByID(ctx, s.InReplyToID)
+			if err != nil {
+				return nil, fmt.Errorf("StatusToAS: error getting replied to status %s: %s", s.InReplyToID, err)
 			}
 			s.InReplyTo = rs
 		}
@@ -629,9 +628,9 @@ func (c *converter) MentionToAS(ctx context.Context, m *gtsmodel.Mention) (vocab
 	// name -- this should be the namestring of the mentioned user, something like @whatever@example.org
 	var domain string
 	if m.TargetAccount.Domain == "" {
-		accountDomain := viper.GetString(config.Keys.AccountDomain)
+		accountDomain := config.GetAccountDomain()
 		if accountDomain == "" {
-			accountDomain = viper.GetString(config.Keys.Host)
+			accountDomain = config.GetHost()
 		}
 		domain = accountDomain
 	} else {

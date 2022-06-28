@@ -33,7 +33,6 @@ import (
 	"codeberg.org/gruf/go-store/kv"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"github.com/stretchr/testify/suite"
 	mediamodule "github.com/superseriousbusiness/gotosocial/internal/api/client/media"
 	"github.com/superseriousbusiness/gotosocial/internal/api/model"
@@ -92,7 +91,7 @@ func (suite *MediaCreateTestSuite) SetupSuite() {
 	suite.tc = testrig.NewTestTypeConverter(suite.db)
 	suite.mediaManager = testrig.NewTestMediaManager(suite.db, suite.storage)
 	suite.oauthServer = testrig.NewTestOauthServer(suite.db)
-	suite.federator = testrig.NewTestFederator(suite.db, testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil), suite.db, fedWorker), suite.storage, suite.mediaManager, fedWorker)
+	suite.federator = testrig.NewTestFederator(suite.db, testrig.NewTestTransportController(testrig.NewMockHTTPClient(nil, "../../../../testrig/media"), suite.db, fedWorker), suite.storage, suite.mediaManager, fedWorker)
 	suite.emailSender = testrig.NewEmailSender("../../../../web/template/", nil)
 	suite.processor = testrig.NewTestProcessor(suite.db, suite.storage, suite.federator, suite.emailSender, suite.mediaManager, clientWorker, fedWorker)
 
@@ -248,20 +247,19 @@ func (suite *MediaCreateTestSuite) TestMediaCreateLongDescription() {
 	suite.mediaModule.MediaCreatePOSTHandler(ctx)
 
 	// check response
-	suite.EqualValues(http.StatusUnprocessableEntity, recorder.Code)
+	suite.EqualValues(http.StatusBadRequest, recorder.Code)
 
 	result := recorder.Result()
 	defer result.Body.Close()
 	b, err := ioutil.ReadAll(result.Body)
 	suite.NoError(err)
 
-	expectedErr := fmt.Sprintf(`{"error":"image description length must be between 0 and 500 characters (inclusive), but provided image description was %d chars"}`, len(description))
-	suite.Equal(expectedErr, string(b))
+	suite.Equal(`{"error":"Bad Request: image description length must be between 0 and 500 characters (inclusive), but provided image description was 6667 chars"}`, string(b))
 }
 
 func (suite *MediaCreateTestSuite) TestMediaCreateTooShortDescription() {
 	// set the min description length
-	viper.Set(config.Keys.MediaDescriptionMinChars, 500)
+	config.SetMediaDescriptionMinChars(500)
 
 	// set up the context for the request
 	t := suite.testTokens["local_account_1"]

@@ -49,7 +49,7 @@ func (p *processor) Create(ctx context.Context, account *gtsmodel.Account, appli
 		Local:                    true,
 		AccountID:                account.ID,
 		AccountURI:               account.URI,
-		ContentWarning:           text.SanitizeCaption(form.SpoilerText),
+		ContentWarning:           text.SanitizePlaintext(form.SpoilerText),
 		ActivityStreamsType:      ap.ObjectNote,
 		Sensitive:                form.Sensitive,
 		Language:                 form.Language,
@@ -57,8 +57,8 @@ func (p *processor) Create(ctx context.Context, account *gtsmodel.Account, appli
 		Text:                     form.Status,
 	}
 
-	if err := p.ProcessReplyToID(ctx, form, account.ID, newStatus); err != nil {
-		return nil, gtserror.NewErrorInternalError(err)
+	if errWithCode := p.ProcessReplyToID(ctx, form, account.ID, newStatus); errWithCode != nil {
+		return nil, errWithCode
 	}
 
 	if err := p.ProcessMediaIDs(ctx, form, account.ID, newStatus); err != nil {
