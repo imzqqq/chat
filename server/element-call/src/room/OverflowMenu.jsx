@@ -1,3 +1,19 @@
+/*
+Copyright 2022 Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 import React, { useCallback } from "react";
 import { Button } from "../button";
 import { Menu } from "../Menu";
@@ -15,16 +31,15 @@ import { FeedbackModal } from "./FeedbackModal";
 
 export function OverflowMenu({
   roomId,
-  setShowInspector,
-  showInspector,
   inCall,
   groupCall,
+  showInvite,
+  feedbackModalState,
+  feedbackModalProps,
 }) {
   const { modalState: inviteModalState, modalProps: inviteModalProps } =
     useModalTriggerState();
   const { modalState: settingsModalState, modalProps: settingsModalProps } =
-    useModalTriggerState();
-  const { modalState: feedbackModalState, modalProps: feedbackModalProps } =
     useModalTriggerState();
 
   // TODO: On closing modal, focus should be restored to the trigger button
@@ -54,10 +69,12 @@ export function OverflowMenu({
         </TooltipTrigger>
         {(props) => (
           <Menu {...props} label="More menu" onAction={onAction}>
-            <Item key="invite" textValue="Invite people">
-              <AddUserIcon />
-              <span>Invite people</span>
-            </Item>
+            {showInvite && (
+              <Item key="invite" textValue="Invite people">
+                <AddUserIcon />
+                <span>Invite people</span>
+              </Item>
+            )}
             <Item key="settings" textValue="Settings">
               <SettingsIcon />
               <span>Settings</span>
@@ -69,13 +86,7 @@ export function OverflowMenu({
           </Menu>
         )}
       </PopoverMenuTrigger>
-      {settingsModalState.isOpen && (
-        <SettingsModal
-          {...settingsModalProps}
-          setShowInspector={setShowInspector}
-          showInspector={showInspector}
-        />
-      )}
+      {settingsModalState.isOpen && <SettingsModal {...settingsModalProps} />}
       {inviteModalState.isOpen && (
         <InviteModal roomId={roomId} {...inviteModalProps} />
       )}

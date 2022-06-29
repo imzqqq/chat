@@ -1,4 +1,4 @@
-FROM node:16-buster as builder
+FROM --platform=$BUILDPLATFORM node:16-buster as builder
 
 WORKDIR /src
 
@@ -9,7 +9,7 @@ RUN element-call/scripts/dockerbuild.sh
 FROM nginxinc/nginx-unprivileged:alpine
 
 COPY --from=builder /src/element-call/dist /app
-COPY scripts/default.conf /etc/nginx/conf.d/
+COPY config/default.conf /etc/nginx/conf.d/
 
 USER root
 

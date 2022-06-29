@@ -1,0 +1,29 @@
+.pttButton {
+  width: 100vw;
+  height: 100vh;
+  max-height: 232px;
+  max-width: 232px;
+  border-radius: 116px;
+  color: var(--primary-content);
+  border: 6px solid var(--accent);
+  background-color: #21262c;
+  position: relative;
+  padding: 0;
+  cursor: pointer;
+}
+
+.talking {
+  background-color: var(--accent);
+  cursor: unset;
+}
+
+.networkWaiting {
+  background-color: var(--tertiary-content);
+  border-color: var(--tertiary-content);
+  cursor: unset;
+}
+
+.error {
+  background-color: var(--alert);
+  border-color: var(--alert);
+}

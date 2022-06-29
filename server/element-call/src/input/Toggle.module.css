@@ -1,0 +1,46 @@
+.toggle {
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.button {
+  position: relative;
+  padding: 0;
+  transition: background-color 0.2s ease-out 0.1s;
+  width: 44px;
+  height: 24px;
+  border: none;
+  border-radius: 21px;
+  background-color: var(--quaternary-content);
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.ball {
+  transition: left 0.15s ease-out 0.1s;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 21px;
+  background-color: var(--background);
+  left: 2px;
+  top: 2px;
+}
+
+.label {
+  padding: 10px 8px;
+  line-height: 24px;
+  color: var(--quaternary-content);
+}
+
+.toggle.on .button {
+  background-color: var(--accent);
+}
+
+.toggle.on .ball {
+  left: 22px;
+}
+
+.toggle.on .label {
+  color: var(--primary-content);
+}

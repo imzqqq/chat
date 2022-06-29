@@ -1,3 +1,19 @@
+/*
+Copyright 2022 Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 import React, { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { GroupCallState } from "matrix-js-sdk/src/webrtc/groupCall";
@@ -5,7 +21,9 @@ import { useGroupCall } from "./useGroupCall";
 import { ErrorView, FullScreenView } from "../FullScreenView";
 import { LobbyView } from "./LobbyView";
 import { InCallView } from "./InCallView";
+import { PTTCallView } from "./PTTCallView";
 import { CallEndedView } from "./CallEndedView";
+import { useRoomAvatar } from "./useRoomAvatar";
 import { useSentryGroupCallHandler } from "./useSentryGroupCallHandler";
 import { useLocationNavigation } from "../useLocationNavigation";
 
@@ -15,19 +33,6 @@ export function GroupCallView({
   roomId,
   groupCall,
 }) {
-  const [showInspector, setShowInspector] = useState(
-    () => !!localStorage.getItem("matrix-group-call-inspector")
-  );
-  const onChangeShowInspector = useCallback((show) => {
-    setShowInspector(show);
-
-    if (show) {
-      localStorage.setItem("matrix-group-call-inspector", "true");
-    } else {
-      localStorage.removeItem("matrix-group-call-inspector");
-    }
-  }, []);
-
   const {
     state,
     error,
@@ -47,7 +52,11 @@ export function GroupCallView({
     localScreenshareFeed,
     screenshareFeeds,
     hasLocalParticipant,
+    participants,
+    unencryptedEventsFromUsers,
   } = useGroupCall(groupCall);
+
+  const avatarUrl = useRoomAvatar(groupCall.room);
 
   useEffect(() => {
     window.groupCall = groupCall;
@@ -72,27 +81,42 @@ export function GroupCallView({
   if (error) {
     return <ErrorView error={error} />;
   } else if (state === GroupCallState.Entered) {
-    return (
-      <InCallView
-        groupCall={groupCall}
-        client={client}
-        roomName={groupCall.room.name}
-        microphoneMuted={microphoneMuted}
-        localVideoMuted={localVideoMuted}
-        toggleLocalVideoMuted={toggleLocalVideoMuted}
-        toggleMicrophoneMuted={toggleMicrophoneMuted}
-        userMediaFeeds={userMediaFeeds}
-        activeSpeaker={activeSpeaker}
-        onLeave={onLeave}
-        toggleScreensharing={toggleScreensharing}
-        isScreensharing={isScreensharing}
-        localScreenshareFeed={localScreenshareFeed}
-        screenshareFeeds={screenshareFeeds}
-        setShowInspector={onChangeShowInspector}
-        showInspector={showInspector}
-        roomId={roomId}
-      />
-    );
+    if (groupCall.isPtt) {
+      return (
+        <PTTCallView
+          client={client}
+          roomId={roomId}
+          roomName={groupCall.room.name}
+          avatarUrl={avatarUrl}
+          groupCall={groupCall}
+          participants={participants}
+          userMediaFeeds={userMediaFeeds}
+          onLeave={onLeave}
+        />
+      );
+    } else {
+      return (
+        <InCallView
+          groupCall={groupCall}
+          client={client}
+          roomName={groupCall.room.name}
+          avatarUrl={avatarUrl}
+          microphoneMuted={microphoneMuted}
+          localVideoMuted={localVideoMuted}
+          toggleLocalVideoMuted={toggleLocalVideoMuted}
+          toggleMicrophoneMuted={toggleMicrophoneMuted}
+          userMediaFeeds={userMediaFeeds}
+          activeSpeaker={activeSpeaker}
+          onLeave={onLeave}
+          toggleScreensharing={toggleScreensharing}
+          isScreensharing={isScreensharing}
+          localScreenshareFeed={localScreenshareFeed}
+          screenshareFeeds={screenshareFeeds}
+          roomId={roomId}
+          unencryptedEventsFromUsers={unencryptedEventsFromUsers}
+        />
+      );
+    }
   } else if (state === GroupCallState.Entering) {
     return (
       <FullScreenView>
@@ -105,8 +129,10 @@ export function GroupCallView({
     return (
       <LobbyView
         client={client}
+        groupCall={groupCall}
         hasLocalParticipant={hasLocalParticipant}
         roomName={groupCall.room.name}
+        avatarUrl={avatarUrl}
         state={state}
         onInitLocalCallFeed={initLocalCallFeed}
         localCallFeed={localCallFeed}
@@ -115,8 +141,6 @@ export function GroupCallView({
         localVideoMuted={localVideoMuted}
         toggleLocalVideoMuted={toggleLocalVideoMuted}
         toggleMicrophoneMuted={toggleMicrophoneMuted}
-        setShowInspector={onChangeShowInspector}
-        showInspector={showInspector}
         roomId={roomId}
       />
     );

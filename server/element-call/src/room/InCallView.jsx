@@ -1,4 +1,20 @@
-import React, { useCallback, useMemo } from "react";
+/*
+Copyright 2022 Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+import React, { useCallback, useMemo, useRef } from "react";
 import styles from "./InCallView.module.css";
 import {
   HangupButton,
@@ -6,10 +22,15 @@ import {
   VideoButton,
   ScreenshareButton,
 } from "../button";
-import { Header, LeftNav, RightNav, RoomHeaderInfo } from "../Header";
+import {
+  Header,
+  LeftNav,
+  RightNav,
+  RoomHeaderInfo,
+  VersionMismatchWarning,
+} from "../Header";
 import { VideoGrid, useVideoGridLayout } from "../video-grid/VideoGrid";
 import { VideoTileContainer } from "../video-grid/VideoTileContainer";
-import { getAvatarUrl } from "../matrix-utils";
 import { GroupCallInspector } from "./GroupCallInspector";
 import { OverflowMenu } from "./OverflowMenu";
 import { GridLayoutMenu } from "./GridLayoutMenu";
@@ -19,6 +40,9 @@ import { useRageshakeRequestModal } from "../settings/submit-rageshake";
 import { RageshakeRequestModal } from "./RageshakeRequestModal";
 import { usePreventScroll } from "@react-aria/overlays";
 import { useMediaHandler } from "../settings/useMediaHandler";
+import { useShowInspector } from "../settings/useSetting";
+import { useModalTriggerState } from "../Modal";
+import { useAudioContext } from "../video-grid/useMediaStream";
 
 const canScreenshare = "getDisplayMedia" in navigator.mediaDevices;
 // There is currently a bug in Safari our our code with cloning and sending MediaStreams
@@ -30,6 +54,7 @@ export function InCallView({
   client,
   groupCall,
   roomName,
+  avatarUrl,
   microphoneMuted,
   localVideoMuted,
   toggleLocalVideoMuted,
@@ -40,14 +65,18 @@ export function InCallView({
   toggleScreensharing,
   isScreensharing,
   screenshareFeeds,
-  setShowInspector,
-  showInspector,
   roomId,
+  unencryptedEventsFromUsers,
 }) {
   usePreventScroll();
   const [layout, setLayout] = useVideoGridLayout(screenshareFeeds.length > 0);
 
+  const [audioContext, audioDestination, audioRef] = useAudioContext();
   const { audioOutput } = useMediaHandler();
+  const [showInspector] = useShowInspector();
+
+  const { modalState: feedbackModalState, modalProps: feedbackModalProps } =
+    useModalTriggerState();
 
   const items = useMemo(() => {
     const participants = [];
@@ -84,23 +113,6 @@ export function InCallView({
     return participants;
   }, [userMediaFeeds, activeSpeaker, screenshareFeeds, layout]);
 
-  const onFocusTile = useCallback(
-    (tiles, focusedTile) => {
-      if (layout === "freedom") {
-        return tiles.map((tile) => {
-          if (tile === focusedTile) {
-            return { ...tile, focused: !tile.focused };
-          }
-
-          return tile;
-        });
-      } else {
-        return tiles;
-      }
-    },
-    [layout, setLayout]
-  );
-
   const renderAvatar = useCallback(
     (roomMember, width, height) => {
       const avatarUrl = roomMember.user?.avatarUrl;
@@ -109,13 +121,8 @@ export function InCallView({
       return (
         <Avatar
           key={roomMember.userId}
-          style={{
-            width: size,
-            height: size,
-            borderRadius: size,
-            fontSize: Math.round(size / 2),
-          }}
-          src={avatarUrl && getAvatarUrl(client, avatarUrl, 96)}
+          size={size}
+          src={avatarUrl}
           fallback={roomMember.name.slice(0, 1).toUpperCase()}
           className={styles.avatar}
         />
@@ -131,9 +138,14 @@ export function InCallView({
 
   return (
     <div className={styles.inRoom}>
+      <audio ref={audioRef} />
       <Header>
         <LeftNav>
-          <RoomHeaderInfo roomName={roomName} />
+          <RoomHeaderInfo roomName={roomName} avatarUrl={avatarUrl} />
+          <VersionMismatchWarning
+            users={unencryptedEventsFromUsers}
+            room={groupCall.room}
+          />
         </LeftNav>
         <RightNav>
           <GridLayoutMenu layout={layout} setLayout={setLayout} />
@@ -145,12 +157,7 @@ export function InCallView({
           <p>Waiting for other participants...</p>
         </div>
       ) : (
-        <VideoGrid
-          items={items}
-          layout={layout}
-          onFocusTile={onFocusTile}
-          disableAnimations={isSafari}
-        >
+        <VideoGrid items={items} layout={layout} disableAnimations={isSafari}>
           {({ item, ...rest }) => (
             <VideoTileContainer
               key={item.id}
@@ -158,6 +165,8 @@ export function InCallView({
               getAvatar={renderAvatar}
               showName={items.length > 2 || item.focused}
               audioOutputDevice={audioOutput}
+              audioContext={audioContext}
+              audioDestination={audioDestination}
               disableSpeakingIndicator={items.length < 3}
               {...rest}
             />
@@ -176,10 +185,11 @@ export function InCallView({
         <OverflowMenu
           inCall
           roomId={roomId}
-          setShowInspector={setShowInspector}
-          showInspector={showInspector}
           client={client}
           groupCall={groupCall}
+          showInvite={true}
+          feedbackModalState={feedbackModalState}
+          feedbackModalProps={feedbackModalProps}
         />
         <HangupButton onPress={onLeave} />
       </div>

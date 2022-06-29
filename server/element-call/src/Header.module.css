@@ -70,7 +70,7 @@
   background: transparent;
   border: none;
   display: flex;
-  color: var(--textColor1);
+  color: var(--primary-content);
   cursor: pointer;
   align-items: center;
 }
@@ -102,6 +102,24 @@
   cursor: pointer;
   font-weight: 600;
   flex-shrink: 0;
+}
+
+.versionMismatchWarning {
+  padding-left: 15px;
+}
+
+.versionMismatchWarning::before {
+  content: "";
+  display: inline-block;
+  position: relative;
+  top: 1px;
+  width: 16px;
+  height: 16px;
+  mask-image: url("./icons/AlertTriangleFilled.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background-color: var(--alert);
+  padding-right: 5px;
 }
 
 @media (min-width: 800px) {

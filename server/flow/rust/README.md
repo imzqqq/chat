@@ -19,7 +19,7 @@ You will need to install several base dependencies:
    > In the Rust development environment, all tools are installed to the ~/.cargo/bin directory, and this is where you will find the Rust toolchain, including rustc, cargo, and rustup.
    > Accordingly, it is customary for Rust developers to include this directory in their PATH environment variable. During installation rustup will attempt to configure the PATH. Because of differences between platforms, command shells, and bugs in rustup, the modifications to PATH may not take effect until the console is restarted, or the user is logged out, or it may not succeed at all.
    > If, after installation, running rustc --version in the console fails, this is the most likely reason.
-1. [Postgres](https://www.postgresql.org/download/). If you don't have a Postgres instance available, you can use the supplied [docker-compose](https://github.com/docker/compose/) configuration file to start an instance:
+2. [Postgres](https://www.postgresql.org/download/). If you don't have a Postgres instance available, you can use the supplied [docker-compose](https://github.com/docker/compose/) configuration file to start an instance:
 
    ```bash
    docker-compose up -d
@@ -35,7 +35,7 @@ You will need to install several base dependencies:
    * Debian/Ubuntu/etc: `apt install libpq-dev`
    * Arch: `pacman -S postgresql-libs`
 
-1. [SASS](https://sass-lang.com/). To install, follow [the official directions](https://sass-lang.com/install), and make sure the `sass` binary is somewhere in your `PATH`.
+3. [SASS](https://sass-lang.com/). To install, follow [the official directions](https://sass-lang.com/install), and make sure the `sass` binary is somewhere in your `PATH`.
 
 Once you have installed these base components, you should run `scripts/setup` to install the remainder of the application dependencies.
 

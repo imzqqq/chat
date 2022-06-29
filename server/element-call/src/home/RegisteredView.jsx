@@ -1,5 +1,21 @@
+/*
+Copyright 2022 Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 import React, { useState, useCallback } from "react";
-import { createRoom, roomAliasFromRoomName } from "../matrix-utils";
+import { createRoom, roomAliasLocalpartFromRoomName } from "../matrix-utils";
 import { useGroupCallRooms } from "./useGroupCallRooms";
 import { Header, HeaderLogo, LeftNav, RightNav } from "../Header";
 import commonStyles from "./common.module.css";
@@ -11,10 +27,12 @@ import { UserMenuContainer } from "../UserMenuContainer";
 import { useModalTriggerState } from "../Modal";
 import { JoinExistingCallModal } from "./JoinExistingCallModal";
 import { useHistory } from "react-router-dom";
-import { Headline, Title } from "../typography/Typography";
+import { Title } from "../typography/Typography";
 import { Form } from "../form/Form";
+import { CallType, CallTypeDropdown } from "./CallTypeDropdown";
 
 export function RegisteredView({ client }) {
+  const [callType, setCallType] = useState(CallType.Video);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
   const history = useHistory();
@@ -23,12 +41,13 @@ export function RegisteredView({ client }) {
       e.preventDefault();
       const data = new FormData(e.target);
       const roomName = data.get("callName");
+      const ptt = callType === CallType.Radio;
 
       async function submit() {
         setError(undefined);
         setLoading(true);
 
-        const roomIdOrAlias = await createRoom(client, roomName);
+        const roomIdOrAlias = await createRoom(client, roomName, ptt);
 
         if (roomIdOrAlias) {
           history.push(`/room/${roomIdOrAlias}`);
@@ -37,7 +56,7 @@ export function RegisteredView({ client }) {
 
       submit().catch((error) => {
         if (error.errcode === "M_ROOM_IN_USE") {
-          setExistingRoomId(roomAliasFromRoomName(roomName));
+          setExistingRoomId(roomAliasLocalpartFromRoomName(roomName));
           setLoading(false);
           setError(undefined);
           modalState.open();
@@ -49,7 +68,7 @@ export function RegisteredView({ client }) {
         }
       });
     },
-    [client]
+    [client, callType]
   );
 
   const recentRooms = useGroupCallRooms(client);
@@ -59,6 +78,9 @@ export function RegisteredView({ client }) {
   const onJoinExistingRoom = useCallback(() => {
     history.push(`/${existingRoomId}`);
   }, [history, existingRoomId]);
+
+  const callNameLabel =
+    callType === CallType.Video ? "Video call name" : "Walkie-talkie call name";
 
   return (
     <>
@@ -73,20 +95,19 @@ export function RegisteredView({ client }) {
       <div className={commonStyles.container}>
         <main className={commonStyles.main}>
           <HeaderLogo className={commonStyles.logo} />
-          <Headline className={commonStyles.headline}>
-            Enter a call name
-          </Headline>
+          <CallTypeDropdown callType={callType} setCallType={setCallType} />
           <Form className={styles.form} onSubmit={onSubmit}>
             <FieldRow className={styles.fieldRow}>
               <InputField
                 id="callName"
                 name="callName"
-                label="Call name"
-                placeholder="Call name"
+                label={callNameLabel}
+                placeholder={callNameLabel}
                 type="text"
                 required
                 autoComplete="off"
               />
+
               <Button
                 type="submit"
                 size="lg"

@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Header.module.css";
 import { ReactComponent as Logo } from "./icons/Logo.svg";
@@ -8,6 +8,9 @@ import { ReactComponent as ArrowLeftIcon } from "./icons/ArrowLeft.svg";
 import { useButton } from "@react-aria/button";
 import { Subtitle } from "./typography/Typography";
 import { Avatar } from "./Avatar";
+import { IncompatibleVersionModal } from "./IncompatibleVersionModal";
+import { useModalTriggerState } from "./Modal";
+import { Button } from "./button";
 
 export function Header({ children, className, ...rest }) {
   return (
@@ -57,12 +60,13 @@ export function HeaderLogo({ className }) {
   );
 }
 
-export function RoomHeaderInfo({ roomName }) {
+export function RoomHeaderInfo({ roomName, avatarUrl }) {
   return (
     <>
       <div className={styles.roomAvatar}>
         <Avatar
           size="md"
+          src={avatarUrl}
           bgKey={roomName}
           fallback={roomName.slice(0, 1).toUpperCase()}
         />
@@ -73,13 +77,35 @@ export function RoomHeaderInfo({ roomName }) {
   );
 }
 
-export function RoomSetupHeaderInfo({ roomName, ...rest }) {
+export function RoomSetupHeaderInfo({ roomName, avatarUrl, ...rest }) {
   const ref = useRef();
   const { buttonProps } = useButton(rest, ref);
   return (
     <button className={styles.backButton} ref={ref} {...buttonProps}>
       <ArrowLeftIcon width={16} height={16} />
-      <RoomHeaderInfo roomName={roomName} />
+      <RoomHeaderInfo roomName={roomName} avatarUrl={avatarUrl} />
     </button>
+  );
+}
+
+export function VersionMismatchWarning({ users, room }) {
+  const { modalState, modalProps } = useModalTriggerState();
+
+  const onDetailsClick = useCallback(() => {
+    modalState.open();
+  }, [modalState]);
+
+  if (users.size === 0) return null;
+
+  return (
+    <span className={styles.versionMismatchWarning}>
+      Incomaptible versions!
+      <Button variant="link" onClick={onDetailsClick}>
+        Details
+      </Button>
+      {modalState.isOpen && (
+        <IncompatibleVersionModal userIds={users} room={room} {...modalProps} />
+      )}
+    </span>
   );
 }

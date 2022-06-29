@@ -1,5 +1,22 @@
+/*
+Copyright 2022 Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 import React, { useCallback, useState } from "react";
 import styles from "./RoomAuthView.module.css";
+import { useClient } from "../ClientContext";
 import { Button } from "../button";
 import { Body, Caption, Link, Headline } from "../typography/Typography";
 import { Header, HeaderLogo, LeftNav, RightNav } from "../Header";
@@ -13,11 +30,13 @@ import { UserMenuContainer } from "../UserMenuContainer";
 import { generateRandomName } from "../auth/generateRandomName";
 
 export function RoomAuthView() {
+  const { setClient } = useClient();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
-  const [{ privacyPolicyUrl, recaptchaKey }, register] =
+  const [privacyPolicyUrl, recaptchaKey, register] =
     useInteractiveRegistration();
   const { execute, reset, recaptchaId } = useRecaptcha(recaptchaKey);
+
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
@@ -29,13 +48,14 @@ export function RoomAuthView() {
         setLoading(true);
         const recaptchaResponse = await execute();
         const userName = generateRandomName();
-        await register(
+        const [client, session] = await register(
           userName,
           randomString(16),
           displayName,
           recaptchaResponse,
           true
         );
+        setClient(client, session);
       }
 
       submit().catch((error) => {
