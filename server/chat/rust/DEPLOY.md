@@ -43,7 +43,6 @@ $ sudo apt install libclang-dev build-essential
 $ cargo build --release
 ```
 
-Note that this currently requires Rust 1.50.
 
 If you want to cross compile Conduit to another architecture, read the [Cross-Compile Guide](cross/README.md).
 
@@ -57,6 +56,12 @@ In Debian you can use this command to create a Conduit user:
 ```bash
 sudo adduser --system conduit --no-create-home
 ```
+
+## Forwarding ports in the firewall or the router
+
+Conduit uses the ports 443 and 8448 both of which need to be open in the firewall.
+
+If Conduit runs behind a router or in a container and has a different public IP address than the host system these public ports need to be forwarded directly or indirectly to the port mentioned in the config.
 
 ## Setting up a systemd service
 
@@ -89,7 +94,8 @@ $ sudo systemctl daemon-reload
 ## Creating the Conduit configuration file
 
 Now we need to create the Conduit's config file in `/etc/matrix-conduit/conduit.toml`. Paste this in **and take a moment
-to read it. You need to change at least the server name.**
+to read it. You need to change at least the server name.**  
+You can also choose to use a different database backend, but right now only `rocksdb` and `sqlite` are recommended.
 
 ```toml
 [global]
@@ -156,7 +162,7 @@ sudo chmod 700 /var/lib/matrix-conduit/
 
 ## Setting up the Reverse Proxy
 
-This depends on whether you use Apache, Nginx or another web server.
+This depends on whether you use Apache, Caddy, Nginx or another web server.
 
 ### Apache
 
@@ -181,6 +187,19 @@ ProxyPassReverse /_matrix/ http://127.0.0.1:6167/_matrix/
 ```bash
 $ sudo systemctl reload apache2
 ```
+
+### Caddy
+Create `/etc/caddy/conf.d/conduit_caddyfile` and enter this (substitute for your server name).
+```caddy
+your.server.name, your.server.name:8448 {
+        reverse_proxy /_matrix/* 127.0.0.1:6167
+}
+```
+That's it! Just start or enable the service and you're set.
+```bash
+$ sudo systemctl enable caddy
+```
+
 
 ### Nginx
 
@@ -216,6 +235,8 @@ $ sudo systemctl reload nginx
 
 ## SSL Certificate
 
+If you chose Caddy as your web proxy SSL certificates are handled automatically and you can skip this step.
+
 The easiest way to get an SSL certificate, if you don't have one already, is to install `certbot` and run this:
 
 ```bash
@@ -247,7 +268,8 @@ $ curl https://your.server.name/_matrix/client/versions
 $ curl https://your.server.name:8448/_matrix/client/versions
 ```
 
-- To check if your server can talk with other homeservers, you can use the [Matrix Federation Tester](https://federationtester.matrix.org/)
+- To check if your server can talk with other homeservers, you can use the [Matrix Federation Tester](https://federationtester.matrix.org/).
+  If you can register but cannot join federated rooms check your config again and also check if the port 8448 is open and forwarded correctly.
 
 # What's next?
 
