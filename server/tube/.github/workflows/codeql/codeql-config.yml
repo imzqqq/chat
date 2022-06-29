@@ -1,4 +1,0 @@
-name: "Tube CodeQL config"
-
-paths-ignore:
- - server/tests

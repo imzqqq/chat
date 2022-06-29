@@ -1,6 +1,0 @@
-@use '_mixins' as *;
-
-.btn-remote-follow {
-  @include tube-button;
-  @include orange-button;
-}

@@ -1,3 +1,0 @@
-- Translations
-  - [:uk: English](/)
-  - [:fr: Français](/fr/use-setup-account)

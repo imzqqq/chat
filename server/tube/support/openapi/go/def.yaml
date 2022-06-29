@@ -1,4 +1,0 @@
-# https://openapi-generator.tech/docs/generators/go
-
-packageName: tube
-enumClassPrefix: "true"
