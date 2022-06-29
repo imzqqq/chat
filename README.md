@@ -450,12 +450,13 @@ type is used to specify the type of commit, and must be one of the following typ
 - docs: documentation changes
 - style: code formatting changes, not css changes (e.g. semicolon changes)
 - test: test case addition, modification
-- build: modifications that affect project builds or dependencies
+- build/run: modifications that affect project builds or dependencies
 - revert: restore the last commit
 - ci: continuous integration related file changes
 - chore: other changes (changes that are not in the above categories)
 - release: release a new version
 - workflow: workflow-related file changes
+- deps: dependencies related changes
 
 ### Scope
 
