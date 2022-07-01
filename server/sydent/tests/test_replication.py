@@ -15,12 +15,7 @@ class ReplicationTestCase(unittest.TestCase):
 
     def setUp(self):
         # Create a new sydent
-        config = {
-            "crypto": {
-                "ed25519.signingkey": "ed25519 0 FJi1Rnpj3/otydngacrwddFvwz/dTDsBv62uZDN2fZM"
-            }
-        }
-        self.sydent = make_sydent(test_config=config)
+        self.sydent = make_sydent()
 
         # Create a fake peer to replicate to.
         peer_public_key_base64 = "+vB8mTaooD/MA8YYZM8t9+vnGhP1937q2icrqPV9JTs"
@@ -84,7 +79,7 @@ class ReplicationTestCase(unittest.TestCase):
         # Send the replication push.
         body = json.dumps({"sgAssocs": signed_assocs})
         request, channel = make_request(
-            self.sydent.reactor, "POST", "/chat/identity/replicate/v1/push", body
+            self.sydent.reactor, "POST", "/_matrix/identity/replicate/v1/push", body
         )
         request.render(self.sydent.servlets.replicationPush)
 
@@ -158,7 +153,7 @@ class ReplicationTestCase(unittest.TestCase):
             """
             # Check the method and the URI.
             assert method == b"POST"
-            assert uri == b"https://fake.server:1234/chat/identity/replicate/v1/push"
+            assert uri == b"https://fake.server:1234/_matrix/identity/replicate/v1/push"
 
             # postJson calls the agent with a BytesIO within a FileBodyProducer, so we
             # need to unpack the payload correctly.

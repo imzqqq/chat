@@ -15,6 +15,7 @@
 import random
 import string
 from email.header import Header
+from http import HTTPStatus
 from typing import TYPE_CHECKING
 
 import nacl.signing
@@ -27,7 +28,7 @@ from sydent.db.threepid_associations import GlobalAssociationStore
 from sydent.http.auth import authV2
 from sydent.http.servlets import MatrixRestError, get_args, jsonwrap, send_cors
 from sydent.types import JsonDict
-from sydent.util.emailutils import sendEmail
+from sydent.util.emailutils import EmailAddressException, sendEmail
 from sydent.util.stringutils import MAX_EMAIL_ADDRESS_LENGTH, normalise_address
 
 if TYPE_CHECKING:
@@ -121,14 +122,10 @@ class StoreInviteServlet(Resource):
             "sender_avatar_url",
             "guest_user_id",
             "guest_access_token",
+            "room_type",
         ]
         for k in extra_substitutions:
             substitutions.setdefault(k, "")
-
-        # MSC3288
-        substitutions["room_type"] = substitutions.pop(
-            "org.matrix.msc3288.room_type", ""
-        )
 
         substitutions["bracketed_verified_sender"] = ""
         if verified_sender:
@@ -138,39 +135,43 @@ class StoreInviteServlet(Resource):
         if substitutions["room_name"] != "":
             substitutions["bracketed_room_name"] = "(%s) " % substitutions["room_name"]
 
-        substitutions["web_client_location"] = self.sydent.default_web_client_location
+        substitutions[
+            "web_client_location"
+        ] = self.sydent.config.email.default_web_client_location
         if "org.matrix.web_client_location" in substitutions:
-            substitutions["web_client_location"] = substitutions.pop(
+            substitutions["web_client_location"] = substitutions[
                 "org.matrix.web_client_location"
-            )
+            ]
 
-        subject_header = Header(
-            self.sydent.cfg.get(
-                "email",
-                "email.invite.subject_space"
-                if substitutions["room_type"] == "m.space"
-                else "email.invite.subject",
-                raw=True,
-            )
-            % substitutions,
-            "utf8",
-        )
-        substitutions["subject_header_value"] = subject_header.encode()
+        if substitutions["room_type"] == "m.space":
+            subject = self.sydent.config.email.invite_subject_space % substitutions
+        else:
+            subject = self.sydent.config.email.invite_subject % substitutions
+
+        substitutions["subject_header_value"] = Header(subject, "utf8").encode()
 
         brand = self.sydent.brand_from_request(request)
-        templateFile = self.sydent.get_branded_template(
-            brand,
-            "invite_template.eml",
-            ("email", "email.invite_template"),
-        )
 
-        sendEmail(self.sydent, templateFile, normalised_address, substitutions)
+        # self.sydent.config.email.invite_template is deprecated
+        if self.sydent.config.email.invite_template is None:
+            templateFile = self.sydent.get_branded_template(
+                brand,
+                "invite_template.eml",
+            )
+        else:
+            templateFile = self.sydent.config.email.invite_template
+
+        try:
+            sendEmail(self.sydent, templateFile, normalised_address, substitutions)
+        except EmailAddressException:
+            request.setResponseCode(HTTPStatus.BAD_REQUEST)
+            return {"errcode": "M_INVALID_EMAIL", "error": "Invalid email address"}
 
         pubKey = self.sydent.keyring.ed25519.verify_key
         pubKeyBase64 = encode_base64(pubKey.encode())
 
-        baseUrl = "%s/chat/identity/api/v1" % (
-            self.sydent.cfg.get("http", "client_http_base"),
+        baseUrl = "%s/_matrix/identity/api/v1" % (
+            self.sydent.config.http.server_http_url_base,
         )
 
         keysToReturn = []
@@ -210,9 +211,11 @@ class StoreInviteServlet(Resource):
 
         # Obfuscate strings
         redacted_username = self._redact(
-            username, self.sydent.username_obfuscate_characters
+            username, self.sydent.config.email.username_obfuscate_characters
         )
-        redacted_domain = self._redact(domain, self.sydent.domain_obfuscate_characters)
+        redacted_domain = self._redact(
+            domain, self.sydent.config.email.domain_obfuscate_characters
+        )
 
         return redacted_username + "@" + redacted_domain
 

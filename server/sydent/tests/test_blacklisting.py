@@ -49,8 +49,8 @@ class BlacklistingAgentTest(TestCase):
             self.reactor.lookups[domain.decode()] = ip.decode()
             self.reactor.lookups[ip.decode()] = ip.decode()
 
-        self.ip_whitelist = self.sydent.ip_whitelist
-        self.ip_blacklist = self.sydent.ip_blacklist
+        self.ip_whitelist = self.sydent.config.general.ip_whitelist
+        self.ip_blacklist = self.sydent.config.general.ip_blacklist
 
     def test_reactor(self):
         """Apply the blacklisting reactor and ensure it properly blocks
@@ -99,7 +99,7 @@ class BlacklistingAgentTest(TestCase):
         request, channel = make_request(
             self.sydent.reactor,
             "POST",
-            "/chat/identity/v2/account/register",
+            "/_matrix/identity/v2/account/register",
             {
                 "access_token": "foo",
                 "expires_in": 300,
@@ -125,7 +125,7 @@ class BlacklistingAgentTest(TestCase):
         )
 
         self.assertRegex(
-            transport.value(), b"^GET /chat/federation/v1/openid/userinfo"
+            transport.value(), b"^GET /_matrix/federation/v1/openid/userinfo"
         )
         self.assertRegex(transport.value(), b"Host: example.com")
 
@@ -151,7 +151,7 @@ class BlacklistingAgentTest(TestCase):
         request, channel = make_request(
             self.sydent.reactor,
             "POST",
-            "/chat/identity/v2/account/register",
+            "/_matrix/identity/v2/account/register",
             {
                 "access_token": "foo",
                 "expires_in": 300,
@@ -175,7 +175,7 @@ class BlacklistingAgentTest(TestCase):
         transport, protocol = self._get_http_request(self.safe_ip.decode("ascii"), 443)
 
         self.assertRegex(
-            transport.value(), b"^GET /chat/federation/v1/openid/userinfo"
+            transport.value(), b"^GET /_matrix/federation/v1/openid/userinfo"
         )
         self.assertRegex(transport.value(), b"Host: example.com")
 
@@ -199,7 +199,7 @@ class BlacklistingAgentTest(TestCase):
         request, channel = make_request(
             self.sydent.reactor,
             "POST",
-            "/chat/identity/v2/account/register",
+            "/_matrix/identity/v2/account/register",
             {
                 "access_token": "foo",
                 "expires_in": 300,

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import time
-from typing import TYPE_CHECKING, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple
 
 if TYPE_CHECKING:
     from sydent.sydent import Sydent
@@ -46,9 +46,7 @@ class JoinTokenStore:
         )
         self.sydent.db.commit()
 
-    def getTokens(
-        self, medium: str, address: str
-    ) -> List[Dict[str, Union[str, Dict[str, str]]]]:
+    def getTokens(self, medium: str, address: str) -> List[Dict[str, str]]:
         """
         Retrieves the pending invites tokens for this 3PID that haven't been delivered
         yet.
@@ -69,25 +67,12 @@ class JoinTokenStore:
                 address,
             ),
         )
-        rows = res.fetchall()
+        rows: List[Tuple[str, str, str, str, str]] = res.fetchall()
 
         ret = []
 
         for row in rows:
             medium, address, roomId, sender, token = row
-
-            # Ensure we're dealing with unicode.
-            if isinstance(medium, bytes):
-                medium = medium.decode("UTF-8")
-            if isinstance(address, bytes):
-                address = address.decode("UTF-8")
-            if isinstance(roomId, bytes):
-                roomId = roomId.decode("UTF-8")
-            if isinstance(sender, bytes):
-                sender = sender.decode("UTF-8")
-            if isinstance(token, bytes):
-                token = token.decode("UTF-8")
-
             ret.append(
                 {
                     "medium": medium,
@@ -165,7 +150,7 @@ class JoinTokenStore:
         """
         cur = self.sydent.db.cursor()
         res = cur.execute("SELECT sender FROM invite_tokens WHERE token = ?", (token,))
-        rows = res.fetchall()
+        rows: List[Tuple[str]] = res.fetchall()
         if rows:
             return rows[0][0]
         return None

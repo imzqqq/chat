@@ -16,11 +16,11 @@ import copy
 import functools
 import json
 import logging
-from typing import Any, Dict, Iterable
+from typing import Any, Awaitable, Callable, Dict, Iterable, TypeVar
 
 from twisted.internet import defer
-from twisted.python import failure
 from twisted.web import server
+from twisted.web.resource import Resource
 from twisted.web.server import Request
 
 from sydent.types import JsonDict
@@ -35,7 +35,7 @@ class MatrixRestError(Exception):
     wrapper should catch this exception themselves.
     """
 
-    def __init__(self, httpStatus, errcode, error):
+    def __init__(self, httpStatus: int, errcode: str, error: str):
         super(Exception, self).__init__(error)
         self.httpStatus = httpStatus
         self.errcode = errcode
@@ -49,9 +49,13 @@ def get_args(
     Helper function to get arguments for an HTTP request.
     Currently takes args from the top level keys of a json object or
     www-form-urlencoded for backwards compatibility on v1 endpoints only.
-    Returns a tuple (error, args) where if error is non-null,
-    the request is malformed. Otherwise, args contains the
-    parameters passed.
+
+    ⚠️ BEWARE ⚠. If a v1 request provides its args in urlencoded form (either in
+    a POST body or as URL query parameters), then we'll return `Dict[str, str]`.
+    The caller may need to interpret these strings as e.g. an `int`, `bool`, etc.
+    Arguments given as a json body are processed with `json.JSONDecoder.decode`,
+    and so are automatically deserialised to a Python type. The caller should
+    still validate that these have the correct type!
 
     :param request: The request received by the servlet.
     :param args: The args to look for in the request's parameters.
@@ -60,12 +64,16 @@ def get_args(
 
     :raises: MatrixRestError if required is True and a given parameter
         was not found in the request's query parameters.
+    :raises: MatrixRestError if we the request body contains bad JSON.
+    :raises: MatrixRestError if arguments are given in www-form-urlencodedquery
+        form, and some argument name or value is not a valid UTF-8-encoded
+        string.
 
     :return: A dict containing the requested args and their values. String values
         are of type unicode.
     """
     assert request.path is not None
-    v1_path = request.path.startswith(b"/chat/identity/api/v1")
+    v1_path = request.path.startswith(b"/_matrix/identity/api/v1")
 
     request_args = None
     # for v1 paths, only look for json args if content type is json
@@ -73,7 +81,9 @@ def get_args(
         not v1_path
         or (
             request.requestHeaders.hasHeader("Content-Type")
-            and request.requestHeaders.getRawHeaders("Content-Type")[0].startswith(
+            # type safety: getRawHeaders() will return a nonempty list because
+            # the hasHeader call has returned True.
+            and request.requestHeaders.getRawHeaders("Content-Type")[0].startswith(  # type: ignore[index]
                 "application/json"
             )
         )
@@ -127,9 +137,13 @@ def get_args(
     return request_args
 
 
-def jsonwrap(f):
+Res = TypeVar("Res", bound=Resource)
+
+
+def jsonwrap(f: Callable[[Res, Request], JsonDict]) -> Callable[[Res, Request], bytes]:
     @functools.wraps(f)
-    def inner(self, request: Request, *args, **kwargs) -> bytes:
+    def inner(self: Res, request: Request) -> bytes:
+
         """
         Runs a web handler function with the given request and parameters, then
         converts its result into JSON and returns it. If an error happens, also sets
@@ -137,14 +151,12 @@ def jsonwrap(f):
 
         :param self: The current object.
         :param request: The request to process.
-        :param args: The arguments to pass to the function.
-        :param kwargs: The keyword arguments to pass to the function.
 
         :return: The JSON payload to send as a response to the request.
         """
         try:
             request.setHeader("Content-Type", "application/json")
-            return dict_to_json_bytes(f(self, request, *args, **kwargs))
+            return dict_to_json_bytes(f(self, request))
         except MatrixRestError as e:
             request.setResponseCode(e.httpStatus)
             return dict_to_json_bytes({"errcode": e.errcode, "error": e.error})
@@ -162,18 +174,20 @@ def jsonwrap(f):
     return inner
 
 
-def asyncjsonwrap(f):
-    async def render(f, self, request: Request, **kwargs):
+AsyncRenderer = Callable[[Res, Request], Awaitable[JsonDict]]
+
+
+def asyncjsonwrap(f: AsyncRenderer[Res]) -> Callable[[Res, Request], object]:
+    async def render(f: AsyncRenderer[Res], self: Res, request: Request) -> None:
         request.setHeader("Content-Type", "application/json")
         try:
-            result = await f(self, request, **kwargs)
+            result = await f(self, request)
             request.write(dict_to_json_bytes(result))
         except MatrixRestError as e:
             request.setResponseCode(e.httpStatus)
             request.write(dict_to_json_bytes({"errcode": e.errcode, "error": e.error}))
         except Exception:
-            f = failure.Failure()
-            logger.error("Request processing failed: %r, %s", f, f.getTraceback())
+            logger.exception("Request processing failed")
             request.setResponseCode(500)
             request.write(
                 dict_to_json_bytes(
@@ -183,17 +197,17 @@ def asyncjsonwrap(f):
         request.finish()
 
     @functools.wraps(f)
-    def inner(*args, **kwargs) -> int:
+    def inner(self: Res, request: Request) -> object:
         """
         Runs an asynchronous web handler function with the given arguments.
 
-        :param args: The arguments to pass to the function.
-        :param kwargs: The keyword arguments to pass to the function.
+        :param self: The servelet instance
+        :param request: The request that `f` will serve.
 
-        :return: A special code to tell the servlet that the response isn't ready yet
+        :return: An opaque object to tell the servlet that the response isn't ready yet
             and will come later.
         """
-        defer.ensureDeferred(render(f, *args, **kwargs))
+        defer.ensureDeferred(render(f, self, request))
         return server.NOT_DONE_YET
 
     return inner

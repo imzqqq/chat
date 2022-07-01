@@ -14,9 +14,9 @@
 # limitations under the License.
 
 import logging
-from typing import TYPE_CHECKING, Dict, List, Optional
+from typing import TYPE_CHECKING, Dict, Optional
 
-import phonenumbers  # type: ignore
+import phonenumbers
 
 from sydent.db.valsession import ThreePidValSessionStore
 from sydent.sms.openmarket import OpenMarketSMS
@@ -35,48 +35,14 @@ class MsisdnValidator:
         self.omSms = OpenMarketSMS(sydent)
 
         # cache originators & sms rules from config file
-        self.originators: Dict[str, List[Dict[str, str]]] = {}
-        self.smsRules = {}
-        for opt in self.sydent.cfg.options("sms"):
-            if opt.startswith("originators."):
-                country = opt.split(".")[1]
-                rawVal = self.sydent.cfg.get("sms", opt)
-                rawList = [i.strip() for i in rawVal.split(",")]
+        self.originators = self.sydent.config.sms.originators
+        self.smsRules = self.sydent.config.sms.smsRules
 
-                self.originators[country] = []
-                for origString in rawList:
-                    parts = origString.split(":")
-                    if len(parts) != 2:
-                        raise Exception(
-                            "Originators must be in form: long:<number>, short:<number> or alpha:<text>, separated by commas"
-                        )
-                    if parts[0] not in ["long", "short", "alpha"]:
-                        raise Exception(
-                            "Invalid originator type: valid types are long, short and alpha"
-                        )
-                    self.originators[country].append(
-                        {
-                            "type": parts[0],
-                            "text": parts[1],
-                        }
-                    )
-            elif opt.startswith("smsrule."):
-                country = opt.split(".")[1]
-                action = self.sydent.cfg.get("sms", opt)
-
-                if action not in ["allow", "reject"]:
-                    raise Exception(
-                        "Invalid SMS rule action: %s, expecting 'allow' or 'reject'"
-                        % action
-                    )
-
-                self.smsRules[country] = action
-
-    def requestToken(
+    async def requestToken(
         self,
         phoneNumber: phonenumbers.PhoneNumber,
         clientSecret: str,
-        sendAttempt: int,
+        send_attempt: int,
         brand: Optional[str] = None,
     ) -> int:
         """
@@ -85,7 +51,7 @@ class MsisdnValidator:
 
         :param phoneNumber: The phone number to send the email to.
         :param clientSecret: The client secret to use.
-        :param sendAttempt: The current send attempt.
+        :param send_attempt: The current send attempt.
         :param brand: A hint at a brand from the request.
 
         :return: The ID of the session created (or of the existing one if any)
@@ -101,36 +67,36 @@ class MsisdnValidator:
             phoneNumber, phonenumbers.PhoneNumberFormat.E164
         )[1:]
 
-        valSession = valSessionStore.getOrCreateTokenSession(
+        valSession, token_info = valSessionStore.getOrCreateTokenSession(
             medium="msisdn", address=msisdn, clientSecret=clientSecret
         )
 
         valSessionStore.setMtime(valSession.id, time_msec())
 
-        if int(valSession.sendAttemptNumber) >= int(sendAttempt):
+        if token_info.send_attempt_number >= send_attempt:
             logger.info(
                 "Not texting code because current send attempt (%d) is not less than given send attempt (%s)",
-                int(sendAttempt),
-                int(valSession.sendAttemptNumber),
+                send_attempt,
+                token_info.send_attempt_number,
             )
             return valSession.id
 
-        smsBodyTemplate = self.sydent.cfg.get("sms", "bodyTemplate")
+        smsBodyTemplate = self.sydent.config.sms.body_template
         originator = self.getOriginator(phoneNumber)
 
         logger.info(
             "Attempting to text code %s to %s (country %d) with originator %s",
-            valSession.token,
+            token_info.token,
             msisdn,
             phoneNumber.country_code,
             originator,
         )
 
-        smsBody = smsBodyTemplate.format(token=valSession.token)
+        smsBody = smsBodyTemplate.format(token=token_info.token)
 
-        self.omSms.sendTextSMS(smsBody, msisdn, originator)
+        await self.omSms.sendTextSMS(smsBody, msisdn, originator)
 
-        valSessionStore.setSendAttemptNumber(valSession.id, sendAttempt)
+        valSessionStore.setSendAttemptNumber(valSession.id, send_attempt)
 
         return valSession.id
 

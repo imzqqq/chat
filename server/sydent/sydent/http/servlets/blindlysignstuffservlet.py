@@ -36,7 +36,7 @@ class BlindlySignStuffServlet(Resource):
 
     def __init__(self, syd: "Sydent", require_auth: bool = False) -> None:
         self.sydent = syd
-        self.server_name = syd.server_name
+        self.server_name = syd.config.general.server_name
         self.tokenStore = JoinTokenStore(syd)
         self.require_auth = require_auth
 
@@ -66,7 +66,9 @@ class BlindlySignStuffServlet(Resource):
             private_key = signedjson.key.decode_signing_key_base64(
                 "ed25519", "0", private_key_base64
             )
-            signed = signedjson.sign.sign_json(to_sign, self.server_name, private_key)
+            signed: JsonDict = signedjson.sign.sign_json(
+                to_sign, self.server_name, private_key
+            )
         except Exception:
             logger.exception("signing failed")
             raise MatrixRestError(500, "M_UNKNOWN", "Internal Server Error")

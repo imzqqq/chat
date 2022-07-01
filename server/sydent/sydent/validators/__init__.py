@@ -12,33 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import attr
 
+# how long a user can wait before validating a session after starting it
+THREEPID_SESSION_VALIDATION_TIMEOUT_MS = 24 * 60 * 60 * 1000
+
+# how long we keep sessions for after they've been validated
+THREEPID_SESSION_VALID_LIFETIME_MS = 24 * 60 * 60 * 1000
+
+
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class ValidationSession:
-    # how long a user can wait before validating a session after starting it
-    THREEPID_SESSION_VALIDATION_TIMEOUT_MS = 24 * 60 * 60 * 1000
+    id: int
+    medium: str
+    address: str
+    client_secret: str
+    validated: bool
+    mtime: int
 
-    # how long we keep sessions for after they've been validated
-    THREEPID_SESSION_VALID_LIFETIME_MS = 24 * 60 * 60 * 1000
 
-    def __init__(
-        self,
-        _id,
-        _medium,
-        _address,
-        _clientSecret,
-        _validated,
-        _mtime,
-        _token,
-        _sendAttemptNumber,
-    ):
-        self.id = _id
-        self.medium = _medium
-        self.address = _address
-        self.clientSecret = _clientSecret
-        self.validated = _validated
-        self.mtime = _mtime
-        self.token = _token
-        self.sendAttemptNumber = _sendAttemptNumber
+@attr.s(frozen=True, slots=True, auto_attribs=True)
+class TokenInfo:
+    token: str
+    send_attempt_number: int
 
 
 class IncorrectClientSecretException(Exception):

@@ -57,13 +57,16 @@ class LookupServlet(Resource):
 
         globalAssocStore = GlobalAssociationStore(self.sydent)
 
-        sgassoc = globalAssocStore.signedAssociationStringForThreepid(medium, address)
+        sgassoc_raw = globalAssocStore.signedAssociationStringForThreepid(
+            medium, address
+        )
 
-        if not sgassoc:
+        if not sgassoc_raw:
             return {}
 
-        sgassoc = json_decoder.decode(sgassoc)
-        if self.sydent.server_name not in sgassoc["signatures"]:
+        # TODO validate this really is a dict
+        sgassoc: JsonDict = json_decoder.decode(sgassoc_raw)
+        if self.sydent.config.general.server_name not in sgassoc["signatures"]:
             # We have not yet worked out what the proper trust model should be.
             #
             # Maybe clients implicitly trust a server they talk to (and so we
@@ -82,7 +85,9 @@ class LookupServlet(Resource):
             # replication, so that we can undo this decision in the future if
             # we wish, without having destroyed the raw underlying data.
             sgassoc = signedjson.sign.sign_json(
-                sgassoc, self.sydent.server_name, self.sydent.keyring.ed25519
+                sgassoc,
+                self.sydent.config.general.server_name,
+                self.sydent.keyring.ed25519,
             )
         return sgassoc
 

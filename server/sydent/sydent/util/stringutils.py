@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import re
 from typing import Optional, Tuple
 
@@ -127,7 +128,7 @@ def is_valid_matrix_server_name(string: str) -> bool:
     return valid_ipv4_addr or valid_ipv6_literal or is_valid_hostname(host)
 
 
-def normalise_address(address, medium):
+def normalise_address(address: str, medium: str) -> str:
     if medium == "email":
         return address.casefold()
     else:

@@ -15,14 +15,17 @@
 import json
 import logging
 from io import BytesIO
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import TYPE_CHECKING, Optional
 
 from twisted.internet.defer import Deferred
+from twisted.internet.interfaces import IOpenSSLClientConnectionCreator
 from twisted.internet.ssl import optionsForClientTLS
-from twisted.web.client import Agent, FileBodyProducer
+from twisted.web.client import Agent, FileBodyProducer, Response
 from twisted.web.http_headers import Headers
 from twisted.web.iweb import IPolicyForHTTPS
 from zope.interface import implementer
+
+from sydent.types import JsonDict
 
 if TYPE_CHECKING:
     from sydent.sydent import Sydent
@@ -39,7 +42,7 @@ class ReplicationHttpsClient:
 
     def __init__(self, sydent: "Sydent") -> None:
         self.sydent = sydent
-        self.agent = None
+        self.agent: Optional[Agent] = None
 
         if self.sydent.sslComponents.myPrivateCertificate:
             # We will already have logged a warn if this is absent, so don't do it again
@@ -49,7 +52,9 @@ class ReplicationHttpsClient:
             #                                                      trustRoot=self.sydent.sslComponents.trustRoot)
             self.agent = Agent(self.sydent.reactor, SydentPolicyForHTTPS(self.sydent))
 
-    def postJson(self, uri: str, jsonObject: Dict[Any, Any]) -> Optional[Deferred]:
+    def postJson(
+        self, uri: str, jsonObject: JsonDict
+    ) -> Optional["Deferred[Response]"]:
         """
         Sends an POST request over HTTPS.
 
@@ -57,7 +62,6 @@ class ReplicationHttpsClient:
         :param jsonObject: The request's body.
 
         :return: The request's response.
-        :rtype: twisted.internet.defer.Deferred[twisted.web.iweb.IResponse]
         """
         logger.debug("POSTing request to %s", uri)
         if not self.agent:
@@ -81,7 +85,9 @@ class SydentPolicyForHTTPS:
     def __init__(self, sydent: "Sydent") -> None:
         self.sydent = sydent
 
-    def creatorForNetloc(self, hostname, port):
+    def creatorForNetloc(
+        self, hostname: bytes, port: int
+    ) -> IOpenSSLClientConnectionCreator:
         return optionsForClientTLS(
             hostname.decode("ascii"),
             trustRoot=self.sydent.sslComponents.trustRoot,

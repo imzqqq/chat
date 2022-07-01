@@ -21,7 +21,7 @@ from twisted.web.resource import Resource
 from twisted.web.server import Request
 
 from sydent.http.auth import authV2
-from sydent.http.servlets import get_args, jsonwrap, send_cors
+from sydent.http.servlets import asyncjsonwrap, get_args, jsonwrap, send_cors
 from sydent.types import JsonDict
 from sydent.util.stringutils import is_valid_client_secret
 from sydent.validators import (
@@ -45,8 +45,8 @@ class MsisdnRequestCodeServlet(Resource):
         self.sydent = syd
         self.require_auth = require_auth
 
-    @jsonwrap
-    def render_POST(self, request: Request) -> JsonDict:
+    @asyncjsonwrap
+    async def render_POST(self, request: Request) -> JsonDict:
         send_cors(request)
 
         if self.require_auth:
@@ -58,7 +58,16 @@ class MsisdnRequestCodeServlet(Resource):
 
         raw_phone_number = args["phone_number"]
         country = args["country"]
-        sendAttempt = args["send_attempt"]
+        try:
+            # See the comment handling `send_attempt` in emailservlet.py for
+            # more context.
+            sendAttempt = int(args["send_attempt"])
+        except (TypeError, ValueError):
+            request.setResponseCode(400)
+            return {
+                "errcode": "M_INVALID_PARAM",
+                "error": f"send_attempt should be an integer (got {args['send_attempt']}",
+            }
         clientSecret = args["client_secret"]
 
         if not is_valid_client_secret(clientSecret):
@@ -90,7 +99,7 @@ class MsisdnRequestCodeServlet(Resource):
 
         brand = self.sydent.brand_from_request(request)
         try:
-            sid = self.sydent.validators.msisdn.requestToken(
+            sid = await self.sydent.validators.msisdn.requestToken(
                 phone_number_object, clientSecret, sendAttempt, brand
             )
             resp = {
@@ -100,14 +109,14 @@ class MsisdnRequestCodeServlet(Resource):
                 "intl_fmt": intl_fmt,
             }
         except DestinationRejectedException:
-            logger.error("Destination rejected for number: %s", msisdn)
+            logger.warning("Destination rejected for number: %s", msisdn)
             request.setResponseCode(400)
             resp = {
                 "errcode": "M_DESTINATION_REJECTED",
                 "error": "Phone numbers in this country are not currently supported",
             }
-        except Exception as e:
-            logger.error("Exception sending SMS: %r", e)
+        except Exception:
+            logger.exception("Exception sending SMS")
             request.setResponseCode(500)
             resp = {"errcode": "M_UNKNOWN", "error": "Internal Server Error"}
 
@@ -128,27 +137,30 @@ class MsisdnValidateCodeServlet(Resource):
     def render_GET(self, request: Request) -> str:
         send_cors(request)
 
-        err, args = get_args(request, ("token", "sid", "client_secret"))
-        if err:
-            msg = "Verification failed: Your request was invalid."
+        args = get_args(request, ("token", "sid", "client_secret"))
+        resp = self.do_validate_request(request)
+        if "success" in resp and resp["success"]:
+            msg = "Verification successful! Please return to your Matrix client to continue."
+            if "next_link" in args:
+                next_link = args["next_link"]
+                request.setResponseCode(302)
+                request.setHeader("Location", next_link)
         else:
-            resp = self.do_validate_request(args)
-            if "success" in resp and resp["success"]:
-                msg = "Verification successful! Please return to your Matrix client to continue."
-                if "next_link" in args:
-                    next_link = args["next_link"]
-                    request.setResponseCode(302)
-                    request.setHeader("Location", next_link)
-            else:
-                request.setResponseCode(400)
-                msg = "Verification failed: you may need to request another verification text"
+            request.setResponseCode(400)
+            msg = (
+                "Verification failed: you may need to request another verification text"
+            )
 
         brand = self.sydent.brand_from_request(request)
-        templateFile = self.sydent.get_branded_template(
-            brand,
-            "verify_response_template.html",
-            ("http", "verify_response_template"),
-        )
+
+        # self.sydent.config.http.verify_response_template is deprecated
+        if self.sydent.config.http.verify_response_template is None:
+            templateFile = self.sydent.get_branded_template(
+                brand,
+                "verify_response_template.html",
+            )
+        else:
+            templateFile = self.sydent.config.http.verify_response_template
 
         request.setHeader("Content-Type", "text/html")
         return open(templateFile).read() % {"message": msg}

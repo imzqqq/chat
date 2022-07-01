@@ -16,9 +16,9 @@
 import collections
 import logging
 import math
-from typing import TYPE_CHECKING, Any, Dict, Union, cast
+from typing import TYPE_CHECKING, Any, Dict, Union
 
-import signedjson.sign  # type: ignore
+import signedjson.sign
 from twisted.internet import defer
 
 from sydent.db.hashing_metadata import HashingMetadataStore
@@ -70,8 +70,10 @@ class ThreepidBinder:
 
         # Hash the medium + address and store that hash for the purposes of
         # later lookups
+        lookup_pepper = self.hashing_store.get_lookup_pepper()
+        assert lookup_pepper is not None
         str_to_hash = " ".join(
-            [normalised_address, medium, self.hashing_store.get_lookup_pepper()],
+            [normalised_address, medium, lookup_pepper],
         )
         lookup_hash = sha256_and_url_safe_base64(str_to_hash)
 
@@ -92,14 +94,19 @@ class ThreepidBinder:
         joinTokenStore = JoinTokenStore(self.sydent)
         pendingJoinTokens = joinTokenStore.getTokens(medium, normalised_address)
         invites = []
+        # Widen the value type to Any: we're going to set the signed key
+        # to point to a dict, but pendingJoinTokens yields Dict[str, str]
+        token: Dict[str, Any]
         for token in pendingJoinTokens:
             token["mxid"] = mxid
-            token["signed"] = {
+            presigned = {
                 "mxid": mxid,
-                "token": cast(str, token["token"]),
+                "token": token["token"],
             }
             token["signed"] = signedjson.sign.sign_json(
-                token["signed"], self.sydent.server_name, self.sydent.keyring.ed25519
+                presigned,
+                self.sydent.config.general.server_name,
+                self.sydent.keyring.ed25519,
             )
             invites.append(token)
         if invites:
@@ -122,7 +129,7 @@ class ThreepidBinder:
         """
 
         # ensure we are casefolding email addresses
-        threepid["address"] = normalise_address(threepid["address"], threepid["email"])
+        threepid["address"] = normalise_address(threepid["address"], threepid["medium"])
 
         localAssocStore = LocalAssociationStore(self.sydent)
         localAssocStore.removeAssociation(threepid, mxid)
@@ -155,7 +162,7 @@ class ThreepidBinder:
             )
             return
 
-        post_url = "matrix://%s/chat/federation/v1/3pid/onbind" % (matrix_server,)
+        post_url = "matrix://%s/_matrix/federation/v1/3pid/onbind" % (matrix_server,)
 
         logger.info("Making bind callback to: %s", post_url)
 
@@ -176,7 +183,7 @@ class ThreepidBinder:
             logger.info("Successfully notified on bind for %s" % (mxid,))
 
             # Skip the deletion step if instructed so by the config.
-            if not self.sydent.delete_tokens_on_bind:
+            if not self.sydent.config.general.delete_tokens_on_bind:
                 return
 
             # Only remove sent tokens when they've been successfully sent.

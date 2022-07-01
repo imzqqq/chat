@@ -15,7 +15,9 @@
 # Actions on the hashing_metadata table which is defined in the migration process in
 # sqlitedb.py
 from sqlite3 import Cursor
-from typing import TYPE_CHECKING, Callable, Optional
+from typing import TYPE_CHECKING, Callable, List, Optional, Tuple
+
+from typing_extensions import Literal
 
 if TYPE_CHECKING:
     from sydent.sydent import Sydent
@@ -24,6 +26,7 @@ if TYPE_CHECKING:
 class HashingMetadataStore:
     def __init__(self, sydent: "Sydent") -> None:
         self.sydent = sydent
+        self._cached_lookup_pepper: Optional[str] = None
 
     def get_lookup_pepper(self) -> Optional[str]:
         """Return the value of the current lookup pepper from the db
@@ -31,9 +34,19 @@ class HashingMetadataStore:
         :return: A pepper if it exists in the database, or None if one does
                  not exist
         """
+
+        if self._cached_lookup_pepper is not None:
+            return self._cached_lookup_pepper
+
         cur = self.sydent.db.cursor()
         res = cur.execute("select lookup_pepper from hashing_metadata")
-        row = res.fetchone()
+        # Annotation safety: lookup_pepper is marked as varchar(256) in the
+        # schema, so could be null. I.e. `row` should strictly be
+        # Optional[Tuple[Optional[str]].
+        # But I think the application code is such that either
+        #  - hashing_metadata contains no rows
+        #  - or it contains exactly one row with a nonnull lookup_pepper.
+        row: Optional[Tuple[str]] = res.fetchone()
 
         if not row:
             return None
@@ -43,6 +56,8 @@ class HashingMetadataStore:
         # Ensure we're dealing with unicode.
         if isinstance(pepper, bytes):
             pepper = pepper.decode("UTF-8")
+
+        self._cached_lookup_pepper = pepper
 
         return pepper
 
@@ -76,12 +91,15 @@ class HashingMetadataStore:
         # Commit the queued db transactions so that adding a new pepper and hashing is atomic
         self.sydent.db.commit()
 
+        # Update the cached pepper (only once the transaction has committed successfully!)
+        self._cached_lookup_pepper = pepper
+
     def _rehash_threepids(
         self,
         cur: Cursor,
         hashing_function: Callable[[str], str],
         pepper: str,
-        table: str,
+        table: Literal["local_threepid_associations", "global_threepid_associations"],
     ) -> None:
         """Rehash 3PIDs of a given table using a given hashing_function and pepper
 
@@ -90,24 +108,17 @@ class HashingMetadataStore:
         the made changes to the database.
 
         :param cur: Database cursor
-        :type cur:
-
         :param hashing_function: A function with single input and output strings
-        :type hashing_function func(str) -> str
-
         :param pepper: A pepper to append to the end of the 3PID (after a space) before hashing
-        :type pepper: str
-
         :param table: The database table to perform the rehashing on
-        :type table: str
         """
 
         # Get count of all 3PID records
         # Medium/address combos are marked as UNIQUE in the database
         sql = "SELECT COUNT(*) FROM %s" % table
         res = cur.execute(sql)
-        row_count = res.fetchone()
-        row_count = row_count[0]
+        row: Tuple[int] = res.fetchone()
+        row_count = row[0]
 
         # Iterate through each medium, address combo, hash it,
         # and store in the db
@@ -120,7 +131,7 @@ class HashingMetadataStore:
                 count,
             )
             res = cur.execute(sql)
-            rows = res.fetchall()
+            rows: List[Tuple[str, str]] = res.fetchall()
 
             for medium, address in rows:
                 # Skip broken db entry

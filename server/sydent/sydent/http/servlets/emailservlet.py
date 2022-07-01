@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from twisted.web.resource import Resource
 from twisted.web.server import Request
@@ -50,8 +50,28 @@ class EmailRequestCodeServlet(Resource):
         args = get_args(request, ("email", "client_secret", "send_attempt"))
 
         email = args["email"]
-        sendAttempt = args["send_attempt"]
         clientSecret = args["client_secret"]
+
+        try:
+            # if we got this via the v1 API in a querystring or urlencoded body,
+            # then the values in args will be a string. So check that
+            # send_attempt is an int.
+            #
+            # NB: We don't check if we're processing a url-encoded v1 request.
+            # This means we accept string representations of integers for
+            # `send_attempt` in v2 requests, and in v1 requests that supply a
+            # JSON body. This is contrary to the spec and leaves me with a dirty
+            # feeling I can't quite shake off.
+            #
+            # Where's Raymond Hettinger when you need him? (THUMP) There must be
+            # a better way!
+            sendAttempt = int(args["send_attempt"])
+        except (TypeError, ValueError):
+            request.setResponseCode(400)
+            return {
+                "errcode": "M_INVALID_PARAM",
+                "error": f"send_attempt should be an integer (got {args['send_attempt']}",
+            }
 
         if not is_valid_client_secret(clientSecret):
             request.setResponseCode(400)
@@ -67,7 +87,7 @@ class EmailRequestCodeServlet(Resource):
         ipaddress = self.sydent.ip_from_request(request)
         brand = self.sydent.brand_from_request(request)
 
-        nextLink = None
+        nextLink: Optional[str] = None
         if "next_link" in args and not args["next_link"].startswith("file:///"):
             nextLink = args["next_link"]
 
@@ -121,11 +141,15 @@ class EmailValidateCodeServlet(Resource):
             msg = "Verification failed: you may need to request another verification email"
 
         brand = self.sydent.brand_from_request(request)
-        templateFile = self.sydent.get_branded_template(
-            brand,
-            "verify_response_template.html",
-            ("http", "verify_response_template"),
-        )
+
+        # self.sydent.config.http.verify_response_template is deprecated
+        if self.sydent.config.http.verify_response_template is None:
+            templateFile = self.sydent.get_branded_template(
+                brand,
+                "verify_response_template.html",
+            )
+        else:
+            templateFile = self.sydent.config.http.verify_response_template
 
         request.setHeader("Content-Type", "text/html")
         res = open(templateFile).read() % {"message": msg}

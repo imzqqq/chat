@@ -22,6 +22,11 @@ from sydent.util import time_msec
 if TYPE_CHECKING:
     from sydent.sydent import Sydent
 
+# Key: id from associations db table
+# Value: an association dict. Roughly speaking, a signed
+# version of sydent.db.TheepidAssociation.
+SignedAssociations = Dict[int, Dict[str, Any]]
+
 
 logger = logging.getLogger(__name__)
 
@@ -90,6 +95,16 @@ class LocalAssociationStore:
         maxId = None
 
         assocs = {}
+        row: Tuple[
+            int,
+            str,
+            str,
+            Optional[str],
+            Optional[str],
+            Optional[int],
+            Optional[int],
+            Optional[int],
+        ]
         for row in res.fetchall():
             assoc = ThreepidAssociation(
                 row[1], row[2], row[3], row[4], row[5], row[6], row[7]
@@ -101,7 +116,7 @@ class LocalAssociationStore:
 
     def getSignedAssociationsAfterId(
         self, afterId: Optional[int], limit: Optional[int] = None
-    ) -> Tuple[Dict[int, Dict[str, Any]], Optional[int]]:
+    ) -> Tuple[SignedAssociations, Optional[int]]:
         """Get associations after a given ID, and sign them before returning
 
         :param afterId: The ID to return results after (not inclusive)
@@ -147,7 +162,7 @@ class LocalAssociationStore:
             "WHERE medium = ? AND address = ? AND mxid = ?",
             (threepid["medium"], threepid["address"], mxid),
         )
-        row = cur.fetchone()
+        row: Tuple[int] = cur.fetchone()
         if row[0] > 0:
             ts = time_msec()
             cur.execute(
@@ -205,7 +220,7 @@ class GlobalAssociationStore:
             (medium, address, time_msec(), time_msec()),
         )
 
-        row = res.fetchone()
+        row: Optional[Tuple[str]] = res.fetchone()
 
         if not row:
             return None
@@ -233,7 +248,7 @@ class GlobalAssociationStore:
             (medium, normalised_address, time_msec(), time_msec()),
         )
 
-        row = res.fetchone()
+        row: Tuple[Optional[str]] = res.fetchone()
 
         if not row:
             return None
@@ -281,6 +296,7 @@ class GlobalAssociationStore:
 
             results = []
             current = None
+            row: Tuple[str, str, int, str]
             for row in res.fetchall():
                 # only use the most recent entry for each
                 # threepid (they're sorted by ts)
@@ -297,7 +313,7 @@ class GlobalAssociationStore:
     def addAssociation(
         self,
         assoc: ThreepidAssociation,
-        rawSgAssoc: Dict[str, Any],
+        rawSgAssoc: str,
         originServer: str,
         originId: int,
         commit: bool = True,
@@ -308,7 +324,7 @@ class GlobalAssociationStore:
         this function.
 
         :param assoc: The association to add as a high level object.
-        :param rawSgAssoc: The original raw bytes of the signed association.
+        :param rawSgAssoc: The original raw text of the signed association.
         :param originServer: The name of the server the association was created on.
         :param originId: The ID of the association on the server the association was
             created on.
@@ -352,7 +368,7 @@ class GlobalAssociationStore:
             "where originServer = ?",
             (server,),
         )
-        row = res.fetchone()
+        row: Tuple[int, int] = res.fetchone()
 
         if row[1] == 0:
             return None
@@ -429,6 +445,15 @@ class GlobalAssociationStore:
             # Place the results from the query into a dictionary
             # Results are sorted from oldest to newest, so if there are multiple mxid's for
             # the same lookup hash, only the newest mapping will be returned
+
+            # Type safety: lookup_hash is a nullable string in
+            # global_threepid_associations. But it must be equal to a lookup_hash
+            # in the temporary table thanks to the join condition.
+            # The temporary table gets hashes from the `addresses` argument,
+            # which is a list of (non-None) strings.
+            # So lookup_hash really is a str.
+            lookup_hash: str
+            mxid: str
             for lookup_hash, mxid in res.fetchall():
                 results[lookup_hash] = mxid
 

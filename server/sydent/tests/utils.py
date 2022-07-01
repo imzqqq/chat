@@ -2,7 +2,7 @@ import json
 import logging
 import os
 from io import BytesIO
-from typing import Dict
+from typing import Dict, Optional
 from unittest.mock import MagicMock
 
 import attr
@@ -23,7 +23,8 @@ from twisted.web.http_headers import Headers
 from twisted.web.server import Request, Site
 from zope.interface import implementer
 
-from sydent.sydent import Sydent, parse_config_dict
+from sydent.config import SydentConfig
+from sydent.sydent import Sydent
 
 # Expires on Jan 11 2030 at 17:53:40 GMT
 FAKE_SERVER_CERT_PEM = """
@@ -52,25 +53,43 @@ tWVEpHfT+G7AjA8=
 """
 
 
-def make_sydent(test_config={}):
+def make_sydent(test_config: Optional[dict] = None) -> Sydent:
     """Create a new sydent
 
     Args:
-        test_config (dict): any configuration variables for overriding the default sydent
+        test_config: Configuration variables for overriding the default sydent
             config
     """
+    if test_config is None:
+        test_config = {}
+
     # Use an in-memory SQLite database. Note that the database isn't cleaned up between
     # tests, so by default the same database will be used for each test if changed to be
     # a file on disk.
-    if "db" not in test_config:
-        test_config["db"] = {"db.file": ":memory:"}
-    else:
-        test_config["db"].setdefault("db.file", ":memory:")
+    test_config.setdefault("db", {}).setdefault("db.file", ":memory:")
+
+    # Specify a server name to avoid warnings.
+    general_config = test_config.setdefault("general", {})
+    general_config.setdefault("server.name", ":test:")
+    # Specify the default templates.
+    general_config.setdefault(
+        "templates.path",
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), "res"),
+    )
+
+    # Specify a signing key.
+    test_config.setdefault("crypto", {}).setdefault(
+        "ed25519.signingkey", "ed25519 0 FJi1Rnpj3/otydngacrwddFvwz/dTDsBv62uZDN2fZM"
+    )
 
     reactor = ResolvingMemoryReactorClock()
+
+    sydent_config = SydentConfig()
+    sydent_config.parse_config_dict(test_config)
+
     return Sydent(
         reactor=reactor,
-        cfg=parse_config_dict(test_config),
+        sydent_config=sydent_config,
         use_tls_for_federation=False,
     )
 
@@ -205,8 +224,8 @@ def make_request(
         path = path.encode("ascii")
 
     # Decorate it to be the full path, if we're using shorthand
-    if shorthand and not path.startswith(b"/chat"):
-        path = b"/chat/identity/v2/" + path
+    if shorthand and not path.startswith(b"/_matrix"):
+        path = b"/_matrix/identity/v2/" + path
         path = path.replace(b"//", b"/")
 
     if not path.startswith(b"/"):

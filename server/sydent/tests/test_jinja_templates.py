@@ -25,14 +25,7 @@ from tests.utils import make_sydent
 class TestTemplate(unittest.TestCase):
     def setUp(self):
         # Create a new sydent
-        config = {
-            "general": {
-                "templates.path": os.path.join(
-                    os.path.dirname(os.path.dirname(__file__)), "res"
-                ),
-            },
-        }
-        self.sydent = make_sydent(test_config=config)
+        self.sydent = make_sydent()
 
     def test_jinja_vector_invite(self):
         substitutions = {
@@ -54,11 +47,14 @@ class TestTemplate(unittest.TestCase):
             "room_type": "",
         }
 
-        templateFile = self.sydent.get_branded_template(
-            "vector-im",
-            "invite_template.eml",
-            ("email", "email.invite_template"),
-        )
+        # self.sydent.config.email.invite_template is deprecated
+        if self.sydent.config.email.invite_template is None:
+            templateFile = self.sydent.get_branded_template(
+                "vector-im",
+                "invite_template.eml",
+            )
+        else:
+            templateFile = self.sydent.config.email.invite_template
 
         with patch("sydent.util.emailutils.smtplib") as smtplib:
             sendEmail(self.sydent, templateFile, "test@test.com", substitutions)
@@ -117,11 +113,14 @@ class TestTemplate(unittest.TestCase):
             "room_type": "",
         }
 
-        templateFile = self.sydent.get_branded_template(
-            "matrix-org",
-            "invite_template.eml",
-            ("email", "email.invite_template"),
-        )
+        # self.sydent.config.email.invite_template is deprecated
+        if self.sydent.config.email.invite_template is None:
+            templateFile = self.sydent.get_branded_template(
+                "matrix-org",
+                "invite_template.eml",
+            )
+        else:
+            templateFile = self.sydent.config.email.invite_template
 
         with patch("sydent.util.emailutils.smtplib") as smtplib:
             sendEmail(self.sydent, templateFile, "test@test.com", substitutions)
@@ -172,7 +171,6 @@ class TestTemplate(unittest.TestCase):
         templateFile = self.sydent.get_branded_template(
             "matrix-org",
             "verification_template.eml",
-            ("email", "email.verification_template"),
         )
 
         with patch("sydent.util.emailutils.smtplib") as smtplib:
@@ -202,7 +200,6 @@ class TestTemplate(unittest.TestCase):
         templateFile = self.sydent.get_branded_template(
             "vector-im",
             "verification_template.eml",
-            ("email", "email.verification_template"),
         )
 
         with patch("sydent.util.emailutils.smtplib") as smtplib:
@@ -212,7 +209,7 @@ class TestTemplate(unittest.TestCase):
         email_contents = smtp.sendmail.call_args[0][2].decode("utf-8")
 
         path = os.path.join(
-            self.sydent.cfg.get("general", "templates.path"),
+            self.sydent.config.general.templates_path,
             "vector_verification_sample.txt",
         )
 

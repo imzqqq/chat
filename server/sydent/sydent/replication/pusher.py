@@ -14,7 +14,7 @@
 # limitations under the License.
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Tuple
 
 import twisted.internet.reactor
 import twisted.internet.task
@@ -41,7 +41,7 @@ class Pusher:
         self.peerStore = PeerStore(self.sydent)
         self.local_assoc_store = LocalAssociationStore(self.sydent)
 
-    def setup(self):
+    def setup(self) -> None:
         cb = twisted.internet.task.LoopingCall(Pusher.scheduledPush, self)
         cb.clock = self.sydent.reactor
         cb.start(10.0)
@@ -62,12 +62,11 @@ class Pusher:
 
         localPeer.pushUpdates(signedAssocs)
 
-    def scheduledPush(self):
+    def scheduledPush(self) -> "defer.Deferred[List[Tuple[bool, None]]]":
         """Push pending updates to all known remote peers. To be called regularly.
 
         :returns a deferred.DeferredList of defers, one per peer we're pushing to that will
         resolve when pushing to that peer has completed, successfully or otherwise
-        :rtype deferred.DeferredList
         """
         peers = self.peerStore.getAllPeers()
 
@@ -89,7 +88,9 @@ class Pusher:
 
         # Check if a push operation is already active. If so, don't start another
         if p.is_being_pushed_to:
-            logger.debug("Waiting for %s:%d to finish pushing...", p.servername, p.port)
+            logger.debug(
+                "Waiting for %s to finish pushing...", p.replication_url_origin
+            )
             return
 
         p.is_being_pushed_to = True
@@ -108,23 +109,22 @@ class Pusher:
                 return
 
             logger.info(
-                "Pushing %d updates to %s:%d", len(assocs), p.servername, p.port
+                "Pushing %d updates to %s", len(assocs), p.replication_url_origin
             )
             result = await p.pushUpdates(assocs)
 
-            await self.peerStore.setLastSentVersionAndPokeSucceeded(
+            self.peerStore.setLastSentVersionAndPokeSucceeded(
                 p.servername, latest_assoc_id, time_msec()
             )
 
             logger.info(
-                "Pushed updates to %s:%d with result %d %s",
-                p.servername,
-                p.port,
+                "Pushed updates to %s with result %d %s",
+                p.replication_url_origin,
                 result.code,
                 result.phrase,
             )
         except Exception:
-            logger.exception("Error pushing updates to %s:%d", p.servername, p.port)
+            logger.exception("Error pushing updates to %s", p.replication_url_origin)
         finally:
             # Whether pushing completed or an error occurred, signal that pushing has finished
             p.is_being_pushed_to = False
