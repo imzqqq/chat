@@ -1,1 +1,0 @@
-Mark `messages` as a required JSON body field in `PUT /chat/client/r0/sendToDevice/{eventType}/{txnId}` calls.

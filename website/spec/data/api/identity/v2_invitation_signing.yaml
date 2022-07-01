@@ -1,5 +1,5 @@
 # Copyright 2018 New Vector Ltd
-# Copyright 2019 The Chat.org Foundation C.I.C.
+# Copyright 2019 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Identity Service Ephemeral Invitation Signing API"
+  title: "Matrix Identity Service Ephemeral Invitation Signing API"
   version: "2.0.0"
 host: localhost:8090
 schemes:
   - https
-basePath: /chat/identity/v2
+basePath: /_matrix/identity/v2
 consumes:
   - application/json
 produces:
@@ -51,7 +51,7 @@ paths:
             properties:
               mxid:
                 type: string
-                description: The Chat user ID of the user accepting the invitation.
+                description: The Matrix user ID of the user accepting the invitation.
               token:
                 type: string
                 description: The token from the call to `store-invite`.
@@ -67,10 +67,10 @@ paths:
             properties:
               mxid:
                 type: string
-                description: The Chat user ID of the user accepting the invitation.
+                description: The Matrix user ID of the user accepting the invitation.
               sender:
                 type: string
-                description: The Chat user ID of the user who sent the invitation.
+                description: The Matrix user ID of the user who sent the invitation.
               signatures:
                 type: object
                 description: The signature of the mxid, sender, and token.

@@ -15,12 +15,12 @@
 
 swagger: '2.0'
 info:
-  title: "Chat Federation OpenID API"
+  title: "Matrix Federation OpenID API"
   version: "1.0.0"
-host: localhost:8880
+host: localhost:8448
 schemes:
   - https
-basePath: /chat/federation/v1
+basePath: /_matrix/federation/v1
 produces:
   - application/json
 paths:
@@ -29,7 +29,7 @@ paths:
       summary: Exchange an OpenID token for user information
       description: |-
         Exchanges an OpenID access token for information about the user
-        who generated the token. Currently this only exposes the Chat
+        who generated the token. Currently this only exposes the Matrix
         User ID of the owner.
       operationId: exchangeOpenIdToken
       parameters:
@@ -49,7 +49,7 @@ paths:
             properties:
               sub:
                 type: string
-                description: The Chat User ID who generated the token.
+                description: The Matrix User ID who generated the token.
                 example: "@alice:example.com"
             required: ['sub']
         401:

@@ -1,18 +1,17 @@
 ---
 type: module
-weight: 100
 ---
 
 ### End-to-End Encryption
 
-Chat optionally supports end-to-end encryption, allowing rooms to be
+Matrix optionally supports end-to-end encryption, allowing rooms to be
 created whose conversation contents are not decryptable or interceptable
 on any of the participating homeservers.
 
 #### Key Distribution
 
-Encryption and Authentication in Chat is based around public-key
-cryptography. The Chat protocol provides a basic mechanism for
+Encryption and Authentication in Matrix is based around public-key
+cryptography. The Matrix protocol provides a basic mechanism for
 exchange of public keys, though an out-of-band channel is required to
 exchange fingerprints between users to build a web of trust.
 
@@ -118,8 +117,12 @@ must include the public part of the device's Ed25519 key, and must be
 signed by that key, as described in [Signing
 JSON](/appendices/#signing-json).
 
-One-time keys are also uploaded to the homeserver using the
+One-time and fallback keys are also uploaded to the homeserver using the
 [`/keys/upload`](/client-server-api/#post_matrixclientv3keysupload) API.
+
+{{% added-in v="1.2" %}} Fallback keys are similar to one-time keys, but
+are not consumed once used. They are only used when the device has run out
+of one-time keys, and can be replaced by a new fallback key.
 
 Devices must store the private part of each key they upload. They can
 discard the private part of a one-time key when they receive a message
@@ -128,6 +131,24 @@ homeserver will never be used, so the device that generates the key will
 never know that it can discard the key. Therefore a device could end up
 trying to store too many private keys. A device that is trying to store
 too many private keys may discard keys starting with the oldest.
+
+{{% boxes/warning %}}
+Fallback keys are used to prevent one-time key exhaustion when devices
+are offline/unable to upload additional keys, though sessions started using
+fallback keys could be vulnerable to replay attacks.
+{{% /boxes/warning %}}
+
+{{% boxes/warning %}}
+Clients should not store the private half of fallback keys indefinitely
+to avoid situations where attackers can decrypt past messages sent using
+that fallback key.
+
+Instead, clients should keep the private keys for at most 2 fallback keys:
+the current, unused, fallback key and the key immediately preceding it.
+Once the client is reasonably certain it has received all messages that
+used the old fallback key, such as after an hour since the first message,
+it should remove that fallback key.
+{{% /boxes/warning %}}
 
 ##### Tracking the device list for a user
 
@@ -345,15 +366,20 @@ A homeserver should rate-limit the number of one-time keys that a given
 user or remote server can claim. A homeserver should discard the public
 part of a one time key once it has given that key to another user.
 
+{{% added-in v="1.2" %}} If the device has run out of one-time keys which
+can be claimed, the homeserver will return the fallback key (if one was
+uploaded). Fallback keys are not deleted once used and should be replaced
+by the device when they are able to upload more one-time keys.
+
 #### Device verification
 
 Before Alice sends Bob encrypted data, or trusts data received from him,
 she may want to verify that she is actually communicating with him,
 rather than a man-in-the-middle. This verification process requires an
-out-of-band channel: there is no way to do it within Chat without
+out-of-band channel: there is no way to do it within Matrix without
 trusting the administrators of the homeservers.
 
-In Chat, verification works by Alice meeting Bob in person, or
+In Matrix, verification works by Alice meeting Bob in person, or
 contacting him via some other trusted medium, and using one of the
 verification methods defined below to interactively verify Bob's devices.
 Alice and Bob may also read aloud their unpadded base64 encoded Ed25519
@@ -379,7 +405,7 @@ Once the signing key has been verified, it is then up to the encryption
 protocol to verify that a given message was sent from a device holding
 that Ed25519 private key, or to encrypt a message so that it may only be
 decrypted by such a device. For the Olm protocol, this is documented at
-<https://chat.imzqqq.top/docs/olm_signing.html>.
+<https://matrix.org/docs/olm_signing.html>.
 {{% /boxes/note %}}
 
 ##### Key verification framework
@@ -728,14 +754,14 @@ supplied as the input keying material. No salt is used. When the
 is the concatenation of:
 
 -   The string `MATRIX_KEY_VERIFICATION_SAS|`.
--   The Chat ID of the user who sent the `m.key.verification.start`
+-   The Matrix ID of the user who sent the `m.key.verification.start`
     message, followed by `|`.
 -   The Device ID of the device which sent the
     `m.key.verification.start` message, followed by `|`.
 -   The public key from the `m.key.verification.key` message sent by
     the device which sent the `m.key.verification.start` message,
     followed by `|`.
--   The Chat ID of the user who sent the `m.key.verification.accept`
+-   The Matrix ID of the user who sent the `m.key.verification.accept`
     message, followed by `|`.
 -   The Device ID of the device which sent the
     `m.key.verification.accept` message, followed by `|`.
@@ -748,11 +774,11 @@ When the `key_agreement_protocol` is the deprecated method `curve25519`,
 the info parameter is the concatenation of:
 
 -   The string `MATRIX_KEY_VERIFICATION_SAS`.
--   The Chat ID of the user who sent the `m.key.verification.start`
+-   The Matrix ID of the user who sent the `m.key.verification.start`
     message.
 -   The Device ID of the device which sent the
     `m.key.verification.start` message.
--   The Chat ID of the user who sent the `m.key.verification.accept`
+-   The Matrix ID of the user who sent the `m.key.verification.accept`
     message.
 -   The Device ID of the device which sent the
     `m.key.verification.accept` message.
@@ -772,9 +798,9 @@ supplied as the input keying material. No salt is used, and in the info
 parameter is the concatenation of:
 
 -   The string `MATRIX_KEY_VERIFICATION_MAC`.
--   The Chat ID of the user whose key is being MAC-ed.
+-   The Matrix ID of the user whose key is being MAC-ed.
 -   The Device ID of the device sending the MAC.
--   The Chat ID of the other user.
+-   The Matrix ID of the other user.
 -   The Device ID of the device receiving the MAC.
 -   The `transaction_id` being used.
 -   The Key ID of the key being MAC-ed, or the string `KEY_IDS` if the
@@ -860,11 +886,11 @@ key, then Alice's device can trust Bob's master key, and she can sign it
 with her user-signing key.
 
 Users upload their cross-signing keys to the server using [POST
-/\chat/client/r0/keys/device\_signing/upload](/client-server-api/#post_matrixclientv3keysdevice_signingupload). When Alice uploads
+/\_matrix/client/v3/keys/device\_signing/upload](/client-server-api/#post_matrixclientv3keysdevice_signingupload). When Alice uploads
 new cross-signing keys, her user ID will appear in the `changed`
 property of the `device_lists` field of the `/sync` of response of all
 users who share an encrypted room with her. When Bob sees Alice's user
-ID in his `/sync`, he will call [POST /\chat/client/r0/keys/query](/client-server-api/#post_matrixclientv3keysquery)
+ID in his `/sync`, he will call [POST /\_matrix/client/v3/keys/query](/client-server-api/#post_matrixclientv3keysquery)
 to retrieve Alice's device and cross-signing keys.
 
 If Alice has a device and wishes to send an encrypted message to Bob,
@@ -1145,7 +1171,7 @@ originally sent the key request to; a device that receives a
 `request` message with the same `request_id` and `requesting_device_id`.
 
 If a device does not wish to share keys with that device, it can
-indicate this by sending an [m.room\_key.withheld](#mroom_key.withheld) to-device message,
+indicate this by sending an [m.room\_key.withheld](#mroom_keywithheld) to-device message,
 as described in [Reporting that decryption keys are
 withheld](#reporting-that-decryption-keys-are-withheld).
 
@@ -1168,17 +1194,17 @@ However, as the session keys are stored on the server encrypted, it
 requires users to enter a decryption key to decrypt the session keys.
 
 To create a backup, a client will call [POST
-/\chat/client/r0/room\_keys/version](#post_matrixclientv3room_keysversion) and define how the keys are to
+/\_matrix/client/v3/room\_keys/version](#post_matrixclientv3room_keysversion) and define how the keys are to
 be encrypted through the backup's `auth_data`; other clients can
 discover the backup by calling [GET
-/\chat/client/r0/room\_keys/version](#get_matrixclientv3room_keysversion). Keys are encrypted according
+/\_matrix/client/v3/room\_keys/version](#get_matrixclientv3room_keysversion). Keys are encrypted according
 to the backup's `auth_data` and added to the backup by calling [PUT
-/\chat/client/r0/room\_keys/keys](#put_matrixclientv3room_keyskeys) or one of its variants, and can
-be retrieved by calling [GET /\chat/client/r0/room\_keys/keys](#get_matrixclientv3room_keyskeys) or
+/\_matrix/client/v3/room\_keys/keys](#put_matrixclientv3room_keyskeys) or one of its variants, and can
+be retrieved by calling [GET /\_matrix/client/v3/room\_keys/keys](#get_matrixclientv3room_keyskeys) or
 one of its variants. Keys can only be written to the most recently
 created version of the backup. Backups can also be deleted using [DELETE
-/\chat/client/r0/room\_keys/version/{version}](#delete_matrixclientv3room_keysversionversion), or individual keys
-can be deleted using [DELETE /\chat/client/r0/room\_keys/keys](#delete_matrixclientv3room_keyskeys) or
+/\_matrix/client/v3/room\_keys/version/{version}](#delete_matrixclientv3room_keysversionversion), or individual keys
+can be deleted using [DELETE /\_matrix/client/v3/room\_keys/keys](#delete_matrixclientv3room_keyskeys) or
 one of its variants.
 
 Clients must only store keys in backups after they have ensured that the
@@ -1247,7 +1273,7 @@ The `session_data` field in the backups is constructed as follows:
 | forwarding_curve25519_key_chain | [string]          | **Required.** Chain of Curve25519 keys through which this session was forwarded, via [m.forwarded_room_key](#mforwarded_room_key) events.                                   |
 | sender_key                      | string            | **Required.** Unpadded base64-encoded device curve25519 key.                                                                                                                |
 | sender_claimed_keys             | {string: string}  | **Required.** A map from algorithm name (`ed25519`) to the identity key for the sending device.                                                                             |
-| session_key                     | string            | **Required.** Unpadded base64-encoded session key in [session-sharing format](https://gitlab.chat.imzqqq.top/matrix-org/olm/blob/master/docs/megolm.md#session-sharing-format).  |
+| session_key                     | string            | **Required.** Unpadded base64-encoded session key in [session-sharing format](https://gitlab.matrix.org/matrix-org/olm/blob/master/docs/megolm.md#session-sharing-format).  |
 
 2.  Generate an ephemeral curve25519 key, and perform an ECDH with the
     ephemeral key and the backup's public key to generate a shared
@@ -1381,7 +1407,7 @@ readers without adding any useful extra information.
 
 The name `m.olm.v1.curve25519-aes-sha2` corresponds to version 1 of the
 Olm ratchet, as defined by the [Olm
-specification](http://chat.api-spec.imzqqq.top/olm.html). This uses:
+specification](http://matrix.org/docs/spec/olm.html). This uses:
 
 -   Curve25519 for the initial key agreement.
 -   HKDF-SHA-256 for ratchet key derivation.
@@ -1461,11 +1487,11 @@ user, and `recipient_keys` to the local ed25519 key.
 
 Clients must confirm that the `sender_key` and the `ed25519` field value
 under the `keys` property match the keys returned by [`/keys/query`](/client-server-api/#post_matrixclientv3keysquery) for
-the given user, and must also verify the signature of the payload.
-Without this check, a client cannot be sure that the sender device owns
-the private part of the ed25519 key it claims to have in the Olm
-payload. This is crucial when the ed25519 key corresponds to a verified
-device.
+the given user, and must also verify the signature of the keys from the
+`/keys/query` response. Without this check, a client cannot be sure that
+the sender device owns the private part of the ed25519 key it claims to
+have in the Olm payload. This is crucial when the ed25519 key corresponds
+to a verified device.
 
 If a client has multiple sessions established with another device, it
 should use the session from which it last received and successfully
@@ -1505,11 +1531,22 @@ For example, Megolm sessions that were sent using the old session would
 have been lost. The client can attempt to retrieve the lost sessions
 through `m.room_key_request` messages.
 
+{{% boxes/note %}}
+Clients should send key requests for unknown sessions to all devices for
+the user which used the session rather than just the `device_id` or
+`sender_key` denoted on the event.
+
+This is due to a deprecation of the fields. See
+[`m.megolm.v1.aes-sha2`](#mmegolmv1aes-sha2) for more information.
+{{% /boxes/note %}}
+
 ##### `m.megolm.v1.aes-sha2`
+
+{{% changed-in v="1.3" %}}
 
 The name `m.megolm.v1.aes-sha2` corresponds to version 1 of the Megolm
 ratchet, as defined by the [Megolm
-specification](http://chat.api-spec.imzqqq.top/megolm.html). This uses:
+specification](http://matrix.org/docs/spec/megolm.html). This uses:
 
 -   HMAC-SHA-256 for the hash ratchet.
 -   HKDF-SHA-256, AES-256 in CBC mode, and 8 byte truncated HMAC-SHA-256
@@ -1554,10 +1591,36 @@ ratchet index that they have already decrypted. Care should be taken in
 order to avoid false positives, as a client may decrypt the same event
 twice as part of its normal processing.
 
-As with Olm events, clients must confirm that the `sender_key` belongs
-to the user who sent the message. The same reasoning applies, but the
-sender ed25519 key has to be inferred from the `keys.ed25519` property
-of the event which established the Megolm session.
+Similar to Olm events, clients should confirm that the user who sent the
+message corresponds to the user the message was expected to come from.
+For room events, this means ensuring the event's `sender`, `room_id`, and
+the recorded `session_id` match a trusted session (eg: the `session_id`
+is already known and validated to the client).
+
+{{% boxes/note %}}
+As of `v1.3`, the `sender_key` and `device_id` keys are **deprecated**. They
+SHOULD continue to be sent, however they MUST NOT be used to verify the
+message's source.
+
+Clients MUST NOT store or lookup sessions using the `sender_key` or `device_id`.
+
+In a future version of the specification the keys can be removed completely,
+including for sending new messages.
+{{% /boxes/note %}}
+
+{{% boxes/rationale %}}
+Removing the fields (eventually) improves privacy and security by masking the
+device which sent the encrypted message as well as reducing the client's
+dependence on untrusted data: a malicious server (or similar attacker) could
+change these values, and other devices/users can simply lie about them too.
+
+We can remove the fields, particularly the `sender_key`, because the `session_id`
+is already globally unique, therefore making storage and lookup possible without
+the need for added context from the `sender_key` or `device_id`.
+
+Removing the dependence on the fields gives a privacy gain while also increasing
+the security of messages transmitted over Matrix.
+{{% /boxes/rationale %}}
 
 In order to enable end-to-end encryption in a room, clients can send an
 `m.room.encryption` state event specifying `m.megolm.v1.aes-sha2` as its
@@ -1569,6 +1632,11 @@ that they can decrypt future messages encrypted using this session. An
 `m.room_key` event is used to do this. Clients must also handle
 `m.room_key` events sent by other devices in order to decrypt their
 messages.
+
+When a client is updating a Megolm session (room key) in its store, the client MUST ensure:
+
+* that the updated session data comes from a trusted source.
+* that the new session key has a lower message index than the existing session key.
 
 #### Protocol definitions
 
@@ -1604,10 +1672,23 @@ It also adds a `one_time_keys_count` property. Note the spelling
 difference with the `one_time_key_counts` property in the
 [`/keys/upload`](/client-server-api/#post_matrixclientv3keysupload) response.
 
-| Parameter                  | Type               | Description                                                                                                            |
-|----------------------------|--------------------|------------------------------------------------------------------------------------------------------------------------|
-| device_lists               | DeviceLists        | Optional. Information on e2e device updates. Note: only present on an incremental sync.                                |
-| device_one_time_keys_count | {string: integer}  | Optional. For each key algorithm, the number of unclaimed one-time keys currently held on the server for this device.  |
+
+{{% added-in v="1.2" %}} Finally, a `device_unused_fallback_key_types` property
+is added to list the key algorithms where the device has a fallback key that
+*has not* been used in a [`/keys/claim`](/client-server-api/#post_matrixclientv3keysclaim)
+response. When a previously uploaded fallback key's algorithm is missing
+from this list, the device should upload a replacement key alongside any
+necessary one-time keys to avoid the fallback key's further usage. This
+property is required for inclusion, though previous versions of the
+specification did not have it. In addition to `/versions`, this can be
+a way to identify the server's support for fallback keys.
+
+
+| Parameter                        | Type               | Description                                                                                                            |
+|----------------------------------|--------------------|------------------------------------------------------------------------------------------------------------------------|
+| device_lists                     | DeviceLists        | Optional. Information on e2e device updates. Note: only present on an incremental sync.                                |
+| device_one_time_keys_count       | {string: integer}  | Optional. For each key algorithm, the number of unclaimed one-time keys currently held on the server for this device.  If an algorithm is unlisted, the count for that algorithm is assumed to be zero.  If this entire parameter is missing, the count for all algorithms is assumed to be zero.  |
+| device_unused_fallback_key_types | [string]           | **Required.** The unused fallback key algorithms.                                                                      |
 
 `DeviceLists`
 

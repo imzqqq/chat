@@ -13,13 +13,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Application Service API"
+  title: "Matrix Application Service API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/app/v1
+basePath: /_matrix/app/v1
 consumes:
   - application/json
 produces:
@@ -48,7 +48,7 @@ paths:
         200:
           description: The protocol was found and metadata returned.
           schema:
-            $ref: definitions/protocol_metadata.yaml
+            $ref: definitions/protocol.yaml
         401:
           description: |-
             The homeserver has not supplied credentials to the application service.
@@ -78,9 +78,9 @@ paths:
             $ref: ../client-server/definitions/errors/error.yaml
   "/thirdparty/user/{protocol}":
     get:
-      summary: Retrieve the Chat User ID of a corresponding third party user.
+      summary: Retrieve the Matrix User ID of a corresponding third party user.
       description: |-
-        This API is called by the homeserver in order to retrieve a Chat
+        This API is called by the homeserver in order to retrieve a Matrix
         User ID linked to a user on the third party network, given a set of
         user parameters.
       operationId: queryUserByProtocol
@@ -101,7 +101,7 @@ paths:
             service to help identify the user.
       responses:
         200:
-          description: The Chat User IDs found with the given parameters.
+          description: The Matrix User IDs found with the given parameters.
           schema:
             $ref: definitions/user_batch.yaml
         401:
@@ -133,9 +133,9 @@ paths:
             $ref: ../client-server/definitions/errors/error.yaml
   "/thirdparty/location/{protocol}":
     get:
-      summary: Retrieve Chat-side portal rooms leading to a third party location.
+      summary: Retrieve Matrix-side portal rooms leading to a third party location.
       description: |-
-        Retrieve a list of Chat portal rooms that lead to the matched third party location.
+        Retrieve a list of Matrix portal rooms that lead to the matched third party location.
       operationId: queryLocationByProtocol
       security:
         - homeserverAccessToken: []
@@ -186,9 +186,9 @@ paths:
             $ref: ../client-server/definitions/errors/error.yaml
   "/thirdparty/location":
     get:
-      summary: Reverse-lookup third party locations given a Chat room alias.
+      summary: Reverse-lookup third party locations given a Matrix room alias.
       description: |-
-        Retrieve an array of third party network locations from a Chat room
+        Retrieve an array of third party network locations from a Matrix room
         alias.
       operationId: queryLocationByAlias
       security:
@@ -197,7 +197,7 @@ paths:
         - in: query
           name: alias
           type: string
-          description: The Chat room alias to look up.
+          description: The Matrix room alias to look up.
       responses:
         200:
           description: |-
@@ -233,9 +233,9 @@ paths:
             $ref: ../client-server/definitions/errors/error.yaml
   "/thirdparty/user":
     get:
-      summary: Reverse-lookup third party users given a Chat User ID.
+      summary: Reverse-lookup third party users given a Matrix User ID.
       description: |-
-        Retrieve an array of third party users from a Chat User ID.
+        Retrieve an array of third party users from a Matrix User ID.
       operationId: queryUserByID
       security:
         - homeserverAccessToken: []
@@ -243,7 +243,7 @@ paths:
         - in: query 
           name: userid
           type: string
-          description: The Chat User ID to look up.
+          description: The Matrix User ID to look up.
       responses:
         200:
           description: |-

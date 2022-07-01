@@ -9,7 +9,7 @@ user-level visible effects and implications.
 Overview
 ========
 
-"Rooms" in Chat server are shared messaging channels over which all the participant
+"Rooms" in Synapse are shared messaging channels over which all the participant
 users can exchange messages. Rooms have an opaque persistent identify, a
 globally-replicated set of state (consisting principly of a membership set of
 users, and other management and miscellaneous metadata), and a message history.
@@ -60,7 +60,7 @@ Every room has a globally-replicated set of stored state. This state is a set of
 key/value or key/subkey/value pairs. The value of every (sub)key is a
 JSON-representable object. The main key of a piece of stored state establishes
 its meaning; some keys store sub-keys to allow a sub-structure within them [more
-detail below]. Some keys have special meaning to Chat server, as they relate to
+detail below]. Some keys have special meaning to Synapse, as they relate to
 management details of the room itself, storing such details as user membership,
 and permissions of users to alter the state of the room itself. Other keys may
 store information to present to users, which the system does not directly rely
@@ -97,15 +97,15 @@ Room State Keys
 [[TODO(paul): if this list gets too big it might become necessary to move it
 into its own doc]]
 
-The following keys have special semantics or meaning to Chat server itself:
+The following keys have special semantics or meaning to Synapse itself:
 
 m.member (has subkeys)
-  Stores a sub-key for every Chat server User ID which is currently a member of
+  Stores a sub-key for every Synapse User ID which is currently a member of
   this room. Its value gives the membership type ("knocked", "invited",
   "joined").
 
 m.power_levels
-  Stores a mapping from Chat server User IDs to their power-level in the room. If
+  Stores a mapping from Synapse User IDs to their power-level in the room. If
   they are not present in this mapping, the default applies.
 
   The reason to store this as a single value rather than a value with subkeys
@@ -162,8 +162,8 @@ m.archive_servers
   even if no users are currently members of it. This list should be consulted by
   the dirctory servers as the candidate list they respond with.
 
-The following keys are provided by Chat server for user benefit, but their value is
-not otherwise used by Chat server.
+The following keys are provided by Synapse for user benefit, but their value is
+not otherwise used by Synapse.
 
 m.name
   Stores a short human-readable name for the room, such that clients can display

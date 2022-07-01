@@ -13,13 +13,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server Directory API"
+  title: "Matrix Client-Server Directory API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:
@@ -39,7 +39,7 @@ paths:
           name: roomAlias
           description: The room alias to set.
           required: true
-          x-example: "#monkeys:chat.imzqqq.top"
+          x-example: "#monkeys:matrix.org"
         - in: body
           name: body
           description: Information about this room alias.
@@ -66,7 +66,7 @@ paths:
           examples:
             application/json: {
               "errcode": "M_UNKNOWN",
-              "error": "Room alias #monkeys:chat.imzqqq.top already exists."
+              "error": "Room alias #monkeys:matrix.org already exists."
             }
           schema:
             "$ref": "definitions/errors/error.yaml"
@@ -88,7 +88,7 @@ paths:
           name: roomAlias
           description: The room alias.
           required: true
-          x-example: "#monkeys:chat.imzqqq.top"
+          x-example: "#monkeys:matrix.org"
       responses:
         200:
           description: The room ID and other information for this alias.
@@ -109,7 +109,7 @@ paths:
                 "room_id": "!abnjk1jdasj98:capuchins.com",
                 "servers": [
                   "capuchins.com",
-                  "chat.imzqqq.top",
+                  "matrix.org",
                   "another.com"
                 ]
               }
@@ -118,7 +118,7 @@ paths:
           examples:
             application/json: {
                 "errcode": "M_NOT_FOUND",
-                "error": "Room alias #monkeys:chat.imzqqq.top not found."
+                "error": "Room alias #monkeys:matrix.org not found."
               }
           schema:
             "$ref": "definitions/errors/error.yaml"
@@ -148,7 +148,7 @@ paths:
           name: roomAlias
           description: The room alias to remove.
           required: true
-          x-example: "#monkeys:chat.imzqqq.top"
+          x-example: "#monkeys:matrix.org"
       responses:
         200:
           description: The mapping was deleted.

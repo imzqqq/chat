@@ -1,9 +1,6 @@
 node_modules
-/assets
-/assets.tar.gz
 /data/msc
 /env*
-/.env
 /resources
 /scripts/swagger
 /scripts/tmp
@@ -16,3 +13,4 @@ _rendered.rst
 /.idea/
 /spec/
 changelogs/rendered.*
+.hugo_build.lock

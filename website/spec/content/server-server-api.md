@@ -4,7 +4,7 @@ weight: 20
 type: docs
 ---
 
-Chat homeservers use the Federation APIs (also known as server-server
+Matrix homeservers use the Federation APIs (also known as server-server
 APIs) to communicate with each other. Homeservers use these APIs to push
 messages to each other in real-time, to retrieve historic messages from
 each other, and to query profile and presence information about users on
@@ -47,7 +47,7 @@ an HTTPS PUT request.
 
 ## API standards
 
-The mandatory baseline for client-server communication in Chat is
+The mandatory baseline for client-server communication in Matrix is
 exchanging JSON objects over HTTP APIs. More efficient optional
 transports will in future be supported as optional extensions - e.g. a
 packed binary encoding over stream-cipher encrypted TCP socket for
@@ -59,7 +59,7 @@ addition, all strings MUST be encoded as UTF-8.
 
 ### Resolving server names
 
-Each Chat homeserver is identified by a server name consisting of a
+Each Matrix homeserver is identified by a server name consisting of a
 hostname and an optional port, as described by the
 [grammar](/appendices#server-name). Where applicable, a delegated
 server name uses the same grammar.
@@ -69,7 +69,7 @@ have various conditions affecting which certificates and `Host` headers
 to send. The process overall is as follows:
 
 1.  If the hostname is an IP literal, then that IP address should be
-    used, together with the given port number, or 8880 if no port is
+    used, together with the given port number, or 8448 if no port is
     given. The target server must present a valid certificate for the IP
     address. The `Host` header in the request should be set to the
     server name, including the port if the server name included one.
@@ -96,7 +96,7 @@ to send. The process overall is as follows:
     parsed as `<delegated_hostname>[:<delegated_port>]` and processed as
     follows:
     -   If `<delegated_hostname>` is an IP literal, then that IP address
-        should be used together with the `<delegated_port>` or 8880 if
+        should be used together with the `<delegated_port>` or 8448 if
         no port is provided. The target server must present a valid TLS
         certificate for the IP address. Requests must be made with a
         `Host` header containing the IP address, including the port if
@@ -110,7 +110,7 @@ to send. The process overall is as follows:
         present a valid certificate for `<delegated_hostname>`.
     -   If `<delegated_hostname>` is not an IP literal and no
         `<delegated_port>` is present, an SRV record is looked up for
-        `chat._tcp.<delegated_hostname>`. This may result in another
+        `_matrix._tcp.<delegated_hostname>`. This may result in another
         hostname (to be resolved using AAAA or A records) and port.
         Requests should be made to the resolved IP address and port with
         a `Host` header containing the `<delegated_hostname>`. The
@@ -118,20 +118,20 @@ to send. The process overall is as follows:
         `<delegated_hostname>`.
     -   If no SRV record is found, an IP address is resolved using AAAA
         or A records. Requests are then made to the resolve IP address
-        and a port of 8880, using a `Host` header of
+        and a port of 8448, using a `Host` header of
         `<delegated_hostname>`. The target server must present a valid
         certificate for `<delegated_hostname>`.
 4.  If the `/.well-known` request resulted in an error response, a
     server is found by resolving an SRV record for
-    `chat._tcp.<hostname>`. This may result in a hostname (to be
+    `_matrix._tcp.<hostname>`. This may result in a hostname (to be
     resolved using AAAA or A records) and port. Requests are made to the
-    resolved IP address and port, using 8880 as a default port, with a
+    resolved IP address and port, using 8448 as a default port, with a
     `Host` header of `<hostname>`. The target server must present a
     valid certificate for `<hostname>`.
 5.  If the `/.well-known` request returned an error response, and the
     SRV record was not found, an IP address is resolved using AAAA and A
     records. Requests are made to the resolved IP address using port
-    8880 and a `Host` header containing the `<hostname>`. The target
+    8448 and a `Host` header containing the `<hostname>`. The target
     server must present a valid certificate for `<hostname>`.
 
 {{% boxes/note %}}
@@ -175,11 +175,11 @@ draft](https://github.com/matrix-org/matrix-doc/blob/51faf8ed2e4a63d4cfd6d231836
 {{% /boxes/note %}}
 
 Each homeserver publishes its public keys under
-`/chat/key/v2/server/{keyId}`. Homeservers query for keys by either
-getting `/chat/key/v2/server/{keyId}` directly or by querying an
+`/_matrix/key/v2/server/{keyId}`. Homeservers query for keys by either
+getting `/_matrix/key/v2/server/{keyId}` directly or by querying an
 intermediate notary server using a
-`/chat/key/v2/query/{serverName}/{keyId}` API. Intermediate notary
-servers query the `/chat/key/v2/server/{keyId}` API on behalf of
+`/_matrix/key/v2/query/{serverName}/{keyId}` API. Intermediate notary
+servers query the `/_matrix/key/v2/server/{keyId}` API on behalf of
 another server and sign the response with their own key. A server may
 query multiple notary servers to ensure that they all report the same
 public keys.
@@ -194,7 +194,7 @@ keys returned by a given notary server by querying other servers.
 #### Publishing Keys
 
 Homeservers publish their signing keys in a JSON object at
-`/chat/key/v2/server/{key_id}`. The response contains a list of
+`/_matrix/key/v2/server/{key_id}`. The response contains a list of
 `verify_keys` that are valid for signing federation requests made by the
 homeserver and for signing events. It contains a list of
 `old_verify_keys` which are only valid for signing events.
@@ -206,7 +206,7 @@ homeserver and for signing events. It contains a list of
 Servers may query another server's keys through a notary server. The
 notary server may be another homeserver. The notary server will retrieve
 keys from the queried servers through use of the
-`/chat/key/v2/server/{keyId}` API. The notary server will
+`/_matrix/key/v2/server/{keyId}` API. The notary server will
 additionally sign the response from the queried server before returning
 the results.
 
@@ -224,8 +224,8 @@ Every HTTP request made by a homeserver is authenticated using public
 key digital signatures. The request method, target and body are signed
 by wrapping them in a JSON object and signing it using the JSON signing
 algorithm. The resulting signatures are added as an Authorization header
-with an auth scheme of `X-Chat`. Note that the target field should
-include the full path starting with `/chat/...`, including the `?`
+with an auth scheme of `X-Matrix`. Note that the target field should
+include the full path starting with `/_matrix/...`, including the `?`
 and any query parameters if present, but should not include the leading
 `https:`, nor the destination server's hostname.
 
@@ -237,7 +237,7 @@ Step 1 sign JSON:
     "uri": "/target",
     "origin": "origin.hs.example.com",
     "destination": "destination.hs.example.com",
-    "content": <request body>,
+    "content": <JSON-parsed request body>,
     "signatures": {
         "origin.hs.example.com": {
             "ed25519:key1": "ABCDEF..."
@@ -255,7 +255,7 @@ condition applies throughout the request signing process.
 Step 2 add Authorization header:
 
     GET /target HTTP/1.1
-    Authorization: X-Chat origin=origin.example.com,key="ed25519:key1",sig="ABCDEF..."
+    Authorization: X-Matrix origin="origin.hs.example.com",destination="destination.hs.example.com",key="ed25519:key1",sig="ABCDEF..."
     Content-Type: application/json
 
     <JSON-encoded request body>
@@ -274,6 +274,7 @@ def authorization_headers(origin_name, origin_signing_key,
     }
 
     if content is not None:
+        # Assuming content is already parsed as JSON
         request_json["content"] = content
 
     signed_json = sign_json(request_json, origin_name, origin_signing_key)
@@ -282,13 +283,51 @@ def authorization_headers(origin_name, origin_signing_key,
 
     for key, sig in signed_json["signatures"][origin_name].items():
         authorization_headers.append(bytes(
-            "X-Chat origin=%s,key=\"%s\",sig=\"%s\"" % (
-                origin_name, key, sig,
+            "X-Matrix origin=\"%s\",destination=\"%s\",key=\"%s\",sig=\"%s\"" % (
+                origin_name, destination_name, key, sig,
             )
         ))
 
-    return ("Authorization", authorization_headers)
+    return ("Authorization", authorization_headers[0])
 ```
+
+The format of the Authorization header is given in
+[RFC 7235](https://datatracker.ietf.org/doc/html/rfc7235#section-2.1). In
+summary, the header begins with authorization scheme `X-Matrix`, followed by
+one or more spaces, followed by a comma-separated list of parameters written as
+name=value pairs. The names are case insensitive and order does not matter. The
+values must be enclosed in quotes if they contain characters that are not
+allowed in `token`s, as defined in
+[RFC 7230](https://datatracker.ietf.org/doc/html/rfc7230#section-3.2.6); if a
+value is a valid `token`, it may or may not be enclosed in quotes. Quoted
+values may include backslash-escaped characters. When parsing the header, the
+recipient must unescape the characters. That is, a backslash-character pair is
+replaced by the character that follows the backslash.
+
+For compatibility with older servers, the sender should
+- only include one space after `X-Matrix`,
+- only use lower-case names, and
+- avoid using backslashes in parameter values.
+
+For compatibility with older servers, the recipient should allow colons to be
+included in values without requiring the value to be enclosed in quotes.
+
+The authorization parameters to include are:
+
+- `origin`: the server name of the sending server. This is the same as the
+  `origin` field from JSON described in step 1.
+- `destination`: {{< added-in v="1.3" >}} the server name of the receiving
+  sender. This is the same as the `destination` field from the JSON described
+  in step 1. For compatibility with older servers, recipients should accept
+  requests without this parameter, but MUST always send it. If this property
+  is included, but the value does not match the receiving server's name, the
+  receiving server must deny the request with an HTTP status code 401
+  Unauthorized.
+- `key`: the ID, including the algorithm name, of the sending server's key used
+  to sign the request.
+- `signature`: the signature of the JSON as calculated in step 1.
+
+Unknown parameters are ignored.
 
 ### Response Authentication
 
@@ -299,7 +338,7 @@ server to avoid leaking messages to eavesdroppers.
 ### Client TLS Certificates
 
 Requests are authenticated at the HTTP layer rather than at the TLS
-layer because HTTP services like Chat are often deployed behind load
+layer because HTTP services like Matrix are often deployed behind load
 balancers that handle the TLS and these load balancers make it difficult
 to check TLS client certificates.
 
@@ -355,13 +394,15 @@ specification](/rooms).
 Whenever a server receives an event from a remote server, the receiving
 server must ensure that the event:
 
-1.  Is a valid event, otherwise it is dropped.
+1.  Is a valid event, otherwise it is dropped. For an event to be valid, it
+    must contain a `room_id`, and it must comply with the event format of
+    that [room version](/rooms).
 2.  Passes signature checks, otherwise it is dropped.
 3.  Passes hash checks, otherwise it is redacted before being processed
     further.
 4.  Passes authorization rules based on the event's auth events,
     otherwise it is rejected.
-5.  Passes authorization rules based on the state at the event,
+5.  Passes authorization rules based on the state before the event,
     otherwise it is rejected.
 6.  Passes authorization rules based on the current state of the room,
     otherwise it is "soft failed".
@@ -375,21 +416,31 @@ them.
 
 #### Definitions
 
-Required Power Level
+**Required Power Level** \
 A given event type has an associated *required power level*. This is
 given by the current `m.room.power_levels` event. The event type is
 either listed explicitly in the `events` section or given by either
 `state_default` or `events_default` depending on if the event is a state
 event or not.
 
-Invite Level, Kick Level, Ban Level, Redact Level
+**Invite Level, Kick Level, Ban Level, Redact Level** \
 The levels given by the `invite`, `kick`, `ban`, and `redact` properties
 in the current `m.room.power_levels` state. Each defaults to 50 if
 unspecified.
 
-Target User
+**Target User** \
 For an `m.room.member` state event, the user given by the `state_key` of
 the event.
+
+{{% boxes/warning %}}
+Some [room versions](/rooms) accept power level values to be represented as
+strings rather than integers. This is strictly for backwards compatibility.
+A homeserver should take reasonable precautions to prevent users from sending
+new power level events with string values (eg: by rejecting the API request),
+and must never populate the default power levels in a room as string values.
+
+See the [room version specification](/rooms) for more information.
+{{% /boxes/warning %}}
 
 #### Authorization rules
 
@@ -407,21 +458,25 @@ the sender permission to send the event. The `auth_events` for the
 `m.room.create` event in a room is empty; for other events, it should be
 the following subset of the room state:
 
--   The `m.room.create` event.
+- The `m.room.create` event.
 
--   The current `m.room.power_levels` event, if any.
+- The current `m.room.power_levels` event, if any.
 
--   The sender's current `m.room.member` event, if any.
+- The sender's current `m.room.member` event, if any.
 
--   If type is `m.room.member`:
+- If type is `m.room.member`:
 
-    -   The target's current `m.room.member` event, if any.
-    -   If `membership` is `join` or `invite`, the current
-        `m.room.join_rules` event, if any.
-    -   If membership is `invite` and `content` contains a
-        `third_party_invite` property, the current
-        `m.room.third_party_invite` event with `state_key` matching
-        `content.third_party_invite.signed.token`, if any.
+    - The target's current `m.room.member` event, if any.
+    - If `membership` is `join` or `invite`, the current
+      `m.room.join_rules` event, if any.
+    - If membership is `invite` and `content` contains a
+      `third_party_invite` property, the current
+      `m.room.third_party_invite` event with `state_key` matching
+      `content.third_party_invite.signed.token`, if any.
+    - If `content.join_authorised_via_users_server` is present,
+      and the [room version supports restricted rooms](/rooms/#feature-matrix),
+      then the `m.room.member` event with `state_key` matching
+      `content.join_authorised_via_users_server`.
 
 #### Rejection
 
@@ -678,22 +733,49 @@ candidate may be used at each time. Thus, any join handshake can
 potentially involve anywhere from two to four homeservers, though most
 in practice will use just two.
 
-```
-    Client         Joining                Directory       Resident
-                   Server                 Server          Server
+<!--
+https://textart.io/sequence
 
-    join request -->
-                   |
-                   directory request ------->
-                   <---------- directory response
-                   |
-                   make_join request ----------------------->
-                   <------------------------------- make_join response
-                   |
-                   send_join request ----------------------->
-                   <------------------------------- send_join response
-                   |
-    <---------- join response
+object Client JoiningServer DirectoryServer ResidentServer
+Client->JoiningServer: join request
+JoiningServer->DirectoryServer: directory request
+DirectoryServer->JoiningServer: directory response
+JoiningServer->ResidentServer: make_join request
+ResidentServer->JoiningServer: make_join response
+JoiningServer->ResidentServer: send_join request
+ResidentServer->JoiningServer: send_join response
+JoiningServer->Client: join response
+-->
+
+```
++---------+          +---------------+            +-----------------+ +-----------------+
+| Client  |          | JoiningServer |            | DirectoryServer | | ResidentServer  |
++---------+          +---------------+            +-----------------+ +-----------------+
+     |                       |                             |                   |
+     | join request          |                             |                   |
+     |---------------------->|                             |                   |
+     |                       |                             |                   |
+     |                       | directory request           |                   |
+     |                       |---------------------------->|                   |
+     |                       |                             |                   |
+     |                       |          directory response |                   |
+     |                       |<----------------------------|                   |
+     |                       |                             |                   |
+     |                       | make_join request           |                   |
+     |                       |------------------------------------------------>|
+     |                       |                             |                   |
+     |                       |                             |make_join response |
+     |                       |<------------------------------------------------|
+     |                       |                             |                   |
+     |                       | send_join request           |                   |
+     |                       |------------------------------------------------>|
+     |                       |                             |                   |
+     |                       |                             |send_join response |
+     |                       |<------------------------------------------------|
+     |                       |                             |                   |
+     |         join response |                             |                   |
+     |<----------------------|                             |                   |
+     |                       |                             |                   |
 ```
 
 The first part of the handshake usually involves using the directory
@@ -717,18 +799,46 @@ The joining server is expected to add or replace the `origin`,
 `origin_server_ts`, and `event_id` on the templated event received by
 the resident server. This event is then signed by the joining server.
 
-To complete the join handshake, the joining server must now submit this
-new event to a resident homeserver, by using the `PUT /send_join`
+To complete the join handshake, the joining server submits this new event
+to the resident server it used for `GET /make_join`, using the `PUT /send_join`
 endpoint.
 
-The resident homeserver then accepts this event into the room's event
-graph, and responds to the joining server with the full set of state for
-the newly-joined room. The resident server must also send the event to
-other servers participating in the room.
+The resident homeserver then adds its signature to this event and
+accepts it into the room's event graph. The joining server receives
+the full set of state for the newly-joined room as well as the freshly
+signed membership event. The resident server must also send the event
+to other servers participating in the room.
 
 {{% http-api spec="server-server" api="joins-v1" %}}
 
 {{% http-api spec="server-server" api="joins-v2" %}}
+
+### Restricted rooms
+
+Restricted rooms are described in detail in the
+[client-server API](/client-server-api/#restricted-rooms) and are available
+in room versions [which support restricted join rules](/rooms/#feature-matrix).
+
+A resident server processing a request to join a restricted room must
+ensure that the joining server satisfies at least one of the conditions
+specified by `m.room.join_rules`. If no conditions are available, or none
+match the required schema, then the joining server is considered to have
+failed all conditions.
+
+The resident server uses a 400 `M_UNABLE_TO_AUTHORISE_JOIN` error on
+`/make_join` and `/send_join` to denote that the resident server is unable
+to validate any of the conditions, usually because the resident server
+does not have state information about rooms required by the conditions.
+
+The resident server uses a 400 `M_UNABLE_TO_GRANT_JOIN` error on `/make_join`
+and `/send_join` to denote that the joining server should try a different
+server. This is typically because the resident server can see that the
+joining user satisfies one of the conditions, though the resident server
+would be unable to meet the auth rules governing `join_authorised_via_users_server`
+on the resulting `m.room.member` event.
+
+If the joining server fails all conditions then a 403 `M_FORBIDDEN` error
+is used by the resident server.
 
 ## Knocking upon a room
 
@@ -796,31 +906,31 @@ the Third Party Invites module.
 {{% /boxes/note %}}
 
 When a user wants to invite another user in a room but doesn't know the
-Chat ID to invite, they can do so using a third-party identifier (e.g.
+Matrix ID to invite, they can do so using a third-party identifier (e.g.
 an e-mail or a phone number).
 
-This identifier and its bindings to Chat IDs are verified by an
+This identifier and its bindings to Matrix IDs are verified by an
 identity server implementing the [Identity Service
 API](/identity-service-api).
 
 ### Cases where an association exists for a third-party identifier
 
-If the third-party identifier is already bound to a Chat ID, a lookup
+If the third-party identifier is already bound to a Matrix ID, a lookup
 request on the identity server will return it. The invite is then
 processed by the inviting homeserver as a standard `m.room.member`
 invite event. This is the simplest case.
 
 ### Cases where an association doesn't exist for a third-party identifier
 
-If the third-party identifier isn't bound to any Chat ID, the inviting
+If the third-party identifier isn't bound to any Matrix ID, the inviting
 homeserver will request the identity server to store an invite for this
-identifier and to deliver it to whoever binds it to its Chat ID. It
+identifier and to deliver it to whoever binds it to its Matrix ID. It
 will also send an `m.room.third_party_invite` event in the room to
 specify a display name, a token and public keys the identity server
 provided as a response to the invite storage request.
 
 When a third-party identifier with pending invites gets bound to a
-Chat ID, the identity server will send a POST request to the ID's
+Matrix ID, the identity server will send a POST request to the ID's
 homeserver as described in the [Invitation
 Storage](/identity-service-api#invitation-storage)
 section of the Identity Service API.
@@ -845,7 +955,7 @@ from, it will need to request the room's homeserver to auth the event.
 When a homeserver receives an `m.room.member` invite event for a room
 it's in with a `third_party_invite` object, it must verify that the
 association between the third-party identifier initially invited to the
-room and the Chat ID that claims to be bound to it has been verified
+room and the Matrix ID that claims to be bound to it has been verified
 without having to rely on a third-party server.
 
 To do so, it will fetch from the room's state events the
@@ -860,8 +970,8 @@ was signed by the same identity server.
 
 Since this `signed` object can only be delivered once in the POST
 request emitted by the identity server upon binding between the
-third-party identifier and the Chat ID, and contains the invited
-user's Chat ID and the token delivered when the invite was stored,
+third-party identifier and the Matrix ID, and contains the invited
+user's Matrix ID and the token delivered when the invite was stored,
 this verification will prove that the `m.room.member` invite event comes
 from the user owning the invited third-party identifier.
 
@@ -874,6 +984,13 @@ This can be done by making a request to the `/publicRooms` endpoint for
 the server the room directory should be retrieved for.
 
 {{% http-api spec="server-server" api="public_rooms" %}}
+
+## Spaces
+
+To complement the [Client-Server API's Spaces module](/client-server-api/#spaces),
+homeservers need a way to query information about spaces from other servers.
+
+{{% http-api spec="server-server" api="space_hierarchy" %}}
 
 ## Typing Notifications
 
@@ -941,7 +1058,7 @@ section is intended to complement the [Device Management
 module](/client-server-api#device-management)
 of the Client-Server API.
 
-Chat currently uses a custom pubsub system for synchronising
+Matrix currently uses a custom pubsub system for synchronising
 information about the list of devices for a given user over federation.
 When a server wishes to determine a remote user's device list for the
 first time, it should populate a local cache from the result of a
@@ -1013,7 +1130,7 @@ API](/client-server-api). When a server wishes
 to serve content originating from a remote server, it needs to ask the
 remote server for the media.
 
-Servers should use the server described in the Chat Content URI, which
+Servers should use the server described in the Matrix Content URI, which
 has the format `mxc://{ServerName}/{MediaID}`. Servers should use the
 download endpoint described in the [Client-Server
 API](/client-server-api), being sure to use
@@ -1032,22 +1149,22 @@ of `M_FORBIDDEN`.
 
 The following endpoint prefixes MUST be protected:
 
--   `/chat/federation/v1/send` (on a per-PDU basis)
--   `/chat/federation/v1/make_join`
--   `/chat/federation/v1/make_leave`
--   `/chat/federation/v1/send_join`
--   `/chat/federation/v2/send_join`
--   `/chat/federation/v1/send_leave`
--   `/chat/federation/v2/send_leave`
--   `/chat/federation/v1/invite`
--   `/chat/federation/v2/invite`
--   `/chat/federation/v1/make_knock`
--   `/chat/federation/v1/send_knock`
--   `/chat/federation/v1/state`
--   `/chat/federation/v1/state_ids`
--   `/chat/federation/v1/backfill`
--   `/chat/federation/v1/event_auth`
--   `/chat/federation/v1/get_missing_events`
+-   `/_matrix/federation/v1/send` (on a per-PDU basis)
+-   `/_matrix/federation/v1/make_join`
+-   `/_matrix/federation/v1/make_leave`
+-   `/_matrix/federation/v1/send_join`
+-   `/_matrix/federation/v2/send_join`
+-   `/_matrix/federation/v1/send_leave`
+-   `/_matrix/federation/v2/send_leave`
+-   `/_matrix/federation/v1/invite`
+-   `/_matrix/federation/v2/invite`
+-   `/_matrix/federation/v1/make_knock`
+-   `/_matrix/federation/v1/send_knock`
+-   `/_matrix/federation/v1/state`
+-   `/_matrix/federation/v1/state_ids`
+-   `/_matrix/federation/v1/backfill`
+-   `/_matrix/federation/v1/event_auth`
+-   `/_matrix/federation/v1/get_missing_events`
 
 ## Signing Events
 
@@ -1069,8 +1186,8 @@ JSON](/appendices#signing-json), using the server's signing key
 
 The signature is then copied back to the original event object.
 
-See [Persistent Data Unit schema](#Persistent Data Unit schema) for an
-example of a signed event.
+For an example of a signed event, see the [room version
+specification](/rooms).
 
 ### Validating hashes and signatures on received events
 
@@ -1185,5 +1302,5 @@ When a domain's ownership changes, the new controller of the domain can
 masquerade as the previous owner, receiving messages (similarly to
 email) and request past messages from other servers. In the future,
 proposals like
-[MSC1228](https://github.com/matrix-org/matrix-doc/issues/1228) will
+[MSC1228](https://github.com/matrix-org/matrix-spec-proposals/issues/1228) will
 address this issue.

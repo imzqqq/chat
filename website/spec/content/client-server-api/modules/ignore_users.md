@@ -1,11 +1,10 @@
 ---
 type: module
-weight: 240
 ---
 
 ### Ignoring Users
 
-With all the communication through Chat it may be desirable to ignore
+With all the communication through Matrix it may be desirable to ignore
 a particular user for whatever reason. This module defines how clients
 and servers can implement the ignoring of users.
 

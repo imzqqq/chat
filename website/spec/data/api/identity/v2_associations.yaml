@@ -1,5 +1,5 @@
 # Copyright 2018 New Vector Ltd
-# Copyright 2019 The Chat.org Foundation C.I.C.
+# Copyright 2019 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Identity Service Establishing Associations API"
+  title: "Matrix Identity Service Establishing Associations API"
   version: "2.0.0"
 host: localhost:8090
 schemes:
   - https
-basePath: /chat/identity/v2
+basePath: /_matrix/identity/v2
 consumes:
   - application/json
 produces:
@@ -68,6 +68,7 @@ paths:
                 description: The address of the 3pid being looked up.
               validated_at:
                 type: integer
+                format: int64
                 description: |-
                   Timestamp, in milliseconds, indicating the time that the 3pid
                   was validated.
@@ -108,9 +109,9 @@ paths:
             $ref: "../client-server/definitions/errors/error.yaml"
   "/3pid/bind":
     post:
-      summary: Publish an association between a session and a Chat user ID.
+      summary: Publish an association between a session and a Matrix user ID.
       description: |-
-        Publish an association between a session and a Chat user ID.
+        Publish an association between a session and a Matrix user ID.
 
         Future calls to `/lookup` for any of the session\'s 3pids will return
         this association.
@@ -130,7 +131,7 @@ paths:
             example: {
               "sid": "1234",
               "client_secret": "monkeys_are_GREAT",
-              "mxid": "@ears:chat.imzqqq.top"
+              "mxid": "@ears:matrix.org"
             }
             properties:
               sid:
@@ -141,7 +142,7 @@ paths:
                 description: The client secret passed to the `requestToken` call.
               mxid:
                 type: string
-                description: The Chat user ID to associate with the 3pids.
+                description: The Matrix user ID to associate with the 3pids.
             required: ["sid", "client_secret", "mxid"]
       responses:
         200:
@@ -150,12 +151,12 @@ paths:
             application/json: {
               "address": "louise@bobs.burgers",
               "medium": "email",
-              "mxid": "@ears:chat.imzqqq.top",
+              "mxid": "@ears:matrix.org",
               "not_before": 1428825849161,
               "not_after": 4582425849161,
               "ts": 1428825849161,
               "signatures": {
-                "chat.imzqqq.top": {
+                "matrix.org": {
                   "ed25519:0": "ENiU2YORYUJgE6WBMitU0mppbQjidDLanAusj8XS2nVRHPu+0t42OKA/r6zV6i2MzUbNQ3c3MiLScJuSsOiVDQ"
                 }
               }
@@ -171,15 +172,18 @@ paths:
                 description: The medium type of the 3pid.
               mxid:
                 type: string
-                description: The Chat user ID associated with the 3pid.
+                description: The Matrix user ID associated with the 3pid.
               not_before:
                 type: integer
+                format: int64
                 description: A unix timestamp before which the association is not known to be valid.
               not_after:
                 type: integer
+                format: int64
                 description: A unix timestamp after which the association is not known to be valid.
               ts:
                 type: integer
+                format: int64
                 description: The unix timestamp at which the association was verified.
               signatures:
                 type: object
@@ -232,9 +236,9 @@ paths:
             $ref: "../client-server/definitions/errors/error.yaml"
   "/3pid/unbind":
     post:
-      summary: Remove an association between a session and a Chat user ID.
+      summary: Remove an association between a session and a Matrix user ID.
       description: |-
-        Remove an association between a session and a Chat user ID.
+        Remove an association between a session and a Matrix user ID.
 
         Future calls to `/lookup` for any of the session's 3pids will not
         return the removed association.
@@ -246,7 +250,7 @@ paths:
         2. The request includes the `sid` and `client_secret` parameters,
            as per `/3pid/bind`, which proves ownership of the 3PID.
 
-        If this endpoint returns a JSON Chat error, that error should be passed
+        If this endpoint returns a JSON Matrix error, that error should be passed
         through to the client requesting an unbind through a homeserver, if the
         homeserver is acting on behalf of a client.
       operationId: unbindV2
@@ -275,7 +279,7 @@ paths:
                 description: The client secret passed to the `requestToken` call.
               mxid:
                 type: string
-                description: The Chat user ID to remove from the 3pids.
+                description: The Matrix user ID to remove from the 3pids.
               threepid:
                 type: object
                 title: 3PID
@@ -302,13 +306,13 @@ paths:
             type: object
         400:
           description: |-
-            If the response body is not a JSON Chat error, the identity server
-            does not support unbinds. If a JSON Chat error is in the response
+            If the response body is not a JSON Matrix error, the identity server
+            does not support unbinds. If a JSON Matrix error is in the response
             body, the requesting party should respect the error.
         404:
           description: |-
-            If the response body is not a JSON Chat error, the identity server
-            does not support unbinds. If a JSON Chat error is in the response
+            If the response body is not a JSON Matrix error, the identity server
+            does not support unbinds. If a JSON Matrix error is in the response
             body, the requesting party should respect the error.
         403:
           description: |-
@@ -328,6 +332,6 @@ paths:
             $ref: "../client-server/definitions/errors/error.yaml"
         501:
           description: |-
-            If the response body is not a JSON Chat error, the identity server
-            does not support unbinds. If a JSON Chat error is in the response
+            If the response body is not a JSON Matrix error, the identity server
+            does not support unbinds. If a JSON Matrix error is in the response
             body, the requesting party should respect the error.

@@ -33,12 +33,12 @@ allOf:
             type: string
             description: |-
               The room where the user's typing status has been updated.
-            example: "!somewhere:chat.imzqqq.top"
+            example: "!somewhere:matrix.org"
           user_id:
             type: string
             description: |-
               The user ID that has had their typing status changed.
-            example: "@john:chat.imzqqq.top"
+            example: "@john:matrix.org"
           typing:
             type: boolean
             description: Whether the user is typing in the room or not.

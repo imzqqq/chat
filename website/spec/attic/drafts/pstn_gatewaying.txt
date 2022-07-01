@@ -1,8 +1,8 @@
-Gatewaying to the PSTN via Chat Application Services
+Gatewaying to the PSTN via Matrix Application Services
 ======================================================
 
-Chat Application Services (AS) provides a way for PSTN users to interact
-with Chat via an AS acting as a gateway. Each PSTN user is represented as a
+Matrix Application Services (AS) provides a way for PSTN users to interact
+with Matrix via an AS acting as a gateway. Each PSTN user is represented as a
 virtual user on a specific homeserver maintained by the AS. Typically the AS
 is provisioned on a well-known AS-supplier HS (e.g. matrix.openmarket.com) or
 is a service provisioned on the user's local HS.
@@ -15,7 +15,7 @@ for these being a visible virtual user rather than an invisible user or an
 invisible sniffing AS is because they do represent real physical 3rd party
 endpoints in the PSTN, and need to be able to send return messages.
 
-Communication with an actual PSTN user happens in a normal Chat room, which
+Communication with an actual PSTN user happens in a normal Matrix room, which
 for 1:1 matrix<->pstn contact will typically store all conversation history
 with that user. On first contact, the matrix user invites the virtual user
 into the room (or vice versa). In the event of switching to another AS-enabled
@@ -30,19 +30,19 @@ where-upon they will relay all the traffic in that group chat through to their
 PSTN counterpart (and vice versa). This behaviour requires no additional
 functionality beyond that required to support 1:1 chat.
 
-When contacting a user, Chat clients should check whether a given E.164
-number is already mapped to a real Chat user by querying the identity
+When contacting a user, Matrix clients should check whether a given E.164
+number is already mapped to a real Matrix user by querying the identity
 servers (or subscribing to identity updates for a given E.164 number. TODO: ID
 server subscriptions). If the E.164 number has a validated mapping in the ID
-server to a Chat ID, then this target ID should be used instead of
+server to a Matrix ID, then this target ID should be used instead of
 contacting the virtual user.
 
 It's likely that PSTN gateway ASes will need to charge the end-user for use of
 the gateway. The AS must therefore track credit per matrix ID it interacts
 with, and stop gatewaying as desired once credit is exhausted. The task of
 extracting credit from the end-user and adding it to the AS is not covered by
-the Chat specification.
+the Matrix specification.
 
 For SMS routing, options are:
  * Terminate traffic only (from a shared shortcode originator)
- * Two-way traffic via a VMN. To save allocating huge numbers of VMNs to Chat users, the VMN can be allocated from a pool such that each {caller,callee} tuple is unique (but the caller number will only work from that specific callee).
+ * Two-way traffic via a VMN. To save allocating huge numbers of VMNs to Matrix users, the VMN can be allocated from a pool such that each {caller,callee} tuple is unique (but the caller number will only work from that specific callee).

@@ -1,4 +1,4 @@
-This is a standalone description of the data architecture of Chat server. There is a
+This is a standalone description of the data architecture of Synapse. There is a
 lot of overlap with the current specification, so it has been split out here for
 posterity. Hopefully all the important bits have been merged into the relevant
 places in the main spec.
@@ -10,7 +10,7 @@ Model
 Overview
 ~~~~~~~~
 
-Chat is used to reliably distribute data between sets of `users`.
+Matrix is used to reliably distribute data between sets of `users`.
 
 Users are associated with one of many matrix `servers`. These distribute,
 receive and store data on behalf of its registered users. Servers can be run on
@@ -27,7 +27,7 @@ required from the server.
 Events
 ~~~~~~
 An event is a collection of data (the `payload`) and metadata to be distributed
-across servers and is the primary data unit in Chat.  Events are extensible
+across servers and is the primary data unit in Matrix.  Events are extensible
 so that clients and servers can add extra arbitrary fields to both the payload
 or metadata.
 

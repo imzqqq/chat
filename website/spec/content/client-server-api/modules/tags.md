@@ -1,6 +1,5 @@
 ---
 type: module
-weight: 180
 ---
 
 ### Room Tagging
@@ -30,7 +29,7 @@ The name of a tag MUST NOT exceed 255 bytes.
 
 The tag namespace is defined as follows:
 
--   The namespace `m.*` is reserved for tags defined in the Chat
+-   The namespace `m.*` is reserved for tags defined in the Matrix
     specification. Clients must ignore any tags in this namespace they
     don't understand.
 -   The namespace `u.*` is reserved for user-defined tags. The portion

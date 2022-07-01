@@ -13,7 +13,7 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Federation Server Discovery API"
+  title: "Matrix Federation Server Discovery API"
   version: "1.0.0"
 host: localhost:443
 schemes:
@@ -27,7 +27,7 @@ paths:
       summary: Gets information about the delegated server for server-server communication.
       description: |-
         Gets information about the delegated server for server-server communication
-        between Chat homeservers. Servers should follow 30x redirects, carefully
+        between Matrix homeservers. Servers should follow 30x redirects, carefully
         avoiding redirect loops, and use normal X.509 certificate validation.
       operationId: getWellKnown
       responses:
@@ -48,6 +48,6 @@ paths:
               "m.server":
                 type: string
                 description: |-
-                  The server name to delegate server-server communciations to, with optional
+                  The server name to delegate server-server communications to, with optional
                   port. The delegated server name uses the same grammar as
                   [server names in the appendices](/appendices/#server-name).

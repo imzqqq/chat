@@ -42,7 +42,7 @@ allOf:
                 user_id:
                   type: string
                   description: The user ID this presence EDU is for.
-                  example: "@john:chat.imzqqq.top"
+                  example: "@john:matrix.org"
                 presence:
                   type: enum
                   enum: ['offline', 'unavailable', 'online']

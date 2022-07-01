@@ -9,18 +9,18 @@ description: |-
 
   The `allow` and `deny` lists are lists of globs supporting `?` and `*`
   as wildcards. When comparing against the server ACLs, the suspect server's port
-  number must not be considered. Therefore `evil.com`, `evil.com:8880`, and
+  number must not be considered. Therefore `evil.com`, `evil.com:8448`, and
   `evil.com:1234` would all match rules that apply to `evil.com`, for example.
 
   The ACLs are applied to servers when they make requests, and are applied in
   the following order:
 
   1. If there is no `m.room.server_acl` event in the room state, allow.
-  #. If the server name is an IP address (v4 or v6) literal, and `allow_ip_literals`
+  2. If the server name is an IP address (v4 or v6) literal, and `allow_ip_literals`
      is present and `false`, deny.
-  #. If the server name matches an entry in the `deny` list, deny.
-  #. If the server name matches an entry in the `allow` list, allow.
-  #. Otherwise, deny.
+  3. If the server name matches an entry in the `deny` list, deny.
+  4. If the server name matches an entry in the `allow` list, allow.
+  5. Otherwise, deny.
 
   **Note:**
   Server ACLs do not restrict the events relative to the room DAG via authorisation
@@ -41,7 +41,7 @@ description: |-
   to check the `prev_events` of leaked events, therefore detecting servers which
   are not upholding the ACLs. Server versions can also be used to try to detect hosts that
   will not uphold the ACLs, although this is not comprehensive. Server ACLs were added
-  in Chat server v0.32.0, although other server implementations and versions exist in the world.
+  in Synapse v0.32.0, although other server implementations and versions exist in the world.
 allOf:
   - $ref: core-event-schema/state_event.yaml
 type: object

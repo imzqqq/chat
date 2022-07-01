@@ -9,18 +9,18 @@
 {{ $cover := .HasShortcode "blocks/cover" }}
 <nav class="js-navbar-scroll navbar navbar-expand navbar-light {{ if $cover}} td-navbar-cover {{ end }}flex-column flex-md-row td-navbar">
         <a class="navbar-brand" href="{{ .Site.Home.RelPermalink }}">
-		<span class="navbar-logo">{{ with resources.Get "icons/logo.svg" }}{{ ( . | minify).Content | safeHTML }}{{ end }}</span><span class="font-weight-bold">Chat Specification</span><span class="navbar-version"> &mdash; {{ partial "version-string" . }}</span>
+		<span class="navbar-logo">{{ with resources.Get "icons/logo.svg" }}{{ ( . | minify).Content | safeHTML }}{{ end }}</span><span class="font-weight-bold">specification</span><span class="navbar-version"> &mdash; {{ partial "version-string" . }}</span>
 	</a>
 	<div class="td-navbar-nav-scroll ml-md-auto" id="main_navbar">
 		<ul class="navbar-nav mt-2 mt-lg-0">
 
-			<li class="nav-item mr-4 mb-2 mb-lg-0"><a href="https://github.com/imzqqq/">Foundation</a>
+			<li class="nav-item mr-4 mb-2 mb-lg-0"><a href="https://matrix.org/foundation/">Foundation</a>
 			</li>
 
-      <li class="nav-item mr-4 mb-2 mb-lg-0"><a href="http://official-site.imzqqq.top/faq/">FAQs</a>
+      <li class="nav-item mr-4 mb-2 mb-lg-0"><a href="https://matrix.org/faq/">FAQs</a>
 			</li>
 
-      <li class="nav-item mr-4 mb-2 mb-lg-0"><a href="https://github.com/imzqqq/">Blog</a>
+      <li class="nav-item mr-4 mb-2 mb-lg-0"><a href="https://matrix.org/blog/posts">Blog</a>
       </li>
 
 			{{ if  .Site.Params.versions }}

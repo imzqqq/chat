@@ -13,13 +13,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server Room Joining API"
+  title: "Matrix Client-Server Room Joining API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:
@@ -34,7 +34,7 @@ paths:
       summary: Invite a user to participate in a particular room.
       description: |-
         *Note that there are two forms of this API, which are documented separately.
-        This version of the API requires that the inviter knows the Chat
+        This version of the API requires that the inviter knows the Matrix
         identifier of the invitee. The other is documented in the*
         [third party invites section](/client-server-api/#post_matrixclientv3roomsroomidinvite-1).
 
@@ -57,14 +57,14 @@ paths:
           name: roomId
           description: The room identifier (not alias) to which to invite the user.
           required: true
-          x-example: "!d41d8cd:chat.imzqqq.top"
+          x-example: "!d41d8cd:matrix.org"
         - in: body
           name: body
           required: true
           schema:
             type: object
             example: {
-              "user_id": "@cheeky_monkey:chat.imzqqq.top",
+              "user_id": "@cheeky_monkey:matrix.org",
               "reason": "Welcome to the team!"
             }
             properties:
@@ -110,7 +110,7 @@ paths:
             - The inviter's power level is insufficient to invite users to the room.
           examples:
             application/json: {
-              "errcode": "M_FORBIDDEN", "error": "@cheeky_monkey:chat.imzqqq.top is banned from the room"}
+              "errcode": "M_FORBIDDEN", "error": "@cheeky_monkey:matrix.org is banned from the room"}
           schema:
             "$ref": "definitions/errors/error.yaml"
         429:

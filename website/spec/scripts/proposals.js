@@ -30,10 +30,6 @@ const outputDir = path.join(__dirname, "../data/msc");
  */
 const states = [
   {
-    label: "proposal-in-review",
-    title: "Proposal In Review"
-  },
-  {
     label: "proposed-final-comment-period",
     title: "Proposed Final Comment Period"
   },
@@ -98,7 +94,7 @@ async function getIssues() {
     return null;
   }
 
-  let pageLink = "https://api.github.com/repos/matrix-org/matrix-doc/issues?state=all&labels=proposal&per_page=100";
+  let pageLink = "https://api.github.com/repos/matrix-org/matrix-spec-proposals/issues?state=all&labels=proposal&per_page=100";
   while (pageLink) {
     const response = await fetch(pageLink);
     const issuesForPage = await response.json();
@@ -113,7 +109,7 @@ getIssues().then(processIssues);
 /**
  * Rather than just store the complete issue, we'll extract
  * only the pieces we need.
- * We'll also do some transformation of the issues, jsut because
+ * We'll also do some transformation of the issues, just because
  * it's easier to do in JS than in the template.
  */
 function getProposalFromIssue(issue) {
@@ -188,23 +184,34 @@ function processIssues()  {
     fs.mkdirSync(outputDir);
   }
   const output = [];
-  // make a group of "work in progress" proposals,
-  // which are identified by not having any of the state labels
-  const stateLabels = states.map(s => s.label);
-  const worksInProgress = issues.filter(issue => {
-    const labelsForIssue = issue.labels.map(l => l.name);
-    return intersection(labelsForIssue, stateLabels).length === 0;
-  });
+
+  // make a group of "work in progress" proposals, for those in draft.
   output.push({
     title: "Work In Progress",
     label: "work-in-progress",
-    proposals: worksInProgress.map(issue => getProposalFromIssue(issue))
+    proposals: issues
+      .filter(issue => issue.state == "open" && issue.draft)
+      .map(issue => getProposalFromIssue(issue))
   });
+
+  // now the 'Proposal In Review' section, which are identified by
+  // not having any of the state labels
+  const stateLabels = states.map(s => s.label);
+  const proposalsInReview = issues.filter(issue => {
+    const labelsForIssue = issue.labels.map(l => l.name);
+    return !issue.draft && intersection(labelsForIssue, stateLabels).length === 0;
+  });
+  output.push({
+    title: "Proposal In Review",
+    label: "proposal-in-review",
+    proposals: proposalsInReview.map(issue => getProposalFromIssue(issue))
+  });
+
   // for each defined state
   for (const state of states) {
     // get the set of issues for that state
     const issuesForState = issues.filter(msc => {
-      return msc.labels.some(l => l.name === state.label);
+      return !msc.draft && msc.labels.some(l => l.name === state.label);
     });
     // store it in /data
     output.push({

@@ -14,13 +14,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Application Service API"
+  title: "Matrix Application Service API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/app/v1
+basePath: /_matrix/app/v1
 produces:
   - application/json
 securityDefinitions:
@@ -65,8 +65,7 @@ paths:
                 description: |-
                   A list of events, formatted as per the Client-Server API.
                 items:
-                  type: object
-                  title: Event
+                  $ref: "../client-server/definitions/client_event.yaml"
             required: ["events"]
       responses:
         200:

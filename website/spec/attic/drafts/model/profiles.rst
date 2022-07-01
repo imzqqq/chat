@@ -2,13 +2,13 @@
 Profiles
 ========
 
-A description of Chat server user profile metadata support.
+A description of Synapse user profile metadata support.
 
 
 Overview
 ========
 
-Internally within Chat server users are referred to by an opaque ID, which consists
+Internally within Synapse users are referred to by an opaque ID, which consists
 of some opaque localpart combined with the domain name of their homeserver.
 Obviously this does not yield a very nice user experience; users would like to
 see readable names for other users that are in some way meaningful to them.
@@ -26,7 +26,7 @@ numbers, website URLs, etc...). We put no requirements on the display name other
 than it being a valid Unicode string. Since it is likely that users will end up
 having multiple accounts (perhaps by necessity of being hosted in multiple
 places, perhaps by choice of wanting multiple distinct identifies), it would be
-useful that a metadata field type exists that can refer to another Chat server User
+useful that a metadata field type exists that can refer to another Synapse User
 ID, so that clients and HSes can make use of this information.
 
 Metadata Fields
@@ -36,7 +36,7 @@ Metadata Fields
 think of them. At the very least, any sort of supported ID for the 3rd Party ID
 servers should be accounted for here.]]
 
- * Chat server Directory Server username(s)
+ * Synapse Directory Server username(s)
 
  * Email address
 
@@ -49,7 +49,7 @@ servers should be accounted for here.]]
  
  * "Bio" information - date of birth, etc...
 
- * Chat server User ID of another account
+ * Synapse User ID of another account
 
  * Web URL
 
@@ -87,7 +87,7 @@ understanding could lead to information leakage.
 Client Concerns of Multiple Accounts
 ====================================
 
-Because a given person may want to have multiple Chat server User accounts, client
+Because a given person may want to have multiple Synapse User accounts, client
 implementations should allow the use of multiple accounts simultaneously
 (especially in the field of mobile phone clients, which generally don't support
 running distinct instances of the same application). Where features like address
@@ -103,7 +103,7 @@ User IDs. These can provide a service similar to giving domain-namespaced names
 for Rooms; in this case they can provide a way for a user to reference their
 User ID in some external form (e.g. that can be printed on a business card).
 
-The format for Chat server user name will consist of a localpart specific to the
+The format for Synapse user name will consist of a localpart specific to the
 directory server, and the domain name of that directory server:
 
   @localname:some.domain.name

@@ -14,12 +14,12 @@
 
 swagger: '2.0'
 info:
-  title: "Chat Federation Events API"
+  title: "Matrix Federation Events API"
   version: "1.0.0"
-host: localhost:8880
+host: localhost:8448
 schemes:
   - https
-basePath: /chat/federation/v1
+basePath: /_matrix/federation/v1
 produces:
   - application/json
 securityDefinitions:
@@ -39,13 +39,13 @@ paths:
           type: string
           description: The room ID to get state for.
           required: true
-          x-example: "!abc123:chat.imzqqq.top"
+          x-example: "!abc123:matrix.org"
         - in: query
           name: event_id
           type: string
           description: An event ID in the room to retrieve the state at.
           required: true
-          x-example: "$helloworld:chat.imzqqq.top"
+          x-example: "$helloworld:matrix.org"
       responses:
         200:
           description: |-
@@ -69,7 +69,7 @@ paths:
                     The [PDUs](/server-server-api/#pdus) contained in the auth chain. The event format
                     varies depending on the room version - check the [room version specification](/rooms)
                     for precise event formats.
-                  properties: []
+                  properties: {}
                   example:
                     $ref: "examples/minimal_pdu.json"
               pdus:
@@ -85,7 +85,7 @@ paths:
                     The [PDUs](/server-server-api/#pdus) for the fully resolved state of the room. The event format
                     varies depending on the room version - check the [room version specification](/rooms)
                     for precise event formats.
-                  properties: []
+                  properties: {}
                   example:
                     $ref: "examples/minimal_pdu.json"
             required: ['auth_chain', 'pdus']
@@ -105,13 +105,13 @@ paths:
           type: string
           description: The room ID to get state for.
           required: true
-          x-example: "!abc123:chat.imzqqq.top"
+          x-example: "!abc123:matrix.org"
         - in: query
           name: event_id
           type: string
           description: An event ID in the room to retrieve the state at.
           required: true
-          x-example: "$helloworld:chat.imzqqq.top"
+          x-example: "$helloworld:matrix.org"
       responses:
         200:
           description: |-
@@ -151,7 +151,7 @@ paths:
           type: string
           description: The event ID to get.
           required: true
-          x-example: "$abc123:chat.imzqqq.top"
+          x-example: "$abc123:matrix.org"
       responses:
         200:
           description: A transaction containing a single PDU which is the event requested.

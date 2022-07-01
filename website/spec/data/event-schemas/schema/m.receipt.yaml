@@ -27,7 +27,8 @@
                                     "x-pattern": "$USER_ID",
                                     "properties": {
                                         "ts": {
-                                            "type": "number",
+                                            "type": "integer",
+                                            "format": "int64",
                                             "description": "The timestamp the receipt was sent at."
                                         }
                                     }
@@ -42,10 +43,7 @@
         "type": {
             "type": "string",
             "enum": ["m.receipt"]
-        },
-        "room_id": {
-            "type": "string"
         }
     },
-    "required": ["room_id", "type", "content"]
+    "required": ["type", "content"]
 }

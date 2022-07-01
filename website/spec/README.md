@@ -1,8 +1,16 @@
-# Chat Server API Specification
+# Matrix Specification
+
+This repository contains the Matrix Specification, rendered at [spec.matrix.org](http://spec.matrix.org/).
+
+Developers looking to use Matrix should join [#matrix-dev:matrix.org](https://matrix.to/#/#matrix-dev:matrix.org)
+on Matrix for help.
+
+Spec authors and proposal writers are welcome to join [#matrix-spec:matrix.org](https://matrix.to/#/#matrix-spec:matrix.org).
+We welcome contributions! See [CONTRIBUTING.rst](./CONTRIBUTING.rst) for details.
 
 ## Structure
 
-The chat server specification is compiled with [Hugo](https://gohugo.io/) (a static site generator) with the following structure:
+The Matrix spec is compiled with [Hugo](https://gohugo.io/) (a static site generator) with the following structure:
 
 * `/assets`: assets that need postprocessing using [Hugo Pipes](https://gohugo.io/hugo-pipes/introduction/).
   For example, Sass files would go here.
@@ -18,11 +26,11 @@ The chat server specification is compiled with [Hugo](https://gohugo.io/) (a sta
 
 * `/layouts`: this contains [Hugo templates](https://gohugo.io/templates/). Some templates define the overall layout of
   a page: for example, whether it has header, footer, sidebar, and so on.
-  * `/layouts/partials`: these templates can be called from other templates, so they can be used to factor out
+    * `/layouts/partials`: these templates can be called from other templates, so they can be used to factor out
       template code that's used in more than one template. An obvious example here is something like a sidebar, where
       several different page layouts might all include the sidebar. But also, partial templates can return values: this
       means they can be used like functions, that can be called by multiple templates to do some common processing.
-  * `/layouts/shortcodes`: these templates can be called directly from files in `/content`.
+    * `/layouts/shortcodes`: these templates can be called directly from files in `/content`.
 
 * `/static`: static files which don't need preprocessing. JS or CSS files could live here.
 
@@ -41,37 +49,55 @@ Additionally, the following directories may be of interest:
 
 * `/attic`: Here contains historical sections of specification and legacy drafts for the specification.
 * `/changelogs`: Various bits of changelog for the specification areas.
-* `/data-definitions`: Bits of structured data consumable by Chat implementations.
+* `/data-definitions`: Bits of structured data consumable by Matrix implementations.
 * `/meta`: Documentation relating to the spec's processes that are otherwise untracked (release instructions, etc).
 * `/scripts`: Various scripts for generating the spec and validating its contents.
-* `/proposals`: Chat Spec Change (CSC) proposals. See <http://localhost:1313/proposals/>.
 
-## Developing
+## Authoring changes to the spec
 
-1. Install the extended version (often the OS default) of [Hugo](https://gohugo.io/getting-started/installing). Note that at least Hugo
-   v0.74 is required.
+Please read [CONTRIBUTING.rst](./CONTRIBUTING.rst) before authoring a change to the spec. Note that spec authoring takes
+place after an MSC has been accepted, not as part of a proposal itself.
 
-   Alternatively, use the Docker image at <https://hub.docker.com/r/klakegg/hugo/>.
-2. Run `npm i` to install the dependencies. Note that this will require NodeJS to be installed.
-3. (Optional) Run `npm run get-proposals` to seed proposal data. This is merely for populating the content of the "Spec Change Proposals" page and is not required.
-4. Run `hugo serve --port 1314` (or `docker run --rm -it -v $(pwd):/src -p 1314:1314 klakegg/hugo:latest serve`) to run a local webserver which builds whenever a file change is detected. If watching doesn't appear to be working for you, try adding `--disableFastRender` to the command line.
-5. Edit the specification 🙂
-6. Open <http://localhost:1314> in browser.
+1. Install the extended version (often the OS default) of Hugo:
+   <https://gohugo.io/getting-started/installing>. Note that at least Hugo
+   v0.93.0 is required.
 
-We use a highly customized [Docsy](https://www.docsy.dev/) theme for our generated site, which uses Bootstrap and FontAwesome.
+   Alternatively, use the Docker image at
+   https://hub.docker.com/r/klakegg/hugo/. (The "extended edition" is required
+   to process the SCSS.)
+2. Run `git submodule update --init --recursive` for good measure.
+3. Run `npm i` to install the dependencies. Note that this will require NodeJS to be installed.
+4. Run `npm run get-proposals` to seed proposal data. This is merely for populating the content of the "Spec Change Proposals"
+   page and is not required.
+5. Run `hugo serve` (or `docker run --rm -it -v $(pwd):/src -p 1313:1313
+   klakegg/hugo:ext serve`) to run a local webserver which builds whenever a file
+   change is detected. If watching doesn't appear to be working for you, try
+   adding `--disableFastRender` to the commandline.
+6. Edit the specification 🙂
+
+We use a highly customized [Docsy](https://www.docsy.dev/) theme for our generated site, which uses Bootstrap and Font
+Awesome. If you're looking at making design-related changes to the spec site, please coordinate with us in
+[#matrix-docs:matrix.org](https://matrix.to/#/#matrix-docs:matrix.org) before opening a PR.
 
 ## Building the specification
 
 If for some reason you're not a CI/CD system and want to render a static version of the spec for yourself, follow the above
-steps for authoring changes to the specification and instead of `hugo serve`, run `hugo -d "spec"` - this will generate the
+steps for authoring changes to the specification and instead of `hugo serve` run `hugo -d "spec"` - this will generate the
 spec to `/spec`. If you'd like to serve the spec off a path instead of a domain root (eg: `/unstable`), add `--baseURL "/unstable"`
 to the `hugo -d "spec"` command.
 
-For building the swagger definitions, create a python3 `virtualenv` and activate it. Then run `pip3 install -r ./scripts/requirements.txt`
-and finally `python3 ./scripts/dump-swagger.py` to generate it to `./scripts/swagger/api-docs.json`. To make use of the generated file,
+For building the swagger definitions, create a python3 virtualenv and activate it. Then run `pip install -r ./scripts/requirements.txt`
+and finally `python ./scripts/dump-swagger.py` to generate it to `./scripts/swagger/api-docs.json`. To make use of the generated file,
 there are a number of options:
 
 * It can be uploaded from your filesystem to an online editor/viewer such as [on the swagger website](http://editor.swagger.io/).
 * You can run a local HTTP server by running `./scripts/swagger-http-server.py`, and then view the documentation via an
   online viewer; for example, at <http://petstore.swagger.io/?url=http://localhost:8000/api-docs.json>.
-* You can host the swagger UI yourself. See <https://github.com/swagger-api/swagger-ui#how-to-run> for advice on how to do so.
+* You can host the swagger UI yourself. See <https://github.com/swagger-api/swagger-ui#how-to-run> for advice on how to
+  do so.
+
+## Issue tracking
+
+Specification issues are tracked on github at <https://github.com/matrix-org/matrix-spec/issues>.
+
+See [meta/github-labels.rst](./meta/github-labels.rst) for information on what the labels mean.

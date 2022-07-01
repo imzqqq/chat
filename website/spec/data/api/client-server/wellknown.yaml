@@ -13,9 +13,9 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server Server Discovery API"
+  title: "Matrix Client-Server Server Discovery API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
 basePath: /.well-known
@@ -24,7 +24,7 @@ produces:
 paths:
   "/matrix/client":
     get:
-      summary: Gets Chat server discovery information about the domain.
+      summary: Gets Matrix server discovery information about the domain.
       description: |-
         Gets discovery information about the domain. The file may include
         additional keys, which MUST follow the Java package naming convention,

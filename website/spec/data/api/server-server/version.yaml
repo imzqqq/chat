@@ -14,12 +14,12 @@
 
 swagger: '2.0'
 info:
-  title: "Chat Federation Version API"
+  title: "Matrix Federation Version API"
   version: "1.0.0"
-host: localhost:8880
+host: localhost:8448
 schemes:
   - https
-basePath: /chat/federation/v1
+basePath: /_matrix/federation/v1
 produces:
   - application/json
 paths:

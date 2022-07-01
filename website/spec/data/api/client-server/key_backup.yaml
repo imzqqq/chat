@@ -1,4 +1,4 @@
-# Copyright 2019-2020 The Chat.org Foundation C.I.C.
+# Copyright 2019-2020 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,13 +13,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server Key Backup API"
+  title: "Matrix Client-Server Key Backup API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:
@@ -172,7 +172,7 @@ paths:
           description: |-
             The backup version to get, as returned in the `version` parameter
             of the response in
-            [`POST /chat/client/r0/room_keys/version`](/client-server/#post_matrixclientv3room_keysversion)
+            [`POST /_matrix/client/v3/room_keys/version`](/client-server-api/#post_matrixclientv3room_keysversion)
             or this endpoint.
           required: true
           x-example: "1"
@@ -254,8 +254,8 @@ paths:
           description: |-
             The backup version to update, as returned in the `version`
             parameter in the response of
-            [`POST /chat/client/r0/room_keys/version`](/client-server-api/#post_matrixclientv3room_keysversion)
-            or [`GET /chat/client/r0/room_keys/version/{version}`](/client-server-api/#get_matrixclientv3room_keysversionversion).
+            [`POST /_matrix/client/v3/room_keys/version`](/client-server-api/#post_matrixclientv3room_keysversion)
+            or [`GET /_matrix/client/v3/room_keys/version/{version}`](/client-server-api/#get_matrixclientv3room_keysversionversion).
           required: true
           x-example: "1"
         - in: body
@@ -298,9 +298,10 @@ paths:
       responses:
         200:
           description: The update succeeded.
+          examples:
+            application/json: {}
           schema:
             type: object
-            properties: {}
         400:
           description: |-
             A parameter was incorrect.  For example, the `algorithm` does not
@@ -343,8 +344,8 @@ paths:
           description: |-
             The backup version to delete, as returned in the `version`
             parameter in the response of
-            [`POST /chat/client/r0/room_keys/version`](/client-server-api/#post_matrixclientv3room_keysversion)
-            or [`GET /chat/client/r0/room_keys/version/{version}`](/client-server-api/#get_matrixclientv3room_keysversionversion).
+            [`POST /_matrix/client/v3/room_keys/version`](/client-server-api/#post_matrixclientv3room_keysversion)
+            or [`GET /_matrix/client/v3/room_keys/version/{version}`](/client-server-api/#get_matrixclientv3room_keysversionversion).
           required: true
           x-example: "1"
       responses:
@@ -377,7 +378,7 @@ paths:
       summary: Store a key in the backup.
       description: |-
         Store a key in the backup.
-      operationId: putRoomKeysBySessionId
+      operationId: putRoomKeyBySessionId
       security:
         - accessToken: []
       parameters:
@@ -449,7 +450,7 @@ paths:
       summary: Retrieve a key from the backup.
       description: |-
         Retrieve a key from the backup.
-      operationId: getRoomKeysBySessionId
+      operationId: getRoomKeyBySessionId
       security:
         - accessToken: []
       parameters:
@@ -496,7 +497,7 @@ paths:
       summary: Delete a key from the backup.
       description: |-
         Delete a key from the backup.
-      operationId: deleteRoomKeysBySessionId
+      operationId: deleteRoomKeyBySessionId
       security:
         - accessToken: []
       parameters:
@@ -878,6 +879,8 @@ paths:
                     }
                   }
                 }
+            required:
+              - rooms
         404:
           description: The backup was not found.
           examples:

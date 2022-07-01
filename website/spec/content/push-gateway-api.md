@@ -16,16 +16,16 @@ notification provider (e.g. APNS, GCM).
 
 ```
                                    +--------------------+  +-------------------+
-                  Chat HTTP      |                    |  |                   |
+                  Matrix HTTP      |                    |  |                   |
              Notification Protocol |   App Developer    |  |   Device Vendor   |
                                    |                    |  |                   |
            +-------------------+   | +----------------+ |  | +---------------+ |
            |                   |   | |                | |  | |               | |
-           | Chat homeserver +----->  Push Gateway  +------> Push Provider | |
+           | Matrix homeserver +----->  Push Gateway  +------> Push Provider | |
            |                   |   | |                | |  | |               | |
            +-^-----------------+   | +----------------+ |  | +----+----------+ |
              |                     |                    |  |      |            |
-    Chat   |                     |                    |  |      |            |
+    Matrix   |                     |                    |  |      |            |
  Client/Server API  +              |                    |  |      |            |
              |      |              +--------------------+  +-------------------+
              |   +--+-+                                           |

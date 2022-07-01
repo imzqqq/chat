@@ -1,7 +1,7 @@
 Registration and Login
 ----------------------
 
-Clients must register with a homeserver in order to use Chat. After
+Clients must register with a homeserver in order to use Matrix. After
 registering, the client will be given an access token which must be used in ALL
 requests to that homeserver as a query parameter 'access_token'.
 
@@ -60,12 +60,12 @@ whatever additional parameters are required for that login or registration type
 ID and a new access token MUST be returned::
 
   {
-    "user_id": "@user:chat.imzqqq.top",
+    "user_id": "@user:matrix.org",
     "access_token": "abcdef0123456789"
   }
 
 The ``user_id`` key is particularly useful if the homeserver wishes to support
-localpart entry of usernames (e.g. "user" rather than "@user:chat.imzqqq.top"), as
+localpart entry of usernames (e.g. "user" rather than "@user:matrix.org"), as
 the client may not be able to determine its ``user_id`` in this case.
 
 If the flow has multiple stages to it, the homeserver may wish to create a
@@ -107,7 +107,7 @@ Captcha-based
 :Type:
   ``m.login.recaptcha``
 :Description:
-  Login is supported by responding to a captcha (in the case of the Chat server
+  Login is supported by responding to a captcha (in the case of the Synapse
   implementation, Google's Recaptcha library is used).
 
 To respond to this type, reply with::
@@ -119,7 +119,7 @@ To respond to this type, reply with::
   }
 
 .. NOTE::
-  In Chat server, the Recaptcha parameters can be obtained in Javascript by calling:
+  In Synapse, the Recaptcha parameters can be obtained in Javascript by calling:
     Recaptcha.get_challenge();
     Recaptcha.get_response();
 
@@ -175,7 +175,7 @@ The client then visits this URI and authorizes the homeserver. The client then
 visits the REDIRECT_URI with the auth code= query parameter which returns::
 
   {
-    "user_id": "@user:chat.imzqqq.top",
+    "user_id": "@user:matrix.org",
     "access_token": "0123456789abcdef"
   }
 
@@ -274,7 +274,7 @@ To respond to this type, reply with::
       {
         "sid": "<identity server session id>",
         "clientSecret": "<identity server client secret>",
-        "idServer": "<url of identity server authed with, e.g. 'chat.imzqqq.top:8090'>"
+        "idServer": "<url of identity server authed with, e.g. 'matrix.org:8090'>"
       }
     ]
   }

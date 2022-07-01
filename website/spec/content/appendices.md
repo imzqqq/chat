@@ -54,7 +54,7 @@ public keys or signatures. Given that JSON cannot safely represent raw
 binary data, all binary values should be encoded and represented in
 JSON as unpadded Base64 strings as described above.
 
-In cases where the Chat specification refers to either opaque byte
+In cases where the Matrix specification refers to either opaque byte
 or opaque Base64 values, the value is considered to be opaque AFTER
 Base64 decoding, rather than the encoded representation itself.
 
@@ -70,7 +70,7 @@ Base64 encoding of binary values may be skipped altogether.
 
 ## Signing JSON
 
-Various points in the Chat specification require JSON objects to be
+Various points in the Matrix specification require JSON objects to be
 cryptographically signed. This requires us to encode the JSON as a
 binary string. Unfortunately the same JSON can be encoded in different
 ways by changing how much white space is used or by changing the order
@@ -387,6 +387,40 @@ Some identifiers are specific to given room versions, please refer to
 the [room versions specification](/rooms) for more
 information.
 
+### Common Namespaced Identifier Grammar
+
+{{% added-in v="1.2" %}}
+
+The specification defines some identifiers to use the *Common Namespaced
+Identifier Grammar*. This is a common grammar intended for non-user-visible
+identifiers, with a defined mechanism for implementations to create new
+identifiers.
+
+The grammar is defined as follows:
+
+ * An identifier must be at least one character and at most 255 characters
+   in length.
+ * Identifiers must start with one of the characters `[a-z]`, and be entirely
+   composed of the characters `[a-z]`, `[0-9]`, `-`, `_` and `.`.
+ * Identifiers starting with the characters `m.` are reserved for use by the
+   official Matrix specification.
+ * Identifiers which are not described in the specification should follow the
+   Java Package Naming Convention to namespace their identifier. This is typically
+   a reverse DNS format, such as `com.example.identifier`.
+
+{{% boxes/note %}}
+Identifiers can and do inherit grammar from this specification. For example, "this
+identifier uses the Common Namespaced Identifier Grammar, though without the namespacing
+requirements" - this means that `m.` is still reserved, but that implementations
+do not have to use the reverse DNS scheme to namespace their custom identifier.
+{{% /boxes/note %}}
+
+{{% boxes/rationale %}}
+ASCII characters do not have issues with homoglyphs or alternative encodings which
+might interfere with the identifier's purpose. Additionally, using lowercase
+characters prevents concerns about case sensitivity.
+{{% /boxes/rationale %}}
+
 ### Server Name
 
 A homeserver is uniquely identified by its server name. This value is
@@ -422,15 +456,15 @@ IPv4 literals must be a sequence of four decimal numbers in the range 0
 to 255, separated by `.`. IPv6 literals must be as specified by
 [RFC3513, section 2.2](https://tools.ietf.org/html/rfc3513#section-2.2).
 
-DNS names for use with Chat should follow the conventional
+DNS names for use with Matrix should follow the conventional
 restrictions for internet hostnames: they should consist of a series of
 labels separated by `.`, where each label consists of the alphanumeric
 characters or hyphens.
 
 Examples of valid server names are:
 
--   `chat.imzqqq.top`
--   `chat.imzqqq.top:8888`
+-   `matrix.org`
+-   `matrix.org:8888`
 -   `1.2.3.4` (IPv4 literal)
 -   `1.2.3.4:1234` (IPv4 literal with explicit port)
 -   `[1234:5678::abcd]` (IPv6 literal)
@@ -444,7 +478,7 @@ IPv6 literals.
 {{% /boxes/note %}}
 
 Server names must be treated case-sensitively: in other words,
-`@user:chat.imzqqq.top` is a different person from `@user:MATRIX.ORG`.
+`@user:matrix.org` is a different person from `@user:MATRIX.ORG`.
 
 Some recommendations for a choice of server name follow:
 
@@ -454,7 +488,7 @@ Some recommendations for a choice of server name follow:
 
 ### Common Identifier Format
 
-The Chat protocol uses a common format to assign unique identifiers to
+The Matrix protocol uses a common format to assign unique identifiers to
 a number of entities, including users, events and rooms. Each identifier
 takes the form:
 
@@ -487,7 +521,7 @@ be represented with a `domain` component under some conditions - see the
 
 #### User Identifiers
 
-Users within Chat are uniquely identified by their Chat user ID. The
+Users within Matrix are uniquely identified by their Matrix user ID. The
 user ID is namespaced to the homeserver which allocated the account and
 has the form:
 
@@ -527,13 +561,13 @@ able to distinguish similar user IDs manually, if somewhat laboriously.
 
 We chose to disallow upper-case characters because we do not consider it
 valid to have two user IDs which differ only in case: indeed it should
-be possible to reach `@user:chat.imzqqq.top` as `@USER:chat.imzqqq.top`. However,
+be possible to reach `@user:matrix.org` as `@USER:matrix.org`. However,
 user IDs are necessarily used in a number of situations which are
 inherently case-sensitive (notably in the `state_key` of `m.room.member`
 events). Forbidding upper-case characters (and requiring homeservers to
 downcase usernames when creating user IDs for new users) is a relatively
-simple way to ensure that `@USER:chat.imzqqq.top` cannot refer to a different
-user to `@user:chat.imzqqq.top`.
+simple way to ensure that `@USER:matrix.org` cannot refer to a different
+user to `@user:matrix.org`.
 
 Finally, we decided to restrict the allowable punctuation to a very
 basic set to reduce the possibility of conflicts with special characters
@@ -547,7 +581,7 @@ the user, it is limited to ensure that the user ID does not dominate
 over the actual content of the events.
 {{% /boxes/rationale %}}
 
-Chat user IDs are sometimes informally referred to as MXIDs.
+Matrix user IDs are sometimes informally referred to as MXIDs.
 
 ##### Historical User IDs
 
@@ -624,51 +658,162 @@ homeserver to look up the alias.
 Room aliases MUST NOT exceed 255 bytes (including the `#` sigil and the
 domain).
 
-#### to.chat.imzqqq.top navigation
+#### URIs
+
+There are two major kinds of referring to a resource in Matrix: matrix.to
+and `matrix:` URI. The specification currently defines both as active/valid
+ways to refer to entities/resources.
+
+Rooms, users, and aliases may be represented as a URI. This URI can
+be used to reference particular objects in a given context, such as mentioning
+a user in a message or linking someone to a particular point in the room's
+history (a permalink).
+
+##### Matrix URI scheme
+
+{{% added-in v="1.2" %}}
+
+The Matrix URI scheme is defined as follows (`[]` enclose optional parts, `{}`
+enclose variables):
+```
+matrix:[//{authority}/]{type}/{id without sigil}[/{type}/{id without sigil}...][?{query}][#{fragment}]
+```
+
+As a schema, this can be represented as:
+
+```
+MatrixURI = "matrix:" hier-part [ "?" query ] [ "#" fragment ]
+hier-part = [ "//" authority "/" ] path
+path = entity-descriptor ["/" entity-descriptor]
+entity-descriptor = nonid-segment / type-qualifier id-without-sigil
+nonid-segment = segment-nz ; as defined in RFC 3986
+type-qualifier = segment-nz "/" ; as defined in RFC 3986
+id-without-sigil = string ; as defined in Matrix identifier spec above
+query = query-element *( "&" query-item )
+query-item = action / routing / custom-query-item
+action = "action=" ( "join" / "chat" )
+routing = "via=” authority
+custom-query-item = custom-item-name "=" custom-item-value
+custom-item-name = 1*unreserved ; reverse-DNS name
+custom-item-value =
+```
+
+Note that this format is deliberately following [RFC 3986](https://tools.ietf.org/html/rfc3986)
+to ensure maximum compatibility with existing tooling. The scheme name (`matrix`) is
+registered alongside other schemes by the IANA [here](https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml).
+
+Currently, the `authority` and `fragment` are unused by this specification,
+though are reserved for future use. Matrix does not have a central authority which
+could reasonably fill the `authority` role. `nonid-segment` in the schema is
+additionally reserved for future use.
+
+The `type` denotes the kind of entity which is described by `id without sigil`.
+Specifically, the following mappings are used:
+
+* `r` for room aliases.
+* `u` for users.
+* `roomid` for room IDs (note the distinction from room aliases).
+* `e` for events, when after a room reference (`r` or `roomid`).
 
 {{% boxes/note %}}
-This namespacing is in place pending a `matrix://` (or similar) URI
-scheme. This is **not** meant to be interpreted as an available web
-service - see below for more details.
+During development of this URI format, types of `user`, `room`, and `event`
+were used: these MUST NOT be produced any further, though implementations might
+wish to consider handling them as `u`, `r`, and `e` respectively.
+
+`roomid` was otherwise unchanged.
 {{% /boxes/note %}}
 
-Rooms, users, aliases, and groups may be represented as a "to.chat.imzqqq.top"
-URI. This URI can be used to reference particular objects in a given
-context, such as mentioning a user in a message or linking someone to a
-particular point in the room's history (a permalink).
+The `id without sigil` is simply the identifier for the entity without the defined
+sigil. For example, `!room:example.org` becomes `room:example.org` (`!` is the sigil
+for room IDs). The sigils are described under the
+[Common Identifier Format](#common-identifier-format).
 
-A to.chat.imzqqq.top URI has the following format, based upon the specification
-defined in RFC 3986:
+The `query` is optional and helps clients with processing the URI's intent. In
+this specification are the following:
 
-> <https://to.chat.imzqqq.top/#/>&lt;identifier&gt;/&lt;extra
-> parameter&gt;?&lt;additional arguments&gt;
+* `action` - Helps provide intent for what the client should do specifically with
+  the URI. Lack of an `action` simply indicates that the URI is identifying a resource
+  and has no suggested action associated with it - clients could treat this as
+  navigating the user to an informational page, for example.
+  * `action=join` - Describes an intent for the client to join the room described
+    by the URI and thus is only valid on URIs which are referring to a room (it
+    has no meaning and is ignored otherwise). The client should prompt for confirmation
+    prior to joining the room, if the user isn't already part of the room.
+  * `action=chat` - Describes an intent for the client to start/open a DM with
+    the user described by the URI and thus is only valid on URIs which are referring
+    to a user (it has no meaning and is ignored otherwise). Clients supporting a
+    form of Canonical DMs should reuse existing DMs instead of creating new ones
+    if available. The client should prompt for confirmation prior to creating the
+    DM, if the user isn't being redirected to an existing canonical DM.
+* `via` - Can be used to denote which servers (`authority` grammar) to attempt to resolve
+  the resource through, or take `action` through. An example of using `via` for
+  routing Room IDs is described [below](#routing), and is encouraged for use in
+  Matrix URIs referring to a room ID. Matrix URIs can additionally use this `via`
+  parameter for non-public federation resolution of identifiers (i.e.: listing a
+  server which might have information about the given user) while a more comprehensive
+  way is being worked out, such as one proposed by [MSC3020](https://github.com/matrix-org/matrix-spec-proposals/pull/3020).
+
+Custom query parameters can be specified using the
+[Common Namespaced Identifier format](#common-namespaced-identifier-grammar) and
+appropriately encoding their values. Specifically, "percent encoding" and encoding
+of the `&` are required. Where custom parameters conflict with specified ones,
+clients should prefer the specified parameters. Clients should strive to maintain
+consistency across custom parameters as users might be using multiple different
+clients across multiple different authors. Useful and mission-aligned custom
+parameters should be proposed to be included in this specification.
+
+Examples of common URIs are:
+
+<!-- Author's note: These examples should be consistent with the matrix.to counterparts. -->
+* Link to `#somewhere:example.org`: `matrix:r/somewhere:example.org`
+* Link to `!somewhere:example.org`: `matrix:roomid/somewhere:example.org?via=elsewhere.ca`
+* Link to `$event` in `#somewhere:example.org`: `matrix:r/somewhere:example.org/e/event`
+* Link to `$event` in `!somewhere:example.org`: `matrix:roomid/somewhere:example.org/e/event?via=elsewhere.ca`
+* Link to chat with `@alice:example.org`: `matrix:u/alice:example.org?action=chat`
+
+A suggested client implementation algorithm is available in the
+[original MSC](https://github.com/matrix-org/matrix-spec-proposals/blob/main/proposals/2312-matrix-uri.md#recommended-implementation).
+
+##### matrix.to navigation
+
+{{% boxes/note %}}
+This namespacing existed prior to a `matrix:` scheme. This is **not**
+meant to be interpreted as an available web service - see below for more
+details.
+{{% /boxes/note %}}
+
+A matrix.to URI has the following format, based upon the specification
+defined in [RFC 3986](https://tools.ietf.org/html/rfc3986):
+
+```
+https://matrix.to/#/<identifier>/<extra parameter>?<additional arguments>
+```
 
 The identifier may be a room ID, room alias, user ID, or group ID. The
 extra parameter is only used in the case of permalinks where an event ID
-is referenced. The to.chat.imzqqq.top URI, when referenced, must always start
-with `https://to.chat.imzqqq.top/#/` followed by the identifier.
+is referenced. The matrix.to URI, when referenced, must always start
+with `https://matrix.to/#/` followed by the identifier.
 
 The `<additional arguments>` and the preceding question mark are
 optional and only apply in certain circumstances, documented below.
 
-Clients should not rely on to.chat.imzqqq.top URIs falling back to a web server
+Clients should not rely on matrix.to URIs falling back to a web server
 if accessed and instead should perform some sort of action within the
-client. For example, if the user were to click on a to.chat.imzqqq.top URI for a
+client. For example, if the user were to click on a matrix.to URI for a
 room alias, the client may open a view for the user to participate in
 the room.
 
-The components of the to.chat.imzqqq.top URI (`<identifier>` and
+The components of the matrix.to URI (`<identifier>` and
 `<extra parameter>`) are to be percent-encoded as per RFC 3986.
 
-Examples of to.chat.imzqqq.top URIs are:
+Examples of matrix.to URIs are:
 
--   Room alias: `https://to.chat.imzqqq.top/#/%23somewhere%3Aexample.org`
--   Room: `https://to.chat.imzqqq.top/#/!somewhere%3Aexample.org`
--   Permalink by room:
-    `https://to.chat.imzqqq.top/#/!somewhere%3Aexample.org/%24event%3Aexample.org`
--   Permalink by room alias:
-    `https://to.chat.imzqqq.top/#/%23somewhere:example.org/%24event%3Aexample.org`
--   User: `https://to.chat.imzqqq.top/#/%40alice%3Aexample.org`
+<!-- Author's note: These examples should be consistent with the matrix scheme counterparts. -->
+* Link to `#somewhere:example.org`: `https://matrix.to/#/%23somewhere%3Aexample.org`
+* Link to `!somewhere:example.org`: `https://matrix.to/#/!somewhere%3Aexample.org?via=elsewhere.ca`
+* Link to `$event` in `#somewhere:example.org`: `https://matrix.to/#/%23somewhere:example.org/%24event%3Aexample.org`
+* Link to `$event` in `!somewhere:example.org`: `https://matrix.to/#/!somewhere%3Aexample.org/%24event%3Aexample.org?via=elsewhere.ca`
+* Link to `@alice:example.org`: `https://matrix.to/#/%40alice%3Aexample.org`
 
 {{% boxes/note %}}
 Historically, clients have not produced URIs which are fully encoded.
@@ -678,10 +823,10 @@ the client if possible.
 {{% /boxes/note %}}
 
 {{% boxes/note %}}
-Clients should be aware that decoding a to.chat.imzqqq.top URI may result in
+Clients should be aware that decoding a matrix.to URI may result in
 extra slashes appearing due to some [room
 versions](/rooms). These slashes should normally be
-encoded when producing to.chat.imzqqq.top URIs, however.
+encoded when producing matrix.to URIs, however.
 {{% /boxes/note %}}
 
 {{% boxes/note %}}
@@ -689,8 +834,8 @@ encoded when producing to.chat.imzqqq.top URIs, however.
 In prior versions of this specification, a concept of "groups" were mentioned
 to organize rooms. This functionality did not properly get introduced into
 the specification and is subsequently replaced with "Spaces". Historical
-to.chat.imzqqq.top URIs pointing to groups might still exist: they take the form
-`https://to.chat.imzqqq.top/#/%2Bexample%3Aexample.org` (where the `+` sigil may or
+matrix.to URIs pointing to groups might still exist: they take the form
+`https://matrix.to/#/%2Bexample%3Aexample.org` (where the `+` sigil may or
 may not be encoded).
 {{% /boxes/note %}}
 
@@ -698,20 +843,17 @@ may not be encoded).
 
 Room IDs are not routable on their own as there is no reliable domain to
 send requests to. This is partially mitigated with the addition of a
-`via` argument on a to.chat.imzqqq.top URI, however the problem of routability is
+`via` argument on a URI, however the problem of routability is
 still present. Clients should do their best to route Room IDs to where
 they need to go, however they should also be aware of [issue
-\#1579](https://github.com/matrix-org/matrix-doc/issues/1579).
+\#1579](https://github.com/matrix-org/matrix-spec/issues/355).
 
 A room (or room permalink) which isn't using a room alias should supply
-at least one server using `via` in the `<additional arguments>`, like
-so:
-`https://to.chat.imzqqq.top/#/!somewhere%3Aexample.org?via=example.org&via=alt.example.org`.
-The parameter can be supplied multiple times to specify multiple servers
-to try.
+at least one server using `via` in the URI's query string. Multiple servers
+can be specified by including multuple `via` parameters.
 
 The values of `via` are intended to be passed along as the `server_name`
-parameters on the Client Server `/join` API.
+parameters on the [Client Server `/join/{roomIdOrAlias}` API](/client-server-api/#post_matrixclientv3joinroomidoralias).
 
 When generating room links and permalinks, the application should pick
 servers which have a high probability of being in the room in the
@@ -1061,11 +1203,11 @@ The event signing algorithm should emit the following signed event:
 }
 ```
 
-## Conventions for Chat APIs
+## Conventions for Matrix APIs
 
-This section is intended primarily to guide API designers when adding to Chat,
+This section is intended primarily to guide API designers when adding to Matrix,
 setting guidelines to follow for how those APIs should work. This is important to
-maintain consistency with the Chat protocol, and thus improve developer
+maintain consistency with the Matrix protocol, and thus improve developer
 experience.
 
 ### HTTP endpoint and JSON property naming

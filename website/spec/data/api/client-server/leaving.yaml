@@ -13,13 +13,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server Room Leaving API"
+  title: "Matrix Client-Server Room Leaving API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:
@@ -51,7 +51,7 @@ paths:
           name: roomId
           description: The room identifier to leave.
           required: true
-          x-example: "!nkl290a:chat.imzqqq.top"
+          x-example: "!nkl290a:matrix.org"
         - in: body
           name: body
           required: true
@@ -88,7 +88,7 @@ paths:
       description: |-
         This API stops a user remembering about a particular room.
 
-        In general, history is a first class citizen in Chat. After this API
+        In general, history is a first class citizen in Matrix. After this API
         is called, however, a user will no longer be able to retrieve history
         for this room. If all users on a homeserver forget a room, the room is
         eligible for deletion from that homeserver.
@@ -104,7 +104,7 @@ paths:
           name: roomId
           description: The room identifier to forget.
           required: true
-          x-example: "!au1ba7o:chat.imzqqq.top"
+          x-example: "!au1ba7o:matrix.org"
       responses:
         200:
           description: |-
@@ -119,7 +119,7 @@ paths:
           examples:
             application/json: {
               "errcode": "M_UNKNOWN",
-              "error": "User @example:chat.imzqqq.top is in room !au1ba7o:chat.imzqqq.top"
+              "error": "User @example:matrix.org is in room !au1ba7o:matrix.org"
             }
           schema:
             "$ref": "definitions/errors/error.yaml"

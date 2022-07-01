@@ -14,12 +14,12 @@
 
 swagger: '2.0'
 info:
-  title: "Chat Federation Key Exchange API"
+  title: "Matrix Federation Key Exchange API"
   version: "1.0.0"
-host: localhost:8880
+host: localhost:8448
 schemes:
   - https
-basePath: /chat/key/v2
+basePath: /_matrix/key/v2
 produces:
   - application/json
 paths:

@@ -13,13 +13,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server Room Banning API"
+  title: "Matrix Client-Server Room Banning API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:
@@ -45,7 +45,7 @@ paths:
           name: roomId
           description: The room identifier (not alias) from which the user should be banned.
           required: true
-          x-example: "!e42d8c:chat.imzqqq.top"
+          x-example: "!e42d8c:matrix.org"
         - in: body
           name: body
           required: true
@@ -53,7 +53,7 @@ paths:
             type: object
             example: {
                 "reason": "Telling unfunny jokes",
-                "user_id": "@cheeky_monkey:chat.imzqqq.top"
+                "user_id": "@cheeky_monkey:matrix.org"
               }
             properties:
               user_id:
@@ -105,14 +105,14 @@ paths:
           name: roomId
           description: The room identifier (not alias) from which the user should be unbanned.
           required: true
-          x-example: "!e42d8c:chat.imzqqq.top"
+          x-example: "!e42d8c:matrix.org"
         - in: body
           name: body
           required: true
           schema:
             type: object
             example: {
-              "user_id": "@cheeky_monkey:chat.imzqqq.top",
+              "user_id": "@cheeky_monkey:matrix.org",
               "reason": "They've been banned long enough"
             }
             properties:

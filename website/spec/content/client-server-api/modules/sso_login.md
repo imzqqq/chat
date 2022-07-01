@@ -1,6 +1,5 @@
 ---
 type: module
-weight: 220
 ---
 
 ### SSO client login/authentication
@@ -10,21 +9,21 @@ allow users to log into applications via a single web-based
 authentication portal. Examples include OpenID Connect, "Central
 Authentication Service" (CAS) and SAML.
 
-This module allows a Chat homeserver to delegate user authentication
+This module allows a Matrix homeserver to delegate user authentication
 to an external authentication server supporting one of these protocols.
 In this process, there are three systems involved:
 
--   A Chat client, using the APIs defined this specification, which
-    is seeking to authenticate a user to a Chat homeserver.
--   A Chat homeserver, implementing the APIs defined in this
+-   A Matrix client, using the APIs defined this specification, which
+    is seeking to authenticate a user to a Matrix homeserver.
+-   A Matrix homeserver, implementing the APIs defined in this
     specification, but which is delegating user authentication to the
     authentication server.
 -   An "authentication server", which is responsible for
     authenticating the user.
 
 This specification is concerned only with communication between the
-Chat client and the homeserver, and is independent of the SSO protocol
-used to communicate with the authentication server. Different Chat
+Matrix client and the homeserver, and is independent of the SSO protocol
+used to communicate with the authentication server. Different Matrix
 homeserver implementations might support different SSO protocols.
 
 Clients and homeservers implementing the SSO flow will need to consider
@@ -33,7 +32,7 @@ similar in both cases, but there are slight differences.
 
 Typically, SSO systems require a single "callback" URI to be configured
 at the authentication server. Once the user is authenticated, their
-browser is redirected to that URI. It is up to the Chat homeserver
+browser is redirected to that URI. It is up to the Matrix homeserver
 implementation to implement a suitable endpoint. For example, for CAS
 authentication the homeserver should provide a means for the
 administrator to configure where the CAS server is and the REST
@@ -47,10 +46,10 @@ buttons. These are known as "identity providers" (IdPs).
 
 An overview of the process is as follows:
 
-1.  The Chat client calls [`GET /login`](/client-server-api/#get_matrixclientv3login) to find the supported login
+1.  The Matrix client calls [`GET /login`](/client-server-api/#get_matrixclientv3login) to find the supported login
     types, and the homeserver includes a flow with
     `"type": "m.login.sso"` in the response.
-2.  To initiate the `m.login.sso` login type, the Chat client
+2.  To initiate the `m.login.sso` login type, the Matrix client
     instructs the user's browser to navigate to the
     [`/login/sso/redirect`](/client-server-api/#get_matrixclientv3loginssoredirect) endpoint on the user's homeserver.
     Note that this may be the IdP-dependent version of the endpoint if the
@@ -71,7 +70,7 @@ opening an embedded web view.
 These steps are illustrated as follows:
 
 ```
-    Chat Client                        Chat Homeserver      Auth Server
+    Matrix Client                        Matrix Homeserver      Auth Server
         |                                       |                   |
         |-------------(0) GET /login----------->|                   |
         |<-------------login types--------------|                   |
@@ -93,7 +92,7 @@ These steps are illustrated as follows:
 
 {{% boxes/note %}}
 In the older [r0.4.0
-version](https://chat.api-spec.imzqqq.top/client_server/r0.4.0.html#cas-based-client-login)
+version](https://matrix.org/docs/spec/client_server/r0.4.0.html#cas-based-client-login)
 of this specification it was possible to authenticate via CAS when the
 homeserver provides a `m.login.cas` login flow. This specification
 deprecates the use of `m.login.cas` to instead prefer `m.login.sso`,
@@ -159,7 +158,7 @@ the generic `/redirect` endpoint instead of the `/redirect/{idpId}` endpoint.
 ###### Redirecting to the Authentication server
 
 The server should handle
-`/chat/client/v3/login/sso/redirect` as follows:
+`/_matrix/client/v3/login/sso/redirect` as follows:
 
 1.  It should build a suitable request for the SSO system.
 2.  It should store enough state that the flow can be securely resumed
@@ -184,7 +183,7 @@ require checking a signature on the response.
 The homeserver then proceeds as follows:
 
 1.  The homeserver MUST map the user details received from the
-    authentication server to a valid [Chat user
+    authentication server to a valid [Matrix user
     identifier](/appendices#user-identifiers). The guidance in
     [Mapping from other character
     sets](/appendices#mapping-from-other-character-sets) may be
@@ -197,7 +196,7 @@ The homeserver then proceeds as follows:
     around five seconds.
 4.  The homeserver adds a query parameter of `loginToken`, with the
     value of the generated login token, to the `redirectUrl` given in
-    the `/chat/client/v3/login/sso/redirect`
+    the `/_matrix/client/v3/login/sso/redirect`
     request. (Note: `redirectURL` may or may not include existing query
     parameters. If it already includes one or more `loginToken`
     parameters, they should be removed before adding the new one.)
@@ -219,7 +218,7 @@ The homeserver then proceeds as follows:
     are happy to grant access to their matrix account to the site named
     in the `redirectUrl`. This can be done either *before* redirecting
     to the SSO login page when handling the
-    `/chat/client/v3/login/sso/redirect`
+    `/_matrix/client/v3/login/sso/redirect`
     endpoint, or *after* login when handling the callback from the
     authentication server. (If the check is performed before
     redirecting, it is particularly important that the homeserver guards
@@ -232,7 +231,7 @@ The homeserver then proceeds as follows:
 2.  For added security, homeservers SHOULD guard against unsolicited
     authentication attempts by tracking pending requests. One way to do
     this is to set a cookie when handling
-    `/chat/client/v3/login/sso/redirect`, which
+    `/_matrix/client/v3/login/sso/redirect`, which
     is checked and cleared when handling the callback from the
     authentication server.
 
@@ -245,7 +244,7 @@ re-enter their password, but for homeservers which delegate to an SSO
 server, this means redirecting to the authentication server during
 user-interactive auth.
 
-The implemementation of this is based on the [Fallback](#fallback) mechanism for
+The implementation of this is based on the [Fallback](#fallback) mechanism for
 user-interactive auth.
 
 #### Client behaviour
@@ -254,7 +253,7 @@ Clients do not need to take any particular additional steps beyond
 ensuring that the fallback mechanism has been implemented, and treating
 the `m.login.sso` authentication type the same as any other unknown type
 (i.e. they should open a browser window for
-`/chat/client/v3/auth/m.login.sso/fallback/web?session=<session_id>`.
+`/_matrix/client/v3/auth/m.login.sso/fallback/web?session=<session_id>`.
 Once the flow has completed, the client retries the request with the
 session only.)
 
@@ -263,9 +262,9 @@ session only.)
 ##### Redirecting to the Authentication server
 
 The server should handle
-`/chat/client/v3/auth/m.login.sso/fallback/web`
+`/_matrix/client/v3/auth/m.login.sso/fallback/web`
 in much the same way as
-`/chat/client/v3/login/sso/redirect`, which is to
+`/_matrix/client/v3/login/sso/redirect`, which is to
 say:
 
 1.  It should build a suitable request for the SSO system.
@@ -312,7 +311,7 @@ fallback completion](#fallback) page to the user's browser.
 
     This confirmation could take place before redirecting to the SSO
     authentication page (when handling the
-    `/chat/client/v3/auth/m.login.sso/fallback/web`
+    `/_matrix/client/v3/auth/m.login.sso/fallback/web`
     endpoint), or *after* authentication when handling the callback from
     the authentication server. (If the check is performed before
     redirecting, it is particularly important that the homeserver guards
@@ -321,6 +320,6 @@ fallback completion](#fallback) page to the user's browser.
 2.  For added security, homeservers SHOULD guard against unsolicited
     authentication attempts by tracking pending requests. One way to do
     this is to set a cookie when handling
-    `/chat/client/v3/auth/m.login.sso/fallback/web`,
+    `/_matrix/client/v3/auth/m.login.sso/fallback/web`,
     which is checked and cleared when handling the callback from the
     authentication server.

@@ -1,5 +1,5 @@
 # Copyright 2018 New Vector Ltd
-# Copyright 2020 The Chat.org Foundation C.I.C.
+# Copyright 2020 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
 
 swagger: '2.0'
 info:
-  title: "Chat Federation Leave Room API"
+  title: "Matrix Federation Leave Room API"
   version: "1.0.0"
-host: localhost:8880
+host: localhost:8448
 schemes:
   - https
-basePath: /chat/federation/v1
+basePath: /_matrix/federation/v1
 consumes:
   - application/json
 produces:
@@ -43,7 +43,7 @@ paths:
           type: string
           description: The room ID that is about to be left.
           required: true
-          x-example: "!abc123:chat.imzqqq.top"
+          x-example: "!abc123:matrix.org"
         - in: path
           name: userId
           type: string
@@ -82,7 +82,7 @@ paths:
                   origin:
                     type: string
                     description: The name of the resident homeserver.
-                    example: "chat.imzqqq.top"
+                    example: "matrix.org"
                   origin_server_ts:
                     type: integer
                     format: int64
@@ -162,7 +162,7 @@ paths:
           type: string
           description: The room ID that is about to be left.
           required: true
-          x-example: "!abc123:chat.imzqqq.top"
+          x-example: "!abc123:matrix.org"
         - in: path
           name: eventId
           type: string
@@ -183,7 +183,7 @@ paths:
               origin:
                 type: string
                 description: The name of the leaving homeserver.
-                example: "chat.imzqqq.top"
+                example: "matrix.org"
               origin_server_ts:
                 type: integer
                 format: int64

@@ -13,13 +13,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server Room Inviting API"
+  title: "Matrix Client-Server Room Inviting API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:
@@ -51,7 +51,7 @@ paths:
           name: roomId
           description: The room identifier (not alias) to join.
           required: true
-          x-example: "!d41d8cd:chat.imzqqq.top"
+          x-example: "!d41d8cd:matrix.org"
         - in: body
           name: body
           required: true
@@ -80,7 +80,7 @@ paths:
             The joined room ID must be returned in the `room_id` field.
           examples:
             application/json: {
-              "room_id": "!d41d8cd:chat.imzqqq.top"}
+              "room_id": "!d41d8cd:matrix.org"}
           schema:
             type: object
             properties:
@@ -95,6 +95,7 @@ paths:
 
             - The room is invite-only and the user was not invited.
             - The user has been banned from the room.
+            - The room is restricted and the user failed to satisfy any of the conditions.
           examples:
             application/json: {
               "errcode": "M_FORBIDDEN", "error": "You are not invited to this room."}
@@ -129,7 +130,7 @@ paths:
           name: roomIdOrAlias
           description: The room identifier or alias to join.
           required: true
-          x-example: "#monkeys:chat.imzqqq.top"
+          x-example: "#monkeys:matrix.org"
         - in: query
           type: array
           items:
@@ -138,7 +139,7 @@ paths:
           description: |-
             The servers to attempt to join the room through. One of the servers
             must be participating in the room.
-          x-example: ["chat.imzqqq.top", "elsewhere.ca"]
+          x-example: ["matrix.org", "elsewhere.ca"]
         - in: body
           name: body
           required: true
@@ -167,7 +168,7 @@ paths:
             The joined room ID must be returned in the `room_id` field.
           examples:
             application/json: {
-              "room_id": "!d41d8cd:chat.imzqqq.top"}
+              "room_id": "!d41d8cd:matrix.org"}
           schema:
             type: object
             properties:
@@ -182,6 +183,7 @@ paths:
 
             - The room is invite-only and the user was not invited.
             - The user has been banned from the room.
+            - The room is restricted and the user failed to satisfy any of the conditions.
           examples:
             application/json: {
               "errcode": "M_FORBIDDEN", "error": "You are not invited to this room."}

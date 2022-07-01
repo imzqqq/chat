@@ -1,11 +1,10 @@
 ---
 type: module
-weight: 330
 ---
 
 ### Moderation policy lists
 
-With Chat being an open network where anyone can participate, a very
+With Matrix being an open network where anyone can participate, a very
 wide range of content exists and it is important that users are
 empowered to select which content they wish to see, and which content
 they wish to block. By extension, room moderators and server admins
@@ -54,7 +53,7 @@ follows:
 -   Is a `room` rule...
     -   Applied to a user: The user should leave the room and not join
         it
-        ([MSC2270](https://github.com/matrix-org/matrix-doc/pull/2270)-style
+        ([MSC2270](https://github.com/matrix-org/matrix-spec-proposals/pull/2270)-style
         ignore).
     -   Applied to a room: No-op because a room cannot ban itself.
     -   Applied to a server: The server should prevent users from
@@ -84,8 +83,8 @@ policy's rules, plain http or https URLs can be used to share links to
 the list. When the URL is approached with a `Accept: application/json`
 header or has `.json` appended to the end of the URL, it should return a
 JSON object containing a `room_uri` property which references the room.
-Currently this would be a `to.chat.imzqqq.top` URI, however in future it could be
-a Chat-schemed URI instead. When not approached with the intent of
+Currently this would be a `matrix.to` URI, however in future it could be
+a Matrix-schemed URI instead. When not approached with the intent of
 JSON, the service could return a user-friendly page describing what is
 included in the ban list.
 
@@ -121,6 +120,6 @@ Depending on how implementations handle subscriptions, user IDs may be
 linked to policy lists and therefore expose the views of that user. For
 example, a client implementation which joins the user to the policy room
 would expose the user's ID to observers of the policy room. In future,
-[MSC1228](https://github.com/matrix-org/matrix-doc/pulls/1228) and
-[MSC1777](https://github.com/matrix-org/matrix-doc/pulls/1777) (or
+[MSC1228](https://github.com/matrix-org/matrix-spec-proposals/pulls/1228) and
+[MSC1777](https://github.com/matrix-org/matrix-spec-proposals/pulls/1777) (or
 similar) could help solve this concern.

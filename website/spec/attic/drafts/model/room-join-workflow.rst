@@ -91,7 +91,7 @@ room in the usual way.
 
 [[NOTE(Erik): Though this may confuse users who expect 'X has joined' to
 actually be a user initiated action, i.e. they may expect that 'X' is actually
-looking at chat right now?]]
+looking at synapse right now?]]
 
 [[NOTE(paul): Yes, a fair point maybe we should suggest HSes don't do that, and
 just offer an invite to the user as normal]]

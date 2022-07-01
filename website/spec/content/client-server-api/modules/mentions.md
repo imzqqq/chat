@@ -1,14 +1,12 @@
 ---
 type: module
-weight: 300
 ---
 
-### User, room, and group mentions
+### User and room mentions
 
-This module allows users to mention other users, rooms, and groups
-within a room message. This is achieved by including a [to.chat.imzqqq.top
-URI](/appendices/#matrixto-navigation) in the HTML body of an
-[m.room.message](#mroommessage) event. This module does not have any server-specific
+This module allows users to mention other users and rooms within a room message.
+This is achieved by including a [Matrix URI](/appendices/#uris) in the HTML body of
+an [m.room.message](#mroommessage) event. This module does not have any server-specific
 behaviour to it.
 
 Mentions apply only to [m.room.message](#mroommessage) events where the `msgtype` is
@@ -23,13 +21,13 @@ To make a mention, reference the entity being mentioned in the
     "body": "Hello Alice!",
     "msgtype": "m.text",
     "format": "org.matrix.custom.html",
-    "formatted_body": "Hello <a href='https://to.chat.imzqqq.top/#/@alice:example.org'>Alice</a>!"
+    "formatted_body": "Hello <a href='https://matrix.to/#/@alice:example.org'>Alice</a>!"
 }
 ```
 
 #### Client behaviour
 
-In addition to using the appropriate `to.chat.imzqqq.top URI` for the mention,
+In addition to using the appropriate `Matrix URI` for the mention,
 clients should use the following guidelines when making mentions in
 events to be sent:
 
@@ -41,7 +39,6 @@ events to be sent:
     listed on the room. If no alias can be found, fall back to the room
     ID. In all cases, use the alias/room ID being linked to as the
     anchor's text.
--   When referencing groups, use the group ID as the anchor's text.
 
 The text component of the anchor should be used in the event's `body`
 where the mention would normally be represented, as shown in the example
@@ -57,4 +54,11 @@ mention differently from other mentions, such as by using a red
 background color to signify to the user that they were mentioned.
 
 When clicked, the mention should navigate the user to the appropriate
-room, group, or user information.
+user or room information.
+
+{{% boxes/note %}}
+Similar to legacy [matrix.to URLs](/appendices/#matrixto-navigation),
+groups used to be representable by mentions. They follow a similar format
+to room mentions, though using the group ID in both the link and anchor
+text.
+{{% /boxes/note %}}

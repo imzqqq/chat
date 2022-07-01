@@ -1,4 +1,4 @@
-# Copyright 2019 The Chat.org Foundation C.I.C.
+# Copyright 2019 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@ description: |-
 properties:
   sender:
     type: string
-    description: The Chat ID of the user who issued the invite.
+    description: The Matrix ID of the user who issued the invite.
     example: "@alice:example.org"
   mxid:
     type: string
-    description: The Chat ID of the invitee.
+    description: The Matrix ID of the invitee.
     example: "@bob:example.org"
   token:
     type: string

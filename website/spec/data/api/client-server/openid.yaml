@@ -13,13 +13,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server OpenID API"
+  title: "Matrix Client-Server OpenID API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:
@@ -32,7 +32,7 @@ paths:
       summary: Get an OpenID token object to verify the requester's identity.
       description: |-
         Gets an OpenID token object that the requester may supply to another
-        service to verify their identity in Chat. The generated token is only
+        service to verify their identity in Matrix. The generated token is only
         valid for exchanging for user information from the federation API for
         OpenID.
 
@@ -65,7 +65,7 @@ paths:
             response documented in the
             [OpenID Connect 1.0 Specification](http://openid.net/specs/openid-connect-core-1_0.html#TokenResponse)
             with the only difference being the lack of an `id_token`. Instead,
-            the Chat homeserver's name is provided.
+            the Matrix homeserver's name is provided.
           examples:
             application/json: {
               "access_token": "SomeT0kenHere",

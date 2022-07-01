@@ -1,4 +1,4 @@
-# Copyright 2021 The Chat.org Foundation C.I.C.
+# Copyright 2021 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,12 +13,12 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Identity Service Versions API"
+  title: "Matrix Identity Service Versions API"
   version: "1.0.0"
 host: localhost:8090
 schemes:
   - https
-basePath: /chat/identity
+basePath: /_matrix/identity
 produces:
   - application/json
 paths:

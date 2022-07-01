@@ -3,10 +3,10 @@
 This informal document contains specification for common brands that clients might experience
 in the wild as part of `m.login.sso` flows. To add your brand, open a PR against this document
 with the relevant additions (using the existing specification as reference) - an MSC is not
-required. Once opened, mention your PR in [#sct-office:chat.imzqqq.top](https://to.chat.imzqqq.top/#/#sct-office:chat.imzqqq.top)
-on Chat so it doesn't end up lost.
+required. Once opened, mention your PR in [#sct-office:matrix.org](https://matrix.to/#/#sct-office:matrix.org)
+on Matrix so it doesn't end up lost.
 
-Please also take some time to read the [contributing guidelines](https://github.com/matrix-org/matrix-doc/blob/master/CONTRIBUTING.rst)
+Please also take some time to read the [contributing guidelines](https://github.com/matrix-org/matrix-spec/blob/master/CONTRIBUTING.rst)
 for an overview of PR requirements.
 
 <!--
@@ -29,7 +29,7 @@ and instead refer to the brands individually.
 
 **Identifier**: `apple`
 
-Suitable for "Sign in with Apple": see https://developer.apple.com/design/human-interface-guidelines/sign-in-with-apple/overview/buttons/.
+Suitable for "Sign in with Apple": see https://appleid.apple.com/signinwithapple/button.
 
 
 ### Facebook

@@ -1,5 +1,5 @@
 # Copyright 2016 OpenMarket Ltd
-# Copyright 2019 The Chat.org Foundation C.I.C.
+# Copyright 2019 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Identity Service Public Key API"
+  title: "Matrix Identity Service Public Key API"
   version: "2.0.0"
 host: localhost:8090
 schemes:
   - https
-basePath: /chat/identity/v2
+basePath: /_matrix/identity/v2
 consumes:
   - application/json
 produces:

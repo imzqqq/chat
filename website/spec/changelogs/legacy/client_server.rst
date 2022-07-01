@@ -69,7 +69,7 @@ Spec Clarifications
 - Fix link to Olm signing specification. (`#2133 <https://github.com/matrix-org/matrix-doc/issues/2133>`_)
 - Clarify the conditions for the ``.m.rule.room_one_to_one`` push rule. (`#2152 <https://github.com/matrix-org/matrix-doc/issues/2152>`_)
 - Clarify the encryption algorithms supported by the device of the device keys example. (`#2157 <https://github.com/matrix-org/matrix-doc/issues/2157>`_)
-- Clarify that ``/rooms/:roomId/event/:eventId`` returns a Chat error. (`#2204 <https://github.com/matrix-org/matrix-doc/issues/2204>`_)
+- Clarify that ``/rooms/:roomId/event/:eventId`` returns a Matrix error. (`#2204 <https://github.com/matrix-org/matrix-doc/issues/2204>`_)
 - Add a missing ``state_key`` check on ``.m.rule.tombstone``. (`#2223 <https://github.com/matrix-org/matrix-doc/issues/2223>`_)
 - Fix the ``m.room_key_request`` ``action`` value, setting it from ``cancel_request`` to ``request_cancellation``. (`#2247 <https://github.com/matrix-org/matrix-doc/issues/2247>`_)
 - Clarify that the ``submit_url`` field is without authentication. (`#2341 <https://github.com/matrix-org/matrix-doc/issues/2341>`_)
@@ -129,7 +129,7 @@ Spec Clarifications
 - Fix various spelling mistakes throughout the specification. (`#1838 <https://github.com/matrix-org/matrix-doc/issues/1838>`_, `#1853 <https://github.com/matrix-org/matrix-doc/issues/1853>`_, `#1860 <https://github.com/matrix-org/matrix-doc/issues/1860>`_, `#1933 <https://github.com/matrix-org/matrix-doc/issues/1933>`_, `#1969 <https://github.com/matrix-org/matrix-doc/issues/1969>`_, `#1988 <https://github.com/matrix-org/matrix-doc/issues/1988>`_, `#1989 <https://github.com/matrix-org/matrix-doc/issues/1989>`_, `#1991 <https://github.com/matrix-org/matrix-doc/issues/1991>`_, `#1992 <https://github.com/matrix-org/matrix-doc/issues/1992>`_)
 - Add the missing ``m.push_rules`` event schema. (`#1889 <https://github.com/matrix-org/matrix-doc/issues/1889>`_)
 - Clarify how modern day local echo is meant to be solved by clients. (`#1891 <https://github.com/matrix-org/matrix-doc/issues/1891>`_)
-- Clarify that ``width`` and ``height`` are required parameters on ``/chat/media/r0/thumbnail/{serverName}/{mediaId}``. (`#1975 <https://github.com/matrix-org/matrix-doc/issues/1975>`_)
+- Clarify that ``width`` and ``height`` are required parameters on ``/_matrix/media/r0/thumbnail/{serverName}/{mediaId}``. (`#1975 <https://github.com/matrix-org/matrix-doc/issues/1975>`_)
 - Clarify how ``m.login.dummy`` can be used to disambiguate login flows. (`#1999 <https://github.com/matrix-org/matrix-doc/issues/1999>`_)
 - Remove ``prev_content`` from the redaction algorithm's essential keys list. (`#2016 <https://github.com/matrix-org/matrix-doc/issues/2016>`_)
 - Fix the ``third_party_signed`` definitions for the join APIs. (`#2025 <https://github.com/matrix-org/matrix-doc/issues/2025>`_)
@@ -156,7 +156,7 @@ Spec Clarifications
 - De-duplicate ``/state/<event_type>`` endpoints, clarifying that the ``<state_key>`` is optional. (`#2088 <https://github.com/matrix-org/matrix-doc/issues/2088>`_)
 - Clarify when and where CORS headers should be returned. (`#2089 <https://github.com/matrix-org/matrix-doc/issues/2089>`_)
 - Clarify when authorization and rate-limiting are not applicable. (`#2090 <https://github.com/matrix-org/matrix-doc/issues/2090>`_)
-- Clarify that ``/register`` must produce valid Chat User IDs. (`#2091 <https://github.com/matrix-org/matrix-doc/issues/2091>`_)
+- Clarify that ``/register`` must produce valid Matrix User IDs. (`#2091 <https://github.com/matrix-org/matrix-doc/issues/2091>`_)
 - Clarify how ``unread_notifications`` is calculated. (`#2097 <https://github.com/matrix-org/matrix-doc/issues/2097>`_)
 - Clarify what a "module" is and update feature profiles for clients. (`#2098 <https://github.com/matrix-org/matrix-doc/issues/2098>`_)
 
@@ -287,7 +287,7 @@ r0.3.0
 
 - Changes to the API which will be backwards-compatible for clients:
 
-  - Add ``filename`` parameter to ``POST /chat/media/r0/upload``
+  - Add ``filename`` parameter to ``POST /_matrix/media/r0/upload``
     (`#364 <https://github.com/matrix-org/matrix-doc/pull/364>`_).
   - Document CAS-based client login and the use of ``m.login.token`` in
     ``/login`` (`#367 <https://github.com/matrix-org/matrix-doc/pull/367>`_).
@@ -466,7 +466,7 @@ This release includes the following changes since r0.0.1:
     (Device-specific push rules will be reintroduced in the future; in the
     meantime, their specification has been moved to a `draft branch`__.)
 
-    __ https://chat.imzqqq.top/speculator/spec/drafts%2Freinstate_device_push_rules/
+    __ https://matrix.org/speculator/spec/drafts%2Freinstate_device_push_rules/
 
 - Changes to the API which will be backwards-compatible for clients:
 
@@ -497,7 +497,7 @@ This release includes the following changes since r0.0.1:
     ``GET /rooms/{roomId}/context/{eventId}``, as well as correcting the
     example for that API
   - Clarify the behaviour of the "Room History Visibility" module; in
-    particular, the behaviour of the ``shared`` history visibilty, and how
+    particular, the behaviour of the ``shared`` history visibility, and how
     events at visibility boundaries should be handled
   - Separate the "Room Previews" module from "Guest access"
   - Reword the description of the ``profile_tag`` property in

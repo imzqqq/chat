@@ -1,6 +1,6 @@
 # Copyright 2016 OpenMarket Ltd
 # Copyright 2018 New Vector Ltd
-# Copyright 2020 The Chat.org Foundation C.I.C.
+# Copyright 2020 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server Client Config API"
+  title: "Matrix Client-Server Client Config API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:
@@ -53,7 +53,12 @@ paths:
                 allOf:
                   - $ref: definitions/device_keys.yaml
               one_time_keys:
+                # $ref: "definitions/one_time_keys.yaml"
+                # XXX: We can't define an actual object here, so we have to hope
+                # that people will look at the swagger source or can figure it out
+                # from the other endpoints/example.
                 type: object
+                title: OneTimeKeys
                 description: |-
                   One-time public keys for "pre-key" messages.  The names of
                   the properties should be in the format
@@ -61,26 +66,6 @@ paths:
                   by the [key algorithm](/client-server-api/#key-algorithms).
 
                   May be absent if no new one-time keys are required.
-                additionalProperties:
-                  type:
-                    - string
-                    - object
-                    # XXX: We can't define an actual object here, so we have to hope
-                    # that people will look at the swagger source or can figure it out
-                    # from the other endpoints/example.
-                    # - type: object
-                    #   title: KeyObject
-                    #   properties:
-                    #     key:
-                    #       type: string
-                    #       description: The key, encoded using unpadded base64.
-                    #     signatures:
-                    #       type: object
-                    #       description: |-
-                    #         Signature for the device. Mapped from user ID to signature object.
-                    #       additionalProperties:
-                    #         type: string
-                    #   required: ['key', 'signatures']
                 example: {
                   "curve25519:AAAAAQ": "/qyvZvwjiTxGdGU0RCguDCLeR+nmsb3FfNG3/Ve4vU8",
                   "signed_curve25519:AAAAHg": {
@@ -100,6 +85,38 @@ paths:
                     }
                   }
                 }
+              fallback_keys:
+                x-addedInMatrixVersion: "1.2"
+                # $ref: "definitions/one_time_keys.yaml"
+                # XXX: We can't define an actual object here - see above.
+                type: object
+                title: OneTimeKeys
+                description: |-
+                  The public key which should be used if the device's one-time keys
+                  are exhausted. The fallback key is not deleted once used, but should
+                  be replaced when additional one-time keys are being uploaded. The
+                  server will notify the client of the fallback key being used through
+                  `/sync`.
+
+                  There can only be at most one key per algorithm uploaded, and the server
+                  will only persist one key per algorithm.
+
+                  When uploading a signed key, an additional `fallback: true` key should
+                  be included to denote that the key is a fallback key.
+
+                  May be absent if a new fallback key is not required.
+                example: {
+                  "curve25519:AAAAAG": "/qyvZvwjiTxGdGU0RCguDCLeR+nmsb3FfNG3/Ve4vU8",
+                  "signed_curve25519:AAAAGj": {
+                    "key": "zKbLg+NrIjpnagy+pIY6uPL4ZwEG2v+8F9lmgsnlZzs",
+                    "fallback": true,
+                    "signatures": {
+                      "@alice:example.com": {
+                        "ed25519:JLAFKJWSCS": "FLWxXqGbwrb8SM3Y795eB6OA8bwBcoMZFXBqnTn58AYWZSqiD45tlBVcDa2L7RwdKXebW/VzDlnfVJ+9jok1Bw"
+                      }
+                    }
+                  }
+                }
       responses:
         200:
           description:
@@ -114,6 +131,8 @@ paths:
                 description: |-
                   For each key algorithm, the number of unclaimed one-time keys
                   of that type currently held on the server for this device.
+                  If an algorithm is not listed, the count for that algorithm
+                  is to be assumed zero.
                 example:
                   curve25519: 10
                   signed_curve25519: 20
@@ -378,28 +397,19 @@ paths:
 
                   See the [key algorithms](/client-server-api/#key-algorithms) section for information
                   on the Key Object format.
+
+                  If necessary, the claimed key might be a fallback key. Fallback
+                  keys are re-used by the server until replaced by the device.
                 additionalProperties:
                   type: object
                   additionalProperties:
-                    type:
-                      - string
-                      - object
-                      # XXX: We can't define an actual object here, so we have to hope
-                      # that people will look at the swagger source or can figure it out
-                      # from the other endpoints/example.
-                      # - type: object
-                      #   title: KeyObject
-                      #   properties:
-                      #     key:
-                      #       type: string
-                      #       description: The key, encoded using unpadded base64.
-                      #     signatures:
-                      #       type: object
-                      #       description: |-
-                      #         Signature for the device. Mapped from user ID to signature object.
-                      #       additionalProperties:
-                      #         type: string
-                      #   required: ['key', 'signatures']
+                    # $ref: "definitions/one_time_keys.yaml"
+                    # XXX: We can't define an actual object here, so we have to hope
+                    # that people will read the link provided in the description
+                    # and figure it out from the other endpoints/example.
+                    # See also one_time_key parameter for /keys/upload above.
+                    type: object
+                    title: OneTimeKeys
                 example: {
                   "@alice:example.com": {
                     "JLAFKJWSCS": {
@@ -467,7 +477,7 @@ paths:
                 items:
                   type: string
                 description: |-
-                  The Chat User IDs of all users who updated their device
+                  The Matrix User IDs of all users who updated their device
                   identity keys.
                 example: ["@alice:example.com", "@bob:example.org"]
               left:
@@ -475,7 +485,7 @@ paths:
                 items:
                   type: string
                 description: |-
-                  The Chat User IDs of all users who may have left all
+                  The Matrix User IDs of all users who may have left all
                   the end-to-end encrypted rooms they previously shared
                   with the user.
                 example: ["@clara:example.com", "@doug:example.org"]

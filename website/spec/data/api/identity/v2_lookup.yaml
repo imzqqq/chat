@@ -2,7 +2,7 @@
 # Copyright 2017 Kamax.io
 # Copyright 2017 New Vector Ltd
 # Copyright 2018 New Vector Ltd
-# Copyright 2019 The Chat.org Foundation C.I.C.
+# Copyright 2019 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,12 +17,12 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Identity Service Lookup API"
+  title: "Matrix Identity Service Lookup API"
   version: "2.0.0"
 host: localhost:8090
 schemes:
   - https
-basePath: /chat/identity/v2
+basePath: /_matrix/identity/v2
 consumes:
   - application/json
 produces:
@@ -67,9 +67,9 @@ paths:
             required: ['lookup_pepper', 'algorithms']
   "/lookup":
     post:
-      summary: Look up Chat User IDs for a set of 3PIDs.
+      summary: Look up Matrix User IDs for a set of 3PIDs.
       description: |-
-        Looks up the set of Chat User IDs which have bound the 3PIDs given, if
+        Looks up the set of Matrix User IDs which have bound the 3PIDs given, if
         bindings are available. Note that the format of the addresses is defined
         later in this specification.
       operationId: lookupUsersV2
@@ -126,7 +126,7 @@ paths:
               mappings:
                 type: object
                 description: |-
-                  Any applicable mappings of `addresses` to Chat User IDs. Addresses
+                  Any applicable mappings of `addresses` to Matrix User IDs. Addresses
                   which do not have associations will not be included, which can make
                   this property be an empty object.
                 title: AssociatedMappings

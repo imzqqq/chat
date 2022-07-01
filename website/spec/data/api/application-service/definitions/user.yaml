@@ -15,9 +15,9 @@
 # TODO: Change userid to user_id as a breaking change
 properties:
   userid:
-    description: A Chat User ID represting a third party user.
+    description: A Matrix User ID represting a third party user.
     type: string
-    example: "@_gitter_jim:chat.imzqqq.top"
+    example: "@_gitter_jim:matrix.org"
   protocol:
     description: The protocol ID that the third party location is a part of.
     type: string

@@ -1,6 +1,5 @@
 ---
 type: module
-weight: 290
 ---
 
 ### Server Access Control Lists (ACLs) for rooms
@@ -27,7 +26,7 @@ server host can easily change ports.
 {{% /boxes/note %}}
 
 {{% boxes/note %}}
-CIDR notation is not supported for IP addresses because Chat does not
+CIDR notation is not supported for IP addresses because Matrix does not
 encourage the use of IPs for identifying servers. Instead, a blanket
 `allow_ip_literals` is provided to cover banning them.
 {{% /boxes/note %}}

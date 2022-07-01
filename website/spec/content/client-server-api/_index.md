@@ -12,7 +12,7 @@ clients which maintain a full local persistent copy of server state.
 
 ## API Standards
 
-The mandatory baseline for client-server communication in Chat is
+The mandatory baseline for client-server communication in Matrix is
 exchanging JSON objects over HTTP APIs. HTTPS is recommended for
 communication, although HTTP may be supported as a fallback to support
 basic HTTP clients. More efficient optional transports will in future be
@@ -25,12 +25,12 @@ encoded as UTF-8.
 Clients are authenticated using opaque `access_token` strings (see [Client
 Authentication](#client-authentication) for details).
 
-See also [Conventions for Chat APIs](/appendices#conventions-for-matrix-apis)
-in the Appendices for conventions which all Chat APIs are expected to follow.
+See also [Conventions for Matrix APIs](/appendices#conventions-for-matrix-apis)
+in the Appendices for conventions which all Matrix APIs are expected to follow.
 
 ### Standard error response
 
-Any errors which occur at the Chat API level MUST return a "standard
+Any errors which occur at the Matrix API level MUST return a "standard
 error response". This is a JSON object which looks like:
 
 ```json
@@ -71,7 +71,7 @@ These error codes can be returned by any API endpoint:
 Forbidden access, e.g. joining a room without permission, failed login.
 
 `M_UNKNOWN_TOKEN`
-The access token specified was not recognised.
+The access or refresh token specified was not recognised.
 
 An additional response parameter, `soft_logout`, might be present on the
 response for 401 HTTP status codes. See [the soft logout
@@ -233,10 +233,10 @@ headers to be returned by servers on all requests are:
 
 ## Server Discovery
 
-In order to allow users to connect to a Chat server without needing to
+In order to allow users to connect to a Matrix server without needing to
 explicitly specify the homeserver's URL or other parameters, clients
 SHOULD use an auto-discovery mechanism to determine the server's URL
-based on a user's Chat ID. Auto-discovery should only be done at login
+based on a user's Matrix ID. Auto-discovery should only be done at login
 time.
 
 In this section, the following terms are used with specific meanings:
@@ -274,8 +274,8 @@ as per the [CORS](#web-browser-clients) section in this specification.
 The `.well-known` method uses a JSON file at a predetermined location to
 specify parameter values. The flow for this method is as follows:
 
-1.  Extract the server name from the user's Chat ID by splitting the
-    Chat ID at the first colon.
+1.  Extract the server name from the user's Matrix ID by splitting the
+    Matrix ID at the first colon.
 2.  Extract the hostname from the server name.
 3.  Make a GET request to `https://hostname/.well-known/matrix/client`.
     1.  If the returned status code is 404, then `IGNORE`.
@@ -285,22 +285,24 @@ specify parameter values. The flow for this method is as follows:
         1.  If the content cannot be parsed, then `FAIL_PROMPT`.
     4.  Extract the `base_url` value from the `m.homeserver` property.
         This value is to be used as the base URL of the homeserver.
-        1.  If this value is not provided, then `FAIL_PROMPT`.
+        1. If this value is not provided, then `FAIL_PROMPT`.
     5.  Validate the homeserver base URL:
-        1.  Parse it as a URL. If it is not a URL, then `FAIL_ERROR`.
-        2.  Clients SHOULD validate that the URL points to a valid
+        1. Parse it as a URL. If it is not a URL, then `FAIL_ERROR`.
+        2. Clients SHOULD validate that the URL points to a valid
             homeserver before accepting it by connecting to the
-            [`/chat/client/versions`](/client-server-api/#get_matrixclientversions) endpoint, ensuring that it does
+            [`/_matrix/client/versions`](/client-server-api/#get_matrixclientversions) endpoint, ensuring that it does
             not return an error, and parsing and validating that the
             data conforms with the expected response format. If any step
             in the validation fails, then `FAIL_ERROR`. Validation is
             done as a simple check against configuration errors, in
             order to ensure that the discovered address points to a
             valid homeserver.
+        3. It is important to note that the `base_url` value might include
+           a trailing `/`. Consumers should be prepared to handle both cases.
     6.  If the `m.identity_server` property is present, extract the
         `base_url` value for use as the base URL of the identity server.
         Validation for this URL is done as in the step above, but using
-        `/chat/identity/v2` as the endpoint to connect to. If the
+        `/_matrix/identity/v2` as the endpoint to connect to. If the
         `m.identity_server` property is present, but does not have a
         `base_url` value, then `FAIL_PROMPT`.
 
@@ -312,7 +314,8 @@ Most API endpoints require the user to identify themselves by presenting
 previously obtained credentials in the form of an `access_token` query
 parameter or through an Authorization Header of `Bearer $access_token`.
 An access token is typically obtained via the [Login](#login) or
-[Registration](#account-registration-and-management) processes.
+[Registration](#account-registration-and-management) processes. Access tokens
+can expire; a new access token can be generated by using a refresh token.
 
 {{% boxes/note %}}
 This specification does not mandate a particular format for the access
@@ -336,40 +339,94 @@ inaccessible for the client.
 
 When credentials are required but missing or invalid, the HTTP call will
 return with a status of 401 and the error code, `M_MISSING_TOKEN` or
-`M_UNKNOWN_TOKEN` respectively.
+`M_UNKNOWN_TOKEN` respectively.  Note that an error code of `M_UNKNOWN_TOKEN`
+could mean one of four things:
+
+1. the access token was never valid.
+2. the access token has been logged out.
+3. the access token has been [soft logged out](#soft-logout).
+4. {{< added-in v="1.3" >}} the access token [needs to be refreshed](#refreshing-access-tokens).
+
+When a client receives an error code of `M_UNKNOWN_TOKEN`, it should:
+
+- attempt to [refresh the token](#refreshing-access-tokens), if it has a refresh
+  token;
+- if [`soft_logout`](#soft-logout) is set to `true`, it can offer to
+  re-log in the user, retaining any of the client's persisted
+  information;
+- otherwise, consider the user as having been logged out.
 
 ### Relationship between access tokens and devices
 
 Client [devices](../index.html#devices) are closely related to access
-tokens. Chat servers should record which device each access token is
-assigned to, so that subsequent requests can be handled correctly.
+tokens and refresh tokens. Matrix servers should record which device
+each access token and refresh token are assigned to, so that
+subsequent requests can be handled correctly. When a refresh token is
+used to generate a new access token and refresh token, the new access
+and refresh tokens are now bound to the device associated with the
+initial refresh token.
 
 By default, the [Login](#login) and [Registration](#account-registration-and-management)
 processes auto-generate a new `device_id`. A client is also free to
 generate its own `device_id` or, provided the user remains the same,
 reuse a device: in either case the client should pass the `device_id` in
 the request body. If the client sets the `device_id`, the server will
-invalidate any access token previously assigned to that device. There is
-therefore at most one active access token assigned to each device at any
-one time.
+invalidate any access and refresh tokens previously assigned to that device.
+
+### Refreshing access tokens
+
+{{% added-in v="1.3" %}}
+
+Access tokens can expire after a certain amount of time. Any HTTP calls that
+use an expired access token will return with an error code `M_UNKNOWN_TOKEN`,
+preferably with `soft_logout: true`. When a client receives this error and it
+has a refresh token, it should attempt to refresh the access token by calling
+[`/refresh`](#post_matrixclientv3refresh). Clients can also refresh their
+access token at any time, even if it has not yet expired. If the token refresh
+succeeds, the client should use the new token for future requests, and can
+re-try previously-failed requests with the new token. When an access token is
+refreshed, a new refresh token may be returned; if a new refresh token is
+given, the old refresh token will be invalidated, and the new refresh token
+should be used when the access token needs to be refreshed.
+
+The old refresh token remains valid until the new access token or refresh token
+is used, at which point the old refresh token is revoked. This ensures that if
+a client fails to receive or persist the new tokens, it will be able to repeat
+the refresh operation.
+
+If the token refresh fails and the error response included a `soft_logout:
+true` property, then the client can treat it as a [soft logout](#soft-logout)
+and attempt to obtain a new access token by re-logging in. If the error
+response does not include a `soft_logout: true` property, the client should
+consider the user as being logged out.
+
+Handling of clients that do not support refresh tokens is up to the homeserver;
+clients indicate their support for refresh tokens by including a
+`refresh_token: true` property in the request body of the
+[`/login`](#post_matrixclientv3login) and
+[`/register`](#post_matrixclientv3register) endpoints. For example, homeservers
+may allow the use of non-expiring access tokens, or may expire access tokens
+anyways and rely on soft logout behaviour on clients that don't support
+refreshing.
 
 ### Soft logout
 
-When a request fails due to a 401 status code per above, the server can
-include an extra response parameter, `soft_logout`, to indicate if the
-client's persisted information can be retained. This defaults to
-`false`, indicating that the server has destroyed the session. Any
+A client can be in a "soft logout" state if the server requires
+re-authentication before continuing, but does not want to invalidate the
+client's session. The server indicates that the client is in a soft logout
+state by including a `soft_logout: true` parameter in an `M_UNKNOWN_TOKEN`
+error response; the `soft_logout` parameter defaults to `false`. If the
+`soft_logout` parameter is omitted or is `false`, this means the server has
+destroyed the session and the client should not reuse it. That is, any
 persisted state held by the client, such as encryption keys and device
-information, must not be reused and must be discarded.
+information, must not be reused and must be discarded. If `soft_logout` is
+`true` the client can reuse any persisted state.
 
-When `soft_logout` is true, the client can acquire a new access token by
-specifying the device ID it is already using to the login API. In most
-cases a `soft_logout: true` response indicates that the user's session
-has expired on the server-side and the user simply needs to provide
-their credentials again.
-
-In either case, the client's previously known access token will no
-longer function.
+{{% changed-in v="1.3" %}} A client that receives such a response can try to
+[refresh its access token](#refreshing-access-tokens), if it has a refresh
+token available. If it does not have a refresh token available, or refreshing
+fails with `soft_logout: true`, the client can acquire a new access token by
+specifying the device ID it is already using to the login API.
 
 ### User-Interactive Authentication API
 
@@ -452,7 +509,7 @@ given. It also contains other keys dependent on the auth type being
 attempted. For example, if the client is attempting to complete auth
 type `example.type.foo`, it might submit something like this:
 
-    POST /chat/client/r0/endpoint HTTP/1.1
+    POST /_matrix/client/v3/endpoint HTTP/1.1
     Content-Type: application/json
 
 ```json
@@ -550,7 +607,7 @@ response with the completed stages, or the result of the API call if all
 stages were completed when a client retries a stage.
 
 Some authentication types may be completed by means other than through
-the Chat client, for example, an email confirmation may be completed
+the Matrix client, for example, an email confirmation may be completed
 when the user clicks on the link in the email. In this case, the client
 retries the request with an auth dict containing only the session key.
 The response to this will be the same as if the client were attempting
@@ -616,6 +673,7 @@ This specification defines the following auth types:
 -   `m.login.email.identity`
 -   `m.login.msisdn`
 -   `m.login.dummy`
+-   `m.login.registration_token`
 
 ##### Password-based
 
@@ -641,7 +699,7 @@ follows:
 where the `identifier` property is a user identifier object, as
 described in [Identifier types](#identifier-types).
 
-For example, to authenticate using the user's Chat ID, clients would
+For example, to authenticate using the user's Matrix ID, clients would
 submit:
 
 ```json
@@ -719,14 +777,12 @@ follows:
 ```json
 {
   "type": "m.login.email.identity",
-  "threepidCreds": [
-    {
-      "sid": "<identity server session id>",
-      "client_secret": "<identity server client secret>",
-      "id_server": "<url of identity server authed with, e.g. 'chat.imzqqq.top:8090'>",
-      "id_access_token": "<access token previously registered with the identity server>"
-    }
-  ],
+  "threepid_creds": {
+    "sid": "<identity server session id>",
+    "client_secret": "<identity server client secret>",
+    "id_server": "<url of identity server authed with, e.g. 'matrix.org:8090'>",
+    "id_access_token": "<access token previously registered with the identity server>"
+  },
   "session": "<session ID>"
 }
 ```
@@ -750,14 +806,12 @@ follows:
 ```json
 {
   "type": "m.login.msisdn",
-  "threepidCreds": [
-    {
-      "sid": "<identity server session id>",
-      "client_secret": "<identity server client secret>",
-      "id_server": "<url of identity server authed with, e.g. 'chat.imzqqq.top:8090'>",
-      "id_access_token": "<access token previously registered with the identity server>"
-    }
-  ],
+  "threepid_creds": {
+    "sid": "<identity server session id>",
+    "client_secret": "<identity server client secret>",
+    "id_server": "<url of identity server authed with, e.g. 'matrix.org:8090'>",
+    "id_access_token": "<access token previously registered with the identity server>"
+  },
   "session": "<session ID>"
 }
 ```
@@ -791,6 +845,49 @@ just the type and session, if provided:
 }
 ```
 
+##### Token-authenticated registration
+
+{{% added-in v="1.2" %}}
+
+| Type                          | Description                                                       |
+|-------------------------------|-------------------------------------------------------------------|
+| `m.login.registration_token`  | Registers an account with a pre-shared token for authentication   |
+
+{{% boxes/note %}}
+The `m.login.registration_token` authentication type is only valid on the
+[`/register`](#post_matrixclientv3register) endpoint.
+{{% /boxes/note %}}
+
+This authentication type provides homeservers the ability to allow registrations
+to a limited set of people instead of either offering completely open registrations
+or completely closed registration (where the homeserver administrators create
+and distribute accounts).
+
+The token required for this authentication type is shared out of band from
+Matrix and is an opaque string with maximum length of 64 characters in the
+range `[A-Za-z0-9._~-]`. The server can keep any number of tokens for any
+length of time/validity. Such cases might be a token limited to 100 uses or
+for the next 2 hours - after the tokens expire, they can no longer be used
+to create accounts.
+
+To use this authentication type, clients should submit an auth dict with just
+the type, token, and session:
+
+```json
+{
+  "type": "m.login.registration_token",
+  "token": "fBVFdqVE",
+  "session": "<session ID>"
+}
+```
+
+To determine if a token is valid before attempting to use it, the client can
+use the `/validity` API defined below. The API doesn't guarantee that a token
+will be valid when used, but does avoid cases where the user finds out late
+in the registration process that their token has expired.
+
+{{% http-api spec="client-server" api="registration_tokens" %}}
+
 #### Fallback
 
 Clients cannot be expected to be able to know how to process every
@@ -799,7 +896,7 @@ type, it can direct the user to a web browser with the URL of a fallback
 page which will allow the user to complete that login step out-of-band
 in their web browser. The URL it should open is:
 
-    /chat/client/v3/auth/<auth type>/fallback/web?session=<session ID>
+    /_matrix/client/v3/auth/<auth type>/fallback/web?session=<session ID>
 
 Where `auth type` is the type name of the stage it is attempting and
 `session ID` is the ID of the session given by the homeserver.
@@ -840,10 +937,10 @@ window which will handle unknown login types:
 ```js
 /**
  * Arguments:
- *     homeserverUrl: the base url of the homeserver (e.g. "https://chat.imzqqq.top")
+ *     homeserverUrl: the base url of the homeserver (e.g. "https://matrix.org")
  *
  *     apiEndpoint: the API endpoint being used (e.g.
- *        "/chat/client/v3/account/password")
+ *        "/_matrix/client/v3/account/password")
  *
  *     loginType: the loginType being attempted (e.g. "m.login.recaptcha")
  *
@@ -879,7 +976,7 @@ function unknownLoginType(homeserverUrl, apiEndpoint, loginType, sessionID, onCo
     window.addEventListener("message", eventListener);
 
     var url = homeserverUrl +
-        "/chat/client/v3/auth/" +
+        "/_matrix/client/v3/auth/" +
         encodeURIComponent(loginType) +
         "/fallback/web?session=" +
         encodeURIComponent(sessionID);
@@ -901,14 +998,14 @@ This specification defines the following identifier types:
 -   `m.id.thirdparty`
 -   `m.id.phone`
 
-##### Chat User ID
+##### Matrix User ID
 
 | Type        | Description                                |
 |-------------|--------------------------------------------|
-| `m.id.user` | The user is identified by their Chat ID. |
+| `m.id.user` | The user is identified by their Matrix ID. |
 
-A client can identify a user using their Chat ID. This can either be
-the fully qualified Chat user ID, or just the localpart of the user
+A client can identify a user using their Matrix ID. This can either be
+the fully qualified Matrix user ID, or just the localpart of the user
 ID.
 
 ```json
@@ -1014,8 +1111,8 @@ as follows:
 }
 ```
 
-As with [token-based]() interactive login, the `token` must encode the
-user ID. In the case that the token is not valid, the homeserver must
+The `token` must encode the user ID, since there is no other identifying
+data in the request. In the case that the token is not valid, the homeserver must
 respond with `403 Forbidden` and an error code of `M_FORBIDDEN`.
 
 If the homeserver advertises `m.login.sso` as a viable flow, and the
@@ -1024,7 +1121,46 @@ client supports it, the client should redirect the user to the
 is complete, the client will need to submit a `/login` request matching
 `m.login.token`.
 
+#### Appservice Login
+
+{{% added-in v="1.2" %}}
+
+An appservice can log in by providing a valid appservice token and a user within the appservice's
+namespace.
+
+{{% boxes/note %}}
+Appservices do not need to log in as individual users in all cases, as they
+can perform [Identity Assertion](/application-service-api#identity-assertion)
+using the appservice token. However, if the appservice needs a scoped token
+for a single user then they can use this API instead.
+{{% /boxes/note %}}
+
+This request must be authenticated by the [appservice `as_token`](/application-service-api#registration)
+(see [Client Authentication](#client-authentication) on how to provide the token).
+
+To use this login type, clients should submit a `/login` request as follows:
+
+```json
+{
+  "type": "m.login.application_service",
+  "identifier": {
+    "type": "m.id.user",
+    "user": "<user_id or user localpart>"
+  }
+}
+```
+
+If the access token is not valid, does not correspond to an appservice
+or the user has not previously been registered then the homeserver will
+respond with an errcode of `M_FORBIDDEN`.
+
+If the access token does correspond to an appservice, but the user id does
+not lie within its namespace then the homeserver will respond with an
+errcode of `M_EXCLUSIVE`.
+
 {{% http-api spec="client-server" api="login" %}}
+
+{{% http-api spec="client-server" api="refresh" %}}
 
 {{% http-api spec="client-server" api="logout" %}}
 
@@ -1033,7 +1169,7 @@ is complete, the client will need to submit a `/login` request matching
 If a client does not recognize any or all login flows it can use the
 fallback login API:
 
-    GET /chat/static/client/login/
+    GET /_matrix/static/client/login/
 
 This returns an HTML and JavaScript page which can perform the entire
 login process. The page will attempt to call the JavaScript function
@@ -1043,7 +1179,7 @@ login process. The page will attempt to call the JavaScript function
 endpoint can be provided as query string parameters here. These are to be
 forwarded to the login endpoint during the login process. For example:
 
-    GET /chat/static/client/login/?device_id=GHTYAJCE
+    GET /_matrix/static/client/login/?device_id=GHTYAJCE
 
 ### Account registration and management
 
@@ -1080,7 +1216,7 @@ can be added and bound at the same time, depending on context.
 
 #### Notes on identity servers
 
-Identity servers in Chat store bindings (relationships) between a
+Identity servers in Matrix store bindings (relationships) between a
 user's third party identifier, typically email or phone number, and
 their user ID. Once a user has chosen an identity server, that identity
 server should be used by all clients.
@@ -1147,8 +1283,8 @@ Some examples of what should **not** be a capability are:
     the server.
 
 Capabilities prefixed with `m.` are reserved for definition in the
-Chat specification while other values may be used by servers using the
-Java package naming convention. The capabilities supported by the Chat
+Matrix specification while other values may be used by servers using the
+Java package naming convention. The capabilities supported by the Matrix
 specification are defined later in this section.
 
 {{% http-api spec="client-server" api="capabilities" %}}
@@ -1213,6 +1349,79 @@ using an `unstable` version.
 
 When this capability is not listed, clients should use `"1"` as the
 default and only stable `available` room version.
+
+### `m.set_displayname` capability
+
+This capability has a single flag, `enabled`, to denote whether the user
+is able to change their own display name via profile endpoints. Cases for
+disabling might include users mapped from external identity/directory
+services, such as LDAP.
+
+Note that this is well paired with the `m.set_avatar_url` capability.
+
+When not listed, clients should assume the user is able to change their
+display name.
+
+An example of the capability API's response for this capability is:
+
+```json
+{
+  "capabilities": {
+    "m.set_displayname": {
+      "enabled": false
+    }
+  }
+}
+```
+
+### `m.set_avatar_url` capability
+
+This capability has a single flag, `enabled`, to denote whether the user
+is able to change their own avatar via profile endpoints. Cases for
+disabling might include users mapped from external identity/directory
+services, such as LDAP.
+
+Note that this is well paired with the `m.set_displayname` capability.
+
+When not listed, clients should assume the user is able to change their
+avatar.
+
+An example of the capability API's response for this capability is:
+
+```json
+{
+  "capabilities": {
+    "m.set_avatar_url": {
+      "enabled": false
+    }
+  }
+}
+```
+
+### `m.3pid_changes` capability
+
+This capability has a single flag, `enabled`, to denote whether the user
+is able to add, remove, or change 3PID associations on their account. Note
+that this only affects a user's ability to use the
+[Admin Contact Information](#adding-account-administrative-contact-information)
+API, not endpoints exposed by an Identity Service. Cases for disabling
+might include users mapped from external identity/directory  services,
+such as LDAP.
+
+When not listed, clients should assume the user is able to modify their 3PID
+associations.
+
+An example of the capability API's response for this capability is:
+
+```json
+{
+  "capabilities": {
+    "m.3pid_changes": {
+      "enabled": false
+    }
+  }
+}
+```
 
 ## Filtering
 
@@ -1288,32 +1497,6 @@ any given point in time:
 
     [E0]->[E1]->[E2]->[E3]->[E4]->[E5]
 
-{{% boxes/warning %}}
-The format of events can change depending on room version. Check the
-[room version specification](/rooms) for specific
-details on what to expect for event formats. Examples contained within
-the client-server specification are expected to be compatible with all
-specified room versions, however some differences may still apply.
-
-For this version of the specification, clients only need to worry about
-the event ID format being different depending on room version. Clients
-should not be parsing the event ID, and instead be treating it as an
-opaque string. No changes should be required to support the currently
-available room versions.
-{{% /boxes/warning %}}
-
-{{% boxes/warning %}}
-Event bodies are considered untrusted data. This means that any application using
-Chat must validate that the event body is of the expected shape/schema
-before using the contents verbatim.
-
-**It is not safe to assume that an event body will have all the expected
-fields of the expected types.**
-
-See [MSC2801](https://github.com/matrix-org/matrix-doc/pull/2801) for more
-detail on why this assumption is unsafe.
-{{% /boxes/warning %}}
-
 ### Types of room events
 
 Room events are split into two categories:
@@ -1340,37 +1523,101 @@ namespaced for each application and reduces the risk of clashes.
 Events are not limited to the types defined in this specification. New
 or custom event types can be created on a whim using the Java package
 naming convention. For example, a `com.example.game.score` event can be
-sent by clients and other clients would receive it through Chat,
+sent by clients and other clients would receive it through Matrix,
 assuming the client has access to the `com.example` namespace.
 {{% /boxes/note %}}
 
-Note that the structure of these events may be different than those in
-the server-server API.
+### Room event format
 
-#### Event fields
+The "federation" format of a room event, which is used internally by homeservers
+and between homeservers via the Server-Server API, depends on the ["room
+version"](/rooms) in use by the room. See, for example, the definitions
+in [room version 1](/rooms/v1#event-format) and [room version
+3](/rooms/v3#event-format).
 
-{{% event-fields event_type="event" %}}
+However, it is unusual that a Matrix client would encounter this event
+format. Instead, homeservers are responsible for converting events into the
+format shown below so that they can be easily parsed by clients.
 
-#### Room event fields
+{{% boxes/warning %}}
+Event bodies are considered untrusted data. This means that any application using
+Matrix must validate that the event body is of the expected shape/schema
+before using the contents verbatim.
 
-{{% event-fields event_type="room_event" %}}
+**It is not safe to assume that an event body will have all the expected
+fields of the expected types.**
 
-#### State event fields
+See [MSC2801](https://github.com/matrix-org/matrix-spec-proposals/pull/2801) for more
+detail on why this assumption is unsafe.
+{{% /boxes/warning %}}
 
-In addition to the fields of a Room Event, State Events have the
-following fields.
+{{% definition path="api/client-server/definitions/client_event" %}}
 
+### Stripped state
 
-| Key          | Type         | Description                                                                                                  |
-|--------------|--------------|--------------------------------------------------------------------------------------------------------------|
-| state_key    | string       | **Required.** A unique key which defines the overwriting semantics for this piece of room state. This value is often a zero-length string. The presence of this key makes this event a State Event. State keys starting with an `@` are reserved for referencing user IDs, such as room members. With the exception of a few events, state events set with a given user's ID as the state key MUST only be set by that user.         |
-| prev_content | EventContent | Optional. The previous `content` for this event. If there is no previous content, this key will be missing.  |
+Stripped state events are simplified state events to help a potential
+joiner identify the room. These state events can only have the `sender`,
+`type`, `state_key` and `content` keys present.
+
+These stripped state events typically appear on invites, knocks, and in
+other places where a user *could* join the room under the conditions
+available (such as a [`restricted` room](#restricted-rooms)).
+
+Clients should only use stripped state events so long as they don't have
+access to the proper state of the room. Once the state of the room is
+available, all stripped state should be discarded. In cases where the
+client has an archived state of the room (such as after being kicked)
+and the client is receiving stripped state for the room, such as from an
+invite or knock, then the stripped state should take precedence until
+fresh state can be acquired from a join.
+
+The following state events should be represented as stripped state when
+possible:
+
+* [`m.room.create`](#mroomcreate)
+* [`m.room.name`](#mroomname)
+* [`m.room.avatar`](#mroomavatar)
+* [`m.room.topic`](#mroomtopic)
+* [`m.room.join_rules`](#mroomjoin_rules)
+* [`m.room.canonical_alias`](#mroomcanonical_alias)
+* [`m.room.encryption`](#mroomencryption)
+
+{{% boxes/note %}}
+Clients should inspect the list of stripped state events and not assume any
+particular event is present. The server might include events not described
+here as well.
+{{% /boxes/note %}}
+
+{{% boxes/rationale %}}
+The name, avatar, topic, and aliases are presented as aesthetic information
+about the room, allowing users to make decisions about whether or not they
+want to join the room.
+
+The join rules are given to help the client determine *why* it is able to
+potentially join. For example, annotating the room decoration with iconography
+consistent with the respective join rule for the room.
+
+The create event can help identify what kind of room is being joined, as it
+may be a Space or other kind of room. The client might choose to render the
+invite in a different area of the application as a result.
+
+Similar to join rules, the encryption information is given to help clients
+decorate the room with appropriate iconography or messaging.
+{{% /boxes/rationale %}}
+
+{{% boxes/warning %}}
+Although stripped state is usually generated and provided by the server, it
+is still possible to be incorrect on the receiving end. The stripped state
+events are not signed and could theoretically be modified, or outdated due to
+updates not being sent.
+{{% /boxes/warning %}}
+
+{{% event-fields event_type="stripped_state" %}}
 
 ### Size limits
 
 The complete event MUST NOT be larger than 65536 bytes, when formatted
-as a [PDU for the Server-Server
-protocol](/server-server-api/#pdus), including any
+with the [federation event format](#room-event-format), including any
 signatures, and encoded as [Canonical
 JSON](/appendices#canonical-json).
 
@@ -1428,7 +1675,9 @@ for each room, a `prev_batch` field, which can be passed as a `start`
 parameter to the [`/rooms/<room_id>/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages) API to retrieve earlier
 messages.
 
-You can visualise the range of events being returned as:
+For example, a `/sync` request might return a range of four events
+`E2`, `E3`, `E4` and `E5` within a given room, omitting two prior events
+`E0` and `E1`. This can be visualised as follows:
 
 ```
     [E0]->[E1]->[E2]->[E3]->[E4]->[E5]
@@ -1445,7 +1694,8 @@ the HTTP connection for a short period of time waiting for new events,
 returning early if an event occurs. Only the `/sync` API (and the
 deprecated `/events` API) support long-polling in this way.
 
-The response for such an incremental sync can be visualised as:
+Continuing the example above, an incremental sync might report
+a single new event `E6`. The response can be visualised as:
 
 ```
     [E0]->[E1]->[E2]->[E3]->[E4]->[E5]->[E6]
@@ -1462,16 +1712,31 @@ containing only the most recent message events. A state "delta" is also
 returned, summarising any state changes in the omitted part of the
 timeline. The client may therefore end up with "gaps" in its knowledge
 of the message timeline. The client can fill these gaps using the
-[`/rooms/<room_id>/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages) API. This situation looks like this:
+[`/rooms/<room_id>/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages) API.
+
+Continuing our example, suppose we make a third `/sync` request asking for
+events since the last sync, by passing the `next_batch` token `x-y-z` as
+the `since` parameter. The server knows about four new events, `E7`, `E8`,
+`E9` and `E10`, but decides this is too many to report at once. Instead,
+the server sends a `limited` response containing `E8`, `E9` and `E10`but
+omitting `E7`. This forms a gap, which we can see in the visualisation:
 
 ```
-    | gap |
-    | <-> |
+                                            | gap |
+                                            | <-> |
     [E0]->[E1]->[E2]->[E3]->[E4]->[E5]->[E6]->[E7]->[E8]->[E9]->[E10]
-          ^                        ^
-          |                        |
-     prev_batch: 'd-e-f'       next_batch: 'u-v-w'
+                                            ^     ^                  ^
+                                            |     |                  |
+                                 since: 'x-y-z'   |                  |
+                                       prev_batch: 'd-e-f'       next_batch: 'u-v-w'
 ```
+
+The limited response includes a state delta which describes how the state
+of the room changes over the gap. This delta explains how to build the state
+prior to returned timeline (i.e. at `E7`) from the state the client knows
+(i.e. at `E6`). To close the gap, the client should make a request to
+[`/rooms/<room_id>/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages)
+with the query parameters `from=x-y-z` and `to=d-e-f`.
 
 {{% boxes/warning %}}
 Events are ordered in this API according to the arrival time of the
@@ -1532,6 +1797,16 @@ There are several APIs provided to `GET` events for a room:
 {{% http-api spec="client-server" api="room_initial_sync" %}}
 
 ### Sending events to a room
+
+{{% boxes/note %}}
+{{% added-in v="1.3" %}}
+
+Servers might need to post-process some events if they
+[relate to](#forming-relationships-between-events) another event. The event's
+relationship type (`rel_type`) determines any restrictions which might apply,
+such as the user only being able to send one event of a given type in relation
+to another.
+{{% /boxes/note %}}
 
 {{% http-api spec="client-server" api="room_state" %}}
 
@@ -1623,7 +1898,238 @@ the topic to be removed from the room.
 
 {{% http-api spec="client-server" api="redaction" %}}
 
+### Forming relationships between events
+
+{{% changed-in v="1.3" %}}
+
+In some cases it is desirable to logically associate one event's contents with
+another event's contents — for example, when replying to a message, editing an
+event, or simply looking to add context for an event's purpose.
+
+Events are related to each other in a parent/child structure, where any event can
+become a parent by simply having a child event point at it. Parent events do not
+define their children, instead relying on the children to describe their parent.
+
+The relationship between a child and its parent event is described in the child
+event's `content` as `m.relates_to` (defined below). A child event can point at
+any other event, including another child event, to build the relationship so long
+as both events are in the same room, however additional restrictions might be imposed
+by the type of the relationship (the `rel_type`).
+
+{{% boxes/note %}}
+Child events can point at other child events, forming a chain of events. These chains
+can naturally take the shape of a tree if two independent children point at a single
+parent event, for example.
+{{% /boxes/note %}}
+
+To allow the server to aggregate and find child events for a parent, the `m.relates_to`
+key of an event MUST be included in the plaintext copy of the event. It cannot be
+exclusively recorded in the encrypted payload as the server cannot decrypt the event
+for processing.
+
+{{% boxes/warning %}}
+If an encrypted event contains an `m.relates_to` in its payload, it should be
+ignored and instead favour the plaintext `m.relates_to` copy (including when there
+is no plaintext copy). This is to ensure the client's behaviour matches the server's
+capability to handle relationships.
+{{% /boxes/warning %}}
+
+Relationships which don't match the schema, or which break the rules of a relationship,
+are simply ignored. An example might be the parent and child being in different
+rooms, or the relationship missing properties required by the schema below. Clients
+handling such invalid relationships should show the events independently of each
+other, optionally with an error message.
+
+{{% boxes/note %}}
+While this specification describes an `m.relates_to` object containing a `rel_type`, there
+is not currently any relationship type which uses this structure. Replies, described below,
+form their relationship outside of the `rel_type` as a legacy type of relationship. Future
+versions of the specification might change replies to better match the relationship structures.
+
+Custom `rel_type`s can, and should, still use the schema described above for relevant
+behaviour.
+{{% /boxes/note %}}
+
+`m.relates_to` is defined as follows:
+
+{{% definition path="api/client-server/definitions/m.relates_to" %}}
+
+#### Relationship types
+
+This specification describes the following relationship types:
+
+* [Rich replies](#rich-replies) (**Note**: does not use `rel_type`).
+
+#### Aggregations
+
+{{% added-in v="1.3" %}}
+
+Some child events can be "aggregated" by the server, depending on their
+`rel_type`. This can allow a set of child events to be summarised to the client without
+the client needing the child events themselves.
+
+An example of this might be that a `rel_type` requires an extra `key` field which, when
+appropriately specified, would mean that the client receives a total count for the number
+of times that `key` was used by child events.
+
+The actual aggregation format depends on the `rel_type`.
+
+{{% boxes/note %}}
+This specification does not currently describe any `rel_type`s which require
+aggregation. This functionality forms a framework for future extensions.
+{{% /boxes/note %}}
+
+Aggregations are sometimes automatically included by a server alongside the parent
+event. This is known as a "bundled aggregation" or "bundle" for simplicity. The
+act of doing this is "bundling".
+
+When an event is served to the client through the APIs listed below, a `m.relations` property
+is included under `unsigned` if the event has child events which can be aggregated and point
+at it. The `m.relations` property is an object keyed by `rel_type` and value being the type-specific
+aggregated format for that `rel_type`, also known as the bundle.
+
+For example (unimportant fields not included):
+
+```json
+{
+  "event_id": "$my_event",
+  "unsigned": {
+    "m.relations": {
+      "org.example.possible_annotations": [
+        {
+          "key": "👍",
+          "origin_server_ts": 1562763768320,
+          "count": 3
+        },
+        {
+          "key": "👎",
+          "origin_server_ts": 1562763768320,
+          "count": 1
+        }
+      ],
+      "org.example.possible_thread": {
+        "current_server_participated": true,
+        "count": 7,
+        "latest_event": {
+          "event_id": "$another_event",
+          "content": {
+            "body": "Hello world"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Note how the `org.example.possible_annotations` bundle is an array compared to the
+`org.example.possible_thread` bundle where the server is summarising the state of
+the relationship in a single object. Both are valid ways to aggregate, and their
+exact types depend on the `rel_type`.
+
+{{% boxes/warning %}}
+State events do not currently receive bundled aggregations. This is not
+necessarily a deliberate design decision, and MSCs which aim to fix this are welcome.
+{{% /boxes/warning %}}
+
+The endpoints where the server *should* include bundled aggregations are:
+
+* [`GET /rooms/{roomId}/messages`](#get_matrixclientv3roomsroomidmessages)
+* [`GET /rooms/{roomId}/context/{eventId}`](#get_matrixclientv3roomsroomidcontexteventid)
+* [`GET /rooms/{roomId}/event/{eventId}`](#get_matrixclientv3roomsroomideventeventid)
+* [`GET /rooms/{roomId}/relations/{eventId}`](#get_matrixclientv1roomsroomidrelationseventid)
+* [`GET /rooms/{roomId}/relations/{eventId}/{relType}`](#get_matrixclientv1roomsroomidrelationseventidreltype)
+* [`GET /rooms/{roomId}/relations/{eventId}/{relType}/{eventType}`](#get_matrixclientv1roomsroomidrelationseventidreltypeeventtype)
+* [`GET /sync`](#get_matrixclientv3sync) when the relevant section has a `limited` value
+  of `true`.
+* [`POST /search`](#post_matrixclientv3search) for any matching events under `room_events`.
+
+{{% boxes/note %}}
+The server is **not** required to return bundled aggregations on deprecated endpoints
+such as `/initialSync`.
+{{% /boxes/note %}}
+
+While this functionality allows the client to see what was known to the server at the
+time of handling, the client should continue to aggregate locally if it is aware of
+the relationship type's behaviour. For example, a client might increment a `count`
+on a parent event's bundle if it saw a new child event which referenced that parent.
+
+The bundle provided by the server only includes child events which were known at the
+time the client would receive the bundle. For example, in a single `/sync` response
+with the parent and multiple child events the child events would have already been
+included on the parent's `m.relations` field. Events received in future syncs would
+need to be aggregated manually by the client.
+
+{{% boxes/note %}}
+Events from [ignored users](#ignoring-users) do not appear in the aggregation
+from the server, however clients might still have events from ignored users cached. Like
+with normal events, clients will need to de-aggregate child events sent by ignored users to
+avoid them being considered in counts. Servers must additionally ensure they do not
+consider child events from ignored users when preparing a bundle for the client.
+{{% /boxes/note %}}
+
+When a parent event is redacted, the child events which pointed to that parent remain, however
+when a child event is redacted then the relationship is broken. Therefore, the server needs
+to de-aggregate or disassociate the event once the relationship is lost. Clients with local
+aggregation or which handle redactions locally should do the same.
+
+It is suggested that clients perform local echo on aggregations — for instance, aggregating
+a new child event into a bundle optimistically until the server returns a failure or the client
+gives up on sending the event, at which point the event should be de-aggregated and an
+error or similar shown. The client should be cautious to not aggregate an event twice if
+it has already optimistically aggregated the event. Clients are encouraged to take this
+a step further to additionally track child events which target unsent/pending events,
+likely using the transaction ID as a temporary event ID until a proper event ID is known.
+
+{{% boxes/warning %}}
+Due to history visibility restrictions, child events might not be visible to the user
+if they are in a section of history the user cannot see. This means any bundles which would
+normally include those events will be lacking them and the client will not be able to
+locally aggregate the events either — relating events of importance (such as votes) should
+take into consideration history visibility.
+
+Additionally, if the server is missing portions of the room history then it may not be
+able to accurately aggregate the events.
+{{% /boxes/warning %}}
+
+#### Relationships API
+
+{{% added-in v="1.3" %}}
+
+To retrieve the child events for a parent from the server, the client can call the
+following endpoint.
+
+This endpoint is particularly useful if the client has lost context on the aggregation for
+a parent event and needs to rebuild/verify it.
+
+{{% boxes/note %}}
+Because replies do not use `rel_type`, they will not be accessible via this API.
+{{% /boxes/note %}}
+
+{{% http-api spec="client-server" api="relations" %}}
+
 ## Rooms
+
+### Types
+
+{{% added-in v="1.2" %}}
+
+Optionally, rooms can have types to denote their intended function. A room
+without a type does not necessarily mean it has a specific default function,
+though commonly these rooms will be for conversational purposes.
+
+Room types are best applied when a client might need to differentiate between
+two different rooms, such as conversation-holding and data-holding. If a room
+has a type, it is specified in the `type` key of an [`m.room.create`](#mroomcreate)
+event. To specify a room's type, provide it as part of `creation_content` on
+the create room request.
+
+In this specification the following room types are specified:
+
+* [`m.space`](#spaces)
+
+Unspecified room types are permitted through the use of
+[Namespaced Identifiers](/appendices/#common-namespaced-identifier-grammar).
 
 ### Creation
 
@@ -1734,6 +2240,19 @@ This room can only be joined if you were invited, and allows anyone to
 request an invite to the room. Note that this join rule is only available
 in room versions [which support knocking](/rooms/#feature-matrix).
 
+{{% added-in v="1.2" %}} `restricted`
+This room can be joined if you were invited or if you are a member of another
+room listed in the join rules. If the server cannot verify membership for any
+of the listed rooms then you can only join with an invite. Note that this rule
+is only expected to work in room versions [which support it](/rooms/#feature-matrix).
+
+{{% added-in v="1.3" %}} `knock_restricted`
+This room can be joined as though it was `restricted` *or* `knock`. If you
+interact with the room using knocking, the `knock` rule takes effect whereas
+trying to join the room without an invite applies the `restricted` join rule.
+Note that this rule is only expected to work in room versions
+[which support it](/rooms/#feature-matrix).
+
 The allowable state transitions of membership are:
 
 ![membership-flow-diagram](/diagrams/membership.png)
@@ -1749,6 +2268,15 @@ The allowable state transitions of membership are:
 ##### Knocking on rooms
 
 {{% added-in v="1.1" %}}
+{{% changed-in v="1.3" %}}
+
+{{% boxes/note %}}
+As of `v1.3`, it is possible to knock on a [restricted room](#restricted-rooms)
+if the room supports and is using the `knock_restricted` join rule.
+
+Note that `knock_restricted` is only expected to work in room versions
+[which support it](/rooms/#feature-matrix).
+{{% /boxes/note %}}
 
 <!--
 This section is here because it's most similar to being invited/joining a
@@ -1782,6 +2310,60 @@ to the client to handle. Clients can expect to see the join event if the
 server chose to auto-accept.
 
 {{% http-api spec="client-server" api="knocking" %}}
+
+##### Restricted rooms
+
+{{% added-in v="1.2" %}}
+{{% changed-in v="1.3" %}}
+
+{{% boxes/note %}}
+As of `v1.3`, it is possible to [knock](#knocking-on-rooms) on a restricted
+room if the room supports and is using the `knock_restricted` join rule.
+
+Note that `knock_restricted` is only expected to work in room versions
+[which support it](/rooms/#feature-matrix).
+{{% /boxes/note %}}
+
+Restricted rooms are rooms with a `join_rule` of `restricted`. These rooms
+are accompanied by "allow conditions" as described in the
+[`m.room.join_rules`](#mroomjoin_rules) state event.
+
+If the user has an invite to the room then the restrictions will not affect
+them. They should be able to join by simply accepting the invite.
+
+When joining without an invite, the server MUST verify that the requesting
+user meets at least one of the conditions. If no conditions can be verified
+or no conditions are satisfied, the user will not be able to join. When the
+join is happening over federation, the remote server will check the conditions
+before accepting the join. See the [Server-Server Spec](/server-server-api/#restricted-rooms)
+for more information.
+
+If the room is `restricted` but no valid conditions are presented then the
+room is effectively invite only.
+
+The user does not need to maintain the conditions in order to stay a member
+of the room: the conditions are only checked/evaluated during the join process.
+
+###### Conditions
+
+Currently there is only one condition available: `m.room_membership`. This
+condition requires the user trying to join the room to be a *joined* member
+of another room (specifically, the `room_id` accompanying the condition). For
+example, if `!restricted:example.org` wanted to allow joined members of
+`!other:example.org` to join, `!restricted:example.org` would have the following
+`content` for [`m.room.join_rules`](#mroomjoin_rules):
+
+```json
+{
+  "join_rule": "restricted",
+  "allow": [
+    {
+      "room_id": "!other:example.org",
+      "type": "m.room_membership"
+    }
+  ]
+}
+```
 
 #### Leaving rooms
 
@@ -1918,7 +2500,7 @@ the [Feature Profile](#feature-profiles) it targets.
 
 ### Feature Profiles
 
-Chat supports many different kinds of clients: from embedded IoT
+Matrix supports many different kinds of clients: from embedded IoT
 devices to desktop clients. Not all clients can provide the same feature
 sets as other clients e.g. due to lack of physical hardware such as not
 having a screen. Clients can fall into one of several profiles and each
@@ -1932,6 +2514,7 @@ that profile.
 | Module / Profile                                           | Web       | Mobile   | Desktop  | CLI      | Embedded |
 |------------------------------------------------------------|-----------|----------|----------|----------|----------|
 | [Instant Messaging](#instant-messaging)                    | Required  | Required | Required | Required | Optional |
+| [Rich replies](#rich-replies)                              | Optional  | Optional | Optional | Optional | Optional |
 | [Direct Messaging](#direct-messaging)                      | Required  | Required | Required | Required | Optional |
 | [Mentions](#user-room-and-group-mentions)                  | Required  | Required | Required | Optional | Optional |
 | [Presence](#presence)                                      | Required  | Required | Required | Required | Optional |
@@ -1961,6 +2544,7 @@ that profile.
 | [Server ACLs](#server-access-control-lists-acls-for-rooms) | Optional  | Optional | Optional | Optional | Optional |
 | [Server Notices](#server-notices)                          | Optional  | Optional | Optional | Optional | Optional |
 | [Moderation policies](#moderation-policy-lists)            | Optional  | Optional | Optional | Optional | Optional |
+| [Spaces](#spaces)                                          | Optional  | Optional | Optional | Optional | Optional |
 
 *Please see each module for more details on what clients need to
 implement.*
@@ -1969,13 +2553,13 @@ implement.*
 
 ##### Stand-alone web (`Web`)
 
-This is a web page which heavily uses Chat for communication.
+This is a web page which heavily uses Matrix for communication.
 Single-page web apps would be classified as a stand-alone web client, as
-would multi-page web apps which use Chat on nearly every page.
+would multi-page web apps which use Matrix on nearly every page.
 
 ##### Mobile (`Mobile`)
 
-This is a Chat client specifically designed for consumption on mobile
+This is a Matrix client specifically designed for consumption on mobile
 devices. This is typically a mobile app but need not be so provided the
 feature set can be reached (e.g. if a mobile site could display push
 notifications it could be classified as a mobile client).
@@ -1996,7 +2580,7 @@ embedded device.
 
 ###### Application
 
-This is a Chat client which is embedded in another website, e.g. using
+This is a Matrix client which is embedded in another website, e.g. using
 iframes. These embedded clients are typically for a single purpose
 related to the website in question, and are not intended to be
 fully-fledged communication apps.
@@ -2009,4 +2593,38 @@ operations and run in a resource constrained environment. Like embedded
 applications, they are not intended to be fully-fledged communication
 systems.
 
-{{% cs-modules %}}
+{{% cs-module name="instant_messaging" %}}
+{{% cs-module name="rich_replies" %}}
+{{% cs-module name="voip_events" %}}
+{{% cs-module name="typing_notifications" %}}
+{{% cs-module name="receipts" %}}
+{{% cs-module name="read_markers" %}}
+{{% cs-module name="presence" %}}
+{{% cs-module name="content_repo" %}}
+{{% cs-module name="send_to_device" %}}
+{{% cs-module name="device_management" %}}
+{{% cs-module name="end_to_end_encryption" %}}
+{{% cs-module name="secrets" %}}
+{{% cs-module name="history_visibility" %}}
+{{% cs-module name="push" %}}
+{{% cs-module name="third_party_invites" %}}
+{{% cs-module name="search" %}}
+{{% cs-module name="guest_access" %}}
+{{% cs-module name="room_previews" %}}
+{{% cs-module name="tags" %}}
+{{% cs-module name="account_data" %}}
+{{% cs-module name="admin" %}}
+{{% cs-module name="event_context" %}}
+{{% cs-module name="sso_login" %}}
+{{% cs-module name="dm" %}}
+{{% cs-module name="ignore_users" %}}
+{{% cs-module name="stickers" %}}
+{{% cs-module name="report_content" %}}
+{{% cs-module name="third_party_networks" %}}
+{{% cs-module name="openid" %}}
+{{% cs-module name="server_acls" %}}
+{{% cs-module name="mentions" %}}
+{{% cs-module name="room_upgrades" %}}
+{{% cs-module name="server_notices" %}}
+{{% cs-module name="moderation_policies" %}}
+{{% cs-module name="spaces" %}}

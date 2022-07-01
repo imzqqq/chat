@@ -14,13 +14,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server Push API"
+  title: "Matrix Client-Server Push API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:
@@ -51,7 +51,7 @@ paths:
                   "profile_tag": "xyz",
                   "lang": "en-US",
                   "data": {
-                    "url": "https://example.com/chat/push/v1/notify"
+                    "url": "https://example.com/_matrix/push/v1/notify"
                   }
                 }
               ]
@@ -158,7 +158,7 @@ paths:
               "app_id": "com.example.app.ios",
               "pushkey": "APA91bHPRgkF3JUikC4ENAHEeMrd41Zxv3hVZjC9KtT8OvPVGJ-hQMRKRrZuJAEcl7B338qju59zJMjw2DELjzEvxwYv7hH5Ynpc1ODQ0aT4U4OFEeco8ohsN5PjL1iC2dNtk2BAokeMCg2ZXKqpc8FXKmhX94kIxQ",
               "data": {
-                "url": "https://push-gateway.location.here/chat/push/v1/notify",
+                "url": "https://push-gateway.location.here/_matrix/push/v1/notify",
                 "format": "event_id_only"
               },
               "append": false
@@ -225,8 +225,8 @@ paths:
                     description: |-
                       Required if `kind` is `http`. The URL to use to send
                       notifications to. MUST be an HTTPS URL with a path of
-                      `/chat/push/v1/notify`.
-                    example: "https://push-gateway.location.here/chat/push/v1/notify"
+                      `/_matrix/push/v1/notify`.
+                    example: "https://push-gateway.location.here/_matrix/push/v1/notify"
                   format:
                     type: string
                     description: |-

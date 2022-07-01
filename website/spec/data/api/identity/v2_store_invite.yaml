@@ -1,5 +1,5 @@
 # Copyright 2018 New Vector Ltd
-# Copyright 2019 The Chat.org Foundation C.I.C.
+# Copyright 2019 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Identity Service Store Invitations API"
+  title: "Matrix Identity Service Store Invitations API"
   version: "2.0.0"
 host: localhost:8090
 schemes:
   - https
-basePath: /chat/identity/v2
+basePath: /_matrix/identity/v2
 consumes:
   - application/json
 produces:
@@ -47,10 +47,12 @@ paths:
         The service records persistently all of the above information.
 
         It also generates an email containing all of this data, sent to the
-        `address` parameter, notifying them of the invitation.
+        `address` parameter, notifying them of the invitation. The email should
+        reference the `inviter_name`, `room_name`, `room_avatar`, and `room_type`
+        (if present) from the request here.
 
         Also, the generated ephemeral public key will be listed as valid on
-        requests to `/chat/identity/v2/pubkey/ephemeral/isvalid`.
+        requests to `/_matrix/identity/v2/pubkey/ephemeral/isvalid`.
 
         Currently, invites may only be issued for 3pids of the `email` medium.
 
@@ -76,19 +78,19 @@ paths:
                 example: "foo@example.com"
               room_id:
                 type: string
-                description: The Chat room ID to which the user is invited
+                description: The Matrix room ID to which the user is invited
                 example: "!something:example.org"
               sender:
                 type: string
-                description: The Chat user ID of the inviting user
+                description: The Matrix user ID of the inviting user
                 example: "@bob:example.com"
               room_alias:
                 type: string
                 description: |-
-                  The Chat room alias for the room to which the user is
+                  The Matrix room alias for the room to which the user is
                   invited. This should be retrieved from the `m.room.canonical_alias`
                   state event.
-                example: "#somewhere:exmaple.org"
+                example: "#somewhere:example.org"
               room_avatar_url:
                 type: string
                 description: |-
@@ -115,6 +117,12 @@ paths:
                 type: string
                 description: The Content URI for the avatar of the user ID initiating the invite.
                 example: "mxc://example.org/an0th3rM3dia"
+              room_type:
+                type: string
+                description: |-
+                  The `type` from the `m.room.create` event's `content`. If the create event doesn't
+                  have a specified `type`, this field is not included.
+                example: "m.space"
             required: ["medium", "address", "room_id", "sender"]
       responses:
         200:
@@ -150,9 +158,9 @@ paths:
               }
         400:
           description: |
-            An error has occured.
+            An error has occurred.
 
-            If the 3pid is already bound to a Chat user ID, the error code
+            If the 3pid is already bound to a Matrix user ID, the error code
             will be `M_THREEPID_IN_USE`.  If the medium is unsupported, the
             error code will be `M_UNRECOGNIZED`.
           examples:

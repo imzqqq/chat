@@ -13,13 +13,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server Room Directory API"
+  title: "Matrix Client-Server Room Directory API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:
@@ -37,7 +37,7 @@ paths:
           name: roomId
           description: The room ID.
           required: true
-          x-example: "!curbf:chat.imzqqq.top"
+          x-example: "!curbf:matrix.org"
       responses:
         200:
           description: The visibility of the room in the directory
@@ -81,7 +81,7 @@ paths:
           name: roomId
           description: The room ID.
           required: true
-          x-example: "!curbf:chat.imzqqq.top"
+          x-example: "!curbf:matrix.org"
         - in: body
           name: body
           required: true
@@ -104,6 +104,8 @@ paths:
           description: The visibility was updated, or no change was needed.
           examples:
             application/json: {}
+          schema:
+            type: object
         404:
           description: The room is not known to the server
           examples:

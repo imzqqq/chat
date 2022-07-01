@@ -188,7 +188,7 @@ Issue page
 Model::
 
  Forum ----< Boards ----< Threads ----< Messages
- - Chat   - Dev        - HALP!        - please halp!
+ - Matrix   - Dev        - HALP!        - please halp!
 
 Main page
  What's visible:

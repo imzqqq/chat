@@ -14,12 +14,12 @@
 
 swagger: '2.0'
 info:
-  title: "Chat Federation Events API"
+  title: "Matrix Federation Events API"
   version: "1.0.0"
-host: localhost:8880
+host: localhost:8448
 schemes:
   - https
-basePath: /chat/federation/v1
+basePath: /_matrix/federation/v1
 consumes:
   - application/json
 produces:
@@ -43,7 +43,7 @@ paths:
           type: string
           description: The room ID to backfill.
           required: true
-          x-example: "!SomeRoom:chat.imzqqq.top"
+          x-example: "!SomeRoom:matrix.org"
         - in: query
           name: v
           type: array
@@ -51,7 +51,7 @@ paths:
             type: string
           description: The event IDs to backfill from.
           required: true
-          x-example: ["$abc123:chat.imzqqq.top"]
+          x-example: ["$abc123:matrix.org"]
         - in: query
           name: limit
           type: integer
@@ -89,7 +89,7 @@ paths:
           type: string
           description: The room ID to search in.
           required: true
-          x-example: "!SomeRoom:chat.imzqqq.top"
+          x-example: "!SomeRoom:matrix.org"
         - in: body
           name: body
           schema:

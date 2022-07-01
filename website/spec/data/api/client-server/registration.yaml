@@ -1,4 +1,5 @@
 # Copyright 2016 OpenMarket Ltd
+# Copyright 2022 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,13 +14,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server Registration API"
+  title: "Matrix Client-Server Registration API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:
@@ -47,13 +48,13 @@ paths:
         auto-generate one.
 
         The server SHOULD register an account with a User ID based on the
-        `username` provided, if any. Note that the grammar of Chat User ID
+        `username` provided, if any. Note that the grammar of Matrix User ID
         localparts is restricted, so the server MUST either map the provided
         `username` onto a `user_id` in a logical manner, or reject
         `username`\s which do not comply to the grammar, with
         `M_INVALID_USERNAME`.
 
-        Chat clients MUST NOT assume that localpart of the registered
+        Matrix clients MUST NOT assume that localpart of the registered
         `user_id` matches the provided `username`.
 
         The returned access token must be associated with the `device_id`
@@ -67,7 +68,7 @@ paths:
         regardless of input.
 
         Any user ID returned by this API must conform to the grammar given in the
-        [Chat specification](/appendices/#user-identifiers).
+        [Matrix specification](/appendices/#user-identifiers).
       operationId: register
       parameters:
         - in: query
@@ -100,8 +101,8 @@ paths:
               username:
                 type: string
                 description: |-
-                  The basis for the localpart of the desired Chat ID. If omitted,
-                  the homeserver MUST generate a Chat ID local part.
+                  The basis for the localpart of the desired Matrix ID. If omitted,
+                  the homeserver MUST generate a Matrix ID local part.
                 example: cheeky_monkey
               password:
                 type: string
@@ -127,12 +128,17 @@ paths:
                   returned from this call, therefore preventing an automatic
                   login. Defaults to false.
                 example: false
+              refresh_token:
+                type: boolean
+                description: |-
+                  If true, the client supports refresh tokens.
+                x-addedInMatrixVersion: "1.3"
       responses:
         200:
           description: The account has been registered.
           examples:
             application/json: {
-                "user_id": "@cheeky_monkey:chat.imzqqq.top",
+                "user_id": "@cheeky_monkey:matrix.org",
                 "access_token": "abc123",
                 "device_id": "GHTYAJCE"
               }
@@ -142,16 +148,37 @@ paths:
               user_id:
                 type: string
                 description: |-
-                  The fully-qualified Chat user ID (MXID) that has been registered.
+                  The fully-qualified Matrix user ID (MXID) that has been registered.
 
                   Any user ID returned by this API must conform to the grammar given in the
-                  [Chat specification](/appendices/#user-identifiers).
+                  [Matrix specification](/appendices/#user-identifiers).
               access_token:
                 type: string
                 description: |-
                   An access token for the account.
                   This access token can then be used to authorize other requests.
                   Required if the `inhibit_login` option is false.
+              refresh_token:
+                type: string
+                description: |-
+                  A refresh token for the account. This token can be used to
+                  obtain a new access token when it expires by calling the
+                  `/refresh` endpoint.
+
+                  Omitted if the `inhibit_login` option is true.
+                x-addedInMatrixVersion: "1.3"
+              expires_in_ms:
+                type: integer
+                description: |-
+                  The lifetime of the access token, in milliseconds. Once
+                  the access token has expired a new access token can be
+                  obtained by using the provided refresh token. If no
+                  refresh token is provided, the client will need to re-log in
+                  to obtain a new access token. If not given, the client can
+                  assume that the access token will not expire.
+
+                  Omitted if the `inhibit_login` option is true.
+                x-addedInMatrixVersion: "1.3"
               home_server:
                 type: string
                 description: |-
@@ -586,7 +613,7 @@ paths:
         fits the server's desired requirements (for example, a server could dictate
         that it does not permit usernames with underscores).
 
-        Chat clients may wish to use this API prior to attempting registration,
+        Matrix clients may wish to use this API prior to attempting registration,
         however the clients must also be aware that using this API does not normally
         reserve the username. This can mean that the username becomes unavailable
         between checking its availability and attempting to register it.

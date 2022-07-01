@@ -14,13 +14,13 @@
 
 swagger: '2.0'
 info:
-  title: "Chat Client-Server Notifications API"
+  title: "Matrix Client-Server Notifications API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:
@@ -112,8 +112,7 @@ paths:
                       type: object
                       title: Event
                       description: The Event object for the event that triggered the notification.
-                      allOf:
-                        - "$ref": "definitions/event.yaml"
+                      "$ref": "definitions/client_event_without_room_id.yaml"
                     profile_tag:
                       type: string
                       description: The profile tag of the rule that matched this event.
@@ -127,6 +126,7 @@ paths:
                       description: The ID of the room in which the event was posted.
                     ts:
                       type: integer
+                      format: int64
                       description: |-
                         The unix timestamp at which the event notification was sent,
                         in milliseconds.

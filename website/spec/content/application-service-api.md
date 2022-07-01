@@ -4,10 +4,10 @@ weight: 30
 type: docs
 ---
 
-The Chat client-server API and server-server APIs provide the means to
+The Matrix client-server API and server-server APIs provide the means to
 implement a consistent self-contained federated messaging fabric.
 However, they provide limited means of implementing custom server-side
-behaviour in Chat (e.g. gateways, filters, extensible hooks etc). The
+behaviour in Matrix (e.g. gateways, filters, extensible hooks etc). The
 Application Service API (AS API) defines a standard API to allow such
 extensible functionality to be implemented irrespective of the
 underlying homeserver implementation.
@@ -138,7 +138,7 @@ failing the request with an `M_FORBIDDEN` error if it does not match.
 Previous drafts of the application service specification had a mix of
 endpoints that have been used in the wild for a significant amount of
 time. The application service specification now defines a version on all
-endpoints to be more compatible with the rest of the Chat
+endpoints to be more compatible with the rest of the Matrix
 specification and the future.
 
 Homeservers should attempt to use the specified endpoints first when
@@ -151,22 +151,22 @@ The older endpoints have the exact same request body and response
 format, they just belong at a different path. The equivalent path for
 each is as follows:
 
--   `/chat/app/v1/transactions/{txnId}` should fall back to
+-   `/_matrix/app/v1/transactions/{txnId}` should fall back to
     `/transactions/{txnId}`
--   `/chat/app/v1/users/{userId}` should fall back to
+-   `/_matrix/app/v1/users/{userId}` should fall back to
     `/users/{userId}`
--   `/chat/app/v1/rooms/{roomAlias}` should fall back to
+-   `/_matrix/app/v1/rooms/{roomAlias}` should fall back to
     `/rooms/{roomAlias}`
--   `/chat/app/v1/thirdparty/protocol/{protocol}` should fall back to
-    `/chat/app/unstable/thirdparty/protocol/{protocol}`
--   `/chat/app/v1/thirdparty/user/{user}` should fall back to
-    `/chat/app/unstable/thirdparty/user/{user}`
--   `/chat/app/v1/thirdparty/location/{location}` should fall back to
-    `/chat/app/unstable/thirdparty/location/{location}`
--   `/chat/app/v1/thirdparty/user` should fall back to
-    `/chat/app/unstable/thirdparty/user`
--   `/chat/app/v1/thirdparty/location` should fall back to
-    `/chat/app/unstable/thirdparty/location`
+-   `/_matrix/app/v1/thirdparty/protocol/{protocol}` should fall back to
+    `/_matrix/app/unstable/thirdparty/protocol/{protocol}`
+-   `/_matrix/app/v1/thirdparty/user/{user}` should fall back to
+    `/_matrix/app/unstable/thirdparty/user/{user}`
+-   `/_matrix/app/v1/thirdparty/location/{location}` should fall back to
+    `/_matrix/app/unstable/thirdparty/location/{location}`
+-   `/_matrix/app/v1/thirdparty/user` should fall back to
+    `/_matrix/app/unstable/thirdparty/user`
+-   `/_matrix/app/v1/thirdparty/location` should fall back to
+    `/_matrix/app/unstable/thirdparty/location`
 
 Homeservers should periodically try again for the newer endpoints
 because the application service may have been updated.
@@ -236,7 +236,7 @@ mappings.
 Application services may declare which protocols they support via their
 registration configuration for the homeserver. These networks are
 generally for third party services such as IRC that the application
-service is managing. Application services may populate a Chat room
+service is managing. Application services may populate a Matrix room
 directory for their registered protocols, as defined in the
 Client-Server API Extensions.
 
@@ -295,27 +295,53 @@ by the `sender_localpart` property of the registration.
 
 An example request would be:
 
-    GET /chat/client/v3/account/whoami?user_id=@_irc_user:example.org
+    GET /_matrix/client/v3/account/whoami?user_id=@_irc_user:example.org
     Authorization: Bearer YourApplicationServiceTokenHere
 
 #### Timestamp massaging
 
-Previous drafts of the Application Service API permitted application
-services to alter the timestamp of their sent events by providing a `ts`
-query parameter when sending an event. This API has been excluded from
-the first release due to design concerns, however some servers may still
-support the feature. Please visit [issue
-\#1585](https://github.com/matrix-org/matrix-doc/issues/1585) for more
-information.
+{{% added-in v="1.3" %}}
+
+Application services can alter the timestamp associated with an event, allowing
+the application service to better represent the "real" time an event was sent
+at. While this doesn't affect the server-side ordering of the event, it can allow
+an application service to better represent when an event would have been sent/received
+at, such as in the case of bridges where the remote network might have a slight
+delay and the application service wishes to bridge the proper time onto the message.
+
+When authenticating requests as an application service, the caller can append a `ts`
+query string argument to change the `origin_server_ts` of the resulting event. Attempting
+to set the timestamp to anything other than what is accepted by `origin_server_ts` should
+be rejected by the server as a bad request.
+
+When not present, the server's behaviour is unchanged: the local system time of the server
+will be used to provide a timestamp, representing "now".
+
+The `ts` query string argument is only valid on the following endpoints:
+
+* [`PUT /rooms/{roomId}/send/{eventType}/{txnId}`](/client-server-api/#put_matrixclientv3roomsroomidsendeventtypetxnid)
+* [`PUT /rooms/{roomId}/state/{eventType}/{stateKey}`](/client-server-api/#put_matrixclientv3roomsroomidstateeventtypestatekey)
+
+Other endpoints, such as `/kick`, do not support `ts`: instead, callers can use the
+`PUT /state` endpoint to mimic the behaviour of the other APIs.
+
+{{% boxes/warning %}}
+Changing the time of an event does not change the server-side (DAG) ordering for the
+event. The event will still be appended at the tip of the DAG as though the timestamp
+was set to "now". Future MSCs, like [MSC2716](https://github.com/matrix-org/matrix-spec-proposals/pull/2716),
+are expected to provide functionality which can allow DAG order manipulation (for history
+imports and similar behaviour).
+{{% /boxes/warning %}}
 
 #### Server admin style permissions
 
 The homeserver needs to give the application service *full control* over
 its namespace, both for users and for room aliases. This means that the
-AS should be able to create/edit/delete any room alias in its namespace,
-as well as create/delete any user in its namespace. No additional API
+AS should be able to manage any users and room alias in its namespace. No additional API
 changes need to be made in order for control of room aliases to be
-granted to the AS. Creation of users needs API changes in order to:
+granted to the AS.
+
+Creation of users needs API changes in order to:
 
 -   Work around captchas.
 -   Have a 'passwordless' user.
@@ -325,7 +351,7 @@ achieved by including the `as_token` on a `/register` request, along
 with a login type of `m.login.application_service` to set the desired
 user ID without a password.
 
-    POST /chat/client/v3/register
+    POST /_matrix/client/v3/register
     Authorization: Bearer YourApplicationServiceTokenHere
 
     Content:
@@ -334,8 +360,28 @@ user ID without a password.
       username: "_irc_example"
     }
 
+Similarly, logging in as users needs API changes in order to allow the AS to
+log in without needing the user's password. This is achieved by including the
+`as_token` on a `/login` request, along with a login type of
+`m.login.application_service`:
+
+{{% added-in v="1.2" %}}
+
+    POST /_matrix/client/v3/login
+    Authorization: Bearer YourApplicationServiceTokenHere
+
+    Content:
+    {
+      type: "m.login.application_service",
+      "identifier": {
+        "type": "m.id.user",
+        "user": "_irc_example"
+      }
+    }
+
 Application services which attempt to create users or aliases *outside*
-of their defined namespaces will receive an error code `M_EXCLUSIVE`.
+of their defined namespaces, or log in as users outside of their defined
+namespaces will receive an error code `M_EXCLUSIVE`.
 Similarly, normal users who attempt to create users or aliases *inside*
 an application service-defined namespace will receive the same
 `M_EXCLUSIVE` error code, but only if the application service has
@@ -363,7 +409,7 @@ client-server endpoint.
 Application services should include an `external_url` in the `content`
 of events it emits to indicate where the message came from. This
 typically applies to application services that bridge other networks
-into Chat, such as IRC, where an HTTP URL may be available to
+into Matrix, such as IRC, where an HTTP URL may be available to
 reference.
 
 Clients should provide users with a way to access the `external_url` if

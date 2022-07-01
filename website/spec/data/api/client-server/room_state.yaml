@@ -13,13 +13,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server state event send API"
+  title: "Matrix Client-Server state event send API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:
@@ -114,7 +114,7 @@ paths:
 
             Some example error codes include:
 
-            * `M_INVALID_PARAMETER`: One or more aliases within the `m.room.canonical_alias`
+            * `M_INVALID_PARAM`: One or more aliases within the `m.room.canonical_alias`
               event have invalid syntax.
 
             * `M_BAD_ALIAS`: One or more aliases within the `m.room.canonical_alias` event

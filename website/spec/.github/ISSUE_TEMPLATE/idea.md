@@ -8,5 +8,5 @@ assignees: ''
 ---
 
 **Suggestion**
-What would you like to see in Chat? If your idea is vaguely complete enough, we
-recommend submitting [an MSC](https://chat.api-spec.imzqqq.top/proposals) instead.
+What would you like to see in Matrix? If your idea is vaguely complete enough, we
+recommend submitting [an MSC](https://matrix.org/docs/spec/proposals) instead.

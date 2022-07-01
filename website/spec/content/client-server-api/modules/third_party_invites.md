@@ -1,18 +1,17 @@
 ---
 type: module
-weight: 140
 ---
 
 ### Third party invites
 
 This module adds in support for inviting new members to a room where
-their Chat user ID is not known, instead addressing them by a third
+their Matrix user ID is not known, instead addressing them by a third
 party identifier such as an email address. There are two flows here; one
-if a Chat user ID is known for the third party identifier, and one if
+if a Matrix user ID is known for the third party identifier, and one if
 not. Either way, the client calls `/invite` with the details of the
 third party identifier.
 
-The homeserver asks the identity server whether a Chat user ID is
+The homeserver asks the identity server whether a Matrix user ID is
 known for that identifier:
 
 -   If it is, an invite is simply issued for that user.
@@ -43,7 +42,7 @@ A client asks a server to invite a user by their third party identifier.
 
 Upon receipt of an `/invite`, the server is expected to look up the
 third party identifier with the provided identity server. If the lookup
-yields a result for a Chat User ID then the normal invite process can
+yields a result for a Matrix User ID then the normal invite process can
 be initiated. This process ends up looking like this:
 
 ```

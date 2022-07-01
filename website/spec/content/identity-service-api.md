@@ -4,11 +4,11 @@ weight: 40
 type: docs
 ---
 
-The Chat client-server and server-server APIs are largely expressed in
-Chat user identifiers. From time to time, it is useful to refer to
+The Matrix client-server and server-server APIs are largely expressed in
+Matrix user identifiers. From time to time, it is useful to refer to
 users by other ("third-party") identifiers, or "3PID"s, e.g. their email
 address or phone number. This Identity Service Specification describes
-how mappings between third-party identifiers and Chat user identifiers
+how mappings between third-party identifiers and Matrix user identifiers
 can be established, validated, and used. This description technically
 may apply to any 3PID, but in practice has only been applied
 specifically to email addresses and phone numbers.
@@ -19,7 +19,7 @@ The purpose of an identity server is to validate, store, and answer
 questions about the identities of users. In particular, it stores
 associations of the form "identifier X represents the same user as
 identifier Y", where identities may exist on different systems (such as
-email addresses, phone numbers, Chat user IDs, etc).
+email addresses, phone numbers, Matrix user IDs, etc).
 
 The identity server has some private-public keypairs. When asked about
 an association, it will sign details of the association with its private
@@ -36,12 +36,12 @@ Appendix.
 
 ## API standards
 
-The mandatory baseline for identity server communication in Chat is
+The mandatory baseline for identity server communication in Matrix is
 exchanging JSON objects over HTTP APIs. HTTPS is required for
 communication, and all API calls use a Content-Type of
 `application/json`. In addition, strings MUST be encoded as UTF-8.
 
-Any errors which occur at the Chat API level MUST return a "standard
+Any errors which occur at the Matrix API level MUST return a "standard
 error response". This is a JSON object which looks like:
 
 ```json
@@ -112,8 +112,8 @@ to provide identity information, access should be restricted to avoid
 leaking potentially sensitive data. In particular, being able to
 construct large-scale connections between identities should be avoided.
 To this end, in general APIs should allow a 3PID to be mapped to a
-Chat user identity, but not in the other direction (i.e. one should
-not be able to get all 3PIDs associated with a Chat user ID, or get
+Matrix user identity, but not in the other direction (i.e. one should
+not be able to get all 3PIDs associated with a Matrix user ID, or get
 all 3PIDs associated with a 3PID).
 
 ## Web browser clients
@@ -285,19 +285,19 @@ the client has made an appropriate request to `/hash_details` first.
 ### Security considerations
 
 {{% boxes/note %}}
-[MSC2134](https://github.com/matrix-org/matrix-doc/pull/2134) has much
+[MSC2134](https://github.com/matrix-org/matrix-spec-proposals/blob/main/proposals/2134-identity-hash-lookup.md) has much
 more information about the security considerations made for this section
 of the specification. This section covers the high-level details for why
 the specification is the way it is.
 {{% /boxes/note %}}
 
 Typically the lookup endpoint is used when a client has an unknown 3PID
-it wants to find a Chat User ID for. Clients normally do this kind of
+it wants to find a Matrix User ID for. Clients normally do this kind of
 lookup when inviting new users to a room or searching a user's address
-book to find any Chat users they may not have discovered yet. Rogue or
+book to find any Matrix users they may not have discovered yet. Rogue or
 malicious identity servers could harvest this unknown information and do
 nefarious things with it if it were sent in plain text. In order to
-protect the privacy of users who might not have a Chat identifier
+protect the privacy of users who might not have a Matrix identifier
 bound to their 3PID addresses, the specification attempts to make it
 difficult to harvest 3PIDs.
 
@@ -319,7 +319,7 @@ tables to mine the addresses. Similarly, clients which support the
 `none` algorithm should consider at least warning the user of the risks
 in sending identifiers in plain text to the identity server.
 
-Addresses are still potentially reversable using a calculated rainbow
+Addresses are still potentially reversible using a calculated rainbow
 table given some identifiers, such as phone numbers, common email
 address domains, and leaked addresses are easily calculated. For
 example, phone numbers can have roughly 12 digits to them, making them
@@ -331,8 +331,8 @@ The flow for creating an association is session-based.
 
 Within a session, one may prove that one has ownership of a 3PID. Once
 this has been established, the user can form an association between that
-3PID and a Chat user ID. Note that this association is only proved one
-way; a user can associate *any* Chat user ID with a validated 3PID,
+3PID and a Matrix user ID. Note that this association is only proved one
+way; a user can associate *any* Matrix user ID with a validated 3PID,
 i.e. I can claim that any email address I own is associated with
 @billg:microsoft.com.
 
@@ -379,11 +379,11 @@ through without modification.
 
 An identity server can store pending invitations to a user's 3PID, which
 will be retrieved and can be either notified on or look up when the 3PID
-is associated with a Chat user ID.
+is associated with a Matrix user ID.
 
 At a later point, if the owner of that particular 3PID binds it with a
-Chat user ID, the identity server will attempt to make an HTTP POST to
-the Chat user's homeserver via the
+Matrix user ID, the identity server will attempt to make an HTTP POST to
+the Matrix user's homeserver via the
 [/3pid/onbind](/server-server-api#put_matrixfederationv13pidonbind)
 endpoint. The request MUST be signed with a long-term private key for
 the identity server.

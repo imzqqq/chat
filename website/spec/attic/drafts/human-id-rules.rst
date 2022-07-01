@@ -1,7 +1,7 @@
 Abstract
 ========
 
-This document outlines a proposed format for human-readable IDs within Chat.
+This document outlines a proposed format for human-readable IDs within Matrix.
 For status see https://github.com/matrix-org/matrix-doc/pull/3/files
 
 Background
@@ -18,7 +18,7 @@ introduced. A variety of checks were put in place in order to protect users. If
 an address failed the check, the raw punycode would be displayed to
 disambiguate the address.
 
-The human-readable IDs in Chat are Room Aliases and User IDs.
+The human-readable IDs in Matrix are Room Aliases and User IDs.
 Room aliases look like ``#localpart:domain``. These aliases point to opaque
 non human-readable room IDs. These pointers can change to point at a different
 room ID at any time. User IDs look like ``@localpart:domain``. These represent

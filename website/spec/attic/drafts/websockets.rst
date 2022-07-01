@@ -20,7 +20,7 @@ https://docs.google.com/document/d/104ClehFBgqLQbf4s-AKX2ijr8sOAxcizfcRs_atsB0g
 Handshake
 ---------
 1. Instead of calling ``/sync``, the client makes a websocket request to
-   ``/chat/client/rN/stream``, passing the query parameters ``access_token``
+   ``/_matrix/client/rN/stream``, passing the query parameters ``access_token``
    and ``since``, and optionally ``filter`` - all of which have the same
    meaning as for ``/sync``.
 
@@ -41,14 +41,14 @@ Client request:
 
 .. code:: http
 
-    GET /chat/client/v2_alpha/stream?access_token=123456&since=s72594_4483_1934 HTTP/1.1
-    Host: chat.imzqqq.top
+    GET /_matrix/client/v2_alpha/stream?access_token=123456&since=s72594_4483_1934 HTTP/1.1
+    Host: matrix.org
     Upgrade: websocket
     Connection: Upgrade
     Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==
     Sec-WebSocket-Protocol: m.json
     Sec-WebSocket-Version: 13
-    Origin: https://chat.imzqqq.top
+    Origin: https://matrix.org
 
 Server response:
 
@@ -129,7 +129,7 @@ id            string     The same as the value in the corresponding Request
 result        object     On success, the results of the request.
 error         object     On error, an object giving the resons for the
                          error. This has the same structure as the "standard
-                         error response" for the Chat API: an object with
+                         error response" for the Matrix API: an object with
                          the fields ``errcode`` and ``error``.
 ============= ========== ===================================================
 
@@ -200,7 +200,7 @@ Client request:
         "id": "12345",
         "method": "send",
         "params": {
-            "room_id": "!d41d8cd:chat.imzqqq.top",
+            "room_id": "!d41d8cd:matrix.org",
             "event_type": "m.room.message",
             "content": {
                 "msgtype": "m.text",
@@ -216,7 +216,7 @@ Server response:
     {
         "id": "12345",
         "result": {
-            "event_id": "$66697273743031:chat.imzqqq.top"
+            "event_id": "$66697273743031:matrix.org"
         }
     }
 

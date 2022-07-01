@@ -13,12 +13,12 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server filter API"
+  title: "Matrix Client-Server filter API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:

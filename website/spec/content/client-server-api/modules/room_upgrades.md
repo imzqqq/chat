@@ -1,12 +1,11 @@
 ---
 type: module
-weight: 310
 ---
 
 ### Room Upgrades
 
 From time to time, a room may need to be upgraded to a different room
-version for a variety for reasons. This module defines a way for rooms
+version for a variety of reasons. This module defines a way for rooms
 to upgrade to a different room version when needed.
 
 #### Events
@@ -55,7 +54,7 @@ server:
     technical limitations of servers not being able to impersonate
     people from other homeservers. Additionally, servers should not
     transfer state events which are sensitive to who sent them, such as
-    events outside of the Chat namespace where clients may rely on the
+    events outside of the Matrix namespace where clients may rely on the
     sender to match certain criteria.
 
 4.  Moves any local aliases to the new room.

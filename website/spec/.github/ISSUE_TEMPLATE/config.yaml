@@ -1,8 +1,8 @@
 blank_issues_enabled: true
 contact_links:
- - name: Chat Spec Discussion
-   url: "https://to.chat.imzqqq.top/#/#matrix-spec:chat.imzqqq.top"
+ - name: Matrix Spec Discussion
+   url: "https://matrix.to/#/#matrix-spec:matrix.org"
    about: Questions about the spec and proposal process can be asked here.
- - name: Chat Security Policy
-   url: https://www.chat.imzqqq.top/security-disclosure-policy/
+ - name: Matrix Security Policy
+   url: https://www.matrix.org/security-disclosure-policy/
    about: Learn more about our security disclosure policy.

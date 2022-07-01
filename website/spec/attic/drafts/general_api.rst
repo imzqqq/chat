@@ -50,15 +50,15 @@ Legend:
    but needs more feedback.
  - ``[Final]``:  The API has no outstanding issues.
 
-This contains the formal proposal for Chat Client-Server API v2. This API 
+This contains the formal proposal for Matrix Client-Server API v2. This API 
 would completely replace v1. It is a general API, not specific to any particular 
 protocol e.g. HTTP. The following APIs will remain unchanged from v1:
 
 - Content repository API
 
 This version will change the path prefix for HTTP:
- - Version 1: ``/chat/client/api/v1``
- - Version 2: ``/chat/client/v2``
+ - Version 1: ``/_matrix/client/api/v1``
+ - Version 2: ``/_matrix/client/v2``
  
 Note the lack of the ``api`` segment. This is for consistency between other 
 homeserver path prefixes.

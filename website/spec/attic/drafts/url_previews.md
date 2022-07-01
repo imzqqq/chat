@@ -1,31 +1,31 @@
 URL Previews
 ============
 
-Design notes on a URL previewing service for Chat:
+Design notes on a URL previewing service for Matrix:
 
 Options are:
 
  1. Have an AS which listens for URLs, downloads them, and inserts an event that describes their metadata.
    * Pros:
-     * Decouples the implementation entirely from Chat server.
-     * Uses existing Chat events & content repo to store the metadata.
+     * Decouples the implementation entirely from Synapse.
+     * Uses existing Matrix events & content repo to store the metadata.
    * Cons:
      * Which AS should provide this service for a room, and why should you trust it?
      * Doesn't work well with E2E; you'd have to cut the AS into every room
      * the AS would end up subscribing to every room anyway.
 
- 2. Have a generic preview API (nothing to do with Chat) that provides a previewing service:
+ 2. Have a generic preview API (nothing to do with Matrix) that provides a previewing service:
    * Pros:
      * Simple and flexible; can be used by any clients at any point
    * Cons:
      * If each HS provides one of these independently, all the HSes in a room may needlessly DoS the target URI
-     * We need somewhere to store the URL metadata rather than just using Chat itself
+     * We need somewhere to store the URL metadata rather than just using Matrix itself
      * We can't piggyback on matrix to distribute the metadata between HSes.
 
- 3. Make the chat of the sending user responsible for spidering the URL and inserting an event asynchronously which describes the metadata.
+ 3. Make the synapse of the sending user responsible for spidering the URL and inserting an event asynchronously which describes the metadata.
    * Pros:
      * Works transparently for all clients
-     * Piggy-backs nicely on using Chat for distributing the metadata.
+     * Piggy-backs nicely on using Matrix for distributing the metadata.
      * No confusion as to which AS
    * Cons:
      * Doesn't work with E2E
@@ -57,14 +57,14 @@ API
 ---
 
 ```
-GET /chat/media/r0/preview_url?url=http://wherever.com
+GET /_matrix/media/r0/preview_url?url=http://wherever.com
 200 OK
 {
     "og:type"        : "article"
     "og:url"         : "https://twitter.com/matrixdotorg/status/684074366691356672"
-    "og:title"       : "Chat on Twitter"
+    "og:title"       : "Matrix on Twitter"
     "og:image"       : "https://pbs.twimg.com/profile_images/500400952029888512/yI0qtFi7_400x400.png"
-    "og:description" : "“Chat server 0.12 is out! Lots of polishing, performance &amp;amp; bugfixes: /sync API, /r0 prefix, fulltext search, 3PID invites https://t.co/5alhXLLEGP”"
+    "og:description" : "“Synapse 0.12 is out! Lots of polishing, performance &amp;amp; bugfixes: /sync API, /r0 prefix, fulltext search, 3PID invites https://t.co/5alhXLLEGP”"
     "og:site_name"   : "Twitter"
 }
 ```

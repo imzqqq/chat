@@ -12,16 +12,16 @@ Overview
 ========
 
 Application services provide a way of implementing custom serverside functionality
-on top of Chat without the complexity of implementing the full federation API.
+on top of Matrix without the complexity of implementing the full federation API.
 By acting as a trusted service logically located behind an existing homeserver,
 Application services are decoupled from:
 
 * Signing or validating federated traffic or conversation history
 * Validating authorisation constraints on federated traffic
-* Managing routing or retry schemes to the rest of the Chat federation
+* Managing routing or retry schemes to the rest of the Matrix federation
 
 As such, developers can focus entirely on implementing application logic rather
-than being concerned with the details of managing Chat federation.
+than being concerned with the details of managing Matrix federation.
 
 Features available to application services include:
 
@@ -38,29 +38,29 @@ Features not provided by application services include:
  
 Example use cases for application services include:
 
-* Exposing existing communication services in Chat
+* Exposing existing communication services in Matrix
 
   * Gateways to/from standards-based protocols (SIP, XMPP, IRC, RCS (MSRP), SIMPLE, Lync, etc)
   * Gateways to/from closed services (e.g. WhatsApp)
   * Gateways could be architected as:
   
-    * Act as a virtual client on the non-Chat network
+    * Act as a virtual client on the non-Matrix network
       (e.g. connect as multiple virtual clients to an IRC or XMPP server)
-    * Act as a server on the non-Chat network
+    * Act as a server on the non-Matrix network
       (e.g. speak s2s XMPP federation, or IRC link protocol)
-    * Act as an application service on the non-Chat network
+    * Act as an application service on the non-Matrix network
       (e.g. link up as IRC services, or an XMPP component)
-    * Exposing a non-Chat client interface listener from the AS
+    * Exposing a non-Matrix client interface listener from the AS
       (e.g. listen on port 6667 for IRC clients, or port 5222 for XMPP clients)
 
 
-* Bridging existing APIs into Chat
+* Bridging existing APIs into Matrix
    * e.g. SMS/MMS aggregator APIs
    * Domain-specific APIs such as SABRE
 
-* Integrating more exotic content into Chat
-   * e.g. MIDI<->Chat gateway/bridge
-   * 3D world <-> Chat bridge
+* Integrating more exotic content into Matrix
+   * e.g. MIDI<->Matrix gateway/bridge
+   * 3D world <-> Matrix bridge
 
 * Application services:
    * Search engines (e.g. elasticsearch search indices)
@@ -114,13 +114,13 @@ On HS handling events to unknown users:
   confirms the existence of that user (from its perspective), then the HS
   creates an account to represent the virtual user.
 * The namespace of virtual user accounts should conform to a structure like
-  ``@.irc.freenode.Arathorn:chat.imzqqq.top``.  This lets Chat users communicate with
-  foreign users who are not yet mapped into Chat via 3PID mappings or through
-  an existing non-virtual Chat user by trying to talk to them via a gateway.
+  ``@.irc.freenode.Arathorn:matrix.org``.  This lets Matrix users communicate with
+  foreign users who are not yet mapped into Matrix via 3PID mappings or through
+  an existing non-virtual Matrix user by trying to talk to them via a gateway.
 * The AS can alternatively preprovision virtual users using the existing CS API
   rather than lazy-loading them in this manner.
 * The AS may want to link the matrix ID of the sender through to their 3PID in
-  the remote ecosystem.  E.g. a message sent from ``@matthew:chat.imzqqq.top`` may wish
+  the remote ecosystem.  E.g. a message sent from ``@matthew:matrix.org`` may wish
   to originate from Arathorn on irc.freenode.net in the case of an IRC bridge.
   It's left as an AS implementation detail as to how the user should authorise
   the AS to act on its behalf.
@@ -145,7 +145,7 @@ On HS handling events to unknown rooms:
     the HS and the source store.
   * or: the HS must delegate conversation storage entirely to the
     AS using a Storage API (not defined here) which allows the existing
-    conversation store to back the HS, complete with all necessary Chat
+    conversation store to back the HS, complete with all necessary Matrix
     metadata (e.g. hashes, signatures, federation DAG, etc).  This obviously
     increases the burden of implementing an AS considerably, but is the only
     option if the implementer wants to avoid duplicating conversation history
@@ -165,7 +165,7 @@ On HS handling events to existing users and rooms:
   * Events are linearised to avoid the AS having to handle the complexity of
     linearisation, and because if linearisation is good enough for CS, it
     should be good enough for AS. Should the AS require non-linearised events
-    from Chat, it should implement the federation API rather than the AS API
+    from Matrix, it should implement the federation API rather than the AS API
     instead.
   * HS->AS event pushes are retried for reliability with sequence numbers
     (or logical timestamping?) to preserve the linearisation order and ensure
@@ -191,7 +191,7 @@ On AS relaying events from unknown-to-HS users:
     we should actually let them log themselves in via OAuth2 to give permission
     to the AS to act on their behalf.
   * We can't auth gatewayed virtual users from 3rd party systems who are being
-    relayed into Chat, as the relaying is happening whether the user likes it
+    relayed into Matrix, as the relaying is happening whether the user likes it
     or not.  Therefore we do need to be able to spoof sender ID for virtual users.
  
 On AS relaying events in unknown-to-HS rooms:

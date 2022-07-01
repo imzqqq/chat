@@ -13,13 +13,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server Versions API"
+  title: "Matrix Client-Server Versions API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client
+basePath: /_matrix/client
 produces:
   - application/json
 paths:
@@ -36,7 +36,7 @@ paths:
         The server may additionally advertise experimental features it supports
         through `unstable_features`. These features should be namespaced and
         may optionally include version information within their name if desired.
-        Features listed here are not for optionally toggling parts of the Chat
+        Features listed here are not for optionally toggling parts of the Matrix
         specification and should only be used to advertise support for a feature
         which has not yet landed in the spec. For example, a feature currently
         undergoing the proposal process may appear here and eventually be taken

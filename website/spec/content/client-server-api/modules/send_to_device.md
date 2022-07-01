@@ -1,6 +1,5 @@
 ---
 type: module
-weight: 80
 ---
 
 ### Send-to-Device messaging
@@ -14,7 +13,7 @@ The primary motivation for this API is exchanging data that is
 meaningless or undesirable to persist in the room DAG - for example,
 one-time authentication tokens or key data. It is not intended for
 conversational data, which should be sent using the normal [`/rooms/<room_id>/send`](/client-server-api/#put_matrixclientv3roomsroomidsendeventtypetxnid) API for
-consistency throughout Chat.
+consistency throughout Matrix.
 
 #### Client behaviour
 
@@ -74,7 +73,7 @@ This module adds the following properties to the [`/sync`](/client-server-api/#g
 | Parameter  | Type         | Description                                                                                     |
 |------------|--------------|-------------------------------------------------------------------------------------------------|
 | content    | EventContent | The content of this event. The fields in this object will vary depending on the type of event.  |
-| sender     | string       | The Chat user ID of the user who sent this event.                                             |
+| sender     | string       | The Matrix user ID of the user who sent this event.                                             |
 | type       | string       | The type of event.                                                                              |
 
 Example response:

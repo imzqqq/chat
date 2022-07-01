@@ -13,13 +13,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server Third Party Lookup API"
+  title: "Matrix Client-Server Third Party Lookup API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:
@@ -77,12 +77,12 @@ paths:
         - Third Party Lookup
   "/thirdparty/location/{protocol}":
     get:
-      summary: Retrieve Chat-side portals rooms leading to a third party location.
+      summary: Retrieve Matrix-side portals rooms leading to a third party location.
       description: |-
         Requesting this endpoint with a valid protocol name results in a list
         of successful mapping results in a JSON array. Each result contains
-        objects to represent the Chat room or rooms that represent a portal
-        to this third party network. Each has the Chat room alias string,
+        objects to represent the Matrix room or rooms that represent a portal
+        to this third party network. Each has the Matrix room alias string,
         an identifier for the particular third party network protocol, and an
         object containing the network-specific fields that comprise this
         identifier. It should attempt to canonicalise the identifier as much
@@ -120,9 +120,9 @@ paths:
         - Third Party Lookup
   "/thirdparty/user/{protocol}":
     get:
-      summary: Retrieve the Chat User ID of a corresponding third party user.
+      summary: Retrieve the Matrix User ID of a corresponding third party user.
       description: |-
-        Retrieve a Chat User ID linked to a user on the third party service, given
+        Retrieve a Matrix User ID linked to a user on the third party service, given
         a set of user parameters.
       operationId: queryUserByProtocol
       security:
@@ -142,11 +142,11 @@ paths:
             One or more custom fields that are passed to the AS to help identify the user.
       responses:
         200:
-          description: The Chat User IDs found with the given parameters.
+          description: The Matrix User IDs found with the given parameters.
           schema:
             $ref: ../application-service/definitions/user_batch.yaml
         404:
-          description: The Chat User ID was not found
+          description: The Matrix User ID was not found
           examples:
             application/json: {
               "errcode": "M_NOT_FOUND"
@@ -157,9 +157,9 @@ paths:
         - Third Party Lookup
   "/thirdparty/location":
     get:
-      summary: Reverse-lookup third party locations given a Chat room alias.
+      summary: Reverse-lookup third party locations given a Matrix room alias.
       description: |-
-        Retrieve an array of third party network locations from a Chat room
+        Retrieve an array of third party network locations from a Matrix room
         alias.
       operationId: queryLocationByAlias
       security:
@@ -168,9 +168,9 @@ paths:
         - in: query
           name: alias
           type: string
-          description: The Chat room alias to look up.
+          description: The Matrix room alias to look up.
           required: true
-          x-example: "#matrix:chat.imzqqq.top"
+          x-example: "#matrix:matrix.org"
       responses:
         200:
           description: |-
@@ -178,7 +178,7 @@ paths:
           schema:
             $ref: ../application-service/definitions/location_batch.yaml
         404:
-          description: The Chat room alias was not found
+          description: The Matrix room alias was not found
           examples:
             application/json: {
               "errcode": "M_NOT_FOUND"
@@ -189,9 +189,9 @@ paths:
         - Third Party Lookup
   "/thirdparty/user":
     get:
-      summary: Reverse-lookup third party users given a Chat User ID.
+      summary: Reverse-lookup third party users given a Matrix User ID.
       description: |-
-        Retrieve an array of third party users from a Chat User ID.
+        Retrieve an array of third party users from a Matrix User ID.
       operationId: queryUserByID
       security:
         - accessToken: []
@@ -199,9 +199,9 @@ paths:
         - in: query
           name: userid
           type: string
-          description: The Chat User ID to look up.
+          description: The Matrix User ID to look up.
           required: true
-          x-example: "@bob:chat.imzqqq.top"
+          x-example: "@bob:matrix.org"
       responses:
         200:
           description: |-
@@ -209,7 +209,7 @@ paths:
           schema:
             $ref: ../application-service/definitions/user_batch.yaml
         404:
-          description: The Chat User ID was not found
+          description: The Matrix User ID was not found
           examples:
             application/json: {
               "errcode": "M_NOT_FOUND"

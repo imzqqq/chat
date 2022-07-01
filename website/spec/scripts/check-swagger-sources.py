@@ -1,4 +1,18 @@
 #! /usr/bin/env python
+#
+# Copyright 2016 OpenMarket Ltd
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 import sys
 import json
@@ -75,7 +89,7 @@ def check_response(filepath, request, code, response):
 
 def check_swagger_file(filepath):
     with open(filepath) as f:
-        swagger = yaml.load(f)
+        swagger = yaml.safe_load(f)
 
     for path, path_api in swagger.get('paths', {}).items():
 
@@ -148,7 +162,7 @@ def load_file(path):
         else:
             # We have to assume it's YAML because some of the YAML examples
             # do not have file extensions.
-            return yaml.load(f)
+            return yaml.safe_load(f)
 
 
 if __name__ == '__main__':

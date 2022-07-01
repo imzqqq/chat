@@ -14,13 +14,13 @@
 
 swagger: '2.0'
 info:
-  title: "Chat Client-Server Send-to-device API"
+  title: "Matrix Client-Server Send-to-device API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:
@@ -85,7 +85,8 @@ paths:
           description:
             The message was successfully sent.
           examples:
-            application/json: {
-              }
+            application/json: {}
+          schema:
+            type: object
       tags:
         - Send-to-Device messaging

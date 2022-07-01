@@ -3,7 +3,7 @@ Third Party Identities
 ======================
 
 A description of how email addresses, mobile phone numbers and other third
-party identifiers can be used to authenticate and discover users in Chat.
+party identifiers can be used to authenticate and discover users in Matrix.
 
 
 Overview
@@ -12,7 +12,7 @@ Overview
 New users need to authenticate their account. An email or SMS text message can 
 be a convenient form of authentication. Users already have email addresses 
 and phone numbers for contacts in their address book. They want to communicate
-with those contacts in Chat without manually exchanging a Chat User ID with 
+with those contacts in Matrix without manually exchanging a Matrix User ID with 
 them.
 
 Third Party IDs
@@ -24,8 +24,8 @@ Third Party IDs
 Third Party ID Associations
 ---------------------------
 
-An Associaton is a binding between a Chat User ID and a Third Party ID (3PID).
-Each 3PID can be associated with one Chat User ID at a time.
+An Associaton is a binding between a Matrix User ID and a Third Party ID (3PID).
+Each 3PID can be associated with one Matrix User ID at a time.
 
 [[TODO(markjh): JSON format of the association.]]
 
@@ -64,7 +64,7 @@ Identity Servers fulfil a similar role to DNS servers.
 Privacy
 -------
 
-A User may publish the association between their phone number and Chat User ID
+A User may publish the association between their phone number and Matrix User ID
 on the Identity Server without publishing the number in their Profile hosted on
 their homeserver.
 

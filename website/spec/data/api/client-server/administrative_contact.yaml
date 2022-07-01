@@ -1,5 +1,5 @@
 # Copyright 2016 OpenMarket Ltd
-# Copyright 2019 The Chat.org Foundation C.I.C.
+# Copyright 2019 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server Account Administrative Contact API"
+  title: "Matrix Client-Server Account Administrative Contact API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 consumes:
   - application/json
 produces:
@@ -36,7 +36,7 @@ paths:
         associated with the user's account.
 
         This is *not* the same as the list of third party identifiers bound to
-        the user's Chat ID in identity servers.
+        the user's Matrix ID in identity servers.
 
         Identifiers in this list may be used by the homeserver as, for example,
         identifiers that it will accept to reset the user's account password.
@@ -136,7 +136,7 @@ paths:
             required: ["three_pid_creds"]
             example: {
                 "three_pid_creds": {
-                  "id_server": "chat.imzqqq.top",
+                  "id_server": "matrix.org",
                   "id_access_token": "abc123_OpaqueString",
                   "sid": "abc123987",
                   "client_secret": "d0nt-T3ll"
@@ -149,26 +149,26 @@ paths:
             application/json: {
               "submit_url": "https://example.org/path/to/submitToken"
             }
-            schema:
-              type: object
-              properties:
-                submit_url:
-                  type: string
-                  format: uri
-                  description: |-
-                    An optional field containing a URL where the client must
-                    submit the validation token to, with identical parameters
-                    to the Identity Service API's `POST
-                    /validate/email/submitToken` endpoint (without the requirement
-                    for an access token). The homeserver must send this token to the
-                    user (if applicable), who should then be prompted to provide it
-                    to the client.
+          schema:
+            type: object
+            properties:
+              submit_url:
+                type: string
+                format: uri
+                description: |-
+                  An optional field containing a URL where the client must
+                  submit the validation token to, with identical parameters
+                  to the Identity Service API's `POST
+                  /validate/email/submitToken` endpoint (without the requirement
+                  for an access token). The homeserver must send this token to the
+                  user (if applicable), who should then be prompted to provide it
+                  to the client.
 
-                    If this field is not present, the client can assume that
-                    verification will happen without the client's involvement
-                    provided the homeserver advertises this specification version
-                    in the `/versions` response (ie: r0.5.0).
-                  example: "https://example.org/path/to/submitToken"
+                  If this field is not present, the client can assume that
+                  verification will happen without the client's involvement
+                  provided the homeserver advertises this specification version
+                  in the `/versions` response (ie: r0.5.0).
+                example: "https://example.org/path/to/submitToken"
         403:
           description: The credentials could not be verified with the identity server.
           examples:
@@ -223,8 +223,8 @@ paths:
           description: The addition was successful.
           examples:
             application/json: {}
-            schema:
-              type: object
+          schema:
+            type: object
         401:
           description: |-
             The homeserver requires additional authentication information.
@@ -282,8 +282,8 @@ paths:
           description: The addition was successful.
           examples:
             application/json: {}
-            schema:
-              type: object
+          schema:
+            type: object
         429:
           description: This request was rate-limited.
           schema:

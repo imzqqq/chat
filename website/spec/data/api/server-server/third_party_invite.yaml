@@ -14,12 +14,12 @@
 
 swagger: '2.0'
 info:
-  title: "Chat Federation Third Party Invites API"
+  title: "Matrix Federation Third Party Invites API"
   version: "1.0.0"
-host: localhost:8880
+host: localhost:8448
 schemes:
   - https
-basePath: /chat/federation/v1
+basePath: /_matrix/federation/v1
 consumes:
   - application/json
 produces:
@@ -44,7 +44,7 @@ paths:
           type: string
           description: The room ID to exchange a third party invite in
           required: true
-          x-example: "!abc123:chat.imzqqq.top"
+          x-example: "!abc123:matrix.org"
         - in: body
           name: body
           type: object
@@ -62,13 +62,13 @@ paths:
                 description: |-
                   The room ID the event is for. Must match the ID given in
                   the path.
-                example: "!abc123:chat.imzqqq.top"
+                example: "!abc123:matrix.org"
               sender:
                 type: string
                 description: |-
                   The user ID of the user who sent the original `m.room.third_party_invite`
                   event.
-                example: "@joe:chat.imzqqq.top"
+                example: "@joe:matrix.org"
               state_key:
                 type: string
                 description: The user ID of the invited user
@@ -172,8 +172,8 @@ paths:
               - content
           example: {
             "type": "m.room.member",
-            "room_id": "!abc123:chat.imzqqq.top",
-            "sender": "@joe:chat.imzqqq.top",
+            "room_id": "!abc123:matrix.org",
+            "sender": "@joe:matrix.org",
             "state_key": "@someone:example.org",
             "content": {
               "membership": "invite",
@@ -232,7 +232,7 @@ paths:
               mxid:
                 type: string
                 description: The user that is now bound to the third party identifier.
-                example: "@alice:chat.imzqqq.top"
+                example: "@alice:matrix.org"
               invites:
                 type: array
                 description: |-
@@ -255,7 +255,7 @@ paths:
                     mxid:
                       type: string
                       description: The now-bound user ID that received the invite.
-                      example: "@alice:chat.imzqqq.top"
+                      example: "@alice:matrix.org"
                     room_id:
                       type: string
                       description: The room ID the invite is valid for.
@@ -263,7 +263,7 @@ paths:
                     sender:
                       type: string
                       description: The user ID that sent the invite.
-                      example: "@bob:chat.imzqqq.top"
+                      example: "@bob:matrix.org"
                     # TODO (TravisR): Make this reusable when doing IS spec changes
                     #   also make sure it isn't lying about anything, like the key version
                     signed:
@@ -278,7 +278,7 @@ paths:
                           description: |-
                             The user ID that has been bound to the third party
                             identifier.
-                          example: "@alice:chat.imzqqq.top"
+                          example: "@alice:matrix.org"
                         token:
                           type: string
                           # TODO: What is this actually?

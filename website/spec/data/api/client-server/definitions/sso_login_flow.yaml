@@ -1,4 +1,4 @@
-# Copyright 2021 The Chat.org Foundation C.I.C.
+# Copyright 2021 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -59,11 +59,10 @@ properties:
           example: "mxc://example.org/abc123"
         brand:
           type: string
-          # TODO @@TR: Actually link to "common identifier format" section when it exists.
           description: |-
             Optional UI hint for what kind of common SSO provider is being
-            described in this IdP. Chat maintains a registry of identifiers
-            [in the matrix-doc repo](https://github.com/matrix-org/matrix-doc/blob/master/informal/idp-brands.md)
+            described in this IdP. Matrix maintains a registry of identifiers
+            [in the matrix-spec repo](https://github.com/matrix-org/matrix-spec/blob/main/informal/idp-brands.md)
             to ensure clients and servers are aligned on major/common brands.
 
             Clients should prefer the `brand` over the `icon`, when both are
@@ -71,7 +70,7 @@ properties:
             including those in the registry, though are expected to be able to
             present any IdP based off the `name`/`icon` to the user regardless.
 
-            Unregistered brands are permitted using the Standard Identifier Format,
+            Unregistered brands are permitted using the [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar),
             though excluding the namespace requirements. For example, `examplesso`
             is a valid brand which is not in the registry but still permitted.
             Servers should be mindful that clients might not support their unregistered

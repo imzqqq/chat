@@ -14,13 +14,13 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Push Notification API"
+  title: "Matrix Push Notification API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/push/v1
+basePath: /_matrix/push/v1
 consumes:
   - application/json
 produces:
@@ -60,10 +60,10 @@ paths:
                 "event_id": "$3957tyerfgewrf384",
                 "room_id": "!slw48wfj34rtnrf:example.com",
                 "type": "m.room.message",
-                "sender": "@exampleuser:chat.imzqqq.top",
+                "sender": "@exampleuser:matrix.org",
                 "sender_display_name": "Major Tom",
                 "room_name": "Mission Control",
-                "room_alias": "#exampleroom:chat.imzqqq.top",
+                "room_alias": "#exampleroom:matrix.org",
                 "prio": "high",
                 "content": {
                   "msgtype": "m.text",
@@ -97,9 +97,9 @@ paths:
                   event_id:
                     type: string
                     description: |-
-                      The Chat event ID of the event being notified about.
+                      The Matrix event ID of the event being notified about.
                       This is required if the notification is about a
-                      particular Chat event. It may be omitted for notifications
+                      particular Matrix event. It may be omitted for notifications
                       that only contain updated badge counts. This ID can and
                       should be used to detect duplicate notification requests.
                   room_id:
@@ -107,7 +107,7 @@ paths:
                     description: |-
                       The ID of the room in which this event occurred.
                       Required if the notification relates to a specific
-                      Chat event.
+                      Matrix event.
                   type:
                     type: string
                     description: |-
@@ -132,7 +132,7 @@ paths:
                     description: |-
                       This is true if the user receiving the notification is the
                       subject of a member event (i.e. the `state_key` of the
-                      member event is equal to the user's Chat ID).
+                      member event is equal to the user's Matrix ID).
                   prio:
                     type: string
                     enum: ["high", "low"]
@@ -184,6 +184,7 @@ paths:
                           description: The `pushkey` given when the pusher was created.
                         pushkey_ts:
                           type: integer
+                          format: int64
                           description: |-
                             The unix timestamp (in seconds) when the
                             pushkey was last updated.

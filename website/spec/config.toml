@@ -1,5 +1,5 @@
 baseURL = "/"
-title = "Chat Server API Specification"
+title = "Matrix Specification"
 
 # Prepends absolute URLs with the baseURL. Useful when hosting on non-root
 # paths, such as /unstable.
@@ -12,14 +12,10 @@ theme = ["docsy"]
 
 disableKinds = ["taxonomy", "taxonomyTerm"]
 
-# Change the default for assets, because the old Python toolchain uses "assets" for build output.
-# When the old toolchain is retired we can switch back to the default here.
-assetDir = "assets-hugo"
-
 [languages]
 [languages.en]
-title = "Chat Server API Specification"
-description = "Home of the Chat server api specification for decentralised communication"
+title = "Matrix Specification"
+description = "Home of the Matrix specification for decentralised communication"
 languageName ="English"
 # Weight used for sorting.
 weight = 1
@@ -31,25 +27,31 @@ weight = 1
       unsafe = true
   [markup.highlight]
       # See a complete list of available styles at https://xyproto.github.io/splash/docs/all.html
+      # If the style is changed, remember to regenerate the CSS with:
+      #
+      #   hugo gen chromastyles --style=<style> > assets/scss/syntax.scss
       style = "tango"
+
+      # we enable CSS classes (instead of using inline styles) for compatibility with the CSP.
+      noClasses = false
 
 # Everything below this are Site Params
 
 [params]
-copyright = "imqzzZ"
-privacy_policy = "https://chat.org/legal/privacy-notice"
+copyright = "The Matrix.org Foundation CIC"
+privacy_policy = "https://matrix.org/legal/privacy-notice"
 
 [params.version]
 # must be one of "unstable", "current", "historical"
 # this is used to decide whether to show a banner pointing to the current release
 status = "unstable"
 # A URL pointing to the latest, stable release of the spec. To be shown in the unstable version warning banner.
-current_version_url = "https://chat.org/docs/spec/"
+current_version_url = "https://spec.matrix.org/latest"
 # The following is used when status = "stable", and is displayed in various UI elements on a released version
 # of the spec. CI will set these values here automatically when a release git tag (i.e `v1.5`) is created.
 #major = "1"
-#minor = "0"
-#release_date = "April 01, 2021"
+#minor = "3"
+#release_date = "June 16, 2022"
 
 # User interface configuration
 [params.ui]
@@ -68,21 +70,37 @@ rendered_data_collapsed = false
 # Developer relevant links. These will show up on right side of footer and in the community page if you have one.
 [[params.links.developer]]
 	name = "GitHub"
-	url = "https://github.com/imzqqq"
+	url = "https://github.com/matrix-org"
 	icon = "fab fa-github"
-  desc = "imqzzZ on GitHub"
+  desc = "Matrix on GitHub"
 [[params.links.developer]]
 	name = "GitLab"
-	url = "https://gitlab.imzqqq.org/imzqqq"
+	url = "https://gitlab.matrix.org/matrix-org"
 	icon = "fab fa-gitlab"
-  desc = "imqzzZ on GitLab"
+  desc = "Matrix on GitLab"
 [[params.links.developer]]
 	name = "YouTube"
-	url = "https://www.youtube.com/channel/imzqqq"
+	url = "https://www.youtube.com/channel/UCVFkW-chclhuyYRbmmfwt6w"
 	icon = "fab fa-youtube"
-  desc = "imqzzZ YouTube channel"
+  desc = "Matrix YouTube channel"
 [[params.links.developer]]
 	name = "Twitter"
-	url = "https://twitter.com/imzqqq"
+	url = "https://twitter.com/matrixdotorg"
 	icon = "fab fa-twitter"
-  desc = "imqzzZ on Twitter"
+  desc = "Matrix on Twitter"
+
+
+# configuration for the hugo development server
+[server]
+
+# set HTTP response headers to match the production site. Compare the Apache config for `spec.matrix.org`.
+[[server.headers]]
+  for = '/**'
+  [server.headers.values]
+    Content-Security-Policy = "default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self' data:; media-src 'self'; child-src 'self'; form-action 'self'; object-src 'self'"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    # Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    X-Frame-Options = "sameorigin"
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET"

@@ -1,6 +1,5 @@
 ---
 type: module
-weight: 70
 ---
 
 ### Content repository
@@ -20,14 +19,14 @@ When serving content, the server SHOULD provide a
 `Content-Security-Policy` header. The recommended policy is
 `sandbox; default-src 'none'; script-src 'none'; plugin-types application/pdf; style-src 'unsafe-inline'; object-src 'self';`.
 
-#### Chat Content (MXC) URIs
+#### Matrix Content (MXC) URIs
 
-Content locations are represented as Chat Content (MXC) URIs. They
+Content locations are represented as Matrix Content (MXC) URIs. They
 look like:
 
     mxc://<server-name>/<media-id>
 
-    <server-name> : The name of the homeserver where this content originated, e.g. chat.imzqqq.top
+    <server-name> : The name of the homeserver where this content originated, e.g. matrix.org
     <media-id> : An opaque ID which identifies the content.
 
 #### Client behaviour
@@ -68,7 +67,7 @@ methods:
 -   640x480, scale
 -   800x600, scale
 
-In summary:  
+In summary:
 -   "scale" maintains the original aspect ratio of the image
 -   "crop" provides an image in the aspect ratio of the sizes given in
     the request

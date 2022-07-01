@@ -1,17 +1,16 @@
 ---
 type: module
-weight: 270
 ---
 
 ### Third Party Networks
 
 Application services can provide access to third party networks via
-bridging. This allows Chat users to communicate with users on other
+bridging. This allows Matrix users to communicate with users on other
 communication platforms, with messages ferried back and forth by the
 application service. A single application service may bridge multiple
 third party networks, and many individual locations within those
 networks. A single third party network location may be bridged to
-multiple Chat rooms.
+multiple Matrix rooms.
 
 #### Third Party Lookups
 

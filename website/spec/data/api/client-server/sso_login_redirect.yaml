@@ -13,20 +13,20 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Chat Client-Server SSO Login API"
+  title: "Matrix Client-Server SSO Login API"
   version: "1.0.0"
-host: localhost:8080
+host: localhost:8008
 schemes:
   - https
   - http
-basePath: /chat/client/v3
+basePath: /_matrix/client/v3
 paths:
   "/login/sso/redirect":
     get:
       x-addedInMatrixVersion: "1.1"
       summary: Redirect the user's browser to the SSO interface.
       description: |-
-        A web-based Chat client should instruct the user's browser to
+        A web-based Matrix client should instruct the user's browser to
         navigate to this endpoint in order to log in via SSO.
 
         The server MUST respond with an HTTP redirect to the SSO interface,
