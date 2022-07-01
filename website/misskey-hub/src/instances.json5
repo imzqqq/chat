@@ -1,0 +1,28 @@
+[{
+	host: 'misskey.io',
+	lang: 'ja',
+}, {
+	host: 'sushi.ski',
+	name: 'すしすき～',
+	lang: 'ja',
+}, {
+	host: 'newskey.cc',
+	name: '𝙉𝙚𝙬𝙨𝙠𝙚𝙮.𝙘𝙘',
+	lang: 'ja',
+}, {
+	host: 'stop.voring.me',
+	name: 'ThoseFewCalculators',
+	lang: 'en',
+}, {
+	host: 'mk.nixnet.social',
+	name: 'NixNet Social',
+	lang: 'en',
+}, {
+  host: 'jigglypuff.club',
+  name: 'Jigglypuff!',
+  lang: 'en',
+}, {
+  host: 'minidisc.tokyo',
+  name: 'ミニディスク【Ｍｉｎｉ　Ｄｉｓｕｋｕ】',
+  lang: 'en',
+}, ]
