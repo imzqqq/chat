@@ -544,6 +544,8 @@ $ git config --global diff.ignoreSubmodules dirty
 $ git config --list
 $ git config --edit
 
+$ git config --system core.longpaths true
+
 $ npm config delete proxy
 
 $ npm install uuid
