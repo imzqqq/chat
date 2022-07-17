@@ -41,7 +41,7 @@ sudo apt install snapd
 snap install hugo --channel=extended
 ```
 
-  3. Use dpkg:
+- Use dpkg:
 
 ```bash
 wget https://github.com/gohugoio/hugo/releases/download/v0.88.1/hugo_extended_0.88.1_Linux-64bit.deb
