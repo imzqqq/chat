@@ -1,16 +1,24 @@
 {%- import "utils.html" as utils with context -%}
 {% extends "layout.html" %}
+
+{% block head %}
+<title>{{ local_actor.display_name }} - Lookup</title>
+{% endblock %}
+
 {% block content %}
 
+    <div class="box">
     <p>Interact with an ActivityPub object via its URL or look for a user using <i>@user@domain.tld</i></p>
 
-    <form action="{{ url_for("get_lookup") }}" method="GET">
-        <input type="text" name="query" value="{{ query if query else "" }}">
+    <form class="form" action="{{ url_for("get_lookup") }}" method="GET">
+        <input type="text" name="query" value="{{ query if query else "" }}" autofocus>
         <input type="submit" value="Lookup">
     </form>
-    {% if ap_object and ap_object.ap_type == "Person" %}
+    </div>
+
+    {% if ap_object and ap_object.ap_type in actor_types %}
     {{ utils.display_actor(ap_object, actors_metadata) }}
     {% elif ap_object %}
-    {{ utils.display_object_expanded(ap_object) }}
+    {{ utils.display_object(ap_object, actors_metadata=actors_metadata) }}
     {% endif %}
 {% endblock %}

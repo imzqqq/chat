@@ -22,12 +22,13 @@
 {% set url_for = request.app.router.url_path_for(url) %}
 <a href="{{ url_for }}" {% if request.url.path == url_for %}class="active"{% endif %}>{{ text }}</a>
 {% endmacro %}
-<div style="margin-bottom:30px;">
+<div style="margin-bottom:30px;padding: 0 20px;">
 <nav class="flexbox">
     <ul>
         <li>Admin</li>
         <li>{{ admin_link("index", "Public") }}</li>
         <li>{{ admin_link("admin_new", "New") }}</li>
+        <li>{{ admin_link("admin_stream", "Stream") }}</li>
         <li>{{ admin_link("admin_inbox", "Inbox") }}/{{ admin_link("admin_outbox", "Outbox") }}</li>
         <li>{{ admin_link("get_notifications", "Notifications") }} {% if notifications_count %}({{ notifications_count }}){% endif %}</li>
         <li>{{ admin_link("get_lookup", "Lookup") }}</li>
@@ -44,7 +45,7 @@
 </div>
 
 <footer class="footer">
-	Powered by <a href="https://microblog.pub">microblog.pub</a> <small class="microblogpub-version"><code>{{ microblogpub_version }}</code></small> (<a href="https://github.com/tsileo/microblog.pub">source code</a>) and the <a href="https://activitypub.rocks/">ActivityPub</a> protocol
+    Powered by <a href="https://docs.microblog.pub">microblog.pub</a> <small class="microblogpub-version"><code>{{ microblogpub_version }}</code></small> and the <a href="https://activitypub.rocks/">ActivityPub</a> protocol. <a href="{{ url_for("login") }}">Admin</a>.
 </footer>
 </body>
 </html>

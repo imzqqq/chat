@@ -8,11 +8,23 @@ from loguru import logger
 from app.config import DEBUG
 
 
+def make_abs(url: str | None, parent: str) -> str | None:
+    if url is None:
+        return None
+
+    if url.startswith("http"):
+        return url
+
+    return (
+        urlparse(parent)._replace(path=url, params="", query="", fragment="").geturl()
+    )
+
+
 class InvalidURLError(Exception):
     pass
 
 
-@functools.lru_cache
+@functools.lru_cache(maxsize=256)
 def _getaddrinfo(hostname: str, port: int) -> str:
     try:
         ip_address = str(ipaddress.ip_address(hostname))
@@ -53,7 +65,8 @@ def is_url_valid(url: str) -> bool:
     return True
 
 
-def check_url(url: str, debug: bool = False) -> None:
+@functools.lru_cache(maxsize=512)
+def check_url(url: str) -> None:
     logger.debug(f"check_url {url=}")
     if not is_url_valid(url):
         raise InvalidURLError(f'"{url}" is invalid')

@@ -2,6 +2,11 @@
 {% extends "layout.html" %}
 
 {% block head %}
+<title>{{ local_actor.display_name }}'s microblog</title>
+<link rel="indieauth-metadata" href="{{ url_for("well_known_authorization_server") }}">
+<link rel="authorization_endpoint" href="{{ url_for("indieauth_authorization_endpoint") }}">
+<link rel="token_endpoint" href="{{ url_for("indieauth_token_endpoint") }}">
+<link rel="micropub" href="{{ url_for("micropub_endpoint") }}">
 <link rel="alternate" href="{{ local_actor.url }}" title="ActivityPub profile"  type="application/activity+json">
 <meta content="profile" property="og:type" />
 <meta content="{{ local_actor.url }}" property="og:url" />
@@ -19,16 +24,23 @@
 <div class="h-feed">
 <data class="p-name" value="{{ local_actor.display_name}}'s notes"></data>
 {% for outbox_object in objects %}
+{% if outbox_object.ap_type in ["Note", "Article", "Video"] %}
 {{ utils.display_object(outbox_object) }}
+{% elif outbox_object.ap_type == "Announce" %}
+<div class="shared-header"><strong>{{ local_actor.display_name }}</strong> shared</div>
+{{ utils.display_object(outbox_object.relates_to_anybox_object) }}
+{% endif %}
 {% endfor %}
 </div>
 
-{% if has_previous_page %}
-<a href="{{ url_for("index") }}?page={{ current_page - 1 }}">Previous</a>
-{% endif %}
+<div class="box">
+    {% if has_previous_page %}
+    <a href="{{ url_for("index") }}?page={{ current_page - 1 }}">Previous</a>
+    {% endif %}
 
-{% if has_next_page %}
-<a href="{{ url_for("index") }}?page={{ current_page + 1 }}">Next</a>
-{% endif %}
+    {% if has_next_page %}
+    <a href="{{ url_for("index") }}?page={{ current_page + 1 }}">Next</a>
+    {% endif %}
+</div>
 
 {% endblock %}

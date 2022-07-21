@@ -10,6 +10,7 @@ from app import config
 from app.config import AP_CONTENT_TYPE  # noqa: F401
 from app.httpsig import auth
 from app.key import get_pubkey_as_pem
+from app.utils.url import check_url
 
 if TYPE_CHECKING:
     from app.actor import Actor
@@ -20,8 +21,36 @@ AS_PUBLIC = "https://www.w3.org/ns/activitystreams#Public"
 
 ACTOR_TYPES = ["Application", "Group", "Organization", "Person", "Service"]
 
+AS_EXTENDED_CTX = [
+    "https://www.w3.org/ns/activitystreams",
+    "https://w3id.org/security/v1",
+    {
+        # AS ext
+        "Hashtag": "as:Hashtag",
+        "sensitive": "as:sensitive",
+        "manuallyApprovesFollowers": "as:manuallyApprovesFollowers",
+        "alsoKnownAs": {"@id": "as:alsoKnownAs", "@type": "@id"},
+        # toot
+        "toot": "http://joinmastodon.org/ns#",
+        "featured": {"@id": "toot:featured", "@type": "@id"},
+        "Emoji": "toot:Emoji",
+        "blurhash": "toot:blurhash",
+        # schema
+        "schema": "http://schema.org#",
+        "PropertyValue": "schema:PropertyValue",
+        "value": "schema:value",
+        # ostatus
+        "ostatus": "http://ostatus.org#",
+        "conversation": "ostatus:conversation",
+    },
+]
+
 
 class ObjectIsGoneError(Exception):
+    pass
+
+
+class ObjectNotFoundError(Exception):
     pass
 
 
@@ -41,45 +70,8 @@ class VisibilityEnum(str, enum.Enum):
         }[key]
 
 
-MICROBLOGPUB = {
-    "@context": [
-        "https://www.w3.org/ns/activitystreams",
-        "https://w3id.org/security/v1",
-        {
-            "Hashtag": "as:Hashtag",
-            "PropertyValue": "schema:PropertyValue",
-            "manuallyApprovesFollowers": "as:manuallyApprovesFollowers",
-            "ostatus": "http://ostatus.org#",
-            "schema": "http://schema.org",
-            "sensitive": "as:sensitive",
-            "toot": "http://joinmastodon.org/ns#",
-            "totalItems": "as:totalItems",
-            "value": "schema:value",
-            "Emoji": "toot:Emoji",
-        },
-    ]
-}
-
-DEFAULT_CTX = COLLECTION_CTX = [
-    "https://www.w3.org/ns/activitystreams",
-    "https://w3id.org/security/v1",
-    {
-        # AS ext
-        "Hashtag": "as:Hashtag",
-        "sensitive": "as:sensitive",
-        "manuallyApprovesFollowers": "as:manuallyApprovesFollowers",
-        # toot
-        "toot": "http://joinmastodon.org/ns#",
-        # "featured": "toot:featured",
-        # schema
-        "schema": "http://schema.org#",
-        "PropertyValue": "schema:PropertyValue",
-        "value": "schema:value",
-    },
-]
-
 ME = {
-    "@context": DEFAULT_CTX,
+    "@context": AS_EXTENDED_CTX,
     "type": "Person",
     "id": config.ID,
     "following": config.BASE_URL + "/following",
@@ -90,7 +82,11 @@ ME = {
     "preferredUsername": config.USERNAME,
     "name": config.CONFIG.name,
     "summary": config.CONFIG.summary,
-    "endpoints": {},
+    "endpoints": {
+        # For compat with servers expecting a sharedInbox...
+        "sharedInbox": config.BASE_URL
+        + "/inbox",
+    },
     "url": config.ID,
     "manuallyApprovesFollowers": False,
     "attachment": [],
@@ -102,9 +98,8 @@ ME = {
     "publicKey": {
         "id": f"{config.ID}#main-key",
         "owner": config.ID,
-        "publicKeyPem": get_pubkey_as_pem(),
+        "publicKeyPem": get_pubkey_as_pem(config.KEY_PATH),
     },
-    "alsoKnownAs": [],
 }
 
 
@@ -116,20 +111,30 @@ class NotAnObjectError(Exception):
         self.resp = resp
 
 
-def fetch(url: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
-    resp = httpx.get(
-        url,
-        headers={
-            "User-Agent": config.USER_AGENT,
-            "Accept": config.AP_CONTENT_TYPE,
-        },
-        params=params,
-        follow_redirects=True,
-    )
+async def fetch(
+    url: str,
+    params: dict[str, Any] | None = None,
+    disable_httpsig: bool = False,
+) -> RawObject:
+    check_url(url)
+
+    async with httpx.AsyncClient() as client:
+        resp = await client.get(
+            url,
+            headers={
+                "User-Agent": config.USER_AGENT,
+                "Accept": config.AP_CONTENT_TYPE,
+            },
+            params=params,
+            follow_redirects=True,
+            auth=None if disable_httpsig else auth,
+        )
 
     # Special handling for deleted object
     if resp.status_code == 410:
         raise ObjectIsGoneError(f"{url} is gone")
+    elif resp.status_code == 404:
+        raise ObjectNotFoundError(f"{url} not found")
 
     resp.raise_for_status()
     try:
@@ -138,7 +143,7 @@ def fetch(url: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
         raise NotAnObjectError(url, resp)
 
 
-def parse_collection(  # noqa: C901
+async def parse_collection(  # noqa: C901
     url: str | None = None,
     payload: RawObject | None = None,
     level: int = 0,
@@ -150,7 +155,7 @@ def parse_collection(  # noqa: C901
     # Go through all the pages
     out: list[RawObject] = []
     if url:
-        payload = fetch(url)
+        payload = await fetch(url)
     if not payload:
         raise ValueError("must at least prove a payload or an URL")
 
@@ -168,7 +173,9 @@ def parse_collection(  # noqa: C901
             return payload["items"]
         if "first" in payload:
             if isinstance(payload["first"], str):
-                out.extend(parse_collection(url=payload["first"], level=level + 1))
+                out.extend(
+                    await parse_collection(url=payload["first"], level=level + 1)
+                )
             else:
                 if "orderedItems" in payload["first"]:
                     out.extend(payload["first"]["orderedItems"])
@@ -176,7 +183,7 @@ def parse_collection(  # noqa: C901
                     out.extend(payload["first"]["items"])
                 n = payload["first"].get("next")
                 if n:
-                    out.extend(parse_collection(url=n, level=level + 1))
+                    out.extend(await parse_collection(url=n, level=level + 1))
         return out
 
     while payload:
@@ -188,7 +195,7 @@ def parse_collection(  # noqa: C901
             n = payload.get("next")
             if n is None:
                 break
-            payload = fetch(n)
+            payload = await fetch(n)
         else:
             raise ValueError("unexpected activity type {}".format(payload["type"]))
 
@@ -219,31 +226,58 @@ def object_visibility(ap_activity: RawObject, actor: "Actor") -> VisibilityEnum:
         return VisibilityEnum.PUBLIC
     elif AS_PUBLIC in cc:
         return VisibilityEnum.UNLISTED
-    elif actor.followers_collection_id in to + cc:
+    elif actor.followers_collection_id and actor.followers_collection_id in to + cc:
         return VisibilityEnum.FOLLOWERS_ONLY
     else:
         return VisibilityEnum.DIRECT
 
 
 def get_actor_id(activity: RawObject) -> str:
-    if activity["type"] in ["Note", "Article", "Video"]:
+    if activity["type"] in ["Note", "Article", "Video", "Question", "Page"]:
         attributed_to = as_list(activity["attributedTo"])
         return get_id(attributed_to[0])
     else:
         return get_id(activity["actor"])
 
 
+async def get_object(activity: RawObject) -> RawObject:
+    if "object" not in activity:
+        raise ValueError(f"No object in {activity}")
+
+    raw_activity_object = activity["object"]
+    if isinstance(raw_activity_object, dict):
+        return raw_activity_object
+    elif isinstance(raw_activity_object, str):
+        return await fetch(raw_activity_object)
+    else:
+        raise ValueError(f"Unexpected object {raw_activity_object}")
+
+
 def wrap_object(activity: RawObject) -> RawObject:
-    return {
-        "@context": AS_CTX,
-        "actor": config.ID,
-        "to": activity.get("to", []),
-        "cc": activity.get("cc", []),
-        "id": activity["id"] + "/activity",
-        "object": remove_context(activity),
-        "published": activity["published"],
-        "type": "Create",
-    }
+    # TODO(ts): improve Create VS Update
+    if "updated" in activity:
+        return {
+            "@context": AS_EXTENDED_CTX,
+            "actor": config.ID,
+            "to": activity.get("to", []),
+            "cc": activity.get("cc", []),
+            "id": activity["id"] + "/update_activity/" + activity["updated"],
+            "object": remove_context(activity),
+            "published": activity["published"],
+            "updated": activity["updated"],
+            "type": "Update",
+        }
+    else:
+        return {
+            "@context": AS_EXTENDED_CTX,
+            "actor": config.ID,
+            "to": activity.get("to", []),
+            "cc": activity.get("cc", []),
+            "id": activity["id"] + "/activity",
+            "object": remove_context(activity),
+            "published": activity["published"],
+            "type": "Create",
+        }
 
 
 def wrap_object_if_needed(raw_object: RawObject) -> RawObject:
@@ -254,8 +288,8 @@ def wrap_object_if_needed(raw_object: RawObject) -> RawObject:
 
 
 def unwrap_activity(activity: RawObject) -> RawObject:
-    # FIXME(ts): other types to unwrap?
-    if activity["type"] == "Create":
+    # FIXME(ts): deprecate this
+    if activity["type"] in ["Create", "Update"]:
         unwrapped_object = activity["object"]
 
         # Sanity check, ensure the wrapped object actor matches the activity
@@ -276,19 +310,9 @@ def remove_context(raw_object: RawObject) -> RawObject:
     return a
 
 
-def get(url: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
-    resp = httpx.get(
-        url,
-        headers={"User-Agent": config.USER_AGENT, "Accept": config.AP_CONTENT_TYPE},
-        params=params,
-        follow_redirects=True,
-        auth=auth,
-    )
-    resp.raise_for_status()
-    return resp.json()
-
-
 def post(url: str, payload: dict[str, Any]) -> httpx.Response:
+    check_url(url)
+
     resp = httpx.post(
         url,
         headers={

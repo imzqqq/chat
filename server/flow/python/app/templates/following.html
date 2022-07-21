@@ -1,5 +1,10 @@
 {%- import "utils.html" as utils with context -%}
 {% extends "layout.html" %}
+
+{% block head %}
+<title>{{ local_actor.display_name }}'s follows</title>
+{% endblock %}
+
 {% block content %}
 {% include "header.html" %}
 <div id="following">
@@ -8,5 +13,17 @@
 <li>{{ utils.display_actor(follow.actor, actors_metadata) }}</li>
 {% endfor %}
 </ul>
+
+{% set x_more = following_count - following | length %}
+{% if x_more > 0 %}
+    <p>And {{ x_more }} more.</p>
+{% endif %}
+
+{% if is_admin %}
+<div class="box">
+    <p><a href="{{ url_for("admin_outbox") }}?filter_by=Follow">Manage follows</a></p>
+</div>
+{% endif %}
+
 </div>
 {% endblock %}

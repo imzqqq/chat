@@ -1,20 +1,32 @@
 import os
+import secrets
 from pathlib import Path
 
 import bcrypt
+import itsdangerous
 import pydantic
 import tomli
 from fastapi import Form
 from fastapi import HTTPException
 from fastapi import Request
-from itsdangerous import TimedSerializer
-from itsdangerous import TimestampSigner
+from itsdangerous import URLSafeTimedSerializer
+from loguru import logger
+
+from app.utils.emoji import _load_emojis
 
 ROOT_DIR = Path().parent.resolve()
 
-_CONFIG_FILE = os.getenv("MICROBLOGPUB_CONFIG_FILE", "me.toml")
+_CONFIG_FILE = os.getenv("MICROBLOGPUB_CONFIG_FILE", "profile.toml")
 
-VERSION = "2.0"
+VERSION_COMMIT = "dev"
+
+try:
+    from app._version import VERSION_COMMIT  # type: ignore
+except ImportError:
+    pass
+
+
+VERSION = f"2.0.0+{VERSION_COMMIT}"
 USER_AGENT = f"microblogpub/{VERSION}"
 AP_CONTENT_TYPE = "application/activity+json"
 
@@ -31,7 +43,7 @@ class Config(pydantic.BaseModel):
     debug: bool = False
 
     # Config items to make tests easier
-    sqlalchemy_database_url: str | None = None
+    sqlalchemy_database: str | None = None
     key_path: str | None = None
 
 
@@ -71,25 +83,39 @@ ID = f"{_SCHEME}://{DOMAIN}"
 USERNAME = CONFIG.username
 BASE_URL = ID
 DEBUG = CONFIG.debug
-DB_PATH = ROOT_DIR / "data" / "microblogpub.db"
-SQLALCHEMY_DATABASE_URL = CONFIG.sqlalchemy_database_url or f"sqlite:///{DB_PATH}"
+DB_PATH = CONFIG.sqlalchemy_database or ROOT_DIR / "data" / "microblogpub.db"
+SQLALCHEMY_DATABASE_URL = f"sqlite:///{DB_PATH}"
 KEY_PATH = (
     (ROOT_DIR / CONFIG.key_path) if CONFIG.key_path else ROOT_DIR / "data" / "key.pem"
 )
+EMOJIS = "😺 😸 😹 😻 😼 😽 🙀 😿 😾"
+# Emoji template for the FE
+EMOJI_TPL = '<img src="/static/twemoji/{filename}.svg" alt="{raw}" class="emoji">'
+
+_load_emojis(ROOT_DIR, BASE_URL)
+
+# TODO(ts): allow to override this
+CODE_HIGHLIGHTING_THEME = "friendly_grayscale"
 
 
-session_serializer = TimedSerializer(CONFIG.secret, salt="microblogpub.login")
-csrf_signer = TimestampSigner(
-    os.urandom(16).hex(),
-    salt=os.urandom(16).hex(),
+session_serializer = URLSafeTimedSerializer(
+    CONFIG.secret,
+    salt=f"{ID}.session",
+)
+csrf_serializer = URLSafeTimedSerializer(
+    CONFIG.secret,
+    salt=f"{ID}.csrf",
 )
 
 
 def generate_csrf_token() -> str:
-    return csrf_signer.sign(os.urandom(16).hex()).decode()
+    return csrf_serializer.dumps(secrets.token_hex(16))  # type: ignore
 
 
 def verify_csrf_token(csrf_token: str = Form()) -> None:
-    if not csrf_signer.validate(csrf_token, max_age=600):
+    try:
+        csrf_serializer.loads(csrf_token, max_age=1800)
+    except (itsdangerous.BadData, itsdangerous.SignatureExpired):
+        logger.exception("Failed to verify CSRF token")
         raise HTTPException(status_code=403, detail="CSRF error")
     return None

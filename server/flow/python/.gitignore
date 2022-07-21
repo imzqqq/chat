@@ -2,3 +2,6 @@
 __pycache__/
 .mypy_cache/
 .pytest_cache/
+docs/dist/
+requirements.txt
+app/_version.py

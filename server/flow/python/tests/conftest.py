@@ -2,33 +2,36 @@ from typing import Generator
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import orm
 
 from app.database import Base
+from app.database import SessionLocal
+from app.database import async_engine
+from app.database import async_session
 from app.database import engine
-from app.database import get_db
 from app.main import app
 
-_Session = orm.sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
-
-def _get_db_for_testing() -> Generator[orm.Session, None, None]:
-    session = _Session()
-    try:
+@pytest.fixture
+async def async_db_session():
+    async with async_session() as session:
+        async with async_engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
         yield session
-    finally:
-        session.close()
+        async with async_engine.begin() as conn:
+            await conn.run_sync(Base.metadata.drop_all)
 
 
 @pytest.fixture
 def db() -> Generator:
     Base.metadata.create_all(bind=engine)
-    yield orm.scoped_session(orm.sessionmaker(bind=engine))
     try:
-        Base.metadata.drop_all(bind=engine)
-    except Exception:
-        # XXX: for some reason, the teardown occasionally fails because of this
-        pass
+        yield SessionLocal()
+    finally:
+        try:
+            Base.metadata.drop_all(bind=engine)
+        except Exception:
+            # XXX: for some reason, the teardown occasionally fails because of this
+            pass
 
 
 @pytest.fixture
@@ -44,6 +47,6 @@ def exclude_fastapi_middleware():
 
 @pytest.fixture
 def client(db, exclude_fastapi_middleware) -> Generator:
-    app.dependency_overrides[get_db] = _get_db_for_testing
+    # app.dependency_overrides[get_db] = _get_db_for_testing
     with TestClient(app) as c:
         yield c

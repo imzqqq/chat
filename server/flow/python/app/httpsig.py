@@ -8,25 +8,36 @@ import hashlib
 import typing
 from dataclasses import dataclass
 from datetime import datetime
-from functools import lru_cache
 from typing import Any
 from typing import Dict
+from typing import MutableMapping
 from typing import Optional
 
 import fastapi
 import httpx
+from cachetools import LFUCache
 from Crypto.Hash import SHA256
 from Crypto.Signature import PKCS1_v1_5
 from loguru import logger
+from sqlalchemy import select
 
 from app import activitypub as ap
 from app import config
+from app.config import KEY_PATH
+from app.database import AsyncSession
+from app.database import get_db_session
 from app.key import Key
-from app.key import get_key
+
+_KEY_CACHE: MutableMapping[str, Key] = LFUCache(256)
 
 
 def _build_signed_string(
-    signed_headers: str, method: str, path: str, headers: Any, body_digest: str | None
+    signed_headers: str,
+    method: str,
+    path: str,
+    headers: Any,
+    body_digest: str | None,
+    sig_data: dict[str, Any],
 ) -> str:
     out = []
     for signed_header in signed_headers.split(" "):
@@ -34,6 +45,12 @@ def _build_signed_string(
             out.append("(request-target): " + method.lower() + " " + path)
         elif signed_header == "digest" and body_digest:
             out.append("digest: " + body_digest)
+        elif signed_header in ["(created)", "(expires)"]:
+            out.append(
+                signed_header
+                + ": "
+                + sig_data[signed_header[1 : len(signed_header) - 1]]
+            )
         else:
             out.append(signed_header + ": " + headers[signed_header])
     return "\n".join(out)
@@ -62,12 +79,38 @@ def _body_digest(body: bytes) -> str:
     return "SHA-256=" + base64.b64encode(h.digest()).decode("utf-8")
 
 
-@lru_cache(32)
-def _get_public_key(key_id: str) -> Key:
-    # TODO: use DB to use cache actor
+async def _get_public_key(db_session: AsyncSession, key_id: str) -> Key:
+    if cached_key := _KEY_CACHE.get(key_id):
+        logger.info(f"Key {key_id} found in cache")
+        return cached_key
+
+    # Check if the key belongs to an actor already in DB
+    from app import models
+
+    existing_actor = (
+        await db_session.scalars(
+            select(models.Actor).where(models.Actor.ap_id == key_id.split("#")[0])
+        )
+    ).one_or_none()
+    if existing_actor and existing_actor.public_key_id == key_id:
+        k = Key(existing_actor.ap_id, key_id)
+        k.load_pub(existing_actor.public_key_as_pem)
+        logger.info(f"Found {key_id} on an existing actor")
+        _KEY_CACHE[key_id] = k
+        return k
+
+    # Fetch it
     from app import activitypub as ap
 
-    actor = ap.fetch(key_id)
+    # Without signing the request as if it's the first contact, the 2 servers
+    # might race to fetch each other key
+    try:
+        actor = await ap.fetch(key_id, disable_httpsig=True)
+    except httpx.HTTPStatusError as http_err:
+        if http_err.response.status_code in [401, 403]:
+            actor = await ap.fetch(key_id, disable_httpsig=False)
+        else:
+            raise
     if actor["type"] == "Key":
         # The Key is not embedded in the Person
         k = Key(actor["owner"], actor["id"])
@@ -77,11 +120,12 @@ def _get_public_key(key_id: str) -> Key:
         k.load_pub(actor["publicKey"]["publicKeyPem"])
 
     # Ensure the right key was fetch
-    if key_id != k.key_id():
+    if key_id not in [k.key_id(), k.owner]:
         raise ValueError(
-            f"failed to fetch requested key {key_id}: got {actor['publicKey']['id']}"
+            f"failed to fetch requested key {key_id}: got {actor['publicKey']}"
         )
 
+    _KEY_CACHE[key_id] = k
     return k
 
 
@@ -89,10 +133,12 @@ def _get_public_key(key_id: str) -> Key:
 class HTTPSigInfo:
     has_valid_signature: bool
     signed_by_ap_actor_id: str | None = None
+    is_ap_actor_gone: bool = False
 
 
 async def httpsig_checker(
     request: fastapi.Request,
+    db_session: AsyncSession = fastapi.Depends(get_db_session),
 ) -> HTTPSigInfo:
     body = await request.body()
 
@@ -108,13 +154,14 @@ async def httpsig_checker(
         request.url.path,
         request.headers,
         _body_digest(body) if body else None,
+        hsig,
     )
 
     try:
-        k = _get_public_key(hsig["keyId"])
-    except ap.ObjectIsGoneError:
-        logger.info("Actor is gone")
-        return HTTPSigInfo(has_valid_signature=False)
+        k = await _get_public_key(db_session, hsig["keyId"])
+    except (ap.ObjectIsGoneError, ap.ObjectNotFoundError):
+        logger.info("Actor is gone or not found")
+        return HTTPSigInfo(has_valid_signature=False, is_ap_actor_gone=True)
     except Exception:
         logger.exception(f'Failed to fetch HTTP sig key {hsig["keyId"]}')
         return HTTPSigInfo(has_valid_signature=False)
@@ -137,6 +184,13 @@ async def enforce_httpsig(
         logger.warning(f"Invalid HTTP sig {httpsig_info=}")
         body = await request.body()
         logger.info(f"{body=}")
+
+        # Special case for Mastoodon instance that keep resending Delete
+        # activities for actor we don't know about if we raise a 401
+        if httpsig_info.is_ap_actor_gone:
+            logger.info("Let's make Mastodon happy, returning a 202")
+            raise fastapi.HTTPException(status_code=202)
+
         raise fastapi.HTTPException(status_code=401, detail="Invalid HTTP sig")
 
     return httpsig_info
@@ -166,7 +220,7 @@ class HTTPXSigAuth(httpx.Auth):
             sigheaders = "(request-target) user-agent host date accept"
 
         to_be_signed = _build_signed_string(
-            sigheaders, r.method, r.url.path, r.headers, bodydigest
+            sigheaders, r.method, r.url.path, r.headers, bodydigest, {}
         )
         if not self.key.privkey:
             raise ValueError("Should never happen")
@@ -183,5 +237,5 @@ class HTTPXSigAuth(httpx.Auth):
 
 
 k = Key(config.ID, f"{config.ID}#main-key")
-k.load(get_key())
+k.load(KEY_PATH.read_text())
 auth = HTTPXSigAuth(k)

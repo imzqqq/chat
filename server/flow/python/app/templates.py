@@ -3,19 +3,23 @@ from datetime import datetime
 from datetime import timezone
 from functools import lru_cache
 from typing import Any
+from typing import Callable
 from urllib.parse import urlparse
 
 import bleach
+import emoji
 import html2text
-import timeago  # type: ignore
+import humanize
 from bs4 import BeautifulSoup  # type: ignore
 from fastapi import Request
 from fastapi.templating import Jinja2Templates
 from loguru import logger
-from sqlalchemy.orm import Session
+from sqlalchemy import func
+from sqlalchemy import select
 from starlette.templating import _TemplateResponse as TemplateResponse
 
 from app import activitypub as ap
+from app import config
 from app import models
 from app.actor import LOCAL_ACTOR
 from app.ap_object import Attachment
@@ -25,12 +29,17 @@ from app.config import DEBUG
 from app.config import VERSION
 from app.config import generate_csrf_token
 from app.config import session_serializer
-from app.database import now
+from app.database import AsyncSession
 from app.media import proxied_media_url
+from app.utils.datetime import now
 from app.utils.highlight import HIGHLIGHT_CSS
 from app.utils.highlight import highlight
 
-_templates = Jinja2Templates(directory="app/templates")
+_templates = Jinja2Templates(
+    directory="app/templates",
+    trim_blocks=True,
+    lstrip_blocks=True,
+)
 
 
 H2T = html2text.HTML2Text()
@@ -73,8 +82,8 @@ def is_current_user_admin(request: Request) -> bool:
     return is_admin
 
 
-def render_template(
-    db: Session,
+async def render_template(
+    db_session: AsyncSession,
     request: Request,
     template: str,
     template_args: dict[str, Any] = {},
@@ -92,14 +101,21 @@ def render_template(
             "csrf_token": generate_csrf_token() if is_admin else None,
             "highlight_css": HIGHLIGHT_CSS,
             "visibility_enum": ap.VisibilityEnum,
-            "notifications_count": db.query(models.Notification)
-            .filter(models.Notification.is_new.is_(True))
-            .count()
+            "notifications_count": await db_session.scalar(
+                select(func.count(models.Notification.id)).where(
+                    models.Notification.is_new.is_(True)
+                )
+            )
             if is_admin
             else 0,
             "local_actor": LOCAL_ACTOR,
-            "followers_count": db.query(models.Follower).count(),
-            "following_count": db.query(models.Following).count(),
+            "followers_count": await db_session.scalar(
+                select(func.count(models.Follower.id))
+            ),
+            "following_count": await db_session.scalar(
+                select(func.count(models.Following.id))
+            ),
+            "actor_types": ap.ACTOR_TYPES,
             **template_args,
         },
     )
@@ -143,13 +159,113 @@ ALLOWED_TAGS = [
     "colgroup",
     "caption",
     "img",
+    "div",
+    "span",
 ]
 
-ALLOWED_ATTRIBUTES = {
+ALLOWED_CSS_CLASSES = [
+    "highlight",
+    "codehilite",
+    "hll",
+    "c",
+    "err",
+    "g",
+    "k",
+    "l",
+    "n",
+    "o",
+    "x",
+    "p",
+    "ch",
+    "cm",
+    "cp",
+    "cpf",
+    "c1",
+    "cs",
+    "gd",
+    "ge",
+    "gr",
+    "gh",
+    "gi",
+    "go",
+    "gp",
+    "gs",
+    "gu",
+    "gt",
+    "kc",
+    "kd",
+    "kn",
+    "kp",
+    "kr",
+    "kt",
+    "ld",
+    "m",
+    "s",
+    "na",
+    "nb",
+    "nc",
+    "no",
+    "nd",
+    "ni",
+    "ne",
+    "nf",
+    "nl",
+    "nn",
+    "nx",
+    "py",
+    "nt",
+    "nv",
+    "ow",
+    "w",
+    "mb",
+    "mf",
+    "mh",
+    "mi",
+    "mo",
+    "sa",
+    "sb",
+    "sc",
+    "dl",
+    "sd",
+    "s2",
+    "se",
+    "sh",
+    "si",
+    "sx",
+    "sr",
+    "s1",
+    "ss",
+    "bp",
+    "fm",
+    "vc",
+    "vg",
+    "vi",
+    "vm",
+    "il",
+]
+
+
+def _allow_class(_tag: str, name: str, value: str) -> bool:
+    return name == "class" and value in ALLOWED_CSS_CLASSES
+
+
+def _allow_img_attrs(_tag: str, name: str, value: str) -> bool:
+    if name in ["src", "alt", "title"]:
+        return True
+    if name == "class" and value == "inline-img":
+        return True
+
+    return False
+
+
+ALLOWED_ATTRIBUTES: dict[str, list[str] | Callable[[str, str, str], bool]] = {
     "a": ["href", "title"],
     "abbr": ["title"],
     "acronym": ["title"],
-    "img": ["src", "alt", "title"],
+    "img": _allow_img_attrs,
+    "div": _allow_class,
+    "span": _allow_class,
+    "code": _allow_class,
 }
 
 
@@ -164,21 +280,28 @@ def _update_inline_imgs(content):
         if not img.attrs.get("src"):
             continue
 
-        img.attrs["src"] = _media_proxy_url(img.attrs["src"])
+        img.attrs["src"] = _media_proxy_url(img.attrs["src"]) + "/740"
+        img["class"] = "inline-img"
 
     return soup.find("body").decode_contents()
 
 
 def _clean_html(html: str, note: Object) -> str:
+    if html is None:
+        logger.error(f"{html=} for {note.ap_id}/{note.ap_object}")
+        return ""
     try:
-        return _replace_custom_emojis(
-            bleach.clean(
-                _update_inline_imgs(highlight(html)),
-                tags=ALLOWED_TAGS,
-                attributes=ALLOWED_ATTRIBUTES,
-                strip=True,
+        return _emojify(
+            _replace_custom_emojis(
+                bleach.clean(
+                    _update_inline_imgs(highlight(html)),
+                    tags=ALLOWED_TAGS,
+                    attributes=ALLOWED_ATTRIBUTES,
+                    strip=True,
+                ),
+                note,
             ),
-            note,
+            is_local=note.ap_id.startswith(BASE_URL),
         )
     except Exception:
         raise
@@ -188,11 +311,13 @@ def _timeago(original_dt: datetime) -> str:
     dt = original_dt
     if dt.tzinfo:
         dt = dt.astimezone(timezone.utc).replace(tzinfo=None)
-    return timeago.format(dt, now().replace(tzinfo=None))
+    return humanize.naturaltime(dt, when=now().replace(tzinfo=None))
 
 
 def _has_media_type(attachment: Attachment, media_type_prefix: str) -> bool:
-    return attachment.media_type.startswith(media_type_prefix)
+    if attachment.media_type:
+        return attachment.media_type.startswith(media_type_prefix)
+    return False
 
 
 def _format_date(dt: datetime) -> str:
@@ -229,11 +354,27 @@ def _html2text(content: str) -> str:
     return H2T.handle(content)
 
 
+def _replace_emoji(u: str, _) -> str:
+    filename = hex(ord(u))[2:]
+    return config.EMOJI_TPL.format(filename=filename, raw=u)
+
+
+def _emojify(text: str, is_local: bool) -> str:
+    if not is_local:
+        return text
+
+    return emoji.replace_emoji(
+        text,
+        replace=_replace_emoji,
+    )
+
+
 _templates.env.filters["domain"] = _filter_domain
 _templates.env.filters["media_proxy_url"] = _media_proxy_url
 _templates.env.filters["clean_html"] = _clean_html
 _templates.env.filters["timeago"] = _timeago
 _templates.env.filters["format_date"] = _format_date
 _templates.env.filters["has_media_type"] = _has_media_type
-_templates.env.filters["pluralize"] = _pluralize
 _templates.env.filters["html2text"] = _html2text
+_templates.env.filters["emojify"] = _emojify
+_templates.env.filters["pluralize"] = _pluralize
