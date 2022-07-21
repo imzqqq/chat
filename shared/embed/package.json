@@ -1,0 +1,24 @@
+{
+  "name": "chatterbox",
+  "version": "0.5.0",
+  "description": "Chatterbox lets you securely embed the Hydrogen matrix client on any website!",
+  "repository": "git@github.com:vector-im/chatterbox.git",
+  "author": "matrix.org",
+  "license": "Apache-2.0",
+  "scripts": {
+    "start": "vite",
+    "build": "tsc && vite build && vite build --config parent-vite.config.js && scripts/after-build.sh",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "cypress": "^10.3.0",
+    "cypress-iframe": "^1.0.1",
+    "typescript": "^4.4.4",
+    "vite": "^2.9.13"
+  },
+  "dependencies": {
+    "@sentry/browser": "^7.5.0",
+    "@sentry/tracing": "^7.5.0",
+    "hydrogen-view-sdk": "^0.0.15"
+  }
+}
